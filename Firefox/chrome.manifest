@@ -1,0 +1,3 @@
+content		xkit		content/
+overlay	chrome://browser/content/browser.xul		chrome://xkit/content/overlay.xul
+resource	xkit		content/
