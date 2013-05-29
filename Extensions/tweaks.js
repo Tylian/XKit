@@ -1,5 +1,5 @@
 //* TITLE Tweaks **//
-//* VERSION 1.0 REV E **//
+//* VERSION 1.0 REV F **//
 //* DESCRIPTION Various little tweaks for your dashboard. **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS These are small little tweaks that allows you customize your dashboard. If you have used XKit 6, you will notice that some of the extensions have been moved here as options you can toggle. Keep in mind that some of the tweaks (the ones marked with a '*') can slow down your computer. **//
@@ -26,6 +26,16 @@ XKit.extensions.tweaks = new Object({
 		"sep0": {
 			text: "Dashboard tweaks",
 			type: "separator",
+		},
+		"always_show_move_to_top": {
+			text: "Always show 'Move to top' button queue",
+			default: true,
+			value: true
+		},
+		"hide_blog_search": {
+			text: "Hide blogs on the search bar suggestions",
+			default: false,
+			value: false
 		},
 		"hide_share": {
 			text: "Hide the share button on posts",
@@ -146,6 +156,10 @@ XKit.extensions.tweaks = new Object({
 			}, 2000);
 		}
 
+		if (XKit.extensions.tweaks.preferences.hide_blog_search.value === true) {
+			XKit.tools.add_css(".blog.search_results_section { display: none !important }", "xkit_tweaks_hide_blog_search");
+		}
+
 		if (XKit.extensions.tweaks.preferences.hide_recommended.value === true) {
 			$("#recommended_tumblelogs").css("display","none");
 		}
@@ -160,6 +174,10 @@ XKit.extensions.tweaks = new Object({
 
 		if (XKit.extensions.tweaks.preferences.hide_find_blogs.value === true) {
 			$("a.spotlight").parent().css("display","none");
+		}
+		
+		if (XKit.extensions.tweaks.preferences.always_show_move_to_top.value === true) {
+			XKit.tools.add_css("#posts .post .post_control.move_to_top { display: block !important; } ", "always_show_move_to_top");
 		}
 
 		if (XKit.extensions.tweaks.preferences.slim_sidebar.value === true) {
@@ -192,9 +210,16 @@ XKit.extensions.tweaks = new Object({
 			}
 			if (typeof user_url === "undefined") { return; }
 			user_url = user_url.replace("#","");
+			
 			if (user_url.indexOf("/") !== -1) {
 				user_url = user_url.substring(0, user_url.indexOf("/"));
 			}
+			
+			// Patch for custom domains.
+			if ($("#popover_blogs > .popover_inner").length > 0) {
+				user_url = $("#popover_blogs > .popover_inner").children(".item:first-child").attr('id').substring(9);
+			}
+			
 			m_html = '<li class="no_push" id="xkit_customize_button">' +
 				 '<a href="/customize/' + user_url + '" class="customize">' +
 				 '<div class="hide_overflow">Customize</div>' +
@@ -221,12 +246,14 @@ XKit.extensions.tweaks = new Object({
 		clearInterval(this.run_interval);	
 		$(".xkit-small-blog-setting-link").remove();
 		$(".small_links.by-xkit").remove();
+		XKit.tools.remove_css("xkit_tweaks_hide_blog_search");
 		XKit.tools.remove_css("xkit_tweaks_hide_share");
 		XKit.tools.remove_css("xkit_tweaks_hide_notes");
 		XKit.tools.remove_css("xkit_tweaks_slim_sidebar");
 		XKit.tools.remove_css("xkit_tweaks_hide_follows");
 		XKit.tools.remove_css("xkit_tweaks_fix_blockquotes");
 		XKit.tools.remove_css("xkit_tweaks_wrap_tags");
+		XKit.tools.remove_css("always_show_move_to_top");
 		$("#tumblr_radar").css("display","block");
 		$("#xkit_customize_button").remove();
 		$("a.spotlight").parent().css("display","block");
