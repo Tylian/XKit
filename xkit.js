@@ -160,7 +160,7 @@ XKit = {
 				XKit.frame_mode = true;
 				XKit.extensions.xkit_main.run();
 			} catch(e) {
-				XKit.console.log("Can't run xkit_main:" + e.message);
+				XKit.console.add("Can't run xkit_main:" + e.message);
 			}
 		}
 		
