@@ -96,7 +96,7 @@ XKit.extensions.xkit_main = new Object({
 						if (typeof XKit.extensions[extension_id].preferences !== "undefined") {
 							XKit.extensions.xkit_main.load_extension_preferences(extension_id);
 						}
-						XKit.extensions[extension_id].run();
+						XKit.extensions[extension_id].frame_run();
 					} catch(e) {
 						XKit.console.add("Can not run " + extension_id + ": " + e.message);
 						XKit.extensions.xkit_main.run_next_extension(); return;
