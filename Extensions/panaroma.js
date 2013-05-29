@@ -1,5 +1,5 @@
 //* TITLE Panaroma **//
-//* VERSION 1.0 REV A **//
+//* VERSION 1.0 REV B **//
 //* DESCRIPTION Widescreen dashboard **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//
