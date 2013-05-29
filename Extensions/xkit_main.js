@@ -1,5 +1,5 @@
 //* TITLE XKit Main **//
-//* VERSION 1.0 REV A **//
+//* VERSION 1.0 REV B **//
 //* DESCRIPTION Boots XKit up **//
 //* DEVELOPER STUDIOXENIX **//
 (function(){
@@ -77,9 +77,33 @@ XKit.extensions.xkit_main = new Object({
 		if (extension_id === "xkit_patches" && force !== true) { XKit.extensions.xkit_main.run_next_extension(); return; }
 
 		var xkit_main = XKit.installed.get(extension_id);
-
+		
 		// Check if in Frame Mode.
 		if (XKit.frame_mode === true && extension_id !== "xkit_patches") {
+			// This is ugly: I don't want to eval script.
+			eval(xkit_main.script);
+			var frame_script = "";
+			try {
+				frame_script = XKit.extensions[extension_id].frame_run;
+			} catch(e) {
+				XKit.console.add("No frame_run on " + extension_id);	
+			}
+			if (frame_script !== "" && typeof frame_script !== "undefined") {
+				// This is a hybrid extension!
+				// Run it!
+				if (XKit.installed.enabled(extension_id) === true) {
+					try {
+						if (typeof XKit.extensions[extension_id].preferences !== "undefined") {
+							XKit.extensions.xkit_main.load_extension_preferences(extension_id);
+						}
+						XKit.extensions[extension_id].run();
+					} catch(e) {
+						XKit.console.add("Can not run " + extension_id + ": " + e.message);
+						XKit.extensions.xkit_main.run_next_extension(); return;
+					}
+				}
+				XKit.extensions.xkit_main.run_next_extension(); return;
+			}
 			if (xkit_main.frame !== true) {
 				// not a frame extension, quit.
 				if (XKit.extensions.xkit_main.disabled_extensions === "") {
