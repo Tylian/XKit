@@ -1,5 +1,5 @@
 //* TITLE Reblog Yourself **//
-//* VERSION 1.0 REV B **//
+//* VERSION 1.0 REV C **//
 //* DESCRIPTION Allows you to reblog posts back to your blog **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//
@@ -16,8 +16,6 @@ XKit.extensions.reblog_yourself = new Object({
 
 		if (document.location.href.indexOf("http://www.tumblr.com/reblog/") !== -1) {
 			XKit.extensions.reblog_yourself.fix_page();
-		} else {
-			XKit.extensions.reblog_yourself.fix_dashboard();
 		}
 	
 		if ($(".post").length > 0) {
@@ -29,7 +27,45 @@ XKit.extensions.reblog_yourself = new Object({
 		}
 
 		XKit.post_listener.add("reblog_yourself", XKit.extensions.reblog_yourself.fix_dashboard);
+		XKit.extensions.reblog_yourself.fix_dashboard();
 
+	},
+	
+	frame_run: function() {
+	
+		// This gets run on frame.
+		// Port of ugly code from XKit 6 but at least it works.
+		
+    		var check_if_there = $("body").html().search("/reblog/");
+    		if (check_if_there !== -1) { return; }
+
+    		var postid_start = document.location.href.search("&pid=");
+    		var postid_end =  document.location.href.indexOf("&", postid_start + 2);
+    		var post_id = document.location.href.substring(postid_start + 5, postid_end);
+
+    		if (postid_start === -1) { return; }
+
+    		var xd_start = document.location.href.search("&rk=");
+    		var xd_end =  document.location.href.indexOf("&", xd_start + 2);
+    		var xd = document.location.href.substring(xd_start + 4, xd_end);
+
+    		var rd_start = document.location.href.search("&src=");
+    		var rd_end =  document.location.href.indexOf("&", rd_start + 2);
+    		var rd = document.location.href.substring(rd_start + 5, rd_end);
+
+    		var xu = "http://www.tumblr.com/reblog/" + post_id + "/" + xd;
+
+		var xu_html = '<a class="btn icon reblog" id="xreblogyourselfiframebutton" style="display: none;" title="Reblog" href="/reblog/' + post_id + '/' + xd + '/?redirect_to=' + rd + '" target="_top"></a>';
+
+
+		$.ajax({
+ 			url: '/reblog/' + post_id + '/' + xd + '/',
+  			success: function(data, xhr) {	
+				$(".controls").prepend(xu_html);
+				$("#xreblogyourselfiframebutton").fadeIn('slow');
+  			}
+		});	
+		
 	},
 
 	fix_page_interval: "",
