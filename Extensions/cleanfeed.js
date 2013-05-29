@@ -1,5 +1,5 @@
 //* TITLE CleanFeed **//
-//* VERSION 1.0 REV D **//
+//* VERSION 1.0 REV E **//
 //* DESCRIPTION Browse safely in public **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS This extension, when enabled, hides photo posts until you hover over them. Useful to browse Tumblr in a workspace or in public, and not worry about NSFW stuff appearing. You can also set it to hide avatars and not show non-text posts at all. To activate or disable it, click on the CleanFeed button on your sidebar. It will remember it's on/off setting. **//
@@ -75,6 +75,18 @@ XKit.extensions.cleanfeed = new Object({
 		
 		XKit.post_listener.add("cleanfeed", XKit.extensions.cleanfeed.do);
 		XKit.extensions.cleanfeed.do();
+		
+		$(document).keydown(XKit.extensions.cleanfeed.key_down);
+		
+	},
+	
+	key_down: function(e) {
+		
+		if (e.altKey === true) {
+			if (e.which === 88) {
+				XKit.extensions.cleanfeed.toggle();
+			}
+		}	
 		
 	},
 	
@@ -168,7 +180,7 @@ XKit.extensions.cleanfeed = new Object({
 			
 		});
 		
-		$(".post_avatar").each(function() {
+		$(".post_avatar_link").each(function() {
 		
 			if (typeof $(this).attr('data-user-avatar-url') === "undefined" || $(this).attr('data-user-avatar-url') === "") {
 			
@@ -181,7 +193,7 @@ XKit.extensions.cleanfeed = new Object({
 		if (hide === true) {
 			
 			if (XKit.extensions.cleanfeed.preferences.hide_avatars.value === true) {
-				$(".post_avatar").not(".flat.lighter_blue").each(function() {
+				$(".post_avatar_link").not(".flat.lighter_blue").each(function() {
 					$(this).css("background-image", "url(" + XKit.extensions.cleanfeed.img_avatar + ")");	
 				});
 			}
@@ -207,8 +219,13 @@ XKit.extensions.cleanfeed = new Object({
 			XKit.tools.remove_css("cleanfeed_full_block");
 			XKit.extensions.cleanfeed.added_full_block_css = false;
 			
-			$(".post_avatar").each(function() {
-				$(this).css("background-image", "url(" + $(this).attr('data-user-avatar-url') + ")");
+			$(".post_avatar_link").each(function() {
+				var m_url = $(this).attr('data-user-avatar-url');
+				if (m_url.indexOf('url(') !== -1) {
+					$(this).css("background-image", m_url);
+				} else {
+					$(this).css("background-image", "url(" + m_url + ")");
+				}	
 			});
 			
 			XKit.tools.remove_css("cleanfeed_on");
