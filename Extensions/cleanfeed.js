@@ -1,5 +1,5 @@
 //* TITLE CleanFeed **//
-//* VERSION 1.0 REV E **//
+//* VERSION 1.0 REV F **//
 //* DESCRIPTION Browse safely in public **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS This extension, when enabled, hides photo posts until you hover over them. Useful to browse Tumblr in a workspace or in public, and not worry about NSFW stuff appearing. You can also set it to hide avatars and not show non-text posts at all. To activate or disable it, click on the CleanFeed button on your sidebar. It will remember it's on/off setting. **//
@@ -173,7 +173,7 @@ XKit.extensions.cleanfeed = new Object({
 	
 	update_images: function(hide) {
 		
-		$(".photoset_row img, .post .image, .post .inline_image").not(".cleanfeed_done_saving").each(function() {
+		$(".photoset_row img, .post .image, .post .inline_image, .post .panorama img").not(".cleanfeed_done_saving").each(function() {
 		
 			$(this).addClass("cleanfeed_done_saving");
 			$(this).attr('data-xkit-old-src', $(this).attr('src'));	
@@ -183,9 +183,7 @@ XKit.extensions.cleanfeed = new Object({
 		$(".post_avatar_link").each(function() {
 		
 			if (typeof $(this).attr('data-user-avatar-url') === "undefined" || $(this).attr('data-user-avatar-url') === "") {
-			
-				$(this).attr('data-user-avatar-url', $(this).css('background-image'));	
-				
+				$(this).attr('data-user-avatar-url', $(this).css('background-image'));
 			}
 			
 		});
@@ -199,7 +197,7 @@ XKit.extensions.cleanfeed = new Object({
 			}
 			
 			if (XKit.extensions.cleanfeed.added_css == false) {
-				XKit.tools.add_css(" .post .inline_image { opacity: 0.15; } .post .inline_image:hover { opacity: 1; } .image_thumbnail, .photoset_row img, .post .image { visibility: hidden; } .post.video { display: none !important; }", "cleanfeed_on");
+				XKit.tools.add_css(" .post .inline_image { opacity: 0.15; } .post .inline_image:hover { opacity: 1; } .image_thumbnail, .photoset_row img, .post .image, .post .panorama { visibility: hidden; } .post.video { display: none !important; }", "cleanfeed_on");
 				XKit.extensions.cleanfeed.added_css = true;
 			}
 			
@@ -211,8 +209,8 @@ XKit.extensions.cleanfeed = new Object({
 			$(document).on("mouseenter",".image_thumbnail", XKit.extensions.cleanfeed.m_enter);	
 			$(document).on("mouseleave",".image_thumbnail", XKit.extensions.cleanfeed.m_leave);
 			
-			$(document).on("mouseenter",".photoset_row img, .post .image", XKit.extensions.cleanfeed.m_ps_enter);	
-			$(document).on("mouseleave",".photoset_row img, .post .image", XKit.extensions.cleanfeed.m_ps_leave);	
+			$(document).on("mouseenter",".photoset_row img, .post .image, .post .panorama img", XKit.extensions.cleanfeed.m_ps_enter);	
+			$(document).on("mouseleave",".photoset_row img, .post .image, .post .panorama img", XKit.extensions.cleanfeed.m_ps_leave);	
 			
 		} else {
 			
@@ -233,8 +231,8 @@ XKit.extensions.cleanfeed = new Object({
 			
 			$(document).off("mouseenter",".image_thumbnail", XKit.extensions.cleanfeed.m_enter);	
 			$(document).off("mouseleave",".image_thumbnail", XKit.extensions.cleanfeed.m_leave);
-			$(document).off("mouseenter",".photoset_row img, .post .image", XKit.extensions.cleanfeed.m_ps_enter);	
-			$(document).off("mouseleave",".photoset_row img, .post .image", XKit.extensions.cleanfeed.m_ps_leave);
+			$(document).off("mouseenter",".photoset_row img, .post .image, .post .panorama img", XKit.extensions.cleanfeed.m_ps_enter);	
+			$(document).off("mouseleave",".photoset_row img, .post .image, .post .panorama img", XKit.extensions.cleanfeed.m_ps_leave);
 			
 		}
 		
@@ -248,7 +246,7 @@ XKit.extensions.cleanfeed = new Object({
 			
 		});
 		
-		$(".photoset_row img, .post .image").each(function() {
+		$(".photoset_row img, .post .image, .post .panorama img").each(function() {
 		
 			if (hide === true) {
 				XKit.extensions.cleanfeed.hide_photoset_picture(this);	
