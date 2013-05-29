@@ -1,0 +1,46 @@
+.notification:hover .xkit-reply-button {
+	
+	display: block;
+
+}
+
+.xkit-reply-button-pn {
+	color: #fff !important;	
+	background: rgba(151,157,162,.6);
+	position: absolute;
+	right: 20px; top: 12px;
+	display: none;
+	font-weight: bold;
+	font-size: 9px !important;
+	padding: 0px 2px; border-radius: 2px;
+	text-decoration: none;
+	text-transform: uppercase !important;
+	text-shadow: none !important;
+	line-height: 12px !important; height: 12px !important;
+}
+
+
+.xkit-reply-button {
+
+	position: absolute;
+	right: 35px; top: 7px;
+	background: rgba(255,255,255,.38) !important;
+	display: none;
+	color: #3d546b !important;
+	font-weight: bold;
+	font-size: 9px !important;
+	padding: 0px 2px; border-radius: 2px;
+	text-decoration: none;
+	text-transform: uppercase !important;
+	line-height: 12px !important; height: 12px !important;
+	
+
+}
+
+.xkit-reply-button-pn:hover {
+	background-color: #979da2 !important;	
+}
+
+.xkit-reply-button:hover {
+	background-color: rgba(255,255,255,.75) !important;
+}

@@ -1,0 +1,18 @@
+.xyahoo-color {
+	display: inline-block;
+	margin-right: 16px;
+	width: 20px; height: 20px;
+	border-radius: 30px;
+	opacity: 0.6;	
+	border: 3px solid white;
+}
+
+.xyahoo-color:hover,
+.xyahoo-color.selected {
+	opacity: 1;	
+	border: 3px solid rgba(0,0,0,0.4);
+}
+
+#xkit-yahoo-colors {
+	padding: 15px;	
+}

@@ -1,0 +1,44 @@
+#xpreview-notes {
+	height: 24px; line-height: 24px;
+	text-align: center;
+	color: #1f5a80;	
+	font-size: 12px;
+	text-shadow: 0px 1px 0px rgba(255,255,255,0.44);
+}
+#xpreview-container.loading {
+	opacity: 0.55;	
+}
+#xpreview-container {
+	position: absolute;
+	display: none;
+	background: #88b7d5;
+	border: 1px solid #c2e1f5;
+	top: 30px; left: 30px;
+	width: 80px; height: 24px;
+	border-radius: 4px;
+	box-shadow: 0px 1px 2px rgba(0,0,0,0.22);
+}
+#xpreview-container:after, #xpreview-container:before {
+	right: 100%;
+	border: solid transparent;
+	content: " ";
+	height: 0;
+	width: 0;
+	position: absolute;
+	pointer-events: none;
+}
+
+#xpreview-container:after {
+	border-color: rgba(136, 183, 213, 0);
+	border-right-color: #88b7d5;
+	border-width: 7px;
+	top: 50%;
+	margin-top: -8px;
+}
+#xpreview-container:before {
+	border-color: rgba(194, 225, 245, 0);
+	border-right-color: #c2e1f5;
+	border-width: 8px;
+	top: 50%;
+	margin-top: -9px;
+}

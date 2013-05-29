@@ -1,0 +1,33 @@
+.xmute-muted {
+	display: none;	
+}
+
+.xkit-muted-user {
+	border-bottom: 1px solid rgb(190,190,190);
+	padding: 0px 15px 0px 35px;	
+	font-size: 12px;
+	height: 24px;
+	line-height: 24px;
+	position: relative;
+}
+
+.xkit-unmute-user-button {
+	position: absolute;
+	top: 0; left: 15px;
+	color: red; opacity: 0.7;
+	cursor: pointer;	
+}
+
+.xkit-unmute-user-button:hover {
+	opacity: 1;	
+}
+
+.xkit-muted-user:last-child {
+	border-bottom: 0;	
+}
+
+#xkit-control-panel-mute.no-muted-users {
+	padding: 15px; font-size: 12px;
+	color: rgb(110,110,110);
+	text-align: center;	
+}
