@@ -1,5 +1,5 @@
 //* TITLE XKit Preferences **//
-//* VERSION 1.1 REV B **//
+//* VERSION 1.1 REV C **//
 //* DESCRIPTION Lets you customize XKit **//
 //* DEVELOPER STUDIOXENIX **//
 XKit.extensions.xkit_preferences = new Object({
