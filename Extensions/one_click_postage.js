@@ -1,5 +1,5 @@
 //* TITLE One-Click Postage **//
-//* VERSION 1.2 REV A **//
+//* VERSION 1.3 REV A **//
 //* DESCRIPTION Lets you easily reblog, draft and queue posts **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//
@@ -118,13 +118,13 @@ XKit.extensions.one_click_postage = new Object({
 			$("#x1cpostage_caption").before(m_blogselector_html);
 		}
 
-		$(document).on("mouseover",".reblog_button", function(event) {
+		$(document).on("mouseover",".reblog_button,.post_control.reblog", function(event) {
 			clearTimeout(XKit.extensions.one_click_postage.menu_closer_int);
 			XKit.extensions.one_click_postage.user_on_box = true;
 			XKit.extensions.one_click_postage.open_menu($(this));
 		});
 		
-		$(document).on("mouseout",".reblog_button", function() {
+		$(document).on("mouseout",".reblog_button,.post_control.reblog", function() {
 			XKit.extensions.one_click_postage.user_on_box = false;
 			XKit.extensions.one_click_postage.close_menu($(this));
 		});
@@ -174,7 +174,7 @@ XKit.extensions.one_click_postage = new Object({
 		});
 	},
 	destroy: function() {
-		$(document).off('click', '.reblog_button', XKit.extensions.one_click_postage.process_click);
+		$(document).off('click', '.reblog_button,.post_control.reblog', XKit.extensions.one_click_postage.process_click);
 		XKit.tools.remove_css("one_click_postage");
 		$("#x1cpostage_box").remove();
 		XKit.tools.remove_css("one_click_postage_slim");	
@@ -182,7 +182,7 @@ XKit.extensions.one_click_postage = new Object({
 	
 	init_keep_tags_dashboard: function() {
 	
-		$(document).on('click', '.reblog_button', XKit.extensions.one_click_postage.process_click);
+		$(document).on('click', '.reblog_button,.post_control.reblog', XKit.extensions.one_click_postage.process_click);
 		
 	},
 	
@@ -204,8 +204,28 @@ XKit.extensions.one_click_postage = new Object({
 				}, 200);
 			}
 
+		} else {
+			
+			// This is an ungodly-ugly hack. We should fix this.
+			
+			if ($(parent_div).parent().parent().find(".post_tag").length > 0) {
+				var tags_text = "";
+				$(parent_div).parent().parent().find(".post_tag").each(function() {
+					if (tags_text === "") {
+						tags_text = $(this).html().replace("#","");
+					} else {
+						tags_text = tags_text + ", " + $(this).html().replace("#","");
+					}
+				});
+				if (tags_text !== "") {
+					setTimeout(function() {		
+						XKit.extensions.one_click_postage.try_to_inject_tags(tags_text);
+					}, 200);
+				}
+			}
+			
 		}
-		
+
 	},
 	
 	try_to_inject_tags: function(to_add) {
@@ -284,6 +304,20 @@ XKit.extensions.one_click_postage = new Object({
 					$("#x1cpostage_tags").val(tags_text);
 				}
 			}
+		} else {
+			if ($(parent_box).find(".post_tag").length > 0) {
+				var tags_text = "";
+				$(parent_box).find(".post_tag").each(function() {
+					if (tags_text === "") {
+						tags_text = $(this).html().replace("#","");
+					} else {
+						tags_text = tags_text + ", " + $(this).html().replace("#","");
+					}
+				});
+				if (tags_text !== "") {
+					$("#x1cpostage_tags").val(tags_text);
+				}
+			}			
 		}
 		
 		$(obj).attr('title','');
@@ -340,9 +374,9 @@ XKit.extensions.one_click_postage = new Object({
 			blog_id = $("#x1cpostage_blog").val();
 		}
 		
-		$(XKit.extensions.one_click_postage.last_object).find(".reblog_button").addClass("xkit-one-click-reblog-working");
+		$(XKit.extensions.one_click_postage.last_object).find(".reblog_button, .post_control.reblog").addClass("xkit-one-click-reblog-working");
 		
-		var m_button = $(XKit.extensions.one_click_postage.last_object).find(".reblog_button");
+		var m_button = $(XKit.extensions.one_click_postage.last_object).find(".reblog_button, .post_control.reblog");
 		var caption = $("#x1cpostage_caption").val();
 		var tags = $("#x1cpostage_tags").val();
 

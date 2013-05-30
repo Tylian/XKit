@@ -1,5 +1,5 @@
 //* TITLE Timestamps **//
-//* VERSION 1.0 REV C **//
+//* VERSION 1.0 REV D **//
 //* DESCRIPTION See when a post has been made. **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//
@@ -44,6 +44,8 @@ XKit.extensions.timestamps = new Object({
 				$(document).on("click",".xkit-timestamp-failed-why", function() {
 					XKit.window.show("Timestamp loading failed.", "This might be caused by several reasons, such as the post being removed, becoming private, or the Tumblr server having a problem that it can't return the page required by XKit to load you the timestamp.", "error", "<div id=\"xkit-close-message\" class=\"xkit-button\">OK</div></div>");
 				});
+			} else {
+				XKit.console.add("Won't run timestamps, not compatible.");	
 			}
 		
 		} catch(e) {
@@ -67,27 +69,32 @@ XKit.extensions.timestamps = new Object({
 	add_timestamps: function() {
 
 		if ($(".post").length === 0) {
+			XKit.console.add("Stopping Timestamps, no posts.");
 			return;
 		}
 		
 		XKit.extensions.timestamps.check_quota();
 	
-		$("#posts > .post").not(".xkit_timestamps").each(function() {
+		$(".post").not(".xkit_timestamps").each(function() {
 		
 			try { 
 			
 				$(this).addClass("xkit_timestamps");
-			
 				if ($(this).attr('id') === "new_post" || $(this).hasClass("fan_mail") === true || 
+					$(this).hasClass("is_note") === true || 
 					$(this).find('.private_label').length > 0  || $(this).hasClass("note") === true ||
 					$(this).hasClass("submission") === true) {
 					return;	
 				}
 			
-				if ($(this).find('.permalink').length <= 0) { return; }
+				if ($(this).find('.permalink').length <= 0 && $(this).find(".post_permalink").length <= 0) { return; }
 
 				var this_control_html = $(this).children('.post_controls').html();
+				
 				var permalink = $(this).find(".permalink").attr('href');
+				if ($(this).find(".post_permalink").length > 0) {
+					permalink = $(this).find(".post_permalink").attr('href');
+				}
 
 				var post_id = $(this).attr('id').replace("post_","");
 				
@@ -96,8 +103,8 @@ XKit.extensions.timestamps = new Object({
 				var json_page = "http://" + json_page_parts[0] + "/api/read/json?id=" + post_id;
 			
 				var m_html = '<div id="xkit_timestamp_' + post_id + '" class="xtimestamp xtimestamp_loading">&nbsp;</div>';
-			
 				$(this).find(".post_content").prepend(m_html);
+			
 				XKit.extensions.timestamps.fetch_timestamp($("#xkit_timestamp_" + post_id), json_page, post_id);
 			
 			} catch(e) {

@@ -1,5 +1,5 @@
 //* TITLE Tweaks **//
-//* VERSION 1.0 REV F **//
+//* VERSION 1.1 REV B **//
 //* DESCRIPTION Various little tweaks for your dashboard. **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS These are small little tweaks that allows you customize your dashboard. If you have used XKit 6, you will notice that some of the extensions have been moved here as options you can toggle. Keep in mind that some of the tweaks (the ones marked with a '*') can slow down your computer. **//
@@ -195,6 +195,7 @@ XKit.extensions.tweaks = new Object({
 
 		if (XKit.extensions.tweaks.preferences.wrap_tags.value === true) {
 			XKit.tools.add_css(".post .tags { width: 500px !important; display: block !important; }  .post .footer_links.with_tags { overflow:visible !important; display: block !important; }.post .footer_links.with_tags span, .footer_links.with_tags .source_url { display:block !important; overflow:visible !important; } .source_url_gradient { display: none !important; } span.tags { white-space:normal !important; } span.with_blingy_tag a.blingy { height:auto !important; display:inline-block !important; }  .source_url, .post_tags_wrapper { display: block !important; } ", "xkit_tweaks_wrap_tags");
+			XKit.tools.add_css("#posts .post.post_full .post_tags { white-space: normal; } .post .post_tags a { font-size: 12px; }", "xkit_tweaks_wrap_tags_v2");
 		}
 
 		if (XKit.extensions.tweaks.preferences.show_customize.value === true) {
@@ -253,6 +254,7 @@ XKit.extensions.tweaks = new Object({
 		XKit.tools.remove_css("xkit_tweaks_hide_follows");
 		XKit.tools.remove_css("xkit_tweaks_fix_blockquotes");
 		XKit.tools.remove_css("xkit_tweaks_wrap_tags");
+		XKit.tools.remove_css("xkit_tweaks_wrap_tags_v2");
 		XKit.tools.remove_css("always_show_move_to_top");
 		$("#tumblr_radar").css("display","block");
 		$("#xkit_customize_button").remove();

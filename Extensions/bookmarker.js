@@ -1,5 +1,5 @@
 //* TITLE Bookmarker **//
-//* VERSION 1.0 REV C **//
+//* VERSION 1.0 REV D **//
 //* DESCRIPTION Dashboard Time Machine **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS The Bookmarker extension allows you to bookmark posts and get back to them whenever you want to. Just click on the Bookmark icon on posts and the post will be added to your Bookmark List on your sidebar. **//
@@ -31,6 +31,11 @@ XKit.extensions.bookmarker = new Object({
 			XKit.extensions.bookmarker.do();
 			if (document.location.href.indexOf("?bookmark=true") !== -1) {
 				XKit.extensions.bookmarker.check_bookmark();
+			}
+			
+			// Check for new body layout.
+			if ($("body").hasClass("posts_v2") === true) {
+				XKit.tools.add_css("#xkit-bookmarker-not-found-inner { padding: 20px 20px 20px 60px; margin-bottom: 10px; }","bookmarker_new_layout");
 			}
 		}
 	},
@@ -336,8 +341,12 @@ XKit.extensions.bookmarker = new Object({
 			}
 
 			var m_html = "<a class=\"post_control post_control_icon xbookmarker_post_icon " + m_class + "\" data-xkit-bookmarker-post-id=\"" + post_id + "\" onclick=\"return false\"></a>";
-			$(this).find(".post_controls").prepend(m_html);
-			
+			if ($(this).find(".post_controls_inner").length > 0) {
+				m_html = "<a class=\"post_control post_control_icon xbookmarker_post_icon xkit_new_dashboard " + m_class + "\" data-xkit-bookmarker-post-id=\"" + post_id + "\" onclick=\"return false\"></a>";
+				$(this).find(".post_controls_inner").prepend(m_html);
+			} else {
+				$(this).find(".post_controls").prepend(m_html);
+			}
 		});	
 		
 	},
@@ -347,6 +356,7 @@ XKit.extensions.bookmarker = new Object({
 		$("#xbookmarker_small_links").remove();
 		$(".xbookmarker_post_icon").remove();
 		XKit.tools.remove_css("bookmarker");
+		XKit.tools.remove_css("bookmarker_new_layout");
 		XKit.post_listener.remove("bookmarker");
 		this.running = false;
 	}

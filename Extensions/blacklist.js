@@ -1,5 +1,5 @@
 //* TITLE Blacklist **//
-//* VERSION 1.0 REV B **//
+//* VERSION 1.1 REV A **//
 //* DESCRIPTION Clean your dash **//
 //* DETAILS This extension allows you to block posts based on the words you specify. If a post has the text you've written in the post itself or it's tags, it will be replaced by a warning, or won't be shown on your dashboard, depending on your settings. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -38,7 +38,7 @@ XKit.extensions.blacklist = new Object({
 			this.blacklisted = m_blacklist;	
 		}
 		
-		if ($("ol#posts").length > 0) {
+		if ($(".post").length > 0) {
 			XKit.post_listener.add("blacklist", XKit.extensions.blacklist.check);	
 			XKit.extensions.blacklist.check();
 		}
@@ -65,6 +65,12 @@ XKit.extensions.blacklist = new Object({
 				$(this).find(".tag").each(function() {
 					m_tags = m_tags + " " + $(this).html().replace("#","");
 				});
+			} else {
+				if ($(this).find(".post_tag").length > 0) {
+					$(this).find(".post_tag").each(function() {
+						m_tags = m_tags + " " + $(this).html().replace("#","");
+					});
+				}
 			}
 			
 			// Collect the title contents too.
@@ -107,6 +113,9 @@ XKit.extensions.blacklist = new Object({
 			$(m_div).find(".post_info").css("display","block");
 			$(m_div).find(".post_controls").css("display","block");
 			$(m_div).find(".post_footer_links").css('display','block');
+			$(m_div).find(".post_tags").css('display','block');
+			$(m_div).find(".post_footer").css('display','table');
+			
 			$(m_div).find(".full_answer_container_wrapper").css("display","block");	
 			
 			$(m_div).find(".xblacklist_excuse").remove();
@@ -136,6 +145,7 @@ XKit.extensions.blacklist = new Object({
 		$(obj).find(".post_controls").css("display","none");
 		$(obj).find(".post_content").html(old_content + block_excuse);
 		$(obj).find(".post_footer_links").css('display','none');
+		$(obj).find(".post_tags, .post_footer").css('display','none');
 		$(obj).find(".full_answer_container_wrapper").css("display","none");
 		
 	},
@@ -215,6 +225,8 @@ XKit.extensions.blacklist = new Object({
 			$(this).removeClass("xblacklist_blacklisted_post");
 			$(this).find(".post_info").css("display","block");
 			$(this).find(".post_controls").css("display","block");
+			$(this).find(".post_tags").css('display','block');
+			$(m_div).find(".post_footer").css('display','table');
 			$(this).find(".post_footer_links").css('display','block');
 			$(this).find(".full_answer_container_wrapper").css("display","block");	
 			$(this).find(".xblacklist_excuse").remove();

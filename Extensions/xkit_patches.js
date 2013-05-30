@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 1.0 REV B **//
+//* VERSION 1.0 REV C **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER STUDIOXENIX **//
 XKit.extensions.xkit_patches = new Object({
@@ -10,6 +10,24 @@ XKit.extensions.xkit_patches = new Object({
 		this.running = true;
 
 		XKit.tools.init_css("xkit_patches");
+		
+		// New Post Listener for Posts_v2
+		XKit.post_listener.check = function() {
+			if ($("#posts").length === 0) {
+				return;
+			}
+			var post_count = $("#posts .post").length;
+			if (XKit.post_listener.count === 0) {
+				XKit.post_listener.count = post_count;
+			} else {
+				if (post_count !== XKit.post_listener.count) {
+					XKit.post_listener.count = post_count;
+					XKit.post_listener.run_callbacks();
+				}
+			} 
+			setTimeout(XKit.post_listener.check, 3500);
+		
+		};
 
 		// Patch notifications adder
 		XKit.notifications.add = function(message, type, sticky, callback) {
