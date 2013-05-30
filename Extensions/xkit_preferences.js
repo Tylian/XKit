@@ -84,7 +84,6 @@ XKit.extensions.xkit_preferences = new Object({
 			if (parseInt(lst_check) < 0) {
 				check_for_update = true;
 			}
-			check_for_update= true;
 
 			// SO!? What shall we do, flips?
 			if (check_for_update === true) {
