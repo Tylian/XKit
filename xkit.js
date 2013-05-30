@@ -168,7 +168,7 @@ XKit = {
 	init_flags: function() {
 		for(var flag in XKit.flags) {
 			var m_value = XKit.tools.get_setting("xkit__flag__" + flag, "");
-			if (m_value === "true") { m_value = true; } else { m_value = false; }
+			if (m_value === true) { m_value = true; } else { m_value = false; }
 			XKit.set_flag(flag, m_value);
 		}
 	},
