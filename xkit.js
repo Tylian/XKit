@@ -198,6 +198,10 @@ XKit = {
 	},
 	servers: {
 		list: [
+			"http://sds1.puaga.com",
+			"http://sds2.puaga.com",
+			"http://sds3.puaga.com",
+			"http://sds4.puaga.com",
 			"http://xds1.puaga.com",
 			"http://xds2.puaga.com",
 			"http://xds3.puaga.com",
