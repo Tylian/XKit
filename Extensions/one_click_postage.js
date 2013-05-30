@@ -1,5 +1,5 @@
 //* TITLE One-Click Postage **//
-//* VERSION 1.3 REV A **//
+//* VERSION 1.2 REV B **//
 //* DESCRIPTION Lets you easily reblog, draft and queue posts **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//
@@ -195,7 +195,7 @@ XKit.extensions.one_click_postage = new Object({
 				if (tags_text === "") {
 					tags_text = $(this).html().replace("#","");
 				} else {
-					tags_text = tags_text + ", " + $(this).html().replace("#","");
+					tags_text = tags_text + "," + $(this).html().replace("#","");
 				}
 			});
 			if (tags_text !== "") {
@@ -214,7 +214,7 @@ XKit.extensions.one_click_postage = new Object({
 					if (tags_text === "") {
 						tags_text = $(this).html().replace("#","");
 					} else {
-						tags_text = tags_text + ", " + $(this).html().replace("#","");
+						tags_text = tags_text + "," + $(this).html().replace("#","");
 					}
 				});
 				if (tags_text !== "") {
@@ -297,27 +297,29 @@ XKit.extensions.one_click_postage = new Object({
 					if (tags_text === "") {
 						tags_text = $(this).html().replace("#","");
 					} else {
-						tags_text = tags_text + ", " + $(this).html().replace("#","");
+						tags_text = tags_text + "," + $(this).html().replace("#","");
 					}
 				});
 				if (tags_text !== "") {
 					$("#x1cpostage_tags").val(tags_text);
 				}
+			} else {
+			
+				if ($(parent_box).find(".post_tag").length > 0) {
+					var tags_text = "";
+					$(parent_box).find(".post_tag").each(function() {
+						if (tags_text === "") {
+							tags_text = $(this).html().replace("#","");
+						} else {
+							tags_text = tags_text + "," + $(this).html().replace("#","");
+						}
+					});
+					if (tags_text !== "") {
+						$("#x1cpostage_tags").val(tags_text);
+					}
+				}	
+				
 			}
-		} else {
-			if ($(parent_box).find(".post_tag").length > 0) {
-				var tags_text = "";
-				$(parent_box).find(".post_tag").each(function() {
-					if (tags_text === "") {
-						tags_text = $(this).html().replace("#","");
-					} else {
-						tags_text = tags_text + ", " + $(this).html().replace("#","");
-					}
-				});
-				if (tags_text !== "") {
-					$("#x1cpostage_tags").val(tags_text);
-				}
-			}			
 		}
 		
 		$(obj).attr('title','');
