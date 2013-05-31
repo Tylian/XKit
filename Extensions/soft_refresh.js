@@ -76,6 +76,9 @@ XKit.extensions.soft_refresh = new Object({
 				if (m_count === 0) {
 					XKit.notifications.add("No new posts found.","info");
 				} else {
+					XKit.tools.add_function(function(){ //Need to execute function in window
+						Tumblr.Events.trigger("posts:load"); //Bind new posts
+					}, true, ""); 
 					XKit.notifications.add("Added " + m_count + " new posts.","ok");
 				}
 				XKit.extensions.soft_refresh.loading = false;
