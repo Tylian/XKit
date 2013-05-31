@@ -1,5 +1,5 @@
 //* TITLE Blacklist **//
-//* VERSION 1.1 REV A **//
+//* VERSION 1.2 REV A **//
 //* DESCRIPTION Clean your dash **//
 //* DETAILS This extension allows you to block posts based on the words you specify. If a post has the text you've written in the post itself or it's tags, it will be replaced by a warning, or won't be shown on your dashboard, depending on your settings. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -21,6 +21,11 @@ XKit.extensions.blacklist = new Object({
 			text: "Don't display blocked posts at all (not recommended)",
 			default: false,
 			value: false
+		},
+		"check_authors": {
+			text: "Check author blog titles and usernames for blacklisted words",
+			default: true,
+			value: true
 		},
 		"sep1": {
 			text: "Blacklisted Words",
@@ -79,6 +84,19 @@ XKit.extensions.blacklist = new Object({
 				m_title = $(this).find(".post_title").html();
 			}
 			
+			// Collect the author info, if the option is toggled.
+			if (XKit.extensions.blacklist.preferences.check_authors.value == true) {
+				var m_author = "";
+				if ($(this).find(".post_info_fence a").length > 0) {
+					m_author = $(this).find(".post_info_fence a").html();
+				}
+			
+				var m_bTitle = "";
+				if ($(this).find(".post_avatar_link").attr("title").length > 0) {
+					m_bTitle = $(this).find(".post_avatar_link").attr('title');
+				}	
+			}
+			
 			// Collect the content.
 			var m_content = "";
 			
@@ -90,7 +108,11 @@ XKit.extensions.blacklist = new Object({
 				m_content = $(this).find(".caption").html();
 			}
 			
+			if (XKit.extensions.blacklist.preferences.check_authors.value == true) {
+			m_content = m_content + " " + m_title + " " + m_tags + " " + m_author + " " + m_bTitle;
+			} else {
 			m_content = m_content + " " + m_title + " " + m_tags;
+			}
 			m_content = XKit.tools.replace_all(m_content, "&nbsp;", " ");
 			m_content = m_content.toLowerCase();
 			
