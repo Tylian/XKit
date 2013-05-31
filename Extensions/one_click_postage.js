@@ -78,7 +78,7 @@ XKit.extensions.one_click_postage = new Object({
 		
 		if (this.preferences.show_small_ui.value === true) {
 		
-			var slim_css = 	"#x1cpostage_caption { height: 50px; }" + 
+			var slim_css = 	"#x1cpostage_caption { height: 50px; }" +
 					"#x1cpostage_reblog, #x1cpostage_queue, #x1cpostage_draft { height: 32px; }";
 			XKit.tools.add_css(slim_css, "one_click_postage_slim");	
 			
@@ -300,6 +300,10 @@ XKit.extensions.one_click_postage = new Object({
 						tags_text = tags_text + "," + $(this).html().replace("#","");
 					}
 				});
+				if(window.location.pathname.indexOf("tagged/") != -1){
+					if(tags_text != ""){ tags_text += ","; }
+					tags_text += $("#search_query").val();
+				}
 				if (tags_text !== "") {
 					$("#x1cpostage_tags").val(tags_text);
 				}
@@ -314,6 +318,10 @@ XKit.extensions.one_click_postage = new Object({
 							tags_text = tags_text + "," + $(this).html().replace("#","");
 						}
 					});
+					if(window.location.pathname.indexOf("tagged/") != -1){
+						if(tags_text != ""){ tags_text += ","; }
+						tags_text += $("#search_query").val();
+					}
 					if (tags_text !== "") {
 						$("#x1cpostage_tags").val(tags_text);
 					}
