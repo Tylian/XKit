@@ -300,6 +300,10 @@ XKit.extensions.one_click_postage = new Object({
 						tags_text = tags_text + "," + $(this).html().replace("#","");
 					}
 				});
+				if(window.location.pathname.indexOf("tagged/") != -1){
+					if(tags_text != ""){ tags_text += ","; }
+					tags_text += $("#search_query").val();
+				}
 				if (tags_text !== "") {
 					$("#x1cpostage_tags").val(tags_text);
 				}
@@ -314,6 +318,10 @@ XKit.extensions.one_click_postage = new Object({
 							tags_text = tags_text + "," + $(this).html().replace("#","");
 						}
 					});
+					if(window.location.pathname.indexOf("tagged/") != -1){
+						if(tags_text != ""){ tags_text += ","; }
+						tags_text += $("#search_query").val();
+					}
 					if (tags_text !== "") {
 						$("#x1cpostage_tags").val(tags_text);
 					}
@@ -516,7 +524,7 @@ XKit.extensions.one_click_postage = new Object({
 					return;
 				}
 				if (mdata.errors === false) {
-					$(m_button).removeClass("xkit-one-click-reblog-working").closest(".post_container").addClass("reblogged");
+					$(m_button).removeClass("xkit-one-click-reblog-working");
 					if (mdata.message === "" || typeof mdata.message === "undefined") {
 					/*	if (state === 0) { XKit.notifications.add(XKit.language.one_click_postage.status_ok_reblogged, "ok"); }
 						if (state === 1) { XKit.notifications.add(XKit.language.one_click_postage.status_ok_drafted, "ok"); }
