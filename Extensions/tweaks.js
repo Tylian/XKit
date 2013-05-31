@@ -1,5 +1,5 @@
 //* TITLE Tweaks **//
-//* VERSION 1.1 REV B **//
+//* VERSION 1.1 REV C **//
 //* DESCRIPTION Various little tweaks for your dashboard. **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS These are small little tweaks that allows you customize your dashboard. If you have used XKit 6, you will notice that some of the extensions have been moved here as options you can toggle. Keep in mind that some of the tweaks (the ones marked with a '*') can slow down your computer. **//
@@ -177,7 +177,7 @@ XKit.extensions.tweaks = new Object({
 		}
 		
 		if (XKit.extensions.tweaks.preferences.always_show_move_to_top.value === true) {
-			XKit.tools.add_css("#posts .post .post_control.move_to_top { display: block !important; } ", "always_show_move_to_top");
+			XKit.tools.add_css("#posts .post .post_control.move_to_top { display: inline-block !important; } ", "always_show_move_to_top");
 		}
 
 		if (XKit.extensions.tweaks.preferences.slim_sidebar.value === true) {
