@@ -78,7 +78,7 @@ XKit.extensions.one_click_postage = new Object({
 		
 		if (this.preferences.show_small_ui.value === true) {
 		
-			var slim_css = 	"#x1cpostage_caption { height: 50px; }" + 
+			var slim_css = 	"#x1cpostage_caption { height: 50px; }" +
 					"#x1cpostage_reblog, #x1cpostage_queue, #x1cpostage_draft { height: 32px; }";
 			XKit.tools.add_css(slim_css, "one_click_postage_slim");	
 			
@@ -516,7 +516,7 @@ XKit.extensions.one_click_postage = new Object({
 					return;
 				}
 				if (mdata.errors === false) {
-					$(m_button).removeClass("xkit-one-click-reblog-working");
+					$(m_button).removeClass("xkit-one-click-reblog-working").closest(".post_container").addClass("reblogged");
 					if (mdata.message === "" || typeof mdata.message === "undefined") {
 					/*	if (state === 0) { XKit.notifications.add(XKit.language.one_click_postage.status_ok_reblogged, "ok"); }
 						if (state === 1) { XKit.notifications.add(XKit.language.one_click_postage.status_ok_drafted, "ok"); }
