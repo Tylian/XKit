@@ -18,7 +18,7 @@
 
 .xblacklist_open_post {
 	position: absolute;
-	height: 20px; line-height: 20px;
+	height: 30px; line-height: 20px;
 	top: 50%; margin-top: -15px;
 	right: 0px; margin-bottom: 0;
 }
