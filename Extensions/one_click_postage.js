@@ -1,5 +1,5 @@
 //* TITLE One-Click Postage **//
-//* VERSION 1.2 REV B **//
+//* VERSION 1.6 REV A **//
 //* DESCRIPTION Lets you easily reblog, draft and queue posts **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//
@@ -13,6 +13,11 @@ XKit.extensions.one_click_postage = new Object({
 		"sep_1": {
 			text: "Appearance",
 			type: "separator",
+		},
+		"show_reverse_ui": {
+			text: "Use the Reverse UI on the popup-window",
+			default: true,
+			value: true
 		},
 		"show_blog_selector": {
 			text: "Show blog selector",
@@ -62,6 +67,7 @@ XKit.extensions.one_click_postage = new Object({
 	},
 	
 	last_object: new Object(),
+	last_icon_object: new Object(),
 	last_post_id: 0,
 	user_on_box: false,
 	menu_closer_int: 0,
@@ -78,7 +84,7 @@ XKit.extensions.one_click_postage = new Object({
 		
 		if (this.preferences.show_small_ui.value === true) {
 		
-			var slim_css = 	"#x1cpostage_caption { height: 50px; }" +
+			var slim_css = 	"#x1cpostage_caption { height: 50px; }" + 
 					"#x1cpostage_reblog, #x1cpostage_queue, #x1cpostage_draft { height: 32px; }";
 			XKit.tools.add_css(slim_css, "one_click_postage_slim");	
 			
@@ -88,9 +94,28 @@ XKit.extensions.one_click_postage = new Object({
 		
 		if (this.preferences.show_caption_remover.value !== true) {
 			m_remove_button = "";
-		}		
+		}	
 		
-		var m_html = "<div id=\"x1cpostage_box\">" + 
+		var m_html = "";	
+		
+		if (this.preferences.show_reverse_ui.value === true) {
+			
+			var m_html = "<div id=\"x1cpostage_box\">" + 
+						"<input id=\"x1cpostage_tags\" placeholder=\"tags (comma separated)\" />" +
+						"<textarea id=\"x1cpostage_caption\" placeholder=\"caption\"></textarea>" +
+						"<div id=\"x1cpostage_replace\"><div>&nbsp;</div>replace caption, not append</div>" +
+						m_remove_button + 
+						"<div id=\"x1cpostage_reblog\">&nbsp;</div>" +
+						"<div id=\"x1cpostage_queue\">&nbsp;</div>" +
+						"<div id=\"x1cpostage_draft\">&nbsp;</div>" +
+					"</div>";
+					
+			XKit.tools.add_css("#x1cpostage_draft { border-radius: 0px 0px 6px 0px; } #x1cpostage_reblog { border-radius: 0px 0px 0px 6px; } #x1cpostage_tags { border-radius: 6px 6px 0px 0px; border-bottom: 0; } #x1cpostage_replace { border-bottom: 0; } #x1cpostage_remove_caption { border-top: 1px solid #abafbc; border-bottom: 0; }","x1cpostage_reverse_ui");
+			
+			
+		} else {
+			
+			var m_html = "<div id=\"x1cpostage_box\">" + 
 						"<div id=\"x1cpostage_reblog\">&nbsp;</div>" +
 						"<div id=\"x1cpostage_queue\">&nbsp;</div>" +
 						"<div id=\"x1cpostage_draft\">&nbsp;</div>" +
@@ -99,6 +124,7 @@ XKit.extensions.one_click_postage = new Object({
 						m_remove_button + 
 						"<input id=\"x1cpostage_tags\" placeholder=\"tags (comma separated)\" />" +
 					"</div>";
+		}
 					
 		$("body").append(m_html);
 		
@@ -115,7 +141,11 @@ XKit.extensions.one_click_postage = new Object({
 				}
 			}
 			m_blogselector_html = "<select id=\"x1cpostage_blog\">" + m_blogselector_html + "</select>";
-			$("#x1cpostage_caption").before(m_blogselector_html);
+			if (this.preferences.show_reverse_ui.value === true) {
+				$("#x1cpostage_reblog").before(m_blogselector_html);
+			} else {
+				$("#x1cpostage_caption").before(m_blogselector_html);
+			}
 		}
 
 		$(document).on("mouseover",".reblog_button,.post_control.reblog", function(event) {
@@ -127,6 +157,11 @@ XKit.extensions.one_click_postage = new Object({
 		$(document).on("mouseout",".reblog_button,.post_control.reblog", function() {
 			XKit.extensions.one_click_postage.user_on_box = false;
 			XKit.extensions.one_click_postage.close_menu($(this));
+		});
+		
+		$(document).on("click",".reblog_button,.post_control.reblog", function() {
+			XKit.extensions.one_click_postage.user_on_box = false;
+			XKit.extensions.one_click_postage.close_menu($(this), true);
 		});
 		
 		$(document).on("mouseover","#x1cpostage_box", function() {
@@ -150,11 +185,38 @@ XKit.extensions.one_click_postage = new Object({
 		});
 		
 		$("#x1cpostage_remove_caption").click(function() {
-			$("#x1cpostage_remove_caption").slideUp('fast');
-			$("#x1cpostage_caption").slideUp('fast');
-			$("#x1cpostage_replace").slideUp('fast');
+			
+			if (XKit.extensions.one_click_postage.preferences.show_reverse_ui.value === true) {
+					
+				$("#x1cpostage_remove_caption").css('display','none');
+				$("#x1cpostage_caption").css('display','none');
+				$("#x1cpostage_replace").css('display','none');
+					
+				// Determine where we are going to show the box.
+				var obj = XKit.extensions.one_click_postage.last_icon_object;	
+				var offset = $(obj).offset();
+	
+				// Box position
+				var box_left = offset.left - ($("#x1cpostage_box").width() / 2) + 10;
+				var box_top = (offset.top - $("#x1cpostage_box").height()) - 5;	
+					
+				$("#x1cpostage_box").css("top", box_top + "px");
+				$("#x1cpostage_box").css("left", box_left + "px");
+
+
+			} else {
+				
+				$("#x1cpostage_remove_caption").slideUp('fast');
+				$("#x1cpostage_caption").slideUp('fast');
+				$("#x1cpostage_replace").slideUp('fast');
+				
+			}
+			
+
 			$("#x1cpostage_caption").addClass("x1cpostage_remove_caption_on");
 			$("#x1cpostage_tags").css("border-top","1px solid #abafbc");
+
+
 		});
 		
 		$("#x1cpostage_replace").click(function() {
@@ -176,6 +238,7 @@ XKit.extensions.one_click_postage = new Object({
 	destroy: function() {
 		$(document).off('click', '.reblog_button,.post_control.reblog', XKit.extensions.one_click_postage.process_click);
 		XKit.tools.remove_css("one_click_postage");
+		XKit.tools.remove_css("x1cpostage_reverse_ui");
 		$("#x1cpostage_box").remove();
 		XKit.tools.remove_css("one_click_postage_slim");	
 	},
@@ -337,15 +400,27 @@ XKit.extensions.one_click_postage = new Object({
 		var offset = $(obj).offset();
 
 		// Box position
+		
 		var box_left = offset.left - ($("#x1cpostage_box").width() / 2) + 10;
 		var box_top = offset.top + 30;
+		
+		if (XKit.extensions.one_click_postage.preferences.show_reverse_ui.value === true) {
+		
+			box_top = (offset.top - $("#x1cpostage_box").height()) - 5;	
+			
+		}
 
 		$("#x1cpostage_box").css("top", box_top + "px");
 		$("#x1cpostage_box").css("left", box_left + "px");
 		
-		$("#x1cpostage_box").slideDown('fast');
+		if (XKit.extensions.one_click_postage.preferences.show_reverse_ui.value === true) {
+			$("#x1cpostage_box").fadeIn('fast');
+		} else {
+			$("#x1cpostage_box").slideDown('fast');
+		}
 		
 		XKit.extensions.one_click_postage.last_object = parent_box;
+		XKit.extensions.one_click_postage.last_icon_object = obj;
 		XKit.extensions.one_click_postage.last_post_id = $(parent_box).attr('data-post-id');
 		
 		
@@ -356,17 +431,37 @@ XKit.extensions.one_click_postage = new Object({
 		$("#x1cpostage_tags").blur();
 		$("#x1cpostage_caption").blur();
 	},
-	close_menu: function(obj) {
+	close_menu: function(obj, force) {
 		clearTimeout(XKit.extensions.one_click_postage.menu_closer_int);
+		
+		if (force === true) {
+			last_object = null;
+			XKit.extensions.one_click_postage.user_on_box = false;
+			if (XKit.extensions.one_click_postage.preferences.show_reverse_ui.value === true) {
+				$("#x1cpostage_box").fadeOut('fast');
+			} else {
+				$("#x1cpostage_box").slideUp('fast');
+			}
+			return;	
+		}
+		
 		XKit.extensions.one_click_postage.menu_closer_int = setTimeout(function() {
 			if (XKit.extensions.one_click_postage.user_on_box === false) {
 				last_object = null;
-				$("#x1cpostage_box").slideUp('fast');
+				if (XKit.extensions.one_click_postage.preferences.show_reverse_ui.value === true) {
+					$("#x1cpostage_box").fadeOut('fast');
+				} else {
+					$("#x1cpostage_box").slideUp('fast');
+				}
 			}
 		}, 700);
 	},
 	post: function(state) {
-		$("#x1cpostage_box").slideUp('fast');
+		if (XKit.extensions.one_click_postage.preferences.show_reverse_ui.value === true) {
+			$("#x1cpostage_box").fadeOut('fast');
+		} else {
+			$("#x1cpostage_box").slideUp('fast');
+		}
 		var post_id = $(XKit.extensions.one_click_postage.last_object).attr('data-post-id');
 		var form_key = $("body").attr('data-form-key');
 		var reblog_key = $(XKit.extensions.one_click_postage.last_object).attr('data-reblog-key');
