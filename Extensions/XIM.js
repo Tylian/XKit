@@ -999,7 +999,7 @@ XKit.extensions.XIM = new Object({
 			}
 		}
 		
-		if (XKit.extensions.XIM.buddy_list.indexOf(from) === -1) {
+		if (XKit.extensions.XIM.contacts.indexOf(from) === -1) {
 			$("#xim_message_window_" + from).find(".xim-status").addClass("unknown");
 			$("#xim_message_window_" + from).find(".xim-messages").before("<div class=\"xim-not-in-buddy-list\">Not in buddy list<div data-user-id=\"" + from + "\"class=\"xim-not-in-buddy-list-add\">add to my buddies</a></div>");
 			$("#xim_message_window_" + from).find(".xim-messages").addClass("xim-not-in-buddy-list-added");
