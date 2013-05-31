@@ -1,5 +1,5 @@
 //* TITLE Reblog As Text **//
-//* VERSION 1.0 REV A **//
+//* VERSION 1.0 REV B **//
 //* DESCRIPTION Text posts remain text **//
 //* DETAILS This post allows you to always reblog text posts as text posts, and not as links. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -18,9 +18,7 @@ XKit.extensions.reblog_as_text = new Object({
 		}
 	
 		if ($(".post").length > 0) {
-			$(document).on("click", ".reblog_button", function() {
-				XKit.extensions.reblog_as_text.fix_page();
-			});
+			$(document).on("click", ".reblog_button, .post_control.reblog", XKit.extensions.reblog_as_text.fix_page);
 		}
 		
 	},
@@ -52,7 +50,6 @@ XKit.extensions.reblog_as_text = new Object({
 				
 				function xkit_do_switch_to_text() {
 					if (jQuery(".mceLayout").length <= 0) {
-						console.log("NO");
 						setTimeout(function() { xkit_do_switch_to_text() },100);
 						return;
 					}
@@ -86,6 +83,7 @@ XKit.extensions.reblog_as_text = new Object({
 	},
 
 	destroy: function() {
+		$(document).off("click", ".reblog_button, .post_control.reblog", XKit.extensions.reblog_as_text.fix_page);
 		this.running = false;
 	}
 
