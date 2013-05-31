@@ -1,5 +1,5 @@
 //* TITLE Mute! **//
-//* VERSION 1.0 REV A **//
+//* VERSION 1.1 REV A **//
 //* DESCRIPTION Better than 'shut up!' **//
 //* DETAILS This extension allows you to hide text and answer posts by an user while still seeing their other posts. Useful if a blogger has nice posts but a bad personality. Please note that you'll need to re-mute them if a user changes their URL. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -35,18 +35,19 @@ XKit.extensions.mute = new Object({
 				XKit.extensions.mute.save();
 			}
 		}
+
 		XKit.post_listener.add("mute", XKit.extensions.mute.do_posts);
 		XKit.extensions.mute.do_posts();
 	},
 	
 	do_posts: function(rethink) {
 	
-		$('.user_menu_info_button').unbind('click', XKit.extensions.mute.add_mute_link);
-		$('.user_menu_info_button').bind('click', XKit.extensions.mute.add_mute_link);
+		$('.tumblelog_menu_button').unbind('click', XKit.extensions.mute.add_mute_link);
+		$('.tumblelog_menu_button').bind('click', XKit.extensions.mute.add_mute_link);
 	
 		if (rethink === true) {
 		
-			$('.post.regular, .post.note').each(function() {
+			$('.post.is_regular, .post.is_note').each(function() {
 			
 				var m_username = $(this).attr('data-tumblelog-name');
 				$(this).addClass("xmute-done");
@@ -61,7 +62,7 @@ XKit.extensions.mute = new Object({
 			
 		} else {
 	
-			$('.post.regular, .post.note').not(".xmute-done").each(function() {
+			$('.post.is_regular, .post.is_note').not(".xmute-done").each(function() {
 			
 				var m_username = $(this).attr('data-tumblelog-name');
 				$(this).addClass("xmute-done");
@@ -77,28 +78,53 @@ XKit.extensions.mute = new Object({
 	},
 	
 	add_mute_link: function(e) {
-		
-		var menu_box = $(e.target).parent().find(".user_menu_list");
-		var user_url = $(menu_box).find(".user_menu_item_toggle_following").attr('data-tumblelog-name');
+
+		var menu_box = $(e.target).parent().find(".tumblelog_menu_popover");
+		var user_url = $(menu_box).parent().find(".tumblelog_menu_link").attr('data-tumblelog-name');
+		var m_class = "";
 		
 		var m_sentence = "Mute";
 		if (XKit.extensions.mute.muted.indexOf(user_url) !== -1) {
 			m_sentence = "Unmute";	
+			m_class = "already_muted";
 		}
 		
 		if ($(menu_box).find(".xkit-mute-button").length > 0) {
 			// Remove first.
-			$(menu_box).find(".xkit-mute-button").remove();
+			$(menu_box).find(".xkit-mute-button").parent().remove();
 		};
 		
-		var m_html = '<a href="#" id="xkit-mute-button-' + user_url + '" data-user-url="' + user_url + '" class="xkit-mute xkit-mute-button" onclick="return false;"><div class="user_menu_list_item">' +
-					'<span class="user_menu_icon xkit-mute-in"></span> ' + m_sentence + '</div></a>';
-		$(menu_box).find(".user_menu_item_toggle_following").before(m_html);
+		/*
 		
-		$("#xkit-mute-button-" + user_url).click(function() {
+		The new menu structure:
+		
+		<div class="popover_menu_item">
+                    <a class="user_menu_toggle_follow tumblelog_menu_link unfollow">
+                        <span class="hide_overflow">
+                            <span class="follow">Follow</span>
+                            <span class="unfollow">Unfollow</span>
+                        </span>
+                    </a>
+                </div>
+                
+                */
+                
+                var m_html = 	"<div class=\"popover_menu_item\">" +
+                			"<a onclick=\"return false;\" class=\"tumblelog_menu_link xkit-mute-button " + m_class + " xkit-mute-button-" + user_url + "\" data-user-url=\"" + user_url + "\">" +
+                				"<span class=\"hide_overflow\">" + m_sentence + "</span>" +
+                			"</a>" +
+                		"</div>";
+                					
+		$(menu_box).find(".open_in_tab").parent().before(m_html);
+		
+		var m_target = e.target;
+		
+		$(".xkit-mute-button-" + user_url).unbind('click');
+		$(".xkit-mute-button-" + user_url).bind('click', function() {
 		
 			XKit.extensions.mute.toggle_mute(user_url);
 			$("#glass_overlay").trigger('click');
+			$(m_target).trigger('click');
 			
 		});
 		
