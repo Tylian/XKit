@@ -1,2 +1,4 @@
 # Do not commit this
 build
+
+.DS_Store
