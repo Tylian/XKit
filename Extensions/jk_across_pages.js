@@ -16,6 +16,9 @@ XKit.extensions.jk_across_pages = new Object({
 	running: false,
 
 	run: function() {
+		// If #auto_pagination_loader exists, endless scrolling is enabled and this extension is useless
+		if (jQuery('#auto_pagination_loader').length > 0) return;
+
 		var that = this;
 		jQuery(document.body).bind('keydown.xkit_jk_across_pages', function(evt) {
 			if (!evt.shiftKey && !evt.ctrlKey && !evt.altKey && !evt.metaKey) {
