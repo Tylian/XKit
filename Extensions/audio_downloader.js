@@ -1,5 +1,5 @@
 //* TITLE Audio Downloader **//
-//* VERSION 1.0 REV B **//
+//* VERSION 1.1 REV A **//
 //* DESCRIPTION Lets you download audio posts hosted on Tumblr **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//
@@ -49,9 +49,15 @@ XKit.extensions.audio_downloader = new Object({
 		var this_control_html = $(obj_id).children('.post_controls').html();
 		var permalink = $(obj_id).find(".permalink").attr('href');
 
+		if ($(obj_id).find(".post_permalink").length > 0) {
+			permalink = $(obj_id).find(".post_permalink").attr('href');
+		}
+
 		var json_page = permalink.replace("/post/", "/api/read/json?id=");
 		json_page = json_page.replace("/private/", "/api/read/json?id=");
 
+
+		console.log(json_page);
 
 		GM_xmlhttpRequest({
 			method: "GET",
@@ -71,6 +77,7 @@ XKit.extensions.audio_downloader = new Object({
 				
 				m_url = m_url + "?plead=please-dont-download-this-or-our-lawyers-wont-let-us-host-audio";
 				var m_id = "audio_" + XKit.extensions.audio_downloader.make_id();
+				console.log(m_url);
 				XKit.window.show("The Big-Bro Warning", "This functionality is provided in good faith. Please keep in mind the laws while using it: if you think downloading this file might be a copyright violation, please hit Cancel Download now.", "warning", "<a href=\"" + m_url + "\" download=\"" + m_id + "\" id=\"xkit-get-audio-button-start\" class=\"xkit-button default\">Download File</a><div id=\"xkit-close-message\" class=\"xkit-button\">Cancel</div>");
 				
 				$("#xkit-get-audio-button-start").click(function() {
@@ -99,7 +106,13 @@ XKit.extensions.audio_downloader = new Object({
 		
 	check_posts: function() {
 	
-		$("li.audio").not(".xgetaudioed").each(function() {
+		var m_selector = "li.audio";
+
+		if ($("#posts").hasClass("posts_v2") === true) {
+			 m_selector = ".is_audio";
+		}
+	
+		$(m_selector).not(".xgetaudioed").each(function() {
 
 			$(this).addClass("xgetaudioed");
 			if ($(this).find('.post_controls').html().indexOf('class="xgetaudiobutton"') !== -1) { return; }
@@ -113,9 +126,13 @@ XKit.extensions.audio_downloader = new Object({
 			}
 
 			this_id = $(this).attr('id');
-			add_html =	'<a href="#" title="Download this Audio Post" onclick="return false;"' +
-					 'class="xgetaudiobutton post_control" data-post-id="' + this_id + '">&nbsp</a>';
-			$(this).find('.post_controls').find('.like_button').before(add_html);
+			add_html =	'<div class="xgetaudiobutton post_control" data-post-id="' + this_id + '"></div>';
+			
+			if ($(this).find('.post_controls').find('.like_button').length > 0) {
+				$(this).find('.post_controls').find('.like_button').before(add_html);
+			} else {
+				$(this).find('.post_controls_inner').find('.like').before(add_html);
+			}
 
 		});
 		
