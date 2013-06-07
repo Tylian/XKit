@@ -1,5 +1,5 @@
 //* TITLE CleanFeed **//
-//* VERSION 1.0 REV F **//
+//* VERSION 1.2 REV A **//
 //* DESCRIPTION Browse safely in public **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS This extension, when enabled, hides photo posts until you hover over them. Useful to browse Tumblr in a workspace or in public, and not worry about NSFW stuff appearing. You can also set it to hide avatars and not show non-text posts at all. To activate or disable it, click on the CleanFeed button on your sidebar. It will remember it's on/off setting. **//
@@ -197,12 +197,12 @@ XKit.extensions.cleanfeed = new Object({
 			}
 			
 			if (XKit.extensions.cleanfeed.added_css == false) {
-				XKit.tools.add_css(" .post .inline_image { opacity: 0.15; } .post .inline_image:hover { opacity: 1; } .image_thumbnail, .photoset_row img, .post .image, .post .panorama { visibility: hidden; } .post.video { display: none !important; }", "cleanfeed_on");
+				XKit.tools.add_css(" .post .inline_image { opacity: 0.15; } .post .inline_image:hover { opacity: 1; } .image_thumbnail, .photoset_row img, .post .image, .post .panorama { visibility: hidden; } .post.video, .post.is_video { display: none !important; }", "cleanfeed_on");
 				XKit.extensions.cleanfeed.added_css = true;
 			}
 			
 			if (XKit.extensions.cleanfeed.added_full_block_css == false && XKit.extensions.cleanfeed.preferences.full_block.value === true) {
-				XKit.tools.add_css(" .post.video, .post.photo, .post.audio { display: none !important; }", "cleanfeed_full_block");	
+				XKit.tools.add_css(" .post.video, .post.photo, .post.audio, .post.is_video, .post.is_photo, .post.is_audio { display: none !important; }", "cleanfeed_full_block");	
 				XKit.extensions.cleanfeed.added_full_block_css = true;
 			}
 			
@@ -218,12 +218,23 @@ XKit.extensions.cleanfeed = new Object({
 			XKit.extensions.cleanfeed.added_full_block_css = false;
 			
 			$(".post_avatar_link").each(function() {
-				var m_url = $(this).attr('data-user-avatar-url');
+				
+				var m_url = $(this).find(".post_avatar_image").attr('src');
+				
+				if (typeof m_url === "undefined" || m_url === "") {
+					
+					m_url = $(this).attr('data-user-avatar-url');	
+					
+				}
+					
 				if (m_url.indexOf('url(') !== -1) {
 					$(this).css("background-image", m_url);
 				} else {
 					$(this).css("background-image", "url(" + m_url + ")");
-				}	
+				}
+
+
+					
 			});
 			
 			XKit.tools.remove_css("cleanfeed_on");
