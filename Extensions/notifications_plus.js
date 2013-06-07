@@ -1,5 +1,5 @@
 //* TITLE Notifications+ **//
-//* VERSION 1.0 REV B **//
+//* VERSION 1.0 REV C **//
 //* DESCRIPTION Enhances the notifications **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//
@@ -101,6 +101,8 @@ XKit.extensions.notifications_plus = new Object({
 			}
 		}
 
+		console.log(post_url);
+		
 		// Break it down.
 		post_url = post_url.replace('http://','');
 		post_url = post_url.replace('.tumblr.com','');
@@ -108,6 +110,8 @@ XKit.extensions.notifications_plus = new Object({
 		var parts = post_url.split('/');
 		var blog_id = parts[0];
 		var post_id = parts[2];
+		
+		console.log("post id: " + post_id);
 	
 		// Position the window.
 		var offset = $(obj).offset();
@@ -146,6 +150,7 @@ XKit.extensions.notifications_plus = new Object({
   			url: "http://" + blog_id + ".tumblr.com/api/read?id=" + post_id,
   			onload: function(response) {
 				var data = response.responseText;
+				console.log(data);
        				var xstart = data.indexOf('unix-timestamp="');
 				var xend = data.indexOf('"', xstart + 18);
 				var xts = data.substring(xstart + 16, xend);
@@ -154,23 +159,49 @@ XKit.extensions.notifications_plus = new Object({
 				if (XKit.extensions.notifications_plus.current_post_id !== post_id) {
 					return;	
 				}
+				//console.log("fetching.." + new_url);
 				GM_xmlhttpRequest({
   					method: "GET",
   					url: new_url,
   					onload: function(response) {
-						data = response.responseText;
-						var post_cont = $("#post_" + post_id, data);
-						var real_html = $(post_cont).find(".notes").html();
-						if (real_html.indexOf(" ") !== -1) {
-							real_html = real_html.substring(0, real_html.indexOf(" "));
+  						try {
+							data = response.responseText;
+							/*var post_cont = $("#post_" + post_id, data);
+							var real_html = $(post_cont).find(".notes").html();
+							if (real_html.indexOf(" ") !== -1) {
+								real_html = real_html.substring(0, real_html.indexOf(" "));
+							}
+							if (XKit.extensions.notifications_plus.current_post_id !== post_id) {
+								return;	
+							}
+							*/
+							
+							var real_html = "";
+							
+							$(".post",data).each(function() {
+								var r_post_id = $(this).attr('data-id');
+								if (r_post_id === post_id) {
+									real_html = $(this).find(".notes").html();	
+									return false;
+								} 	
+							});
+							
+
+							if (real_html.indexOf(" ") !== -1) {
+								real_html = real_html.substring(0, real_html.indexOf(" "));
+							}
+							
+							if (XKit.extensions.notifications_plus.current_post_id !== post_id) {
+								return;	
+							}
+							
+							$("#xpreview-container").removeClass("loading");
+							$("#xpreview-notes").html("&hearts; " + real_html);
+							XKit.extensions.notifications_plus.last_post = post_id;
+							XKit.extensions.notifications_plus.last_post_notes = real_html;
+						} catch(e) {
+							XKit.console.add(e.message);	
 						}
-						if (XKit.extensions.notifications_plus.current_post_id !== post_id) {
-							return;	
-						}
-						$("#xpreview-container").removeClass("loading");
-						$("#xpreview-notes").html("&hearts; " + real_html);
-						XKit.extensions.notifications_plus.last_post = post_id;
-						XKit.extensions.notifications_plus.last_post_notes = real_html;
   					}
 				});
 			}
