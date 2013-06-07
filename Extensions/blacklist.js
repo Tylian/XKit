@@ -1,5 +1,5 @@
 //* TITLE Blacklist **//
-//* VERSION 1.2 REV A **//
+//* VERSION 1.3 REV A **//
 //* DESCRIPTION Clean your dash **//
 //* DETAILS This extension allows you to block posts based on the words you specify. If a post has the text you've written in the post itself or it's tags, it will be replaced by a warning, or won't be shown on your dashboard, depending on your settings. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -102,6 +102,10 @@ XKit.extensions.blacklist = new Object({
 			
 			if ($(this).find(".post_text_wrapper").length > 0) {
 				m_content = $(this).find(".post_text_wrapper").html();	
+			}
+			
+			if ($(this).find(".post_body").length > 0) {
+				m_content = $(this).find(".post_body").html();	
 			}
 			
 			if ($(this).find(".caption").length > 0) {
