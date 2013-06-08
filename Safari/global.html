@@ -1,0 +1,152 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>XKit global HTML page</title>
+<script type="text/javascript">
+
+	// XKit Bridge for Safari
+
+	(function(){
+
+	if (typeof XBridge !== "undefined") { return; }
+
+	XBridge = {
+		
+		framework_version: safari.extension.displayVersion,
+		
+		init: function() {
+			console.log("XBridge working on framework " + XBridge.framework_version);
+			safari.application.addEventListener("message",XBridge.message,false);
+		},
+		
+		message: function(ev) {
+		
+			if (ev.name === "framework_version") {
+				ev.target.page.dispatchMessage("framework_version", XBridge.framework_version);
+			}
+			
+			if (ev.name === "http_request") {
+				console.log("Got HTTP Request");
+				XBridge.http_request(ev.message, ev);
+			}
+		
+		},
+		
+		http_request: function(obj, ev) {
+		
+			try {
+	
+			var settings = obj.settings;
+			var request = new XMLHttpRequest();
+			var m_event = ev;
+			
+			console.log("Requesting url " + settings['url']);
+
+			if (settings['method'] === "POST") {
+				request.open('POST', settings['url'], true);
+			} else {
+				request.open('GET', settings['url'], true);
+			}
+
+			request.onreadystatechange = function (oEvent) {  
+				if (request.readyState === 4) {  
+			  		console.log("state changed to " + request.status);
+			  		var m_to_return = new Object();
+			  		m_to_return.request = request;
+			  		m_to_return.status = request.status;
+			  		m_to_return.settings = settings;
+			  		m_to_return.onload = obj.onload;
+			  		m_to_return.onerror = obj.onerror;
+			  		m_to_return.request_id = obj.request_id;
+					if (request.status === 200) {  
+						if (typeof settings['onload'] !== "undefined") {
+							m_event.target.page.dispatchMessage("http_response", m_to_return);
+						}
+					} else {  
+						if (typeof settings['onerror'] !== "undefined") {
+							m_event.target.page.dispatchMessage("http_response", m_to_return);
+						}
+				}  
+			  }  
+			};  
+
+			if (settings['method'] === "POST") {
+				if (settings['json'] === true) {
+					request.setRequestHeader('Content-Type', "application/json");
+					console.log(" -- Bridge requesting post with json mode on");
+				} else {
+					request.setRequestHeader('Content-Type', "application/x-www-form-urlencoded");
+					console.log(" -- Bridge requesting post with json mode off");
+				}
+				request.send(settings['data']);
+			} else {
+				request.send(null);
+			}
+
+			} catch(e) {
+				console.log("Bridge can not make request: " + e.message);
+			}
+		
+		}
+	
+	}
+	
+	XBridge.init();
+
+	}());
+ 
+ 	
+ 
+	/*function httpRequest(settings, event) {
+
+	try {
+
+	var request = new XMLHttpRequest();
+
+	if (settings['method'] === "POST") {
+		request.open('POST', settings['url'], true);
+	} else {
+		request.open('GET', settings['url'], true);
+	}
+
+	request.onreadystatechange = function (oEvent) {  
+	  if (request.readyState === 4) {  
+	    if (request.status === 200) {  
+		if (typeof settings['onload'] !== "undefined") {
+			event.target.page.dispatchMessage("httpResponse", request);
+		}
+	    } else {  
+		if (typeof settings['onerror'] !== "undefined") {
+			event.target.page.dispatchMessage("httpResponse", request);
+		}
+	    }  
+	  }  
+	};  
+
+	if (settings['method'] === "POST") {
+		request.setRequestHeader('Content-Type', "application/x-www-form-urlencoded");
+		request.send(settings['data']);
+	} else {
+		request.send(null);
+	}
+
+	} catch(e) {
+		xlog("**** [httpRequest] Unable to do this: " + e.message,"SafariHTTPRequest");
+	}
+
+	}
+
+	function respondToMessage(theMessageEvent) {
+    		if(theMessageEvent.name === "httpRequest") {
+       			var settings = theMessageEvent.message;
+       			httpRequest(settings, theMessageEvent);
+    		}
+}
+
+	safari.application.addEventListener("message",respondToMessage,false);*/
+
+</script>
+</head>
+<body>
+</body>
+</html>
