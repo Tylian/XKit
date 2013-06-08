@@ -1,5 +1,5 @@
 //* TITLE Notifications+ **//
-//* VERSION 1.0 REV C **//
+//* VERSION 1.1 REV B **//
 //* DESCRIPTION Enhances the notifications **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//
@@ -101,8 +101,6 @@ XKit.extensions.notifications_plus = new Object({
 			}
 		}
 
-		console.log(post_url);
-		
 		// Break it down.
 		post_url = post_url.replace('http://','');
 		post_url = post_url.replace('.tumblr.com','');
@@ -111,8 +109,7 @@ XKit.extensions.notifications_plus = new Object({
 		var blog_id = parts[0];
 		var post_id = parts[2];
 		
-		console.log("post id: " + post_id);
-	
+
 		// Position the window.
 		var offset = $(obj).offset();
 		// Box position
@@ -150,7 +147,6 @@ XKit.extensions.notifications_plus = new Object({
   			url: "http://" + blog_id + ".tumblr.com/api/read?id=" + post_id,
   			onload: function(response) {
 				var data = response.responseText;
-				console.log(data);
        				var xstart = data.indexOf('unix-timestamp="');
 				var xend = data.indexOf('"', xstart + 18);
 				var xts = data.substring(xstart + 16, xend);

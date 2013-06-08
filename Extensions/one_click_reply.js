@@ -1,5 +1,5 @@
 //* TITLE One-Click-Reply **//
-//* VERSION 1.1 REV F **//
+//* VERSION 1.2 REV A **//
 //* DESCRIPTION Lets you reply to notifications **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS To use this extension, hover over a notification and click on the Reply button. **//
@@ -59,8 +59,8 @@ XKit.extensions.one_click_reply = new Object({
 				XKit.extensions.one_click_reply.fill_post();
 			}
 			
-			$(document).on("mouseleave",".notes_container .note", XKit.extensions.one_click_reply.exit_pn);
-			$(document).on("mouseenter",".notes_container .note", XKit.extensions.one_click_reply.enter_pn);
+			$(document).on("mouseleave",".post.is_mine .notes_container .note", XKit.extensions.one_click_reply.exit_pn);
+			$(document).on("mouseenter",".post.is_mine .notes_container .note", XKit.extensions.one_click_reply.enter_pn);
 			$(document).on("mouseenter",".notification", XKit.extensions.one_click_reply.enter);
 			$(document).on("click",".xkit-reply-button", function() {
 				var m_parent = $(this).parentsUntil(".notification").parent();
@@ -105,7 +105,7 @@ XKit.extensions.one_click_reply = new Object({
 				n_box = $(n_box).parentsUntil(".note").parent();
 			}
 		}
-		
+
 		if ($(n_box).find(".xkit-reply-button-pn").length <= 0) {
 			var m_html = "<a href=\"#\" onclick=\"return false\" class=\"xkit-reply-button-pn\">reply</a>";
 			$(n_box).append(m_html);
@@ -232,7 +232,7 @@ XKit.extensions.one_click_reply = new Object({
 		}
 		
 		var post_div = $(obj).parentsUntil(".post").parent();
-		var post_url = $(post_div).find(".permalink").attr('href');
+		var post_url = $(post_div).find(".post_permalink").attr('href');
 		
 		// Then the post contents:
 		var post_contents = "";

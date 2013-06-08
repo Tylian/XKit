@@ -1,5 +1,5 @@
 //* TITLE Reblog Yourself **//
-//* VERSION 1.0 REV C **//
+//* VERSION 1.1 REV B **//
 //* DESCRIPTION Allows you to reblog posts back to your blog **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//
@@ -49,13 +49,13 @@ XKit.extensions.reblog_yourself = new Object({
     		var xd_end =  document.location.href.indexOf("&", xd_start + 2);
     		var xd = document.location.href.substring(xd_start + 4, xd_end);
 
-    		var rd_start = document.location.href.search("&src=");
+    		var rd_start = document.location.href.search("src=") + 4;
     		var rd_end =  document.location.href.indexOf("&", rd_start + 2);
-    		var rd = document.location.href.substring(rd_start + 5, rd_end);
-
+    		var rd = document.location.href.substring(rd_start, rd_end);
+    		
     		var xu = "http://www.tumblr.com/reblog/" + post_id + "/" + xd;
 
-		var xu_html = '<a class="btn icon reblog" id="xreblogyourselfiframebutton" style="display: none;" title="Reblog" href="/reblog/' + post_id + '/' + xd + '/?redirect_to=' + rd + '" target="_top"></a>';
+		var xu_html = '<a class="btn icon reblog" id="xreblogyourselfiframebutton" style="display: none;" title="Reblog" href="/reblog/' + post_id + '/' + xd + '?redirect_to=' + rd + '" target="_top"></a>';
 
 
 		$.ajax({
@@ -94,6 +94,10 @@ XKit.extensions.reblog_yourself = new Object({
 	},
 
 	fix_dashboard: function() {
+		
+		if ($("body").hasClass('dashboard_drafts') === true || $("body").hasClass('dashboard_post_queue') === true) {
+			return;	
+		}
 
 		if ($(".post").length == 0) { return; }
 
@@ -108,7 +112,7 @@ XKit.extensions.reblog_yourself = new Object({
 
 		var user_form_key = $("body").attr('data-form-key');
 		
-		$('li.is_mine').not(".xreblogyourself_done").each(function(index) {
+		$('.post.is_mine').not(".xreblogyourself_done").each(function(index) {
 
 			if ($(this).hasClass("xreblogyourself_done") === true) { return; }
 
@@ -134,13 +138,20 @@ XKit.extensions.reblog_yourself = new Object({
 	
 			if (post_id === "" ||reblog_key === "") {
 				// Can't do this for some reason.
+				console.log("NO REBLOG / POST ID");
 				return;
 			}
 
 			// <a class="post_control post_control_icon reblog_button" title="" data-tumblelog-name="xenix" data-post-type="regular" data-reblog-key="5XJmYn8f" data-reblog-id="50250451612" data-user-form-key="0Rk2VkO4FhIFHKYsHMXFFokI0QI" href="/reblog/50250451612/5XJmYn8f?redirect_to=%2Fdashboard">Reblog</a>
-
-			var m_html = "<a class=\"added_by_xkit_reblog_yourself post_control post_control_icon reblog_button\" title=\"\" data-tumblelog-name=\"" + blog_id + "\" data-post-type=\"" + post_type + "\" data-reblog-key=\"" + reblog_key + "\" data-reblog-id=\"" + reblog_id + "\" data-user-form-key=\"" + user_form_key + "\" href=\"/reblog/" + post_id + "/" + reblog_key + "?redirect_to=%2Fdashboard\">Reblog</a>";
-			$(this).find('.post_controls .delete_button').before(m_html);
+			
+			// New button layout:
+			// <a class="post_control reblog" title="" href="/reblog/51800635787/9lQg1pX7?redirect_to=%2Fdashboard"><span class="offscreen">Reblog</span></a>
+			/* 
+				var m_html = "<a class=\"added_by_xkit_reblog_yourself post_control post_control_icon reblog_button\" title=\"\" data-tumblelog-name=\"" + blog_id + "\" data-post-type=\"" + post_type + "\" data-reblog-key=\"" + reblog_key + "\" data-reblog-id=\"" + reblog_id + "\" data-user-form-key=\"" + user_form_key + "\" href=\"/reblog/" + post_id + "/" + reblog_key + "?redirect_to=%2Fdashboard\">Reblog</a>";
+			*/
+			
+			var m_html = "<a class=\"post_control reblog added_by_xkit_reblog_yourself\" title=\"\" href=\"/reblog/" + post_id + "/" + reblog_key + "?redirect_to=%2Fdashboard\"><span class=\"offscreen\">Reblog</span></a>";
+			$(this).find('.post_controls_inner').prepend(m_html);
 		});
 	
 	},

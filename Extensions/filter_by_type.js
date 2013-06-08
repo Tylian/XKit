@@ -1,5 +1,5 @@
 //* TITLE Filter By Type **//
-//* VERSION 1.0 REV C **//
+//* VERSION 1.1 REV A **//
 //* DESCRIPTION Lets you filter the posts on your dashboard by type **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//
@@ -16,14 +16,14 @@ XKit.extensions.filter_by_type = new Object({
 		  "Only text posts",
 		  "Only quote posts",
 		  "Only link posts",
-		  "Only chat posts"],
+	  	  "Only chat posts"],
 
 	ftr_lnk: ["/dashboard/",
 		  "/show/photos/",
 		  "/show/text/",
 		  "/show/quotes/",
 		  "/show/links/",
-		  "/show/chats/"],
+	  	  "/show/chats/"],
 
 	ftr_typ: ["post",
 		  "photo",
@@ -51,7 +51,7 @@ XKit.extensions.filter_by_type = new Object({
 
 		xf_html = '<ul class="controls_section" id="xfilter_group">' +
 			'<li class="no_push">' +
-				'<a href="#" class="queue" id="xfilter_button">' +
+				'<a href="#" onclick="return false" class="queue" id="xfilter_button">' +
 					'<div id="xfilter_status">' + XKit.extensions.filter_by_type.ftr_str[0] + '</div>' +
 				'</a>' +
 			'</li>' +
@@ -88,8 +88,8 @@ XKit.extensions.filter_by_type = new Object({
 	filter: function() {
 
 		var m_type = XKit.extensions.filter_by_type.current_filter;
-		var new_post_html = jQuery("#new_post")[0].outerHTML;
-		$("ol#posts").html(new_post_html + "<li id=\"xfilter-loading\" class=\"post\"><div>Loading posts, please wait..</div></li>");
+		var new_post_html = jQuery("#new_post").parent()[0].outerHTML;
+		$("ol#posts").html(new_post_html + "<li id=\"xfilter-loading\" class=\"post_container\"><div class=\"post post_full\">Loading posts, please wait..</div></li>");
 
 		XKit.extensions.filter_by_type.scroller_working = false;
 		XKit.extensions.filter_by_type.current_page = 1;
@@ -111,6 +111,10 @@ XKit.extensions.filter_by_type = new Object({
 					$("html, body").animate({ scrollTop: 0 }, "slow");
 					$("#auto_pagination_loader_failure").css("display","none");
 					$("#auto_pagination_loader_loading").css("display","block");
+					
+					XKit.tools.add_function(function(){ //Need to execute function in window
+						Tumblr.Events.trigger("posts:load"); //Bind new posts
+					}, true, ""); 
 				}
 			});
 
@@ -140,6 +144,11 @@ XKit.extensions.filter_by_type = new Object({
 							$("ol#posts").append(new_posts);
 							$("#auto_pagination_loader_failure").css("display","none");
 							$("#auto_pagination_loader_loading").css("display","block");
+							
+							XKit.tools.add_function(function(){ //Need to execute function in window
+								Tumblr.Events.trigger("posts:load"); //Bind new posts
+							}, true, ""); 
+							
 						}
 					});
 					

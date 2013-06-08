@@ -1,5 +1,5 @@
 //* TITLE Tweaks **//
-//* VERSION 1.1 REV C **//
+//* VERSION 1.3 REV A **//
 //* DESCRIPTION Various little tweaks for your dashboard. **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS These are small little tweaks that allows you customize your dashboard. If you have used XKit 6, you will notice that some of the extensions have been moved here as options you can toggle. Keep in mind that some of the tweaks (the ones marked with a '*') can slow down your computer. **//
@@ -12,6 +12,7 @@ XKit.extensions.tweaks = new Object({
 	running: false,
 	slow: true,
 	run_interval: 0,
+	run_interval_2: 0,
 
 	preferences: {
 		"sepm1": {
@@ -31,6 +32,16 @@ XKit.extensions.tweaks = new Object({
 			text: "Always show 'Move to top' button queue",
 			default: true,
 			value: true
+		},
+		"small_quotes": {
+			text: "Slim Quote post text on Dashboard",
+			default: false,
+			value: false
+		},
+		"hide_sponsored": {
+			text: "Dim sponsored posts on dashboard (not recommended)",
+			default: false,
+			value: false
 		},
 		"hide_blog_search": {
 			text: "Hide blogs on the search bar suggestions",
@@ -159,17 +170,26 @@ XKit.extensions.tweaks = new Object({
 		if (XKit.extensions.tweaks.preferences.hide_blog_search.value === true) {
 			XKit.tools.add_css(".blog.search_results_section { display: none !important }", "xkit_tweaks_hide_blog_search");
 		}
+		
+		if (XKit.extensions.tweaks.preferences.hide_sponsored.value === true) {
+			XKit.tools.add_css(".posts.sponsored_post { opacity: 0.33 !important } .posts.sponsored_post:hover { opacity: 1 !important }", "xkit_tweaks_hide_sponsored");
+		}
+		
+	
+		if (XKit.extensions.tweaks.preferences.small_quotes.value === true) {
+			XKit.tools.add_css(".post.is_quote .post_title.large, .post.is_quote .post_title.extra_large { font-size: 20px; line-height: 22px; }", "xkit_tweaks_small_quotes");
+		}
 
 		if (XKit.extensions.tweaks.preferences.hide_recommended.value === true) {
 			$("#recommended_tumblelogs").css("display","none");
 		}
 		
 		if (XKit.extensions.tweaks.preferences.hide_share.value === true) {
-			XKit.tools.add_css("#posts .post .post_controls .share_social_button { display: none; } ", "xkit_tweaks_hide_share");
+			XKit.tools.add_css(".post .post_controls .share_social_button { display: none; } ", "xkit_tweaks_hide_share");
 		}
 
 		if (XKit.extensions.tweaks.preferences.hide_notes.value === true) {
-			XKit.tools.add_css("#posts .post .post_controls .reblog_count { display: none; } ", "xkit_tweaks_hide_notes");
+			XKit.tools.add_css(".post .post_notes { display: none; } ", "xkit_tweaks_hide_notes");
 		}	
 
 		if (XKit.extensions.tweaks.preferences.hide_find_blogs.value === true) {
@@ -244,9 +264,12 @@ XKit.extensions.tweaks = new Object({
 
 	destroy: function() {
 		this.running = false;
-		clearInterval(this.run_interval);	
+		clearInterval(this.run_interval);
+		clearInterval(this.run_interval_2);	
 		$(".xkit-small-blog-setting-link").remove();
 		$(".small_links.by-xkit").remove();
+		XKit.tools.remove_css("xkit_tweaks_small_quotes");
+		XKit.tools.remove_css("xkit_tweaks_hide_sponsored");
 		XKit.tools.remove_css("xkit_tweaks_hide_blog_search");
 		XKit.tools.remove_css("xkit_tweaks_hide_share");
 		XKit.tools.remove_css("xkit_tweaks_hide_notes");

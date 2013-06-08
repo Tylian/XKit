@@ -16,8 +16,7 @@ XKit.extensions.xkit_installer = new Object({
 		'one_click_postage',
 		'one_click_reply',
 		'tweaks',
-		'go_to_dash',
-		'XIM'
+		'go_to_dash'
 	],
 
 	run: function() {
