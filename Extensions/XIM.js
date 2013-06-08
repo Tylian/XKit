@@ -1,5 +1,5 @@
 //* TITLE XIM **//
-//* VERSION 2.8 REV B **//
+//* VERSION 3.1 REV B **//
 //* DESCRIPTION Instant messenger for XKit. **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS XIM allows you to send instant messages to other XKit 7 users.<br/>Please note that this is a very premature version of XIM. A lot of features, including security ones are not implemented yet. Please use with caution.<br/><br/>Notification Sounds by pageofmelody.tumblr.com **//
@@ -9,7 +9,7 @@
 
 XKit.extensions.XIM = new Object({
 
-	build: 300,
+	build: 400,
 	slow: true,
 	running: false,
 	state: 0,
@@ -289,7 +289,7 @@ XKit.extensions.XIM = new Object({
 
 	send: function(data) {
 
-		XKit.console.add("|-- Sending: " + data);
+		//XKit.console.add("|-- Sending: " + data);
 		XKit.extensions.XIM.socket.send(data);
 
 	},
@@ -416,6 +416,8 @@ XKit.extensions.XIM = new Object({
 		document.title = XKit.extensions.XIM.default_title;
 		$("#xim_username").html("XIM");
 		$("#xim_status").html("offline");
+		$("#xim-contacts-offline").remove();
+		$("#xim-contacts-online").remove();
 		$("#xim_small_links").slideUp('fast');
 		$("#xim_sidebar").find("#xim-add-person").slideUp('fast');
 		$(".xim_contact").slideUp('fast', function() { $(this).remove(); });
@@ -458,7 +460,7 @@ XKit.extensions.XIM = new Object({
 
 	process: function(data) {
 
-		XKit.console.add("XIM [" + XKit.extensions.XIM.state + "] received data -> " + data);
+		//XKit.console.add("XIM [" + XKit.extensions.XIM.state + "] received data -> " + data);
 		
 		if (data === "XIM_PHOTO_NEXT") {
 				
@@ -501,6 +503,7 @@ XKit.extensions.XIM = new Object({
 			var m_from = m_data[0];
 			var m_picture = m_data[1];
 			
+			$("#xim_message_window_" + m_from).find(".photo-transfer-progress").remove();
 			var m_html = "<div class=\"xim-message photo-transfer\"><b>Photo transfer in progress</b><br/>Please do not close the window or refresh the page.</div><div class=\"xim-message photo-transfer photo-transfer-progress\">Please wait...</div>";
 
 			if($("#xim_message_window_" + m_from).length === 0) {
@@ -828,6 +831,11 @@ XKit.extensions.XIM = new Object({
 		XKit.extensions.XIM.buddy_list_status[XKit.extensions.XIM.buddy_list.indexOf(user_name)] = "1";
 		$("#xim-status-for-" + user_name).addClass("online");
 		$("#xim-status-for-" + user_name).removeClass("offline");
+		
+		var m_div = $("#xim-status-for-" + user_name).parentsUntil(".xim_contact").parent();
+		$(m_div).insertAfter("#xim-contacts-online");
+		
+		XKit.extensions.XIM.check_for_empty_lists();
 
 	},
 
@@ -859,7 +867,38 @@ XKit.extensions.XIM = new Object({
 		$("#xim-status-for-" + user_name).removeClass("online");
 		
 		$("#xim-status-for-" + user_name).addClass("offline");
+		
+		var m_div = $("#xim-status-for-" + user_name).parentsUntil(".xim_contact").parent();
+		$(m_div).insertAfter("#xim-contacts-offline");
+		
+		XKit.extensions.XIM.check_for_empty_lists();
 
+	},
+	
+	check_for_empty_lists: function() {
+		
+		if ($(".xim-status.online").length < 1) {
+			if ($("#xim-no-contacts-found-online").length <= 0) {	
+				var m_html = "<li id=\"xim-no-contacts-found-online\" class=\"no_push xim-no-contacts-placeholder\">No online contacts</li>";
+				$("#xim_sidebar").find("#xim-contacts-online").after(m_html);
+			}
+		} else {
+			if ($("#xim-no-contacts-found-online").length > 0) {
+				$("#xim-no-contacts-found-online").remove();	
+			}
+		}
+		
+		if ($(".xim-status.offline").length < 1) {
+			if ($("#xim-no-contacts-found-offline").length <= 0) {	
+				var m_html = "<li id=\"xim-no-contacts-found-offline\" class=\"no_push xim-no-contacts-placeholder\">No offline contacts</li>";
+				$("#xim_sidebar").find("#xim-contacts-offline").after(m_html);
+			}
+		} else {
+			if ($("#xim-no-contacts-found-offline").length > 0) {
+				$("#xim-no-contacts-found-offline").remove();	
+			}
+		}
+		
 	},
 	
 	load_msg_history: function() {
@@ -1173,6 +1212,13 @@ XKit.extensions.XIM = new Object({
 		var m_html = "";
 
 		$(".xim_contact").remove();
+		
+		$("#xim-contacts-online").remove();
+		$("#xim-contacts-offline").remove();
+		
+		var m_html = "<li class=\"no_push xim-contacts-separator\" id=\"xim-contacts-online\">Online Contacts</li><li class=\"no_push xim-contacts-separator\" id=\"xim-contacts-offline\">Offline Contacts</li>";
+
+		$("#xim_sidebar").find("#xim-add-person").before(m_html);
 
 		for(i=0;i<XKit.extensions.XIM.buddy_list.length;i++) {
 
@@ -1184,17 +1230,13 @@ XKit.extensions.XIM = new Object({
 			if (XKit.extensions.XIM.buddy_list_status[i] === "1") {
 				m_state = "online";
 			}
-			/*m_html = m_html + '<li style="display: none" class="no_push xim_contact">' +
-						'<a href="#" onclick="return false" class="following xim_contact_send" data-user-id="' + XKit.extensions.XIM.buddy_list[i] + '">' +
-							'<div class="hide_overflow">' + XKit.extensions.XIM.buddy_list[i] + '</div>' +
-							'<div id="xim-status-for-' + XKit.extensions.XIM.buddy_list[i] + '" class="count xim-status ' + m_state + '">' + m_state + '</div>' +
-						'</a></li>';*/
+
 			XKit.extensions.XIM.create_contact_div(XKit.extensions.XIM.buddy_list[i], m_state);
 		}
 
-		$("#xim_sidebar").find("#xim-add-person").before(m_html);
+		
 		XKit.extensions.XIM.bind_contact_send();
-
+		XKit.extensions.XIM.check_for_empty_lists();
 		$(".xim_contact").slideDown('fast');
 
 	},
@@ -1205,6 +1247,10 @@ XKit.extensions.XIM = new Object({
 		if (typeof status !== "undefined") {
 			state_class = status;
 		}
+		
+		if ($("#xim-status-for-" + username).length > 0) {
+			return;
+		}
 
 		var m_html = '<li style="display: none" class="no_push xim_contact">' +
 				'<img src="http://api.tumblr.com/v2/blog/' + username + '.tumblr.com/avatar/16" class="xim-avatar">' +
@@ -1212,7 +1258,18 @@ XKit.extensions.XIM = new Object({
 					'<div class="hide_overflow">' + username + '</div>' +
 					'<div id="xim-status-for-' + username + '" class="count xim-status ' + state_class + '">offline</div>' +
 			'</a></li>';
-		$("#xim_sidebar").find("#xim-add-person").before(m_html);
+			
+		if (state_class === "offline") {
+			
+			$("#xim_sidebar").find("#xim-contacts-offline").after(m_html);
+		
+		}else {
+		
+			$("#xim_sidebar").find("#xim-contacts-online").after(m_html);	
+			
+		}
+		
+		// $("#xim_sidebar").find("#xim-add-person").before(m_html);
 		$(".xim_contact").slideDown('fast');
 
 		XKit.extensions.XIM.bind_contact_send();
@@ -1234,6 +1291,7 @@ XKit.extensions.XIM = new Object({
   			XKit.window.show("Unable to access webcam","You either don't have a webcam, or you've denied permission for XKit to access your webcam to take pictures.","error","<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
   			XKit.console.add(e);
   			$("#xim-camera-window").remove();
+  			$("#xim-camera-shadow").remove();
 		}
 
 		function success(stream) {
@@ -1274,6 +1332,7 @@ XKit.extensions.XIM = new Object({
   				XKit.extensions.XIM.photo_sending_to = XKit.extensions.XIM.camera_username;
   				XKit.extensions.XIM.send("XIM_PHOTO " + XKit.extensions.XIM.camera_username + "\n" + m_data.substring(0,XKit.extensions.XIM.photo_sending_chunk_size));
   				
+  				$("#xim_message_window_" + XKit.extensions.XIM.camera_username).find(".photo-transfer-progress").remove();
  				var m_html = "<div class=\"xim-message photo-transfer\"><b>Sending photo...</b></div><div class=\"xim-message photo-transfer photo-transfer-progress\">Please wait...</div>";
 
 				if($("#xim_message_window_" + XKit.extensions.XIM.camera_username).length === 0) {
@@ -1361,6 +1420,7 @@ XKit.extensions.XIM = new Object({
 				if ($(this).attr('data-user-id') === musername) {
 					$(this).parent().slideUp('fast',function() {
 						$(this).remove();
+						XKit.extensions.XIM.check_for_empty_lists();
 					});
 				}
 			});
