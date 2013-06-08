@@ -1,5 +1,5 @@
 //* TITLE XKit Preferences **//
-//* VERSION 1.1 REV C **//
+//* VERSION 1.1 REV D **//
 //* DESCRIPTION Lets you customize XKit **//
 //* DEVELOPER STUDIOXENIX **//
 XKit.extensions.xkit_preferences = new Object({
@@ -84,6 +84,8 @@ XKit.extensions.xkit_preferences = new Object({
 			if (parseInt(lst_check) < 0) {
 				check_for_update = true;
 			}
+			
+			check_for_update = true;
 
 			// SO!? What shall we do, flips?
 			if (check_for_update === true) {
@@ -1367,7 +1369,7 @@ XKit.extensions.xkit_preferences = new Object({
 					"XKit comes with the Extension Editor embedded. This is used to write new extensions and update the existing. You can use it to write extensions if you are good with JavaScript and the XKit framework." +
 				"</div>" +
 				"<div class=\"bottom-part\">" +		
-					"<div id=\"xkit-panel-reset-xkit\" class=\"xkit-button block\">Open Editor</div>" +
+					"<a href=\"http://www.tumblr.com/xkit_editor\" class=\"xkit-button block\">Open Editor</a>" +
 				"</div>" +		
 				"</div>";
 
