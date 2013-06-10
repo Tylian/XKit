@@ -1,5 +1,5 @@
 //* TITLE XIM **//
-//* VERSION 3.1 REV B **//
+//* VERSION 3.3 REV A **//
 //* DESCRIPTION Instant messenger for XKit. **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS XIM allows you to send instant messages to other XKit 7 users.<br/>Please note that this is a very premature version of XIM. A lot of features, including security ones are not implemented yet. Please use with caution.<br/><br/>Notification Sounds by pageofmelody.tumblr.com **//
@@ -32,6 +32,7 @@ XKit.extensions.XIM = new Object({
 	on_video: false,
 	on_audio: false,
 	camera_username: "",
+	reset_post_id: "",
 	enable_photo_sending: true,
 	photo_sending_start: 0,
 	photo_sending_data: "",
@@ -289,12 +290,12 @@ XKit.extensions.XIM = new Object({
 
 	send: function(data) {
 
-		//XKit.console.add("|-- Sending: " + data);
+		XKit.console.add("|-- Sending: " + data);
 		XKit.extensions.XIM.socket.send(data);
 
 	},
 
-	connect: function(auto_sign_in) {
+	connect: function(auto_sign_in, reset_mode) {
 
 		XKit.extensions.XIM.host = XKit.extensions.XIM.preferences.server_address.value;
 
@@ -328,12 +329,17 @@ XKit.extensions.XIM = new Object({
 
 		XKit.extensions.XIM.socket.onopen = function(evt) { 
 			$("#xim_status").html("connecting");
-			if (XKit.extensions.XIM.next_time_set_pin !== true) {
-				XKit.extensions.XIM.send("XIM_OPEN " + XKit.extensions.XIM.build);
+			if (reset_mode !== true) {
+				if (XKit.extensions.XIM.next_time_set_pin !== true) {
+					XKit.extensions.XIM.send("XIM_OPEN " + XKit.extensions.XIM.build);
+				} else {
+					XKit.extensions.XIM.send("XIM_SETP " + XKit.extensions.XIM.id + ";" + XKit.extensions.XIM.pin);
+				}
+				XKit.extensions.XIM.next_time_set_pin = false;
 			} else {
-				XKit.extensions.XIM.send("XIM_SETP " + XKit.extensions.XIM.id + ";" + XKit.extensions.XIM.pin);
+				XKit.console.add("XIM Reset mode for ID " + XKit.extensions.XIM.id);
+				XKit.extensions.XIM.send("XIM_RESET " + XKit.extensions.XIM.id);	
 			}
-			XKit.extensions.XIM.next_time_set_pin = false;
 		}; 
 		XKit.extensions.XIM.socket.onmessage = function(evt) { 
 			XKit.extensions.XIM.process(evt.data);			
@@ -358,7 +364,7 @@ XKit.extensions.XIM = new Object({
 	show_pin_window: function(next_time_pin, m_error, m_first, m_enter) {
 		
 		var m_err_div = "";
-		var m_forgot_button = "<a href=\"http://www.xkit.info/xim/pin/\" class=\"xkit-button\">I forgot/don't know my XIM PIN</a>";
+		var m_forgot_button = "<div id=\"xim-forgot-pin\" class=\"xkit-button\">Reset my PIN</div>";
 		if (m_error === true) {
 			m_err_div = "<div class=\"xim-wrong-pin-box\"><b>Your XIM PIN has been rejected.</b><br/>Perhaps you've entered it incorrectly, or your PIN was reset?</div>";
 		}
@@ -406,7 +412,28 @@ XKit.extensions.XIM = new Object({
 			XKit.extensions.XIM.connect();
 
 		});
+		
+		$("#xim-forgot-pin").click(function() {
+			
+			XKit.extensions.XIM.reset_pin(XKit.extensions.XIM.id);	
+			
+		});
 
+	},
+	
+	reset_pin: function(url) {
+		
+		XKit.window.show("Reset XIM PIN?","When you click the Continue button, XIM will create a temporary post on your blog, and alert the XIM servers. The XIM servers will check your blog to make sure it's a valid request, coming from you, then reset your PIN.<br/><br/>After your PIN is reset, the temporary post created will be deleted from your blog. It should take less than 30 seconds.","question","<div class=\"xkit-button default\" id=\"xim-reset-pin-continue\">Continue</div><div class=\"xkit-button\" id=\"xim-reset-pin-cancel\">Cancel</div>");
+		
+		$("#xim-reset-pin-cancel").click(function() {
+			XKit.window.close();
+		});
+		
+		$("#xim-reset-pin-continue").click(function() {
+			XKit.window.show("Please wait..","<b>Resetting PIN for the blog " + XKit.extensions.XIM.id + "...</b><br/>Please wait, this might take ~30 seconds or more.", "info");
+			XKit.extensions.XIM.connect(false, true);
+		});		
+		
 	},
 	
 	disconnected: function() {
@@ -418,6 +445,8 @@ XKit.extensions.XIM = new Object({
 		$("#xim_status").html("offline");
 		$("#xim-contacts-offline").remove();
 		$("#xim-contacts-online").remove();
+		$("#xim-no-contacts-found-online").remove();
+		$("#xim-no-contacts-found-offline").remove();
 		$("#xim_small_links").slideUp('fast');
 		$("#xim_sidebar").find("#xim-add-person").slideUp('fast');
 		$(".xim_contact").slideUp('fast', function() { $(this).remove(); });
@@ -460,7 +489,118 @@ XKit.extensions.XIM = new Object({
 
 	process: function(data) {
 
-		//XKit.console.add("XIM [" + XKit.extensions.XIM.state + "] received data -> " + data);
+		XKit.console.add("XIM [" + XKit.extensions.XIM.state + "] received data -> " + data);
+		
+		if (data.substring(0,19) === "XIM_RESET_RESPONSE ") {
+			
+			var result = data.substring(19);
+			
+			/* {"post_id":"52655727754","channel_id":"xenix","form_key":"form key goes here"} */
+			
+			var m_object = new Object();
+			
+			m_object.post_id = XKit.extensions.XIM.reset_post_id;
+			m_object.channel_id = XKit.extensions.XIM.id;
+			m_object.form_key = $("body").attr('data-form-key');
+			
+			GM_xmlhttpRequest({
+				method: "POST",
+				url: "http://www.tumblr.com/svc/post/delete",
+				data: JSON.stringify(m_object),
+				json: true,
+				onerror: function(response) {
+					XKit.window.show("Unable to delete temporary post","You can manually delete this from your blog using Mass Post Editor.<br/>Error 130","error","<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
+					return;
+				},
+				onload: function(response) {
+					// We are done!
+					try {
+						var mdata = jQuery.parseJSON(response.responseText);
+					} catch(e) {
+						XKit.window.show("Unable to delete temporary post","You can manually delete this from your blog using Mass Post Editor.<br/>Error 131","error","<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
+						return;
+					}
+					if (mdata.response.success === true) {
+						XKit.extensions.XIM.reset_post_id = "";
+					} else {
+						XKit.window.show("Unable to delete temporary post","You can manually delete this from your blog using Mass Post Editor.<br/>Error 132","error","<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
+					}
+				}
+			});
+			
+			if (result === "1") {
+				XKit.window.show("PIN Reset.","<b>Your PIN is back to it's default state.</b><br/>Click on the button below to return to dashboard<br/>and set a new PIN for your blog.","info","<a href=\"/dashboard/\" class=\"xkit-button default\">Go to dashboard</a>");
+			} else{
+				XKit.window.show("Unable to reset PIN","I'm sorry. Please try again later.","error","<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
+			}
+			
+			return;	
+			
+		}
+		
+		if (data.substring(0,10) === "XIM_RESET ") {
+			
+			// PIN reset random string.
+			var m_str = data.substring(10);
+			
+			/*{"form_key":"form key goes here","post":{},"context_id":"",
+			"context_page":"dashboard","editor_type":"rich","is_rich_text[one]":"0",
+			"is_rich_text[two]":"1","is_rich_text[three]":"0","channel_id":"xenix",
+			"post[slug]":"","post[source_url]":"http://","post[date]":"",
+			"post[type]":"regular","post[one]":"Some title","post[two]":"",
+			"post[tags]":"","post[publish_on]":"","post[state]":"private"}*/
+			
+			var m_form_key = $("body").attr('data-form-key');
+			
+			var m_object = new Object();
+			
+			m_object.form_key = m_form_key;
+			
+			m_object["post[state]"] = "private";
+			m_object["post[publish_on]"] = "";
+			m_object["post[tags]"] = "";
+			m_object["post[slug]"] = "";
+			m_object["post[type]"] = "regular";
+			m_object["post[one]"] = "XIM PIN RESET REQUEST POST";
+			m_object["post[two]"] = m_str;
+			m_object["post[source_url]"] = "http://";
+			m_object["post[date]"] = "";
+			m_object["channel_id"] = XKit.extensions.XIM.id;
+			m_object["is_rich_text[one]"] = "0";
+			m_object["is_rich_text[two]"] = "1";
+			m_object["is_rich_text[three]"] = "0";
+			m_object["editor_type"] = "rich";
+			m_object["context_page"] = "dashboard";
+			
+			GM_xmlhttpRequest({
+				method: "POST",
+				url: "http://www.tumblr.com/svc/post/update",
+				data: JSON.stringify(m_object),
+				json: true,
+				onerror: function(response) {
+					XKit.window.show("Unable to reset PIN","I'm sorry. Please try again later.","error","<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
+					return;
+				},
+				onload: function(response) {
+					// We are done!
+					try {
+						var mdata = jQuery.parseJSON(response.responseText);
+					} catch(e) {
+						XKit.window.show("Unable to reset PIN","I'm sorry. Please try again later.","error","<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
+						return;
+					}
+					if (mdata.errors === false) {
+						XKit.extensions.XIM.reset_post_id = mdata.post.id;
+						XKit.extensions.XIM.send("XIM_RESET_CHECK " + mdata.post.id);
+					} else {
+						XKit.window.show("Unable to reset PIN","I'm sorry. Please try again later.","error","<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
+					}
+				}
+			});
+			
+			return;
+			
+		}
 		
 		if (data === "XIM_PHOTO_NEXT") {
 				
