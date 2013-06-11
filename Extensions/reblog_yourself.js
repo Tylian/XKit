@@ -82,8 +82,22 @@ XKit.extensions.reblog_yourself = new Object({
 			return;
 		}
 
+		// defaults
 		var m_blog_url = $("#popover_blogs").find(".popover_menu_item").first().attr('id').replace("menuitem-","");
 		var m_blog_title = $("#popover_blogs").find(".popover_menu_item").first().find(".blog_title").find("span").html();
+
+		// check which blog is missing from the list
+		var m_blogs = XKit.tools.get_blogs();
+		var check = [];
+		for(i=0;i<m_blogs.length;i++) {
+			if (m_blogs[i] !== "") {
+				check = $('#tumblelog_choices .popover_inner ul li div[data-option-value='+m_blogs[i]+']');
+				if(check.length == 0) {
+					m_blog_url = m_blogs[i];
+					m_blog_title = $("#menuitem-"+m_blog_url+" .blog_title span").html();
+				}
+			}
+		}
 
 		var post_avatar = $("#new_post").find(".post_avatar").attr('data-avatar-url');
 
