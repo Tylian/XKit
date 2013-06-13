@@ -20,6 +20,12 @@ XKit.extensions.xinbox = new Object({
 			default: true,
 			value: true
 		},
+		"anon_tag": {
+			text: "Tag to use when the asker is anonymous",
+			default: "Anonymous",
+			value: "Anonymous",
+			type: "text"
+		},
 		"tag_custom": {
 			text: "Tag published asks with the custom tag below:",
 			default: false,
@@ -302,9 +308,17 @@ XKit.extensions.xinbox = new Object({
 				var this_obj = m_parent;
 				var m_box_id = "xinbox_tags_" + post_id;
 			
-				var asker = "Anonymous";
+				var asker = XKit.extensions.xinbox.preferences.anon_tag.value;
+				var respondant = $(m_parent).attr('data-tumblelog-name');
 				if (m_parent.find(".post_info").find("a").length > 0) {
 					asker = m_parent.find(".post_info").find("a").html();
+
+					// If the ask is anonymous there is no link to their blog to parse.
+					// If the blog is secondary there will be a link to respondant's own blog
+					// and this will be found instead. Reset asker to anoymous if this is the case.
+					if(asker === respondant){
+						asker = XKit.extensions.xinbox.preferences.anon_tag.value;
+					}
 				}
 			
 				$(submit_button).attr('onclick','');
