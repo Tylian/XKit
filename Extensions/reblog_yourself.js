@@ -1,5 +1,5 @@
 //* TITLE Reblog Yourself **//
-//* VERSION 1.1 REV B **//
+//* VERSION 1.2 REV B **//
 //* DESCRIPTION Allows you to reblog posts back to your blog **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//
@@ -19,7 +19,7 @@ XKit.extensions.reblog_yourself = new Object({
 		}
 	
 		if ($(".post").length > 0) {
-			$(document).on("click", ".reblog_button", function() {
+			$(document).on("click", ".post_control.reblog", function() {
 				if ($(this).parentsUntil(".post").parent().hasClass("is_mine") === true) {
 					XKit.extensions.reblog_yourself.fix_page();
 				}
@@ -73,6 +73,7 @@ XKit.extensions.reblog_yourself = new Object({
 	fix_page: function() {
 
 		if ($("#tumblelog_choices").length === 0) {
+			XKit.console.add("Can't run Reblog Yourself, delaying..");
 			setTimeout(function() { XKit.extensions.reblog_yourself.fix_page(); }, 300);
 			return;
 		}
@@ -81,7 +82,7 @@ XKit.extensions.reblog_yourself = new Object({
 			XKit.console.add("Can't run Reblog Yourself, popover_blogs not found.");
 			return;
 		}
-
+		
 		// defaults
 		var m_blog_url = $("#popover_blogs").find(".popover_menu_item").first().attr('id').replace("menuitem-","");
 		var m_blog_title = $("#popover_blogs").find(".popover_menu_item").first().find(".blog_title").find("span").html();
@@ -95,11 +96,19 @@ XKit.extensions.reblog_yourself = new Object({
 				if(check.length == 0) {
 					m_blog_url = m_blogs[i];
 					m_blog_title = $("#menuitem-"+m_blog_url+" .blog_title span").html();
+					
+					m_blog_avatar = $("#menuitem-"+m_blog_url+" .blog_icon").css("background-image");
+					m_blog_avatar = m_blog_avatar.substring(4, m_blog_avatar.length - 1);
+					
+					// I'm pretty sure they just use PNG but just in case:
+					m_blog_avatar = m_blog_avatar.replace("_40.png","_64.png");
+					m_blog_avatar = m_blog_avatar.replace("_40.gif","_64.gif");
+					m_blog_avatar = m_blog_avatar.replace("_40.jpg","_64.jpg");
 				}
 			}
 		}
 
-		var post_avatar = $("#new_post").find(".post_avatar").attr('data-avatar-url');
+		var post_avatar = m_blog_avatar;
 
 		var m_html = '<div class="option" data-facebook-on="false" data-twitter-on="false" data-facebook="false" data-twitter="false" data-is-password-protected="false" data-use-sub-avatar="" data-use-channel-avatar="0" data-blog-url="http://' + m_blog_url + '.tumblr.com/" data-avatar-url="' + post_avatar +'" data-user-avatar-url="' + post_avatar +'" data-option-value="'+ m_blog_url +'" title="'+ m_blog_title +'">' + m_blog_url + '</div>';
 
