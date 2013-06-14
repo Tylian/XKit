@@ -1,5 +1,5 @@
 //* TITLE Soft Refresh **//
-//* VERSION 0.3 REV A **//
+//* VERSION 0.3 REV B **//
 //* DESCRIPTION Refresh without refreshing **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS This extension allows you to see new posts on your dashboard without refreshing the page. When you get the New Posts bubble, click on the Tumblr logo, and new posts will appear on your dashboard.<br><br>If you still want to refresh the page completely (perform a Hard Refresh), hold the ALT key while clicking on logo and the page will refresh.<br><br>Please note that this extension is highly experimental, and might not work properly all the time. **//
@@ -13,6 +13,19 @@ XKit.extensions.soft_refresh = new Object({
 	slow: true,
 	loading: false,
 	default_page_title: document.title,
+        preferences: { 
+		"use_logo":{
+			text:"Soft refresh when the tumblr logo is clicked.",
+			default:true,
+			value:true
+		},
+		"use_home_button":{
+			text:"Soft refresh when the home button is clicked.",
+			default:false,
+			value:true
+		}
+	},
+
 
 	run: function() {
 		this.running = true;
@@ -23,15 +36,31 @@ XKit.extensions.soft_refresh = new Object({
 			return;	
 		}
 		
-		$(".logo_anchor").attr('onclick','return false');
-		$(".logo_anchor").attr('href', '#');
-		$(document).on("click", ".logo_anchor", function(event) {
-			if (event.altKey) {
-				location.reload(true);
-				return;	
-			}
-			XKit.extensions.soft_refresh.load_posts();	
-		});
+		if(this.preferences.use_logo.value == true){
+			$(".logo_anchor").attr('onclick','return false');
+			$(".logo_anchor").attr('href', '#');
+			$(document).on("click", ".logo_anchor", function(event) {
+				if (event.altKey) {
+					location.reload(true);
+					return;	
+				}
+				XKit.extensions.soft_refresh.load_posts();	
+			});
+		}
+
+		if(this.preferences.use_home_button.value == true){
+                	var homeButton = $("#header").find("#home_button")
+
+			homeButton.click(function(event) {
+				if (event.altKey) {
+					location.reload(true);
+					return;	
+				}
+				XKit.extensions.soft_refresh.load_posts();
+			});
+			// Need to change all children to make sure the user doesn't click the new posts count number.
+			homeButton.children().attr('href','#')
+		}
 	},
 	
 	load_posts: function() {
