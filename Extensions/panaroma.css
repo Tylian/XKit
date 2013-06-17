@@ -19,15 +19,6 @@
 	min-width: 900px; width: auto !important; padding: 0px !important;
 }
 
-#posts .post .image_thumbnail.enlarged {
-	width: 100% !important; height: auto !important;
-}
-
-#posts .post .flipcard,
-#posts .post .flipcard_front,
-#posts .post_content .image {
-	width: 100% !important; height: auto !important;
-}
 
 .notification {
 	width: 100%;

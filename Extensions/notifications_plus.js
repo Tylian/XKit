@@ -1,5 +1,5 @@
 //* TITLE Notifications+ **//
-//* VERSION 1.1 REV B **//
+//* VERSION 1.2 REV C **//
 //* DESCRIPTION Enhances the notifications **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//
@@ -100,6 +100,8 @@ XKit.extensions.notifications_plus = new Object({
 				return;
 			}
 		}
+		
+		XKit.console.add("Notifications+: Post URL is " + post_url);
 
 		// Break it down.
 		post_url = post_url.replace('http://','');
@@ -142,9 +144,14 @@ XKit.extensions.notifications_plus = new Object({
 			return;
 		}
 
+		XKit.console.add("Getting http://" + blog_id + ".tumblr.com/api/read?id=" + post_id);
+
 		GM_xmlhttpRequest({
   			method: "GET",
   			url: "http://" + blog_id + ".tumblr.com/api/read?id=" + post_id,
+  			onerror: function() {
+  				XKit.console.add("Can not load page to load notes.");	
+  			},
   			onload: function(response) {
 				var data = response.responseText;
        				var xstart = data.indexOf('unix-timestamp="');
@@ -155,7 +162,7 @@ XKit.extensions.notifications_plus = new Object({
 				if (XKit.extensions.notifications_plus.current_post_id !== post_id) {
 					return;	
 				}
-				//console.log("fetching.." + new_url);
+				XKit.console.add(" -- Getting " + new_url);
 				GM_xmlhttpRequest({
   					method: "GET",
   					url: new_url,
@@ -177,7 +184,7 @@ XKit.extensions.notifications_plus = new Object({
 							$(".post",data).each(function() {
 								var r_post_id = $(this).attr('data-id');
 								if (r_post_id === post_id) {
-									real_html = $(this).find(".notes").html();	
+									real_html = $(this).find(".post_notes").html();	
 									return false;
 								} 	
 							});

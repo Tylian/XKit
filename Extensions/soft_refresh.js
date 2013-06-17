@@ -1,5 +1,5 @@
 //* TITLE Soft Refresh **//
-//* VERSION 0.3 REV B **//
+//* VERSION 0.3 REV C **//
 //* DESCRIPTION Refresh without refreshing **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS This extension allows you to see new posts on your dashboard without refreshing the page. When you get the New Posts bubble, click on the Tumblr logo, and new posts will appear on your dashboard.<br><br>If you still want to refresh the page completely (perform a Hard Refresh), hold the ALT key while clicking on logo and the page will refresh.<br><br>Please note that this extension is highly experimental, and might not work properly all the time. **//
@@ -21,7 +21,7 @@ XKit.extensions.soft_refresh = new Object({
 		},
 		"use_home_button":{
 			text:"Soft refresh when the home button is clicked.",
-			default:false,
+			default:true,
 			value:true
 		}
 	},
@@ -74,6 +74,18 @@ XKit.extensions.soft_refresh = new Object({
 		document.title = this.default_page_title;
 		$("#new_post_notice_container").css("display","none");
 		$("#new_post_notice_container .tab_notice_value").html("0");
+		
+		function soft_refresh_hit_triggers() {
+			
+			if (typeof Tumblr === "undefined") {
+				window.top.Tumblr.Events.trigger("posts:load");
+				window.top.Tumblr.AudioPlayer.update_all();
+			} else {
+				Tumblr.Events.trigger("posts:load");
+				Tumblr.AudioPlayer.update_all();
+			}
+
+		}
 	
 		GM_xmlhttpRequest({
 			method: "GET",
@@ -105,14 +117,32 @@ XKit.extensions.soft_refresh = new Object({
 				if (m_count === 0) {
 					XKit.notifications.add("No new posts found.","info");
 				} else {
-					XKit.tools.add_function(function(){ //Need to execute function in window
-						Tumblr.Events.trigger("posts:load"); //Bind new posts
-					}, true, ""); 
+					XKit.tools.add_function(soft_refresh_hit_triggers, true, ""); 
+					XKit.extensions.soft_refresh.check_embeds();
 					XKit.notifications.add("Added " + m_count + " new posts.","ok");
 				}
 				XKit.extensions.soft_refresh.loading = false;
 			}
 		});	
+		
+	},
+	
+	check_embeds: function() {
+					
+		if ($("body").find(".inline_embed").length > 0) {
+			$("body").find(".inline_embed").each(function() {
+						
+				try { 
+					var script = document.createElement("script");
+					script.textContent = $(this).html();
+					document.body.appendChild(script); 
+					$(this).remove();
+				} catch(e) { 
+					alert(e.message); 
+				}
+							
+			});	
+		}	
 		
 	},
 	

@@ -1,5 +1,5 @@
 //* TITLE Reblog Yourself **//
-//* VERSION 1.2 REV B **//
+//* VERSION 1.2 REV A **//
 //* DESCRIPTION Allows you to reblog posts back to your blog **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//

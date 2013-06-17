@@ -1,5 +1,5 @@
 //* TITLE Filter By Type **//
-//* VERSION 1.1 REV A **//
+//* VERSION 2.0 REV A **//
 //* DESCRIPTION Lets you filter the posts on your dashboard by type **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//
@@ -15,6 +15,8 @@ XKit.extensions.filter_by_type = new Object({
 		  "Only photo posts",
 		  "Only text posts",
 		  "Only quote posts",
+		  "Only audio posts",
+		  "Only video posts",
 		  "Only link posts",
 	  	  "Only chat posts"],
 
@@ -22,6 +24,8 @@ XKit.extensions.filter_by_type = new Object({
 		  "/show/photos/",
 		  "/show/text/",
 		  "/show/quotes/",
+		  "/show/audio/",
+		  "/show/videos/",
 		  "/show/links/",
 	  	  "/show/chats/"],
 
@@ -93,6 +97,22 @@ XKit.extensions.filter_by_type = new Object({
 
 		XKit.extensions.filter_by_type.scroller_working = false;
 		XKit.extensions.filter_by_type.current_page = 1;
+		
+		function xfilter_trigger_load() {
+			
+			if (typeof Tumblr === "undefined") {
+				window.top.Tumblr.Events.trigger("posts:load");
+				window.top.Tumblr.AudioPlayer.update_all();
+			} else {
+				Tumblr.Events.trigger("posts:load");
+				Tumblr.AudioPlayer.update_all();
+			}
+
+		}
+			
+		function xfilter_stop_paginator () {
+			Tumblr.AutoPaginator.stop();
+		}
 
 		if (XKit.extensions.filter_by_type.current_filter !== "0") {
 
@@ -107,20 +127,19 @@ XKit.extensions.filter_by_type = new Object({
 					$("#xfilter-loading").slideUp('fast', function(){ $(this).remove(); });
 					if (XKit.extensions.filter_by_type.current_filter !== m_type) { return; }
 					var new_posts = $("ol#posts", response.responseText).html();
-					$("ol#posts").html(new_post_html + new_posts);
+					try {
+						$("ol#posts").html(new_post_html + new_posts);
+					} catch(e) {
+						console.log(" -- Error while loading via Filter, " + e.message);	
+					}
 					$("html, body").animate({ scrollTop: 0 }, "slow");
 					$("#auto_pagination_loader_failure").css("display","none");
 					$("#auto_pagination_loader_loading").css("display","block");
-					
-					XKit.tools.add_function(function(){ //Need to execute function in window
-						Tumblr.Events.trigger("posts:load"); //Bind new posts
-					}, true, ""); 
+				
+					XKit.tools.add_function(xfilter_trigger_load, true,"");
+					XKit.extensions.filter_by_type.check_embeds();
 				}
 			});
-
-			function xfilter_stop_paginator () {
-				Tumblr.AutoPaginator.stop();
-			}
 
 			$(window).scroll(function() {
    				if($(window).scrollTop() + $(window).height() == $(document).height()) {
@@ -145,9 +164,8 @@ XKit.extensions.filter_by_type = new Object({
 							$("#auto_pagination_loader_failure").css("display","none");
 							$("#auto_pagination_loader_loading").css("display","block");
 							
-							XKit.tools.add_function(function(){ //Need to execute function in window
-								Tumblr.Events.trigger("posts:load"); //Bind new posts
-							}, true, ""); 
+							XKit.tools.add_function(xfilter_trigger_load, true,"");
+							XKit.extensions.filter_by_type.check_embeds();
 							
 						}
 					});
@@ -178,6 +196,24 @@ XKit.extensions.filter_by_type = new Object({
 
 		}
 
+	},
+	
+	check_embeds: function() {
+					
+		if ($("body").find(".inline_embed").length > 0) {
+			$("body").find(".inline_embed").each(function() {
+						
+				try { 
+					var script = document.createElement("script");
+					script.textContent = $(this).html();
+					document.body.appendChild(script); 
+				} catch(e) { 
+					alert(e.message); 
+				}
+							
+			});	
+		}	
+		
 	},
 
 	run_here: function() {

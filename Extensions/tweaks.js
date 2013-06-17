@@ -1,5 +1,5 @@
 //* TITLE Tweaks **//
-//* VERSION 1.3 REV A **//
+//* VERSION 1.5 REV E **//
 //* DESCRIPTION Various little tweaks for your dashboard. **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS These are small little tweaks that allows you customize your dashboard. If you have used XKit 6, you will notice that some of the extensions have been moved here as options you can toggle. Keep in mind that some of the tweaks (the ones marked with a '*') can slow down your computer. **//
@@ -29,9 +29,14 @@ XKit.extensions.tweaks = new Object({
 			type: "separator",
 		},
 		"always_show_move_to_top": {
-			text: "Always show 'Move to top' button queue",
+			text: "Always show 'Move to top' button in queued posts",
 			default: true,
 			value: true
+		},
+		"split_gear": {
+			text: "Move the edit/remove buttons out of the gear menu",
+			default: false,
+			value: false
 		},
 		"small_quotes": {
 			text: "Slim Quote post text on Dashboard",
@@ -96,6 +101,11 @@ XKit.extensions.tweaks = new Object({
 			default: false,
 			value: false
 		},
+		"hide_follower_count": {
+			text: "Hide Follower count",
+			default: false,
+			value: false
+		},
 		"hide_radar": {
 			text: "Hide Tumblr radar",
 			default: false,
@@ -157,6 +167,12 @@ XKit.extensions.tweaks = new Object({
 			}
 		}
 
+	
+		if (XKit.extensions.tweaks.preferences.split_gear.value === true) {
+			XKit.post_listener.add("tweaks_split_gear", XKit.extensions.tweaks.split_gear);
+			XKit.extensions.tweaks.split_gear();
+		}
+
 		if (XKit.extensions.tweaks.preferences.hide_radar.value === true) {
 			$("#tumblr_radar").css("display","none");
 		}
@@ -172,7 +188,7 @@ XKit.extensions.tweaks = new Object({
 		}
 		
 		if (XKit.extensions.tweaks.preferences.hide_sponsored.value === true) {
-			XKit.tools.add_css(".posts.sponsored_post { opacity: 0.33 !important } .posts.sponsored_post:hover { opacity: 1 !important }", "xkit_tweaks_hide_sponsored");
+			XKit.tools.add_css(".post.sponsored_post { opacity: 0.33 !important } .post.sponsored_post:hover { opacity: 1 !important }", "xkit_tweaks_hide_sponsored");
 		}
 		
 	
@@ -198,6 +214,10 @@ XKit.extensions.tweaks = new Object({
 		
 		if (XKit.extensions.tweaks.preferences.always_show_move_to_top.value === true) {
 			XKit.tools.add_css("#posts .post .post_control.move_to_top { display: inline-block !important; } ", "always_show_move_to_top");
+		}
+		
+		if (XKit.extensions.tweaks.preferences.hide_follower_count.value === true) {
+			XKit.tools.add_css(".right_column .followers .count { display: none !important; } ", "xtweaks-hide_follower_count");
 		}
 
 		if (XKit.extensions.tweaks.preferences.slim_sidebar.value === true) {
@@ -261,13 +281,31 @@ XKit.extensions.tweaks = new Object({
 
 
 	},
+	
+	split_gear: function() {
+		
+		$(".post.is_mine").not(".xkit-tweaks-split-gear-done").each(function() {
+			$(this).addClass("xkit-tweaks-split-gear-done");
+			$(this).find(".post_control.edit").html("<span class=\"offscreen\">Edit</span>");
+			$(this).find(".post_control.delete").html("<span class=\"offscreen\">Delete</span>");
+			$(this).find(".post_control.queue").html("<span class=\"offscreen\">Queue</span>");
+			$(this).find(".post_control.edit, .post_control.delete").removeClass("show_label");
+			$(this).find(".post_control.edit").appendTo($(this).find(".post_controls_inner"));
+			$(this).find(".post_control.delete").appendTo($(this).find(".post_controls_inner"));
+			$(this).find(".post_control.queue").appendTo($(this).find(".post_controls_inner"));
+			$(this).find(".post_control.post_control_menu.creator").remove();
+		});	
+		
+	},
 
 	destroy: function() {
 		this.running = false;
 		clearInterval(this.run_interval);
-		clearInterval(this.run_interval_2);	
+		clearInterval(this.run_interval_2);
+		XKit.post_listener.remove("tweaks_split_gear");	
 		$(".xkit-small-blog-setting-link").remove();
 		$(".small_links.by-xkit").remove();
+		XKit.tools.remove_css("xtweaks-hide_follower_count");
 		XKit.tools.remove_css("xkit_tweaks_small_quotes");
 		XKit.tools.remove_css("xkit_tweaks_hide_sponsored");
 		XKit.tools.remove_css("xkit_tweaks_hide_blog_search");

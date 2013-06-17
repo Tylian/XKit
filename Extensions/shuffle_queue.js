@@ -1,5 +1,5 @@
 //* TITLE Shuffle Queue **//
-//* VERSION 1.3 REV B **//
+//* VERSION 1.4 REV A **//
 //* DESCRIPTION Shuffle items on your queue **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS Go to your queue and click on the Shuffle button on the sidebar to shuffle the posts. Note that only the posts you see will be shuffled. If you have more than 15 posts on your queue, scroll down and load more posts in order to shuffle them too. **//
@@ -61,10 +61,12 @@ XKit.extensions.shuffle_queue = new Object({
 		
 		var to_send = encodeURIComponent(IDs.join(","));
 		
+		var form_key = $("body").attr('data-form-key');
+		
 		GM_xmlhttpRequest({
 			method: "POST",
 			url: "http://www.tumblr.com/blog/" + m_url + "/order_post_queue/",
-			data: "post_ids=" + to_send,
+			data: "post_ids=" + to_send + "&form_key=" + form_key,
 			json: false,
 			onerror: function(response) {
 				XKit.window.show("Unable to save queue","I was unable to save the current order of the queue.<br/>Please try again later.","error","<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");

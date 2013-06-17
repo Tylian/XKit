@@ -1,5 +1,5 @@
 //* TITLE Post Crushes **//
-//* VERSION 1.0 REV B **//
+//* VERSION 1.0 REV A **//
 //* DESCRIPTION Lets you share your Tumblr Crushes **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS To use this extension, go to the 'Following' page on your dashboard, and click on the 'Post My Crushes' button below your Tumblr Crushes. **//
@@ -72,12 +72,7 @@ XKit.extensions.post_crushes = new Object({
 				crush_img_src = crush_img_src.substring(0, crush_img_src.indexOf("'"));
 			crush_img.push(crush_img_src);
 			crush_url.push($("#crush_" + i).attr('href'));
-			//crush_name.push($("#crush_" + i).attr('href').replace(".tumblr.com/","").replace(".tumblr.com","").replace("http://",""));
-			var c_title = $("#crush_" + i).attr('title');
-				c_title = c_title.substring(0, c_title.indexOf(' '));
-			crush_name.push(c_title);
-			// Value Resets
-			c_title = "";
+			crush_name.push($("#crush_" + i).attr('href').replace(".tumblr.com/","").replace(".tumblr.com","").replace("http://",""));
 			crush_val.push($("#crush_" + i).find("span").html().replace("%",""));
 		}
 

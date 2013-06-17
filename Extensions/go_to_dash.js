@@ -1,5 +1,5 @@
 //* TITLE Go-To-Dash **//
-//* VERSION 1.0 REV B **//
+//* VERSION 1.0 REV D **//
 //* DESCRIPTION View a post on a blog on your dashboard. **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS This extension adds a 'view' button on peoples blogs that allows you to go back to that post on your dashboard. This feature only works on the blogs you follow. If the post was made before you followed them, you might not see them on your dashboard when you click the view button. **//
@@ -17,10 +17,15 @@ XKit.extensions.go_to_dash = new Object({
 		}
 
 		var m_html = $('body').html();
-	
-		// check if we are following the user:
 
-		if ($(".unfollow").hasClass("hidden") === false) {
+		var go_ahead = false;
+		if ($(".btn.edit").length > 0) {
+			if ($(".btn.edit").hasClass("hidden") === false) {
+				go_ahead = true;	
+			}
+		}
+		
+		if ($(".btn.unfollow").hasClass("hidden") === false ||go_ahead === true) {
 
 			if ($("#xkit_gotodash").length > 0) { return; }
 
@@ -36,7 +41,12 @@ XKit.extensions.go_to_dash = new Object({
 			var go_back_icon = '<a href="/dashboard/2/' + post_id + '" class="btn" target="_top" id="xkit_gotodash">View</a>';
 
 			$(".dashboard").html("");
-			$(".controls").find(".unfollow").before(go_back_icon);
+			
+			if ($(".controls").find(".unfollow").length > 0) {
+				$(".controls").find(".unfollow").before(go_back_icon);
+			} else {
+				$(".controls").find(".delete").before(go_back_icon);		
+			}
 
 		}
 

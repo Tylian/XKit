@@ -5,9 +5,9 @@
 
 #xcleanfeedindicator { 
 	border: 1px solid rgba(0,0,0,0.52); opacity: 0.66; 
-	position: absolute; width: 4px; height: 8px; 
-	border-radius: 0px 8px 8px 0px; background: red; 
-	top: 50%; margin-top: -6px; left: 0px; 
+	position: absolute; width: 4px; height: 4px; 
+	border-radius: 8px; background: red; 
+	top: 50%; margin-top: -4px; left: 4px; 
 	box-shadow: 0px 1px 0px rgba(255,255,255,0.33); 
 }
 

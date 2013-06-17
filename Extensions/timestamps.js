@@ -1,6 +1,7 @@
 //* TITLE Timestamps **//
-//* VERSION 1.0 REV D **//
+//* VERSION 2.0 REV A **//
 //* DESCRIPTION See when a post has been made. **//
+//* DETAILS This extension lets you see when a post was made, in full date or relative time (eg: 5 minutes ago). It also works on asks on your inbox too, but due to Tumblr limitations, there is no relative time available there. **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//
 //* BETA false **//
@@ -16,6 +17,16 @@ XKit.extensions.timestamps = new Object({
 			text: "Only show relative time (eg: 5 minutes ago)",
 			default: false,
 			value: false
+		},
+		sep0: {
+			text: "Timestamp display format",
+			type: "separator"	
+		},
+		format: {
+			text: "Timestamp format (<a id=\"xkit-timestamps-format-help\" href=\"#\" onclick=\"return false\">what is this?</a>)",
+			type: "text",
+			default: "MMMM Do YYYY, h:mm:ss a",
+			value: "MMMM Do YYYY, h:mm:ss a"	
 		}
 	},
 	
@@ -33,6 +44,11 @@ XKit.extensions.timestamps = new Object({
 	run: function() {
 
 		XKit.tools.init_css("timestamps");
+		
+		if (XKit.extensions.timestamps.preferences.format.value === "") {
+			XKit.extensions.timestamps.preferences.format.value = "MMMM Do YYYY, h:mm:ss a";
+		}
+		
 		XKit.extensions.timestamps.check_quota();
 		try {
 
@@ -81,7 +97,6 @@ XKit.extensions.timestamps = new Object({
 			
 				$(this).addClass("xkit_timestamps");
 				if ($(this).attr('id') === "new_post" || $(this).hasClass("fan_mail") === true || 
-					$(this).hasClass("is_note") === true || 
 					$(this).find('.private_label').length > 0  || $(this).hasClass("note") === true ||
 					$(this).hasClass("submission") === true) {
 					return;	
@@ -96,7 +111,7 @@ XKit.extensions.timestamps = new Object({
 					permalink = $(this).find(".post_permalink").attr('href');
 				}
 
-				var post_id = $(this).attr('id').replace("post_","");
+				var post_id = $(this).attr('data-post-id');
 				
 				// Ugly but it works?
 				var json_page_parts = permalink.replace("http://","").split("/");
@@ -104,8 +119,22 @@ XKit.extensions.timestamps = new Object({
 			
 				var m_html = '<div id="xkit_timestamp_' + post_id + '" class="xtimestamp xtimestamp_loading">&nbsp;</div>';
 				$(this).find(".post_content").prepend(m_html);
+				
+				var in_inbox = false;
+				if ($("body").hasClass("dashboard_messages_inbox") === true || $("body").hasClass("dashboard_messages_submissions") === true) {
+					in_inbox = true;	
+				}
+				
+				if ($(this).hasClass("is_note") === true && in_inbox === true) {
+				
+					var m_post_id = $(this).attr('data-post-id');
+					XKit.extensions.timestamps.fetch_note($("#xkit_timestamp_" + post_id), post_id);
+					
+				} else {
 			
-				XKit.extensions.timestamps.fetch_timestamp($("#xkit_timestamp_" + post_id), json_page, post_id);
+					XKit.extensions.timestamps.fetch_timestamp($("#xkit_timestamp_" + post_id), json_page, post_id);
+					
+				}
 			
 			} catch(e) {
 			
@@ -115,6 +144,92 @@ XKit.extensions.timestamps = new Object({
 		
 		});
 	
+	},
+	
+	fetch_note: function(obj, post_id) {
+		
+		var form_key = $("body").attr('data-form-key');
+
+		var m_object = new Object();
+		
+		m_object.post_id = parseInt(post_id);
+		m_object.form_key = form_key;
+		m_object.post_type = false;
+		
+		var cached = XKit.storage.get("timestamps", "xkit_timestamp_cache_" + post_id, "");
+		
+		if (cached === "") {
+
+			GM_xmlhttpRequest({
+				method: "POST",
+				url: "http://www.tumblr.com/svc/post/fetch",
+				data: JSON.stringify(m_object),
+				json: true,
+				onerror: function(response) {
+					XKit.extensions.timestamps.show_failed(obj);
+				},
+				onload: function(response) {
+					// We are done!
+					try {
+						var mdata = $.parseJSON(response.responseText);
+					} catch(e) {
+						XKit.extensions.timestamps.show_failed(obj);
+						return;
+					}
+					//$(obj).html(mdata.post.date);
+					
+					// Tumblr format: Jun 16th, 2013 12:42pm
+					
+					var dtx = moment(mdata.post.date, "MMM DD, YYYY hh:mma");
+					var nowdate = new Date();
+					var nowdatem = moment(nowdate);
+					var dt = moment(dtx);
+					
+					if (dtx.isValid() === true) {
+					
+						if (XKit.extensions.timestamps.preferences.only_relative.value === true) {
+    							$(obj).html(dt.from(nowdatem));
+						} else {
+							$(obj).html(dt.format(XKit.extensions.timestamps.preferences.format.value) + " &middot; " + dt.from(nowdatem));
+						}
+				
+					} else {
+				
+						$(obj).html(mdata.post.date);
+				
+					}
+					
+					$(obj).removeClass('xtimestamp_loading');
+					XKit.storage.set("timestamps", "xkit_timestamp_cache_" + post_id, mdata.post.date);
+
+				}
+			});	
+		
+		} else {
+		
+			var dtx = moment(cached, "MMM DD, YYYY hh:mma");
+			var nowdate = new Date();
+			var nowdatem = moment(nowdate);
+			var dt = moment(dtx);
+			
+			if (dtx.isValid() === true) {
+				
+				if (XKit.extensions.timestamps.preferences.only_relative.value === true) {
+    					$(obj).html(dt.from(nowdatem));
+				} else {
+					$(obj).html(dt.format(XKit.extensions.timestamps.preferences.format.value) + " &middot; " + dt.from(nowdatem));
+				}
+				
+			} else {
+				
+				$(obj).html(cached);
+				
+			}
+			
+			$(obj).removeClass('xtimestamp_loading');	
+			
+		}
+		
 	},
 	
 	fetch_timestamp: function(obj, json_page, post_id) {
@@ -191,6 +306,16 @@ XKit.extensions.timestamps = new Object({
 		$(obj).removeClass('xtimestamp_loading');
 		return;	
 	
+	},
+	
+	cpanel: function() {
+	
+		$("#xkit-timestamps-format-help").click(function() {
+		
+			XKit.window.show("Timestamp formatting","Timestamps extension allows you to format the date by using a formatting syntax. Make your own and type it in the Timestamp Format box to customize your timestamps.<br/><br/>For information, please visit:<br/><a href=\"http://xkit.info/seven/support/timestamps/index.php\">Timestamp Format Documentation</a><br/><br/>Please be careful while customizing the format. Improper/invalid formatting can render Timestamps unusable. In that case, just delete the text you've entered completely and XKit will revert to its default formatting.","info","<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
+			
+		});	
+		
 	},
 	
 	destroy: function() {

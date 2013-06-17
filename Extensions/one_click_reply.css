@@ -4,6 +4,14 @@
 
 }
 
+.notification.xkit-reply-selected {
+	background: green !important;	
+}
+
+.note.xkit-reply-selected-pn {
+	background: #b1dda5 !important;	
+}
+
 .xkit-reply-button-pn {
 	color: #fff !important;	
 	background: rgba(151,157,162,.6);

@@ -1,5 +1,5 @@
 //* TITLE XKit Preferences **//
-//* VERSION 1.1 REV D **//
+//* VERSION 1.6 REV B **//
 //* DESCRIPTION Lets you customize XKit **//
 //* DEVELOPER STUDIOXENIX **//
 XKit.extensions.xkit_preferences = new Object({
@@ -7,7 +7,7 @@ XKit.extensions.xkit_preferences = new Object({
 	running: false,
 	current_panel: "",
 
-	default_extension_icon: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAIAAAD8GO2jAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBNYWNpbnRvc2giIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6NjNEQ0QyNTFBODhDMTFFMkFDMDJFMzk3N0RDMDc2NDQiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6NjNEQ0QyNTJBODhDMTFFMkFDMDJFMzk3N0RDMDc2NDQiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDo2M0RDRDI0RkE4OEMxMUUyQUMwMkUzOTc3REMwNzY0NCIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDo2M0RDRDI1MEE4OEMxMUUyQUMwMkUzOTc3REMwNzY0NCIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/Pp0ikDoAAAgNSURBVHjanFZZiCVX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",
+	default_extension_icon: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAIAAAD8GO2jAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBNYWNpbnRvc2giIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6MjU4ODQ1RkRDRThCMTFFMjlGRjNBNzgwQUUxNTkwRDkiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6MjU4ODQ1RkVDRThCMTFFMjlGRjNBNzgwQUUxNTkwRDkiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDoyNTg4NDVGQkNFOEIxMUUyOUZGM0E3ODBBRTE1OTBEOSIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDoyNTg4NDVGQ0NFOEIxMUUyOUZGM0E3ODBBRTE1OTBEOSIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/Pmm6kIEAAAKuSURBVHjapFZJqyIxEH7dRtxGVMQd9CDiXfz/Vw8iInjVk7jghoqK+3zPmgn1kkq/x0wdQrqSruWrLd5+v/940+v18jzv9SbN0Z+0Pp9Pzceen+Lz8XjoI830Pxhx6S7i+gIuaFL82zhzSeEu8g0AINs5+d+Kc1ntUmNc8F0uky2AdblcXi4X4w72YK5WKw63aJMvata/IQV6vd50OuV20DqZTPr9/vF4NEJoOKREw/UxPKDV+A3r/X7neeFKECVCbFzVDtmCvk0EZcddDJpdBwakdtH8CXKwdMo8rLajVJX8SPbAdXa9XoHy6XTC/na7YfNiREysdAEUDodF1731ei3q6HQ61EUM3+1ogxKJRLvd5hyNvFDJtMJ82qTTafxv4ENSDofDdru1K4BzVHBK4Cp8j0ajPFOJD/SBD8miIIvJqlwNAEJhIDaLxSIUCiWTScP83W6HIidOLBazC01WoL2rVCr4n06hiUKq74DPw47LovQvCoxNLpcrFArz+ZyMLZVKMFNDAZWz2Yzul8vlTCYTpMAVhkajsdlsqNONx2OEmnIfaqCSLgPJer0eMEiCKjkSiTSbzcFgQElVLBaV+mwt5/NZJzeMANNlPlJD6UlpqwEBqGw2i7aMGAyHQ6Mg8vk8Tl3S5XbN5y3Fs1arGRlCp77vV6tVPpnFxixAZMznVCoVj8cpZbmsX29ySadmHlQHHA0IggKjT1BlBD8SYL2ggKLCZwAKzRhEBJELd/1+EerA6Pu0ogLgBJKHGhT0gQPcXNK/dJTRaMQTydX7sHa7XQIKUWm1WiImumU9/5LixooZpZ97KFc0PvCBvgg3b9QkXcgiPaSoX9rvkeCHkz1TlZ6I9uvxJ6I57hwcsxeJxfwT4qDzCjWfjv8vnY8d8130D6QL1WW4pt8CDAAp0m61S6STLAAAAABJRU5ErkJggg==",
 	kernel_extension_icon: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAIAAAD8GO2jAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBNYWNpbnRvc2giIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6NjNEQ0QyNTVBODhDMTFFMkFDMDJFMzk3N0RDMDc2NDQiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6NjNEQ0QyNTZBODhDMTFFMkFDMDJFMzk3N0RDMDc2NDQiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDo2M0RDRDI1M0E4OEMxMUUyQUMwMkUzOTc3REMwNzY0NCIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDo2M0RDRDI1NEE4OEMxMUUyQUMwMkUzOTc3REMwNzY0NCIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/Pqxa0agAAAfqSURBVHjaTFZrbBTX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",
 
 	run: function() {
@@ -55,6 +55,12 @@ XKit.extensions.xkit_preferences = new Object({
 		}
 		XKit.extensions.xkit_preferences.news.update();
 
+		var shown_notification_notification = XKit.storage.get("xkit_preferences","shown_notification_notification","0");
+		
+		if (shown_notification_notification === "0") {
+			XKit.notifications.add("<b>Turn off notifications</b><br/>You can turn off \"Unread XKit News\" notifications from XKit Control Panel > Other > News. If you have unread mail, please read them first.<br/>Click here to close this notification. This message will be shown only once.","warning",true);
+		 	XKit.storage.set("xkit_preferences","shown_notification_notification","1");
+		}
 	},
 
 	news: {
@@ -85,8 +91,6 @@ XKit.extensions.xkit_preferences = new Object({
 				check_for_update = true;
 			}
 			
-			check_for_update = true;
-
 			// SO!? What shall we do, flips?
 			if (check_for_update === true) {
 				// yep, we need to check for updates.
@@ -99,7 +103,7 @@ XKit.extensions.xkit_preferences = new Object({
 				return;
 			}
 
-			XKit.download.page("paperboy.php", function(mdata) {
+			XKit.download.page("../paperboy/index.php", function(mdata) {
 
 				if (mdata.server_down === true) {
 				
@@ -111,7 +115,9 @@ XKit.extensions.xkit_preferences = new Object({
 					// (id, title, message, date)
 					mdata.news[news_item].message = XKit.tools.replace_all(mdata.news[news_item].message, "\\\\'", "'");
 					mdata.news[news_item].message = XKit.tools.replace_all(mdata.news[news_item].message, "\\\\\"", "\"");
-					XKit.extensions.xkit_preferences.news.create(mdata.news[news_item].id, mdata.news[news_item].title, mdata.news[news_item].message);
+					mdata.news[news_item].title = XKit.tools.replace_all(mdata.news[news_item].title, "\\\\'", "'");
+					mdata.news[news_item].title = XKit.tools.replace_all(mdata.news[news_item].title, "\\\\\"", "\"");
+					XKit.extensions.xkit_preferences.news.create(mdata.news[news_item].id, mdata.news[news_item].title, mdata.news[news_item].message, undefined, mdata.news[news_item].important);
 				}
 
 			});
@@ -163,7 +169,11 @@ XKit.extensions.xkit_preferences = new Object({
 
 		},
 
-		create: function(id, title, message, date) {
+		create: function(id, title, message, date, important) {
+			
+			if (important !== "1" && XKit.tools.get_setting("xkit_show_feature_updates","true") !== "true") {
+				return;	
+			}
 
 			if (XKit.extensions.xkit_preferences.news.check(id) === true) {
 				XKit.console.add("News " + id + " could not be pushed: already exists.");
@@ -372,7 +382,7 @@ XKit.extensions.xkit_preferences = new Object({
 
 				$("#xkit-tour-continue-2").click(function() {
 
-					XKit.window.show("Welcome to the control panel!", "<b>This is the Other panel.</b><br/>Here, you can Reset your XKit (deleting all it's settings so it can re-install again), update all your extensions at once, or if you are feeling nerd-ish, play with some advanced settings.", "info","<div class=\"xkit-button default\" id=\"xkit-tour-continue-3\">Continue &rarr;</div><div class=\"xkit-button xkit-tour-cancel\">Cancel Tour</div>");
+					XKit.window.show("Welcome to the control panel!", "<b>This is the Other panel.</b><br/>Here, you can Reset your XKit (deleting all its settings so it can re-install again), update all your extensions at once, or if you are feeling nerd-ish, play with some advanced settings.", "info","<div class=\"xkit-button default\" id=\"xkit-tour-continue-3\">Continue &rarr;</div><div class=\"xkit-button xkit-tour-cancel\">Cancel Tour</div>");
 					$("#xkit-cp-tab-other").trigger('click');
 
 					$("#xkit-tour-continue-3").click(function() {
@@ -778,10 +788,17 @@ XKit.extensions.xkit_preferences = new Object({
 					"<div class=\"more-info\" style=\"display: none;\" id=\"xkit-extension-more-info\">attributes</div>" +
 					"<div class=\"developer\">by " + m_extension.developer + "</div>" +
 					"<div class=\"description\">" + m_extension.description;
-
+					
+		var third_party_extension = false;
+		if (m_extension.developer.toLowerCase() !== "studioxenix") {
+			third_party_extension = true;
+			m_html = m_html + "<div class=\"xkit-third-party-warning\">third party extension</div>";
+		}
+		
 		if (m_extension.details !== "" && typeof m_extension.details !== "undefined") {
 			m_html = m_html + "<div class=\"details\" id=\"xkit-extension-details\">more information</div>";
 		}
+		
 		m_html = m_html + "</div><div class=\"buttons\">" +
 						"<div class=\"xkit-button\" id=\"xkit-extension-update\">Update</div>";
 
@@ -850,6 +867,12 @@ XKit.extensions.xkit_preferences = new Object({
 			// Call it:
 			XKit.extensions[extension_id].cpanel($("#xkit-extension-panel-settings"));
 		}
+		
+		$(".xkit-third-party-warning").click(function() {
+		
+			XKit.window.show("Third Party Extension", "This extension was not created by STUDIOXENIX. Since it is not developed by me, I can not make any guarantees about it, nor provide support for this extension, accept bug reports or feature requests.<div style=\"border: 1px solid rgb(200,200,200); background: rgb(235,235,235); margin: 15px 0px; padding: 10px; color: rgb(100,100,100); text-align: center; border-radius: 4px; box-shadow: inset 0px 1px 0px white, 0px 1px 2px rgba(0,0,0,0.22); \">This extension was developed by <a style=\"text-decoration: underline;\" href=\"http://github.com/" + m_extension.developer + "\">" + m_extension.developer + "</a></div>Please contact the developer using the link provided below for questions, bug reports and feature requests.","warning", "<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");	
+			
+		});
 
 		$("#xkit-extension-update").click(function() {
 
@@ -1157,7 +1180,8 @@ XKit.extensions.xkit_preferences = new Object({
 		var m_html = 	"<div class=\"nano long\" id=\"xkit-extensions-panel-left\">" +
 					"<div class=\"content\" id=\"xkit-extensions-panel-left-inner\">" +
 						"<div data-pname=\"reset\" class=\"xkit-extension text-only\">Reset XKit</div>" +
-						"<div data-pname=\"update-all\" class=\"xkit-extension text-only\">Update All</div>" +
+						"<div data-pname=\"news\" class=\"xkit-extension text-only\">News</div>" +
+						"<div data-pname=\"update-all\" style=\"display: none;\" class=\"xkit-extension text-only\">Update All</div>" +
 						"<div data-pname=\"storage\" class=\"xkit-extension text-only\">Storage</div>" +
 						"<div data-pname=\"editor\" class=\"xkit-extension text-only\">Open Editor</div>" +
 						"<div data-pname=\"console\" class=\"xkit-extension text-only\">Console</div>" +
@@ -1183,6 +1207,9 @@ XKit.extensions.xkit_preferences = new Object({
 			if ($(this).attr('data-pname') === "update-all") {
 				XKit.extensions.xkit_preferences.show_others_panel_update_all();
 			}
+			if ($(this).attr('data-pname') === "news") {
+				XKit.extensions.xkit_preferences.show_others_panel_news();
+			}
 			if ($(this).attr('data-pname') === "console") {
 				XKit.extensions.xkit_preferences.show_others_panel_console();
 			}
@@ -1202,6 +1229,39 @@ XKit.extensions.xkit_preferences = new Object({
 		});
 
 		$("#xkit-extensions-panel-left-inner > .xkit-extension:first-child").trigger("click");
+
+	},
+
+	show_others_panel_news: function() {
+
+		var m_html = 	"<div class=\"xkit-others-panel\">" +
+				"<div class=\"title\">News</div>" +
+				"<div class=\"description\">" +
+					"News section keeps you up to date with the latest on \"What's going on?\". I periodically write news items for that section to let you know when there is a new extension, a new feature, or when something goes wrong, such as when Tumblr changes things and breaks XKit.<br/><br/>News items are divided into two: <b>Feature Updates</b>, which alert you on bug fixes and new features/extensions and <b>Important Updates</b>, sent only when there is something bad going on with XKit, such as a Tumblr change or a bug that might cause annoyance or big problems.<br/><br/>You can turn off Feature Updates if you are not interested in them. You will continue receiving Important Updates if you do, since they usually have tips on how to make XKit work again if it goes berserk." +
+				"</div>" +
+				"<div class=\"bottom-part\">" +		
+					"<div id=\"xkit-panel-enable-feature-updates\" class=\"xkit-checkbox\"><b>&nbsp;</b>Bring me Feature Updates</div>" +
+				"</div>" +		
+				"</div>";
+
+		$("#xkit-extensions-panel-right-inner").html(m_html);
+		$("#xkit-extensions-panel-right").nanoScroller();
+
+		if (XKit.tools.get_setting("xkit_show_feature_updates","true") === "true") {
+			$("#xkit-panel-enable-feature-updates").addClass("selected");
+		}
+
+		$("#xkit-panel-enable-feature-updates").click(function() {
+
+			if (XKit.tools.get_setting("xkit_show_feature_updates","true") === "true") {
+				$("#xkit-panel-enable-feature-updates").removeClass("selected");
+				XKit.tools.set_setting("xkit_show_feature_updates","false");
+			} else {
+				$("#xkit-panel-enable-feature-updates").addClass("selected");
+				XKit.tools.set_setting("xkit_show_feature_updates","true");
+			}
+
+		});
 
 	},
 

@@ -13,6 +13,10 @@
 	margin-right: -10px !important; 	
 }
 
+.post_full .post_controls_inner .popover_menu_item .post_control {
+	float: none !important;
+}
+
 .post_full .post_header {
 	margin: 1px 0 13px !important;
 	z-index: 20;
