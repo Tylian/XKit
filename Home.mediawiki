@@ -1,0 +1,31 @@
+__NOTOC__
+'''Welcome to the XKit Wiki'''
+
+== Getting started ==
+
+<!-- -------- Start table -->
+{| style="width:100%; border-spacing:8px; margin:0px;" cellpadding="8"
+|-
+<!-- -------- Start left column -->
+| style="width:50%; background:#f6fafd; border:1px solid #E3EEF7; vertical-align:top;" |
+
+<h2 style="padding:0.2em 0.4em; margin:0 0 10px 0; color:#000; font-size:140%; font-weight:bold; text-align:left;">API Functions</h2>
+{{col-begin}}
+{{col-2}}
+* Coming Soon!
+{{col-end}}
+
+{{col-end}}
+
+<!-- -------- Start right column -->
+| style="width:50%; background:#f4f8fb; border:1px solid #DBDDD8; vertical-align:top;" |
+<h1 style="padding:0.2em 0.4em; margin:0 0 10px 0; color:#000; font-size:140%; font-weight:bold; text-align:left;">Important Links</h1>
+{{col-begin}}
+{{col-2}}
+* [http://xkit-dev.tumblr.com/ XKit Dev Blog]
+* [http://xkit-extension.tunblr.con/ XKit Main Blog
+{{col-end}}
+
+
+<!-- -------- End table -->
+|}
