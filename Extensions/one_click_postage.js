@@ -1,5 +1,5 @@
 //* TITLE One-Click Postage **//
-//* VERSION 2.2 REV A **//
+//* VERSION 2.0 REV E **//
 //* DESCRIPTION Lets you easily reblog, draft and queue posts **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//
@@ -19,26 +19,10 @@ XKit.extensions.one_click_postage = new Object({
 			default: true,
 			value: true
 		},
-		"show_social": {
-			text: "Show Post To Facebook and Twitter buttons",
-			default: false,
-			value: false
-		},
-		"allow_resize": {
-			text: "Allow resizing of the caption box vertically (experimental)",
-			default: false,
-			value: false
-		},
 		"show_blog_selector": {
 			text: "Show blog selector",
 			default: true,
 			value: true
-		},
-		"default_blog": {
-			text: "Default blog url",
-			type: "text",
-			default: "",
-			value: ""
 		},
 		"show_caption_remover": {
 			text: "Show the Remove Caption button",
@@ -93,7 +77,6 @@ XKit.extensions.one_click_postage = new Object({
 	user_on_box: false,
 	menu_closer_int: 0,
 	default_blog_id: "",
-	caption_height: 90,
 
 	run: function() {
 	
@@ -104,13 +87,8 @@ XKit.extensions.one_click_postage = new Object({
 			this.init_keep_tags_dashboard();	
 		}
 		
-		if (this.preferences.allow_resize.value === true) {
-			XKit.tools.add_css("#x1cpostage_caption { resize: vertical; }", "one_click_postage_resize");	
-		}
-		
 		if (this.preferences.show_small_ui.value === true) {
 		
-			this.caption_height = 50;
 			var slim_css = 	"#x1cpostage_caption { height: 50px; }" + 
 					"#x1cpostage_reblog, #x1cpostage_queue, #x1cpostage_draft { height: 32px; }";
 			XKit.tools.add_css(slim_css, "one_click_postage_slim");	
@@ -158,13 +136,8 @@ XKit.extensions.one_click_postage = new Object({
 		var m_blogs = XKit.tools.get_blogs();
 		var m_blogselector_html = "";
 		
-		//XKit.extensions.one_click_postage.default_blog_id = m_blogs[0];
-		if (this.preferences.default_blog.value !== "") {
-			XKit.extensions.one_click_postage.default_blog_id = this.preferences.default_blog.value;
-		} else {
-			XKit.extensions.one_click_postage.default_blog_id = m_blogs[0];
-		}
-
+		XKit.extensions.one_click_postage.default_blog_id = m_blogs[0];
+		
 		if (this.preferences.show_blog_selector.value === true) {
 			for(i=0;i<m_blogs.length;i++) {
 				if (m_blogs[i] !== "") {
@@ -172,39 +145,13 @@ XKit.extensions.one_click_postage = new Object({
 							m_blogs[i] + "\">" + m_blogs[i] + "</option>";
 				}
 			}
-			m_blogselector_html = "<select id=\"x1cpostage_blog\" >" + m_blogselector_html + "</select>";
+			m_blogselector_html = "<select id=\"x1cpostage_blog\">" + m_blogselector_html + "</select>";
 			if (this.preferences.show_reverse_ui.value === true) {
-				m_blogselector_html = $(m_blogselector_html).insertBefore("#x1cpostage_reblog");
+				$("#x1cpostage_reblog").before(m_blogselector_html);
 			} else {
-				m_blogselector_html = $(m_blogselector_html).insertBefore("#x1cpostage_caption");
-			}
-			m_blogselector_html.val(XKit.extensions.one_click_postage.default_blog_id);
-		}
-		
-		if (this.preferences.show_social.value === true) {
-			var m_html = "<div id=\"xkit-1cp-social\">" +
-					"<div data-site=\"facebook\" id=\"xkit-1cp-social-facebook\">&nbsp;</div>" +
-					"<div data-site=\"twitter\" id=\"xkit-1cp-social-twitter\">&nbsp;</div>" +	
-				     "</div>";
-			if (this.preferences.show_reverse_ui.value === true) {
-				$("#x1cpostage_reblog").before(m_html);
-			} else {
-				$("#x1cpostage_draft").after(m_html);
+				$("#x1cpostage_caption").before(m_blogselector_html);
 			}
 		}
-
-		var share_fb = XKit.storage.get("one_click_postage","share_on_facebook", "false");
-		var share_twitter = XKit.storage.get("one_click_postage","share_on_twitter", "false");
-
-		if (share_fb === "true") { $("#xkit-1cp-social-facebook").addClass("selected"); }
-		if (share_twitter === "true") { $("#xkit-1cp-social-twitter").addClass("selected"); }
-
-		$("#xkit-1cp-social-facebook, #xkit-1cp-social-twitter").click(function() {
-			$(this).toggleClass("selected");
-			var m_value = "false";
-			if ($(this).hasClass("selected") === true) { m_value = "true"; }
-			XKit.storage.set("one_click_postage","share_on_" + $(this).attr('data-site'), m_value);
-		});
 
 		$(document).on("mouseover",".reblog_button,.post_control.reblog", function(event) {
 			if ($(this).hasClass("radar_button") === true) {return; }
@@ -284,15 +231,15 @@ XKit.extensions.one_click_postage = new Object({
 		});
 		
 		$("#x1cpostage_reblog").click(function() {
-			XKit.extensions.one_click_postage.post(0, false);
+			XKit.extensions.one_click_postage.post(0);
 		});
 		
 		$("#x1cpostage_queue").click(function() {
-			XKit.extensions.one_click_postage.post(2, false);
+			XKit.extensions.one_click_postage.post(2);
 		});
 		
 		$("#x1cpostage_draft").click(function() {
-			XKit.extensions.one_click_postage.post(1, false);
+			XKit.extensions.one_click_postage.post(1);
 		});
 	},
 	destroy: function() {
@@ -300,8 +247,7 @@ XKit.extensions.one_click_postage = new Object({
 		XKit.tools.remove_css("one_click_postage");
 		XKit.tools.remove_css("x1cpostage_reverse_ui");
 		$("#x1cpostage_box").remove();
-		XKit.tools.remove_css("one_click_postage_slim");
-		XKit.tools.remove_css("one_click_postage_resize");	
+		XKit.tools.remove_css("one_click_postage_slim");	
 	},
 	
 	init_keep_tags_dashboard: function() {
@@ -412,7 +358,6 @@ XKit.extensions.one_click_postage = new Object({
 		$("#x1cpostage_remove_caption").css("display","block");
 		$("#x1cpostage_caption").removeClass("x1cpostage_remove_caption_on");
 		$("#x1cpostage_tags").css("border-top","0px");
-		$("#x1cpostage_caption").css("height", XKit.extensions.one_click_postage.caption_height + "px");
 		
 		// Keep tags patch.
 		if (XKit.extensions.one_click_postage.preferences.keep_tags.value === true) {
@@ -518,7 +463,7 @@ XKit.extensions.one_click_postage = new Object({
 			}
 		}, 700);
 	},
-	post: function(state, retry_mode) {
+	post: function(state) {
 		if (XKit.extensions.one_click_postage.preferences.show_reverse_ui.value === true) {
 			$("#x1cpostage_box").fadeOut('fast');
 		} else {
@@ -528,19 +473,9 @@ XKit.extensions.one_click_postage = new Object({
 		var form_key = $("body").attr('data-form-key');
 		var reblog_key = $(XKit.extensions.one_click_postage.last_object).attr('data-reblog-key');
 		var post_type = $(XKit.extensions.one_click_postage.last_object).attr('data-type');
-		var channel_id = $(XKit.extensions.one_click_postage.last_object).attr('data-tumblelog-name');
 
 		var m_object = new Object();
 		
-		/*
-			{"channel_id":"neoplethora",
-			 "reblog_id":"53347650122",
-			 "reblog_key":"22Csj9mI",
-			 "post_type":false,
-			 "form_key":"FFR35OVIeHyFd2sr9EZasl2m8E"}:
-		*/
-		
-		m_object.channel_id = channel_id;
 		m_object.reblog_id = parseInt(post_id);
 		m_object.reblog_key = reblog_key;
 		m_object.form_key = form_key;
@@ -565,19 +500,24 @@ XKit.extensions.one_click_postage = new Object({
 			onerror: function(response) {
 				
 				if (response.status === 401) {
-					XKit.extensions.one_click_postage.show_error("OCP01", state);
+					//xkit_error(XKit.language.one_click_postage.status_error_title, XKit.language.generic_errors.unauthorized);
+					XKit.window.show("Unable to process request","Please check that you have not used today's posting limit and your queue is not full (the limit is 301) and send me an ask if this continues.<br/><br/>The error code to report is <b>OCP99</b>. Thank you.","error","<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div><a href=\"http://xkit-extension.tumblr.com/ask\" class=\"xkit-button\">Send an ask</a>");
 				} else {
 					if (response.status === 404) {
-						XKit.extensions.one_click_postage.show_error("OCP02 [Not Found]", state);
+						XKit.window.show("Unable to process request","Looks like this post was removed by the user.","error","<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
+					//	xkit_error(XKit.language.one_click_postage.status_error_title, XKit.language.generic_errors.notfound);
 					} else {
+					//	xkit_error(XKit.language.one_click_postage.status_error_title, XKit.language.generic_errors.cant_reach);
 						if (retry_mode !== true) {
-							XKit.extensions.one_click_postage.post(state, true);
+							XKit.extensions.one_click_postage.process(data, state, form_key, "", post_id, caption, tags, reblog_key, m_button, true);
 						} else {
-							XKit.extensions.one_click_postage.show_error("OCP03-" + response.status, state);
+							XKit.window.show("Unable to process request","Please check that you have not used today's posting limit and your queue is not full (the limit is 301) and send me an ask if this continues.<br/><br/>The error code to report is <b>OCP43-" + response.status + "</b>. Thank you.","error","<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div><a href=\"http://xkit-extension.tumblr.com/ask\" class=\"xkit-button\">Send an ask</a>");
 						}
 					}
 				}
 				
+				//xkit_error(XKit.language.one_click_postage.status_error_title, XKit.language.generic_errors.cant_reach);
+				//XKit.window.show("Unable to process request","Please check that you have not used today's posting limit and your queue is not full (the limit is 301) and send me an ask if this continues.<br/><br/>The error code to report is <b>OCP11</b>. Thank you.","error","<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div><a href=\"http://xkit-extension.tumblr.com/ask\" class=\"xkit-button\">Send an ask</a>");
 				$(m_button).removeClass("xkit-one-click-reblog-working");
 				return;
 			},
@@ -587,14 +527,15 @@ XKit.extensions.one_click_postage = new Object({
 					var mdata = jQuery.parseJSON(response.responseText);
 				} catch(e) {
 					//xkit_error(XKit.language.one_click_postage.status_error_title, XKit.language.generic_errors.not_json);
-					XKit.extensions.one_click_postage.show_error("OCP04", state);
+					XKit.window.show("Unable to process request","Please check that you have not used today's posting limit and your queue is not full (the limit is 301) and send me an ask if this continues.<br/><br/>The error code to report is <b>OCP01</b>. Thank you.","error","<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div><a href=\"http://xkit-extension.tumblr.com/ask\" class=\"xkit-button\">Send an ask</a>");
 					$(m_button).removeClass("xkit-one-click-reblog-working");
 					return;
 				}
 				if (mdata.errors === false) {
 					XKit.extensions.one_click_postage.process(mdata, state, form_key, blog_id, post_id, caption, tags, reblog_key, m_button);
 				} else {
-					XKit.extensions.one_click_postage.show_error("OCP05", state);
+					XKit.window.show("Unable to process request","Please check that you have not used today's posting limit and your queue is not full (the limit is 301) and send me an ask if this continues.<br/><br/>The error code to report is <b>OCP02</b>. Thank you.","error","<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div><a href=\"http://xkit-extension.tumblr.com/ask\" class=\"xkit-button\">Send an ask</a>");
+					//xkit_error(XKit.language.one_click_postage.status_error_title, XKit.language.generic_errors.server_error);
 					$(m_button).removeClass("xkit-one-click-reblog-working");
 				}
 			}
@@ -657,14 +598,6 @@ XKit.extensions.one_click_postage = new Object({
 	
 		m_object["post[type]"] = data.post.type;
 
-		if ($("#xkit-1cp-social-twitter").hasClass("selected") === true) {
-			m_object["send_to_twitter"] = "on";
-		}
-
-		if ($("#xkit-1cp-social-facebook").hasClass("selected") === true) {
-			m_object["send_to_fbog"] = "on";
-		}
-
 		if (typeof data.post.two === "undefined") {
 			data.post.two = "";
 		}
@@ -716,15 +649,19 @@ XKit.extensions.one_click_postage = new Object({
 			json: true,
 			onerror: function(response) {
 				if (response.status === 401) {
-					XKit.extensions.one_click_postage.show_error("OCP06", state);
+					//xkit_error(XKit.language.one_click_postage.status_error_title, XKit.language.generic_errors.unauthorized);
+					// XKit.window.show("Unable to process request","Please check that you have not used today's posting limit and your queue is not full (the limit is 301) and send me an ask if this continues.<br/><br/>The error code to report is <b>OCP42</b>. Thank you.","error","<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div><a href=\"http://xkit-extension.tumblr.com/ask\" class=\"xkit-button\">Send an ask</a>");
+					XKit.extensions.one_click_postage.process(data, state, form_key, "", post_id, caption, tags, reblog_key, m_button, true);
 				} else {
 					if (response.status === 404) {
-						XKit.extensions.one_click_postage.show_error("OCP07", state);
+						XKit.window.show("Unable to process request","Looks like this post was removed by the user.","error","<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
+					//	xkit_error(XKit.language.one_click_postage.status_error_title, XKit.language.generic_errors.notfound);
 					} else {
+					//	xkit_error(XKit.language.one_click_postage.status_error_title, XKit.language.generic_errors.cant_reach);
 						if (retry_mode !== true) {
 							XKit.extensions.one_click_postage.process(data, state, form_key, "", post_id, caption, tags, reblog_key, m_button, true);
 						} else {
-							XKit.extensions.one_click_postage.show_error("OCP08-" + response.status, state);
+							XKit.window.show("Unable to process request","Please check that you have not used today's posting limit and your queue is not full (the limit is 301) and send me an ask if this continues.<br/><br/>The error code to report is <b>OCP43-" + response.status + "</b>. Thank you.","error","<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div><a href=\"http://xkit-extension.tumblr.com/ask\" class=\"xkit-button\">Send an ask</a>");
 						}
 					}
 				}
@@ -736,7 +673,7 @@ XKit.extensions.one_click_postage = new Object({
 					var mdata = jQuery.parseJSON(response.responseText);
 				} catch(e) {
 					//xkit_error(XKit.language.one_click_postage.status_error_title, XKit.language.generic_errors.not_json);
-					XKit.extensions.one_click_postage.show_error("OCP09-J", state);
+					XKit.window.show("Unable to process request","Please check that you have not used today's posting limit and your queue is not full (the limit is 301) and send me an ask if this continues.<br/><br/>The error code to report is <b>OCP03</b>. Thank you.","error","<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div><a href=\"http://xkit-extension.tumblr.com/ask\" class=\"xkit-button\">Send an ask</a>");
 					$(m_button).removeClass("xkit-one-click-reblog-working");
 					return;
 				}
@@ -760,39 +697,12 @@ XKit.extensions.one_click_postage = new Object({
 					if (typeof mdata.error !== "undefined") {
 						m_error = mdata.error;	
 					}
-					XKit.extensions.one_click_postage.show_error("OCP10", state);
+					XKit.window.show("Unable to process request","Please check that you have not used today's posting limit and your queue is not full (the limit is 301) and send me an ask if this continues.<br/><br/>The error code to report is <b>OCP04<br/>" + m_error + "</b>. Thank you.","error","<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div><a href=\"http://xkit-extension.tumblr.com/ask\" class=\"xkit-button\">Send an ask</a>");
 					$(m_button).removeClass("xkit-one-click-reblog-working");
 				}
 			}
 		});
 	
-	},
-	
-	show_error: function(code, state) {
-		
-		var m_word = "reblog";
-		if (state === 1) { m_word = "draft"; }
-		if (state === 2) { m_word = "queue"; }
-		
-		var m_causes =	"<ul class=\"xkit-one-click-postage-error-list\">" +
-					"<li><b>You have used your post limit.</b><br/>The post limit is 250 per day.<br/>You might need to wait up to 24 hours for your limit to reset.</li>" +
-					"<li><b>You've filled your queue.</b><br/>You can not queue more than 300 posts.<br/>If you went over your post limit you might not be able to queue.</li>" +
-					"<li><b>The post is deleted.</b><br/>The post you are trying to " + m_word + " is deleted by the user.</li>" +
-					"<li><b>There was a server error.</b><br/>Wait for a while and retry the " + m_word + " request.<br/>There might be some changes made to the Tumblr servers, in that case, a fix will be provided soon. Check the XKit blog for updates.</li>" +
-				"</ul>";
-		
-		XKit.window.show("I could not " + m_word + " your post.","<b>What might be causing this?</b>" + m_causes + "<b>If the tips above did not solve the problem,</b><br/>please send me an ask along with the error code <b>" + code + "</b>.","error","<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div><a href=\"http://xkit-extension.tumblr.com/\" class=\"xkit-button\">Visit the XKit Blog</a><a href=\"http://xkit-extension.tumblr.com/ask\" class=\"xkit-button\">Send an ask</a>");	
-		
-	},
-	
-	cpanel: function(div) {
-	
-		$("#xkit-one-click-postage-ultrafast-help").click(function() {
-			
-			XKit.window.show("UltraFastReblog", "UltraFastReblog adds three buttons on all posts on your dashboard: Reblog, Queue and Draft. When you click on them, the post will be submitted to your main blog, without opening the options pop-up.<br/><br/>It is used if you are not going to add any tags or caption to the post, and just want to reblog/queue/draft them as soon as possible. When UltraFastReblogging, you can not use features of One-Click Postage such as Remove Caption or Blog Selector.","info","<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");	
-			
-		});	
-		
 	}
 	
 });
