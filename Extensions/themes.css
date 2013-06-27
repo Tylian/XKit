@@ -1,0 +1,42 @@
+#xkit-themes-loading {
+	font-size: 17px;
+	color: rgb(120,120,120);
+	padding: 30px;
+	text-align: center;	
+	margin-top: 40px;
+}
+
+.xkit-theme-obj {
+	border-bottom: 1px solid rgb(190,190,190);
+	position: relative;
+	padding: 8px 15px 8px 30px;
+	font-size: 13px;
+	background-repeat: no-repeat;
+	background-position: 11px 11px;	
+	cursor: pointer;
+}
+
+.xkit-theme-obj.selected {
+	background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAJCAYAAAALpr0TAAAAPElEQVQYV2NkIBIwEqHuP1ANIyGFYEUgw/AphCtCV4gsgaIIl0IMRdgU4nQOshtBJpkA8VlsIUHI13A9AJekCgr1mBZRAAAAAElFTkSuQmCC');	
+}
+
+.xkit-theme-obj:hover {
+	background-color: rgb(245,245,245);	
+}
+
+.xkit-theme-obj:active {
+	background-color: rgb(235,235,235);	
+}
+
+.xkit-theme-title {
+	font-weight: bold;	
+}
+
+.xkit-theme-description {
+	color: rgb(80,80,80);	
+}
+
+.xkit-theme-developer {
+	font-size: 11px;
+	color: rgb(130,130,130);	
+}
