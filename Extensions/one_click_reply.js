@@ -1,5 +1,5 @@
 //* TITLE One-Click-Reply **//
-//* VERSION 1.2 REV C **//
+//* VERSION 1.3 REV A **//
 //* DESCRIPTION Lets you reply to notifications **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS To use this extension, hover over a notification and click on the Reply button. If Multi-Reply is on, hold down the ALT key while clicking on the Reply button to select/deselect posts and reply to all of them at once. **//
@@ -16,15 +16,20 @@ XKit.extensions.one_click_reply = new Object({
 			text: "Reply Options",
 			type: "separator"	
 		},
-		"multi_reply": {
-			text: "Enable replying to multiple notifications at once (experimental)",
-			default: true,
-			value: true
+		"show_avatars": {
+			text: "Show avatars on reply posts",
+			default: false,
+			value: false
 		},
 		"open_in_new_tab": {
 			text: "Open reply windows in a new tab",
 			default: false,
 			value: false
+		},
+		"multi_reply": {
+			text: "Enable replying to multiple notifications at once (experimental)",
+			default: true,
+			value: true
 		},
 		"sep1": {
 			text: "Tagging Options",
@@ -56,6 +61,12 @@ XKit.extensions.one_click_reply = new Object({
 		"follow": "<p><a href=\"%l\">%u</a> started following %b</p>",
 		"reply": "<p><a href=\"%l\">%u</a> replied to your post: <a href=\"%p\">%t</a></p><blockquote>%r</blockquote>",
 		"answer": "<p><a href=\"%l\">%u</a> answered your post: <a href=\"%p\">%t</a></p><blockquote>%r</blockquote>",	
+		
+		"nt_reblog": "<p><a href=\"%l\">%u</a> reblogged your <a href=\"%p\">post</a></p>",
+		"nt_reblog_with_comments": "<p><a href=\"%l\">%u</a> reblogged your <a href=\"%p\">post</a> and added:</p><blockquote>%r</blockquote>",
+		"nt_like": "<p><a href=\"%l\">%u</a> liked your <a href=\"%p\">post</a></p>",
+		"nt_reply": "<p><a href=\"%l\">%u</a> replied to your <a href=\"%p\">post:</a></p><blockquote>%r</blockquote>",
+		"nt_answer": "<p><a href=\"%l\">%u</a> answered your <a href=\"%p\">post:</a></p><blockquote>%r</blockquote>",	
 		
 	},
 	
@@ -236,7 +247,6 @@ XKit.extensions.one_click_reply = new Object({
 		if ($(obj).hasClass("reply") === true) { m_post_type = "reply"; m_sentence = XKit.extensions.one_click_reply.sentences.reply; }
 		if ($(obj).hasClass("like") === true) { m_post_type = "like"; m_sentence = XKit.extensions.one_click_reply.sentences.like;  }
 		if ($(obj).hasClass("answer") === true) { m_post_type = "answer"; m_sentence = XKit.extensions.one_click_reply.sentences.answer;  }
-		
 		if ($(obj).hasClass("reblog") === true) { 
 			m_post_type = "reblog"; 
 			m_sentence = XKit.extensions.one_click_reply.sentences.reblog; 
@@ -306,6 +316,29 @@ XKit.extensions.one_click_reply = new Object({
 			user_url = $(obj).find("a.tumblelog").attr('href');	
 		}	
 		
+		if ($.trim(post_contents) === "") {
+			
+			if (m_post_type === "reply") {
+				m_sentence = XKit.extensions.one_click_reply.sentences.nt_reply;	
+			}
+			
+			if (m_post_type === "like") {
+				m_sentence = XKit.extensions.one_click_reply.sentences.nt_like;	
+			}
+			
+			if (m_post_type === "answer") {
+				m_sentence = XKit.extensions.one_click_reply.sentences.nt_answer;	
+			}
+
+			if ($(obj).hasClass("reblog") === true) { 
+				m_sentence = XKit.extensions.one_click_reply.sentences.nt_reblog; 
+				if ($(obj).hasClass("with_commentary") === true) {
+					m_sentence = XKit.extensions.one_click_reply.sentences.nt_reblog_with_comments;	
+				}
+			}	
+
+		}	
+		
 		m_sentence = m_sentence.replace("%l", user_url);
 		m_sentence = m_sentence.replace("%u", user_name);
 		m_sentence = m_sentence.replace("%p", post_url);
@@ -313,6 +346,17 @@ XKit.extensions.one_click_reply = new Object({
 		m_sentence = m_sentence.replace("%t", post_contents);
 		
 		m_sentence = XKit.extensions.one_click_reply.strip_sentence(m_sentence);
+		
+		if (XKit.extensions.one_click_reply.preferences.show_avatars.value === true) {
+			// Fetch the avatar, slugify it to sentence.
+			var avatar_url = $(obj).find(".avatar_frame").find(".avatar").attr('src');
+			// This is ugly but it works:
+			avatar_url_start = avatar_url.indexOf('.media.tumblr.com');
+			if (avatar_url_start !== -1) {
+				avatar_url = "http://" + avatar_url.substring(avatar_url_start + 1);	
+			}
+			m_sentence = "<img src=\"" + avatar_url + "\" class=\"image_thumbnail\">" + m_sentence;	
+		}
 		
 		XKit.tools.set_setting("xkit_one_click_reply_sentence", m_sentence);
 		XKit.tools.set_setting("xkit_one_click_reply_username", user_name);
@@ -481,6 +525,17 @@ XKit.extensions.one_click_reply = new Object({
 		}
 		
 		m_sentence = XKit.extensions.one_click_reply.strip_sentence(m_sentence);
+		
+		if (XKit.extensions.one_click_reply.preferences.show_avatars.value === true) {
+			// Fetch the avatar, slugify it to sentence.
+			var avatar_url = $(obj).find(".avatar_frame").find(".avatar").attr('src');
+			// This is ugly but it works:
+			avatar_url_start = avatar_url.indexOf('.media.tumblr.com');
+			if (avatar_url_start !== -1) {
+				avatar_url = "http://" + avatar_url.substring(avatar_url_start + 1);	
+			}
+			m_sentence = "<img src=\"" + avatar_url + "\" class=\"image_thumbnail\">" + m_sentence;	
+		}
 		
 		XKit.tools.set_setting("xkit_one_click_reply_sentence", m_sentence);
 		XKit.tools.set_setting("xkit_one_click_reply_username", username);

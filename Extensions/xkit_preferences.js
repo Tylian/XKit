@@ -1,5 +1,5 @@
 //* TITLE XKit Preferences **//
-//* VERSION 1.6 REV B **//
+//* VERSION 1.9 REV A **//
 //* DESCRIPTION Lets you customize XKit **//
 //* DEVELOPER STUDIOXENIX **//
 XKit.extensions.xkit_preferences = new Object({
@@ -55,12 +55,57 @@ XKit.extensions.xkit_preferences = new Object({
 		}
 		XKit.extensions.xkit_preferences.news.update();
 
-		var shown_notification_notification = XKit.storage.get("xkit_preferences","shown_notification_notification","0");
+		var launch_count = XKit.storage.get("xkit_preferences","launch_count","0");
+		launch_count++;
+		XKit.storage.set("xkit_preferences","launch_count",launch_count);
+
+		var shown_blogs = XKit.storage.get("xkit_preferences","shown_blogs_notification","0");
+		if (shown_blogs === "0" && launch_count >= 5) {
+			
+			setTimeout(function() {
+				
+			var form_key = $("body").attr('data-form-key');
+			if (form_key === "" ||typeof form_key === "undefined" ||document.location.href.indexOf('/dashboard') === -1) {
+				return;
+			}	
+			XKit.window.show("Follow the XKit blog?","<b>The XKit blog brings you the latest, most up to date news about XKit, including new extensions and new beta versions of XKit, future developments, bug fixes and more.</b><br/><br/>If you would like to follow the official XKit blog, just click on the button below, and XKit will do the rest.<br/><br/><small>This message will be displayed only once.</small>","question","<div id=\"xkit-follow-blog\" class=\"xkit-button default\">Follow the XKit blog</div><div id=\"xkit-close-message\" class=\"xkit-button\">No, thanks.</div>");
+			XKit.storage.set("xkit_preferences","shown_blogs_notification","1");
+			
+			$("#xkit-follow-blog").click(function() {
+				
+				$("#xkit-follow-blog").addClass("disabled");
+				$("#xkit-close-message").css("display","none");
+				
+				$("#xkit-follow-blog").html("Please wait...");
+				
+				var m_data = "form_key=" + form_key + "&data%5Btumblelog%5D=xkit-extension&data%5Bsource%5D=FOLLOW_SOURCE_IFRAME";
+				GM_xmlhttpRequest({
+					method: "POST",
+					url: "http://www.tumblr.com/svc/follow",
+					data: m_data,
+					headers: {
+						"Content-Type": "application/x-www-form-urlencoded"
+					},
+					json: false,
+					onerror: function(response) {
+						alert("Well this is embarrassing.\n\nTumblr servers would not allow me to let you follow the XKit blog. You can try again later or go to xkit-extension.tumblr.com and follow it manually.");
+					},
+					onload: function(response) {
+						// Do nothing?
+						XKit.window.close();
+					}
+				});
+
+			});
+			
+			}, 2000);
+			
+		}
 		
-		if (shown_notification_notification === "0") {
+		/*if (shown_notification_notification === "0") {
 			XKit.notifications.add("<b>Turn off notifications</b><br/>You can turn off \"Unread XKit News\" notifications from XKit Control Panel > Other > News. If you have unread mail, please read them first.<br/>Click here to close this notification. This message will be shown only once.","warning",true);
 		 	XKit.storage.set("xkit_preferences","shown_notification_notification","1");
-		}
+		}*/
 	},
 
 	news: {
@@ -457,7 +502,7 @@ XKit.extensions.xkit_preferences = new Object({
 					"<div class=\"content\" id=\"xkit-extensions-panel-left-inner\"></div>" +
 				"</div>" +
 				"<div class=\"nano xkit-no-message\" id=\"xkit-extensions-panel-right\">" +
-					"<div class=\"content\" id=\"xkit-extensions-panel-right-inner\"></div>" +
+					"<div class=\"content\" id=\"xkit-extensions-panel-right-inner\"><div id=\"xkit-news-turn-off-help\"><b>Don't like news?</b><br/>You can turn these off from the Others > News Notifications panel.</div>" +
 				"</div>";
 
 		$("#xkit-control-panel-inner").html(m_html);
@@ -1179,12 +1224,15 @@ XKit.extensions.xkit_preferences = new Object({
 
 		var m_html = 	"<div class=\"nano long\" id=\"xkit-extensions-panel-left\">" +
 					"<div class=\"content\" id=\"xkit-extensions-panel-left-inner\">" +
+						"<div class=\"xkit-extension text-only separator\">Configuration & Information</div>" +
 						"<div data-pname=\"reset\" class=\"xkit-extension text-only\">Reset XKit</div>" +
-						"<div data-pname=\"news\" class=\"xkit-extension text-only\">News</div>" +
+						"<div data-pname=\"news\" class=\"xkit-extension text-only\">News Notificatons</div>" +
+						"<div data-pname=\"updates\" class=\"xkit-extension text-only\">Update Notificatons</div>" +
 						"<div data-pname=\"update-all\" style=\"display: none;\" class=\"xkit-extension text-only\">Update All</div>" +
 						"<div data-pname=\"storage\" class=\"xkit-extension text-only\">Storage</div>" +
-						"<div data-pname=\"editor\" class=\"xkit-extension text-only\">Open Editor</div>" +
+						"<div class=\"xkit-extension text-only separator\">Advanced Settings</div>" +
 						"<div data-pname=\"console\" class=\"xkit-extension text-only\">Console</div>" +
+						"<div data-pname=\"editor\" class=\"xkit-extension text-only\">XKit Editor</div>" +
 						"<div data-pname=\"internal\" class=\"xkit-extension text-only\">Show Internals</div>" +
 						"<div data-pname=\"flags\" class=\"xkit-extension text-only\">Flags</div>" +
 					"</div>" +
@@ -1194,15 +1242,20 @@ XKit.extensions.xkit_preferences = new Object({
 				"</div>";
 
 		$("#xkit-control-panel-inner").html(m_html);
-		$("#xkit-control-panel-left").nanoScroller();
 
-		$("#xkit-extensions-panel-left-inner > .xkit-extension").click(function() {
+		$("#xkit-extensions-panel-left").nanoScroller();
+		$("#xkit-extensions-panel-left").nanoScroller({ scroll: 'top' });
+
+		$("#xkit-extensions-panel-left-inner > .xkit-extension").not(".separator").click(function() {
 
 			$("#xkit-extensions-panel-left-inner > .xkit-extension").removeClass("selected");
 			$(this).addClass("selected");
 
 			if ($(this).attr('data-pname') === "reset") {
 				XKit.extensions.xkit_preferences.show_others_panel_reset();
+			}
+			if ($(this).attr('data-pname') === "updates") {
+				XKit.extensions.xkit_preferences.show_others_panel_updates();
 			}
 			if ($(this).attr('data-pname') === "update-all") {
 				XKit.extensions.xkit_preferences.show_others_panel_update_all();
@@ -1228,14 +1281,47 @@ XKit.extensions.xkit_preferences = new Object({
 				
 		});
 
-		$("#xkit-extensions-panel-left-inner > .xkit-extension:first-child").trigger("click");
+		$("#xkit-extensions-panel-left-inner > .xkit-extension").not(".separator").first().trigger("click");
+		$("#xkit-extensions-panel-left-inner > .xkit-extension:last-child").css("border-bottom","0");
 
+	},
+	
+	show_others_panel_updates: function() {
+	
+		var m_html = 	"<div class=\"xkit-others-panel\">" +
+				"<div class=\"title\">Update Notifications</div>" +
+				"<div class=\"description\">" +
+					"XKit alerts you when it updates one of it's extensions. You can turn these off if you are not interested in update notifications." +
+				"</div>" +
+				"<div class=\"bottom-part\">" +		
+					"<div id=\"xkit-panel-enable-show-updates\" class=\"xkit-checkbox\"><b>&nbsp;</b>Show me update notifications</div>" +
+				"</div>" +		
+				"</div>";
+
+		$("#xkit-extensions-panel-right-inner").html(m_html);
+		$("#xkit-extensions-panel-right").nanoScroller();
+
+		if (XKit.tools.get_setting("xkit_show_update_notifications","true") === "true") {
+			$("#xkit-panel-enable-show-updates").addClass("selected");
+		}
+
+		$("#xkit-panel-enable-show-updates").click(function() {
+
+			if (XKit.tools.get_setting("xkit_show_update_notifications","true") === "true") {
+				$("#xkit-panel-enable-show-updates").removeClass("selected");
+				XKit.tools.set_setting("xkit_show_update_notifications","false");
+			} else {
+				$("#xkit-panel-enable-show-updates").addClass("selected");
+				XKit.tools.set_setting("xkit_show_update_notifications","true");
+			}
+
+		});		
 	},
 
 	show_others_panel_news: function() {
 
 		var m_html = 	"<div class=\"xkit-others-panel\">" +
-				"<div class=\"title\">News</div>" +
+				"<div class=\"title\">News Notifications</div>" +
 				"<div class=\"description\">" +
 					"News section keeps you up to date with the latest on \"What's going on?\". I periodically write news items for that section to let you know when there is a new extension, a new feature, or when something goes wrong, such as when Tumblr changes things and breaks XKit.<br/><br/>News items are divided into two: <b>Feature Updates</b>, which alert you on bug fixes and new features/extensions and <b>Important Updates</b>, sent only when there is something bad going on with XKit, such as a Tumblr change or a bug that might cause annoyance or big problems.<br/><br/>You can turn off Feature Updates if you are not interested in them. You will continue receiving Important Updates if you do, since they usually have tips on how to make XKit work again if it goes berserk." +
 				"</div>" +
@@ -1424,7 +1510,7 @@ XKit.extensions.xkit_preferences = new Object({
 	show_others_panel_open_editor: function() {
 
 		var m_html = 	"<div class=\"xkit-others-panel\">" +
-				"<div class=\"title\">Open Editor</div>" +
+				"<div class=\"title\">XKit Editor</div>" +
 				"<div class=\"description\">" +
 					"XKit comes with the Extension Editor embedded. This is used to write new extensions and update the existing. You can use it to write extensions if you are good with JavaScript and the XKit framework." +
 				"</div>" +

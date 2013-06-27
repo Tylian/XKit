@@ -1,5 +1,5 @@
 //* TITLE Soft Refresh **//
-//* VERSION 0.3 REV C **//
+//* VERSION 0.3 REV E **//
 //* DESCRIPTION Refresh without refreshing **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS This extension allows you to see new posts on your dashboard without refreshing the page. When you get the New Posts bubble, click on the Tumblr logo, and new posts will appear on your dashboard.<br><br>If you still want to refresh the page completely (perform a Hard Refresh), hold the ALT key while clicking on logo and the page will refresh.<br><br>Please note that this extension is highly experimental, and might not work properly all the time. **//
@@ -36,34 +36,41 @@ XKit.extensions.soft_refresh = new Object({
 			return;	
 		}
 		
+		$(".logo_anchor").attr('data-old-href', $(".logo_anchor").attr('href'));
 		if(this.preferences.use_logo.value == true){
 			$(".logo_anchor").attr('onclick','return false');
 			$(".logo_anchor").attr('href', '#');
-			$(document).on("click", ".logo_anchor", function(event) {
-				if (event.altKey) {
-					location.reload(true);
-					return;	
-				}
-				XKit.extensions.soft_refresh.load_posts();	
-			});
+			$(document).on("click", ".logo_anchor", XKit.extensions.soft_refresh.logo_clicked);
 		}
 
+		$("#home_button a").attr('data-old-href', $("#home_button a").attr('href'));
 		if(this.preferences.use_home_button.value == true){
-                	var homeButton = $("#header").find("#home_button")
-
-			homeButton.click(function(event) {
-				if (event.altKey) {
-					location.reload(true);
-					return;	
-				}
-				XKit.extensions.soft_refresh.load_posts();
-			});
+			$(document).on("click", "#home_button", XKit.extensions.soft_refresh.logo_clicked);
 			// Need to change all children to make sure the user doesn't click the new posts count number.
-			homeButton.children().attr('href','#')
+			$("#home_button").children().attr('href','#');
 		}
 	},
 	
+	logo_clicked: function(event) {
+		
+		if (event.altKey) {
+			location.reload(true);
+			return;	
+		}
+		XKit.extensions.soft_refresh.load_posts();
+		
+	},
+	
 	load_posts: function() {
+		
+		if (typeof XKit.extensions.filter_by_type !== "undefined") {
+			if (XKit.extensions.filter_by_type.running === true) {
+				if (XKit.extensions.filter_by_type.current_filter !== "0") {
+					location.reload(true);
+					return;	
+				}
+			}	
+		}
 		
 		if (this.loading === true) { return; }
 		this.loading = true;
@@ -80,9 +87,11 @@ XKit.extensions.soft_refresh = new Object({
 			if (typeof Tumblr === "undefined") {
 				window.top.Tumblr.Events.trigger("posts:load");
 				window.top.Tumblr.AudioPlayer.update_all();
+				window.top.Tumblr.Events.trigger("DOMEventor:updateRect");
 			} else {
 				Tumblr.Events.trigger("posts:load");
 				Tumblr.AudioPlayer.update_all();
+				Tumblr.Events.trigger("DOMEventor:updateRect");
 			}
 
 		}
@@ -153,6 +162,16 @@ XKit.extensions.soft_refresh = new Object({
 	},
 
 	destroy: function() {
+		
+		$(".logo_anchor").attr('href', $(".logo_anchor").attr('data-old-href'));
+		$(document).off("click", ".logo_anchor", XKit.extensions.soft_refresh.logo_clicked);
+		$(".logo_anchor").attr('onclick','');
+		
+		$("#home_button a").attr('href', $("#home_button a").attr('data-old-href'));
+		$(document).off("click", "#home_button", XKit.extensions.soft_refresh.logo_clicked);
+		$("#home_button").attr('onclick','');
+		$("#home_button").children().attr('href',$("#home_button a").attr('data-old-href'));
+		
 		XKit.tools.remove_css("soft_refresh");
 		this.running = false;
 	}

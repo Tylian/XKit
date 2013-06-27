@@ -1,5 +1,5 @@
 //* TITLE Mute! **//
-//* VERSION 1.1 REV D **//
+//* VERSION 1.1 REV E **//
 //* DESCRIPTION Better than 'shut up!' **//
 //* DETAILS This extension allows you to hide text and answer posts by an user while still seeing their other posts. Useful if a blogger has nice posts but a bad personality. Please note that you'll need to re-mute them if a user changes their URL. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -13,6 +13,20 @@ XKit.extensions.mute = new Object({
 	slow: true,
 	
 	preferences: {
+		"sep1": {
+			text: "Muting Options",
+			type: "separator"
+		},
+		hide_chat_posts: {
+			text: "Hide chat posts by muted users too",
+			default: false,
+			value: false
+		},
+		hide_link_posts: {
+			text: "Hide link posts by muted users too",
+			default: false,
+			value: false
+		},
 		"title": {
 			text: "Muted users",
 			type: "separator"
@@ -45,6 +59,8 @@ XKit.extensions.mute = new Object({
 		$('.tumblelog_menu_button').unbind('click', XKit.extensions.mute.add_mute_link);
 		$('.tumblelog_menu_button').bind('click', XKit.extensions.mute.add_mute_link);
 	
+		var update_rects = false;
+	
 		if (rethink === true) {
 		
 			$('.post.is_regular, .post.is_note').each(function() {
@@ -53,9 +69,11 @@ XKit.extensions.mute = new Object({
 				$(this).addClass("xmute-done");
 				
 				if (XKit.extensions.mute.muted.indexOf(m_username) !== -1) {
-					$(this).addClass("xmute-muted");	
+					$(this).addClass("xmute-muted");
+					update_rects = true;	
 				} else {
-					$(this).removeClass("xmute-muted");	
+					$(this).removeClass("xmute-muted");
+					update_rects = true;	
 				}
 			
 			});	
@@ -68,11 +86,18 @@ XKit.extensions.mute = new Object({
 				$(this).addClass("xmute-done");
 				
 				if (XKit.extensions.mute.muted.indexOf(m_username) !== -1) {
-					$(this).addClass("xmute-muted");	
+					$(this).addClass("xmute-muted");
+					update_rects = true;	
 				}
 			
 			});
 		
+		}
+		
+		if (update_rects === true) {
+			XKit.tools.add_function(function() {
+				Tumblr.Events.trigger("DOMEventor:updateRect");
+			}, true, "");	
 		}
 		
 	},
@@ -168,7 +193,11 @@ XKit.extensions.mute = new Object({
 		XKit.tools.remove_css("mute");
 		$('.user_menu_info_button').unbind('click', XKit.extensions.mute.add_mute_link);
 		$(".xkit-mute-button").remove();
-		$(".xmute-muted").removeClass("xmute-muted");	
+		$(".xmute-muted").removeClass("xmute-muted");
+		
+		XKit.tools.add_function(function() {
+			Tumblr.Events.trigger("DOMEventor:updateRect");
+		}, true, "");		
 	},
 	
 	create_div: function(ud) {

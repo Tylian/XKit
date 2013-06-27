@@ -1,5 +1,5 @@
 //* TITLE Audio Downloader **//
-//* VERSION 1.1 REV A **//
+//* VERSION 1.1 REV B **//
 //* DESCRIPTION Lets you download audio posts hosted on Tumblr **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//
@@ -65,7 +65,7 @@ XKit.extensions.audio_downloader = new Object({
 			onload: function(response) {
 				$(obj).removeClass("xkit-audio-downloader-working");
 				if (response.responseText.indexOf("?audio_file=") == -1) {
-					show_error("Can't fetch audio information", "I'm sorry but I could not fetch information needed to download this file. Please try again later.", "error", "<div id=\"xkit-close-message\" class=\"xkit-button\">OK</div>");
+					XKit.window.show("Can't fetch audio information", "I'm sorry but I could not fetch information needed to download this file. Please try again later.", "error", "<div id=\"xkit-close-message\" class=\"xkit-button\">OK</div>");
 					return;
 				}
 				var m_start = response.responseText.indexOf("?audio_file=") + 12;

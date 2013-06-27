@@ -1,5 +1,5 @@
 //* TITLE XInbox **//
-//* VERSION 1.1 REV A **//
+//* VERSION 1.3 REV A **//
 //* DESCRIPTION Enhances your Inbox experience **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS XInbox allows you to tag posts before posting them, and see all your messages at once, and lets you delete multiple messages at once using the Mass Editor mode. To use this mode, go to your Inbox and click on the Mass Editor Mode button on your sidebar, click on the messages you want to delete then click the Delete Messages button.  **//
@@ -14,6 +14,11 @@ XKit.extensions.xinbox = new Object({
 		"sep0": {
 			text: "Tagging while publishing",
 			type: "separator"
+		},
+		"show_tag_box": {
+			text: "Show the tag input box on asks",
+			default: true,
+			value: true
 		},
 		"tag_usernames": {
 			text: "Tag published asks with their usernames",
@@ -71,8 +76,8 @@ XKit.extensions.xinbox = new Object({
 		this.running = true;
 		XKit.tools.init_css("xinbox");
 
-		if(XKit.extensions.xinbox.preferences.custom_tag.value === true || XKit.extensions.xinbox.preferences.tag_usernames.value === true) {
-			XKit.extensions.xinbox.init_tags();
+		if(XKit.extensions.xinbox.preferences.show_tag_box.value === true || XKit.extensions.xinbox.preferences.tag_usernames.value === true || XKit.extensions.xinbox.preferences.tag_custom.value === true) {
+			XKit.extensions.xinbox.init_tags();	
 		}
 
 		if(XKit.extensions.xinbox.preferences.hide_fan_mail_button.value === true && $("#right_column > .send_fan_mail").length > 0) {
@@ -157,10 +162,10 @@ XKit.extensions.xinbox = new Object({
 		var button_selected = "Delete %s Messages";
 		var button_selected_first = "Delete 1 Message";
 	
-		XKit.tools.add_css(" #posts { padding: 0; margin: 0; } .xtimestamp { display: none; } .post_controls { display: none; }" +
+		XKit.tools.add_css(" #posts { padding: 0; margin: 0 !important; } .xtimestamp { display: none; } .post_controls { display: none; }" +
 				" .post:last-child { display: block; } #left_column { min-height: 120%; } " +
 				" .post:active { position: relative; top: 1px; } " +
-				" .post { -moz-user-select: none; user-select: none; -webkit-user-select: none; float: left !important; width: 160px !important; height: 130px !important; " + 
+				" .post { -moz-user-select: none; user-select: none; -webkit-user-select: none; float: left !important; width: 200px !important; height: 150px !important; " + 
 				"    opacity: 0.53; " + 
 				"    display: inline-block !important; clear: none !important; overflow: hidden !important; " + 
 				"    margin: 0px 4px 8px 4px !important; } " +
@@ -187,6 +192,10 @@ XKit.extensions.xinbox = new Object({
 				"<div style=\"margin-top: 8px;\">" + 
 				"<div id=\"xkit_delete_selected\" class=\"disabled\">No messages selected</div>" +
 				"</div></div>");
+				
+		XKit.tools.add_function(function() {
+			Tumblr.Events.trigger("DOMEventor:updateRect");
+		}, true, "");
 
 		$("#xkit_delete_selected").click(function() {
 
@@ -309,6 +318,15 @@ XKit.extensions.xinbox = new Object({
 				// Disable default buttons.
 				var submit_button = $(m_parent).find('[id^="ask_publish_button_"]');
 				$(submit_button).attr('onclick','return false;');
+				$(submit_button).attr('data-state','0');
+				
+				var queue_button = $(m_parent).find('[id^="ask_queue_button_"]');
+				$(queue_button).attr('onclick','return false;');
+				$(queue_button).attr('data-state','2');
+			
+				var draft_button = $(m_parent).find('[id^="ask_draft_button_"]');
+				$(draft_button).attr('onclick','return false;');
+				$(draft_button).attr('data-state','1');
 	
 				var this_obj = m_parent;
 				var m_box_id = "xinbox_tags_" + post_id;
@@ -326,46 +344,73 @@ XKit.extensions.xinbox = new Object({
 					}
 				}
 			
-				$(submit_button).attr('onclick','');
-				$(submit_button).bind("click",function(event) {
+				var all_buttons = $(m_parent).find('[id^="ask_publish_button_"], [id^="ask_draft_button_"], [id^="ask_queue_button_"]');
+			
+				$(all_buttons).attr('onclick','');
+				$(all_buttons).bind("click",function(event) {
 				
 					event.preventDefault();
-					var m_tags = $("#" + m_box_id).val();
-				
-					var tags_to_add = asker;
-					if(XKit.extensions.xinbox.preferences.tag_usernames.value !== true) {
-						tags_to_add = "";
+					
+					var m_tags = "";
+					
+					if ($("#" + m_box_id).length > 0) {
+						m_tags = $("#" + m_box_id).val();	
 					}
 				
-					if (m_tags !== "") {
-						tags_to_add = tags_to_add + "," + m_tags;
-					}
-
-					if(XKit.extensions.xinbox.preferences.tag_custom.value === true) {
-						if (XKit.extensions.xinbox.preferences.custom_tag.value !== "") {
-							tags_to_add = tags_to_add + "," + XKit.extensions.xinbox.preferences.custom_tag.value;
+					if(XKit.extensions.xinbox.preferences.tag_usernames.value === true) {
+						if (m_tags === "") {
+							m_tags = asker;	
+						} else {
+							m_tags = m_tags + "," + asker;
 						}
 					}
 				
+					if(XKit.extensions.xinbox.preferences.tag_custom.value === true) {
+						if (XKit.extensions.xinbox.preferences.custom_tag.value !== "") {
+							if (m_tags === "") {
+								m_tags = XKit.extensions.xinbox.preferences.custom_tag.value;
+							} else {
+								m_tags = m_tags + "," + XKit.extensions.xinbox.preferences.custom_tag.value;
+							}
+						}
+					}
+					
+					var m_state = $(this).attr('data-state');
+					if (typeof m_state === "undefined") {
+						m_state = "0";	
+					}
+
 					XKit.extensions.xinbox.poke_tinymce(post_id);
 					setTimeout(function() {
-						XKit.extensions.xinbox.publish_ask(this_obj, post_id, tags_to_add);
+						XKit.extensions.xinbox.publish_ask(this_obj, post_id, m_tags, m_state);
 					}, 200);
 				
 				});
 	
 				$(m_parent).find(".xinbox_tag_box").remove();
 	
-				// Add our tag box here.
-				var m_html = 	'<div class="xinbox_tag_box">' + 
-						'<input class="xinbox_tag_box_input" id="' + m_box_id + '" ' +
-							' placeholder="Tags, comma separated" />' +
-						'</div>';
-	
-				if ($(m_parent).find(".private_answer_button").length > 0) {
-					$(m_parent).find(".private_answer_button").after(m_html);
-				} else {
-					$(m_parent).find(".ask_publish_button").after(m_html);
+				// Does the user want the tag box?
+				
+				if (XKit.extensions.xinbox.preferences.show_tag_box.value === true) {
+					
+					// Calculate tag box width.
+					$(m_parent).find(".ask_publish_button").parent().css("padding-top","0");
+
+					// Add our tag box here.
+					
+					var m_html = 	'<div class="xinbox_tag_box">' + 
+							'<input class="xinbox_tag_box_input" id="' + m_box_id + '" ' +
+								' placeholder="Tags, comma separated" />' +
+							'</div>';
+		
+					
+					$(m_parent).find(".ask_publish_button").parent().prepend(m_html);
+					
+					/*if ($(m_parent).find(".private_answer_button").length > 0) {
+						$(m_parent).find(".private_answer_button").after(m_html);						
+					} else {
+						$(m_parent).find(".ask_draft_button").after(m_html);
+					}*/
 				}
 
 			});
@@ -376,7 +421,7 @@ XKit.extensions.xinbox = new Object({
 
 	},
 
-	publish_ask: function(post_div, post_id, tags) {
+	publish_ask: function(post_div, post_id, tags, state) {
 	
 		XKit.extensions.xinbox.poke_tinymce(post_id);
 
@@ -425,7 +470,7 @@ XKit.extensions.xinbox = new Object({
 					return;
 				}
 				if (mdata.errors === false) {
-					XKit.extensions.xinbox.send_publish_request(mdata, answer, tags, post_div, form_key, post_id);
+					XKit.extensions.xinbox.send_publish_request(mdata, answer, tags, post_div, form_key, post_id, state);
 				} else {
 					XKit.extensions.xinbox.show_error("Server returned an error message. Maybe you hit your post limit or your account was suspended.");
 				}
@@ -434,7 +479,7 @@ XKit.extensions.xinbox = new Object({
 	
 	},
 
-	send_publish_request: function(mdata, answer, tags, post_div, form_key, post_id) {
+	send_publish_request: function(mdata, answer, tags, post_div, form_key, post_id, state) {
 		
 		var m_object = new Object;
 		
@@ -463,7 +508,7 @@ XKit.extensions.xinbox = new Object({
 		m_object["post[two]"] = answer;
 		m_object["post[tags]"] = "," + tags;
 		m_object["post[publish_on]"] = "";
-		m_object["post[state]"] = "";
+		m_object["post[state]"] = state;
 		
 		GM_xmlhttpRequest({
 			method: "POST",
@@ -484,8 +529,13 @@ XKit.extensions.xinbox = new Object({
 				if (mdata.errors === false) {
 					$(post_div).fadeOut('slow', function() {
 						$(post_div).remove();
+						XKit.tools.add_function(function() {
+							Tumblr.Events.trigger("DOMEventor:updateRect");
+						}, true, "");
 					});
-					XKit.notifications.add("Published ask.","ok");
+					if (state === "" ||state === "0") { XKit.notifications.add("Published ask.","ok"); }
+					if (state === "1") { XKit.notifications.add("Drafted ask.","ok"); }	
+					if (state === "2") { XKit.notifications.add("Queued ask.","ok"); }
 				} else {
 					XKit.extensions.xinbox.show_error("Server returned an error message. Maybe you hit your post limit or your account was suspended.");
 				}

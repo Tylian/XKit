@@ -1,7 +1,7 @@
 //* TITLE Timestamps **//
-//* VERSION 2.0 REV A **//
+//* VERSION 2.1 REV A **//
 //* DESCRIPTION See when a post has been made. **//
-//* DETAILS This extension lets you see when a post was made, in full date or relative time (eg: 5 minutes ago). It also works on asks on your inbox too, but due to Tumblr limitations, there is no relative time available there. **//
+//* DETAILS This extension lets you see when a post was made, in full date or relative time (eg: 5 minutes ago). It also works on asks, and you can format your timestamps. **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//
 //* BETA false **//
@@ -37,6 +37,9 @@ XKit.extensions.timestamps = new Object({
 			if (XKit.extensions.timestamps.preferences.only_relative.value === true) {
 				XKit.storage.set("timestamps", "extension__setting__only_relative", "true");
 			}
+			if (XKit.extensions.timestamps.preferences.format.value !== "") {
+				XKit.storage.set("timestamps", "extension__setting__format", XKit.extensions.timestamps.preferences.format.value);
+			}
 		}	
 		
 	},
@@ -46,9 +49,10 @@ XKit.extensions.timestamps = new Object({
 		XKit.tools.init_css("timestamps");
 		
 		if (XKit.extensions.timestamps.preferences.format.value === "") {
+			alert("empty, restoring default");
 			XKit.extensions.timestamps.preferences.format.value = "MMMM Do YYYY, h:mm:ss a";
 		}
-		
+
 		XKit.extensions.timestamps.check_quota();
 		try {
 
@@ -251,7 +255,7 @@ XKit.extensions.timestamps = new Object({
 				if (XKit.extensions.timestamps.preferences.only_relative.value === true) {
     					$(obj).html(dt.from(nowdatem));
 				} else {
-					$(obj).html(dt.format('MMMM Do YYYY, h:mm:ss a') + " &middot; " + dt.from(nowdatem));
+					$(obj).html(dt.format(XKit.extensions.timestamps.preferences.format.value) + " &middot; " + dt.from(nowdatem));
 				}
 
 				// $(obj).html(dt.format('MMMM Do YYYY, h:mm:ss a') + " &middot; " + dt.from(nowdatem));
@@ -282,7 +286,7 @@ XKit.extensions.timestamps = new Object({
 					if (XKit.extensions.timestamps.preferences.only_relative.value === true) {
     						$(obj).html(dt.from(nowdatem));
 					} else {
-						$(obj).html(dt.format('MMMM Do YYYY, h:mm:ss a') + " &middot; " + dt.from(nowdatem));
+						$(obj).html(dt.format(XKit.extensions.timestamps.preferences.format.value) + " &middot; " + dt.from(nowdatem));
 					}
 					$(obj).removeClass('xtimestamp_loading');
 					XKit.storage.set("timestamps", "xkit_timestamp_cache_" + post_id, xd);

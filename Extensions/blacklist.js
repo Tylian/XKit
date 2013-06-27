@@ -1,5 +1,5 @@
 //* TITLE Blacklist **//
-//* VERSION 1.3 REV A **//
+//* VERSION 1.7 REV C **//
 //* DESCRIPTION Clean your dash **//
 //* DETAILS This extension allows you to block posts based on the words you specify. If a post has the text you've written in the post itself or it's tags, it will be replaced by a warning, or won't be shown on your dashboard, depending on your settings. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -27,7 +27,26 @@ XKit.extensions.blacklist = new Object({
 			default: true,
 			value: true
 		},
+		"dont_block_me": {
+			text: "Don't block my own posts",
+			default: true,
+			value: true
+		},
+		"use_improved": {
+			text: "Use improved checking (might slow down your computer)",
+			default: true,
+			value: true
+		},
 		"sep1": {
+			text: "Appearance options",
+			type: "separator"
+		},
+		"show_tags": {
+			text: "Show tags on blocked posts",
+			default: false,
+			value: false
+		},
+		"sep2": {
 			text: "Blacklisted Words",
 			type: "separator"
 		}
@@ -38,6 +57,7 @@ XKit.extensions.blacklist = new Object({
 	run: function() {
 		this.running = true;
 		XKit.tools.init_css("blacklist");
+		
 		var m_blacklist = XKit.storage.get("blacklist","words","").split(",");
 		if (m_blacklist !== "") {
 			this.blacklisted = m_blacklist;	
@@ -133,7 +153,7 @@ XKit.extensions.blacklist = new Object({
 		
 		$(".xblacklist_open_post").unbind("click");
 		$(".xblacklist_open_post").bind("click", function() {
-		
+
 			var m_div = $("#" + $(this).attr('data-post-id'));
 			$(m_div).removeClass("xblacklist_blacklisted_post");
 			$(m_div).find(".post_info").css("display","block");
@@ -149,9 +169,26 @@ XKit.extensions.blacklist = new Object({
 			
 		});
 		
+		XKit.tools.add_function(function() {
+			/*Tumblr.Events.on("DOMEventor:flatscroll", function(n) {
+				console.log(JSON.stringify(n));
+				//n.documentHeight = 0;	
+				// if ((n.documentHeight - n.windowScrollY) < n.windowHeight * 3) {
+				console.log(" -- 1] " + (n.documentHeight - n.windowScrollY));
+				console.log(" -- 2] " + n.windowHeight * 3 + " <-- must be smaller than this");
+			});*/
+			Tumblr.Events.trigger("DOMEventor:updateRect");
+		}, true, "");
+		
 	},
 	
 	hide_post: function(obj, word) {
+		
+		if (XKit.extensions.blacklist.preferences.dont_block_me.value === true) {
+			if ($(obj).hasClass("is_mine") === true) {
+				return;
+			}
+		}
 		
 		if (XKit.extensions.blacklist.preferences.dont_display.value === true) {
 			// Wow this user must hate the words they've added.
@@ -171,14 +208,21 @@ XKit.extensions.blacklist = new Object({
 		$(obj).find(".post_controls").css("display","none");
 		$(obj).find(".post_content").html(old_content + block_excuse);
 		$(obj).find(".post_footer_links").css('display','none');
-		$(obj).find(".post_tags, .post_footer").css('display','none');
+		
+		if (XKit.extensions.blacklist.preferences.show_tags.value === true) {
+			$(obj).find(".post_footer").css('display','none');
+		} else {
+			$(obj).find(".post_tags, .post_footer").css('display','none');	
+		}
+		
 		$(obj).find(".full_answer_container_wrapper").css("display","none");
 		
 	},
 	
 	do_post: function(post_content) {
 		
-		if ($.trim(post_content) === "") { return ""; }		
+		if ($.trim(post_content) === "") { return ""; }	
+		post_content = post_content.replace(new RegExp('\n','g'), ' ');
 		var p_words = post_content.split(" ");
 
 		for (var i=0;i<XKit.extensions.blacklist.blacklisted.length;i++) {
@@ -187,6 +231,8 @@ XKit.extensions.blacklist = new Object({
 			if ($.trim(m_word) === "") { continue; }
 			
 			var m_word_wildcard = false;
+			
+			
 			
 			if (m_word.substring(m_word.length - 1) === "*") {
 				// This word is wildcarded!	
@@ -202,9 +248,27 @@ XKit.extensions.blacklist = new Object({
 				
 				// Well this one is easy:
 				
+				// First lets strip the dots or commas.
+				
 				if (p_words.indexOf(m_word) !== -1) {
 					// We've found the word!
 					return m_word;	
+				} else {
+					if (XKit.extensions.blacklist.preferences.use_improved.value === true) {
+						// This will use some CPU...
+						if (post_content.indexOf(m_word) !== -1) {
+							for (var m=0;m<p_words.length;m++) {
+								if (p_words[m].indexOf(m_word) !== -1) {
+									mp_word = p_words[m].replace(/\./g, '');
+									mp_word = mp_word.replace(/\,/g, '');
+									mp_word = mp_word.replace(/\u2026/g, '');
+									if (m_word === mp_word) {
+										return m_word;	
+									}	
+								}
+							}	
+						}
+					}	
 				}	
 				
 			} else {
@@ -226,7 +290,19 @@ XKit.extensions.blacklist = new Object({
 						}
 						
 						if (m < p_words.length) {
-							var tmp_word = p_words[m] + " " + p_words[m + 1];	
+							var tmp_word = p_words[m] + " " + p_words[m + 1];
+							
+							// This is a dirty fix but it should work for now.
+							if (p_words[m + 2] !== "" || typeof p_words[m + 2] !== "undefined") {
+								tmp_word = tmp_word + " " + p_words[m + 2];
+							}
+							if (p_words[m + 3] !== "" || typeof p_words[m + 3] !== "undefined") {
+								tmp_word = tmp_word + " " + p_words[m + 3];
+							}
+							if (p_words[m + 4] !== "" || typeof p_words[m + 4] !== "undefined") {
+								tmp_word = tmp_word + " " + p_words[m + 4];
+							}
+							
 							if (tmp_word.indexOf(m_word) !== -1) {
 								return m_word;	
 							}
@@ -252,7 +328,7 @@ XKit.extensions.blacklist = new Object({
 			$(this).find(".post_info").css("display","block");
 			$(this).find(".post_controls").css("display","block");
 			$(this).find(".post_tags").css('display','block');
-			$(m_div).find(".post_footer").css('display','table');
+			$(this).find(".post_footer").css('display','table');
 			$(this).find(".post_footer_links").css('display','block');
 			$(this).find(".full_answer_container_wrapper").css("display","block");	
 			$(this).find(".xblacklist_excuse").remove();
@@ -392,9 +468,14 @@ XKit.extensions.blacklist = new Object({
 					return;
 				}
 				
-				if (m_to_add.length <= 2) {
-					alert("Words must be at least three characters.");
+				if (m_to_add.length <= 1) {
+					alert("Words must be at least two characters.");
 					return;	
+				}
+				
+				if (m_to_add.substring(0,1) === "#") {
+					alert("Please do not add hashtags to words.");
+					return;						
 				}
 				
 				if (XKit.extensions.blacklist.check_if_exists(m_to_add) === true) {

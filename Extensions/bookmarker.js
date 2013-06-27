@@ -1,5 +1,5 @@
 //* TITLE Bookmarker **//
-//* VERSION 1.0 REV D **//
+//* VERSION 1.1 REV A **//
 //* DESCRIPTION Dashboard Time Machine **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS The Bookmarker extension allows you to bookmark posts and get back to them whenever you want to. Just click on the Bookmark icon on posts and the post will be added to your Bookmark List on your sidebar. **//
@@ -270,6 +270,7 @@ XKit.extensions.bookmarker = new Object({
 		var m_index = -1;
 		
 		for (var i=0;i<XKit.extensions.bookmarker.bookmarks.length; i++) {
+			//alert(i + "\ncurrently: " + XKit.extensions.bookmarker.bookmarks[i].id + "\nwanted: " + post_id);
 			if (XKit.extensions.bookmarker.bookmarks[i].id == post_id) {	
 				m_index = i;
 				break;
@@ -278,11 +279,12 @@ XKit.extensions.bookmarker = new Object({
 		
 		if (m_index === -1) {
 			// Not found, don't bother trying to remove it.
+			//alert("NOT FOUND");
 			return;	
 		}
 		
-		var m_index = XKit.extensions.bookmarker.bookmarks.indexOf(post_id);
-		XKit.extensions.bookmarker.bookmarks.splice(m_index - 1, 1);	
+
+		XKit.extensions.bookmarker.bookmarks.splice(m_index, 1);	
 		
 		if (mass_mode === true) {
 			return;	

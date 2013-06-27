@@ -1,5 +1,5 @@
 //* TITLE Read More Now **//
-//* VERSION 1.1 REV A **//
+//* VERSION 1.2 REV A **//
 //* DESCRIPTION Read Mores in your dash **//
 //* DETAILS This extension allows you to read 'Read More' posts without leaving your dash. Just click on the 'Read More Now!' button on posts and XKit will automatically load and display the post on your dashboard. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -21,6 +21,11 @@ XKit.extensions.read_more_now = new Object({
 
 	run: function() {
 		this.running = true;
+		
+		if ($("body").hasClass("dashboard_drafts") == true || $("body").hasClass("dashboard_post_queue") == true) {
+			return;
+		}
+			
 		XKit.post_listener.add("read_more_now", XKit.extensions.read_more_now.do);
 		XKit.extensions.read_more_now.do();
 		$(document).on('click', '.xkit-read-more-now', function() {
@@ -45,9 +50,9 @@ XKit.extensions.read_more_now = new Object({
 						var m_object = JSON.parse(rs);
 						if ($(m_cont).parent().parent().find(".post_title").length > 0) {
 							var post_title = $(m_cont).parent().parent().find(".post_title")[0].outerHTML;
-							$(m_cont).parent().parent().html(post_title + m_object.posts[0]["regular-body"]);
+							$(m_cont).parent().parent().html(XKit.extensions.read_more_now.strip_scripts(post_title + m_object.posts[0]["regular-body"]));
 						} else {
-							$(m_cont).parent().parent().html(m_object.posts[0]["regular-body"]);
+							$(m_cont).parent().parent().html(XKit.extensions.read_more_now.strip_scripts(m_object.posts[0]["regular-body"]));
 						}
 					} catch(e) {
 						$(m_cont).removeClass("disabled");
@@ -62,6 +67,25 @@ XKit.extensions.read_more_now = new Object({
 				}
 			});
 		});
+	},
+	
+	strip_scripts: function(s) {
+		
+		/*
+			From:
+			http://stackoverflow.com/questions/6659351/removing-all-script-tags-from-html-with-js-regular-expression
+		*/
+		
+		
+   		var div = document.createElement('div');
+    		div.innerHTML = s;
+    		var scripts = div.getElementsByTagName('script');
+    		var i = scripts.length;
+    		while (i--) {
+     			scripts[i].parentNode.removeChild(scripts[i]);
+    		}
+    		return div.innerHTML;	
+		
 	},
 	
 	show_failed: function() {

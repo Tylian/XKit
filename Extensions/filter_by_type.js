@@ -1,5 +1,5 @@
 //* TITLE Filter By Type **//
-//* VERSION 2.0 REV A **//
+//* VERSION 2.0 REV B **//
 //* DESCRIPTION Lets you filter the posts on your dashboard by type **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//
@@ -107,11 +107,13 @@ XKit.extensions.filter_by_type = new Object({
 				Tumblr.Events.trigger("posts:load");
 				Tumblr.AudioPlayer.update_all();
 			}
-
+			
+			Tumblr.Events.trigger("DOMEventor:updateRect");
 		}
 			
 		function xfilter_stop_paginator () {
 			Tumblr.AutoPaginator.stop();
+			Tumblr.Events.trigger("DOMEventor:updateRect");
 		}
 
 		if (XKit.extensions.filter_by_type.current_filter !== "0") {

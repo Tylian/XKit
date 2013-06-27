@@ -1,5 +1,5 @@
 //* TITLE XKit Updates **//
-//* VERSION 1.0 REV A **//
+//* VERSION 1.1 REV B **//
 //* DESCRIPTION Provides automatic updating of extensions **//
 //* DEVELOPER STUDIOXENIX **//
 XKit.extensions.xkit_updates = new Object({
@@ -26,6 +26,7 @@ XKit.extensions.xkit_updates = new Object({
 
 	run: function() {
 		try {
+			XKit.tools.init_css("xkit_updates");
 			this.running = true;
 			var d = new Date();
 			var ms = d.getTime();
@@ -84,7 +85,7 @@ XKit.extensions.xkit_updates = new Object({
 			}
 
 			if (XKit.extensions.xkit_updates.to_update.length > 0) {
-				XKit.notifications.add("Auto-update in progress..","warning");
+				$("body").append("<div id=\"xkit-updating-indicator\">XKit Auto-Update</div>");
 				XKit.extensions.xkit_updates.update_next();
 			} else {
 				var d = new Date();
@@ -116,13 +117,22 @@ XKit.extensions.xkit_updates = new Object({
 			XKit.storage.set("xkit_updates", "last_update_check", ms);
 
 			// Completed all?
-			XKit.notifications.add("XKit updated " + XKit.extensions.xkit_updates.updated_list.length + " extension(s). Click here to view them.", "ok", true, function() {
-				var m_result = "";
-				for (i=0;i<XKit.extensions.xkit_updates.updated_list.length;i++) {
-					m_result = m_result + "<br/>" + XKit.extensions.xkit_updates.updated_list[i] + " &middot; " + XKit.extensions.xkit_updates.updated_list_versions[i];
-				}
-				XKit.window.show("Auto-Update results","<b>XKit updated the following extension(s):</b>" + m_result, "info", "<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
-			});
+			
+			var to_show = XKit.tools.get_setting("xkit_show_update_notifications","true");
+			
+			if (to_show === "true") {
+			
+				XKit.notifications.add("XKit updated " + XKit.extensions.xkit_updates.updated_list.length + " extension(s). Click here to view them.", "ok", true, function() {
+					var m_result = "";
+					for (i=0;i<XKit.extensions.xkit_updates.updated_list.length;i++) {
+						m_result = m_result + "<br/>" + XKit.extensions.xkit_updates.updated_list[i] + " &middot; " + XKit.extensions.xkit_updates.updated_list_versions[i];
+					}
+					XKit.window.show("Auto-Update results","<b>XKit updated the following extension(s):</b>" + m_result, "info", "<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
+				});
+				
+			}
+			
+			$("#xkit-updating-indicator").remove();	
 			return;
 		}
 

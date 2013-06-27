@@ -1,11 +1,33 @@
 .post_footer {
 
-	position: absolute;
-	top: 0;
-	left: 15px;
+	display: block !important;
+	position: absolute !important;
+	top: 0 !important; right: 0 !important;
+	left: auto !important;
+	width: 50% !important;
+	padding-left: 5px !important;
+	padding-right: 20px !important;
 	border-top: 0 !important;
 	padding-top: 0px !important;	
-	margin: 4px -10px -15px 0 !important;
+	margin: 4px 0px -15px 0 !important;
+	
+}
+
+.post_controls_inner {
+	width: 100% !important;	
+}
+
+.post_notes {
+	height: 45px !important; line-height: 45px !important;
+	display: block !important;
+	width: auto !important;	
+}
+
+.post_full .post_controls {
+	float: right;	
+}
+
+.post_notes_inner{
 	
 }
 

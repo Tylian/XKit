@@ -1,5 +1,5 @@
 //* TITLE CleanFeed **//
-//* VERSION 1.2 REV B **//
+//* VERSION 1.3 REV A **//
 //* DESCRIPTION Browse safely in public **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS This extension, when enabled, hides photo posts until you hover over them. Useful to browse Tumblr in a workspace or in public, and not worry about NSFW stuff appearing. You can also set it to hide avatars and not show non-text posts at all. To activate or disable it, click on the CleanFeed button on your sidebar. It will remember it's on/off setting. **//
@@ -23,13 +23,26 @@ XKit.extensions.cleanfeed = new Object({
 			text: "Level of Blockage",
 			type: "separator"
 		},
+		full_block: {
+			text: "Use Full Block: Completely hide non-text things (audio, video, photos) on the dash",
+			default: false,
+			value: false
+		},
+		sep2: {
+			text: "Avatars",
+			type: "separator"
+		},
 		hide_avatars: {
 			text: "Hide avatars when I turn on CleanFeed",
 			default: false,
 			value: false
 		},
-		full_block: {
-			text: "Use Full Block: Completely hide non-text things (audio, video, photos) on the dash",
+		sep3: {
+			text: "Photosets",
+			type: "separator"
+		},
+		show_all_photoset_photos: {
+			text: "Show all photos at once when I hover over a photoset photo",
 			default: false,
 			value: false
 		}
@@ -70,7 +83,7 @@ XKit.extensions.cleanfeed = new Object({
 
 		if (XKit.extensions.cleanfeed.preferences.full_block.value === true) {
 			XKit.extensions.cleanfeed.added_full_block_css = true;
-			XKit.tools.add_css(" .post.video, .post.photo, .post.audio { display: none !important; }", "cleanfeed_full_block");
+			XKit.tools.add_css(" .post.is_video, .post.is_photo, .post.is_photoset, .post.is_audio { display: none !important; }", "cleanfeed_full_block");
 		}
 		
 		XKit.post_listener.add("cleanfeed", XKit.extensions.cleanfeed.do);
@@ -127,17 +140,46 @@ XKit.extensions.cleanfeed = new Object({
 		
 	},
 	
-	m_ps_enter: function(e) {
+	m_ps_enter: function(e, open_all_mode) {
 		
 		if (XKit.extensions.cleanfeed.status !== "true") { return; }
+		
+		if (open_all_mode === true) {
+			XKit.extensions.cleanfeed.show_photoset_picture(e);
+			return;
+		}
+		
 		XKit.extensions.cleanfeed.show_photoset_picture(e.target);
 		
+		if ($(e.target).parent().hasClass("photoset_photo") == true) {
+			if (XKit.extensions.cleanfeed.preferences.show_all_photoset_photos.value === true) {
+				var parent_post = $(e.target).parentsUntil('.post_content');
+				$(parent_post).find(".photoset_row img").each(function() {
+					XKit.extensions.cleanfeed.m_ps_enter($(this), true);
+				});
+			}
+		}
 	},
 	
-	m_ps_leave: function(e) {
+	m_ps_leave: function(e, close_all_mode) {
 	
 		if (XKit.extensions.cleanfeed.status !== "true") { return; }
+		
+		if (close_all_mode === true) {
+			XKit.extensions.cleanfeed.hide_photoset_picture(e);
+			return;
+		}
+		
 		XKit.extensions.cleanfeed.hide_photoset_picture(e.target);
+		
+		if ($(e.target).parent().hasClass("photoset_photo") == true) {
+			if (XKit.extensions.cleanfeed.preferences.show_all_photoset_photos.value === true) {
+				var parent_post = $(e.target).parentsUntil('.post_content');
+				$(parent_post).find(".photoset_row img").each(function() {
+					XKit.extensions.cleanfeed.m_ps_leave($(this), true);
+				});
+			}
+		}
 		
 	},
 	
@@ -202,7 +244,7 @@ XKit.extensions.cleanfeed = new Object({
 			}
 			
 			if (XKit.extensions.cleanfeed.added_full_block_css == false && XKit.extensions.cleanfeed.preferences.full_block.value === true) {
-				XKit.tools.add_css(" .post.video, .post.photo, .post.audio, .post.is_video, .post.is_photo, .post.is_audio { display: none !important; }", "cleanfeed_full_block");	
+				XKit.tools.add_css(" .post.video, .post.photo, .post.audio, .post.is_video, .post.is_photo, .post.is_audio, .post.is_photoset, { display: none !important; }", "cleanfeed_full_block");	
 				XKit.extensions.cleanfeed.added_full_block_css = true;
 			}
 			

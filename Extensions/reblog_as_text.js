@@ -1,5 +1,5 @@
 //* TITLE Reblog As Text **//
-//* VERSION 1.0 REV B **//
+//* VERSION 1.0 REV D **//
 //* DESCRIPTION Text posts remain text **//
 //* DETAILS This post allows you to always reblog text posts as text posts, and not as links. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -43,6 +43,14 @@ XKit.extensions.reblog_as_text = new Object({
 			do_this = true;	
 		}
 		
+		var m_tags = "";
+		// Get tags, if possible.
+		if ($(".main_content").find(".tags").length > 0) {
+			$(".main_content").find(".tags").find(".tag").each(function() {
+				m_tags = m_tags + "," + $(this).html();	
+			});
+		}
+		
 		if ( do_this === true ) {
 			
 			function m_function() {
@@ -75,10 +83,46 @@ XKit.extensions.reblog_as_text = new Object({
 					}, 500);
 				}	
 			}
+			
+			// Import links if possible.
+			if (m_tags !== "") {
+				setTimeout(function() {
+					XKit.extensions.reblog_as_text.try_to_inject_tags(m_tags);
+				}, 1000);
+			}
 		
 		}
 			
 		
+		
+	},
+	
+	try_to_inject_tags: function(to_add) {
+		
+		if($("#post_content").length <= 0) {
+			setTimeout(function() {		
+				XKit.extensions.reblog_as_text.try_to_inject_tags(to_add);
+			}, 200);
+			return;
+		}
+
+		var add_tag = "";
+		var xas;
+		var xae;
+		var last_point = 0;
+		var do_tags = true;
+		var tag_to_be_added = "";
+		var tags = to_add.split(",");
+		for (i=0;i<tags.length;i++) {
+			tag_to_be_added = tags[i];
+			if (tag_to_be_added !== "") {
+				var old_tags = $("#post_content").find(".tags").find(".post_tags").val();
+				$("#post_content").find(".tags").find(".post_tags").val(old_tags + "," + tag_to_be_added);
+				$("#post_content").find(".tags").find(".editor_wrapper").before('<span class="tag">' + tag_to_be_added + '</span>');
+			}
+		}
+		$("#post_tags_label").css('display','none');
+		$("#post_tags").val(to_add);	
 		
 	},
 

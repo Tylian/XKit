@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 1.0 REV C **//
+//* VERSION 1.0 REV E **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER STUDIOXENIX **//
 XKit.extensions.xkit_patches = new Object({
@@ -29,8 +29,18 @@ XKit.extensions.xkit_patches = new Object({
 		
 		};
 
+		// Increasing storage for extensions from 50kb to 150kb.
+		XKit.storage.max_area_size = 153600;
+
 		// Patch notifications adder
 		XKit.notifications.add = function(message, type, sticky, callback) {
+
+				//alert($("#xkit-notifications").length);
+				if($("#xkit-notifications").length <= 0) {
+					setTimeout(function() { XKit.notifications.add(message,type,sticky,callback); }, 500);
+					return;
+				}
+
 				XKit.notifications.count++;
 			
 				var m_class = "";
@@ -52,7 +62,9 @@ XKit.extensions.xkit_patches = new Object({
 				XKit.console.add(" Notification > " + message);
 			
 				var m_notification_id = XKit.notifications.count;
-				$("#xkit_notification_" + m_notification_id).slideDown('slow');
+				setTimeout(function() {
+					$("#xkit_notification_" + m_notification_id).slideDown('slow');
+				}, 100);
 				$("#xkit_notification_" + m_notification_id).click(function() {
 					if(typeof callback !== undefined) {
 						try { 
