@@ -34,7 +34,7 @@ XKit.extensions.jk_across_pages = new Object({
 			text: "Other"
 		}, 
 		"view_entire_posts": {
-			text: "View the entire post, even if it's longer than the screen (BETA)",
+			text: "Scroll through the entire post, even if it's longer than the screen",
 			default: false,
 			value: false
 		}
@@ -76,9 +76,12 @@ XKit.extensions.jk_across_pages = new Object({
 					jQuery(jQuery.elementFromPoint(jQuery('#posts').offset().left+1,  that.scrollBufferJ+1)).closest('.post_container')[0] == 
 					jQuery(jQuery.elementFromPoint(jQuery('#posts').offset().left+1,  window.innerHeight - (that.scrollBufferJ+1))).closest('.post_container')[0]){
 					
-					jQuery('html, body').delay(10).animate({
-						scrollTop: window.scrollY + window.innerHeight - that.scrollBufferInside
-					}, that.scrollAnimationDuration);
+					/* Animate this twice to make sure Tumblr's scrolling doesn't override it */
+					var scrollTo = window.scrollY + window.innerHeight - that.scrollBufferInside;
+					jQuery(document.body).animate({ scrollTop: scrollTo }, that.scrollAnimationDuration, function() {
+						$(this).animate({ scrollTop: scrollTo }, that.scrollAnimationDuration);
+					});
+
 					
 					return; // Don't try to go to the next page
 				}
