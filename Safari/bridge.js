@@ -87,7 +87,7 @@ function GM_xmlhttpRequest(settings) {
 	m_callbacks.onload = settings['onload'];
 	m_callbacks.onerror = settings['onerror'];
   
-  // Safari 7 will refuse to send the message if functions are present (I think)
+  // Safari 7 will refuse to send the message if functions are present
   settings['onload'] = !!settings['onload']; // convert to boolean
   settings['onerror'] = !!settings['onerror']; // convert to boolean
 	
