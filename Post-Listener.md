@@ -22,3 +22,9 @@ Post Listener looks out for new posts to appear on the dashboard, which usually 
 		// Always remove the listener on destroy!
 		XKit.post_listener.remove("my_extension");
 	}
+	
+### Tips
+* Always remove the listener when `destroy` is called.
+* You can have several listeners   
+	`XKit.post_listener.add("my_extension_red", XKit.extensions.my_extension.paint_red);`  
+	`XKit.post_listener.add("my_extension_blue", XKit.extensions.my_extension.paint_blue);`
