@@ -1,6 +1,8 @@
 XKit Control Panel renders your extensions' settings depending on the "preferences" object of your extension. Your extension panel can have separators, text input and checkboxes. If you need more, you can write your own custom control panel by adding a `cpanel` function.
 
-### How to add preferences using standard controls (recommended)
+## How to add preferences using standard controls (recommended)
+
+### Example
 	XKit.extensions.my_extension = new Object({
 
 		running: false,
@@ -39,7 +41,19 @@ XKit Control Panel renders your extensions' settings depending on the "preferenc
 
 	},
 	
-### How to add preferences using your own controls (not recommended)
+### Experimental and Slow settings
+Some of the settings your extension have might be experimental, or might slow down the user's computer. In that case, let the user know by using `slow` and `experimental` tags on your preferences.
+
+	"take_over": {
+		text: "Enable taking over the world",
+		default: false,
+		value: false,
+		experimental: true
+	}
+	
+You should always set slow and experimental preferences off by default.
+	
+## How to add preferences using your own controls (not recommended)
 If you can't settle for checkbox/text combo, you can draw custom controls and attach events. To do this, write a function called `cpanel` that takes a jQuery DIV object as a parameter.
 
 	cpanel: function(m_div) {
