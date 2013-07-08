@@ -1,5 +1,5 @@
 //* TITLE Blacklist **//
-//* VERSION 1.7 REV C **//
+//* VERSION 1.9 REV A **//
 //* DESCRIPTION Clean your dash **//
 //* DETAILS This extension allows you to block posts based on the words you specify. If a post has the text you've written in the post itself or it's tags, it will be replaced by a warning, or won't be shown on your dashboard, depending on your settings. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -17,6 +17,11 @@ XKit.extensions.blacklist = new Object({
 			text: "Blacklisting options",
 			type: "separator"
 		},
+		"right_click": {
+			text: "Enable alt + click on highlighted text to add words (experimental)",
+			default: false,
+			value: false
+		},
 		"dont_display": {
 			text: "Don't display blocked posts at all (not recommended)",
 			default: false,
@@ -31,6 +36,11 @@ XKit.extensions.blacklist = new Object({
 			text: "Don't block my own posts",
 			default: true,
 			value: true
+		},
+		"dont_show_cause": {
+			text: "Don't show why the post was blocked",
+			default: false,
+			value: false
 		},
 		"use_improved": {
 			text: "Use improved checking (might slow down your computer)",
@@ -66,7 +76,97 @@ XKit.extensions.blacklist = new Object({
 		if ($(".post").length > 0) {
 			XKit.post_listener.add("blacklist", XKit.extensions.blacklist.check);	
 			XKit.extensions.blacklist.check();
+			
+			if (XKit.extensions.blacklist.preferences.right_click.value === true) {
+				$(document).on('mouseup', XKit.extensions.blacklist.get_selection);
+			}
+			
 		}
+		
+	},
+	
+	get_selection: function(e) {
+		
+		if( e.altKey != true ) { return; }
+		
+		var text = "";
+		
+		try {
+			
+		if (top.getSelection) {
+        		text = top.getSelection().toString();
+        	} else if (document.selection && document.selection.type != "Control") {
+        		text = document.selection.createRange().text;
+   		}
+   		
+   		} catch(e) {
+   			console.log("ho");	
+   		}
+        	
+        	if (text === "" ||typeof text === "undefined"){
+        		return;	
+        	}
+        	
+        	text = $.trim(text);
+        	
+        	XKit.extensions.blacklist.show_add(text, "");
+		
+	},
+	
+	show_add: function(m_text, m_div) {
+		
+		XKit.window.show("Add word to blacklist","<b>Enter the word you want to add.</b><br/>Your words can not contain commas or backslashes.<input type=\"text\" maxlength=\"50\" placeholder=\"Enter a word here.\" class=\"xkit-textbox\" id=\"xkit-blacklist-word\"><br/>Before adding a word, please check \"Tips on Blacklisting\" section.","question","<div class=\"xkit-button default\" id=\"xkit-blacklist-add-word\">Add word</div><div class=\"xkit-button\" id=\"xkit-close-message\">Cancel</div>")
+		
+		if (typeof m_text !== "undefined" && m_text !== "") {
+			$("#xkit-blacklist-word").val(m_text);
+		}
+
+		$("#xkit-blacklist-add-word").click(function() {
+				
+			var m_to_add = $("#xkit-blacklist-word").val();
+			
+			if (m_to_add === "" ||$.trim(m_to_add) === "") {
+				XKit.window.close();
+				return;	
+			}
+			
+			if (m_to_add.indexOf(",") !== -1) {
+				alert("The word(s) you enter can not have commas in it.");	
+				return;
+			}
+			
+			if (m_to_add.indexOf("\\") !== -1) {
+				alert("The word(s) you enter can not have backslashes in it.");	
+				return;
+			}
+			
+			if (m_to_add.length <= 1) {
+				alert("Words must be at least two characters.");
+				return;	
+			}
+			
+			if (m_to_add.substring(0,1) === "#") {
+				alert("Please do not add hashtags to words.");
+				return;						
+			}
+			
+			if (XKit.extensions.blacklist.check_if_exists(m_to_add) === true) {
+				alert("This word is already in the blacklist.");
+				return;	
+			}
+			
+			XKit.extensions.blacklist.blacklisted.push(m_to_add);
+			XKit.extensions.blacklist.save_blacklist();
+			XKit.window.close();
+			
+			if (typeof m_text === "undefined" || m_text === "") {
+				XKit.extensions.blacklist.cpanel(m_div);
+			} else {
+				XKit.notifications.add("Added to blacklist.","ok");	
+			}
+			XKit.extensions.xkit_preferences.restart_extension("blacklist");
+			
+		});	
 		
 	},
 	
@@ -109,6 +209,10 @@ XKit.extensions.blacklist = new Object({
 				var m_author = "";
 				if ($(this).find(".post_info_fence a").length > 0) {
 					m_author = $(this).find(".post_info_fence a").html();
+				}
+				
+				if ($(this).find(".reblog_source").length > 0) {
+					m_author = m_author + " " + $(this).find(".reblog_source a").html();
 				}
 			
 				var m_bTitle = "";
@@ -159,10 +263,11 @@ XKit.extensions.blacklist = new Object({
 			$(m_div).find(".post_info").css("display","block");
 			$(m_div).find(".post_controls").css("display","block");
 			$(m_div).find(".post_footer_links").css('display','block');
+			$(m_div).find(".post_source").css('display','block');
 			$(m_div).find(".post_tags").css('display','block');
 			$(m_div).find(".post_footer").css('display','table');
 			
-			$(m_div).find(".full_answer_container_wrapper").css("display","block");	
+			$(m_div).find(".post_answer").css("display","block");	
 			
 			$(m_div).find(".xblacklist_excuse").remove();
 			$(m_div).find(".post_content").html($(m_div).find(".xblacklist_old_content").html());
@@ -198,16 +303,23 @@ XKit.extensions.blacklist = new Object({
 		
 		var old_content = '<div style="display: none;" class="xblacklist_old_content">' + 
 					$(obj).find(".post_content").html() + '</div>';
-
+					
 		var block_excuse = '<div class="xblacklist_excuse">' +
 					'Blocked because of the word "<b>' + word + '</b>"' +
 					'<a href="#" onClick="return false" data-post-id="' + $(obj).attr('id') + '" class="xblacklist_open_post xkit-button">Show it anyway</a></div>';
+
+		if (XKit.extensions.blacklist.preferences.dont_show_cause.value === true) {
+			block_excuse = '<div class="xblacklist_excuse">' +
+					'Post blocked.' +
+					'<a href="#" onClick="return false" data-post-id="' + $(obj).attr('id') + '" class="xblacklist_open_post xkit-button">Show it anyway</a></div>';
+		}
 
 		$(obj).addClass("xblacklist_blacklisted_post");
 		$(obj).find(".post_info").css("display","none");
 		$(obj).find(".post_controls").css("display","none");
 		$(obj).find(".post_content").html(old_content + block_excuse);
 		$(obj).find(".post_footer_links").css('display','none');
+		$(obj).find(".post_source").css('display','none');
 		
 		if (XKit.extensions.blacklist.preferences.show_tags.value === true) {
 			$(obj).find(".post_footer").css('display','none');
@@ -215,7 +327,7 @@ XKit.extensions.blacklist = new Object({
 			$(obj).find(".post_tags, .post_footer").css('display','none');	
 		}
 		
-		$(obj).find(".full_answer_container_wrapper").css("display","none");
+		$(obj).find(".post_answer").css("display","none");
 		
 	},
 	
@@ -328,9 +440,10 @@ XKit.extensions.blacklist = new Object({
 			$(this).find(".post_info").css("display","block");
 			$(this).find(".post_controls").css("display","block");
 			$(this).find(".post_tags").css('display','block');
+			$(this).find(".post_source").css('display','block');
 			$(this).find(".post_footer").css('display','table');
 			$(this).find(".post_footer_links").css('display','block');
-			$(this).find(".full_answer_container_wrapper").css("display","block");	
+			$(this).find(".post_answer").css("display","block");	
 			$(this).find(".xblacklist_excuse").remove();
 			$(this).find(".post_content").html($(this).find(".xblacklist_old_content").html());	
 		});	
@@ -447,49 +560,7 @@ XKit.extensions.blacklist = new Object({
 		
 		$("#blacklist-add-button").click(function() {
 			
-			XKit.window.show("Add word to blacklist","<b>Enter the word you want to add.</b><br/>Your words can not contain commas or backslashes.<input type=\"text\" maxlength=\"50\" placeholder=\"Enter a word here.\" class=\"xkit-textbox\" id=\"xkit-blacklist-word\"><br/>Before adding a word, please check \"Tips on Blacklisting\" section.","question","<div class=\"xkit-button default\" id=\"xkit-blacklist-add-word\">Add word</div><div class=\"xkit-button\" id=\"xkit-close-message\">Cancel</div>")	
-			
-			$("#xkit-blacklist-add-word").click(function() {
-				
-				var m_to_add = $("#xkit-blacklist-word").val();
-				
-				if (m_to_add === "" ||$.trim(m_to_add) === "") {
-					XKit.window.close();
-					return;	
-				}
-				
-				if (m_to_add.indexOf(",") !== -1) {
-					alert("The word(s) you enter can not have commas in it.");	
-					return;
-				}
-				
-				if (m_to_add.indexOf("\\") !== -1) {
-					alert("The word(s) you enter can not have backslashes in it.");	
-					return;
-				}
-				
-				if (m_to_add.length <= 1) {
-					alert("Words must be at least two characters.");
-					return;	
-				}
-				
-				if (m_to_add.substring(0,1) === "#") {
-					alert("Please do not add hashtags to words.");
-					return;						
-				}
-				
-				if (XKit.extensions.blacklist.check_if_exists(m_to_add) === true) {
-					alert("This word is already in the blacklist.");
-					return;	
-				}
-				
-				XKit.extensions.blacklist.blacklisted.push(m_to_add);
-				XKit.extensions.blacklist.save_blacklist();
-				XKit.window.close();
-				XKit.extensions.blacklist.cpanel(m_div);
-				XKit.extensions.xkit_preferences.restart_extension("blacklist");
-				
-			});
+			XKit.extensions.blacklist.show_add("",m_div);
 			
 		});
 		

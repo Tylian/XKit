@@ -1,5 +1,5 @@
 //* TITLE XInbox **//
-//* VERSION 1.3 REV A **//
+//* VERSION 1.3 REV B **//
 //* DESCRIPTION Enhances your Inbox experience **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS XInbox allows you to tag posts before posting them, and see all your messages at once, and lets you delete multiple messages at once using the Mass Editor mode. To use this mode, go to your Inbox and click on the Mass Editor Mode button on your sidebar, click on the messages you want to delete then click the Delete Messages button.  **//
@@ -42,9 +42,23 @@ XKit.extensions.xinbox = new Object({
 			value: "",
 			type: "text"
 		},
-		"sep1": {
-			text: "Appearance",
+		"sep1a": {
+			text: "Appearance options",
 			type: "separator"
+		},
+		"show_queue_draft": {
+			text: "Show Queue and Draft buttons while answering asks",
+			default: false,
+			value: false
+		},
+		"sep1": {
+			text: "Fan Mail options",
+			type: "separator"
+		},
+		"auto_expand_fan_mail": {
+			text: "Automatically expand Fan Mail without having to click on Read More",
+			default: false,
+			value: false
 		},
 		"slim_fan_mail": {
 			text: "Slim Fan Mail",
@@ -79,6 +93,11 @@ XKit.extensions.xinbox = new Object({
 		if(XKit.extensions.xinbox.preferences.show_tag_box.value === true || XKit.extensions.xinbox.preferences.tag_usernames.value === true || XKit.extensions.xinbox.preferences.tag_custom.value === true) {
 			XKit.extensions.xinbox.init_tags();	
 		}
+		
+		if(XKit.extensions.xinbox.preferences.auto_expand_fan_mail.value === true) {
+			XKit.post_listener.add("xinbox_auto_expand_fan_mail", XKit.extensions.xinbox.auto_expand_fan_mail);
+			XKit.extensions.xinbox.auto_expand_fan_mail();
+		}
 
 		if(XKit.extensions.xinbox.preferences.hide_fan_mail_button.value === true && $("#right_column > .send_fan_mail").length > 0) {
 			XKit.tools.add_css("#right_column > .send_fan_mail { display: none; } #right_column .controls_section { margin-top: 0 !important; margin-bottom: 18px; } ", "xkit_inbox_hide_fan_mail_button");
@@ -108,7 +127,20 @@ XKit.extensions.xinbox = new Object({
 		if(XKit.extensions.xinbox.preferences.mass_editor.value === true) {
 			XKit.extensions.xinbox.init_mass_editor();
 		}
+		
+		if(XKit.extensions.xinbox.preferences.show_queue_draft.value === true) {
+			var cx_css = 	".ask_draft_button, .ask_queue_button, .ask_publish_button, .private_answer_button {" +
+						"display: block !important; margin-left: 2px !important;" +
+					"}";
+			XKit.tools.add_css(cx_css, "xkit_inbox_show_queue");
+		}
 
+	},
+	
+	auto_expand_fan_mail: function() {
+		
+		$(".fan_mail_read_more").trigger('click');
+		
 	},
 
 	init_mass_editor: function() {
@@ -346,10 +378,22 @@ XKit.extensions.xinbox = new Object({
 			
 				var all_buttons = $(m_parent).find('[id^="ask_publish_button_"], [id^="ask_draft_button_"], [id^="ask_queue_button_"]');
 			
+				if(XKit.extensions.xinbox.preferences.show_queue_draft.value === true) {
+					var private_button = $(m_parent).find('[id^="private_answer_button_"]');
+					$(draft_button).html("Draft");	
+					$(submit_button).after($(private_button));
+					
+					$(private_button).click(function() {
+						$(all_buttons).attr('disabled','disabled');	
+					});
+				}
+			
 				$(all_buttons).attr('onclick','');
 				$(all_buttons).bind("click",function(event) {
 				
 					event.preventDefault();
+					
+					$(all_buttons).attr('disabled','disabled');
 					
 					var m_tags = "";
 					
@@ -568,8 +612,10 @@ XKit.extensions.xinbox = new Object({
 
 	destroy: function() {
 		$("#xinbox_sidebar").remove();
+		XKit.post_listener.remove("xinbox_auto_expand_fan_mail");
 		$(document).off("click", "[id^='ask_answer_link_']");
 		XKit.tools.remove_css("xkit_inbox_slim_fan_mail");
+		XKit.tools.remove_css("xkit_inbox_show_queue");
 		XKit.tools.remove_css("xkit_inbox_hide_fan_mail_button");
 		XKit.tools.remove_css("xinbox");
 		this.running = false;

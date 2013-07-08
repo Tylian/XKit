@@ -1,5 +1,5 @@
 //* TITLE Bookmarker **//
-//* VERSION 1.1 REV A **//
+//* VERSION 2.0 REV A **//
 //* DESCRIPTION Dashboard Time Machine **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS The Bookmarker extension allows you to bookmark posts and get back to them whenever you want to. Just click on the Bookmark icon on posts and the post will be added to your Bookmark List on your sidebar. **//
@@ -14,15 +14,44 @@ XKit.extensions.bookmarker = new Object({
 	slow: true,
 
 	preferences: {
+		sep0: {
+			text: "Opening bookmarks",
+			type: "separator"	
+		},
 		new_tab: {
 			text: "Open my bookmarks in new tabs",
 			default: false,
 			value: false
+		},
+		sep1: {
+			text: "Displaying bookmarks",
+			type: "separator"	
+		},
+		display_on_top: {
+			text: "On dashboard, show my bookmarks after my blog information",
+			default: false,
+			value: false
+		},
+		display_non_relative: {
+			text: "Instead of relative time, use the following format:",
+			default: false,
+			value: false
+		},
+		format: {
+			text: "Timestamp format (<a id=\"xkit-bookmarks-format-help\" href=\"#\" onclick=\"return false\">what is this?</a>)",
+			type: "text",
+			default: "MMM Do, h:mm a",
+			value: "MMM Do, h:mm a"	
 		}
 	},
 
 	run: function() {
 		this.running = true;
+		
+		if (XKit.extensions.bookmarker.preferences.format.value === "") {
+			XKit.extensions.bookmarker.preferences.format.value = "MMM Do, h:mm a";
+		}
+		
 		if (document.location.href.indexOf('http://www.tumblr.com/dashboard') !== -1) {
 			XKit.tools.init_css("bookmarker");
 			XKit.extensions.bookmarker.load_bookmarks();
@@ -50,13 +79,13 @@ XKit.extensions.bookmarker = new Object({
 
 		if ($("#post_" + str_sub).length <= 0) {
 
-			$("#posts").prepend("<div class=\"post\" id=\"xkit-bookmarker-not-found-msg\"><div id=\"xkit-bookmarker-not-found-inner\"><b>Bookmarked post not found.</b>" + 
-			"<br/>This might be because the post has been deleted, or because of a temporary Tumblr error. Posts made around the same time as the bookmarked post is listed below.<br/><a href=\"#\" onclick=\"return false\"><div class=\"xkit-button\" id=\"xkit-delete-current-bookmark\">Delete this bookmark</div></a></div></div>");
+			$("#posts").prepend("<li class=\"post_container\"><div class=\"post post_full\" id=\"xkit-bookmarker-not-found-msg\"><div id=\"xkit-bookmarker-not-found-inner\"><b>Bookmarked post not found.</b>" + 
+			"<br/>This might be because the post has been deleted, or because of a temporary Tumblr error. Posts made around the same time as the bookmarked post is listed below.<br/><a href=\"#\" onclick=\"return false\"><div class=\"xkit-button\" id=\"xkit-delete-current-bookmark\">Delete this bookmark</div></a></div></div></li>");
 
 		} else {
 
-			$("#posts").prepend("<div class=\"post no-error-on-xbookmark\" id=\"xkit-bookmarker-not-found-msg\"><div id=\"xkit-bookmarker-not-found-inner\"><b>You are viewing a bookmark.</b><br/>" + 
-			"If you are done with it, you can click the button below to remove it.<br/><div class=\"xkit-button\" id=\"xkit-delete-current-bookmark\">Delete this bookmark</div><a class=\"xkit-button\" href=\"/dashboard/\">Return to my dashboard</a></div></div>");		
+			$("#posts").prepend("<li class=\"post_container\"><div class=\"post post_full no-error-on-xbookmark\" id=\"xkit-bookmarker-not-found-msg\"><div id=\"xkit-bookmarker-not-found-inner\"><b>You are viewing a bookmark.</b><br/>" + 
+			"If you are done with it, you can click the button below to remove it.<br/><div class=\"xkit-button\" id=\"xkit-delete-current-bookmark\">Delete this bookmark</div><a class=\"xkit-button\" href=\"/dashboard/\">Return to my dashboard</a></div></div></li>");		
 		
 		}
 
@@ -89,10 +118,14 @@ XKit.extensions.bookmarker = new Object({
 		if (document.location.href.indexOf("?bookmark=true") !== -1) {
 			$("#right_column").prepend(m_html);
 		} else {
-			if ($("#tumblr_radar").length > 0) {
-				$("#tumblr_radar").before(m_html);
-			} else {
-				$("#right_column").append(m_html);
+			if (XKit.extensions.bookmarker.preferences.display_on_top.value === true) {
+				$("ul.controls_section:eq(1)").after(m_html);
+			} else{
+				if ($("#tumblr_radar").length > 0) {
+					$("#tumblr_radar").before(m_html);
+				} else {
+					$("#right_column").append(m_html);
+				}
 			}
 		}
 		
@@ -210,8 +243,15 @@ XKit.extensions.bookmarker = new Object({
 			
 		var bookmark_caption = current_bookmark.caption;
 		if (bookmark_caption === "" ||typeof bookmark_caption === "undefined") {
+			
 			var dt = moment(current_bookmark.date);
-			bookmark_caption = dt.from(nowdatem);
+			
+			if (XKit.extensions.bookmarker.preferences.display_non_relative.value === true) {
+				bookmark_caption = dt.format(XKit.extensions.bookmarker.preferences.format.value);
+			} else {
+				bookmark_caption = dt.from(nowdatem);
+			}
+			
 		}
 	
 		return	'<li class="no_push xbookmark xbookmark_to_slidedown" style="display: none;" id="xkit_bookmark_' + current_bookmark.id + '" data-xkit-bookmark-post-id="' + current_bookmark.id + '">' +
@@ -349,6 +389,16 @@ XKit.extensions.bookmarker = new Object({
 			} else {
 				$(this).find(".post_controls").prepend(m_html);
 			}
+		});	
+		
+	},
+	
+	cpanel: function() {
+	
+		$("#xkit-bookmarks-format-help").click(function() {
+		
+			XKit.window.show("Bookmark time formatting","Bookmarks extension allows you to format the date by using a formatting syntax. Make your own and type it in the Timestamp Format box to customize your timestamps.<br/><br/>For information, please visit:<br/><a href=\"http://xkit.info/seven/support/timestamps/index.php\">Timestamp Format Documentation</a><br/><br/>Please be careful while customizing the format. Improper/invalid formatting can render Timestamps unusable. In that case, just delete the text you've entered completely and XKit will revert to its default formatting.","info","<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
+			
 		});	
 		
 	},

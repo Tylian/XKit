@@ -1,5 +1,5 @@
 //* TITLE Tweaks **//
-//* VERSION 1.7 REV A **//
+//* VERSION 2.0 REV A **//
 //* DESCRIPTION Various little tweaks for your dashboard. **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS These are small little tweaks that allows you customize your dashboard. If you have used XKit 6, you will notice that some of the extensions have been moved here as options you can toggle. Keep in mind that some of the tweaks (the ones marked with a '*') can slow down your computer. **//
@@ -15,36 +15,18 @@ XKit.extensions.tweaks = new Object({
 	run_interval_2: 0,
 
 	preferences: {
-		"sepm1": {
-			text: "Posting tweaks",
-			type: "separator",
-		},
-		"photo_replies": {
-			text: "Auto-enable photo replies (might slow down your computer)",
-			default: false,
-			value: false
-		},
+
 		"sep0": {
-			text: "Dashboard tweaks",
+			text: "Popular tweaks",
 			type: "separator",
 		},
-		"show_new_on_secondary": {
-			text: "Show new post icons on secondary dashboard pages",
-			default: true,
-			value: true	
-		},
-		"slim_popups": {
-			text: "Slim down the popup menus such as the user menu",
-			default: false,
-			value: false	
-		},
-		"always_show_move_to_top": {
-			text: "Always show 'Move to top' button in queued posts",
+		"wrap_tags": {
+			text: "Wrap tags for easier reading",
 			default: true,
 			value: true
 		},
-		"split_gear": {
-			text: "Move the edit/remove buttons out of the gear menu",
+		"fix_blockquotes": {
+			text: "Slim block quotes for easier reading",
 			default: false,
 			value: false
 		},
@@ -53,35 +35,60 @@ XKit.extensions.tweaks = new Object({
 			default: false,
 			value: false
 		},
-		"hide_sponsored": {
-			text: "Dim sponsored posts on dashboard (not recommended)",
-			default: false,
-			value: false
-		},
-		"hide_blog_search": {
-			text: "Hide blogs on the search bar suggestions",
-			default: false,
-			value: false
-		},
 		"hide_share": {
 			text: "Hide the share button on posts",
 			default: false,
 			value: false
 		},
-		"fix_blockquotes": {
-			text: "Slim block quotes for easier reading",
+		"photo_replies": {
+			text: "Auto-enable photo replies on all posts I create",
 			default: false,
-			value: false
+			value: false,
+			experimental: true
 		},
-		"wrap_tags": {
-			text: "Wrap tags for easier reading",
+		"sep1": {
+			text: "User Interface tweaks",
+			type: "separator",
+		},
+		"show_new_on_secondary": {
+			text: "Show new post icons on secondary dashboard pages",
+			default: true,
+			value: true	
+		},
+		"scroll_new_posts": {
+			text: "Scroll the new posts icons along with me",
+			default: false,
+			value: false	
+		},
+		"slim_popups": {
+			text: "Slim down the popup menus such as the user menu",
+			default: false,
+			value: false	
+		},
+		"always_show_move_to_top": {
+			text: "Always show 'Move to top' button on the queued posts page",
 			default: true,
 			value: true
 		},
-		"hide_follows": {
-			text: "Hide the mini-follow buttons on posts and notifications",
+		"split_gear": {
+			text: "Move the edit/remove buttons out of the gear menu",
+			default: false,
+			value: false,
+			experimental: true
+		},
+		"sep2": {
+			text: "Dashboard tweaks",
+			type: "separator",
+		},
+		"hide_sponsored": {
+			text: "Dim sponsored posts on dashboard (not recommended)",
 			default: false,
 			value: false
+		},
+		"dont_show_mine_on_dashboard": {
+			text: "Don't show my own posts on my dashboard",
+			default: false,
+			value: false	
 		},
 		"hide_notes": {
 			text: "Hide the notes on posts",
@@ -89,20 +96,32 @@ XKit.extensions.tweaks = new Object({
 			value: false
 		},
 		"hide_bubble": {
-			text: "Hide the new post bubble when you are not in dashboard*",
+			text: "Hide the new post bubble when you are not in dashboard",
+			default: false,
+			value: false,
+			slow: true
+		},
+		"hide_follows": {
+			text: "Hide the mini-follow buttons on posts and notifications",
 			default: false,
 			value: false
 		},
-		"sep1": {
-			text: "Navigation tweaks",
+		"sep3": {
+			text: "Navigation and Search tweaks",
 			type: "separator",
 		},
 		"redirect_to_everything": {
-			text: "On popular tags, always show all posts, not just the popular ones (experimental)*",
+			text: "On popular tags, always show all posts, not just the popular ones",
+			default: false,
+			value: false,
+			experimental: true
+		},
+		"hide_blog_search": {
+			text: "Hide blogs on the search bar suggestions",
 			default: false,
 			value: false
 		},
-		"sep2": {
+		"sep4": {
 			text: "Sidebar tweaks",
 			type: "separator",
 		},
@@ -112,22 +131,22 @@ XKit.extensions.tweaks = new Object({
 			value: false
 		},
 		"hide_follower_count": {
-			text: "Hide Follower count",
+			text: "Hide my follower count",
 			default: false,
 			value: false
 		},
 		"hide_post_count": {
-			text: "Hide Post count",
+			text: "Hide my post count",
 			default: false,
 			value: false
 		},
 		"hide_draft_count": {
-			text: "Hide Draft count",
+			text: "Hide my drafted posts count",
 			default: false,
 			value: false
 		},
 		"hide_radar": {
-			text: "Hide Tumblr radar",
+			text: "Hide the Tumblr radar",
 			default: false,
 			value: false
 		},
@@ -142,7 +161,7 @@ XKit.extensions.tweaks = new Object({
 			value: false
 		},
 		"show_customize": {
-			text: "Show Customize and Blog Settings buttons*",
+			text: "Show Customize and Blog Settings buttons",
 			default: true,
 			value: true
 		}
@@ -208,7 +227,7 @@ XKit.extensions.tweaks = new Object({
 			}	
 			
 		}
-	
+
 		if (XKit.extensions.tweaks.preferences.split_gear.value === true) {
 			XKit.post_listener.add("tweaks_split_gear", XKit.extensions.tweaks.split_gear);
 			XKit.extensions.tweaks.split_gear();
@@ -297,6 +316,38 @@ XKit.extensions.tweaks = new Object({
 				$(this).addClass("xkit_post_tags_inner_add_back");
 			});
 		}
+		
+		if (document.location.href.indexOf('/dashboard') !== -1) {
+		
+			if (XKit.extensions.tweaks.preferences.dont_show_mine_on_dashboard.value === true) {
+				XKit.tools.add_css("#posts .post.is_mine { display: none; } .new_post_buttons { display: block !important; }", "xkit_tweaks_dont_show_mine_on_dashboard");
+				XKit.post_listener.add("tweaks_fix_hidden_post_height", XKit.extensions.tweaks.fix_hidden_post_height);
+			}
+			
+		}
+	
+		if (XKit.extensions.tweaks.preferences.scroll_new_posts.value === true) {
+			$(window).scroll(function () {
+				if ($(window).scrollTop() >= 200) {
+					$("#new_post").addClass("xkit-new-post-scrolls");	
+				} else {
+					$("#new_post").removeClass("xkit-new-post-scrolls");
+				}
+			});
+			$("#new_post").click(function() {
+			
+				$('html, body').animate({
+    					scrollTop: 30
+ 				}, 500);	
+ 				
+ 				$("#new_post").removeClass("xkit-new-post-scrolls");
+				
+			});
+			XKit.tools.add_css(	"#new_post.xkit-new-post-scrolls { position: fixed; top: -5px; z-index: 100; opacity: 0.75; min-height: 88px !important; }" + 
+						"#new_post.xkit-new-post-scrolls:hover { opacity: 1; }" + 
+						"#new_post.xkit-new-post-scrolls #post_buttons { top: -5px !important; }" + 
+						"#new_post.xkit-new-post-scrolls .post_avatar { display: none; }", "xkit_tweaks_scroll_new_posts");
+		}
 
 		if (XKit.extensions.tweaks.preferences.show_customize.value === true) {
 			var user_url = "";
@@ -342,6 +393,14 @@ XKit.extensions.tweaks = new Object({
 
 	},
 	
+	fix_hidden_post_height: function() {
+	
+		XKit.tools.add_function(function() {
+			Tumblr.Events.trigger("DOMEventor:updateRect");
+		}, true, "");	
+		
+	},
+	
 	split_gear: function() {
 		
 		$(".post.is_mine").not(".xkit-tweaks-split-gear-done").each(function() {
@@ -377,15 +436,52 @@ XKit.extensions.tweaks = new Object({
 		});	
 		
 	},
+	
+	upload_photos: function() {
+		
+		
+		if (document.location.href.indexOf('/new/photo') !== -1) {
+		
+			XKit.console.add("Tweaks, upload_photos: user in photo page.");
+			if ($("#post_content").length === 0) {
+				alert("waitin ");
+				XKit.console.add("Tweaks, upload_photos: waiting for panel.");
+				setTimeout(function() {
+					XKit.extensions.tweaks.upload_photos();
+				}, 1);
+				return;
+			}	
+			
+			$("#post_two_image").css("background","red");
+			$("#post_two_image").removeClass("mce_image");
+			$("#post_two_image").addClass("mce_image_upload");
+			$("#post_two_image").find(".mceIcon").addClass("mce_image_upload");
+			$("#post_two_image").find(".mceIcon").removeClass("mce_image");
+			$("#post_two_image_upload").attr('id','post_two_image_upload');
+			$("#post_two_image_voice").attr('id','post_two_image_upload_voice');
+			
+			XKit.console.add("Tweaks, upload_photos: done.");
+			
+			XKit.tools.add_function(function() {
+				Tumblr.Events.trigger("posts:load");
+				tinyMCE.execCommand("mceRepaint");
+				alert(JSON.stringify(tinyMCE.activeEditor.settings));
+			}, true, "");
+			
+		}	
+	
+	},
 
 	destroy: function() {
 		this.running = false;
 		XKit.post_listener.remove("tweaks_check_for_share_on_private_posts");
+		XKit.post_listener.remove("tweaks_fix_hidden_post_height");
 		clearInterval(this.run_interval);
 		clearInterval(this.run_interval_2);
 		XKit.post_listener.remove("tweaks_split_gear");	
 		$(".xkit-small-blog-setting-link").remove();
 		$(".small_links.by-xkit").remove();
+		XKit.tools.remove_css("xkit_tweaks_dont_show_mine_on_dashboard");
 		XKit.tools.remove_css("xkit_tweaks_slim_popups");
 		XKit.tools.remove_css("xtweaks-hide_follower_count");
 		XKit.tools.remove_css("xtweaks-hide_post_count");

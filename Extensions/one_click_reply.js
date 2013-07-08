@@ -1,5 +1,5 @@
 //* TITLE One-Click-Reply **//
-//* VERSION 1.3 REV A **//
+//* VERSION 1.4 REV B **//
 //* DESCRIPTION Lets you reply to notifications **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS To use this extension, hover over a notification and click on the Reply button. If Multi-Reply is on, hold down the ALT key while clicking on the Reply button to select/deselect posts and reply to all of them at once. **//
@@ -164,7 +164,11 @@ XKit.extensions.one_click_reply = new Object({
 			} else {
 				$(n_box).find(".notification_sentence").append(m_html);
 				$(n_box).find(".xkit-reply-button").css("top","12px");
-				$(n_box).find(".xkit-reply-button").css("right","38px");
+				if ($(n_box).hasClass("stretchy_kid_container") === true) {
+					$(n_box).find(".xkit-reply-button").css("right","8px");
+				} else {
+					$(n_box).find(".xkit-reply-button").css("right","38px");
+				}
 			}
 			var m_right = 45 + $(n_box).find(".xkit-reply-button").width();
 			if (XKit.extensions.one_click_reply.added_css !== true) {
@@ -368,6 +372,10 @@ XKit.extensions.one_click_reply = new Object({
 			m_url = $("#new_post_label_text").attr('href');
 		}
 		
+		if (m_url.indexOf('?') !== -1) {
+			m_url = m_url.substring(0, m_url.indexOf('?'));
+		}
+		
 		var m_tags_to_return = "";
 		
 		if (this.preferences.tag_people.value === true) {
@@ -435,7 +443,7 @@ XKit.extensions.one_click_reply = new Object({
 					var m_text = "";
 					var m_tags = "";
 					
-					$(".xkit-reply-selected, .xkit-reply-selected-pn").each(function() {
+					$(".notification.xkit-reply-selected, .xkit-reply-selected-pn").each(function() {
 					
 						// Cycle thru all the posts and gather information.
 						
@@ -460,6 +468,10 @@ XKit.extensions.one_click_reply = new Object({
 					if (document.location.href.indexOf("/blog/") !== -1) {
 						// Maybe we can make this better?
 						m_url = $("#new_post_label_text").attr('href');
+					}
+					
+					if (m_url.indexOf('?') !== -1) {
+						m_url = m_url.substring(0, m_url.indexOf('?'));
 					}
 		
 					if (this.preferences.tag_people.value === true) {
@@ -495,20 +507,6 @@ XKit.extensions.one_click_reply = new Object({
 		
 	try {
 
-	
-		/*var username = "<a href=\"" + $(obj).find(".username").attr('href') + "\">" + $(obj).find(".username").html() + "</a>";
-		var post_url = $(obj).next('.colon').find('a').html();
-	
-		var m_class = ""; 
-		if (obj.hasClass("notification_reblog") === true) { m_class = "reblog"; }
-		if (obj.hasClass("notification_like") === true) { 
-			m_class = "like"; 
-			var m_sentence = XKit.language.one_click_reply.sentences.like;
-			m_sentence = m_sentence.replace("%u", username);
-			m_sentence = m_sentence.replace("%p", post_url);	
-			alert(m_sentence);
-		}*/
-		
 		var username = $(obj).find(".username").html();
 		var m_sentence = "";
 		if ( $(obj).find(".notification_sentence").find(".hide_overflow") > 0) {
@@ -528,9 +526,29 @@ XKit.extensions.one_click_reply = new Object({
 		
 		if (XKit.extensions.one_click_reply.preferences.show_avatars.value === true) {
 			// Fetch the avatar, slugify it to sentence.
-			var avatar_url = $(obj).find(".avatar_frame").find(".avatar").attr('src');
+			var m_obj = $(obj);
+
+
+			/*if ($(m_obj).hasClass("stretchy_kids") === true ||$(m_obj).hasClass("notification_follower") === true) {
+				m_obj = $(m_obj).parent();	
+			}
+			
+			if ($(m_obj).hasClass("stretchy_kid") === true || $(m_obj).hasClass("stretchy_kid_container") === true) {
+				m_obj = $(m_obj).parent().parent();			
+			}*/
+			
+			/*if ($(m_obj).hasClass("notification_follower") === true) {
+					
+			}*/
+			
+			console.log(" -- Now: " + $(m_obj).attr('class'));
+			var avatar_url = $(m_obj).find(".avatar_frame").find(".avatar").attr('src');
 			// This is ugly but it works:
-			avatar_url_start = avatar_url.indexOf('.media.tumblr.com');
+			try { 
+				avatar_url_start = avatar_url.indexOf('.media.tumblr.com');
+			} catch(e) {
+				console.log("Can't fetch avatar.");
+			}	
 			if (avatar_url_start !== -1) {
 				avatar_url = "http://" + avatar_url.substring(avatar_url_start + 1);	
 			}
@@ -547,6 +565,10 @@ XKit.extensions.one_click_reply = new Object({
 			m_url = $("#new_post_label_text").attr('href');
 		}
 		
+		if (m_url.indexOf('?') !== -1) {
+			m_url = m_url.substring(0, m_url.indexOf('?'));
+		}
+
 		var m_tags_to_return = "";
 		
 		if (this.preferences.tag_people.value === true) {
@@ -581,7 +603,7 @@ XKit.extensions.one_click_reply = new Object({
 		}
 		
 	} catch(e) {
-		alert(e.message);
+		alert("On 102: " + e.message);
 	}
 	},
 	

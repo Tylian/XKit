@@ -1,5 +1,5 @@
 //* TITLE Audio Downloader **//
-//* VERSION 1.1 REV B **//
+//* VERSION 1.2 REV B **//
 //* DESCRIPTION Lets you download audio posts hosted on Tumblr **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//
@@ -63,7 +63,11 @@ XKit.extensions.audio_downloader = new Object({
 			method: "GET",
 			url: json_page,
 			onload: function(response) {
+				
+				console.log(response.responseText);
+				
 				$(obj).removeClass("xkit-audio-downloader-working");
+				
 				if (response.responseText.indexOf("?audio_file=") == -1) {
 					XKit.window.show("Can't fetch audio information", "I'm sorry but I could not fetch information needed to download this file. Please try again later.", "error", "<div id=\"xkit-close-message\" class=\"xkit-button\">OK</div>");
 					return;
@@ -75,13 +79,18 @@ XKit.extensions.audio_downloader = new Object({
 					m_url = m_url.substring(0, m_url.indexOf('&color='));
 				}
 				
-				m_url = m_url + "?plead=please-dont-download-this-or-our-lawyers-wont-let-us-host-audio";
+
 				var m_id = "audio_" + XKit.extensions.audio_downloader.make_id();
-				console.log(m_url);
-				XKit.window.show("The Big-Bro Warning", "This functionality is provided in good faith. Please keep in mind the laws while using it: if you think downloading this file might be a copyright violation, please hit Cancel Download now.", "warning", "<a href=\"" + m_url + "\" download=\"" + m_id + "\" id=\"xkit-get-audio-button-start\" class=\"xkit-button default\">Download File</a><div id=\"xkit-close-message\" class=\"xkit-button\">Cancel</div>");
+
+				if (XKit.browser().firefox === true || XKit.browser().safari === true) {
+					XKit.window.show("The Big-Bro Warning", "This functionality is provided in good faith. Please keep in mind the laws while using it: if you think downloading this file might be a copyright violation, please hit Cancel Download now.", "warning", "<a href=\"http://www.xkit.info/seven/helpers/audioget.php?fln=" + m_url + "&id=" + m_id + "\" id=\"xkit-get-audio-button-start\" class=\"xkit-button default\">Download File</a><div id=\"xkit-close-message\" class=\"xkit-button\">Cancel</div>");			
+				} else {
+					m_url = m_url + "?plead=please-dont-download-this-or-our-lawyers-wont-let-us-host-audio";
+					XKit.window.show("The Big-Bro Warning", "This functionality is provided in good faith. Please keep in mind the laws while using it: if you think downloading this file might be a copyright violation, please hit Cancel Download now.", "warning", "<a href=\"" + m_url + "\" download=\"" + m_id + "\" id=\"xkit-get-audio-button-start\" class=\"xkit-button default\">Download File</a><div id=\"xkit-close-message\" class=\"xkit-button\">Cancel</div>");	
+				}
 				
 				$("#xkit-get-audio-button-start").click(function() {
-				
+
 					XKit.notifications.add("Your download will begin any second now.", "ok");
 					XKit.window.close();
 				
@@ -106,12 +115,8 @@ XKit.extensions.audio_downloader = new Object({
 		
 	check_posts: function() {
 	
-		var m_selector = "li.audio";
+		var m_selector = ".is_audio";
 
-		if ($("#posts").hasClass("posts_v2") === true) {
-			 m_selector = ".is_audio";
-		}
-	
 		$(m_selector).not(".xgetaudioed").each(function() {
 
 			$(this).addClass("xgetaudioed");

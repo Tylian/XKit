@@ -1,5 +1,5 @@
 //* TITLE XKit Preferences **//
-//* VERSION 1.9 REV A **//
+//* VERSION 2.1 REV B **//
 //* DESCRIPTION Lets you customize XKit **//
 //* DEVELOPER STUDIOXENIX **//
 XKit.extensions.xkit_preferences = new Object({
@@ -151,7 +151,6 @@ XKit.extensions.xkit_preferences = new Object({
 			XKit.download.page("../paperboy/index.php", function(mdata) {
 
 				if (mdata.server_down === true) {
-				
 					XKit.window.show("Can't connect to server","XKit was unable to contact the servers in order to download XKit News. You might be using an outdated or buggy version of XKit. Please visit <a href=\"http://xkit-extension.tumblr.com\">the Official XKit Blog</a> for updates and details.","error","<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
 					return;
 				}
@@ -163,6 +162,40 @@ XKit.extensions.xkit_preferences = new Object({
 					mdata.news[news_item].title = XKit.tools.replace_all(mdata.news[news_item].title, "\\\\'", "'");
 					mdata.news[news_item].title = XKit.tools.replace_all(mdata.news[news_item].title, "\\\\\"", "\"");
 					XKit.extensions.xkit_preferences.news.create(mdata.news[news_item].id, mdata.news[news_item].title, mdata.news[news_item].message, undefined, mdata.news[news_item].important);
+				}
+
+			});
+			
+			XKit.download.page("framework_version.php", function(mdata) {
+
+				if (mdata.server_down === true) {
+					XKit.window.show("Can't connect to server","XKit was unable to contact the servers in order to download framework version update file. You might be using an outdated or buggy version of XKit. Please visit <a href=\"http://xkit-extension.tumblr.com\">the Official XKit Blog</a> for updates and details.","error","<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
+					return;
+				}
+				
+				// This is awful but at least it works.
+				var my_version = parseFloat(XKit.tools.replace_all(XKit.version, "\\.",""));
+				for(var framework in mdata.frameworks) {
+					if (mdata.frameworks[framework].name === "firefox" && XKit.browser().firefox === true) {
+						var new_version = parseFloat(XKit.tools.replace_all(mdata.frameworks[framework].version,"\\.",""));
+						if (new_version > my_version) {
+							XKit.notifications.add("<b>Please update XKit</b><br/>A new version of XKit is available for your browser. Please click here for more information and how you can easily and quickly update now.","warning",true, function() {
+								XKit.window.show("Please update XKit","<b>A new version of XKit, version " + mdata.frameworks[framework].version + " is available.</b><br/>You are currently using XKit version " + XKit.version + ".<br/><br/>Please update to the latest version as soon as possible. If you don't, XKit might not work properly, or might not work at all in the future.<br/><br/>All you have to do is to go to the XKit download page, and re-download XKit. XKit will update itself, and all your settings will be preserved.", "warning","<a class=\"xkit-button default\" href=\"http://www.xkit.info/download/\">Go to Download page</a><div class=\"xkit-button\" id=\"xkit-close-message\">Not now, remind me later.</div>");
+							});
+						}	
+						break;
+						return;
+					}
+					if (mdata.frameworks[framework].name === "safari" && XKit.browser().safari === true) {
+						var new_version = parseFloat(XKit.tools.replace_all(mdata.frameworks[framework].version,"\\.",""));
+						if (new_version > my_version) {
+							XKit.notifications.add("<b>Please update XKit</b><br/>A new version of XKit is available for your browser. Please click here for more information and how you can easily and quickly update now.","warning",true, function() {
+								XKit.window.show("Please update XKit","<b>A new version of XKit, version " + mdata.frameworks[framework].version + " is available.</b><br/>You are currently using XKit version " + XKit.version + ".<br/><br/>Please update to the latest version as soon as possible. If you don't, XKit might not work properly, or might not work at all in the future.<br/><br/>All you have to do is to go to the XKit download page, and re-download XKit. XKit will update itself, and all your settings will be preserved.", "warning","<a class=\"xkit-button default\" href=\"http://www.xkit.info/download/\">Go to Download page</a><div class=\"xkit-button\" id=\"xkit-close-message\">Not now, remind me later.</div>");
+							});
+						}
+						break;
+						return;	
+					}
 				}
 
 			});
@@ -918,6 +951,18 @@ XKit.extensions.xkit_preferences = new Object({
 			XKit.window.show("Third Party Extension", "This extension was not created by STUDIOXENIX. Since it is not developed by me, I can not make any guarantees about it, nor provide support for this extension, accept bug reports or feature requests.<div style=\"border: 1px solid rgb(200,200,200); background: rgb(235,235,235); margin: 15px 0px; padding: 10px; color: rgb(100,100,100); text-align: center; border-radius: 4px; box-shadow: inset 0px 1px 0px white, 0px 1px 2px rgba(0,0,0,0.22); \">This extension was developed by <a style=\"text-decoration: underline;\" href=\"http://github.com/" + m_extension.developer + "\">" + m_extension.developer + "</a></div>Please contact the developer using the link provided below for questions, bug reports and feature requests.","warning", "<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");	
 			
 		});
+		
+		$(".xkit-extension-experimental-bong").click(function() {
+		
+			XKit.window.show("This is an experimental feature", "<b>This feature is labelled \"experimental\" since it was added recently, and haven't throughly tested yet. It might cause problems and might not work properly.</b> If you hit a bug, please contact the creator of this extension: look at the top-right of the extension panel, if it says \"Third Party Extension\", click on it to learn who to contact. If there is no warning icon, please contact the XKit Blog.","warning", "<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");	
+			
+		});
+		
+		$(".xkit-extension-experimental-turtle").click(function() {
+		
+			XKit.window.show("This feature might slow down your computer", "Turning this feature on might slow down your computer, especially if you have a slow internet connection or an older computer.","warning", "<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");	
+			
+		});
 
 		$("#xkit-extension-update").click(function() {
 
@@ -1148,8 +1193,19 @@ XKit.extensions.xkit_preferences = new Object({
 		for(var pref in XKit.extensions[extension_id].preferences) {
 
 			if (XKit.extensions[extension_id].preferences[pref].type === "text") {
+				
+				var m_extra_classes = "";
+				if (XKit.extensions[extension_id].preferences[pref].experimental === true || XKit.extensions[extension_id].preferences[pref].slow === true) {
+					m_extra_classes = "xkit-experimental-option";
+				}
 
-				m_return = m_return + "<div class=\"xkit-extension-setting\" data-extension-id=\"" + extension_id + "\" data-setting-id=\"" + pref + "\">";
+				m_return = m_return + "<div class=\"xkit-extension-setting " + m_extra_classes + "\" data-extension-id=\"" + extension_id + "\" data-setting-id=\"" + pref + "\">";
+
+				if (XKit.extensions[extension_id].preferences[pref].experimental === true) {
+					m_return = m_return + "<div class=\"xkit-extension-experimental-bong\">&nbsp;</div>";
+				} else if (XKit.extensions[extension_id].preferences[pref].slow === true) {
+					m_return = m_return + "<div class=\"xkit-extension-experimental-turtle\">&nbsp;</div>";
+				}
 
 				if (typeof XKit.extensions[extension_id].preferences[pref].value === "undefined") {
 					XKit.extensions[extension_id].preferences[pref].value = "";
@@ -1184,7 +1240,18 @@ XKit.extensions.xkit_preferences = new Object({
 
 			if (typeof XKit.extensions[extension_id].preferences[pref].type === "undefined" ||  XKit.extensions[extension_id].preferences[pref].type === "" || XKit.extensions[extension_id].preferences[pref].type === "checkbox") {
 
-				m_return = m_return + "<div class=\"xkit-extension-setting checkbox\" data-extension-id=\"" + extension_id + "\" data-setting-id=\"" + pref + "\">";
+				var m_extra_classes = "";
+				if (XKit.extensions[extension_id].preferences[pref].experimental === true || XKit.extensions[extension_id].preferences[pref].slow === true) {
+					m_extra_classes = "xkit-experimental-option";
+				}
+
+				m_return = m_return + "<div class=\"xkit-extension-setting " + m_extra_classes + " checkbox\" data-extension-id=\"" + extension_id + "\" data-setting-id=\"" + pref + "\">";
+
+				if (XKit.extensions[extension_id].preferences[pref].experimental === true) {
+					m_return = m_return + "<div class=\"xkit-extension-experimental-bong\">&nbsp;</div>";
+				} else if (XKit.extensions[extension_id].preferences[pref].slow === true) {
+					m_return = m_return + "<div class=\"xkit-extension-experimental-turtle\">&nbsp;</div>";
+				}
 
 				if (typeof XKit.extensions[extension_id].preferences[pref].value === "undefined") {
 					if (typeof XKit.extensions[extension_id].preferences[pref].default !== "undefined") {
@@ -1226,8 +1293,8 @@ XKit.extensions.xkit_preferences = new Object({
 					"<div class=\"content\" id=\"xkit-extensions-panel-left-inner\">" +
 						"<div class=\"xkit-extension text-only separator\">Configuration & Information</div>" +
 						"<div data-pname=\"reset\" class=\"xkit-extension text-only\">Reset XKit</div>" +
-						"<div data-pname=\"news\" class=\"xkit-extension text-only\">News Notificatons</div>" +
-						"<div data-pname=\"updates\" class=\"xkit-extension text-only\">Update Notificatons</div>" +
+						"<div data-pname=\"news\" class=\"xkit-extension text-only\">News Notifications</div>" +
+						"<div data-pname=\"updates\" class=\"xkit-extension text-only\">Update Notifications</div>" +
 						"<div data-pname=\"update-all\" style=\"display: none;\" class=\"xkit-extension text-only\">Update All</div>" +
 						"<div data-pname=\"storage\" class=\"xkit-extension text-only\">Storage</div>" +
 						"<div class=\"xkit-extension text-only separator\">Advanced Settings</div>" +

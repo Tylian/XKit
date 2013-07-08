@@ -1,5 +1,5 @@
 //* TITLE Mass+ **//
-//* VERSION 0.2 REV A **//
+//* VERSION 0.2 REV B **//
 //* DESCRIPTION Enhancements for the Mass Editor **//
 //* DETAILS This extension allows you to select multiple posts by once, by type or month. It also comes with visual enhancements for the mass post editor, such as selected post count and more! **//
 //* DEVELOPER STUDIOXENIX **//
