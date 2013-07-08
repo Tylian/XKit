@@ -1,12 +1,12 @@
 Returns data about the browser.
 
-### Returns
+## Returns
 * name 
 * version - not reliable on Safari/Opera
 * chrome, safari, firefox, opera - booleans
 * name - user-readable browser name
 
-### Usage example
+## Usage example
 
 	var m_browser = XKit.browser();
 	
@@ -18,3 +18,6 @@ Returns data about the browser.
 	if (m_browser.firefox || m_browser.safari) {
 		alert("Boo.");
 	}
+	
+## Tips
+* Do not ever write browser-specific extensions or refuse to run if it's not the browser of your liking.
