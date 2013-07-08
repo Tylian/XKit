@@ -1,5 +1,3 @@
-**XKit** is the god object.  
-
 ### Backend
 
 * [XKit.tools](https://github.com/atesh/XKit/wiki/XKit.tools)   
