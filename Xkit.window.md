@@ -41,3 +41,5 @@ Close the last window.
 
 ## Tips
 * XKit can only display one dialog at a time.
+* Always pass a title and message.
+* If "buttons" parameter is blank, the window will have no controls and the "darker-gray" area on the bottom.
