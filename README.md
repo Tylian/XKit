@@ -1,9 +1,9 @@
 XKit
 ====
-XKit is a small extension framework that powers tweaks for Tumblr.
+### XKit is a small extension framework that powers tweaks for Tumblr.
 
-To run it, get XKit.js and other files on the root, and then the
-browser-specific files and mush them together. 
+#### Develop for it
+To develop extensions for XKit, check out the [XKit Wiki](https://github.com/atesh/XKit/wiki).
 
-Files under Extensions folder is hosted on XKit
-servers and served to the script on installation, and not needed.
+#### Get it
+You can go to the [official download page](https://www.xkit.info/download) to get it for Safari, Chrome and Firefox, or try the [unofficial mod](https://xkit-opera.tumblr.com) for Opera.
