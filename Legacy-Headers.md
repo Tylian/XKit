@@ -29,11 +29,11 @@ Either `true` or `false`. Set to "true" if your extension manipulates DOM extens
 Not in use right now. Set to true anyways if it's in early beta/alpha.
 
 ## Example
-	`//* TITLE Tweaks **//  
+	//* TITLE Tweaks **//  
 	//* VERSION 2.0 REV A **//  
 	//* DESCRIPTION Various little tweaks for your dashboard. **//  
 	//* DEVELOPER STUDIOXENIX **//  
 	//* DETAILS These are small little tweaks .... your computer. **//
 	//* FRAME false **//
 	//* SLOW true **//
-	//* BETA false **//`
+	//* BETA false **//
