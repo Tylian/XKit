@@ -3,7 +3,7 @@
 ## Get started
 
 * Learn how to get started on writing [a new extension](https://github.com/atesh/XKit/wiki/Writing-a-New-Extension) for XKit.
-* Learn how to [build XKit](https://github.com/atesh/XKit/wiki/Build-XKit) for your browser.
+* Here is an [example extension](https://github.com/atesh/XKit/wiki/Example-Extension).
 
 ## API Functions
 
@@ -25,7 +25,10 @@
 	Information about the stuff Tumblr uses on Dashboard.
 	
 *	[Tumblr Classes](https://github.com/atesh/XKit/wiki/Tumblr-Classes)  
-	Information about the classes and data attributes that Tumblr uses
+	Information about the classes and data attributes that Tumblr uses.
+	
+* 	[Build XKit](https://github.com/atesh/XKit/wiki/Build-XKit)  
+	Learn how to build XKit for your browser.
 
 ## Important Links
 * [XKit - Dev Blog](https://xkit-extension.tumblr.com)
