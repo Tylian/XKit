@@ -1,23 +1,28 @@
-## list
+## Methods
+
+### list
 Returns an array of installed extensions
 
-## check(extension_id)
+### check(extension_id)
 Returns true if extension_id is installed.
 
-## version(extension_id)
+### version(extension_id)
 Returns the version of extension_id
 
-## title(extension_id)
+### title(extension_id)
 Returns the user-friendly title of extension_id
 
-## icon(extension_id)
+### icon(extension_id)
 Returns the icon of extension_id
 
-## css(extension_id)
+### css(extension_id)
 Returns the stylesheet of extension_id
 
-## description(extension_id)
+### description(extension_id)
 Returns the description of extension_id
 
-## developer(extension_id)
+### developer(extension_id)
 Returns the developer of extension_id
+
+## Tips
+* XKit.installed also functions to remove/add extensions, but do not use them, since they are reserved for XKit only and never should be used in an extension.
