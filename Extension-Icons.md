@@ -1,4 +1,5 @@
-Your extension's icon is very important. A badly drawn icon, or an icon that doesn't really fix the rest of the icons used by XKit extensions will turn off your users, and will lead them to think the extension is amateurish, and might be buggy. A good branding is important for a good extension.  
+**Your extension's icon is very important.**  
+A badly drawn icon, or an icon that doesn't really fix the rest of the icons used by XKit extensions will turn off your users, and will lead them to think the extension is amateurish, and might be buggy. A good branding is important for a good extension.  
 
 ### Technical
 * XKit extension icons are 32x32 pixels.   
