@@ -9,6 +9,17 @@
 
 * Documentation is Coming Soon!
 
+## Others
+
+*	[Adding preferences to your extension](https://github.com/atesh/XKit/wiki/Preferences)  
+	Tips and examples on how to make your extension more customizable.
+
+* 	[Legacy Headers](https://github.com/atesh/XKit/wiki/Legacy-Headers)   
+	These are required for all extensions.
+	
+*	[Extension Icons guidelines](https://github.com/atesh/XKit/wiki/Extension-Icons)   
+	Create cool icons for your extensions.
+
 ## Important Links
 * [XKit - Dev Blog](https://xkit-extension.tumblr.com)
 * [XKit - Main Blog](https://xkit-dev.tumblr.com)
