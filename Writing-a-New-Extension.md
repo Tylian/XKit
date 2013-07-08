@@ -1,3 +1,9 @@
+### Things you need
+1. XKit 6.9 or higher, with all the internal extensions up to date.
+2. Javascript and jQuery knowledge.
+3. Patience and enough hair to pull when Tumblr changes something and breaks your extension.
+	* XKit users (well, actually, all the computer users) like their extensions updated when Tumblr changes something and breaks them. If you are going to get bored with your extension after a few days and not provide any updates to it, it's better to keep the extension to yourself.
+
 ### Get started
 1. Open the XKit Control Panel > Other > XKit Editor
 	or go to www.tumblr.com/xkit_editor
