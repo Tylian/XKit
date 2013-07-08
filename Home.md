@@ -20,6 +20,12 @@
 	
 *	[Extension Icons guidelines](https://github.com/atesh/XKit/wiki/Extension-Icons)   
 	Create cool icons for your extensions.
+	
+*	[Tumblr Dashboard API](https://github.com/atesh/XKit/wiki/Tumblr-Dashboard-API)  
+	Information about the stuff Tumblr uses on Dashboard.
+	
+*	[Tumblr Classes](https://github.com/atesh/XKit/wiki/Tumblr-Classes)  
+	Information about the classes and data attributes that Tumblr uses
 
 ## Important Links
 * [XKit - Dev Blog](https://xkit-extension.tumblr.com)
