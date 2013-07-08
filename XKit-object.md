@@ -1,5 +1,8 @@
 ### Backend
 
+* XKit.version
+	Returns XKit framework version
+
 * [XKit.tools](https://github.com/atesh/XKit/wiki/XKit.tools)   
 	Add/remove CSS, get blogs, generate random strings and more.
 	
