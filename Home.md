@@ -7,7 +7,7 @@
 
 ## API Functions
 
-* [XKit](https://github.com/atesh/XKit/wiki/XKit-object) is the God-Object. Start here for API.
+* **[XKit](https://github.com/atesh/XKit/wiki/XKit-object) is the God-Object.** Start here for API.
 * Learn about the [Run/Destroy sequences](https://github.com/atesh/XKit/wiki/Run-Destroy-Sequences), which are really important.
 
 ## Others
