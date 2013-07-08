@@ -15,7 +15,7 @@ XBridge = {
 	tmp_loaded: "",
 	tmp_loaded_css: "",
 	display_error: function(e) {
-		alert(e.message);
+		alert("XKit Bridge Error:\n" + e.message);
 		XBridge.console.log(e.message);
 	},
 	init: function() {
@@ -63,13 +63,13 @@ XBridge = {
 			// Browser shutdown event
 			window.removeEventListener('load', XBridge.events.load, false);
 			window.removeEventListener('unload', XBridge.events.unload, false);
-			window.document.getElementById("appcontent").removeEventListener("DOMContentLoaded", XBridge.events.window, false);
+			//window.document.getElementById("appcontent").removeEventListener("DOMContentLoaded", XBridge.events.window, false);
+			XBridge.run(e);
 		},
 		window: function(e) {
 			// New window event
 			var unsafeWin=e.target.defaultView;
 			if (unsafeWin.wrappedJSObject) unsafeWin=unsafeWin.wrappedJSObject;
-
 			var unsafeLoc=new XPCNativeWrapper(unsafeWin, "location").location;
 			var href=new XPCNativeWrapper(unsafeLoc, "href").href;
 			if (XBridge.check(href) && /^http:\/\/www\.tumblr\.com\/.*$/.test(href)) {
@@ -160,28 +160,18 @@ XBridge = {
 		if (!evt.originalTarget instanceof HTMLDocument) {
 			return;
 		}
-
+		
 		var view = evt.originalTarget.defaultView;
 		if (!view) {
 			return;
 		}
 		
-		var script = "";
-		if (XBridge.tmp_loaded == "") {
-			for (var i=0;i<XBridge.to_load.length;i++) {
-				script = script + XBridge.retrieve('chrome://xkit/content/' + XBridge.to_load[i]);
-			}
-			XBridge.tmp_loaded = script;
-		} else {
-			script = XBridge.tmp_loaded;
-		}
-	
-		var sandbox = new Components.utils.Sandbox(view);
+		var sandbox = new Components.utils.Sandbox(view, { sandboxPrototype: view, wantXrays: true });
 		sandbox.unsafeWindow = view.window.wrappedJSObject;
 		sandbox.window = view.window;
 		sandbox.document = sandbox.window.document;
 		sandbox.__proto__ = sandbox.window;
-	
+		
 		var http_requester = new XBridge.objects.httpRequester(window);
 	
 		sandbox.framework_version = XBridge.framework_version;
@@ -195,22 +185,31 @@ XBridge = {
 		sandbox.GM_deleteValue = XBridge.storage.delete;
 		sandbox.GM_deleteAllValues = XBridge.storage.delete_all;
 		
+		for (var i=0;i<XBridge.to_load.length;i++) {
+			var m_script = XBridge.retrieve('chrome://xkit/content/' + XBridge.to_load[i]);
+			Components.utils.evalInSandbox(m_script, sandbox, "1.8", "resource://xkit/" + XBridge.to_load[i]);
+		}
+		
 		var fileref = sandbox.document.createElement("link");
 		fileref.setAttribute("rel", "stylesheet");
 		fileref.setAttribute("type", "text/css");
 		fileref.setAttribute("href", "resource://xkit/resources/xkit.css");
 		sandbox.document.getElementsByTagName("head")[0].appendChild(fileref);
 		
-		// Eval your JS in the sandbox
 		try {
-			var previous_onload = (sandbox.window.onload);
-			sandbox.window.onload = function() { 
-				Components.utils.evalInSandbox(script, sandbox);
+		
+			if (typeof sandbox.XKit === "undefined" || typeof sandbox.$ === "undefined") {
+				setTimeout(function() {
+					if (typeof sandbox.XKit === "undefined" || typeof sandbox.$ === "undefined") {
+						sandbox.XKit.init();
+					} else {
+						// Give up here?
+					}
+				}, 500);
+			} else {
 				sandbox.XKit.init();
-				if (typeof previous_onload === "function") {
-					previous_onload();
-				}
 			}
+			
 		} catch(e) {
 			XBridge.display_error(e);
 		}
