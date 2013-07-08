@@ -52,7 +52,8 @@
 				if (request.readyState === 4) {  
 			  		console.log("state changed to " + request.status);
 			  		var m_to_return = new Object();
-			  		m_to_return.request = request;
+					// Re-object-ify the XHR object so Safari doesn't prevent it from going through
+			  		m_to_return.request = JSON.parse(JSON.stringify(request)); 
 			  		m_to_return.status = request.status;
 			  		m_to_return.settings = settings;
 			  		m_to_return.onload = obj.onload;
