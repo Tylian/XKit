@@ -1,47 +1,47 @@
 ### Backend
 
 * XKit.version  
-	Returns XKit framework version
+	_Returns XKit framework version_
 	
 * XKit.flags  
-	Flags that are set on the XKit Control Panel.
+	_Flags that are set on the XKit Control Panel._
 
 * [XKit.tools](https://github.com/atesh/XKit/wiki/XKit.tools)   
-	Add/remove CSS, get blogs, generate random strings and more.
+	_Add/remove CSS, get blogs, generate random strings and more._
 	
 * [XKit.post_listener](https://github.com/atesh/XKit/wiki/XKit.post_listener)   
-	Listens for new posts to manipulate.
+	_Listens for new posts to manipulate._
 	
 * [XKit.download](https://github.com/atesh/XKit/wiki/XKit.download)   
-	Download files and extensions.
+	_Download files and extensions._
 	
 * [XKit.browser](https://github.com/atesh/XKit/wiki/XKit.browser)   
-	Get information about user's browser
+	_Get information about user's browser_
 	
 * [XKit.extensions](https://github.com/atesh/XKit/wiki/XKit.extensions)   
-	Semi-god object for all the installed extensions
+	_Semi-god object for all the installed extensions_
 	
 * [XKit.installed](https://github.com/atesh/XKit/wiki/XKit.installed)   
-	Check for installed extensions
+	_Check for installed extensions_
 	
 * [XKit.storage](https://github.com/atesh/XKit/wiki/XKit.storage)   
-	Store/retrieve information
+	_Store/retrieve information_
 	
 ### User Interface
 	
 * [XKit.window](https://github.com/atesh/XKit/wiki/XKit.window)   
-	Display message dialogs
+	_Display message dialogs_
 	
 * [XKit.notifications](https://github.com/atesh/XKit/wiki/XKit.notifications)   
-	Show notifications for the user
+	_Show notifications for the user_
 	
 * [XKit.progress](https://github.com/atesh/XKit/wiki/XKit.progress)   
-	Add/remove/modify progress bars
+	_Add/remove/modify progress bars_
 	
 ### Debugging
 
 * [XKit.console](https://github.com/atesh/XKit/wiki/XKit.console)   
-	Use the XKit Console for debugging your extension.
+	_Use the XKit Console for debugging your extension._
 
 ***
 
