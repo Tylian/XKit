@@ -1,7 +1,10 @@
 ### Backend
 
-* XKit.version
+* XKit.version  
 	Returns XKit framework version
+	
+* XKit.flags  
+	Flags that are set on the XKit Control Panel.
 
 * [XKit.tools](https://github.com/atesh/XKit/wiki/XKit.tools)   
 	Add/remove CSS, get blogs, generate random strings and more.
