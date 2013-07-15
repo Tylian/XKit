@@ -46,7 +46,6 @@ XKit.extensions.scroll_to_bottom = new Object({
     $("#return_to_bottom").remove();
     $("#return_to_bottom_bar").remove();
     this.running = false;
-    console.log("destroying");
   }
 
 });
