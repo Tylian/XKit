@@ -29,6 +29,7 @@ XKit.extensions.scroll_to_bottom = new Object({
   },
   
   run: function() {
+    if ($('.post_container').length < 1) { return; }
     XKit.post_listener.add("scroll_to_bottom", XKit.extensions.scroll_to_bottom.post_listener);
     XKit.tools.init_css("scroll_to_bottom");
 
