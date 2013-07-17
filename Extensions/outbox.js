@@ -1,5 +1,5 @@
 //* TITLE Outbox **//
-//* VERSION 0.1 REV C **//
+//* VERSION 0.3 REV B **//
 //* DESCRIPTION Saves your last 20 sent private replies. **//
 //* DETAILS This extension stores and lets you view the last 20 asks you've answered privately. Please keep in mind that this is a highly experimental extension, so if you hit a bug, please send the XKit blog an ask with the problem you've found. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -49,16 +49,31 @@ XKit.extensions.outbox = new Object({
 			return;
 		}
 		
-		$(document).on("click", "[id^='ask_answer_link_']", function() {
-			
-			var m_parent = $(this).parentsUntil(".post").parent();
-			
-			var private_button = $(m_parent).find('[id^="private_answer_button_"]');
-			
-			$(private_button).click(XKit.extensions.outbox.save);
-			
-		});
+		XKit.post_listener.add("outbox_init", XKit.extensions.outbox.init_outbox_buttons);
+		XKit.extensions.outbox.init_outbox_buttons();	
 
+	},
+	
+	init_outbox_buttons: function() {
+		
+		$("[id^='ask_answer_link_']").unbind("click", XKit.extensions.outbox.save_activate);
+		$("[id^='ask_answer_link_']").bind("click", XKit.extensions.outbox.save_activate);	
+		
+	},
+	
+	save_activate: function(e) {
+		
+		var obj = e.target || e.srcElement;
+		var m_parent = $(obj).parentsUntil(".post").parent();
+		var private_button = $(m_parent).find('[id^="private_answer_button_"]');
+		
+		if ($(m_parent).hasClass("xkit-outbox-activated") === true) {
+			return;
+		}
+		
+		$(m_parent).addClass("xkit-outbox-activated");
+		$(private_button).bind("click", XKit.extensions.outbox.save);
+		
 	},
 	
 	save: function(e) {
@@ -107,6 +122,7 @@ XKit.extensions.outbox = new Object({
 			m_obj.message = m_message;
 			m_obj.answer = m_answer;
 			m_obj.to = m_to;
+			m_obj.time = new Date().getTime();
 			
 			m_messages_array.unshift(m_obj);
 			XKit.storage.set("outbox", "messages_" + form_key, JSON.stringify(m_messages_array));
@@ -133,7 +149,7 @@ XKit.extensions.outbox = new Object({
 	
 	start: function() {
 		
-		XKit.tools.add_css(" .post { display: none; } .post.by-xkit-outbox { display: block !important; }", "outbox_additional");
+		XKit.tools.add_css(" .post { display: none; } .post.by-xkit-outbox { display: block !important; } #auto_pagination_loader { display: none !important; }", "outbox_additional");
 		
 		var form_key = $("body").attr('data-form-key');
 		if (form_key === "" ||typeof form_key === "undefined") {
@@ -152,9 +168,36 @@ XKit.extensions.outbox = new Object({
 		try {
 			messages_array = JSON.parse(m_messages);	
 			XKit.extensions.outbox.show(messages_array);
+			$(document).on('click','.xkit-outbox-delete', XKit.extensions.outbox.delete);
 		} catch(e) {
 			XKit.extensions.outbox.show_empty("Can't load messages,<br/>" + e.message);	
 		}
+		
+	},
+	
+	delete: function(e) {
+		
+		var obj = e.target;
+		
+		var form_key = $("body").attr('data-form-key');
+		var m_messages = XKit.storage.get("outbox", "messages_" + form_key, "");
+		
+		var m_messages_array = "";
+		
+		try {
+			m_messages_array = JSON.parse(m_messages);
+		} catch(e) {
+			m_messages_array = new Array();
+		}
+		
+		m_messages_array.splice(parseInt($(obj).attr('data-outbox-id')), 1);
+			
+		var parent = $(obj).parentsUntil('#posts');
+		$(parent).fadeOut('slow', function() {
+			$(parent).remove();
+		});
+			
+		XKit.storage.set("outbox", "messages_" + form_key, JSON.stringify(m_messages_array));
 		
 	},
 	
@@ -165,7 +208,7 @@ XKit.extensions.outbox = new Object({
 			
 			var m_obj = m_array[m_message];
 			
-			m_html = m_html + XKit.extensions.outbox.render(m_obj);	
+			m_html = m_html + XKit.extensions.outbox.render(m_obj, m_message);	
 			
 		}
 		
@@ -173,14 +216,31 @@ XKit.extensions.outbox = new Object({
 		
 	},
 	
-	render: function(obj) {
+	render: function(obj, m_id) {
 		
-		var to_return = "<li class=\"post_container\"><div class=\"post post_full by-xkit-outbox is_mine is_original is_private_answer no_source\">";
+		var to_return = "<li class=\"post_container\"><div class=\"post is_note note is_mine post_full by-xkit-outbox is_mine is_original is_private_answer no_source\">";
 	
 		var m_link = "<a href=\"http://" + obj.username + ".tumblr.com/\">" + obj.username + "</a>";
 		
 		var av_link = "<a href=\"http://" + obj.username + ".tumblr.com/\"><img width=\"24\" height=\"24\" src=\"" + obj.avatar + "\"></a>";
 		var av_text = "<a href=\"http://" + obj.username + ".tumblr.com/\" class=\"post_question_asker\">" + obj.username + "</a>";
+		
+		var m_day = "";
+		var m_date = "";
+
+		if (obj.time !== "" && typeof obj.time !== "undefined") {
+			var m = moment(obj.time);
+			m_day = m.format('ddd');
+			m_date = m.format('hh:mm a');
+		} else {
+			m_day = "?";
+			m_date = "Unknown";	
+		}
+			
+		to_return = to_return + "<div class=\"post_avatar\"><div class=\"queue\">" +
+        				"<div class=\"publish_info day publish_on_day\">" + m_day + "</div>" + 
+       					"<div class=\"publish_info time publish_on_time\">" + m_date + "</div>" +
+				"</div></div>";
 		
 		to_return = to_return + "<div class=\"post-wrapper\">" +
 				"<div class=\"post_header\"><div class=\"post_info\">You've sent to " + m_link + "</div></div>" +
@@ -193,6 +253,12 @@ XKit.extensions.outbox = new Object({
 							av_text +
 						"</div>" +
 						"<div class=\"post_answer_bar\" style=\"margin-top: 15px; padding-top: 15px; border-top: 1px solid #e7eaec\">" + obj.answer + "</div>" +
+					"</div>" +
+					"<div class=\"post_footer clearfix\" style=\"margin-bottom: -25px;\">" +
+						"<div class=\"post_notes\"><div class=\"post_notes_inner\"></div></div>" +
+						"<div class=\"post_controls\" role=\"toolbar\"><div class=\"post_controls_inner\">" +
+							"<div class=\"post_control deny-xoutbox xkit-outbox-delete\" data-outbox-id=\"" + m_id + "\" title=\"Delete\"></div>" +
+						"</div></div>" +
 					"</div>" +
 				"</div></div>" +
 			    "</div>";
@@ -223,11 +289,15 @@ XKit.extensions.outbox = new Object({
 		$(".by-xkit-outbox").parent().remove();
 		$("#xkit-outbox-no-posts").remove();
 		XKit.tools.remove_css("outbox_additional");
+		$(document).off('click','.xkit-outbox-delete', XKit.extensions.outbox.delete);
 		
 	},
 
 	destroy: function() {
 		this.running = false;
+		XKit.extensions.outbox.end();
+		$("[id^='ask_answer_link_']").off("click", XKit.extensions.outbox.save_activate);
+		XKit.post_listener.remove("outbox_init");
 	}
 
 });

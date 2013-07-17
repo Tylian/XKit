@@ -1,5 +1,5 @@
 //* TITLE Blacklist **//
-//* VERSION 1.9 REV A **//
+//* VERSION 1.9 REV G **//
 //* DESCRIPTION Clean your dash **//
 //* DETAILS This extension allows you to block posts based on the words you specify. If a post has the text you've written in the post itself or it's tags, it will be replaced by a warning, or won't be shown on your dashboard, depending on your settings. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -67,6 +67,10 @@ XKit.extensions.blacklist = new Object({
 	run: function() {
 		this.running = true;
 		XKit.tools.init_css("blacklist");
+		
+		/*if ($("body").hasClass("dashboard_messages_inbox") === true || $("body").hasClass("dashboard_messages_submissions") === true) {
+			return;	
+		}*/
 		
 		var m_blacklist = XKit.storage.get("blacklist","words","").split(",");
 		if (m_blacklist !== "") {
@@ -256,8 +260,8 @@ XKit.extensions.blacklist = new Object({
 		});
 		
 		$(".xblacklist_open_post").unbind("click");
-		$(".xblacklist_open_post").bind("click", function() {
-
+		$(".xblacklist_open_post").bind("click", function(e) {
+			
 			var m_div = $("#" + $(this).attr('data-post-id'));
 			$(m_div).removeClass("xblacklist_blacklisted_post");
 			$(m_div).find(".post_info").css("display","block");
@@ -267,7 +271,13 @@ XKit.extensions.blacklist = new Object({
 			$(m_div).find(".post_tags").css('display','block');
 			$(m_div).find(".post_footer").css('display','table');
 			
-			$(m_div).find(".post_answer").css("display","block");	
+			$(m_div).find(".post_answer").css("display","block");
+			
+			if ($(m_div).hasClass("xkit-shorten-posts-shortened") === true) {
+				$(m_div).find(".xkit-shorten-posts-embiggen").css("display","block");
+				var pre_hidden_height = $(m_div).attr('data-xkit-blacklist-old-height');	
+				$(m_div).css("height", pre_hidden_height);
+			}
 			
 			$(m_div).find(".xblacklist_excuse").remove();
 			$(m_div).find(".post_content").html($(m_div).find(".xblacklist_old_content").html());
@@ -306,12 +316,12 @@ XKit.extensions.blacklist = new Object({
 					
 		var block_excuse = '<div class="xblacklist_excuse">' +
 					'Blocked because of the word "<b>' + word + '</b>"' +
-					'<a href="#" onClick="return false" data-post-id="' + $(obj).attr('id') + '" class="xblacklist_open_post xkit-button">Show it anyway</a></div>';
+					'<div data-post-id="' + $(obj).attr('id') + '" class="xblacklist_open_post xkit-button">Show it anyway</div></div>';
 
 		if (XKit.extensions.blacklist.preferences.dont_show_cause.value === true) {
 			block_excuse = '<div class="xblacklist_excuse">' +
 					'Post blocked.' +
-					'<a href="#" onClick="return false" data-post-id="' + $(obj).attr('id') + '" class="xblacklist_open_post xkit-button">Show it anyway</a></div>';
+					'<div data-post-id="' + $(obj).attr('id') + '" class="xblacklist_open_post xkit-button">Show it anyway</div></div>';
 		}
 
 		$(obj).addClass("xblacklist_blacklisted_post");
@@ -325,6 +335,15 @@ XKit.extensions.blacklist = new Object({
 			$(obj).find(".post_footer").css('display','none');
 		} else {
 			$(obj).find(".post_tags, .post_footer").css('display','none');	
+		}
+		
+		if ($(obj).hasClass("xkit-shorten-posts-shortened") === true) {
+		
+			// This was also shortened.
+			$(obj).attr('data-xkit-blacklist-old-height', $(obj).css("height"));
+			$(obj).css("height","auto");
+			$(obj).find(".xkit-shorten-posts-embiggen").css("display","none");	
+			
 		}
 		
 		$(obj).find(".post_answer").css("display","none");
@@ -446,6 +465,7 @@ XKit.extensions.blacklist = new Object({
 			$(this).find(".post_answer").css("display","block");	
 			$(this).find(".xblacklist_excuse").remove();
 			$(this).find(".post_content").html($(this).find(".xblacklist_old_content").html());	
+			$(this).find(".xkit-shorten-posts-embiggen").css("display","block");
 		});	
 		$(".xblacklist-done").removeClass("xblacklist-done");
 		$(".xblacklist_hidden_post").removeClass("xblacklist_hidden_post");

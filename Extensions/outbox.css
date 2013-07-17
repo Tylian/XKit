@@ -4,3 +4,7 @@
 	background-position: 12px 45% !important;	
 	
 }
+
+.post_full .post_control.deny-xoutbox:after {
+	background-position: -914px -123px;
+}

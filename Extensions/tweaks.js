@@ -1,5 +1,5 @@
 //* TITLE Tweaks **//
-//* VERSION 2.0 REV A **//
+//* VERSION 2.1 REV A **//
 //* DESCRIPTION Various little tweaks for your dashboard. **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS These are small little tweaks that allows you customize your dashboard. If you have used XKit 6, you will notice that some of the extensions have been moved here as options you can toggle. Keep in mind that some of the tweaks (the ones marked with a '*') can slow down your computer. **//
@@ -87,6 +87,11 @@ XKit.extensions.tweaks = new Object({
 		},
 		"dont_show_mine_on_dashboard": {
 			text: "Don't show my own posts on my dashboard",
+			default: false,
+			value: false	
+		},
+		"dont_show_liked_on_dashboard": {
+			text: "Don't show liked posts on my dashboard",
 			default: false,
 			value: false	
 		},
@@ -248,7 +253,7 @@ XKit.extensions.tweaks = new Object({
 		}
 		
 		if (XKit.extensions.tweaks.preferences.slim_popups.value === true) {
-			XKit.tools.add_css(".popover_menu_item { padding: 5px 15px 5px 15px !important; font-size: 12px !important; }", "xkit_tweaks_slim_popups");
+			XKit.tools.add_css(".popover_menu_item { padding: 5px 15px 5px 15px !important; font-size: 12px !important; } .popover_menu_item.tracked_tag { padding: 0px !important; }", "xkit_tweaks_slim_popups");
 		}
 		
 		if (XKit.extensions.tweaks.preferences.hide_sponsored.value === true) {
@@ -305,7 +310,13 @@ XKit.extensions.tweaks = new Object({
 
 		if (XKit.extensions.tweaks.preferences.fix_blockquotes.value === true) {
 			XKit.tools.add_css("#posts .post_content blockquote { border-left: solid 3px #dcdcdc; padding-left: 8px; margin-left: 6px; }", "xkit_tweaks_fix_blockquotes");
-		}		
+		}	
+		
+		if (XKit.extensions.tweaks.preferences.dont_show_liked_on_dashboard.value === true) {
+			XKit.tools.add_css("#posts .post.is_liked { display: none !important; }", "xkit_tweaks_dont_show_liked");
+			XKit.post_listener.add("tweaks_dont_show_liked", XKit.extensions.tweaks.check_for_liked_posts);
+			XKit.extensions.tweaks.check_for_liked_posts();
+		}	
 
 		if (XKit.extensions.tweaks.preferences.wrap_tags.value === true) {
 			XKit.tools.add_css(".post .tags { width: 500px !important; display: block !important; }  .post .footer_links.with_tags { overflow:visible !important; display: block !important; }.post .footer_links.with_tags span, .footer_links.with_tags .source_url { display:block !important; overflow:visible !important; } .source_url_gradient { display: none !important; } span.tags { white-space:normal !important; } span.with_blingy_tag a.blingy { height:auto !important; display:inline-block !important; }  .source_url, .post_tags_wrapper { display: block !important; } ", "xkit_tweaks_wrap_tags");
@@ -393,6 +404,27 @@ XKit.extensions.tweaks = new Object({
 
 	},
 	
+	check_for_liked_posts: function() {
+		
+		if (document.location.href.indexOf('/dashboard') === -1) {
+			return;
+		}
+		
+		var call_update_rect = false;
+		$(".post").not(".xkit-tweaks-checked-for-likes").each(function() {
+			$(this).addClass("xkit-tweaks-checked-for-likes");
+			if ($(this).find(".post_control.like").hasClass("liked")) {
+				$(this).addClass("is_liked");	
+				call_update_rect = true;
+			}
+		});
+		
+		if (call_update_rect) {
+			XKit.extensions.tweaks.fix_hidden_post_height();
+		}
+		
+	},
+	
 	fix_hidden_post_height: function() {
 	
 		XKit.tools.add_function(function() {
@@ -476,11 +508,13 @@ XKit.extensions.tweaks = new Object({
 		this.running = false;
 		XKit.post_listener.remove("tweaks_check_for_share_on_private_posts");
 		XKit.post_listener.remove("tweaks_fix_hidden_post_height");
+		XKit.post_listener.remove("tweaks_dont_show_liked");
 		clearInterval(this.run_interval);
 		clearInterval(this.run_interval_2);
 		XKit.post_listener.remove("tweaks_split_gear");	
 		$(".xkit-small-blog-setting-link").remove();
 		$(".small_links.by-xkit").remove();
+		XKit.tools.remove_css("xkit_tweaks_dont_show_liked");
 		XKit.tools.remove_css("xkit_tweaks_dont_show_mine_on_dashboard");
 		XKit.tools.remove_css("xkit_tweaks_slim_popups");
 		XKit.tools.remove_css("xtweaks-hide_follower_count");

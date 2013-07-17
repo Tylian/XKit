@@ -1,5 +1,5 @@
 //* TITLE One-Click-Reply **//
-//* VERSION 1.4 REV B **//
+//* VERSION 1.4 REV C **//
 //* DESCRIPTION Lets you reply to notifications **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS To use this extension, hover over a notification and click on the Reply button. If Multi-Reply is on, hold down the ALT key while clicking on the Reply button to select/deselect posts and reply to all of them at once. **//
@@ -131,7 +131,7 @@ XKit.extensions.one_click_reply = new Object({
 		}
 
 		if ($(n_box).find(".xkit-reply-button-pn").length <= 0) {
-			var m_html = "<a href=\"#\" onclick=\"return false\" class=\"xkit-reply-button-pn\">reply</a>";
+			var m_html = "<a onclick=\"return false\" class=\"xkit-reply-button-pn\">reply</a>";
 			$(n_box).append(m_html);
 			var m_right = 30 + $(n_box).find(".xkit-reply-button-pn").width();
 			if (XKit.extensions.one_click_reply.added_css_pn !== true) {
@@ -158,7 +158,7 @@ XKit.extensions.one_click_reply = new Object({
 		}
 
 		if ($(n_box).find(".xkit-reply-button").length < 1) {
-			var m_html = "<a href=\"#\" onclick=\"return false\" class=\"xkit-reply-button\">reply</a>";
+			var m_html = "<a onclick=\"return false\" class=\"xkit-reply-button\">reply</a>";
 			if ($(n_box).find(".block").length > 0) {
 				$(n_box).find(".block").after(m_html);
 			} else {

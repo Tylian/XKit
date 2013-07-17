@@ -1,5 +1,5 @@
 //* TITLE Reblog Yourself **//
-//* VERSION 1.2 REV A **//
+//* VERSION 1.2 REV B **//
 //* DESCRIPTION Allows you to reblog posts back to your blog **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//
@@ -141,6 +141,7 @@ XKit.extensions.reblog_yourself = new Object({
 
 	   		if ($(this).attr('id') === "new_post") { return; }
 			if ($(this).hasClass("note") === true) { return; }
+			if ($(this).hasClass("is_note") === true) { return; }
 			if ($(this).hasClass("is_mine") === false) { return; }
 	   		if ($(this).css('visibility') === "hidden") { return; } // tumblr savior hack.
 	   		if ($(this).css('display') === "none") { return; } // tumblr savior hack.
