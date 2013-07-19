@@ -1,5 +1,5 @@
 //* TITLE Tweaks **//
-//* VERSION 2.1 REV A **//
+//* VERSION 2.2 REV A **//
 //* DESCRIPTION Various little tweaks for your dashboard. **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS These are small little tweaks that allows you customize your dashboard. If you have used XKit 6, you will notice that some of the extensions have been moved here as options you can toggle. Keep in mind that some of the tweaks (the ones marked with a '*') can slow down your computer. **//
@@ -37,6 +37,11 @@ XKit.extensions.tweaks = new Object({
 		},
 		"hide_share": {
 			text: "Hide the share button on posts",
+			default: false,
+			value: false
+		},
+		"hide_follows": {
+			text: "Hide the mini-follow buttons on posts and notifications",
 			default: false,
 			value: false
 		},
@@ -106,11 +111,6 @@ XKit.extensions.tweaks = new Object({
 			value: false,
 			slow: true
 		},
-		"hide_follows": {
-			text: "Hide the mini-follow buttons on posts and notifications",
-			default: false,
-			value: false
-		},
 		"sep3": {
 			text: "Navigation and Search tweaks",
 			type: "separator",
@@ -132,6 +132,11 @@ XKit.extensions.tweaks = new Object({
 		},
 		"slim_sidebar": {
 			text: "Slim sidebar buttons",
+			default: false,
+			value: false
+		},
+		"hide_activity": {
+			text: "Hide the Activity button on sidebar",
 			default: false,
 			value: false
 		},
@@ -232,6 +237,10 @@ XKit.extensions.tweaks = new Object({
 			}	
 			
 		}
+		
+		if (XKit.extensions.tweaks.preferences.hide_activity.value === true) {
+			$("a.activity").parent().css("display","none");
+		}
 
 		if (XKit.extensions.tweaks.preferences.split_gear.value === true) {
 			XKit.post_listener.add("tweaks_split_gear", XKit.extensions.tweaks.split_gear);
@@ -305,7 +314,7 @@ XKit.extensions.tweaks = new Object({
 		}
 
 		if (XKit.extensions.tweaks.preferences.hide_follows.value === true) {
-			XKit.tools.add_css(".notification_follow, .reblog_follow_button { display: none !important; }", "xkit_tweaks_hide_follows");
+			XKit.tools.add_css(".notification_follow, .reblog_follow_button { display: none !important; } #posts .notes_outer_container.popover .note a.follow { display: none !important; } #posts .notes_outer_container.popover .note.like a.block { right: 16px !important; }", "xkit_tweaks_hide_follows");
 		}
 
 		if (XKit.extensions.tweaks.preferences.fix_blockquotes.value === true) {
@@ -387,18 +396,38 @@ XKit.extensions.tweaks = new Object({
 				 '<a href="/customize/' + user_url + '" class="customize">' +
 				 '<div class="hide_overflow">Customize</div>' +
 				 '</a></li>';
-			x_html= '<div class="small_links by-xkit">' +
-           			'<a href="/mega-editor/' + user_url + '" target="_mass_post_editor">Mass Post Editor</a>' +
-           			'<a href="/blog/' + user_url.replace("/","") + '/settings/" target="_mass_post_editor">Blog Settings</a>' +
-				'</div>';
+				 
+			$("#dashboard_controls_open_blog").append(m_html);
+			
+			var add_mega_link = true;	 
+			if ($(".small_links").length > 0) {
+				$(".small_links a").each(function() {
+					var m_link = $(this).attr('href');
+					if (m_link.indexOf('/mega-editor') !== -1) {
+						add_mega_link = false;
+						return false;
+					}	
+				});
+			} else {
+				add_mega_link = true;
+			}
+			
+			if (add_mega_link) {
+				x_html = '<div class="small_links by-xkit">' +
+           					'<a href="/mega-editor/' + user_url + '" target="_mass_post_editor">Mass Post Editor</a>' +
+           					'<a href="/blog/' + user_url.replace("/","") + '/settings/" target="_mass_post_editor">Blog Settings</a>' +
+					'</div>';
+			}
+			
 			if ($("#dashboard_controls_open_blog").length >= 1) {
-				if ($(".small_links").length > 0 && document.location.href.indexOf("/blog/") !== -1) {
-					$(".small_links:first").append('<a class=\"xkit-small-blog-setting-link\" href="/blog/' + user_url.replace("/","") + '/settings/" target="_mass_post_editor">Blog Settings</a>');
+				if ($(".small_links").length > 0 && add_mega_link === false) {
+					$(".small_links:first").append('<a class=\"xkit-small-blog-setting-link\" href="/blog/' + user_url.replace("/","") + '/settings/" target="_blog_settings">Blog Settings</a>');
 				} else {
 					$("#dashboard_controls_open_blog").after(x_html);
 				}
+				
 			}
-			$("#dashboard_controls_open_blog").append(m_html);
+			
 		}	
 
 
@@ -535,6 +564,7 @@ XKit.extensions.tweaks = new Object({
 		$("#xkit_customize_button").remove();
 		$("a.spotlight").parent().css("display","block");
 		$("#recommended_tumblelogs").css("display","block");
+		$("a.activity").parent().css("display","block");
 		$("xkit_post_tags_inner_add_back").addClass("post_tags_inner");
 		$("xkit_post_tags_inner_add_back").removeClass("xkit_post_tags_inner_add_back");
 	}

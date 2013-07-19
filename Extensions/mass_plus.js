@@ -1,5 +1,5 @@
 //* TITLE Mass+ **//
-//* VERSION 0.2 REV B **//
+//* VERSION 0.3 REV A **//
 //* DESCRIPTION Enhancements for the Mass Editor **//
 //* DETAILS This extension allows you to select multiple posts by once, by type or month. It also comes with visual enhancements for the mass post editor, such as selected post count and more! **//
 //* DEVELOPER STUDIOXENIX **//
@@ -11,23 +11,34 @@ XKit.extensions.mass_plus = new Object({
 	running: false,
 	
 	preferences: {
+		sep0: {
+			text: "Experimental features",
+			type: "separator"	
+		},
 		enable_search_tags: {
-			text: "Enable Search By Tag (highly experimental)",
+			text: "Enable Search By Tag",
 			default: false,
-			value: false
-		}
+			value: false,
+			experimental: true
+		},
+		enable_caption_delete: {
+			text: "Enable Delete Caption function",
+			default: false,
+			value: false,
+			experimental: true
+		},
 	},
 
 	run: function() {
 		this.running = true;
 		
 		if (document.location.href.indexOf('http://www.tumblr.com/mega-editor/') !== -1 && $("#nav_archive").length > 0) {
+			if (document.location.href.indexOf('http://www.tumblr.com/activity') !== -1) {return; }
 			XKit.tools.init_css("mass_plus");
 			XKit.extensions.mass_plus.do();	
+			setInterval(function() { XKit.extensions.mass_plus.do_headings(); }, 2000);	
+			XKit.extensions.mass_plus.do_headings();
 		}
-		
-		setInterval(function() { XKit.extensions.mass_plus.do_headings(); }, 2000);	
-		XKit.extensions.mass_plus.do_headings();
 		
 	},
 	

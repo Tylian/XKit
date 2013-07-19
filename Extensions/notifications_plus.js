@@ -1,5 +1,5 @@
 //* TITLE Notifications+ **//
-//* VERSION 1.2 REV C **//
+//* VERSION 1.3 REV A **//
 //* DESCRIPTION Enhances the notifications **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//
@@ -27,6 +27,15 @@ XKit.extensions.notifications_plus = new Object({
 			value: true
 		},
 		"sep_2": {
+			text: "Previews",
+			type: "separator",
+		},
+		"show_bigger_preview": {
+			text: "Show bigger preview when I hover on a notification",
+			default: false,
+			value: false
+		},
+		"sep_3": {
 			text: "Dim Notifications",
 			type: "separator",
 		},
@@ -74,11 +83,21 @@ XKit.extensions.notifications_plus = new Object({
 	},
 	
 	xpreview_init: function() {
-	
-		$("body").append("<div id=\"xpreview-container\"><div id=\"xpreview-notes\">&hearts; 302</div></div>");	
 		
-		$(document).on("mouseenter", ".notification", function(e){
+		if (XKit.extensions.notifications_plus.preferences.show_bigger_preview.value === true) {
+			
+			$("body").append("<div class=\"with-preview\" id=\"xpreview-container\"><img src=\"\" id=\"xpreview-image\"><div id=\"xpreview-notes\">&hearts; 302</div></div>");	
+			
+		} else {
+	
+			$("body").append("<div id=\"xpreview-container\"><div id=\"xpreview-notes\">&hearts; 302</div></div>");	
+		
+		}
+		
+		$(document).on("mouseenter", ".notification", function() {
+		
 			XKit.extensions.notifications_plus.xpreview_show($(this));	
+			
 		});
 		
 		$(document).on("mouseleave", ".notification", function(e){
@@ -89,10 +108,30 @@ XKit.extensions.notifications_plus = new Object({
 	
 	xpreview_show: function(obj) {
 		
+		/*var obj = $(e.target);
+		
+		if ($(obj).hasClass("notification") !== true) {
+			obj = $(obj).parentsUntil('#posts')[0];	
+		}*/
+		
 		// get post URL.
 		var post_url = $(obj).find(".preview_frame").attr('href');
-
-		if (post_url === "") {
+		
+		var using_preview = false;
+		
+		if (XKit.extensions.notifications_plus.preferences.show_bigger_preview.value === true) {
+			if (!$(obj).find(".preview_frame").hasClass("icon")) {
+				$("#xpreview-image").attr('src', $(obj).find(".preview_frame").find("img").attr('src'));
+				$("#xpreview-image").css("display","block");
+				$("#xpreview-container").addClass("with-preview");
+				using_preview = true;
+			} else {
+				$("#xpreview-container").removeClass("with-preview");
+				$("#xpreview-image").css("display","none");	
+			}
+		}
+		
+		if (post_url === "" ||typeof post_url === "undefined") {
 			// XReply is here! (Compatibility with XKit 6)
 			post_url = $(obj).attr('data-old-href');
 			if (post_url === "") {
@@ -116,7 +155,11 @@ XKit.extensions.notifications_plus = new Object({
 		var offset = $(obj).offset();
 		// Box position
 		var box_left = offset.left + $(obj).width();
+		
 		var box_top = offset.top + 7;	
+		if (using_preview === true) {
+			box_top = offset.top - 34;
+		}
 		$("#xpreview-container").css("top",box_top + "px");
 		$("#xpreview-container").css("left",box_left + "px");
 		$("#xpreview-container").css("display","block");

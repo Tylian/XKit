@@ -1,5 +1,5 @@
 //* TITLE One-Click-Reply **//
-//* VERSION 1.4 REV C **//
+//* VERSION 1.5 REV A **//
 //* DESCRIPTION Lets you reply to notifications **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS To use this extension, hover over a notification and click on the Reply button. If Multi-Reply is on, hold down the ALT key while clicking on the Reply button to select/deselect posts and reply to all of them at once. **//
@@ -72,6 +72,7 @@ XKit.extensions.one_click_reply = new Object({
 	
 	added_css: false,
 	added_css_pn: false,
+	added_css_pn_new: false,
 	
 	run: function() {
 	
@@ -83,8 +84,8 @@ XKit.extensions.one_click_reply = new Object({
 				XKit.extensions.one_click_reply.fill_post();
 			}
 			
-			$(document).on("mouseleave",".post.is_mine .notes_container .note", XKit.extensions.one_click_reply.exit_pn);
-			$(document).on("mouseenter",".post.is_mine .notes_container .note", XKit.extensions.one_click_reply.enter_pn);
+			$(document).on("mouseleave",".post.is_mine .notes_container .note, .ui_notes .ui_note", XKit.extensions.one_click_reply.exit_pn);
+			$(document).on("mouseenter",".post.is_mine .notes_container .note, .ui_notes .ui_note", XKit.extensions.one_click_reply.enter_pn);
 			$(document).on("mouseenter",".notification", XKit.extensions.one_click_reply.enter);
 			$(document).on("click",".xkit-reply-button", function(e) {
 				var m_parent = $(this).parentsUntil(".notification").parent();
@@ -120,24 +121,82 @@ XKit.extensions.one_click_reply = new Object({
 	enter_pn: function(event) {
 		
 		var n_box = event.target;
+		var new_style = false;
+		var in_box = false;
+
+		if ($(n_box).attr('class').indexOf("part_") !== -1) {
+			
+			new_style = true;
+			n_box = $(n_box).parentsUntil(".ui_note").parent();
+			
+		} else {
 		
-		if ($(n_box).hasClass("note") === false || $(n_box).hasClass("action") === true) {
-			// Must be in a sub-div.
-			if ($(n_box).hasClass("action") === true) {
-				n_box = $(n_box).parent();
-			} else {
-				n_box = $(n_box).parentsUntil(".note").parent();
+			if ($(n_box).hasClass("note") === false || $(n_box).hasClass("action") === true) {
+				// Must be in a sub-div.
+				if ($(n_box).hasClass("action") === true) {
+					n_box = $(n_box).parent();
+				} else {
+					n_box = $(n_box).parentsUntil(".note").parent();
+				}
 			}
+			
 		}
+		
+		if ($(n_box).parent().parent().hasClass('popover_scroll')) {
+			in_box = true;
+		}
+		
+		if (typeof $(n_box).attr('class') === "undefined") { return; }
 
 		if ($(n_box).find(".xkit-reply-button-pn").length <= 0) {
+			
 			var m_html = "<a onclick=\"return false\" class=\"xkit-reply-button-pn\">reply</a>";
-			$(n_box).append(m_html);
-			var m_right = 30 + $(n_box).find(".xkit-reply-button-pn").width();
-			if (XKit.extensions.one_click_reply.added_css_pn !== true) {
-				XKit.tools.add_css(".notes_container .note .block { right: " + m_right + "px !important; }", "one_click_reply");
-				XKit.extensions.one_click_reply.added_css_pn = true;
+			if (new_style) {
+				m_html = "<a onclick=\"return false\" class=\"xkit-reply-button-pn xkit-notes-new-style-fix\">reply</a>";
 			}
+			if (in_box) {
+				var flush_to_right = false;
+				if ($(n_box).find(".follow").length > 0) {
+					if ($(n_box).find("a.follow").css("display") !== "block") {
+						flush_to_right = true;
+					}
+				} else {
+					flush_to_right = true;	
+				}
+				if ($(n_box).hasClass("reblog")) { flush_to_right = false; }
+				m_html = "<a onclick=\"return false\" class=\"xkit-reply-button-pn xkit-notes-new-style-fix-pn\">reply</a>";
+			}		
+			
+			$(n_box).append(m_html);
+			
+			if (flush_to_right) {
+				$(n_box).find(".xkit-reply-button-pn").addClass("xkit-reply-button-flush-to-right");
+			}
+			
+			var m_right = 30 + $(n_box).find(".xkit-reply-button-pn").width();
+			var m_new_right = m_right + 5;
+			
+			if (in_box) {
+				if (flush_to_right === true) {
+					m_right = 17 + $(n_box).find(".xkit-reply-button-pn").width();	
+				} else {
+					m_right = 50 + $(n_box).find(".xkit-reply-button-pn").width();		
+				}
+				console.log("RIGHT => " + m_right + " ||push_to_right => " + flush_to_right);
+				$(n_box).find("a.block").css("right", m_right + "px");
+			}
+			
+			/*if (XKit.extensions.one_click_reply.added_css_pn !== true) {
+				
+				XKit.tools.add_css("#posts .notes_outer_container.popover .note.like a.block { right: " + m_right + "px !important; }", "one_click_reply");
+				XKit.extensions.one_click_reply.added_css_pn = true;
+			}*/
+			
+			if (XKit.extensions.one_click_reply.added_css_pn_new !== true) {
+				XKit.tools.add_css(".ui_notes .ui_note .part_ignore { right: " + m_new_right + "px !important; }", "one_click_reply");
+				XKit.extensions.one_click_reply.added_css_pn_new = true;
+			}
+			
 		}
 		
 		$(n_box).find(".xkit-reply-button-pn").css("display","block");
@@ -235,6 +294,8 @@ XKit.extensions.one_click_reply = new Object({
 		
 		obj = $(obj).parent();
 		
+		
+		
 		if ($(obj).hasClass("note") === false || $(obj).hasClass("action") === true) {
 			// Must be in a sub-div.
 			if ($(obj).hasClass("action") === true) {
@@ -244,14 +305,19 @@ XKit.extensions.one_click_reply = new Object({
 			}
 		}
 		
+		if ($(obj).hasClass("ui_note")) {
+			// New style notifications!
+			return XKit.extensions.one_click_reply.make_post_activity(obj, silent_mode);
+		}
+		
 		// Let's first get the type:
 		var m_post_type = "";
 		var m_sentence = "";
 		
-		if ($(obj).hasClass("reply") === true) { m_post_type = "reply"; m_sentence = XKit.extensions.one_click_reply.sentences.reply; }
-		if ($(obj).hasClass("like") === true) { m_post_type = "like"; m_sentence = XKit.extensions.one_click_reply.sentences.like;  }
-		if ($(obj).hasClass("answer") === true) { m_post_type = "answer"; m_sentence = XKit.extensions.one_click_reply.sentences.answer;  }
-		if ($(obj).hasClass("reblog") === true) { 
+		if ($(obj).hasClass("is_reply") === true ||$(obj).hasClass("reply") === true) { m_post_type = "reply"; m_sentence = XKit.extensions.one_click_reply.sentences.reply; }
+		if ($(obj).hasClass("is_like") === true || $(obj).hasClass("like") === true) { m_post_type = "like"; m_sentence = XKit.extensions.one_click_reply.sentences.like;  }
+		if ($(obj).hasClass("is_answer") === true || $(obj).hasClass("answer") === true) { m_post_type = "answer"; m_sentence = XKit.extensions.one_click_reply.sentences.answer;  }
+		if ($(obj).hasClass("is_reblog") === true || $(obj).hasClass("reblog") === true) { 
 			m_post_type = "reblog"; 
 			m_sentence = XKit.extensions.one_click_reply.sentences.reblog; 
 			if ($(obj).hasClass("with_commentary") === true) {
@@ -507,6 +573,15 @@ XKit.extensions.one_click_reply = new Object({
 		
 	try {
 
+		return XKit.extensions.one_click_reply.make_post_reg(obj, pn_mode, event, silent_mode);
+		
+	} catch(e) {
+		alert("On 102: " + e.message);
+	}
+	},
+	
+	make_post_reg: function(obj, pn_mode, event, silent_mode) {
+		
 		var username = $(obj).find(".username").html();
 		var m_sentence = "";
 		if ( $(obj).find(".notification_sentence").find(".hide_overflow") > 0) {
@@ -600,11 +675,109 @@ XKit.extensions.one_click_reply = new Object({
 				document.location.href = m_url;
 			}
 		
+		}	
+		
+	},
+	
+	make_post_activity: function(obj, silent_mode) {
+		
+		var username = $(obj).attr('data-tumblelog-name');
+		var post_url = $(obj).find(".part_glass").attr('href');
+		
+		var m_sentence = "";
+		if ( $(obj).find(".part_main").length > 0) {
+		 	m_sentence = "<p>" + $(obj).find(".part_main").html() + "</p>";
+		} else {
+			var tmp_div = $(obj).find(".notification_sentence");
+			$(".xkit-reply-button", tmp_div).remove();
+			var tmp_html = $(tmp_div).html();
+			m_sentence = "<p>" + tmp_html + "</p>";
 		}
 		
-	} catch(e) {
-		alert("On 102: " + e.message);
-	}
+		if ($(".summary", m_sentence).length > 0) {
+			var m_new = $(m_sentence);
+			$(m_new).find(".summary").html($(m_new).find(".summary").html());
+			$(m_new).find(".summary").wrap("<a href=\"" + post_url + "\"></a>");
+			$(m_new).find(".summary").parent().before(" ");
+			m_sentence = $(m_new).html();
+		}
+		
+		if ($(obj).find(".part_response").length > 0) {
+			m_sentence = m_sentence + $(obj).find(".part_response").html();
+		}
+		
+		alert("username: \n" + username + "\n\nsentence:\n" + m_sentence);
+		
+		m_sentence = XKit.extensions.one_click_reply.strip_sentence(m_sentence);
+		
+		if (XKit.extensions.one_click_reply.preferences.show_avatars.value === true) {
+			// Fetch the avatar, slugify it to sentence.
+			var m_obj = $(obj);
+			
+			console.log(" -- Now: " + $(m_obj).attr('class'));
+			var avatar_url = $(m_obj).find(".part_avatar").find(".ui_avatar_link").attr('data-avatar-url');
+			avatar_url = avatar_url.replace("_64.png","_40.png");
+			avatar_url = avatar_url.replace("_64.gif","_40.gif");
+			avatar_url = avatar_url.replace("_64.jpg","_40.jpg");
+			// This is ugly but it works:
+			try { 
+				avatar_url_start = avatar_url.indexOf('.media.tumblr.com');
+			} catch(e) {
+				console.log("Can't fetch avatar.");
+			}	
+			if (avatar_url_start !== -1) {
+				avatar_url = "http://" + avatar_url.substring(avatar_url_start + 1);	
+			}
+			m_sentence = "<p><img src=\"" + avatar_url + "\" class=\"image_thumbnail\"></p>" + m_sentence;	
+		}
+		
+		XKit.tools.set_setting("xkit_one_click_reply_sentence", m_sentence);
+		XKit.tools.set_setting("xkit_one_click_reply_username", username);
+		
+		var m_url = "http://www.tumblr.com/new/text";
+		
+		if (document.location.href.indexOf("/blog/") !== -1) {
+			// Maybe we can make this better?
+			m_url = $("#new_post_label_text").attr('href');
+		}
+		
+		if (m_url.indexOf('?') !== -1) {
+			m_url = m_url.substring(0, m_url.indexOf('?'));
+		}
+
+		var m_tags_to_return = "";
+		
+		if (this.preferences.tag_people.value === true) {
+			m_url = m_url + "?tags=" + username;
+			m_tags_to_return = username;
+			if (this.preferences.auto_tag.value === true && this.preferences.auto_tag_text.value !== "") {
+				m_url = m_url + "," + this.preferences.auto_tag_text.value;
+				m_tags_to_return = m_tags_to_return + "," + this.preferences.auto_tag_text.value;
+			}
+		} else {
+			if (this.preferences.auto_tag.value === true && this.preferences.auto_tag_text.value !== "") {
+				m_url = m_url + "?tags=" + this.preferences.auto_tag_text.value;
+				m_tags_to_return = m_tags_to_return + "," + this.preferences.auto_tag_text.value;
+			}		
+		}
+		
+		if (silent_mode === true) {
+		
+			var obj_to_return = new Object();
+			obj_to_return.sentence = m_sentence;
+			obj_to_return.tags = m_tags_to_return;
+			return obj_to_return;
+			
+		} else {
+		
+			if (this.preferences.open_in_new_tab.value === true) {
+				window.open(m_url,'_BLANK');
+			} else {
+				document.location.href = m_url;
+			}
+		
+		}	
+		
 	},
 	
 	strip_sentence: function(m_sentence) {
