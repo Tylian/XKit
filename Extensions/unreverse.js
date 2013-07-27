@@ -1,5 +1,5 @@
 //* TITLE Unreverse **//
-//* VERSION 0.3 REV B **//
+//* VERSION 0.4 REV A **//
 //* DESCRIPTION Unreversify the dashboard **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS This extension puts the reblog/like/notes back where they were a few days ago. I have written this in less than 20 minutes, so it will probably have some bugs. Please use with caution. **//

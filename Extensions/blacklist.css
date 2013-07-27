@@ -1,7 +1,7 @@
-#xkit-blacklist-none {
+.xkit-blacklist-none {
 	padding: 15px;
 	color: rgb(150,150,150);
-	font-size: 14px;
+	font-size: 13px;
 	line-height: 22px;
 	text-align: center;	
 }
@@ -41,10 +41,50 @@
 	margin-bottom: 10px;	
 }
 
+#xkit-blacklist-add-to-whitelist {
+	padding-left: 0px;
+	margin-bottom: 10px;
+	margin-top: 3px;
+}
+
+#blacklist-word-container {
+	position: absolute;
+	height: auto;
+	width: 100%;
+}
+
 #blacklist-toolbar {
 	background: rgb(245,245,245);
 	padding: 3px 15px;
 	border-bottom: 1px solid rgb(190,190,190);	
+}
+
+.xkit-blacklist-clear {
+	height: 0; line-height: 0;
+	clear: both; display: none;
+}
+
+#whitelist-words,
+#blacklist-words {
+	width: 50%;
+	float: left;	
+	box-sizing: border-box;
+	height: 100%;
+}
+
+#whitelist-words {
+	border-left: 1px solid rgb(190,190,190);	
+	position: absolute;
+	right: 0;
+	top: 0;
+}
+
+.blacklist-words-title {
+	background: rgb(240,240,240);
+	text-align: center;
+	font-size: 13px;
+	padding: 5px;
+	border-bottom: 1px solid rgb(190,190,190);
 }
 
 .xkit-blacklisted-word {

@@ -1,5 +1,5 @@
 //* TITLE Mute! **//
-//* VERSION 1.1 REV E **//
+//* VERSION 1.2 REV A **//
 //* DESCRIPTION Better than 'shut up!' **//
 //* DETAILS This extension allows you to hide text and answer posts by an user while still seeing their other posts. Useful if a blogger has nice posts but a bad personality. Please note that you'll need to re-mute them if a user changes their URL. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -27,6 +27,16 @@ XKit.extensions.mute = new Object({
 			default: false,
 			value: false
 		},
+		hide_quote_posts: {
+			text: "Hide quote posts by muted users too",
+			default: false,
+			value: false
+		},
+		hide_photo_posts: {
+			text: "Hide photo / photoset posts by muted users too",
+			default: false,
+			value: false
+		},
 		"title": {
 			text: "Muted users",
 			type: "separator"
@@ -34,10 +44,76 @@ XKit.extensions.mute = new Object({
 	},
 	
 	muted: new Array(),
+	
+	frame_run: function() {
+
+		if ($(".btn.icon.unfollow").length > 0) {
+			
+			XKit.extensions.mute.load_muted();
+			
+			$("#xkit-mute-button").remove();
+			
+			if ($(".btn.icon.unfollow").hasClass("hidden")) {
+				return;
+			}
+			
+			$(".btn.icon.dashboard, .btn.icon.unfollow, .btn.icon.reblog, .btn.icon.follow").html("");
+			$(".btn.icon.dashboard, .btn.icon.unfollow, .btn.icon.reblog, .btn.icon.follow").addClass("no_label");
+			
+			var m_username = $(".btn.unfollow").attr('data-tumblelog-name');
+			
+			var m_caption = "Mute";
+			
+			if (XKit.extensions.mute.muted.indexOf(m_username) !== -1) {
+				m_caption = "Unmute";	
+			}
+			
+			var m_html = "<a data-username=\"" + m_username + "\" id=\"xkit-mute-button\" class=\"btn no_icon\" href=\"#\">" + m_caption + "</a>";
+			
+			$("#iframe_controls").find(".btn.icon.unfollow").before(m_html);
+			
+			$("#xkit-mute-button").click(function() {
+			
+				var m_username = $(this).attr('data-username');
+				
+				if (XKit.extensions.mute.muted.indexOf(m_username) !== -1) {
+					// Unmute
+					var m_index = XKit.extensions.mute.muted.indexOf(m_username);
+					XKit.extensions.mute.muted.splice(m_index, 1);
+					XKit.extensions.mute.save();	
+				} else {
+					// Mute
+					if (XKit.extensions.mute.muted.length >= 101) {
+						alert("Can't mute.\nYou have over a hundred muted blogs.<br/>Please remove some before muting people.");
+						return;
+					}
+			
+					XKit.extensions.mute.muted.push(m_username);
+					XKit.extensions.mute.save();
+				}	
+				
+				XKit.extensions.mute.frame_run();
+				
+			});
+			
+			
+			
+		} 
+
+	},
 
 	run: function() {
 		this.running = true;
 		XKit.tools.init_css("mute");
+		
+		XKit.extensions.mute.load_muted();
+
+		XKit.post_listener.add("mute", XKit.extensions.mute.do_posts);
+		XKit.extensions.mute.do_posts();
+	},
+	
+	load_muted: function() {
+		
 		var m_list = XKit.storage.get("mute", "muted_list", "");
 		if (m_list === "") {
 			XKit.extensions.mute.muted = new Array();	
@@ -48,10 +124,8 @@ XKit.extensions.mute = new Object({
 				XKit.extensions.mute.muted = new Array();
 				XKit.extensions.mute.save();
 			}
-		}
-
-		XKit.post_listener.add("mute", XKit.extensions.mute.do_posts);
-		XKit.extensions.mute.do_posts();
+		}	
+		
 	},
 	
 	do_posts: function(rethink) {
@@ -60,10 +134,28 @@ XKit.extensions.mute = new Object({
 		$('.tumblelog_menu_button').bind('click', XKit.extensions.mute.add_mute_link);
 	
 		var update_rects = false;
-	
+		
+		var m_posts = ".post.is_regular, .post.is_note";
+		
+		if (XKit.extensions.mute.preferences.hide_chat_posts.value === true) {
+			m_posts = m_posts + ", .post.is_conversation";
+		}
+		
+		if (XKit.extensions.mute.preferences.hide_link_posts.value === true) {
+			m_posts = m_posts + ", .post.is_link";
+		}
+		
+		if (XKit.extensions.mute.preferences.hide_quote_posts.value === true) {
+			m_posts = m_posts + ", .post.is_quote";
+		}
+		
+		if (XKit.extensions.mute.preferences.hide_photo_posts.value === true) {
+			m_posts = m_posts + ", .post.is_photo, .post.is_photoset";
+		}
+		
 		if (rethink === true) {
 		
-			$('.post.is_regular, .post.is_note').each(function() {
+			$(m_posts).each(function() {
 			
 				var m_username = $(this).attr('data-tumblelog-name');
 				$(this).addClass("xmute-done");
@@ -80,7 +172,7 @@ XKit.extensions.mute = new Object({
 			
 		} else {
 	
-			$('.post.is_regular, .post.is_note').not(".xmute-done").each(function() {
+			$(m_posts).not(".xmute-done").each(function() {
 			
 				var m_username = $(this).attr('data-tumblelog-name');
 				$(this).addClass("xmute-done");

@@ -13,6 +13,10 @@
 	
 }
 
+.post_notes_avatar.ui_avatar { display: none !important; }
+
+.post_answer_form { margin-bottom: 15px; }
+
 .post_controls_inner {
 	width: 100% !important;	
 }

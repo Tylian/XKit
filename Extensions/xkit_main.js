@@ -1,5 +1,5 @@
 //* TITLE XKit Main **//
-//* VERSION 1.0 REV B **//
+//* VERSION 1.0 REV C **//
 //* DESCRIPTION Boots XKit up **//
 //* DEVELOPER STUDIOXENIX **//
 (function(){
@@ -22,7 +22,9 @@ XKit.extensions.xkit_main = new Object({
 		XKit.console.add("Welcome from XKit Main " + XKit.installed.version('xkit_main'));
 
 		if (XKit.frame_mode === true) {
-			if (document.location.href.indexOf("http://www.tumblr.com/dashboard/iframe?") === -1 && document.location.href.indexOf("http://www.tumblr.com/ask_form") === -1) {
+			if (document.location.href.indexOf("http://www.tumblr.com/dashboard/iframe?") === -1 
+				&& document.location.href.indexOf("http://www.tumblr.com/ask_form") === -1
+				&& document.location.href.indexOf("http://www.tumblr.com/send") === -1) {
 				XKit.console.add("Wrong page, quitting.");
 				return;
 			}

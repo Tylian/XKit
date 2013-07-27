@@ -1,5 +1,5 @@
 //* TITLE XKit Preferences **//
-//* VERSION 2.1 REV B **//
+//* VERSION 2.2 REV A **//
 //* DESCRIPTION Lets you customize XKit **//
 //* DEVELOPER STUDIOXENIX **//
 XKit.extensions.xkit_preferences = new Object({
@@ -9,6 +9,8 @@ XKit.extensions.xkit_preferences = new Object({
 
 	default_extension_icon: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAIAAAD8GO2jAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBNYWNpbnRvc2giIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6MjU4ODQ1RkRDRThCMTFFMjlGRjNBNzgwQUUxNTkwRDkiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6MjU4ODQ1RkVDRThCMTFFMjlGRjNBNzgwQUUxNTkwRDkiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDoyNTg4NDVGQkNFOEIxMUUyOUZGM0E3ODBBRTE1OTBEOSIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDoyNTg4NDVGQ0NFOEIxMUUyOUZGM0E3ODBBRTE1OTBEOSIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/Pmm6kIEAAAKuSURBVHjapFZJqyIxEH7dRtxGVMQd9CDiXfz/Vw8iInjVk7jghoqK+3zPmgn1kkq/x0wdQrqSruWrLd5+v/940+v18jzv9SbN0Z+0Pp9Pzceen+Lz8XjoI830Pxhx6S7i+gIuaFL82zhzSeEu8g0AINs5+d+Kc1ntUmNc8F0uky2AdblcXi4X4w72YK5WKw63aJMvata/IQV6vd50OuV20DqZTPr9/vF4NEJoOKREw/UxPKDV+A3r/X7neeFKECVCbFzVDtmCvk0EZcddDJpdBwakdtH8CXKwdMo8rLajVJX8SPbAdXa9XoHy6XTC/na7YfNiREysdAEUDodF1731ei3q6HQ61EUM3+1ogxKJRLvd5hyNvFDJtMJ82qTTafxv4ENSDofDdru1K4BzVHBK4Cp8j0ajPFOJD/SBD8miIIvJqlwNAEJhIDaLxSIUCiWTScP83W6HIidOLBazC01WoL2rVCr4n06hiUKq74DPw47LovQvCoxNLpcrFArz+ZyMLZVKMFNDAZWz2Yzul8vlTCYTpMAVhkajsdlsqNONx2OEmnIfaqCSLgPJer0eMEiCKjkSiTSbzcFgQElVLBaV+mwt5/NZJzeMANNlPlJD6UlpqwEBqGw2i7aMGAyHQ6Mg8vk8Tl3S5XbN5y3Fs1arGRlCp77vV6tVPpnFxixAZMznVCoVj8cpZbmsX29ySadmHlQHHA0IggKjT1BlBD8SYL2ggKLCZwAKzRhEBJELd/1+EerA6Pu0ogLgBJKHGhT0gQPcXNK/dJTRaMQTydX7sHa7XQIKUWm1WiImumU9/5LixooZpZ97KFc0PvCBvgg3b9QkXcgiPaSoX9rvkeCHkz1TlZ6I9uvxJ6I57hwcsxeJxfwT4qDzCjWfjv8vnY8d8130D6QL1WW4pt8CDAAp0m61S6STLAAAAABJRU5ErkJggg==",
 	kernel_extension_icon: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAIAAAD8GO2jAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBNYWNpbnRvc2giIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6NjNEQ0QyNTVBODhDMTFFMkFDMDJFMzk3N0RDMDc2NDQiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6NjNEQ0QyNTZBODhDMTFFMkFDMDJFMzk3N0RDMDc2NDQiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDo2M0RDRDI1M0E4OEMxMUUyQUMwMkUzOTc3REMwNzY0NCIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDo2M0RDRDI1NEE4OEMxMUUyQUMwMkUzOTc3REMwNzY0NCIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/Pqxa0agAAAfqSURBVHjaTFZrbBTX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",
+
+	hide_xcloud_if_not_installed: true,
 
 	run: function() {
 		
@@ -420,6 +422,7 @@ XKit.extensions.xkit_preferences = new Object({
 						"<div id=\"xkit-cp-tab-my-extensions\" class=\"selected\">My XKit</div>" +
 						"<div id=\"xkit-cp-tab-get-extensions\">Get Extensions</div>" +
 						"<div id=\"xkit-cp-tab-news\">News</div>" +
+						"<div id=\"xkit-cp-tab-xcloud\">XCloud</div>" +
 						"<div id=\"xkit-cp-tab-other\">Other</div>" +
 						"<div id=\"xkit-cp-tab-about\">About + Support</div>" +
 					"</div>" +
@@ -427,6 +430,13 @@ XKit.extensions.xkit_preferences = new Object({
 				"<div id=\"xkit-control-panel-shadow\">&nbsp;</div>";
 
 		$("body").append(m_html);
+		
+		if (XKit.extensions.xkit_preferences.hide_xcloud_if_not_installed === true) {
+			if (XKit.installed.check("xcloud") === false) {
+				$("#xkit-cp-tab-xcloud").css("display","none");
+			}
+		}
+		
 		XKit.extensions.xkit_preferences.current_panel = "";
 
 		$("body").css("overflow","hidden");
@@ -493,6 +503,10 @@ XKit.extensions.xkit_preferences = new Object({
 
 			if (div_id === "xkit-cp-tab-news") {
 				XKit.extensions.xkit_preferences.show_news();
+			}
+			
+			if (div_id === "xkit-cp-tab-xcloud") {
+				XKit.extensions.xkit_preferences.show_xcloud();
 			}
 
 			if (div_id === "xkit-cp-tab-other") {
@@ -1625,6 +1639,44 @@ XKit.extensions.xkit_preferences = new Object({
 		});
 
 		$("#xkit-extensions-panel-right").nanoScroller();
+
+	},
+	
+	show_xcloud: function() {
+		
+		if (XKit.extensions.xkit_preferences.current_panel === "xcloud") { return; }
+		XKit.extensions.xkit_preferences.current_panel = "xcloud";
+		
+		var m_html = "";
+		var show_error = false;
+		
+		if (XKit.installed.check("xcloud") === false) {
+			show_error = true;
+		} else {
+			if (XKit.extensions.xcloud.running === false) {
+				show_error = true;	
+			}	
+		}
+		
+		if (show_error) {
+			
+			m_html = "<div id=\"xcloud-not-found-container\">" +
+					"<div id=\"xcloud-not-found\">" +
+						"<b>XCloud is not installed/enabled.</b><br/>" +
+						"XCloud allows you to synchronize your XKit settings across computers.<br/>You can get it using the \"Get Extensions\" tab on the bottom." +
+					"</div></div>";
+
+		} else {
+			
+			m_html = XKit.extensions.xcloud.panel();
+			
+		}
+				
+		$("#xkit-control-panel-inner").html(m_html);
+		
+		if (!show_error) {
+			XKit.extensions.xcloud.panel_appended();	
+		}		
 
 	},
 

@@ -1,5 +1,5 @@
 //* TITLE Tweaks **//
-//* VERSION 2.2 REV A **//
+//* VERSION 2.2 REV B **//
 //* DESCRIPTION Various little tweaks for your dashboard. **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS These are small little tweaks that allows you customize your dashboard. If you have used XKit 6, you will notice that some of the extensions have been moved here as options you can toggle. Keep in mind that some of the tweaks (the ones marked with a '*') can slow down your computer. **//
@@ -262,7 +262,8 @@ XKit.extensions.tweaks = new Object({
 		}
 		
 		if (XKit.extensions.tweaks.preferences.slim_popups.value === true) {
-			XKit.tools.add_css(".popover_menu_item { padding: 5px 15px 5px 15px !important; font-size: 12px !important; } .popover_menu_item.tracked_tag { padding: 0px !important; }", "xkit_tweaks_slim_popups");
+			XKit.tools.add_css(".tumblelog_menu_link { padding: 6px 10px 6px 34px !important; font-size: 13px !important; }" +
+						".tumblelog_menu .tumblelog_menu_link:before { left: 7px !important; top: 5px !important; } ", "xkit_tweaks_slim_popups");
 		}
 		
 		if (XKit.extensions.tweaks.preferences.hide_sponsored.value === true) {
@@ -314,7 +315,7 @@ XKit.extensions.tweaks = new Object({
 		}
 
 		if (XKit.extensions.tweaks.preferences.hide_follows.value === true) {
-			XKit.tools.add_css(".notification_follow, .reblog_follow_button { display: none !important; } #posts .notes_outer_container.popover .note a.follow { display: none !important; } #posts .notes_outer_container.popover .note.like a.block { right: 16px !important; }", "xkit_tweaks_hide_follows");
+			XKit.tools.add_css(".notification_follow, .reblog_follow_button { display: none !important; } #posts .notes_outer_container.popover .note a.follow { display: none !important; } #posts .notes_outer_container.popover .note.like a.block { right: 16px; }", "xkit_tweaks_hide_follows");
 		}
 
 		if (XKit.extensions.tweaks.preferences.fix_blockquotes.value === true) {

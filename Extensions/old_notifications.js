@@ -1,5 +1,5 @@
 //* TITLE Old Notifications **//
-//* VERSION 0.1 REV B **//
+//* VERSION 0.1 REV C **//
 //* DESCRIPTION Notifications where they were **//
 //* DETAILS This is a very experimental extension that brings back the notifications to your blog pages (ie: www.tumblr.com/blog/xkit-extension), just the way it was before Tumblr's Activity update. Only the last 10 notifications are displayed. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -22,7 +22,7 @@ XKit.extensions.old_notifications = new Object({
 	
 	fetch_failed: function(err) {
 		
-		
+		console.log("Can't fetch Activity page!");
 		
 	},
 	
@@ -34,8 +34,8 @@ XKit.extensions.old_notifications = new Object({
 			return;
 		}
 		
-		var m_parent = $(m_target).parentsUntil(".notification").parent();
-		window.open($(m_parent).find(".preview_frame").attr('href'));
+		var m_parent = $(m_target).parentsUntil(".by-xkit-old-notifications").parent();
+		window.open($(m_parent).attr('data-url'));
 		
 	},
 	
@@ -58,7 +58,6 @@ XKit.extensions.old_notifications = new Object({
 		
 		$(new_obj).find(".ui_avatar").addClass("avatar_frame_temporary");
 		$(new_obj).find(".ui_avatar").removeClass("ui_avatar");
-		
 		
 		$(new_obj).find(".ui_note").addClass("notification");
 		$(new_obj).find(".ui_note").removeClass("ui_note");
@@ -109,6 +108,8 @@ XKit.extensions.old_notifications = new Object({
 		// first_notification -- last_notification
 		var additional_classes = "";
 		
+		var m_link = $(obj).find(".part_glass").attr('href');
+		
 		if ($(new_obj).find(".notification").hasClass("is_answer"))
 			additional_classes = additional_classes + " notification_answer ";
 			
@@ -130,7 +131,7 @@ XKit.extensions.old_notifications = new Object({
 		if (XKit.extensions.old_notifications.notification_count === XKit.extensions.old_notifications.max_notifications - 1)
 			additional_classes = additional_classes + " last_notification ";
 			 
-		var m_html = "<li class=\"notification by-xkit-old-notifications " + additional_classes + "\">" + $(new_obj).html() + "</li>";
+		var m_html = "<li data-url=\"" + m_link + "\" class=\"notification by-xkit-old-notifications " + additional_classes + "\">" + $(new_obj).html() + "</li>";
 		
 		XKit.extensions.old_notifications.alt_notification = !XKit.extensions.old_notifications.alt_notification;
 		
@@ -153,6 +154,8 @@ XKit.extensions.old_notifications = new Object({
 	fetch: function() {
 		
 		var to_fetch = document.location.href.replace("/blog/","/activity/");
+		
+		console.log("Trying to fetch " + to_fetch);
 		
 		GM_xmlhttpRequest({
 			method: "GET",

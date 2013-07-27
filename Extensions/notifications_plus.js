@@ -1,5 +1,5 @@
 //* TITLE Notifications+ **//
-//* VERSION 1.3 REV A **//
+//* VERSION 1.4 REV B **//
 //* DESCRIPTION Enhances the notifications **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//
@@ -85,22 +85,16 @@ XKit.extensions.notifications_plus = new Object({
 	xpreview_init: function() {
 		
 		if (XKit.extensions.notifications_plus.preferences.show_bigger_preview.value === true) {
-			
 			$("body").append("<div class=\"with-preview\" id=\"xpreview-container\"><img src=\"\" id=\"xpreview-image\"><div id=\"xpreview-notes\">&hearts; 302</div></div>");	
-			
 		} else {
-	
 			$("body").append("<div id=\"xpreview-container\"><div id=\"xpreview-notes\">&hearts; 302</div></div>");	
-		
 		}
 		
-		$(document).on("mouseenter", ".notification", function() {
-		
-			XKit.extensions.notifications_plus.xpreview_show($(this));	
-			
+		$(document).on("mouseenter", ".notification, .ui_note", function() {
+			XKit.extensions.notifications_plus.xpreview_show($(this));		
 		});
 		
-		$(document).on("mouseleave", ".notification", function(e){
+		$(document).on("mouseleave", ".notification, .ui_note", function(e){
 			$("#xpreview-container").css("display","none");	
 		});
 		
@@ -116,18 +110,37 @@ XKit.extensions.notifications_plus = new Object({
 		
 		// get post URL.
 		var post_url = $(obj).find(".preview_frame").attr('href');
+		if ($(obj).hasClass("ui_note") === true) {
+			post_url = $(obj).find(".part_glass").attr('href');	
+		}
+		
+		if ($(obj).hasClass("is_follower") === true) { return; }
 		
 		var using_preview = false;
 		
 		if (XKit.extensions.notifications_plus.preferences.show_bigger_preview.value === true) {
-			if (!$(obj).find(".preview_frame").hasClass("icon")) {
-				$("#xpreview-image").attr('src', $(obj).find(".preview_frame").find("img").attr('src'));
-				$("#xpreview-image").css("display","block");
-				$("#xpreview-container").addClass("with-preview");
-				using_preview = true;
+			if ($(obj).hasClass("ui_note") === true) {
+				if ($(obj).find(".ui_post_badge").hasClass("photo")) {
+					using_preview = true;	
+					var m_preview = $(obj).find(".ui_post_badge").css("background-image");
+					m_preview = m_preview.substring(4, m_preview.length - 1);
+					$("#xpreview-image").attr('src', m_preview);
+					$("#xpreview-image").css("display","block");
+					$("#xpreview-container").addClass("with-preview");
+				} else {
+					$("#xpreview-container").removeClass("with-preview");
+					$("#xpreview-image").css("display","none");	
+				}
 			} else {
-				$("#xpreview-container").removeClass("with-preview");
-				$("#xpreview-image").css("display","none");	
+				if (!$(obj).find(".preview_frame").hasClass("icon")) {
+					$("#xpreview-image").attr('src', $(obj).find(".preview_frame").find("img").attr('src'));
+					$("#xpreview-image").css("display","block");
+					$("#xpreview-container").addClass("with-preview");
+					using_preview = true;
+				} else {
+					$("#xpreview-container").removeClass("with-preview");
+					$("#xpreview-image").css("display","none");	
+				}
 			}
 		}
 		

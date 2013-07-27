@@ -1,5 +1,5 @@
 //* TITLE One-Click-Reply **//
-//* VERSION 1.5 REV A **//
+//* VERSION 1.5 REV C **//
 //* DESCRIPTION Lets you reply to notifications **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS To use this extension, hover over a notification and click on the Reply button. If Multi-Reply is on, hold down the ALT key while clicking on the Reply button to select/deselect posts and reply to all of them at once. **//
@@ -124,11 +124,16 @@ XKit.extensions.one_click_reply = new Object({
 		var new_style = false;
 		var in_box = false;
 
-		if ($(n_box).attr('class').indexOf("part_") !== -1) {
+		if ($(n_box).attr('class').indexOf("part_") !== -1 ||$(n_box).hasClass("xkit-activity-plus-timestamp")) {
+			
+			if ($(n_box).hasClass("xkit-activity-plus-timestamp")) {
+				n_box = $(n_box).parent();
+			} else {
+				n_box = $(n_box).parentsUntil(".ui_note").parent();
+			}
 			
 			new_style = true;
-			n_box = $(n_box).parentsUntil(".ui_note").parent();
-			
+
 		} else {
 		
 			if ($(n_box).hasClass("note") === false || $(n_box).hasClass("action") === true) {
@@ -705,8 +710,6 @@ XKit.extensions.one_click_reply = new Object({
 		if ($(obj).find(".part_response").length > 0) {
 			m_sentence = m_sentence + $(obj).find(".part_response").html();
 		}
-		
-		alert("username: \n" + username + "\n\nsentence:\n" + m_sentence);
 		
 		m_sentence = XKit.extensions.one_click_reply.strip_sentence(m_sentence);
 		

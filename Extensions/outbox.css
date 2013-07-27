@@ -8,3 +8,26 @@
 .post_full .post_control.deny-xoutbox:after {
 	background-position: -914px -123px;
 }
+
+.post_question_fan_mail {
+
+	background: #e7eaec;
+	padding: 15px 20px; font-size: 22px;
+	border-radius: 5px;
+	font-weight: bold;
+	line-height: 28px;	
+	
+}
+
+.xkit-outbox-fanmail-indicator {
+
+	background: #e7eaec;
+	font-weight: bold;
+	border-radius: 4px;	
+	position: absolute;
+	bottom: 13px;
+	left: 20px;
+	font-size: 12px;
+	padding: 3px 8px;
+	
+}
