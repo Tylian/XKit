@@ -211,26 +211,31 @@ XKit.extensions.one_click_postage = new Object({
 			XKit.extensions.one_click_postage.user_on_box = false;
 			XKit.extensions.one_click_postage.close_menu($(this), true);
 		});
-		
-		$(document).on("mouseover","#x1cpostage_box", function() {
+
+
+		var cancel_menu_close = function() {
 			clearTimeout(XKit.extensions.one_click_postage.menu_closer_int);
 			XKit.extensions.one_click_postage.user_on_box = true;
-		});
+		};
+
+		var menu_close = function() {
+			// Only close the menu if it doesn't have keyboard or mouse focus
+			if ($("#x1cpostage_box").find('input:focus, textarea:focus').length == 0 && $('#x1cpostage_box:hover').length == 0) {
+				XKit.extensions.one_click_postage.user_on_box = false;
+				XKit.extensions.one_click_postage.close_menu($(this));
+			}
+		};
 		
-		$(document).on("mouseout","#x1cpostage_box", function() {
-			XKit.extensions.one_click_postage.user_on_box = false;
-			XKit.extensions.one_click_postage.close_menu($(this));
-		});
+		$(document).on("mouseover","#x1cpostage_box", cancel_menu_close);
+		$(document).on("mouseout","#x1cpostage_box", menu_close);
 		
-		$("#x1cpostage_tags").bind("keydown", function(event) {
+		$("#x1cpostage_tags, #x1cpostage_caption").bind("keydown", function(event) {
 			event.stopPropagation();
 			event.stopImmediatePropagation();
 		});
 
-		$("#x1cpostage_caption").bind("keydown", function(event) {
-			event.stopPropagation();
-			event.stopImmediatePropagation();
-		});
+		$("#x1cpostage_caption, #x1cpostage_tags").bind("focus", cancel_menu_close);
+		$("#x1cpostage_caption, #x1cpostage_tags").bind("blur", menu_close);
 		
 		$("#x1cpostage_remove_caption").click(function() {
 			
