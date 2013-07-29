@@ -54,6 +54,11 @@ XKit.extensions.one_click_postage = new Object({
 			default: false,
 			value: false
 		},
+		"enable_keyboard_shortcuts": {
+			text: "Use keyboard shortcuts (R/Q/D to reblog/queue/draft, T to tag, escape to close)",
+			default: false,
+			value: false
+		},
 		"sep_2": {
 			text: "Tags",
 			type: "separator",
@@ -211,26 +216,38 @@ XKit.extensions.one_click_postage = new Object({
 			XKit.extensions.one_click_postage.user_on_box = false;
 			XKit.extensions.one_click_postage.close_menu($(this), true);
 		});
-		
-		$(document).on("mouseover","#x1cpostage_box", function() {
+
+
+		var cancel_menu_close = function() {
 			clearTimeout(XKit.extensions.one_click_postage.menu_closer_int);
 			XKit.extensions.one_click_postage.user_on_box = true;
-		});
+		};
+
+		var menu_close = function() {
+			// Only close the menu if it doesn't have keyboard or mouse focus
+			if ($("#x1cpostage_box").find('input:focus, textarea:focus').length == 0 && $('#x1cpostage_box:hover').length == 0) {
+				XKit.extensions.one_click_postage.user_on_box = false;
+				XKit.extensions.one_click_postage.close_menu($(this));
+			}
+		};
 		
-		$(document).on("mouseout","#x1cpostage_box", function() {
-			XKit.extensions.one_click_postage.user_on_box = false;
-			XKit.extensions.one_click_postage.close_menu($(this));
-		});
+		$(document).on("mouseover","#x1cpostage_box", cancel_menu_close);
+		$(document).on("mouseout","#x1cpostage_box", menu_close);
 		
-		$("#x1cpostage_tags").bind("keydown", function(event) {
+		$("#x1cpostage_tags, #x1cpostage_caption").bind("keydown", function(event) {
+			if (XKit.extensions.one_click_postage.preferences.enable_keyboard_shortcuts.value === true
+					&& event.which == 27) { // 27 = Escape
+				$(this).blur();
+				XKit.extensions.one_click_postage.user_on_box = false;
+				XKit.extensions.one_click_postage.close_menu($(this), true);
+				event.preventDefault();
+			}
 			event.stopPropagation();
 			event.stopImmediatePropagation();
 		});
 
-		$("#x1cpostage_caption").bind("keydown", function(event) {
-			event.stopPropagation();
-			event.stopImmediatePropagation();
-		});
+		$("#x1cpostage_caption, #x1cpostage_tags").bind("focus", cancel_menu_close);
+		$("#x1cpostage_caption, #x1cpostage_tags").bind("blur", menu_close);
 		
 		$("#x1cpostage_remove_caption").click(function() {
 			
@@ -282,9 +299,17 @@ XKit.extensions.one_click_postage = new Object({
 		$("#x1cpostage_draft").click(function() {
 			XKit.extensions.one_click_postage.post(1, false);
 		});
+
+		if (this.preferences.enable_keyboard_shortcuts.value === true) {
+			$(document).on('keydown', XKit.extensions.one_click_postage.process_keydown);
+			// Must use capture=true here to intercept Tumblr's default handlers, so we can't use jQuery's .on()
+			window.addEventListener('keydown', XKit.extensions.one_click_postage.suspend_tumblr_key_commands, true);
+		}
 	},
 	destroy: function() {
-		$(document).off('click', '.reblog_button,.post_control.reblog', XKit.extensions.one_click_postage.process_click);
+		$(document).off('click', '.reblog_button,.post_control.reblog', XKit.extensions.one_click_postage.process_click)
+			.off('keydown', XKit.extensions.one_click_postage.process_keydown);
+		window.removeEventListener('keydown', XKit.extensions.one_click_postage.suspend_tumblr_key_commands);
 		XKit.tools.remove_css("one_click_postage");
 		XKit.tools.remove_css("x1cpostage_reverse_ui");
 		$("#x1cpostage_box").remove();
@@ -296,6 +321,59 @@ XKit.extensions.one_click_postage = new Object({
 	
 		$(document).on('click', '.reblog_button,.post_control.reblog', XKit.extensions.one_click_postage.process_click);
 		
+	},
+
+	suspend_tumblr_key_commands: function(e) {
+		// 82 = R
+		if (e.metaKey || e.altKey || e.ctrlKey || e.sjiftKey || e.keyCode !== 82) {
+			return;
+		}
+		XKit.tools.add_function(function(){Tumblr.KeyCommands.suspend()}, true, '');
+	},
+
+	process_keydown: function(e) {
+		// 68 = D, 81 = Q, 82 = R, 84 = T
+		if (e.metaKey || e.altKey || e.ctrlKey || e.shiftKey
+				|| (e.which !== 68 && e.which !== 81 && e.which !== 82 && e.which !== 84)
+				|| $(e.target).is('input,textarea')) {
+			return;
+		}
+		// Tumblr puts 7-8px padding at the top of the screen when you use J/K to navigate
+		var screenPos = $(window).scrollTop() + 10;
+		// Find the post at the top of the screen, if there is one
+		$(".reblog_button,.post_control.reblog").each(function() {
+			if ($(this).hasClass("radar_button")) {return; }
+			var parent_box = $(this).parentsUntil(".post").parent();
+			var boxPos = parent_box.offset().top;
+			if (boxPos <= screenPos && boxPos + parent_box.innerHeight() > screenPos) {
+				switch (e.which) {
+					case 68: // 68 = D
+						XKit.extensions.one_click_postage.open_menu($(this), true);
+						XKit.extensions.one_click_postage.post(1, false);
+						break;
+					case 81: // 81 = Q
+						XKit.extensions.one_click_postage.open_menu($(this), true);
+						XKit.extensions.one_click_postage.post(2, false);
+						break;
+					case 82: // 82 = R
+						XKit.extensions.one_click_postage.open_menu($(this), true);
+						XKit.extensions.one_click_postage.post(0, false);
+						break;
+					case 84: // 84 = T
+						XKit.extensions.one_click_postage.user_on_box = true;
+						XKit.extensions.one_click_postage.open_menu($(this), false, true);
+						$('#x1cpostage_tags').focus();
+						break;
+				}
+				event.preventDefault();
+				return false;
+			} else if (boxPos > screenPos) {
+				// Post is too far down the screen, stop looking
+				return false;
+			}
+		});
+		// re-enable tumblr's key commands since we suspended them in suspend_tumblr_key_commands
+		XKit.tools.add_function(function(){Tumblr.KeyCommands.resume()}, true, '');
 	},
 	
 	process_click: function(e) {
@@ -367,7 +445,7 @@ XKit.extensions.one_click_postage = new Object({
 		
 	},
 	
-	open_menu: function(obj) {
+	open_menu: function(obj, hide_ui, force_on_screen) {
 		
 		if ($(obj).attr('x1cpostage_disabled') === "true" || $(obj).hasClass("xkit-one-click-reblog-working") === true) {
 			// we are!
@@ -446,27 +524,39 @@ XKit.extensions.one_click_postage = new Object({
 		$(obj).attr('title','');
 		/*XKit.extensions.one_click_postage.previous_div_id = box_id;*/
 		
-		// Determine where we are going to show the box.
-		var offset = $(obj).offset();
+		if (hide_ui !== true) {
+			// Determine where we are going to show the box.
+			var offset = $(obj).offset();
 
-		// Box position
-		
-		var box_left = offset.left - ($("#x1cpostage_box").width() / 2) + 10;
-		var box_top = offset.top + 30;
-		
-		if (XKit.extensions.one_click_postage.preferences.show_reverse_ui.value === true) {
-		
-			box_top = (offset.top - $("#x1cpostage_box").height()) - 5;	
+			// Box position
 			
-		}
+			var box_left = offset.left - ($("#x1cpostage_box").width() / 2) + 10;
+			var box_top = offset.top + 30;
+			
+			if (XKit.extensions.one_click_postage.preferences.show_reverse_ui.value === true) {
+			
+				box_top = (offset.top - $("#x1cpostage_box").height()) - 5;	
+				
+			}
 
-		$("#x1cpostage_box").css("top", box_top + "px");
-		$("#x1cpostage_box").css("left", box_left + "px");
-		
-		if (XKit.extensions.one_click_postage.preferences.show_reverse_ui.value === true) {
-			$("#x1cpostage_box").fadeIn('fast');
-		} else {
-			$("#x1cpostage_box").slideDown('fast');
+			if (force_on_screen === true) {
+				var window_top = $(window).scrollTop();
+				var window_bottom = window_top + $(window).height();
+				if (box_top < window_top) {
+					box_top = window_top + 5;
+				} else if (box_top + $("#x1cpostage_box").height() > window_bottom) {
+					box_top = window_bottom - $("#x1cpostage_box").height() - 5
+				}
+			}
+
+			$("#x1cpostage_box").css("top", box_top + "px");
+			$("#x1cpostage_box").css("left", box_left + "px");
+			
+			if (XKit.extensions.one_click_postage.preferences.show_reverse_ui.value === true) {
+				$("#x1cpostage_box").fadeIn('fast');
+			} else {
+				$("#x1cpostage_box").slideDown('fast');
+			}
 		}
 		
 		XKit.extensions.one_click_postage.last_object = parent_box;
