@@ -1,5 +1,5 @@
 //* TITLE One-Click Postage **//
-//* VERSION 2.2 REV A **//
+//* VERSION 2.4 REV A **//
 //* DESCRIPTION Lets you easily reblog, draft and queue posts **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//
@@ -10,24 +10,18 @@ XKit.extensions.one_click_postage = new Object({
 	running: false,
 	
 	preferences: {
-		"sep_1": {
-			text: "Appearance",
+		"sep_0": {
+			text: "Shortcuts",
 			type: "separator",
 		},
-		"show_reverse_ui": {
-			text: "Use the Reverse UI on the popup-window (window on top of reblog button)",
-			default: true,
-			value: true
-		},
-		"show_social": {
-			text: "Show Post To Facebook and Twitter buttons",
+		"enable_keyboard_shortcuts": {
+			text: "Use keyboard shortcuts (R/Q/D to reblog/queue/draft, T to tag, escape to close)",
 			default: false,
 			value: false
 		},
-		"allow_resize": {
-			text: "Allow resizing of the caption box vertically (experimental)",
-			default: false,
-			value: false
+		"sep_1": {
+			text: "Popup Options",
+			type: "separator",
 		},
 		"show_blog_selector": {
 			text: "Show blog selector",
@@ -39,10 +33,29 @@ XKit.extensions.one_click_postage = new Object({
 			default: true,
 			value: true
 		},
+		"show_reverse_ui": {
+			text: "Use the Reverse UI on the popup-window (popup on top of reblog button)",
+			default: true,
+			value: true
+		},
 		"show_small_ui": {
 			text: "Use the Slim User Interface on the pop-up window",
 			default: false,
 			value: false
+		},
+		"show_social": {
+			text: "Show Post To Facebook and Twitter buttons",
+			default: false,
+			value: false
+		},
+		"allow_resize": {
+			text: "Allow resizing of the caption box vertically (experimental)",
+			default: false,
+			value: false
+		},
+		"sep_2": {
+			text: "Notifications",
+			type: "separator",
 		},
 		"dim_posts_after_reblog": {
 			text: "Turn the reblog button green after a successful reblog/queue/draft",
@@ -54,30 +67,9 @@ XKit.extensions.one_click_postage = new Object({
 			default: false,
 			value: false
 		},
-		"sep_2": {
-			text: "Tags",
+		"sep_3": {
+			text: "Tagging options",
 			type: "separator",
-		},
-		"keep_tags": {
-			text: "Keep original tags while reblogging using One-Click Postage",
-			default: false,
-			value: true
-		},
-		"keep_tags_dashboard": {
-			text: "Keep original tags while reblogging manually (experimental)",
-			default: false,
-			value: true
-		},
-		"auto_tag": {
-			text: "Auto-tag queued posts",
-			default: false,
-			value: true
-		},
-		"auto_tag_text": {
-			text:  "Tags for queued posts (comma separated)",
-			type: "text",
-			default: "",
-			value: ""
 		}
 	},
 	
@@ -88,16 +80,45 @@ XKit.extensions.one_click_postage = new Object({
 	menu_closer_int: 0,
 	default_blog_id: "",
 	caption_height: 90,
+	
+	auto_tagger: false,
+	auto_tagger_preferences: "",
+	
+	cpanel: function(obj) {
+		
+		$(obj).append("<div id=\"one_click_postage_warning_movage\">Tagging options are moved to a separate extension called \"Auto Tagger.\"</div>");
+		
+	},
+	
+	get_autotagger: function() {
+		
+		if (XKit.installed.check("auto_tagger") === false) {
+			XKit.extensions.one_click_postage.auto_tagger = false;
+		} else {
+			if (XKit.installed.enabled("auto_tagger") === true) {
+				if (typeof XKit.extensions.auto_tagger	=== "undefined") {
+					// Not booted up yet?	
+					setTimeout(function() { XKit.extensions.one_click_postage.get_autotagger(); }, 100);
+				} else {
+					XKit.console.add("Auto tagger installed and found");
+					XKit.extensions.one_click_postage.auto_tagger = true;
+					XKit.extensions.one_click_postage.auto_tagger_preferences = XKit.extensions.auto_tagger.preferences;
+				}
+			} else {
+				XKit.extensions.one_click_postage.auto_tagger = false;
+			}
+		}
+		
+	},
 
 	run: function() {
 	
 		/*XKit.extensions.one_click_postage.previous_div_id = "";*/
 		XKit.tools.init_css("one_click_postage");
 		
-		if (this.preferences.keep_tags_dashboard.value === true) {
-			this.init_keep_tags_dashboard();	
-		}
-		
+		// Let's first check if we have auto_tagger installed and active.
+		XKit.extensions.one_click_postage.get_autotagger();
+
 		if (this.preferences.allow_resize.value === true) {
 			XKit.tools.add_css("#x1cpostage_caption { resize: vertical; }", "one_click_postage_resize");	
 		}
@@ -211,26 +232,38 @@ XKit.extensions.one_click_postage = new Object({
 			XKit.extensions.one_click_postage.user_on_box = false;
 			XKit.extensions.one_click_postage.close_menu($(this), true);
 		});
-		
-		$(document).on("mouseover","#x1cpostage_box", function() {
+
+
+		var cancel_menu_close = function() {
 			clearTimeout(XKit.extensions.one_click_postage.menu_closer_int);
 			XKit.extensions.one_click_postage.user_on_box = true;
-		});
+		};
+
+		var menu_close = function() {
+			// Only close the menu if it doesn't have keyboard or mouse focus
+			if ($("#x1cpostage_box").find('input:focus, textarea:focus').length == 0 && $('#x1cpostage_box:hover').length == 0) {
+				XKit.extensions.one_click_postage.user_on_box = false;
+				XKit.extensions.one_click_postage.close_menu($(this));
+			}
+		};
 		
-		$(document).on("mouseout","#x1cpostage_box", function() {
-			XKit.extensions.one_click_postage.user_on_box = false;
-			XKit.extensions.one_click_postage.close_menu($(this));
-		});
+		$(document).on("mouseover","#x1cpostage_box", cancel_menu_close);
+		$(document).on("mouseout","#x1cpostage_box", menu_close);
 		
-		$("#x1cpostage_tags").bind("keydown", function(event) {
+		$("#x1cpostage_tags, #x1cpostage_caption").bind("keydown", function(event) {
+			if (XKit.extensions.one_click_postage.preferences.enable_keyboard_shortcuts.value === true
+					&& event.which == 27) { // 27 = Escape
+				$(this).blur();
+				XKit.extensions.one_click_postage.user_on_box = false;
+				XKit.extensions.one_click_postage.close_menu($(this), true);
+				event.preventDefault();
+			}
 			event.stopPropagation();
 			event.stopImmediatePropagation();
 		});
 
-		$("#x1cpostage_caption").bind("keydown", function(event) {
-			event.stopPropagation();
-			event.stopImmediatePropagation();
-		});
+		$("#x1cpostage_caption, #x1cpostage_tags").bind("focus", cancel_menu_close);
+		$("#x1cpostage_caption, #x1cpostage_tags").bind("blur", menu_close);
 		
 		$("#x1cpostage_remove_caption").click(function() {
 			
@@ -282,9 +315,20 @@ XKit.extensions.one_click_postage = new Object({
 		$("#x1cpostage_draft").click(function() {
 			XKit.extensions.one_click_postage.post(1, false);
 		});
+
+		if (this.preferences.enable_keyboard_shortcuts.value === true) {
+			$(document).on('keydown', XKit.extensions.one_click_postage.process_keydown);
+			// Must use capture=true here to intercept Tumblr's default handlers, so we can't use jQuery's .on()
+			window.addEventListener('keydown', XKit.extensions.one_click_postage.suspend_tumblr_key_commands, true);
+		}
+		
+		this.init_keep_tags_dashboard();
+		
 	},
 	destroy: function() {
-		$(document).off('click', '.reblog_button,.post_control.reblog', XKit.extensions.one_click_postage.process_click);
+		$(document).off('click', '.reblog_button,.post_control.reblog', XKit.extensions.one_click_postage.process_click)
+			.off('keydown', XKit.extensions.one_click_postage.process_keydown);
+		window.removeEventListener('keydown', XKit.extensions.one_click_postage.suspend_tumblr_key_commands);
 		XKit.tools.remove_css("one_click_postage");
 		XKit.tools.remove_css("x1cpostage_reverse_ui");
 		$("#x1cpostage_box").remove();
@@ -297,77 +341,77 @@ XKit.extensions.one_click_postage = new Object({
 		$(document).on('click', '.reblog_button,.post_control.reblog', XKit.extensions.one_click_postage.process_click);
 		
 	},
-	
-	process_click: function(e) {
-	
-		var parent_div = $(this).parent().parent();
-		if ($(parent_div).find(".tag").length > 0) {
-			var tags_text = "";
-			$(parent_div).find(".tag").each(function() {
-				if (tags_text === "") {
-					tags_text = $(this).html().replace("#","");
-				} else {
-					tags_text = tags_text + "," + $(this).html().replace("#","");
-				}
-			});
-			if (tags_text !== "") {
-				setTimeout(function() {		
-					XKit.extensions.one_click_postage.try_to_inject_tags(tags_text);
-				}, 200);
-			}
 
-		} else {
-			
-			// This is an ungodly-ugly hack. We should fix this.
-			
-			if ($(parent_div).parent().parent().find(".post_tag").length > 0) {
-				var tags_text = "";
-				$(parent_div).parent().parent().find(".post_tag").each(function() {
-					if (tags_text === "") {
-						tags_text = $(this).html().replace("#","");
-					} else {
-						tags_text = tags_text + "," + $(this).html().replace("#","");
-					}
-				});
-				if (tags_text !== "") {
-					setTimeout(function() {		
-						XKit.extensions.one_click_postage.try_to_inject_tags(tags_text);
-					}, 200);
-				}
-			}
-			
-		}
-
-	},
-	
-	try_to_inject_tags: function(to_add) {
-	
-		if($("#post_content").length <= 0) {
-			setTimeout(function() {		
-				XKit.extensions.one_click_postage.try_to_inject_tags(to_add);
-			}, 200);
+	suspend_tumblr_key_commands: function(e) {
+		// 82 = R
+		if (e.metaKey || e.altKey || e.ctrlKey || e.sjiftKey || e.keyCode !== 82) {
 			return;
 		}
+		XKit.tools.add_function(function(){Tumblr.KeyCommands.suspend()}, true, '');
+	},
 
-		var add_tag = "";
-		var xas;
-		var xae;
-		var last_point = 0;
-		var do_tags = true;
-		var tag_to_be_added = "";
-		var tags = to_add.split(",");
-		for (i=0;i<tags.length;i++) {
-			tag_to_be_added = tags[i];
-			var old_tags = $("#post_content").find(".tags").find(".post_tags").val();
-			$("#post_content").find(".tags").find(".post_tags").val(old_tags + "," + tag_to_be_added);
-			$("#post_content").find(".tags").find(".editor_wrapper").before('<span class="tag">' + tag_to_be_added + '</span>');
+	process_keydown: function(e) {
+		// 68 = D, 81 = Q, 82 = R, 84 = T
+		if (e.metaKey || e.altKey || e.ctrlKey || e.shiftKey
+				|| (e.which !== 68 && e.which !== 81 && e.which !== 82 && e.which !== 84)
+				|| $(e.target).is('input,textarea')) {
+			return;
 		}
-		$("#post_tags_label").css('display','none');
-		$("#post_tags").val(to_add);
-		
+		// Tumblr puts 7-8px padding at the top of the screen when you use J/K to navigate
+		var screenPos = $(window).scrollTop() + 10;
+		// Find the post at the top of the screen, if there is one
+		$(".reblog_button,.post_control.reblog").each(function() {
+			if ($(this).hasClass("radar_button")) {return; }
+			var parent_box = $(this).parentsUntil(".post").parent();
+			var boxPos = parent_box.offset().top;
+			if (boxPos <= screenPos && boxPos + parent_box.innerHeight() > screenPos) {
+				switch (e.which) {
+					case 68: // 68 = D
+						XKit.extensions.one_click_postage.open_menu($(this), true);
+						XKit.extensions.one_click_postage.post(1, false);
+						break;
+					case 81: // 81 = Q
+						XKit.extensions.one_click_postage.open_menu($(this), true);
+						XKit.extensions.one_click_postage.post(2, false);
+						break;
+					case 82: // 82 = R
+						XKit.extensions.one_click_postage.open_menu($(this), true);
+						XKit.extensions.one_click_postage.post(0, false);
+						break;
+					case 84: // 84 = T
+						XKit.extensions.one_click_postage.user_on_box = true;
+						XKit.extensions.one_click_postage.open_menu($(this), false, true);
+						$('#x1cpostage_tags').focus();
+						break;
+				}
+				event.preventDefault();
+				return false;
+			} else if (boxPos > screenPos) {
+				// Post is too far down the screen, stop looking
+				return false;
+			}
+		});
+		// re-enable tumblr's key commands since we suspended them in suspend_tumblr_key_commands
+		XKit.tools.add_function(function(){Tumblr.KeyCommands.resume()}, true, '');
 	},
 	
-	open_menu: function(obj) {
+	process_click: function(e) {
+		
+		var parent_box = $(e.target).parentsUntil('.post').parent();
+		
+		if (XKit.extensions.one_click_postage.auto_tagger == true && typeof XKit.extensions.auto_tagger != "undefined") {
+			// Call Auto Tagger for tags.
+			var additional_tags = XKit.extensions.auto_tagger.return_tags($(parent_box));
+			if (additional_tags !== "") {
+				setTimeout(function() {		
+					XKit.extensions.auto_tagger.inject_to_window(additional_tags);
+				}, 200);	
+			}
+		}
+
+	},
+	
+	open_menu: function(obj, hide_ui, force_on_screen) {
 		
 		if ($(obj).attr('x1cpostage_disabled') === "true" || $(obj).hasClass("xkit-one-click-reblog-working") === true) {
 			// we are!
@@ -402,71 +446,48 @@ XKit.extensions.one_click_postage = new Object({
 		$("#x1cpostage_tags").css("border-top","0px");
 		$("#x1cpostage_caption").css("height", XKit.extensions.one_click_postage.caption_height + "px");
 		
-		// Keep tags patch.
-		if (XKit.extensions.one_click_postage.preferences.keep_tags.value === true) {
-			if ($(parent_box).find(".tag").length > 0) {
-				var tags_text = "";
-				$(parent_box).find(".tag").each(function() {
-					if (tags_text === "") {
-						tags_text = $(this).html().replace("#","");
-					} else {
-						tags_text = tags_text + "," + $(this).html().replace("#","");
-					}
-				});
-				if(window.location.pathname.indexOf("tagged/") != -1){
-					if(tags_text != ""){ tags_text += ","; }
-					tags_text += $("#search_query").val();
-				}
-				if (tags_text !== "") {
-					$("#x1cpostage_tags").val(tags_text);
-				}
-			} else {
-			
-				if ($(parent_box).find(".post_tag").length > 0) {
-					var tags_text = "";
-					$(parent_box).find(".post_tag").each(function() {
-						if (tags_text === "") {
-							tags_text = $(this).html().replace("#","");
-						} else {
-							tags_text = tags_text + "," + $(this).html().replace("#","");
-						}
-					});
-					if(window.location.pathname.indexOf("tagged/") != -1){
-						if(tags_text != ""){ tags_text += ","; }
-						tags_text += $("#search_query").val();
-					}
-					if (tags_text !== "") {
-						$("#x1cpostage_tags").val(tags_text);
-					}
-				}	
-				
-			}
-		}
-		
 		$(obj).attr('title','');
 		/*XKit.extensions.one_click_postage.previous_div_id = box_id;*/
 		
-		// Determine where we are going to show the box.
-		var offset = $(obj).offset();
-
-		// Box position
-		
-		var box_left = offset.left - ($("#x1cpostage_box").width() / 2) + 10;
-		var box_top = offset.top + 30;
-		
-		if (XKit.extensions.one_click_postage.preferences.show_reverse_ui.value === true) {
-		
-			box_top = (offset.top - $("#x1cpostage_box").height()) - 5;	
-			
+		if (XKit.extensions.one_click_postage.auto_tagger == true && typeof XKit.extensions.auto_tagger != "undefined") {
+			// Call Auto Tagger for tags.
+			var additional_tags = XKit.extensions.auto_tagger.return_tags($(parent_box));
+			$("#x1cpostage_tags").val(additional_tags);
 		}
-
-		$("#x1cpostage_box").css("top", box_top + "px");
-		$("#x1cpostage_box").css("left", box_left + "px");
 		
-		if (XKit.extensions.one_click_postage.preferences.show_reverse_ui.value === true) {
-			$("#x1cpostage_box").fadeIn('fast');
-		} else {
-			$("#x1cpostage_box").slideDown('fast');
+		if (hide_ui !== true) {
+			// Determine where we are going to show the box.
+			var offset = $(obj).offset();
+
+			// Box position
+			
+			var box_left = offset.left - ($("#x1cpostage_box").width() / 2) + 10;
+			var box_top = offset.top + 30;
+			
+			if (XKit.extensions.one_click_postage.preferences.show_reverse_ui.value === true) {
+			
+				box_top = (offset.top - $("#x1cpostage_box").height()) - 5;	
+				
+			}
+
+			if (force_on_screen === true) {
+				var window_top = $(window).scrollTop();
+				var window_bottom = window_top + $(window).height();
+				if (box_top < window_top) {
+					box_top = window_top + 5;
+				} else if (box_top + $("#x1cpostage_box").height() > window_bottom) {
+					box_top = window_bottom - $("#x1cpostage_box").height() - 5
+				}
+			}
+
+			$("#x1cpostage_box").css("top", box_top + "px");
+			$("#x1cpostage_box").css("left", box_left + "px");
+			
+			if (XKit.extensions.one_click_postage.preferences.show_reverse_ui.value === true) {
+				$("#x1cpostage_box").fadeIn('fast');
+			} else {
+				$("#x1cpostage_box").slideDown('fast');
+			}
 		}
 		
 		XKit.extensions.one_click_postage.last_object = parent_box;
@@ -644,6 +665,14 @@ XKit.extensions.one_click_postage = new Object({
 		m_object["post[date]"] = "";
 	
 		m_object["post[type]"] = data.post.type;
+		
+		if (tags !== "" && typeof tags !== "undefined") {
+			m_object["post[tags]"] = tags;
+		} else {
+			m_object["post[tags]"] = "";
+		}
+		
+		
 
 		if ($("#xkit-1cp-social-twitter").hasClass("selected") === true) {
 			m_object["send_to_twitter"] = "on";
@@ -683,9 +712,17 @@ XKit.extensions.one_click_postage = new Object({
 			m_object["post[tags]"] = "";
 		}
 		
-		if (state === 2) {
-			if (this.preferences.auto_tag.value === true && this.preferences.auto_tag_text.value !== "") {
-				m_object["post[tags]"] = m_object["post[tags]"] + "," + this.preferences.auto_tag_text.value;
+		if (XKit.extensions.one_click_postage.auto_tagger == true && typeof XKit.extensions.auto_tagger != "undefined") {
+			// Call Auto Tagger for tags.
+			if (state === 2) {
+				var additional_tags = XKit.extensions.auto_tagger.return_tags_for_queue();
+				if (additional_tags !== "") {
+					if (m_object["post[tags]"] === "") {
+						m_object["post[tags]"] = additional_tags;	
+					} else {
+						m_object["post[tags]"] = m_object["post[tags]"] + "," + additional_tags;
+					}
+				}
 			}
 		}
 		
@@ -770,16 +807,6 @@ XKit.extensions.one_click_postage = new Object({
 				"</ul>";
 		
 		XKit.window.show("I could not " + m_word + " your post.","<b>What might be causing this?</b>" + m_causes + "<b>If the tips above did not solve the problem,</b><br/>please send me an ask along with the error code <b>" + code + "</b>.","error","<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div><a href=\"http://xkit-extension.tumblr.com/\" class=\"xkit-button\">Visit the XKit Blog</a><a href=\"http://xkit-extension.tumblr.com/ask\" class=\"xkit-button\">Send an ask</a>");	
-		
-	},
-	
-	cpanel: function(div) {
-	
-		$("#xkit-one-click-postage-ultrafast-help").click(function() {
-			
-			XKit.window.show("UltraFastReblog", "UltraFastReblog adds three buttons on all posts on your dashboard: Reblog, Queue and Draft. When you click on them, the post will be submitted to your main blog, without opening the options pop-up.<br/><br/>It is used if you are not going to add any tags or caption to the post, and just want to reblog/queue/draft them as soon as possible. When UltraFastReblogging, you can not use features of One-Click Postage such as Remove Caption or Blog Selector.","info","<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");	
-			
-		});	
 		
 	}
 	
