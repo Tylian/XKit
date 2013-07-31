@@ -53,6 +53,11 @@ XKit.extensions.one_click_postage = new Object({
 			default: false,
 			value: false
 		},
+		"enable_keyboard_shortcuts": {
+			text: "Use keyboard shortcuts (R/Q/D to reblog/queue/draft, T to tag, escape to close)",
+			default: false,
+			value: false
+		},
 		"sep_2": {
 			text: "Notifications",
 			type: "separator",
@@ -321,9 +326,12 @@ XKit.extensions.one_click_postage = new Object({
 			// Must use capture=true here to intercept Tumblr's default handlers, so we can't use jQuery's .on()
 			window.addEventListener('keydown', XKit.extensions.one_click_postage.suspend_tumblr_key_commands, true);
 		}
+<<<<<<< HEAD
 		
 		this.init_keep_tags_dashboard();
 		
+=======
+>>>>>>> 65389aeae2be7950b1b6ed7c9ac1aeae03a38bae
 	},
 	destroy: function() {
 		$(document).off('click', '.reblog_button,.post_control.reblog', XKit.extensions.one_click_postage.process_click)
@@ -341,6 +349,80 @@ XKit.extensions.one_click_postage = new Object({
 		$(document).on('click', '.reblog_button,.post_control.reblog', XKit.extensions.one_click_postage.process_click);
 		
 	},
+<<<<<<< HEAD
+=======
+
+	suspend_tumblr_key_commands: function(e) {
+		// 82 = R
+		if (e.metaKey || e.altKey || e.ctrlKey || e.sjiftKey || e.keyCode !== 82) {
+			return;
+		}
+		XKit.tools.add_function(function(){Tumblr.KeyCommands.suspend()}, true, '');
+	},
+
+	process_keydown: function(e) {
+		// 68 = D, 81 = Q, 82 = R, 84 = T
+		if (e.metaKey || e.altKey || e.ctrlKey || e.shiftKey
+				|| (e.which !== 68 && e.which !== 81 && e.which !== 82 && e.which !== 84)
+				|| $(e.target).is('input,textarea')) {
+			return;
+		}
+		// Tumblr puts 7-8px padding at the top of the screen when you use J/K to navigate
+		var screenPos = $(window).scrollTop() + 10;
+		// Find the post at the top of the screen, if there is one
+		$(".reblog_button,.post_control.reblog").each(function() {
+			if ($(this).hasClass("radar_button")) {return; }
+			var parent_box = $(this).parentsUntil(".post").parent();
+			var boxPos = parent_box.offset().top;
+			if (boxPos <= screenPos && boxPos + parent_box.innerHeight() > screenPos) {
+				switch (e.which) {
+					case 68: // 68 = D
+						XKit.extensions.one_click_postage.open_menu($(this), true);
+						XKit.extensions.one_click_postage.post(1, false);
+						break;
+					case 81: // 81 = Q
+						XKit.extensions.one_click_postage.open_menu($(this), true);
+						XKit.extensions.one_click_postage.post(2, false);
+						break;
+					case 82: // 82 = R
+						XKit.extensions.one_click_postage.open_menu($(this), true);
+						XKit.extensions.one_click_postage.post(0, false);
+						break;
+					case 84: // 84 = T
+						XKit.extensions.one_click_postage.user_on_box = true;
+						XKit.extensions.one_click_postage.open_menu($(this), false, true);
+						$('#x1cpostage_tags').focus();
+						break;
+				}
+				event.preventDefault();
+				return false;
+			} else if (boxPos > screenPos) {
+				// Post is too far down the screen, stop looking
+				return false;
+			}
+		});
+		// re-enable tumblr's key commands since we suspended them in suspend_tumblr_key_commands
+		XKit.tools.add_function(function(){Tumblr.KeyCommands.resume()}, true, '');
+	},
+	
+	process_click: function(e) {
+	
+		var parent_div = $(this).parent().parent();
+		if ($(parent_div).find(".tag").length > 0) {
+			var tags_text = "";
+			$(parent_div).find(".tag").each(function() {
+				if (tags_text === "") {
+					tags_text = $(this).html().replace("#","");
+				} else {
+					tags_text = tags_text + "," + $(this).html().replace("#","");
+				}
+			});
+			if (tags_text !== "") {
+				setTimeout(function() {		
+					XKit.extensions.one_click_postage.try_to_inject_tags(tags_text);
+				}, 200);
+			}
+>>>>>>> 65389aeae2be7950b1b6ed7c9ac1aeae03a38bae
 
 	suspend_tumblr_key_commands: function(e) {
 		// 82 = R
@@ -449,12 +531,15 @@ XKit.extensions.one_click_postage = new Object({
 		$(obj).attr('title','');
 		/*XKit.extensions.one_click_postage.previous_div_id = box_id;*/
 		
+<<<<<<< HEAD
 		if (XKit.extensions.one_click_postage.auto_tagger == true && typeof XKit.extensions.auto_tagger != "undefined") {
 			// Call Auto Tagger for tags.
 			var additional_tags = XKit.extensions.auto_tagger.return_tags($(parent_box));
 			$("#x1cpostage_tags").val(additional_tags);
 		}
 		
+=======
+>>>>>>> 65389aeae2be7950b1b6ed7c9ac1aeae03a38bae
 		if (hide_ui !== true) {
 			// Determine where we are going to show the box.
 			var offset = $(obj).offset();
