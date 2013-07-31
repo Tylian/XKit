@@ -1,0 +1,17 @@
+.read_posts_read:not(.read_posts_avatar_only) {
+	opacity: 0.4;
+	transition: opacity 0.3s ease-in-out;
+}
+
+.read_posts_read.read_posts_avatar_only .post_avatar {
+	opacity: 0.4;
+	transition: opacity 0.3s ease-in-out;
+}
+ 
+.read_posts_read:hover {
+	opacity: 1.0;
+}
+
+.read_posts_read:hover .post_avatar {
+	opacity: 1.0;
+}
