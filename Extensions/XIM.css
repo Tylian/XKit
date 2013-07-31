@@ -12,6 +12,11 @@
    	-o-transition: 0.22s ease-in;
    	transition: 0.22s ease-in;
 	opacity: 0.89;
+	overflow: hidden;
+}
+
+.xim-message-window-minimized {
+	height: 30px !important;
 }
 
 #xim-contacts-no-contacts {

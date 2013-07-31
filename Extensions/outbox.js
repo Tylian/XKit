@@ -1,5 +1,5 @@
 //* TITLE Outbox **//
-//* VERSION 0.3 REV C **//
+//* VERSION 0.3 REV D **//
 //* DESCRIPTION Saves your last 20 sent private replies and fan mail. **//
 //* DETAILS This extension stores and lets you view the last 20 asks you've answered privately. Please keep in mind that this is a highly experimental extension, so if you hit a bug, please send the XKit blog an ask with the problem you've found. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -84,6 +84,7 @@ XKit.extensions.outbox = new Object({
 		
 		if ($("body").hasClass("dashboard_messages_inbox") !== true && $("body").hasClass("dashboard_messages_submissions") !== true &&
 				document.location.href.indexOf('http://www.tumblr.com/send/') == -1) {
+			XKit.console.add("Outbox -> Quitting, not in inbox");
 			return;
 		}
 		

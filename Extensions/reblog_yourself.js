@@ -1,5 +1,5 @@
 //* TITLE Reblog Yourself **//
-//* VERSION 1.2 REV B **//
+//* VERSION 1.2 REV C **//
 //* DESCRIPTION Allows you to reblog posts back to your blog **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//
@@ -35,6 +35,9 @@ XKit.extensions.reblog_yourself = new Object({
 	
 		// This gets run on frame.
 		// Port of ugly code from XKit 6 but at least it works.
+
+		$(".btn.icon.dashboard, .btn.icon.edit, .btn.icon.follow").html("");
+		$(".btn.icon.dashboard, .btn.icon.edit, .btn.icon.follow").addClass("no_label");
 		
     		var check_if_there = $("body").html().search("/reblog/");
     		if (check_if_there !== -1) { return; }
@@ -55,7 +58,7 @@ XKit.extensions.reblog_yourself = new Object({
     		
     		var xu = "http://www.tumblr.com/reblog/" + post_id + "/" + xd;
 
-		var xu_html = '<a class="btn icon reblog" id="xreblogyourselfiframebutton" style="display: none;" title="Reblog" href="/reblog/' + post_id + '/' + xd + '?redirect_to=' + rd + '" target="_top"></a>';
+		var xu_html = '<a class="btn icon reblog no_label" id="xreblogyourselfiframebutton" style="display: none;" title="Reblog" href="/reblog/' + post_id + '/' + xd + '?redirect_to=' + rd + '" target="_top"></a>';
 
 
 		$.ajax({
