@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 1.0 REV E **//
+//* VERSION 1.1 REV A **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER STUDIOXENIX **//
 XKit.extensions.xkit_patches = new Object({
@@ -10,6 +10,87 @@ XKit.extensions.xkit_patches = new Object({
 		this.running = true;
 
 		XKit.tools.init_css("xkit_patches");
+		
+		XKit.interface = new Object({
+			
+			post: function(obj) {
+				
+				var m_return = new Object();
+				
+				m_return.id = $(obj).attr('data-post-id');
+				m_return.root_id = $(obj).attr('data-root-id');
+				m_return.reblog_key = $(obj).attr('data-reblog-key');
+				m_return.owner = $(obj).attr('data-tumblelog-name');
+				
+				m_return.liked = $(obj).find(".post_control.like").hasClass("liked");
+				m_return.permalink = $(obj).find(".post_permalink").attr('href');
+				
+				m_return.type = $(obj).attr('data-type');
+				
+				if ($(obj).find(".post_body").length > 0) {
+					m_return.body = $(obj).find(".post_body").html();
+				} else {
+					if ($(obj).find(".post_content_inner").length > 0) {
+						m_return.body = $(obj).find(".post_content_inner").html();
+					} else {
+						m_return.body = "";	
+					}	
+				}
+				m_return.is_reblogged = $(obj).hasClass("is_reblog");
+				m_return.is_mine = $(obj).hasClass("is_mine");
+				m_return.is_following = ($(obj).attr('data-following-tumblelog') === true);
+				
+				m_return.avatar = $(obj).find(".post_avatar_image").attr('src');
+				
+				m_return.tags = "";
+				if ($(obj).find(".post_tags").length > 0) {
+					var to_return = "";
+					$(obj).find(".post_tags_inner").find(".post_tag").each(function() {
+						var m_tag = $(this).html().substring(1);
+						if (to_return === "") {
+							to_return = m_tag;	
+						} else {
+							to_return = to_return + "," + m_tag;	
+						}
+					});
+					m_return.tags = to_return;
+				}
+				
+				return m_return;
+				
+			}
+			
+		});
+		
+		XKit.init = function() {
+	
+			// Check page then return control to init_extension.
+			if (document.location.href.indexOf('http://www.tumblr.com/xkit_reset') !== -1 || 
+				document.location.href.indexOf('http://www.tumblr.com/xkit_log') !== -1 || 
+				document.location.href.indexOf('http://www.tumblr.com/xkit_editor') !== -1 || 
+				document.location.href.indexOf('http://www.tumblr.com/xkit_update=') !== -1) {
+				XKit.page.xkit = true;
+				XKit.init_extension();
+				return;
+			}
+			XKit.init_flags();
+			if (top === self && document.location.href.indexOf("http://www.tumblr.com/dashboard/iframe?") === -1) { 
+				XKit.page.standard = true;
+				XKit.init_extension();
+			} else { 
+				XKit.console.add("In IFRAME, location: " + document.location.href);
+				if (document.location.href.indexOf("http://www.tumblr.com/send") === -1) { 
+					XKit.page.standard = true;
+				}
+				if (document.location.href.indexOf("http://www.tumblr.com/dashboard/iframe?") !== -1) {
+					XKit.page.blog_frame = true;
+				}
+				if (document.location.href.indexOf("http://www.tumblr.com/ask_form/") !== -1) {
+					XKit.page.ask_frame = true;
+				}
+				XKit.init_extension();
+			}
+		};
 		
 		// New Post Listener for Posts_v2
 		XKit.post_listener.check = function() {
