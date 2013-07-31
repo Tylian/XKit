@@ -2,11 +2,7 @@
 //* VERSION 3.3 REV B **//
 //* DESCRIPTION Instant messenger for XKit. **//
 //* DEVELOPER STUDIOXENIX **//
-<<<<<<< HEAD
 //* DETAILS XIM allows you to send instant messages to other XKit 7 users.<br>Notification Sounds by pageofmelody.tumblr.com **//
-=======
-//* DETAILS XIM allows you to send instant messages to other XKit 7 users.<br/>Please note that this is a very premature version of XIM. A lot of features, including security ones are not implemented yet. Please use with caution.<br/><br/>Notification Sounds by pageofmelody.tumblr.com **//
->>>>>>> 65389aeae2be7950b1b6ed7c9ac1aeae03a38bae
 //* FRAME false **//
 //* BETA false **//
 //* SLOW true **//
