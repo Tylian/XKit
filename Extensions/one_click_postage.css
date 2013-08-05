@@ -9,6 +9,12 @@
 
 }
 
+#one_click_postage_warning_movage {
+	padding: 15px;
+	font-size: 12px;
+	color: rgb(80,80,80);	
+}
+
 #xkit-1cp-social-twitter,
 #xkit-1cp-social-facebook {
 	background: rgba(228,232,238,1);

@@ -1,5 +1,5 @@
 //* TITLE XInbox **//
-//* VERSION 1.4 REV E **//
+//* VERSION 1.5 REV A **//
 //* DESCRIPTION Enhances your Inbox experience **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS XInbox allows you to tag posts before posting them, and see all your messages at once, and lets you delete multiple messages at once using the Mass Editor mode. To use this mode, go to your Inbox and click on the Mass Editor Mode button on your sidebar, click on the messages you want to delete then click the Delete Messages button.  **//
@@ -52,6 +52,26 @@ XKit.extensions.xinbox = new Object({
 			value: false
 		},
 		"sep1": {
+			text: "Inbox Tools",
+			type: "separator"
+		},
+		"inbox_search": {
+			text: "Enable Inbox Search",
+			default: true,
+			value: true,
+			experimental: true
+		},
+		"mass_editor": {
+			text: "Enable Mass Inbox Editor",
+			default: true,
+			value: true
+		},
+		"check_for_blanks": {
+			text: "Confirm my action when I'm about to publish a blank ask",
+			default: true,
+			value: true
+		},
+		"sep2": {
 			text: "Fan Mail options",
 			type: "separator"
 		},
@@ -69,20 +89,6 @@ XKit.extensions.xinbox = new Object({
 			text: "Hide 'Send Fan Mail' button",
 			default: false,
 			value: false
-		},
-		"sep2": {
-			text: "Inbox Tools",
-			type: "separator"
-		},
-		"mass_editor": {
-			text: "Enable Mass Inbox Editor",
-			default: true,
-			value: true
-		},
-		"check_for_blanks": {
-			text: "Confirm my action when I'm about to publish a blank ask",
-			default: true,
-			value: true
 		}
 	},
 
@@ -139,7 +145,205 @@ XKit.extensions.xinbox = new Object({
 			var au_ex_css = ".post.fan_mail .read_more, .post.fan_mail .message_body_truncated { display: none; } .post.fan_mail .message_body { display: block !important; }";
 			XKit.tools.add_css(au_ex_css, "xkit_inbox_auto_expand");
 		}
+		
+		if(XKit.extensions.xinbox.preferences.inbox_search.value === true) {
+			XKit.extensions.xinbox.init_inbox_search();
+		}
 
+	},
+	
+	inbox_search_term: "",
+	
+	init_inbox_search: function() {
+		
+		var m_html = 	'<li class="" id="xinbox_search_li">' +
+				'<a href="#" class="customize" id="xinbox_search_button">' +
+					'<div class="hide_overflow">Search Inbox..</div>' +
+				'</a>' +
+				'</li>';
+		
+		if ($("#xinbox_sidebar").length > 0) {
+		
+			$("#xinbox_sidebar").append(m_html);	
+			
+		}
+		
+		var x_html = "<div id=\"xinbox-search-box\"><input type=\"text\" placeholder=\"Enter URL/text...\" id=\"xinbox-search-box-input\"></div>";
+		$("#xinbox_sidebar").before(x_html);
+		
+		$("#xinbox_search_button").bind("click", function() {
+			
+			XKit.extensions.xinbox.inbox_search_start();	
+			
+		});
+		
+		$("#xinbox-search-box-input").keyup(function() {
+
+			var m_value = $(this).val().toLowerCase();
+			m_value = $.trim(m_value);
+			
+			XKit.extensions.xinbox.inbox_search_term = m_value;
+			XKit.extensions.xinbox.search_do_posts();
+
+		});
+		
+	},
+	
+	search_do_posts: function() {
+		
+		var m_value = XKit.extensions.xinbox.inbox_search_term;
+		
+		if (m_value === "" ||m_value.length <= 1) {
+			// Show all
+			
+			/*$(".post").each(function() {
+				var m_html = XKit.extensions.xinbox.remove_wraps($(this).find(".post_body").html());
+				$(this).find(".post_body").html(m_html);	
+			});*/
+			$(".post").find(".post_body").find("mark").contents().unwrap();
+			
+			if ($("#xinbox-search-bar").length > 0) {
+				$("#xinbox-search-bar").slideUp('slow', function() { $(this).remove(); });
+			}
+	
+			$(".post").parent().removeClass("xkit-inbox-found");
+			$(".post").parent().slideDown('fast');
+			XKit.tools.add_function(function() {
+				Tumblr.Events.trigger("DOMEventor:updateRect");
+			}, true, "");
+			return;
+		}
+		
+		var i_html = "Searching for <b>\"" + m_value + "\"</b><br/><span id=\"xinbox-search-found-count\">0</span> results found so far, inspected <span id=\"xinbox-search-search-count\">0</span> posts.<br/><small>Scroll down to load more asks and results.</small>";
+		
+		if ($("#xinbox-search-bar").length > 0) {
+			$("#xinbox-search-bar").html(i_html);
+		} else {
+			$("#posts").before("<div id=\"xinbox-search-bar\">" + i_html + "</div>");
+		}
+		
+		$(".post").each(function() {
+				
+			var username = $(this).attr('data-tumblelog-name');
+			var hide_this = false;
+			
+			var to_search_in = $(this).find(".post_body").text().toLowerCase();
+			
+			console.log(to_search_in);
+				
+			if (typeof username !== "undefined") {
+				to_search_in = to_search_in + username;
+			}
+			
+			if (to_search_in.indexOf(m_value) === -1) {
+				hide_this = true;
+			}
+			
+			if (!hide_this) {
+					
+				$(this).parent().slideDown('fast');
+				$(this).parent().addClass("xkit-inbox-found");
+				
+				$(this).find(".post_body").find("mark").contents().unwrap();
+				var m_html = XKit.extensions.xinbox.return_highlighted_html($(this).find(".post_body").html(), m_value);
+				$(this).find(".post_body").html(m_html);
+					
+			} else {
+					
+				$(this).parent().slideUp('fast');
+				$(this).parent().removeClass("xkit-inbox-found");
+				$(this).find(".post_body").find("mark").contents().unwrap();
+				//var m_html = XKit.extensions.xinbox.remove_wraps($(this).find(".post_body").html());
+				//$(this).find(".post_body").html(m_html);
+					
+			}	
+				
+		});
+		
+		$("#xinbox-search-found-count").html($(".xkit-inbox-found").length);
+		$("#xinbox-search-search-count").html($(".post").length);
+
+		XKit.tools.add_function(function() {
+			Tumblr.Events.trigger("DOMEventor:updateRect");
+		}, true, "");	
+		
+	},
+	
+	remove_wraps: function(src_str) {
+
+		src_str = XKit.tools.replace_all(src_str, "<wrap>","");
+		src_str = XKit.tools.replace_all(src_str, "<\/wrap>","");		
+		
+		return src_str;
+		
+	},
+	
+	return_highlighted_html: function(src_str, term) {
+		
+		/* from http://jsfiddle.net/UPs3V/ */
+		
+		term = term.replace(/(\s+)/,"(<[^>]+>)*$1(<[^>]+>)*");
+		var pattern = new RegExp("("+term+")", "i");
+
+		src_str = src_str.replace(pattern, "<mark>$1</mark>");
+		src_str = src_str.replace(/(<mark>[^<>]*)((<[^>]+>)+)([^<>]*<\/mark>)/,"$1</mark>$2<mark>$4");
+		
+		return src_str;
+		
+	},
+	
+	inbox_search_start: function() {
+		
+		$("#xinbox_search_button").toggleClass("xkit-xinbox-in-search");
+		
+		if ($("#xinbox_search_button").hasClass("xkit-xinbox-in-search")) {
+			
+			$("#xinbox_search_li").addClass("selected");
+			XKit.extensions.xinbox.inbox_search_term = "";
+			
+			$(".post").parent().addClass("xkit-inbox-found");
+			XKit.tools.add_css(".post_container { display: none; } .post_container.xkit-inbox-found { display: block; } ", "xkit-inbox-search");
+			XKit.post_listener.add("xinbox_search", XKit.extensions.xinbox.search_do_posts);
+
+			$("#xinbox_sidebar").addClass("xkit_others_hidden");
+			$("#right_column").children().not("#xinbox_sidebar").not("#xinbox-search-box").slideUp('slow', function() { $(this).addClass("xinbox-search-hidden-box"); });	
+			$("#xinbox-search-box").slideDown('slow');
+			
+		} else {
+			
+			$("#xinbox_search_li").removeClass("selected");
+			XKit.extensions.xinbox.inbox_search_term = "";
+			
+			XKit.extensions.xinbox.reset_search();
+			
+			$("#xinbox_sidebar").removeClass("xkit_others_hidden");
+			$("#right_column").children().not("#xinbox_sidebar").not("#xinbox-search-box").slideDown('slow', function() { $(this).removeClass("xinbox-search-hidden-box"); });	
+			$("#xinbox-search-box").slideUp('slow');	
+			
+		}
+		
+	},
+	
+	reset_search: function() {
+		
+		$(".post").parent().removeClass("xkit-inbox-found");
+		XKit.tools.remove_css("xkit-inbox-search");
+		XKit.post_listener.remove("xinbox_search");
+		
+		if ($("#xinbox-search-bar").length > 0) {
+			$("#xinbox-search-bar").slideUp('slow', function() { $(this).remove(); });
+		}
+		
+		$(".post").find(".post_body").find("mark").contents().unwrap();
+		
+		XKit.tools.add_function(function() {
+			Tumblr.Events.trigger("DOMEventor:updateRect");
+		}, true, "");
+		
+		if ($(".post").length > 30) {
+			$(".post:gt(30)").remove();
+		}
+		
 	},
 	
 	auto_expand_fan_mail: function() {
@@ -375,6 +579,10 @@ XKit.extensions.xinbox = new Object({
 				var this_obj = m_parent;
 				var m_box_id = "xinbox_tags_" + post_id;
 			
+				/*
+				
+				OBSOLETE -- Tumblr changes.
+				
 				var asker = XKit.extensions.xinbox.preferences.anon_tag.value;
 				var respondant = $(m_parent).attr('data-tumblelog-name');
 				if (m_parent.find(".post_info").find("a").length > 0) {
@@ -386,6 +594,18 @@ XKit.extensions.xinbox = new Object({
 					if(asker === respondant){
 						asker = XKit.extensions.xinbox.preferences.anon_tag.value;
 					}
+				}
+				*/
+				
+				var asker = XKit.extensions.xinbox.preferences.anon_tag.value;
+				var respondant = $(m_parent).attr('data-tumblelog-name');
+				
+				if (respondant !== "" && typeof respondant !== "undefined") {
+					asker = respondant;	
+				} else {
+					if (typeof asker === "undefined") {
+						asker = "";	
+					}	
 				}
 			
 				var all_buttons = $(m_parent).find('[id^="ask_publish_button_"], [id^="ask_draft_button_"], [id^="ask_queue_button_"]');
@@ -625,6 +845,7 @@ XKit.extensions.xinbox = new Object({
 	destroy: function() {
 		$("#xinbox_sidebar").remove();
 		XKit.post_listener.remove("xinbox_auto_expand_fan_mail");
+		XKit.post_listener.remove("xinbox_search");
 		$(document).off("click", "[id^='ask_answer_link_']");
 		XKit.tools.remove_css("xkit_inbox_slim_fan_mail");
 		XKit.tools.remove_css("xkit_inbox_auto_expand");

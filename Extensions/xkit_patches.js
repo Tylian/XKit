@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 1.1 REV A **//
+//* VERSION 1.1 REV B **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER STUDIOXENIX **//
 XKit.extensions.xkit_patches = new Object({
@@ -45,7 +45,7 @@ XKit.extensions.xkit_patches = new Object({
 				m_return.tags = "";
 				if ($(obj).find(".post_tags").length > 0) {
 					var to_return = "";
-					$(obj).find(".post_tags_inner").find(".post_tag").each(function() {
+					$(obj).find(".post_tags").find(".post_tag").each(function() {
 						var m_tag = $(this).html().substring(1);
 						if (to_return === "") {
 							to_return = m_tag;	

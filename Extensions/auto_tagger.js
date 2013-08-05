@@ -1,5 +1,5 @@
 //* TITLE Auto Tagger **//
-//* VERSION 0.1 REV B **//
+//* VERSION 0.3 REV B **//
 //* DESCRIPTION Tags posts automatically. **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS This extension allows you to automatically add tags to posts based on state (reblogged, original, queued) or post type (audio, video, etc) and keeping original tags while reblogging a post. **//
@@ -101,6 +101,23 @@ XKit.extensions.auto_tagger = new Object({
 			type: "text",	
 			default: "",
 			value: ""
+		},
+		
+		"sep3": {
+			text: "Miscellaneous",
+			type: "separator",	
+		},
+		
+		"tag_person": {
+			text: "When reblogging, tag with the URL of the person I'm reblogging from",
+			default: false,
+			value: false
+		},
+		
+		"tag_date": {
+			text: "Tag with date (ie: <i>#August 21th 2013, #August, #21th, #2013</i>)",
+			default: false,
+			value: false
 		}
 		
 	},
@@ -148,8 +165,14 @@ XKit.extensions.auto_tagger = new Object({
 		if (XKit.extensions.auto_tagger.return_tag_based_on_type(m_post) !== "") {
 			m_tags = this.mreturn_add(m_tags, XKit.extensions.auto_tagger.return_tag_based_on_type(m_post));
 		}
+	
+		if (XKit.extensions.auto_tagger.preferences.tag_date.value === true) {
+			m_tags = this.mreturn_add(m_tags, XKit.extensions.auto_tagger.return_date_tag());
+		}
 		
-		this.inject_to_window(m_tags);
+		if (m_tags !== "") {
+			this.inject_to_window(m_tags);		
+		}
 		
 		
 	},
@@ -161,6 +184,15 @@ XKit.extensions.auto_tagger = new Object({
 		} else {
 			return "";	
 		}	
+		
+	},
+	
+	return_date_tag: function() {
+	
+		var nowdate = new Date();
+		var nowdatem = moment(nowdate);
+		var m_date = nowdatem.format("Do[,]MMMM[,]YYYY[,]MMMM Do YYYY");
+		return m_date;	
 		
 	},
 	
@@ -187,9 +219,28 @@ XKit.extensions.auto_tagger = new Object({
 		
 		if (XKit.extensions.auto_tagger.preferences.keep_tags.value === true && m_post_object.tags !== "") {	
 			to_return = this.mreturn_add(to_return,  m_post_object.tags);
+			
+			if ($("body").attr('data-page-root').indexOf('/tagged/') !== -1) {
+				var m_search_tag = $("body").attr('data-page-root').substring(8);
+				m_search_tag = decodeURIComponent(m_search_tag);
+				to_return = this.mreturn_add(to_return,  m_search_tag);
+			}
 		}
 		
-		return to_return;
+		if (XKit.extensions.auto_tagger.preferences.tag_person.value === true && m_post_object.owner !== "") {	
+			to_return = this.mreturn_add(to_return,  m_post_object.owner);
+		}
+
+		if (XKit.extensions.auto_tagger.preferences.tag_date.value === true) {		
+			var m_date = XKit.extensions.auto_tagger.return_date_tag();
+			to_return = this.mreturn_add(to_return,  m_date);
+		}
+		
+		if ($.trim(to_return) !== "") {
+			return to_return;
+		} else {
+			return "";	
+		}
 		
 	},
 	

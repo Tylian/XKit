@@ -1,5 +1,5 @@
 //* TITLE Mass+ **//
-//* VERSION 0.3 REV B **//
+//* VERSION 0.3 REV C **//
 //* DESCRIPTION Enhancements for the Mass Editor **//
 //* DETAILS This extension allows you to select multiple posts by once, by type or month. It also comes with visual enhancements for the mass post editor, such as selected post count and more! **//
 //* DEVELOPER STUDIOXENIX **//
@@ -20,13 +20,7 @@ XKit.extensions.mass_plus = new Object({
 			default: false,
 			value: false,
 			experimental: true
-		},
-		enable_caption_delete: {
-			text: "Enable Delete Caption function",
-			default: false,
-			value: false,
-			experimental: true
-		},
+		}
 	},
 
 	run: function() {

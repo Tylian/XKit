@@ -1,5 +1,5 @@
 //* TITLE One-Click Postage **//
-//* VERSION 2.4 REV A **//
+//* VERSION 2.4 REV B **//
 //* DESCRIPTION Lets you easily reblog, draft and queue posts **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//

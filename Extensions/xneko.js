@@ -1,5 +1,5 @@
 //* TITLE XNeko **//
-//* VERSION 1.0 REV A **//
+//* VERSION 1.0 REV B **//
 //* DESCRIPTION One live cat for your dashboard **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//
@@ -280,7 +280,12 @@ XKit.extensions.xneko = new Object({
 	destroy: function() {
 		this.running = false;
 		XKit.tools.remove_css("xneko");
-		XKit.extensions.xneko.neko.die();
+		if (typeof XKit.extensions.xneko.neko !== "undefined") {
+			if (typeof XKit.extensions.xneko.neko.die === "function") {
+				XKit.extensions.xneko.neko.die();
+			}
+		}	
+		
 	}
 
 });

@@ -1,5 +1,5 @@
 //* TITLE Notifications+ **//
-//* VERSION 1.4 REV B **//
+//* VERSION 1.4 REV C **//
 //* DESCRIPTION Enhances the notifications **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//
@@ -124,6 +124,7 @@ XKit.extensions.notifications_plus = new Object({
 					using_preview = true;	
 					var m_preview = $(obj).find(".ui_post_badge").css("background-image");
 					m_preview = m_preview.substring(4, m_preview.length - 1);
+					m_preview = XKit.tools.replace_all(m_preview, "\\\"", "");
 					$("#xpreview-image").attr('src', m_preview);
 					$("#xpreview-image").css("display","block");
 					$("#xpreview-container").addClass("with-preview");

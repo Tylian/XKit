@@ -1,5 +1,5 @@
 //* TITLE One-Click-Reply **//
-//* VERSION 1.5 REV C **//
+//* VERSION 1.5 REV D **//
 //* DESCRIPTION Lets you reply to notifications **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS To use this extension, hover over a notification and click on the Reply button. If Multi-Reply is on, hold down the ALT key while clicking on the Reply button to select/deselect posts and reply to all of them at once. **//
@@ -298,8 +298,6 @@ XKit.extensions.one_click_reply = new Object({
 	make_post_pn: function(obj, silent_mode) {
 		
 		obj = $(obj).parent();
-		
-		
 		
 		if ($(obj).hasClass("note") === false || $(obj).hasClass("action") === true) {
 			// Must be in a sub-div.
@@ -719,9 +717,13 @@ XKit.extensions.one_click_reply = new Object({
 			
 			console.log(" -- Now: " + $(m_obj).attr('class'));
 			var avatar_url = $(m_obj).find(".part_avatar").find(".ui_avatar_link").attr('data-avatar-url');
+			
 			avatar_url = avatar_url.replace("_64.png","_40.png");
 			avatar_url = avatar_url.replace("_64.gif","_40.gif");
 			avatar_url = avatar_url.replace("_64.jpg","_40.jpg");
+			avatar_url = avatar_url.replace("_128.png","_40.png");
+			avatar_url = avatar_url.replace("_128.gif","_40.gif");
+			avatar_url = avatar_url.replace("_128.jpg","_40.jpg");
 			// This is ugly but it works:
 			try { 
 				avatar_url_start = avatar_url.indexOf('.media.tumblr.com');
@@ -741,13 +743,13 @@ XKit.extensions.one_click_reply = new Object({
 		
 		if (document.location.href.indexOf("/blog/") !== -1) {
 			// Maybe we can make this better?
-			m_url = $("#new_post_label_text").attr('href');
+			m_url = $("body").attr('data-new-root') + "/new/text";
 		}
 		
 		if (m_url.indexOf('?') !== -1) {
 			m_url = m_url.substring(0, m_url.indexOf('?'));
 		}
-
+		
 		var m_tags_to_return = "";
 		
 		if (this.preferences.tag_people.value === true) {
