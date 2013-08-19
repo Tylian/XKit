@@ -1,5 +1,5 @@
 //* TITLE Tweaks **//
-//* VERSION 2.3 REV A **//
+//* VERSION 2.3 REV C **//
 //* DESCRIPTION Various little tweaks for your dashboard. **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS These are small little tweaks that allows you customize your dashboard. If you have used XKit 6, you will notice that some of the extensions have been moved here as options you can toggle. Keep in mind that some of the tweaks (the ones marked with a '*') can slow down your computer. **//
@@ -60,6 +60,11 @@ XKit.extensions.tweaks = new Object({
 			default: true,
 			value: true	
 		},
+		"old_chat_posts": {
+			text: "Show Chat posts in classic interface",
+			default: false,
+			value: false	
+		},
 		"scroll_new_posts": {
 			text: "Scroll the new posts icons along with me",
 			default: false,
@@ -102,6 +107,11 @@ XKit.extensions.tweaks = new Object({
 		},
 		"hide_notes": {
 			text: "Hide the notes on posts",
+			default: false,
+			value: false
+		},
+		"hide_tags": {
+			text: "Hide the tags on posts",
 			default: false,
 			value: false
 		},
@@ -288,6 +298,11 @@ XKit.extensions.tweaks = new Object({
 		if (XKit.extensions.tweaks.preferences.hide_notes.value === true) {
 			XKit.tools.add_css(".post .post_notes { display: none; } ", "xkit_tweaks_hide_notes");
 		}	
+		
+		if (XKit.extensions.tweaks.preferences.hide_tags.value === true) {
+			XKit.tools.add_css(".post .post_tags { display: none; } ", "xkit_tweaks_hide_tags");
+		}	
+	
 
 		if (XKit.extensions.tweaks.preferences.hide_find_blogs.value === true) {
 			$("a.spotlight").parent().css("display","none");
@@ -327,7 +342,11 @@ XKit.extensions.tweaks = new Object({
 			XKit.post_listener.add("tweaks_dont_show_liked", XKit.extensions.tweaks.check_for_liked_posts);
 			XKit.extensions.tweaks.check_for_liked_posts();
 		}	
-
+		
+		if (XKit.extensions.tweaks.preferences.old_chat_posts.value === true) {
+			XKit.tools.add_css(".post_full.is_conversation .conversation_lines { border: 1px solid rgb(200,200,200); padding: 0px; font: normal 14px/1.4 \"Helvetica Neue\",\"HelveticaNeue\",Helvetica,Arial,sans-serif; } li.chat_line { padding: 10px 17px !important; border-bottom: 1px solid rgb(200,200,200); } li.chat_line:last-child { border-bottom: 0; }", "xkit_tweaks_fix_blockquotes");
+		}
+		
 		if (XKit.extensions.tweaks.preferences.wrap_tags.value === true) {
 			XKit.tools.add_css(".post .tags { width: 500px !important; display: block !important; }  .post .footer_links.with_tags { overflow:visible !important; display: block !important; }.post .footer_links.with_tags span, .footer_links.with_tags .source_url { display:block !important; overflow:visible !important; } .source_url_gradient { display: none !important; } span.tags { white-space:normal !important; } span.with_blingy_tag a.blingy { height:auto !important; display:inline-block !important; }  .source_url, .post_tags_wrapper { display: block !important; } ", "xkit_tweaks_wrap_tags");
 			XKit.tools.add_css("#posts .post.post_full .post_tags { white-space: normal; } .post .post_tags a { font-size: 12px; } .post_full .post_tags:after { background: none !important; }", "xkit_tweaks_wrap_tags_v2");
@@ -555,6 +574,7 @@ XKit.extensions.tweaks = new Object({
 		XKit.tools.remove_css("xkit_tweaks_hide_blog_search");
 		XKit.tools.remove_css("xkit_tweaks_hide_share");
 		XKit.tools.remove_css("xkit_tweaks_hide_notes");
+		XKit.tools.remove_css("xkit_tweaks_hide_tags");
 		XKit.tools.remove_css("xkit_tweaks_slim_sidebar");
 		XKit.tools.remove_css("xkit_tweaks_hide_follows");
 		XKit.tools.remove_css("xkit_tweaks_fix_blockquotes");
