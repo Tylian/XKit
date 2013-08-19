@@ -54,6 +54,16 @@ For example:
   
 This will get all the posts that is owned by the user, and turns the text posts red.
 
+### XKit.interface.find_post(post_id)
+Wrapper for interface.post. Supply the post ID, and if the post is in the dashboard, a Post Object will be returned. If not, a new object with the error set to true will be returned.
+
+	var m_post = XKit.interface.find_post("30219394");
+	if (m_post.error == false) {
+		alert(m_post.id + " is the post id.");
+	} else {
+		alert("Oops.");	
+	}
+
 ## Adding buttons
 
 ### XKit.interface.create_control_button(class_name, icon, text, func)
@@ -80,6 +90,11 @@ Data entered to additional field will be printed verbose to the button. Use it t
 
 	XKit.interface.add_control_button(this, "xkit-quick-tags", "data-my-data=\"hello\" data-another-data=\"yo!\"");
 	
+### XKit.interface.disable_control_button(obj, boolean disabled)
+Turns the button into a disabled one, callback won't be called if disabled = true.
+
+### XKit.interface.switch_control_button(obj, boolean working)
+Makes the button show the spinning "working" icon, callback won't be called while working = true. Call this when you will be doing stuff like fetching a page, and let them know you are working, and when you don't want the user to click on it twice.
 	
 ## Authorization
 ### XKit.interface.form_key()
@@ -107,6 +122,24 @@ Returns information about which page the user is in.
 		if (XKit.interface.where().dashboard === true) {
 			alert("Hooray you are in dashboard now!");	
 		}
+
+## Fetching and Submitting
+### XKit.interface.fetch(post_object, callback, reblog_mode)
+Makes a request to the Tumblr server to return their post object. post_object must be the result you get from XKit.interface.post or XKit.interface.find_post. When it's done, the callback will be called, with the data or status information. reblog_mode **must be set to true** for posts not owned by the user.
+
+	var m_post = XKit.interface.find_post("498392831");
+	if (m_post.error == false) {
+	
+		XKit.interface.fetch(m_post, function(my_data) {
+			if (data.error === true) {
+				// Could not fetch anything!
+				alert("Error: " + my_data.message + "\n" + my_data.status);	
+			} else {
+				alert("Post tags are: " + my_data.data.post.tags);
+			}
+		}, false);
+		
+	}
 
 ## Other
 ### XKit.interface.revision
