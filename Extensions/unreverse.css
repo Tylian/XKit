@@ -13,6 +13,11 @@
 	
 }
 
+.notes_container * {
+	text-align: left !important;
+	white-space: normal !important;
+}
+
 .post_notes_avatar.ui_avatar { display: none !important; }
 
 .post_answer_form { margin-bottom: 15px; }
