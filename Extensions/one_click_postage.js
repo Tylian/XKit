@@ -1,5 +1,5 @@
 //* TITLE One-Click Postage **//
-//* VERSION 2.4 REV B **//
+//* VERSION 2.5 REV C **//
 //* DESCRIPTION Lets you easily reblog, draft and queue posts **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//
@@ -18,6 +18,16 @@ XKit.extensions.one_click_postage = new Object({
 			text: "Use keyboard shortcuts (R/Q/D to reblog/queue/draft, T to tag, escape to close)",
 			default: false,
 			value: false
+		},
+		"sep_5": {
+			text: "AlreadyReblogged <a id=\"xkit-alreadyreblogged-help\" href=\"#\" onclick=\"return false\">what is this?</a>",
+			type: "separator",
+		},
+		"enable_alreadyreblogged": {
+			text: "Enable AlreadyReblogged for posts I reblog, queue or draft",
+			default: false,
+			value: false,
+			experimental: true
 		},
 		"sep_1": {
 			text: "Popup Options",
@@ -73,6 +83,7 @@ XKit.extensions.one_click_postage = new Object({
 		}
 	},
 	
+	already_reblogged: new Array(),
 	last_object: new Object(),
 	last_icon_object: new Object(),
 	last_post_id: 0,
@@ -87,6 +98,12 @@ XKit.extensions.one_click_postage = new Object({
 	cpanel: function(obj) {
 		
 		$(obj).append("<div id=\"one_click_postage_warning_movage\">Tagging options are moved to a separate extension called \"Auto Tagger.\"</div>");
+		
+		$("#xkit-alreadyreblogged-help").click(function() {
+		
+			XKit.window.show("AlreadyReblogged","AlreadyReblogged keeps the track of the posts you reblog using One-Click Postage.<br/><br/>When you queue, draft or reblog a post using One-Click postage, the next time you refresh your page, the reblog button will turn green automatically.<br/><br/>Please note that this feature is experimental, and for now only keeps the last 3,000 posts.","info","<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
+			
+		});	
 		
 	},
 	
@@ -112,7 +129,7 @@ XKit.extensions.one_click_postage = new Object({
 	},
 
 	run: function() {
-	
+
 		/*XKit.extensions.one_click_postage.previous_div_id = "";*/
 		XKit.tools.init_css("one_click_postage");
 		
@@ -324,12 +341,44 @@ XKit.extensions.one_click_postage = new Object({
 		
 		this.init_keep_tags_dashboard();
 		
+		if (this.preferences.enable_alreadyreblogged.value === true) {
+			
+			var m_data = XKit.storage.get("one_click_postage","already_reblogged","");
+
+			try {
+				XKit.extensions.one_click_postage.already_reblogged = JSON.parse(m_data);
+			} catch(e) {
+				XKit.extensions.one_click_postage.already_reblogged = new Array();
+			}
+		
+			XKit.post_listener.add("already_reblogged", XKit.extensions.one_click_postage.check_if_alreadyreblogged);
+			XKit.extensions.one_click_postage.check_if_alreadyreblogged();	
+			
+		}
+		
 	},
+	
+	check_if_alreadyreblogged: function() {
+		
+		$(".post").not(".xkit_already_reblogged_check").each(function() {
+			
+			var post_id = $(this).attr('data-root-id');
+			$(this).addClass("xkit_already_reblogged_check");
+			
+			if (XKit.extensions.one_click_postage.is_alreadyreblogged(post_id)) {
+				$(this).find(".post_control.reblog").addClass("xkit-one-click-reblog-done");
+			}
+			
+		});
+		
+	},
+	
 	destroy: function() {
 		$(document).off('click', '.reblog_button,.post_control.reblog', XKit.extensions.one_click_postage.process_click)
 			.off('keydown', XKit.extensions.one_click_postage.process_keydown);
 		window.removeEventListener('keydown', XKit.extensions.one_click_postage.suspend_tumblr_key_commands);
 		XKit.tools.remove_css("one_click_postage");
+		XKit.post_listener.remove("already_reblogged");
 		XKit.tools.remove_css("x1cpostage_reverse_ui");
 		$("#x1cpostage_box").remove();
 		XKit.tools.remove_css("one_click_postage_slim");
@@ -538,7 +587,9 @@ XKit.extensions.one_click_postage = new Object({
 		var reblog_key = $(XKit.extensions.one_click_postage.last_object).attr('data-reblog-key');
 		var post_type = $(XKit.extensions.one_click_postage.last_object).attr('data-type');
 		var channel_id = $(XKit.extensions.one_click_postage.last_object).attr('data-tumblelog-name');
-
+		
+		var root_id = $(XKit.extensions.one_click_postage.last_object).attr('data-root-id');
+		
 		var m_object = new Object();
 		
 		/*
@@ -601,7 +652,7 @@ XKit.extensions.one_click_postage = new Object({
 					return;
 				}
 				if (mdata.errors === false) {
-					XKit.extensions.one_click_postage.process(mdata, state, form_key, blog_id, post_id, caption, tags, reblog_key, m_button);
+					XKit.extensions.one_click_postage.process(mdata, state, form_key, blog_id, post_id, caption, tags, reblog_key, m_button, false, root_id);
 				} else {
 					XKit.extensions.one_click_postage.show_error("OCP05", state);
 					$(m_button).removeClass("xkit-one-click-reblog-working");
@@ -610,7 +661,7 @@ XKit.extensions.one_click_postage = new Object({
 		});
 		
 	},
-	process: function(data, state, form_key, blog_id, post_id, caption, tags, reblog_key, m_button, retry_mode) {
+	process: function(data, state, form_key, blog_id, post_id, caption, tags, reblog_key, m_button, retry_mode, root_id) {
 
 		var m_object = new Object;
 
@@ -671,8 +722,6 @@ XKit.extensions.one_click_postage = new Object({
 		} else {
 			m_object["post[tags]"] = "";
 		}
-		
-		
 
 		if ($("#xkit-1cp-social-twitter").hasClass("selected") === true) {
 			m_object["send_to_twitter"] = "on";
@@ -686,13 +735,18 @@ XKit.extensions.one_click_postage = new Object({
 			data.post.two = "";
 		}
 		
-		if ($("#x1cpostage_caption").hasClass("x1cpostage_remove_caption_on") === true) {
+		var photo_post = false;
+		if (data.post.type === "photo" || data.post.type === "photoset") {
+			photo_post = true;	
+		}
 		
+		if ($("#x1cpostage_caption").hasClass("x1cpostage_remove_caption_on") === true) {
+			
 			// User wishes to remove caption.
 			m_object["post[two]"] = "";
-			
+				
 		} else {
-			
+				
 			if (caption !== "" && typeof caption !== "undefined") {
 				if ($("#x1cpostage_replace").hasClass("selected") === false) {
 					m_object["post[two]"] = data.post.two + "<p>" + caption + "</p>";
@@ -733,7 +787,7 @@ XKit.extensions.one_click_postage = new Object({
 			m_object["post[state]"] = state;
 		}
 		m_object.custom_tweet = "";
-		
+
 		GM_xmlhttpRequest({
 			method: "POST",
 			url: "http://www.tumblr.com/svc/post/update",
@@ -747,7 +801,7 @@ XKit.extensions.one_click_postage = new Object({
 						XKit.extensions.one_click_postage.show_error("OCP07", state);
 					} else {
 						if (retry_mode !== true) {
-							XKit.extensions.one_click_postage.process(data, state, form_key, "", post_id, caption, tags, reblog_key, m_button, true);
+							XKit.extensions.one_click_postage.process(data, state, form_key, "", post_id, caption, tags, reblog_key, m_button, true, root_id);
 						} else {
 							XKit.extensions.one_click_postage.show_error("OCP08-" + response.status, state);
 						}
@@ -772,7 +826,10 @@ XKit.extensions.one_click_postage = new Object({
 						if (state === 1) { XKit.notifications.add(XKit.language.one_click_postage.status_ok_drafted, "ok"); }
 						if (state === 2) { XKit.notifications.add(XKit.language.one_click_postage.status_ok_queued, "ok"); } */
 					} else {
-						if (XKit.extensions.one_click_postage.preferences.dim_posts_after_reblog.value === true) {
+						if (XKit.extensions.one_click_postage.preferences.enable_alreadyreblogged.value === true) {
+							XKit.extensions.one_click_postage.add_to_alreadyreblogged(root_id);
+						}
+						if (XKit.extensions.one_click_postage.preferences.enable_alreadyreblogged.value === true ||XKit.extensions.one_click_postage.preferences.dim_posts_after_reblog.value === true) {
 							$(m_button).addClass("xkit-one-click-reblog-done");
 						}
 						if (XKit.extensions.one_click_postage.preferences.dont_show_notifications.value !== true) {
@@ -793,6 +850,38 @@ XKit.extensions.one_click_postage = new Object({
 	
 	},
 	
+	add_to_alreadyreblogged: function(post_id) {
+		
+		if (XKit.extensions.one_click_postage.already_reblogged.indexOf(post_id) === -1) {
+			XKit.extensions.one_click_postage.already_reblogged.push(post_id);
+			XKit.extensions.one_click_postage.save_alreadyreblogged();
+		}
+
+	},
+	
+	is_alreadyreblogged: function(post_id) {
+	
+		if (XKit.extensions.one_click_postage.already_reblogged.indexOf(post_id) === -1) {
+			return false;
+		} else {
+			return true;	
+		}	
+		
+	},
+	
+	save_alreadyreblogged: function() {
+		
+		if (XKit.extensions.one_click_postage.already_reblogged.length >= 3000) {
+			// Drop 20 posts.
+			for (var i=0;i<20;i++) {
+				XKit.extensions.one_click_postage.already_reblogged.shift();
+			}	
+		}
+		
+		XKit.storage.set("one_click_postage","already_reblogged", JSON.stringify(XKit.extensions.one_click_postage.already_reblogged));
+		
+	},
+	
 	show_error: function(code, state) {
 		
 		var m_word = "reblog";
@@ -800,13 +889,14 @@ XKit.extensions.one_click_postage = new Object({
 		if (state === 2) { m_word = "queue"; }
 		
 		var m_causes =	"<ul class=\"xkit-one-click-postage-error-list\">" +
-					"<li><b>You have used your post limit.</b><br/>The post limit is 250 per day.<br/>You might need to wait up to 24 hours for your limit to reset.</li>" +
-					"<li><b>You've filled your queue.</b><br/>You can not queue more than 300 posts.<br/>If you went over your post limit you might not be able to queue.</li>" +
+					"<li><b>You have used your post limit.</b><br/>The limit is 250 per day, set by Tumblr. Try again in 24 hours.</li>" +
+					"<li><b>You've filled your queue.</b><br/>You can not queue more than 300 posts.</li>" +
 					"<li><b>The post is deleted.</b><br/>The post you are trying to " + m_word + " is deleted by the user.</li>" +
+					"<li><b>Your browser settings are denying XKit cookies.</b><br/>If you have disabled \"Third Party Cookies\", One-Click Postage can not work properly. Please enable them and try again.</li>" +
 					"<li><b>There was a server error.</b><br/>Wait for a while and retry the " + m_word + " request.<br/>There might be some changes made to the Tumblr servers, in that case, a fix will be provided soon. Check the XKit blog for updates.</li>" +
 				"</ul>";
 		
-		XKit.window.show("I could not " + m_word + " your post.","<b>What might be causing this?</b>" + m_causes + "<b>If the tips above did not solve the problem,</b><br/>please send me an ask along with the error code <b>" + code + "</b>.","error","<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div><a href=\"http://xkit-extension.tumblr.com/\" class=\"xkit-button\">Visit the XKit Blog</a><a href=\"http://xkit-extension.tumblr.com/ask\" class=\"xkit-button\">Send an ask</a>");	
+		XKit.window.show("I could not " + m_word + " your post.","<b>One of the following might be the reason for that:</b>" + m_causes + "<b>If the tips above did not solve the problem,</b><br/>please send me an ask along with the error code <b>" + code + "</b>.","error","<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div><a href=\"http://xkit-extension.tumblr.com/\" class=\"xkit-button\">Visit the XKit Blog</a><a href=\"http://xkit-extension.tumblr.com/ask\" class=\"xkit-button\">Send an ask</a>");	
 		
 	}
 	
