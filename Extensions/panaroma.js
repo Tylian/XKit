@@ -1,5 +1,5 @@
 //* TITLE Panorama **//
-//* VERSION 1.2 REV A **//
+//* VERSION 1.2 REV B **//
 //* DESCRIPTION Widescreen dashboard **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//

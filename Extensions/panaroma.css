@@ -1,5 +1,9 @@
+body {
+	overflow-x: hidden;	
+}
+
 #container {
-	min-width: 900px; width: auto !important; padding: 0px 10px !important;
+	min-width: 900px; width: auto !important; margin: 0px 30px !important;
 } 
 
 #content {
@@ -36,6 +40,10 @@
 
 #left_column {
 	width: 75%; min-width: 625px;
+}
+
+.new_post_buttons.xkit-new-post-scrolls {
+	max-width: 600px;	
 }
 
 #posts .post_container .post_full {
