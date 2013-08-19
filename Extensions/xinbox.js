@@ -1,5 +1,5 @@
 //* TITLE XInbox **//
-//* VERSION 1.5 REV A **//
+//* VERSION 1.6 REV C **//
 //* DESCRIPTION Enhances your Inbox experience **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS XInbox allows you to tag posts before posting them, and see all your messages at once, and lets you delete multiple messages at once using the Mass Editor mode. To use this mode, go to your Inbox and click on the Mass Editor Mode button on your sidebar, click on the messages you want to delete then click the Delete Messages button.  **//
@@ -11,6 +11,16 @@ XKit.extensions.xinbox = new Object({
 	running: false,
 
 	preferences: {
+		"sep-1": {
+			text: "Notifications",
+			type: "separator"
+		},
+		"show_new_notification": {
+			text: "Show an XKit Notification when I receive new asks/fan mail",
+			default: false,
+			value: false,
+			experimental: true
+		},
 		"sep0": {
 			text: "Tagging while publishing",
 			type: "separator"
@@ -81,7 +91,12 @@ XKit.extensions.xinbox = new Object({
 			value: false
 		},
 		"slim_fan_mail": {
-			text: "Slim Fan Mail",
+			text: "Slim Incoming Fan Mail",
+			default: false,
+			value: false
+		},
+		"slim_outgoing_fan_mail": {
+			text: "Slim Fan Mail when I'm writing one",
 			default: false,
 			value: false
 		},
@@ -91,10 +106,62 @@ XKit.extensions.xinbox = new Object({
 			value: false
 		}
 	},
+	
+	frame_run: function() {
+
+		XKit.extensions.xinbox.slimify_outgoing();
+
+	},
+	
+	slimify_outgoing: function() {
+		
+		if (XKit.extensions.xinbox.preferences.slim_outgoing_fan_mail.value === true) {
+			
+			XKit.tools.add_css("#fan_mail { background-image: url('http://xkit.info/seven/extension_assets/paper.png'); }#fan_mail #message{ overflow-y: scroll; font-size: 15px !important; line-height: 22px !important; }", "xinbox_slim_outgoing_fan_mail");
+			
+			$(document).on('click', '#paper_white-lined-1', function() {
+			
+				$("#fan_mail").css("background-image","url('http://xkit.info/seven/extension_assets/paper.png')");
+				
+			});
+			
+		}
+		
+	},
+	
+	notification_check_interval: 0,
+	last_check: 0,
+	
+	check_for_new: function(first) {
+		
+		if ($("#inbox_button").length <= 0) { return; }
+		
+		var m_value = parseInt($("#inbox_button").find(".tab_notice_value").html());
+		
+		if (first === true) {
+			XKit.extensions.xinbox.last_check = m_value;
+			return;
+		}
+		
+		if (m_value > 0 && XKit.extensions.xinbox.last_check !== m_value) {
+		
+			XKit.notifications.add("You have <b>" + m_value + "</b> new ask/fan mail in your Inbox.", "mail");	
+			XKit.extensions.xinbox.last_check = m_value;
+			
+		}	
+		
+	},
 
 	run: function() {
 		this.running = true;
 		XKit.tools.init_css("xinbox");
+		
+		XKit.extensions.xinbox.slimify_outgoing();
+		
+		if(XKit.extensions.xinbox.preferences.show_new_notification.value === true) {
+			XKit.extensions.xinbox.notification_check_interval = setInterval(function() { XKit.extensions.xinbox.check_for_new(); }, 2000);
+			XKit.extensions.xinbox.check_for_new(true);
+		}
 		
 		if ($("body").hasClass("dashboard_messages_inbox") !== true && $("body").hasClass("dashboard_messages_submissions") !== true) {
 			return;	
@@ -543,7 +610,7 @@ XKit.extensions.xinbox = new Object({
 			onload: function(response) {
 				XKit.extensions.xinbox.delete_msg_index = current_msg;
 				var post_div = $(".xpost-selected:eq(0)");
-				$(post_div).fadeOut('fast', function() { $(this).remove(); });
+				$(post_div).fadeOut('fast', function() { $(this).parent().remove(); });
 				setTimeout(function() { XKit.extensions.xinbox.mass_editor_delete(); }, 500);
 			}
 		});
@@ -583,6 +650,8 @@ XKit.extensions.xinbox = new Object({
 				
 				OBSOLETE -- Tumblr changes.
 				
+				
+				
 				var asker = XKit.extensions.xinbox.preferences.anon_tag.value;
 				var respondant = $(m_parent).attr('data-tumblelog-name');
 				if (m_parent.find(".post_info").find("a").length > 0) {
@@ -600,14 +669,14 @@ XKit.extensions.xinbox = new Object({
 				var asker = XKit.extensions.xinbox.preferences.anon_tag.value;
 				var respondant = $(m_parent).attr('data-tumblelog-name');
 				
-				if (respondant !== "" && typeof respondant !== "undefined") {
+				if (respondant !== "" && typeof respondant !== "undefined" && !m_parent.hasClass("post_tumblelog_")) {
 					asker = respondant;	
 				} else {
 					if (typeof asker === "undefined") {
 						asker = "";	
 					}	
 				}
-			
+
 				var all_buttons = $(m_parent).find('[id^="ask_publish_button_"], [id^="ask_draft_button_"], [id^="ask_queue_button_"]');
 				
 				if(XKit.extensions.xinbox.preferences.show_queue_draft.value === true) {
@@ -804,7 +873,7 @@ XKit.extensions.xinbox = new Object({
 				}
 				if (mdata.errors === false) {
 					$(post_div).fadeOut('slow', function() {
-						$(post_div).remove();
+						$(post_div).parent().remove();
 						XKit.tools.add_function(function() {
 							Tumblr.Events.trigger("DOMEventor:updateRect");
 						}, true, "");
@@ -847,9 +916,11 @@ XKit.extensions.xinbox = new Object({
 		XKit.post_listener.remove("xinbox_auto_expand_fan_mail");
 		XKit.post_listener.remove("xinbox_search");
 		$(document).off("click", "[id^='ask_answer_link_']");
+		clearInterval(XKit.extensions.xinbox.notification_check_interval);
 		XKit.tools.remove_css("xkit_inbox_slim_fan_mail");
 		XKit.tools.remove_css("xkit_inbox_auto_expand");
 		XKit.tools.remove_css("xkit_inbox_show_queue");
+		XKit.tools.remove_css("xinbox_slim_outgoing_fan_mail");
 		XKit.tools.remove_css("xkit_inbox_hide_fan_mail_button");
 		XKit.tools.remove_css("xinbox");
 		this.running = false;
