@@ -5,6 +5,9 @@ This section is still under construction, and most pages are missing.
 
 ### Backend
 
+* [XKit.interface](https://github.com/atesh/XKit/wiki/XKit.interface)   
+	_Interact with the page_
+
 * XKit.version  
 	_Returns XKit framework version_
 	
