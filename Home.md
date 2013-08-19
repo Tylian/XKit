@@ -8,7 +8,8 @@
 ## API Functions
 
 * **[XKit](https://github.com/atesh/XKit/wiki/XKit-object) is the God-Object.** Start here for API.
-* **[XKit Interface](https://github.com/atesh/XKit/wiki/XKit.interface) is used to interact with Tumblr pages now.** Read it and use it for your extensions for maximum compatibility and minimum hair loss.
+* **[XKit Interface](https://github.com/atesh/XKit/wiki/XKit.interface) is used to interact with Tumblr pages now.**   
+Read it and use it for your extensions for maximum compatibility and minimum hair loss.
 * Learn about the [Run/Destroy sequences](https://github.com/atesh/XKit/wiki/Run-Destroy-Sequences), which are really important.
 
 ## Others
