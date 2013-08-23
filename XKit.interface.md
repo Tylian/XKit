@@ -100,6 +100,81 @@ Makes the button show the spinning "working" icon, callback won't be called whil
 ### XKit.interface.form_key()
 Returns the form key, used to authorize some transactions by Tumblr.
 
+## Post Window Listener
+Just like Post Listener, executes functions when the user opens a new post / manual reblogging window. Each function is executed once on each window open.
+
+### XKit.interface.post_window_listener.add(id, function)
+Add a new function to execute on each window open. You must specify an ID for the function.
+
+	XKit.interface.post_window_listener.add("quick_tags", XKit.extensions.quick_tags.post_window);
+
+### XKit.interface.post_window_listener.remove(id)
+Removes function from the list.
+
+	XKit.interface.post_window_listener.remove("quick_tags");
+
+## Post Window
+Lets you manipulate or get information from Manual Reblogging / New Post Window 
+
+### XKit.interface.post_window.state()
+Returns an object, with the following:
+* **publish**: true / false
+* **draft**: true / false
+* **queue**: true / false
+* **private**: true / false
+     
+		var m_post_state = XKit.interface.post_window.state();
+		if (m_post_state.queue === true) {
+			alert("So you are gonna queue this eh?");	
+		}
+
+### XKit.interface.post_window.add_tag(tag) 
+Tag can be an array or a string. Appends it to the tags list on the window.
+
+	XKit.interface.post_window.add_tag("Hello!"); // will add #Hello! to the post.
+
+### XKit.interface.post_window.tag_exists(tag)
+Returns true if the tag (string) exists
+
+### XKit.interface.post_window.remove_tag(tag) 
+Removes specified tag (string) from the post
+
+### XKit.interface.post_window.blog()
+Returns the URL of the blog the post is going to get posted to.
+
+	if (XKit.interface.post_window.blog() === "xenix") {
+		alert("Yay, you are posting on my blog.. somehow?");
+	}	 
+
+### XKit.interface.post_window.open()
+Returns true if the post window is still open.
+
+### XKit.interface.post_window.switch_blog(url)
+Changes blog to specified username. Returns true on success.
+
+	XKit.interface.post_window.switch_blog("xkit-extension");
+	
+### XKit.interface.post_window.type()
+Returns an object containing post type information:
+
+	var post_type = XKit.interface.post_window.type();
+	if (post_type.audio === true) {
+		alert("Yay for audio!");	
+	}
+	
+Object has the following properties: text, photo, quote, link, chat, video, audio.
+
+### XKit.interface.post_window.origin()
+Returns an object that allows you to check if the user is creating a new post or reblogging one.
+
+	var origin = XKit.interface.post_window.origin();
+	if (origin.is_reblog === true) {
+		alert("Yay for reblogging!");	
+	}	
+	if (origin.is_original === true) {
+		alert("Yay for creating new stuff!");	
+	}	
+
 ##User Information
 ### XKit.interface.user()
 Returns data about the current blog selected.
