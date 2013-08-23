@@ -66,8 +66,8 @@ Wrapper for interface.post. Supply the post ID, and if the post is in the dashbo
 
 ## Adding buttons
 
-### XKit.interface.create_control_button(class_name, icon, text, func)
-Called once to "create" a button. Pick a class_name that is unique, supply a base64-encoded image, and a text for the button and the function to be called when the user clicks on it. You must call this first before adding buttons to posts.
+### XKit.interface.create_control_button(class_name, icon, text, func, ok_icon)
+Called once to "create" a button. Pick a class_name that is unique, supply a base64-encoded image, and a text for the button and the function to be called when the user clicks on it. You must call this first before adding buttons to posts. "ok_icon" should be a green version of the icon, to be used with **completed_control_button** function.
 
 	XKit.interface.create_control_button("xkit-quick-tags", this.button_icon, "Quick Tags!", function() {
 			alert("hello world!");
@@ -95,6 +95,9 @@ Turns the button into a disabled one, callback won't be called if disabled = tru
 
 ### XKit.interface.switch_control_button(obj, boolean working)
 Makes the button show the spinning "working" icon, callback won't be called while working = true. Call this when you will be doing stuff like fetching a page, and let them know you are working, and when you don't want the user to click on it twice.
+
+### XKit.interface.completed_control_button(obj, boolean will_be_green)
+Turns the button into a green one. Callback will still fire if the user clicks on it. Check for class **xkit-interface-completed** if you don't want the user to use your button again.
 	
 ## Authorization
 ### XKit.interface.form_key()
