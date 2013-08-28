@@ -1,5 +1,5 @@
 //* TITLE TagViewer **//
-//* VERSION 0.1 REV C **//
+//* VERSION 0.1 REV D **//
 //* DESCRIPTION View post tags easily **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS This extension allows you to see what tags people added to a post while they reblogged it. It also provides access to the post, and to Tumblr search pages to find similar posts.<br><br>Based on the work of <a href='http://inklesspen.tumblr.com'>inklesspen</a> **//

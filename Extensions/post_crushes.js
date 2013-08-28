@@ -1,5 +1,5 @@
 //* TITLE Post Crushes **//
-//* VERSION 1.0 REV A **//
+//* VERSION 1.0 REV B **//
 //* DESCRIPTION Lets you share your Tumblr Crushes **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS To use this extension, go to the 'Following' page on your dashboard, and click on the 'Post My Crushes' button below your Tumblr Crushes. **//
@@ -12,7 +12,7 @@ XKit.extensions.post_crushes = new Object({
 
 	preferences: {
 		"sep0": {
-			text: "Appearance and Tagging",
+			text: "Appearance",
 			type: "separator"
 		},
 		"default_title": {
@@ -21,15 +21,30 @@ XKit.extensions.post_crushes = new Object({
 			default: "My Tumblr Crushes",
 			value: "My Tumblr Crushes"
 		},
+		"show_percentage": {
+			text: "Show percentages on the post next to their usernames",
+			default: false,
+			value: true
+		},
+		"sep1": {
+			text: "Tagging",
+			type: "separator"
+		},
 		"tag_people": {
 			text: "Tag the people in the post",
 			default: true,
 			value: true
 		},
-		"show_percentage": {
-			text: "Show percentages on the post next to their usernames",
+		"auto_tag": {
+			text: "Auto-tag all my replies with a custom tag",
 			default: false,
 			value: true
+		},
+		"auto_tag_text": {
+			text:  "Custom tag for all replies",
+			type: "text",
+			default: "",
+			value: ""
 		}
 	},	
 
@@ -120,9 +135,11 @@ XKit.extensions.post_crushes = new Object({
 
 		var additional = prompt("Anything you would like to add to the post?","");
 	
-		if (typeof additional !== "null" && additional !== "") {
+		if (additional) {
+			console.log("Added custom caption.");
 			m_object["post[two]"] = send_txt + "<p>" + additional + "</p>";
 		} else {
+			console.log("No custom caption.");
 			m_object["post[two]"] = send_txt;
 		}
 

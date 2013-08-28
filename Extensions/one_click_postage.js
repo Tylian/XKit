@@ -1,5 +1,5 @@
 //* TITLE One-Click Postage **//
-//* VERSION 2.5 REV C **//
+//* VERSION 2.6 REV B **//
 //* DESCRIPTION Lets you easily reblog, draft and queue posts **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//
@@ -95,6 +95,8 @@ XKit.extensions.one_click_postage = new Object({
 	auto_tagger: false,
 	auto_tagger_preferences: "",
 	
+	quick_tags: false,
+	
 	cpanel: function(obj) {
 		
 		$(obj).append("<div id=\"one_click_postage_warning_movage\">Tagging options are moved to a separate extension called \"Auto Tagger.\"</div>");
@@ -127,7 +129,27 @@ XKit.extensions.one_click_postage = new Object({
 		}
 		
 	},
-
+	
+	get_quicktags: function() {
+		
+		if (XKit.installed.check("quick_tags") === false) {
+			XKit.extensions.one_click_postage.quick_tags = false;
+		} else {
+			if (XKit.installed.enabled("quick_tags") === true) {
+				if (typeof XKit.extensions.quick_tags	=== "undefined") {
+					// Not booted up yet?	
+					setTimeout(function() { XKit.extensions.one_click_postage.get_quicktags(); }, 100);
+				} else {
+					XKit.console.add("Quick Tags installed and found");
+					XKit.extensions.one_click_postage.quick_tags = true;
+				}
+			} else {
+				XKit.extensions.one_click_postage.quick_tags = false;
+			}
+		}
+		
+	},
+	
 	run: function() {
 
 		/*XKit.extensions.one_click_postage.previous_div_id = "";*/
@@ -135,6 +157,9 @@ XKit.extensions.one_click_postage = new Object({
 		
 		// Let's first check if we have auto_tagger installed and active.
 		XKit.extensions.one_click_postage.get_autotagger();
+		
+		// Then, check Quick Tags.
+		XKit.extensions.one_click_postage.get_quicktags();
 
 		if (this.preferences.allow_resize.value === true) {
 			XKit.tools.add_css("#x1cpostage_caption { resize: vertical; }", "one_click_postage_resize");	
@@ -242,11 +267,13 @@ XKit.extensions.one_click_postage = new Object({
 		$(document).on("mouseout",".reblog_button,.post_control.reblog", function() {
 			if ($(this).hasClass("radar_button") === true) {return; }
 			XKit.extensions.one_click_postage.user_on_box = false;
+			console.log("calling close_menu 1");
 			XKit.extensions.one_click_postage.close_menu($(this));
 		});
 		
 		$(document).on("click",".reblog_button,.post_control.reblog", function() {
 			XKit.extensions.one_click_postage.user_on_box = false;
+			console.log("calling close_menu 2");
 			XKit.extensions.one_click_postage.close_menu($(this), true);
 		});
 
@@ -260,27 +287,30 @@ XKit.extensions.one_click_postage = new Object({
 			// Only close the menu if it doesn't have keyboard or mouse focus
 			if ($("#x1cpostage_box").find('input:focus, textarea:focus').length == 0 && $('#x1cpostage_box:hover').length == 0) {
 				XKit.extensions.one_click_postage.user_on_box = false;
+				console.log("calling close_menu 3");
 				XKit.extensions.one_click_postage.close_menu($(this));
 			}
 		};
 		
+		/*$("#x1cpostage_caption, #x1cpostage_tags").bind("focus", cancel_menu_close);
+		$("#x1cpostage_caption, #x1cpostage_tags").bind("blur", function() { console.log("11"); menu_close() });
+		*/
+		
 		$(document).on("mouseover","#x1cpostage_box", cancel_menu_close);
-		$(document).on("mouseout","#x1cpostage_box", menu_close);
+		$(document).on("mouseout","#x1cpostage_box", function() { console.log("1221"); menu_close() });
 		
 		$("#x1cpostage_tags, #x1cpostage_caption").bind("keydown", function(event) {
 			if (XKit.extensions.one_click_postage.preferences.enable_keyboard_shortcuts.value === true
 					&& event.which == 27) { // 27 = Escape
 				$(this).blur();
 				XKit.extensions.one_click_postage.user_on_box = false;
+				console.log("calling close_menu 4");
 				XKit.extensions.one_click_postage.close_menu($(this), true);
 				event.preventDefault();
 			}
 			event.stopPropagation();
 			event.stopImmediatePropagation();
 		});
-
-		$("#x1cpostage_caption, #x1cpostage_tags").bind("focus", cancel_menu_close);
-		$("#x1cpostage_caption, #x1cpostage_tags").bind("blur", menu_close);
 		
 		$("#x1cpostage_remove_caption").click(function() {
 			
@@ -504,6 +534,19 @@ XKit.extensions.one_click_postage = new Object({
 			$("#x1cpostage_tags").val(additional_tags);
 		}
 		
+		// Quick Tags?
+		$("#x1cpostage_quick_tags").remove();
+		if (XKit.extensions.one_click_postage.quick_tags === true  && typeof XKit.extensions.quick_tags != "undefined") {
+			// Call Quick Tags to render our box.
+			var m_html = "<div id=\"x1cpostage_quick_tags\">" + XKit.extensions.quick_tags.return_for_one_click_postage() + "</div>";
+			if (XKit.extensions.one_click_postage.preferences.show_reverse_ui.value === true) {
+				$("#x1cpostage_caption").before(m_html);	
+			} else {
+				$("#x1cpostage_tags").before(m_html);
+				$("#x1cpostage_quick_tags").addClass("xkit-no-reverse-ui");	
+			}
+		}
+		
 		if (hide_ui !== true) {
 			// Determine where we are going to show the box.
 			var offset = $(obj).offset();
@@ -552,6 +595,8 @@ XKit.extensions.one_click_postage = new Object({
 		$("#x1cpostage_caption").blur();
 	},
 	close_menu: function(obj, force) {
+		
+		console.log("Close menu called: XKit.extensions.one_click_postage.user_on_box = " + XKit.extensions.one_click_postage.user_on_box);
 		clearTimeout(XKit.extensions.one_click_postage.menu_closer_int);
 		
 		if (force === true) {
@@ -566,6 +611,7 @@ XKit.extensions.one_click_postage = new Object({
 		}
 		
 		XKit.extensions.one_click_postage.menu_closer_int = setTimeout(function() {
+			console.log("CLOSING! XKit.extensions.one_click_postage.user_on_box = " + XKit.extensions.one_click_postage.user_on_box);
 			if (XKit.extensions.one_click_postage.user_on_box === false) {
 				last_object = null;
 				if (XKit.extensions.one_click_postage.preferences.show_reverse_ui.value === true) {
@@ -740,21 +786,31 @@ XKit.extensions.one_click_postage = new Object({
 			photo_post = true;	
 		}
 		
+		caption = XKit.tools.replace_all(caption, "\n", "<br/>");
+		
+		var variable_to_use = "post[two]";
+		var current_caption = data.post.two;
+		
+		if (data.post.type === "link") {
+			variable_to_use = "post[three]";	
+			current_caption = data.post.three;
+		}
+		
 		if ($("#x1cpostage_caption").hasClass("x1cpostage_remove_caption_on") === true) {
 			
 			// User wishes to remove caption.
-			m_object["post[two]"] = "";
+			m_object[variable_to_use] = "";
 				
 		} else {
 				
 			if (caption !== "" && typeof caption !== "undefined") {
 				if ($("#x1cpostage_replace").hasClass("selected") === false) {
-					m_object["post[two]"] = data.post.two + "<p>" + caption + "</p>";
+					m_object[variable_to_use] = current_caption + "<p>" + caption + "</p>";
 				} else {
-					m_object["post[two]"] = caption;
+					m_object[variable_to_use] = caption;
 				}
 			} else {
-				m_object["post[two]"] = data.post.two;
+				m_object[variable_to_use] = current_caption;
 			}
 			
 		}

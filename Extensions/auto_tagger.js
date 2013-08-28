@@ -1,5 +1,5 @@
 //* TITLE Auto Tagger **//
-//* VERSION 0.3 REV C **//
+//* VERSION 0.3 REV D **//
 //* DESCRIPTION Tags posts automatically. **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS This extension allows you to automatically add tags to posts based on state (reblogged, original, queued) or post type (audio, video, etc) and keeping original tags while reblogging a post. **//
@@ -123,15 +123,59 @@ XKit.extensions.auto_tagger = new Object({
 	},
 	
 	new_post_check_interval: 0,
+	last_post_id: 0,
 
 	run: function() {
 		this.running = true;
 		new_post_check_interval = setInterval(function() { XKit.extensions.auto_tagger.new_post_check(); }, 1000);	
 	},
 	
+	reblog_do: function() {
+		
+		// Lets first get the post ID.
+		if ($("#post_header").length <= 0) { setTimeout(function() { XKit.extensions.auto_tagger.reblog_do(); }, 100); return; }
+		
+		var post_id = $("input[name='reblog_post_id']").val();	
+		
+		// if (XKit.extensions.auto_tagger.last_post_id === post_id) {return; }
+		
+		XKit.extensions.auto_tagger.last_post_id = post_id;
+		
+		if ($("#post_state").val() === "2") {
+			if (XKit.extensions.auto_tagger.preferences.tag_for_queued.value !== "") {
+				if (XKit.extensions.auto_tagger.check_if_tag_exists(XKit.extensions.auto_tagger.preferences.tag_for_queued.value) === false) {
+					XKit.extensions.auto_tagger.inject_to_window(XKit.extensions.auto_tagger.preferences.tag_for_queued.value);	
+				}
+			}	
+		} else {
+			if (XKit.extensions.auto_tagger.preferences.tag_for_queued.value !== "") {
+				if (XKit.extensions.auto_tagger.check_if_tag_exists(XKit.extensions.auto_tagger.preferences.tag_for_queued.value) === true) {
+					// Remove tag.
+					XKit.extensions.auto_tagger.remove_tag(XKit.extensions.auto_tagger.preferences.tag_for_queued.value);
+				}
+			}
+		}
+		
+	},
+	
+	check_if_tag_exists: function(tag) {
+		
+		var found = false;
+		$("#post_content").find(".tag").each(function() {
+			if ($(this).html() === tag) {
+				found = true;
+			}	
+		});	
+		
+		return found;
+		
+	},
+	
 	new_post_check: function() {
 		
+		if (document.location.href.indexOf("http://www.tumblr.com/reblog/") !== -1) { this.reblog_do(); return; }
 		if (document.location.href.indexOf("http://www.tumblr.com/new/") === -1) { return; }
+		
 		XKit.console.add("Auto Tagger -> new_post_check -> user in new post page!");	
 		
 		if($("#post_form").length <= 0) {
@@ -293,6 +337,37 @@ XKit.extensions.auto_tagger = new Object({
 		}
 	},
 	
+	remove_tag: function(tag) {
+	
+		$("#post_content").find(".tag").each(function() {
+			if ($(this).html() === tag) {
+				$(this).remove();
+			}	
+		});
+		
+		try {
+			
+			var m_tags = $("#post_content").find(".tags").find(".post_tags").val().split(",");
+			//("old: " + m_tags);
+			if (m_tags.length === 0) { return; }
+			var to_add = new Array();
+			
+			for (var i=0;i<m_tags.length;i++) {
+				if (m_tags[i] !== tag) {
+					to_add.push(m_tags[i]);
+				}	
+			}
+			
+			// $("#post_tags").val(to_add.join(","));
+			//alert("new: " + to_add.join(","));
+			$("#post_content").find(".tags").find(".post_tags").val(to_add.join(","));
+			
+		} catch(e) {
+			XKit.console.add("auto_tagger -> " + e.message);	
+		}	
+		
+	},
+	
 	inject_to_window: function(to_add) {
 		
 		if($("#post_content").length <= 0) {
@@ -317,7 +392,7 @@ XKit.extensions.auto_tagger = new Object({
 		}
 		$("#post_tags_label").css('display','none');
 		$("#post_tags").val(to_add);
-		
+
 	},
 
 	destroy: function() {

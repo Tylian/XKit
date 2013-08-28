@@ -1,5 +1,5 @@
 //* TITLE One-Click-Reply **//
-//* VERSION 1.5 REV D **//
+//* VERSION 1.5 REV E **//
 //* DESCRIPTION Lets you reply to notifications **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS To use this extension, hover over a notification and click on the Reply button. If Multi-Reply is on, hold down the ALT key while clicking on the Reply button to select/deselect posts and reply to all of them at once. **//
@@ -41,12 +41,12 @@ XKit.extensions.one_click_reply = new Object({
 			value: true
 		},
 		"auto_tag": {
-			text: "Auto-tag all my replies with a custom tag",
+			text: "Auto-tag the post with a custom one",
 			default: false,
 			value: true
 		},
 		"auto_tag_text": {
-			text:  "Custom tag for all replies",
+			text:  "Custom tag for Crush Posts",
 			type: "text",
 			default: "",
 			value: ""
@@ -533,16 +533,20 @@ XKit.extensions.one_click_reply = new Object({
 					XKit.tools.set_setting("xkit_one_click_reply_username", m_tags);
 					
 					var m_url = "http://www.tumblr.com/new/text";
-		
+					
 					if (document.location.href.indexOf("/blog/") !== -1) {
 						// Maybe we can make this better?
-						m_url = $("#new_post_label_text").attr('href');
+						if ($("#new_post_label_text").length > 0) {
+							m_url = $("#new_post_label_text").attr('href');
+						} else {
+							m_url = $("body").attr('data-new-root') + "/new/text";	
+						}
 					}
 					
 					if (m_url.indexOf('?') !== -1) {
 						m_url = m_url.substring(0, m_url.indexOf('?'));
 					}
-		
+					
 					if (this.preferences.tag_people.value === true) {
 						m_url = m_url + "?tags=" + m_tags;
 						if (this.preferences.auto_tag.value === true && this.preferences.auto_tag_text.value !== "") {

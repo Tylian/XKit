@@ -1,5 +1,5 @@
 //* TITLE Blacklist **//
-//* VERSION 2.0 REV C **//
+//* VERSION 2.0 REV D **//
 //* DESCRIPTION Clean your dash **//
 //* DETAILS This extension allows you to block posts based on the words you specify. If a post has the text you've written in the post itself or it's tags, it will be replaced by a warning, or won't be shown on your dashboard, depending on your settings. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -95,7 +95,23 @@ XKit.extensions.blacklist = new Object({
 		
 		if (this.preferences.mini_block.value === true) {
 			
-			var mini_ui = "	.xblacklist_blacklisted_post .post_avatar { display: none; } .xblacklist_blacklisted_post .xblacklist_excuse { color: rgba(255,255,255,.43); height: 20px; padding: 0px; line-height: 20px; padding-left: 15px; } .xblacklist_blacklisted_post .post_content { background: transparent; color: rgba(255,255,255,.43); } .xblacklist_blacklisted_post:hover .xblacklist_open_post { display: block; } .xblacklist_blacklisted_post .xblacklist_open_post { display: none; } .xblacklist_blacklisted_post { opacity: 1 !important; padding: 2px; box-shadow: inset 0px 1px 0px rgba(255,255,255,0.18); border: 1px solid rgba(0,0,0,0.28); background: rgba(255,255,255,0.06); }";
+			var mini_ui = 	" .xblacklist_blacklisted_post .post_avatar, .xblacklist_blacklisted_post .post_permalink { display: none !important; } " +
+					" .xblacklist_blacklisted_post .xblacklist_excuse { " +
+						" position: absolute; top: 0; left: 0; width: 100%; " +
+						" color: rgba(255,255,255,.43); height: 27px !important; padding: 0px; !important; " +
+						" line-height: 27px !important; padding-left: 15px; !important; } " +
+					" .xblacklist_blacklisted_post .post_content { " +
+						" background: transparent; color: rgba(255,255,255,.43); } " +
+					" .xblacklist_blacklisted_post:hover .xblacklist_open_post { display: block; } " +
+					" .xblacklist_blacklisted_post .xblacklist_open_post { " +
+						" display: none; " +
+					" } " +
+					" .xblacklist_blacklisted_post { " +
+						" height: 40px !important; " +
+						" opacity: 1 !important; padding: 0px !important; " + 
+						" box-shadow: inset 0px 1px 0px rgba(255,255,255,0.10); " +
+						" border: 1px solid rgba(0,0,0,0.28); background: rgba(255,255,255,0.06);" +
+					" }";
 			
 			XKit.tools.add_css(mini_ui, "xkit_blacklist_mini_ui");
 			

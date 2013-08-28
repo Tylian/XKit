@@ -1,5 +1,5 @@
 //* TITLE XInbox **//
-//* VERSION 1.6 REV C **//
+//* VERSION 1.7 REV A **//
 //* DESCRIPTION Enhances your Inbox experience **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS XInbox allows you to tag posts before posting them, and see all your messages at once, and lets you delete multiple messages at once using the Mass Editor mode. To use this mode, go to your Inbox and click on the Mass Editor Mode button on your sidebar, click on the messages you want to delete then click the Delete Messages button.  **//
@@ -58,6 +58,11 @@ XKit.extensions.xinbox = new Object({
 		},
 		"show_queue_draft": {
 			text: "Show Queue and Draft buttons while answering asks",
+			default: false,
+			value: false
+		},
+		"bigger_answer_boxes": {
+			text: "Make the answer box taller when I'm typing a reply to an ask",
 			default: false,
 			value: false
 		},
@@ -618,6 +623,20 @@ XKit.extensions.xinbox = new Object({
 		}, 700);
 
 	},
+	
+	resize_text_area: function(post_id) {
+		
+		if ($("#ask_answer_field_" + + post_id + "_tbl").length > 0) {
+
+			$("#ask_answer_field_" + + post_id + "_tbl, #ask_answer_field_" + post_id + "_ifr").css("height","220px");
+					
+		} else {
+					
+			setTimeout(function() { XKit.extensions.xinbox.resize_text_area(post_id); }, 100);	
+						
+		}
+		
+	},
 
 	init_tags: function() {
 		
@@ -629,6 +648,11 @@ XKit.extensions.xinbox = new Object({
 				
 				var m_parent = $(this).parentsUntil(".post").parent();
 				var post_id = $(m_parent).attr('id').replace("post_","");
+				
+				// Make it longer?
+				if(XKit.extensions.xinbox.preferences.bigger_answer_boxes.value === true) {
+					XKit.extensions.xinbox.resize_text_area(post_id);
+				}
 
 				// Disable default buttons.
 				var submit_button = $(m_parent).find('[id^="ask_publish_button_"]');

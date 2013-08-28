@@ -1,5 +1,5 @@
 //* TITLE Reblog Yourself **//
-//* VERSION 1.2 REV C **//
+//* VERSION 1.2 REV D **//
 //* DESCRIPTION Allows you to reblog posts back to your blog **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//
@@ -93,26 +93,40 @@ XKit.extensions.reblog_yourself = new Object({
 		// check which blog is missing from the list
 		var m_blogs = XKit.tools.get_blogs();
 		var check = [];
+		var do_add = false;
+		var m_blog_avatar = "";
 		for(i=0;i<m_blogs.length;i++) {
 			if (m_blogs[i] !== "") {
-				check = $('#tumblelog_choices .popover_inner ul li div[data-option-value='+m_blogs[i]+']');
-				if(check.length == 0) {
+				check = $('#tumblelog_choices').find('.popover_inner ul li div[data-option-value='+m_blogs[i]+']');
+				if(check.length <= 0) {
+					do_add = true;
 					m_blog_url = m_blogs[i];
 					m_blog_title = $("#menuitem-"+m_blog_url+" .blog_title span").html();
 					
-					m_blog_avatar = $("#menuitem-"+m_blog_url+" .blog_icon").css("background-image");
-					m_blog_avatar = m_blog_avatar.substring(4, m_blog_avatar.length - 1);
-					
-					// I'm pretty sure they just use PNG but just in case:
-					m_blog_avatar = m_blog_avatar.replace("_40.png","_64.png");
-					m_blog_avatar = m_blog_avatar.replace("_40.gif","_64.gif");
-					m_blog_avatar = m_blog_avatar.replace("_40.jpg","_64.jpg");
+					try {
+						m_blog_avatar = $("#menuitem-"+m_blog_url).find(".blog_icon_image").attr('src');
+						// I'm pretty sure they just use PNG but just in case:
+						m_blog_avatar = m_blog_avatar.replace("_40.png","_64.png");
+						m_blog_avatar = m_blog_avatar.replace("_40.gif","_64.gif");
+						m_blog_avatar = m_blog_avatar.replace("_40.jpg","_64.jpg");
+					} catch(e) {
+						XKit.console.add("reblog_yourself: " + e.message);	
+					}
+				} else {
+					console.log("Found for " + m_blogs[i]);	
 				}
 			}
 		}
-
-		var post_avatar = m_blog_avatar;
-
+		
+		if (!do_add) { return; }
+		
+		try {
+			var post_avatar = m_blog_avatar;
+		} catch(e) {
+			var post_avatar = "";	
+			XKit.console.add("reblog_yourself: " + e.message);
+		}
+		
 		var m_html = '<div class="option" data-facebook-on="false" data-twitter-on="false" data-facebook="false" data-twitter="false" data-is-password-protected="false" data-use-sub-avatar="" data-use-channel-avatar="0" data-blog-url="http://' + m_blog_url + '.tumblr.com/" data-avatar-url="' + post_avatar +'" data-user-avatar-url="' + post_avatar +'" data-option-value="'+ m_blog_url +'" title="'+ m_blog_title +'">' + m_blog_url + '</div>';
 
 		$("#tumblelog_choices").find(".popover_inner").find("ul").prepend("<li>" + m_html + "</li>");

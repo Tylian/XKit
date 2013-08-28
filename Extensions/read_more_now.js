@@ -1,5 +1,5 @@
 //* TITLE Read More Now **//
-//* VERSION 1.2 REV A **//
+//* VERSION 1.2 REV C **//
 //* DESCRIPTION Read Mores in your dash **//
 //* DETAILS This extension allows you to read 'Read More' posts without leaving your dash. Just click on the 'Read More Now!' button on posts and XKit will automatically load and display the post on your dashboard. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -48,11 +48,26 @@ XKit.extensions.read_more_now = new Object({
 					rs = rs.substring(0, rs.length - 2);
 					try {
 						var m_object = JSON.parse(rs);
+						console.log(m_object.posts[0]);
+						var m_contents = m_object.posts[0]["regular-body"];
+						
+						if (m_object.posts[0]["type"] === "photo") {
+							m_contents = m_object.posts[0]["photo-caption"];
+						}
+						
+						if (m_object.posts[0]["type"] === "answer") {
+							m_contents = m_object.posts[0]["answer"];
+						}
+
+						if (m_object.posts[0]["type"] === "link") {
+							m_contents = m_object.posts[0]["link-description"];
+						}
+						
 						if ($(m_cont).parent().parent().find(".post_title").length > 0) {
 							var post_title = $(m_cont).parent().parent().find(".post_title")[0].outerHTML;
-							$(m_cont).parent().parent().html(XKit.extensions.read_more_now.strip_scripts(post_title + m_object.posts[0]["regular-body"]));
+							$(m_cont).parent().parent().html(XKit.extensions.read_more_now.strip_scripts(post_title + m_contents));
 						} else {
-							$(m_cont).parent().parent().html(XKit.extensions.read_more_now.strip_scripts(m_object.posts[0]["regular-body"]));
+							$(m_cont).parent().parent().html(XKit.extensions.read_more_now.strip_scripts(m_contents));
 						}
 					} catch(e) {
 						$(m_cont).removeClass("disabled");

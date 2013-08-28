@@ -1,5 +1,5 @@
 //* TITLE PostBlock **//
-//* VERSION 0.1 REV B **//
+//* VERSION 0.1 REV C **//
 //* DESCRIPTION Block the posts you don't like **//
 //* DETAILS This is an experimental extension that blocks posts you don't like on your dashboard. When you block a post, it will be hidden completely, including reblogs of it. **//
 //* DEVELOPER STUDIOXENIX **//
