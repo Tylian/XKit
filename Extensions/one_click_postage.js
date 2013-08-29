@@ -463,7 +463,7 @@ XKit.extensions.one_click_postage = new Object({
 						$('#x1cpostage_tags').focus();
 						break;
 				}
-				event.preventDefault();
+				e.preventDefault();
 				return false;
 			} else if (boxPos > screenPos) {
 				// Post is too far down the screen, stop looking
