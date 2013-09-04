@@ -1,5 +1,5 @@
 //* TITLE Activity+ **//
-//* VERSION 0.2 REV B **//
+//* VERSION 0.2 REV C **//
 //* DESCRIPTION Tweaks for the Activity page **//
 //* DETAILS This extension brings a couple of tweaks for the Activity page, such as the ability to filter notes by type and showing timestamps. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -51,7 +51,7 @@ XKit.extensions.activity_plus = new Object({
 	run: function() {
 		
 		this.running = true;
-		if (!$("body").hasClass("notifications_index")) { return; }
+		if (!XKit.interface.where().activity) { return; }
 		
 		XKit.tools.init_css("activity_plus");
 		var m_css = "";

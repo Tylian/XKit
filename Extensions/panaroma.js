@@ -1,5 +1,5 @@
 //* TITLE Panorama **//
-//* VERSION 1.2 REV B **//
+//* VERSION 1.2 REV C **//
 //* DESCRIPTION Widescreen dashboard **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//
@@ -29,11 +29,22 @@ XKit.extensions.panaroma = new Object({
 			XKit.tools.add_css("#posts .post .image_thumbnail.enlarged { width: 100% !important; height: auto !important; } #posts .post .flipcard, #posts .post .flipcard_front, #posts .post_content .image { width: 100% !important; height: auto !important; }", "panaroma_str");	
 			
 		}
+		
+		$(window).on('resize', XKit.extensions.panaroma.resized);
+		XKit.extensions.panaroma.resized();
+	},
+	
+	resized: function() {
+		
+		var m_width = $(".post .post_body").width() - 60;
+		$(".post .note_item").css("width", m_width + "px");	
+		
 	},
 
 	destroy: function() {
 		XKit.tools.remove_css("panaroma");
 		XKit.tools.remove_css("panaroma_str");
+		$(window).off('resize', XKit.extensions.panaroma.resized);
 		this.running = false;
 	}
 

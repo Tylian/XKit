@@ -1,5 +1,5 @@
 //* TITLE One-Click Postage **//
-//* VERSION 2.6 REV B **//
+//* VERSION 2.7 REV B **//
 //* DESCRIPTION Lets you easily reblog, draft and queue posts **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//
@@ -9,6 +9,9 @@ XKit.extensions.one_click_postage = new Object({
 
 	running: false,
 	
+	qq_icon: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAATCAYAAAByUDbMAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBNYWNpbnRvc2giIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6QzgxMzAzQzIwRDZGMTFFM0IyOTBDRDZCRDY3Qzk1QTkiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6QzgxMzAzQzMwRDZGMTFFM0IyOTBDRDZCRDY3Qzk1QTkiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDpDODEzMDNDMDBENkYxMUUzQjI5MENENkJENjdDOTVBOSIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDpDODEzMDNDMTBENkYxMUUzQjI5MENENkJENjdDOTVBOSIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PpK36AkAAAFxSURBVHjalJSxS8NAFMZzJruuhSBCdHMISIcWhw4OAZfO/hHSySmFblnF2cH/wA6CDg5Oujg4dHJRUGinklWo1O/kO3h5Hkl88OOSd+++vHv3cma9XgfajDE9DEegD/ZBB8zBDDyCe6x7+rPQijlgCSjAwk7VsGBcUlkvhLrgukFEY+O7FTFmpIVeQQZiEHLM6NeCiRQrVEAe1Fuu4gtX+56qkRY6B8/gUNU3VzW0OsFYbU3bDeeOlVigtjze4PE7Ow3+ZzK+H7GPnM08CwzHXfTfAZ/fwFLF/+qsRKqhR+zO0xInnAuFbxWxs2NO2k7/VGJnYBt8gW/6liLe2VxnsQO25N/RYJnI7NY5U/AuJh6saAuxymk6pxUqwRCMOHnVIObts5SOiQi0mZU1Yt4/IBI1KkXd7PMm32MWt8PjvwB7QngKLuWX7OIXMOCX7PuUmbW/NWgjT+CkRsx7nxmRXcrMSm59gIAhuv6j7U37I8AABDEAB/datwYAAAAASUVORK5CYII=",
+	qq_ok_icon: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAATCAYAAAByUDbMAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBNYWNpbnRvc2giIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6NzNGRkUyQzUwRDcwMTFFM0IyOTBDRDZCRDY3Qzk1QTkiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6NzNGRkUyQzYwRDcwMTFFM0IyOTBDRDZCRDY3Qzk1QTkiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDpDODEzMDNDNDBENkYxMUUzQjI5MENENkJENjdDOTVBOSIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDo3M0ZGRTJDNDBENzAxMUUzQjI5MENENkJENjdDOTVBOSIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PkDLUa4AAAG4SURBVHjalJQxSEJRFIafL/fcRNAKrIYSCsJBCWpwqK3WpgQ3IwgiQhKCJBocRBoFp5ptcwiqRYccJNxECgqkpWxsCPov/DdOh6fRgY93733n/Jx77rnXl72YdzwsAVIgCWIgBPqgAxrgGjSN4/lW5yfIr0SiIAPSIKj+hckayIIqqICedXCFcxwUwaGHkLYg/Yo7l7G4FjMZ5cCGCOiCdRDhDiKcd4WP8c9BMCrFMkooD2ZBHbyAL37rXM8rwYwVS7BGUqgg5iXQAstiraAE08gu4fLUgmJrBVWfabAExtV6QWzZxKdcHr+1Xed/Jv2TfvaRtY5HgE9laOwRvCn/mMuGtNb3EBtTtWux17R/yM+FsF3gqUk7ABPgk6fqMCtHJ2L7x9oUCICBWHsAc0Nq9qtEts8WwRNr8Q5uKfqXlcW4YcVqDN4Ee2CFNRplR2CG41dz+V1mNcngGr936kZ4CZ2IeRWvR9MvtjMQdRuIJg3zkEKsUVlkZHdVsU+Qqc8H2AZtcMP5FZ2fR2RohE6RVU9e9GOwQCGHWbVHiJganYF9CN3rx7HEDFe5xQDHDvtu6Esr7VuAAQC+Omj592980QAAAABJRU5ErkJggg==",
+	
 	preferences: {
 		"sep_0": {
 			text: "Shortcuts",
@@ -16,6 +19,11 @@ XKit.extensions.one_click_postage = new Object({
 		},
 		"enable_keyboard_shortcuts": {
 			text: "Use keyboard shortcuts (R/Q/D to reblog/queue/draft, T to tag, escape to close)",
+			default: false,
+			value: false
+		},
+		"enable_quick_queue": {
+			text: "Enable QuickQueue buttons on posts",
 			default: false,
 			value: false
 		},
@@ -386,6 +394,51 @@ XKit.extensions.one_click_postage = new Object({
 			
 		}
 		
+		if (this.preferences.enable_quick_queue.value === true) {
+			
+			XKit.interface.create_control_button("xkit-one-click-postage-quickqueue", this.qq_icon, "QuickQueue", "", this.qq_ok_icon);	
+			XKit.post_listener.add("quick_queue_do_posts", XKit.extensions.one_click_postage.quick_queue_do_posts);
+			XKit.extensions.one_click_postage.quick_queue_do_posts();
+			
+			$(document).on('click', '.xkit-one-click-postage-quickqueue', XKit.extensions.one_click_postage.quick_queue_button_clicked);	
+			
+		}
+		
+	},
+	
+	quick_queue_button_clicked: function(e) {
+		
+		var obj = $(e.target);
+		
+		if ($(obj).hasClass("xkit-interface-working") === true) { return; }
+		
+		var parent_box = $(e.target).parentsUntil('.post').parent();
+		
+		XKit.extensions.one_click_postage.last_object = parent_box;
+		XKit.extensions.one_click_postage.last_icon_object = obj;
+		XKit.extensions.one_click_postage.last_post_id = $(parent_box).attr('data-post-id');	
+		
+		XKit.interface.switch_control_button($(obj), true);
+		XKit.extensions.one_click_postage.post(2, false, true);
+		
+	},
+	
+	quick_queue_do_posts: function() {
+		
+		var posts = XKit.interface.get_posts("xkit-1cp-quick-queue-done");
+		
+		if (XKit.interface.where().queue === true) { return; }
+
+		$(posts).each(function() {
+			
+			$(this).addClass("xkit-1cp-quick-queue-done");
+			
+			if (XKit.interface.where().inbox === true) { return; }
+			
+			XKit.interface.add_control_button(this, "xkit-one-click-postage-quickqueue", "");
+
+		});
+		
 	},
 	
 	check_if_alreadyreblogged: function() {
@@ -538,12 +591,14 @@ XKit.extensions.one_click_postage = new Object({
 		$("#x1cpostage_quick_tags").remove();
 		if (XKit.extensions.one_click_postage.quick_tags === true  && typeof XKit.extensions.quick_tags != "undefined") {
 			// Call Quick Tags to render our box.
-			var m_html = "<div id=\"x1cpostage_quick_tags\">" + XKit.extensions.quick_tags.return_for_one_click_postage() + "</div>";
-			if (XKit.extensions.one_click_postage.preferences.show_reverse_ui.value === true) {
-				$("#x1cpostage_caption").before(m_html);	
-			} else {
-				$("#x1cpostage_tags").before(m_html);
-				$("#x1cpostage_quick_tags").addClass("xkit-no-reverse-ui");	
+			if (XKit.extensions.quick_tags.preferences.show_in_one_click_postage.value === true) {
+				var m_html = "<div id=\"x1cpostage_quick_tags\">" + XKit.extensions.quick_tags.return_for_one_click_postage() + "</div>";
+				if (XKit.extensions.one_click_postage.preferences.show_reverse_ui.value === true) {
+					$("#x1cpostage_caption").before(m_html);	
+				} else {
+					$("#x1cpostage_tags").before(m_html);
+					$("#x1cpostage_quick_tags").addClass("xkit-no-reverse-ui");	
+				}
 			}
 		}
 		
@@ -622,7 +677,7 @@ XKit.extensions.one_click_postage = new Object({
 			}
 		}, 700);
 	},
-	post: function(state, retry_mode) {
+	post: function(state, retry_mode, quick_queue_mode) {
 		if (XKit.extensions.one_click_postage.preferences.show_reverse_ui.value === true) {
 			$("#x1cpostage_box").fadeOut('fast');
 		} else {
@@ -657,9 +712,16 @@ XKit.extensions.one_click_postage = new Object({
 			blog_id = $("#x1cpostage_blog").val();
 		}
 		
-		$(XKit.extensions.one_click_postage.last_object).find(".reblog_button, .post_control.reblog").addClass("xkit-one-click-reblog-working");
+		if (quick_queue_mode !== true) {
+			$(XKit.extensions.one_click_postage.last_object).find(".reblog_button, .post_control.reblog").addClass("xkit-one-click-reblog-working");
+		}
 		
 		var m_button = $(XKit.extensions.one_click_postage.last_object).find(".reblog_button, .post_control.reblog");
+		
+		if (quick_queue_mode) {
+			m_button = $(XKit.extensions.one_click_postage.last_object).find(".xkit-one-click-postage-quickqueue");
+		}
+		
 		var caption = $("#x1cpostage_caption").val();
 		var tags = $("#x1cpostage_tags").val();
 
@@ -677,7 +739,7 @@ XKit.extensions.one_click_postage = new Object({
 						XKit.extensions.one_click_postage.show_error("OCP02 [Not Found]", state);
 					} else {
 						if (retry_mode !== true) {
-							XKit.extensions.one_click_postage.post(state, true);
+							XKit.extensions.one_click_postage.post(state, true, quick_queue_mode);
 						} else {
 							XKit.extensions.one_click_postage.show_error("OCP03-" + response.status, state);
 						}
@@ -698,7 +760,7 @@ XKit.extensions.one_click_postage = new Object({
 					return;
 				}
 				if (mdata.errors === false) {
-					XKit.extensions.one_click_postage.process(mdata, state, form_key, blog_id, post_id, caption, tags, reblog_key, m_button, false, root_id);
+					XKit.extensions.one_click_postage.process(mdata, state, form_key, blog_id, post_id, caption, tags, reblog_key, m_button, false, root_id, quick_queue_mode);
 				} else {
 					XKit.extensions.one_click_postage.show_error("OCP05", state);
 					$(m_button).removeClass("xkit-one-click-reblog-working");
@@ -707,7 +769,7 @@ XKit.extensions.one_click_postage = new Object({
 		});
 		
 	},
-	process: function(data, state, form_key, blog_id, post_id, caption, tags, reblog_key, m_button, retry_mode, root_id) {
+	process: function(data, state, form_key, blog_id, post_id, caption, tags, reblog_key, m_button, retry_mode, root_id, quick_queue_mode) {
 
 		var m_object = new Object;
 
@@ -791,7 +853,7 @@ XKit.extensions.one_click_postage = new Object({
 		var variable_to_use = "post[two]";
 		var current_caption = data.post.two;
 		
-		if (data.post.type === "link") {
+		if (data.post.type === "link" || data.post.type === "note") {
 			variable_to_use = "post[three]";	
 			current_caption = data.post.three;
 		}
@@ -857,7 +919,7 @@ XKit.extensions.one_click_postage = new Object({
 						XKit.extensions.one_click_postage.show_error("OCP07", state);
 					} else {
 						if (retry_mode !== true) {
-							XKit.extensions.one_click_postage.process(data, state, form_key, "", post_id, caption, tags, reblog_key, m_button, true, root_id);
+							XKit.extensions.one_click_postage.process(data, state, form_key, "", post_id, caption, tags, reblog_key, m_button, true, root_id, quick_queue_mode);
 						} else {
 							XKit.extensions.one_click_postage.show_error("OCP08-" + response.status, state);
 						}
@@ -886,7 +948,12 @@ XKit.extensions.one_click_postage = new Object({
 							XKit.extensions.one_click_postage.add_to_alreadyreblogged(root_id);
 						}
 						if (XKit.extensions.one_click_postage.preferences.enable_alreadyreblogged.value === true ||XKit.extensions.one_click_postage.preferences.dim_posts_after_reblog.value === true) {
-							$(m_button).addClass("xkit-one-click-reblog-done");
+							if (quick_queue_mode !== true) {
+								$(m_button).addClass("xkit-one-click-reblog-done");
+							} else {
+								XKit.interface.switch_control_button($(m_button), false);
+								XKit.interface.completed_control_button($(m_button), true);	
+							}
 						}
 						if (XKit.extensions.one_click_postage.preferences.dont_show_notifications.value !== true) {
 							XKit.notifications.add(mdata.message, "ok");

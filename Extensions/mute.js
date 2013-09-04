@@ -1,5 +1,5 @@
 //* TITLE Mute! **//
-//* VERSION 1.2 REV B **//
+//* VERSION 1.2 REV C **//
 //* DESCRIPTION Better than 'shut up!' **//
 //* DETAILS This extension allows you to hide text and answer posts by an user while still seeing their other posts. Useful if a blogger has nice posts but a bad personality. Please note that you'll need to re-mute them if a user changes their URL. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -114,30 +114,87 @@ XKit.extensions.mute = new Object({
 		setTimeout(function() {
 			
                 if (typeof XKit.extensions.show_more !== "undefined") {
-                	if (XKit.extensions.show_more.running === true && XKit.extensions.show_more.preferences.use_classic_menu.value === true) {
-                		console.log("-------------- OK!");
-                		XKit.extensions.show_more.add_custom_menu("mute", function(data) {
-                			
-                			console.log(data);
-                			var user_url = data.name;
-                			
-                			var m_class = "";
-        				var m_sentence = "Mute";
-					if (XKit.extensions.mute.muted.indexOf(user_url) !== -1) {
-						m_sentence = "Unmute";	
-						m_class = "already_muted";
-					}
-					
-					$(document).off("click", ".xkit-mute-button-" + user_url, XKit.extensions.mute.menu_clicked);
-					$(document).on("click", ".xkit-mute-button-" + user_url, XKit.extensions.mute.menu_clicked);
+                	
+                	if (XKit.extensions.show_more.running === true) {
+                		
+                		if (XKit.extensions.show_more.preferences.use_classic_menu.value === true) {
 
-					return "<div data-url=\"" + user_url + "\" class=\"xkit-mute-button-" + user_url + " xkit-mute " + m_class + "\">" + m_sentence + "</div>";
+                			XKit.extensions.show_more.add_custom_menu("mute", function(data) {
+                			
+                				console.log(data);
+                				var user_url = data.name;
+                				
+                				var m_class = "";
+        					var m_sentence = "Mute";
+						if (XKit.extensions.mute.muted.indexOf(user_url) !== -1) {
+							m_sentence = "Unmute";	
+							m_class = "already_muted";
+						}
+						
+						$(document).off("click", ".xkit-mute-button-" + user_url, XKit.extensions.mute.menu_clicked);
+						$(document).on("click", ".xkit-mute-button-" + user_url, XKit.extensions.mute.menu_clicked);
+	
+						return "<div data-url=\"" + user_url + "\" class=\"xkit-mute-button-" + user_url + " xkit-mute " + m_class + "\">" + m_sentence + "</div>";	
 
-                		});	
+                			});	
+                			
+                		} else {
+                			
+                			XKit.extensions.show_more.add_custom_menu("mute", function(data) {
+                			
+                				console.log(data);
+                				var user_url = data.name;
+                				
+                				var m_class = "";
+        					var m_sentence = "Mute";
+						if (XKit.extensions.mute.muted.indexOf(user_url) !== -1) {
+							m_sentence = "Unmute";	
+							m_class = "already_muted";
+						}
+						
+						$(document).off("click", ".xkit-mute-button-" + user_url, XKit.extensions.mute.menu_clicked_new);
+						$(document).on("click", ".xkit-mute-button-" + user_url, XKit.extensions.mute.menu_clicked_new);
+						
+						return "<li>" +
+                					"<a data-url=\"" + user_url + "\" class=\"xkit-mute-button-" + user_url + " xkit-mute xkit-new-menu-fix\">" +
+                						"<span class=\"hide_overflow\">" + m_sentence + "</span>" +
+                					"</a>" +
+                		 		 "</li>";
+
+                			});	
+                			
+                		}
+                		
                 	}
                 }
                 
                 }, 2000);
+		
+	},
+	
+	menu_clicked_new: function(e) {
+		
+		var m_object = $(e.target);
+		
+		if (!m_object.hasClass("xkit-mute")) {
+
+			while (!m_object.hasClass("xkit-mute")) {
+				m_object = m_object.parent();
+			}			
+			
+		}
+		
+		var user_url = $(m_object).attr('data-url');
+		XKit.extensions.mute.toggle_mute(user_url);
+		$(".tumblelog_popover_glass").trigger('click');
+		setTimeout(function() { $(".tumblelog_popover_glass").trigger('click'); }, 10);
+		$(".popover").hide();
+		
+		var m_sentence = "muted.";
+		if (XKit.extensions.mute.muted.indexOf(user_url) === -1) {
+			m_sentence = "unmuted.";	
+		}
+		XKit.notifications.add("User " + user_url + " is now " + m_sentence,"ok");	
 		
 	},
 	

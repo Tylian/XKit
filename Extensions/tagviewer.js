@@ -1,5 +1,5 @@
 //* TITLE TagViewer **//
-//* VERSION 0.1 REV D **//
+//* VERSION 0.1 REV F **//
 //* DESCRIPTION View post tags easily **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS This extension allows you to see what tags people added to a post while they reblogged it. It also provides access to the post, and to Tumblr search pages to find similar posts.<br><br>Based on the work of <a href='http://inklesspen.tumblr.com'>inklesspen</a> **//
@@ -12,23 +12,27 @@ XKit.extensions.tagviewer = new Object({
 	running: false,
 	slow: false,
 	apiKey: "fuiKNFp9vQFvjLNvx4sUwti4Yb5yGutBN4Xh10LXZhhRKjWlV4",
+	
+	button_icon: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAATCAYAAAByUDbMAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBNYWNpbnRvc2giIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6QTk1QTcxMEMwMjA2MTFFM0IwRTREQUE2OUI0ODg5QzAiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6QTk1QTcxMEQwMjA2MTFFM0IwRTREQUE2OUI0ODg5QzAiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDpDRTQ1N0Y3NTAyMDUxMUUzQjBFNERBQTY5QjQ4ODlDMCIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDpDRTQ1N0Y3NjAyMDUxMUUzQjBFNERBQTY5QjQ4ODlDMCIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/Psb53nIAAAFmSURBVHjapJSxSgNBEIbvAqa6EEtBIY34GiZtHsDX0Dc438AI9oKFKS20SnMRRbQQG4uIRbARCxFFEVHx/Af+C8M4e1u48LG7N3P/zszOXVqWZZKmaZnUjxb83iI+SYPzd8TvHAdmMbFEIsN4lyVF98El95oJyMQ/hBXbBHNgSaJxBG+YsivWMIG+gi/wAH6cRFbARTBlE9kj2AZHTlSaay/lSuzD1KYHlkmPz6zgrU25ErvnC/PB4sLmiE60YOW4oF7qgzE4IbLuK/uak3JrJkanNjioqZPY2gFBueVMC11Fil7SpxI8NLZhJVao02WeOkK7nAuVjbbvyYNcn8p1x0m5o6LfodiI+zPQ1E37DIcXFly+hIGyjWG7Ex/un5TtFHRh/7Rp5oyuUBEVfJY7acptN21r6AvInR5bdy5gUQvVtYZcwBaZ2tYIkVJoNvARr2LaYMcnrNMAfsex39kfsf+MXwEGAADNf36DmfC2AAAAAElFTkSuQmCC",
 
 	run: function() {
 
 		this.running = true;
+		
 		if ($(".post").length > 0) {
 			XKit.tools.init_css("tagviewer");
+			XKit.interface.create_control_button("xkit-tagviewer", this.button_icon, "TagViewer", "");
 			XKit.extensions.tagviewer.init();
-				XKit.post_listener.add("tagviewer", XKit.extensions.tagviewer.do);
-				XKit.extensions.tagviewer.do();
+			XKit.post_listener.add("tagviewer", XKit.extensions.tagviewer.do);
+			XKit.extensions.tagviewer.do();
 		}
 		
 	},
 
 	init: function() {
 
-		$(document).on("click", ".xkit_tagviewer_button", function(event) {
-			var post_id = $(this).attr('data-xkit-tagviewer-post-id');
+		$(document).on("click", ".xkit-tagviewer", function(event) {
+			var post_id = $(this).attr('data-post-id');
 			var tumblelog_key = $(this).attr('data-xkit-tagviewer-tumblelog-key');
 			var tumblelog_name = $(this).attr('data-xkit-tagviewer-tumblelog-name');
 			XKit.extensions.tagviewer.view_tags(post_id, tumblelog_key, tumblelog_name);
@@ -336,10 +340,33 @@ XKit.extensions.tagviewer = new Object({
 	},
 
 	do: function() {
+		
+		// get posts:
+		var posts = XKit.interface.get_posts("xkit-tagviewer-done");
 
+		$(posts).each(function() {
+			
+			$(this).addClass("xkit-tagviewer-done");
+			
+	  		var m_post = XKit.interface.post($(this));
+	  		
+	  		// Post has no notes, skip.
+	  		if (m_post.note_count === 0) { return; }
+			
+			// Don't add button if we are in inbox.
+			if ($(this).hasClass("is_note") && XKit.interface.where().inbox === true) { return; }
+
+			XKit.interface.add_control_button(this, "xkit-tagviewer", "data-xkit-tagviewer-tumblelog-key=\"" + m_post.tumblelog_key + "\" data-xkit-tagviewer-tumblelog-name=\"" + m_post.owner + "\"");
+
+		});
+		
+		return;
+		
 		$(".post").not(".note").not(".xtagviewer_done").each(function() {
 			
 			$(this).addClass("xtagviewer_done");
+			
+			if ($(this).hasClass("fan_mail")) {return; }
 			
 	  		var post_id = $(this).attr('data-post-id');
 	  		var tumblelog_key = $(this).attr('data-tumblelog-key');

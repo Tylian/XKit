@@ -1,5 +1,5 @@
 //* TITLE XKit Updates **//
-//* VERSION 1.1 REV B **//
+//* VERSION 1.2 REV A **//
 //* DESCRIPTION Provides automatic updating of extensions **//
 //* DEVELOPER STUDIOXENIX **//
 XKit.extensions.xkit_updates = new Object({
@@ -59,7 +59,11 @@ XKit.extensions.xkit_updates = new Object({
 	updated_list: "",
 	updated_list_versions: "",
 
-	get_list: function() {
+	get_list: function(force_mode) {
+		
+		if (force_mode) {
+			$("#xkit-forced-auto-updates-message").html("Fetching the latest changes from XKit servers...");	
+		}
 
 		XKit.download.page("list.php", function(mdata) {
 
@@ -75,18 +79,44 @@ XKit.extensions.xkit_updates = new Object({
 			XKit.extensions.xkit_updates.updated_list_versions = new Array();
 
 			for(var extension in mdata.extensions) {
-
-				if (mdata.extensions[extension].version !== XKit.installed.get(mdata.extensions[extension].name).version) {
+				
+				if (force_mode) {
+					
+					var check_this = false;
 					if (XKit.installed.check(mdata.extensions[extension].name) === true) {
-						XKit.extensions.xkit_updates.to_update.push(mdata.extensions[extension].name);
+						
+						if (mdata.extensions[extension].version !== XKit.installed.get(mdata.extensions[extension].name).version) {
+							check_this = true;	
+						}
+						
+						if (mdata.extensions[extension].name.substring(0,5) === "xkit_") {
+							// Always update internals no matter what.
+							check_this = true;	
+						}
+						
+						if (check_this) {
+							XKit.extensions.xkit_updates.to_update.push(mdata.extensions[extension].name);
+						}
 					}
+					
+				} else {
+				
+					if (mdata.extensions[extension].version !== XKit.installed.get(mdata.extensions[extension].name).version) {
+						if (XKit.installed.check(mdata.extensions[extension].name) === true) {
+							XKit.extensions.xkit_updates.to_update.push(mdata.extensions[extension].name);
+						}
+					}
+					
 				}
 
 			}
 
 			if (XKit.extensions.xkit_updates.to_update.length > 0) {
 				$("body").append("<div id=\"xkit-updating-indicator\">XKit Auto-Update</div>");
-				XKit.extensions.xkit_updates.update_next();
+				if (force_mode) {
+					$("#xkit-forced-auto-updates-message").html("Downloading extensions from the servers...");	
+				}
+				XKit.extensions.xkit_updates.update_next(force_mode);
 			} else {
 				var d = new Date();
 				var ms = d.getTime();
@@ -108,7 +138,7 @@ XKit.extensions.xkit_updates = new Object({
 
 	},
 
-	update_next: function() {
+	update_next: function(force_mode) {
 
 		if (XKit.extensions.xkit_updates.to_update_index >= XKit.extensions.xkit_updates.to_update.length) {
 
@@ -118,23 +148,36 @@ XKit.extensions.xkit_updates = new Object({
 
 			// Completed all?
 			
-			var to_show = XKit.tools.get_setting("xkit_show_update_notifications","true");
+			if (!force_mode) {
 			
-			if (to_show === "true") {
+				var to_show = XKit.tools.get_setting("xkit_show_update_notifications","true");
 			
-				XKit.notifications.add("XKit updated " + XKit.extensions.xkit_updates.updated_list.length + " extension(s). Click here to view them.", "ok", true, function() {
-					var m_result = "";
-					for (i=0;i<XKit.extensions.xkit_updates.updated_list.length;i++) {
-						m_result = m_result + "<br/>" + XKit.extensions.xkit_updates.updated_list[i] + " &middot; " + XKit.extensions.xkit_updates.updated_list_versions[i];
-					}
-					XKit.window.show("Auto-Update results","<b>XKit updated the following extension(s):</b>" + m_result, "info", "<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
-				});
+				if (to_show === "true") {
+			
+					XKit.notifications.add("XKit updated " + XKit.extensions.xkit_updates.updated_list.length + " extension(s). Click here to view them.", "ok", true, function() {
+						var m_result = "";
+						for (i=0;i<XKit.extensions.xkit_updates.updated_list.length;i++) {
+							m_result = m_result + "<br/>" + XKit.extensions.xkit_updates.updated_list[i] + " &middot; " + XKit.extensions.xkit_updates.updated_list_versions[i];
+						}
+						XKit.window.show("Auto-Update results","<b>XKit updated the following extension(s):</b>" + m_result, "info", "<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
+					});
+					
+				}
+				
+			} else {
+			
+				XKit.window.show("Complete!","<b>XKit updated all the extensions with version mismatch.</b><br/>Changes will be active when you refresh the page.","info","<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
 				
 			}
-			
+				
 			$("#xkit-updating-indicator").remove();	
 			return;
 		}
+		
+		if (force_mode) {
+			$("#xkit-forced-auto-updates-message").html("Downloading " + XKit.extensions.xkit_updates.to_update[XKit.extensions.xkit_updates.to_update_index] + " (" + (XKit.extensions.xkit_updates.to_update_index + 1) + " of " + XKit.extensions.xkit_updates.to_update.length + ")");	
+		}
+
 
 		XKit.extensions.xkit_updates.update(XKit.extensions.xkit_updates.to_update[XKit.extensions.xkit_updates.to_update_index], function(mdata) {
 
@@ -147,12 +190,12 @@ XKit.extensions.xkit_updates = new Object({
 					return;
 				}
 			}
-
+			
 			XKit.extensions.xkit_updates.updated_list.push(mdata.title);
 			XKit.extensions.xkit_updates.updated_list_versions.push(mdata.version);
 			XKit.console.add("Updated " + XKit.extensions.xkit_updates.to_update[XKit.extensions.xkit_updates.to_update_index]);
 			XKit.extensions.xkit_updates.to_update_index++;
-			XKit.extensions.xkit_updates.update_next();
+			XKit.extensions.xkit_updates.update_next(force_mode);
 
 		});
 

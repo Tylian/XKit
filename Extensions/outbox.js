@@ -1,5 +1,5 @@
 //* TITLE Outbox **//
-//* VERSION 0.3 REV D **//
+//* VERSION 0.4 REV B **//
 //* DESCRIPTION Saves your last 20 sent private replies and fan mail. **//
 //* DETAILS This extension stores and lets you view the last 20 asks you've answered privately. Please keep in mind that this is a highly experimental extension, so if you hit a bug, please send the XKit blog an ask with the problem you've found. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -82,8 +82,7 @@ XKit.extensions.outbox = new Object({
 	run: function() {
 		this.running = true;
 		
-		if ($("body").hasClass("dashboard_messages_inbox") !== true && $("body").hasClass("dashboard_messages_submissions") !== true &&
-				document.location.href.indexOf('http://www.tumblr.com/send/') == -1) {
+		if (XKit.interface.where().inbox !== true && document.location.href.indexOf('http://www.tumblr.com/send/') == -1) {
 			XKit.console.add("Outbox -> Quitting, not in inbox");
 			return;
 		}
@@ -172,11 +171,12 @@ XKit.extensions.outbox = new Object({
 		
 		if (m_message.indexOf("<div id=\"ask_answer_") !== -1) {
 		
-			m_message = m_message.substring(0, m_message.indexOf("<div id=\"ask_answer_"));
+			m_message = m_message.substring(0, m_message.indexOf("<div"));
 			
 		}
 		
 		var m_answer = $('#ask_answer_field_' + post_id).val();
+	
 		setTimeout(function() {
 			
 			m_answer = $('#ask_answer_field_' + post_id).val();
@@ -316,6 +316,8 @@ XKit.extensions.outbox = new Object({
 			m_day = "?";
 			m_date = "Unknown";	
 		}
+		
+		obj.message = $("<div>" + obj.message + "</div>").text();
 			
 		to_return = to_return + "<div class=\"post_avatar\"><div class=\"queue\">" +
         				"<div class=\"publish_info day publish_on_day\">" + m_day + "</div>" + 
@@ -374,7 +376,11 @@ XKit.extensions.outbox = new Object({
         				"<div class=\"publish_info day publish_on_day\">" + m_day + "</div>" + 
        					"<div class=\"publish_info time publish_on_time\">" + m_date + "</div>" +
 				"</div></div>";
-		
+
+		if (obj.message.indexOf("<div") !== -1) {
+			obj.message = obj.message.substring(0, 	obj.message.indexOf("<div"));
+		}
+
 		to_return = to_return + "<div class=\"post-wrapper\">" +
 				"<div class=\"post_header\"><div class=\"post_info\">You've sent to " + m_link + "</div></div>" +
 				"<div class=\"post_content clearfix\"><div class=\"post_content_inner clearfix\">" +

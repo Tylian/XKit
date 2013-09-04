@@ -1,5 +1,5 @@
 //* TITLE Read More Now **//
-//* VERSION 1.2 REV C **//
+//* VERSION 1.2 REV D **//
 //* DESCRIPTION Read Mores in your dash **//
 //* DETAILS This extension allows you to read 'Read More' posts without leaving your dash. Just click on the 'Read More Now!' button on posts and XKit will automatically load and display the post on your dashboard. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -22,7 +22,7 @@ XKit.extensions.read_more_now = new Object({
 	run: function() {
 		this.running = true;
 		
-		if ($("body").hasClass("dashboard_drafts") == true || $("body").hasClass("dashboard_post_queue") == true) {
+		if (XKit.interface.where().queue === true || XKit.interface.where().drafts === true) {
 			return;
 		}
 			

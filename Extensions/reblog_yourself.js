@@ -1,5 +1,5 @@
 //* TITLE Reblog Yourself **//
-//* VERSION 1.2 REV D **//
+//* VERSION 1.2 REV E **//
 //* DESCRIPTION Allows you to reblog posts back to your blog **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//
@@ -113,7 +113,7 @@ XKit.extensions.reblog_yourself = new Object({
 						XKit.console.add("reblog_yourself: " + e.message);	
 					}
 				} else {
-					console.log("Found for " + m_blogs[i]);	
+					// console.log("Found for " + m_blogs[i]);	
 				}
 			}
 		}
@@ -135,8 +135,8 @@ XKit.extensions.reblog_yourself = new Object({
 
 	fix_dashboard: function() {
 		
-		if ($("body").hasClass('dashboard_drafts') === true || $("body").hasClass('dashboard_post_queue') === true) {
-			return;	
+		if (XKit.interface.where().queue === true || XKit.interface.where().drafts === true) {
+			return false;
 		}
 
 		if ($(".post").length == 0) { return; }

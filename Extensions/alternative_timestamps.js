@@ -1,8 +1,7 @@
 //* TITLE Alternative Timestamps **//
-//* VERSION 1.0 REV E **//
-//* DESCRIPTION An alternative to Timestamps **//
-//* DETAILS Adds timestamps to dashboard posts using a parsing method instead of AJAX calls. English tumblr interface only for now. **//
-//* DEVELOPER bit-shift **//
+//* VERSION 1.0 REV F **//
+//* DESCRIPTION Adds timestamps to dashboard posts using a parsing method instead of AJAX calls. English tumblr interface only for now. **//
+//* DEVELOPER Bit Shift **//
 //* FRAME false **//
 //* BETA true **//
 
@@ -48,7 +47,7 @@ XKit.extensions.alternative_timestamps = new Object({
 				$timestamp.addClass('alternative_timestamp');
 				$timestamp.text(XKit.extensions.alternative_timestamps.render_timestamp(moment_timestamp));
 
-				$(this).find('.post_info').append($timestamp);
+				$(this).find('.post_info').first().append($timestamp);
 			}
 		});
 	},

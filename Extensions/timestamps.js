@@ -1,5 +1,5 @@
 //* TITLE Timestamps **//
-//* VERSION 2.1 REV A **//
+//* VERSION 2.2 REV D **//
 //* DESCRIPTION See when a post has been made. **//
 //* DETAILS This extension lets you see when a post was made, in full date or relative time (eg: 5 minutes ago). It also works on asks, and you can format your timestamps. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -79,7 +79,7 @@ XKit.extensions.timestamps = new Object({
 	
 	is_compatible: function() {
 	
-		if ($("body").hasClass("dashboard_drafts") === true || $("body").hasClass("dashboard_post_queue") === true) {
+		if (XKit.interface.where().queue === true || XKit.interface.where().drafts === true) {
 			return false;
 		}
 		return true;
@@ -103,29 +103,36 @@ XKit.extensions.timestamps = new Object({
 				if ($(this).attr('id') === "new_post" || $(this).hasClass("fan_mail") === true || 
 					$(this).find('.private_label').length > 0  || $(this).hasClass("note") === true ||
 					$(this).hasClass("submission") === true) {
+					console.log("no -->");
 					return;	
 				}
-			
-				if ($(this).find('.permalink').length <= 0 && $(this).find(".post_permalink").length <= 0) { return; }
-
-				var this_control_html = $(this).children('.post_controls').html();
 				
-				var permalink = $(this).find(".permalink").attr('href');
-				if ($(this).find(".post_permalink").length > 0) {
-					permalink = $(this).find(".post_permalink").attr('href');
-				}
-
 				var post_id = $(this).attr('data-post-id');
 				
-				// Ugly but it works?
-				var json_page_parts = permalink.replace("http://","").split("/");
-				var json_page = "http://" + json_page_parts[0] + "/api/read/json?id=" + post_id;
+				var get_json = true;
+				
+				if (XKit.interface.where().inbox !== true) {
+					
+					if ($(this).find('.permalink').length <= 0 && $(this).find(".post_permalink").length <= 0) { return; }
+	
+					var this_control_html = $(this).children('.post_controls').html();
+					
+					var permalink = $(this).find(".permalink").attr('href');
+					if ($(this).find(".post_permalink").length > 0) {
+						permalink = $(this).find(".post_permalink").attr('href');
+					}
+
+					// Ugly but it works?
+					var json_page_parts = permalink.replace("http://","").split("/");
+					var json_page = "http://" + json_page_parts[0] + "/api/read/json?id=" + post_id;
+				
+				}
 			
 				var m_html = '<div id="xkit_timestamp_' + post_id + '" class="xtimestamp xtimestamp_loading">&nbsp;</div>';
 				$(this).find(".post_content").prepend(m_html);
 				
 				var in_inbox = false;
-				if ($("body").hasClass("dashboard_messages_inbox") === true || $("body").hasClass("dashboard_messages_submissions") === true) {
+				if (XKit.interface.where().inbox === true) {
 					in_inbox = true;	
 				}
 				
@@ -170,6 +177,7 @@ XKit.extensions.timestamps = new Object({
 				data: JSON.stringify(m_object),
 				json: true,
 				onerror: function(response) {
+					console.log("Unable to load timestamp - Err 01");
 					XKit.extensions.timestamps.show_failed(obj);
 				},
 				onload: function(response) {
@@ -177,6 +185,7 @@ XKit.extensions.timestamps = new Object({
 					try {
 						var mdata = $.parseJSON(response.responseText);
 					} catch(e) {
+						console.log("Unable to load timestamp - Err 02 : Not JSON");
 						XKit.extensions.timestamps.show_failed(obj);
 						return;
 					}
@@ -262,7 +271,8 @@ XKit.extensions.timestamps = new Object({
 				$(obj).removeClass('xtimestamp_loading');
 				
 			} catch(e) {
-			
+				
+				console.log("Unable to load timestamp - Err 03");
 				XKit.extensions.timestamps.show_failed(obj);
 			
 			}
@@ -270,6 +280,7 @@ XKit.extensions.timestamps = new Object({
 		} else {
 	
 		try {
+			console.log(json_page);
 			GM_xmlhttpRequest({
 				method: "GET",
 				dataType: "json",
@@ -277,9 +288,9 @@ XKit.extensions.timestamps = new Object({
 				onload: function(response) {
 					var rs = (response.responseText);
 					var xs = rs.search('"unix-timestamp":');
-					if (xs === -1) { XKit.extensions.timestamps.show_failed(obj); return; }
+					if (xs === -1) { console.log("Unable to load timestamp - Err 11"); XKit.extensions.timestamps.show_failed(obj); return; }
 					var xe = rs.indexOf(',', xs + 17);
-					if (xe === -1) { XKit.extensions.timestamps.show_failed(obj); return; }
+					if (xe === -1) { console.log("Unable to load timestamp - Err 12"); XKit.extensions.timestamps.show_failed(obj); return; }
 					var xd = rs.substring(xs + 17, xe);
 					var dtx = new Date(xd * 1000);
 					var dt = moment(dtx);
@@ -292,6 +303,7 @@ XKit.extensions.timestamps = new Object({
 					XKit.storage.set("timestamps", "xkit_timestamp_cache_" + post_id, xd);
 				},
 				onerror: function(response) {
+					console.log("Unable to load timestamp - Err 22");
 					XKit.extensions.timestamps.show_failed(obj);
 				}
 			});

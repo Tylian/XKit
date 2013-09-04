@@ -1,5 +1,5 @@
 //* TITLE Notifications+ **//
-//* VERSION 1.4 REV C **//
+//* VERSION 1.4 REV D **//
 //* DESCRIPTION Enhances the notifications **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//
@@ -18,7 +18,7 @@ XKit.extensions.notifications_plus = new Object({
 	
 	preferences: {
 		"sep_1": {
-			text: "Notes",
+			text: "XPreview",
 			type: "separator",
 		},
 		"show_notes": {
@@ -26,16 +26,12 @@ XKit.extensions.notifications_plus = new Object({
 			default: true,
 			value: true
 		},
-		"sep_2": {
-			text: "Previews",
-			type: "separator",
-		},
 		"show_bigger_preview": {
 			text: "Show bigger preview when I hover on a notification",
 			default: false,
 			value: false
 		},
-		"sep_3": {
+		"sep_4": {
 			text: "Dim Notifications",
 			type: "separator",
 		},
@@ -45,9 +41,10 @@ XKit.extensions.notifications_plus = new Object({
 			value: false
 		},
 		"dont_dim_on_reblogs": {
-			text: "Don't dim notifications on reblogs with new text (might be slow)",
+			text: "Don't dim notifications on reblogs with new text",
 			default: false,
-			value: false
+			value: false,
+			slow: true
 		},
 	},
 
@@ -57,7 +54,7 @@ XKit.extensions.notifications_plus = new Object({
 		if (XKit.extensions.notifications_plus.preferences.only_replies.value === true) {
 			XKit.tools.add_css("ol#posts .notification { opacity: 0.29; } ol#posts .notification_answer, ol#posts .notification_reply, ol#posts .notification:hover { opacity: 1; } ", "notifications_plus_only_replies");
 		}
-		
+
 		if (XKit.extensions.notifications_plus.preferences.dont_dim_on_reblogs.value === true) {
 			XKit.post_listener.add("notifications_plus", XKit.extensions.notifications_plus.dedim);
 			XKit.extensions.notifications_plus.dedim();
@@ -180,6 +177,8 @@ XKit.extensions.notifications_plus = new Object({
 		$("#xpreview-container").addClass("loading");
 		$("#xpreview-notes").html("loading");
 		
+		XKit.console.add("Notifications+: Post ID is " + post_id + " | blog_id = " + blog_id);
+		
 		XKit.extensions.notifications_plus.xpreview_load(post_id, blog_id);
 		
 	},
@@ -226,6 +225,7 @@ XKit.extensions.notifications_plus = new Object({
   					onload: function(response) {
   						try {
 							data = response.responseText;
+							XKit.console.add(" -- Success!");
 							/*var post_cont = $("#post_" + post_id, data);
 							var real_html = $(post_cont).find(".notes").html();
 							if (real_html.indexOf(" ") !== -1) {
@@ -239,14 +239,16 @@ XKit.extensions.notifications_plus = new Object({
 							var real_html = "";
 							
 							$(".post",data).each(function() {
-								var r_post_id = $(this).attr('data-id');
-								if (r_post_id === post_id) {
+								var r_post_id = $(this).attr('data-post-id');
+								var r_post_id_2 = $(this).attr('data-id');
+								if (r_post_id_2 === post_id || r_post_id === post_id) {
 									real_html = $(this).find(".post_notes").html();	
 									return false;
 								} 	
 							});
 							
-
+							real_html = $.trim(real_html);
+							
 							if (real_html.indexOf(" ") !== -1) {
 								real_html = real_html.substring(0, real_html.indexOf(" "));
 							}

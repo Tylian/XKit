@@ -1,5 +1,5 @@
 //* TITLE XKit Preferences **//
-//* VERSION 2.2 REV A **//
+//* VERSION 2.3 REV B **//
 //* DESCRIPTION Lets you customize XKit **//
 //* DEVELOPER STUDIOXENIX **//
 XKit.extensions.xkit_preferences = new Object({
@@ -1309,7 +1309,7 @@ XKit.extensions.xkit_preferences = new Object({
 						"<div data-pname=\"reset\" class=\"xkit-extension text-only\">Reset XKit</div>" +
 						"<div data-pname=\"news\" class=\"xkit-extension text-only\">News Notifications</div>" +
 						"<div data-pname=\"updates\" class=\"xkit-extension text-only\">Update Notifications</div>" +
-						"<div data-pname=\"update-all\" style=\"display: none;\" class=\"xkit-extension text-only\">Update All</div>" +
+						"<div data-pname=\"update-all\" class=\"xkit-extension text-only\">Update All</div>" +
 						"<div data-pname=\"storage\" class=\"xkit-extension text-only\">Storage</div>" +
 						"<div class=\"xkit-extension text-only separator\">Advanced Settings</div>" +
 						"<div data-pname=\"console\" class=\"xkit-extension text-only\">Console</div>" +
@@ -1576,15 +1576,22 @@ XKit.extensions.xkit_preferences = new Object({
 		var m_html = 	"<div class=\"xkit-others-panel\">" +
 				"<div class=\"title\">Update All</div>" +
 				"<div class=\"description\">" +
-					"If, for some reason, you can not receive XKit updates, click on the button below to force XKit to re-download and update all the extensions you have installed." +
+					"If you would like to force XKit to update itself now, or for some reason, you can not receive updates, click the button below to trigger Automatic Updates now. XKit will check for the new versions of extensions and update them if necessary." +
 				"</div>" +
 				"<div class=\"bottom-part\">" +		
-					"<div id=\"xkit-panel-reset-xkit\" class=\"xkit-button block\">Update all my extensions</div>" +
+					"<div id=\"xkit-panel-force-update-xkit\" class=\"xkit-button block\">Update all my extensions</div>" +
 				"</div>" +		
 				"</div>";
 
 		$("#xkit-extensions-panel-right-inner").html(m_html);
 		$("#xkit-extensions-panel-right").nanoScroller();
+		
+		$("#xkit-panel-force-update-xkit").click(function() {
+			
+			XKit.window.show("Forcing Automatic Updates","Please wait while I review the changes and update myself..<br/>Please do not navigate away from this page.<div id=\"xkit-forced-auto-updates-message\">Initializing...</div>", "info");	
+			XKit.extensions.xkit_updates.get_list(true);
+			
+		});
 
 	},
 

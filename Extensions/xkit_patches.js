@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 1.6 REV A **//
+//* VERSION 1.6 REV F **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER STUDIOXENIX **//
 XKit.extensions.xkit_patches = new Object({
@@ -10,6 +10,73 @@ XKit.extensions.xkit_patches = new Object({
 		this.running = true;
 
 		XKit.tools.init_css("xkit_patches");
+		
+		XKit.extensions.lang_english = {
+		
+			common: {
+			
+				"ok": "OK",
+				"cancel": "Cancel"	
+				
+			}	
+			
+		};
+		
+		XKit.lang = new Object({
+			
+			default: "english",
+			current: "",
+			
+			init: function() {
+				
+				var lang = XKit.storage.get("xkit_patches","language","");
+				
+				if (lang === "" || typeof lang === "undefined") {
+					lang = "english";	
+				}	
+				
+				XKit.lang.current = lang;
+				
+			},
+		
+			get: function(path, par1, par2, par3) {
+				
+				var m_path = path.split(".");
+				
+				var m_lang = XKit.extensions["lang_" + XKit.lang.current];
+				
+				if (typeof m_lang == "undefined") {
+					m_lang = XKit.extensions["lang_" + XKit.lang.default];
+				}
+				
+				var m_obj = m_lang;
+				var set_to_default = false;
+				
+				for (var i=0;i<m_path.length;i++) {
+					
+					if (typeof m_obj[m_path[i]] !== "undefined") {
+						m_obj = m_obj[m_path[i]];
+					} else {
+						return "???";
+					}
+					
+				}	
+				
+				if (typeof par1 === "undefined") { par1 = "???" }
+				if (typeof par2 === "undefined") { par2 = "???" }
+				if (typeof par3 === "undefined") { par3 = "???" }
+				
+				m_obj = m_obj.replace("%1", par1);
+				m_obj = m_obj.replace("%2", par2);
+				m_obj = m_obj.replace("%3", par3);
+				
+				return m_obj;
+				
+			}	
+			
+		});
+		
+		XKit.lang.init();
 		
 		XKit.interface = new Object({
 			
@@ -772,6 +839,7 @@ XKit.extensions.xkit_patches = new Object({
 				m_return.root_id = $(obj).attr('data-root-id');
 				m_return.reblog_key = $(obj).attr('data-reblog-key');
 				m_return.owner = $(obj).attr('data-tumblelog-name');
+				m_return.tumblelog_key = $(obj).attr('data-tumblelog-key');
 				
 				m_return.liked = $(obj).find(".post_control.like").hasClass("liked");
 				m_return.permalink = $(obj).find(".post_permalink").attr('href');
@@ -791,12 +859,25 @@ XKit.extensions.xkit_patches = new Object({
 				m_return.is_mine = $(obj).hasClass("is_mine");
 				m_return.is_following = ($(obj).attr('data-following-tumblelog') === true);
 				
+				var n_count = 0;
+				
+				if ($(obj).find(".note_link_current").length > 0) {
+			  		if ($(obj).find(".note_link_current").html() == "") {
+	  					n_count = 0;
+	  				} else {
+	  					n_count = $(obj).find(".note_link_current").html().replace(/\D/g,'');	
+	  				}
+	  			}	
+				
+				m_return.note_count = n_count;
+				
 				m_return.avatar = $(obj).find(".post_avatar_image").attr('src');
 				
 				m_return.tags = "";
 				if ($(obj).find(".post_tags").length > 0) {
 					var to_return = "";
 					$(obj).find(".post_tags").find(".post_tag").each(function() {
+						if ($(this).hasClass("post_ask_me_link") === true) { return; }
 						var m_tag = $(this).html().substring(1);
 						if (to_return === "") {
 							to_return = m_tag;	
@@ -853,10 +934,61 @@ XKit.extensions.xkit_patches = new Object({
 				
 				var m_return = new Object();
 				
-				m_return.inbox = $("body").hasClass("dashboard_messages_inbox") === true || $("body").hasClass("dashboard_messages_submissions") === true;
+				m_return.inbox = false;	
+				if ($("body").hasClass("dashboard_messages_inbox") === true || $("body").hasClass("dashboard_messages_submissions") === true) {
+					m_return.inbox = true;
+				} else {
+					if (document.location.href.indexOf("www.tumblr.com/inbox") !== -1) {
+						m_return.inbox = true;	
+					} else {
+						if (document.location.href.indexOf("www.tumblr.com/blog/") !== -1) {
+							var m_array = document.location.href.split("/");
+							if (m_array[5] === "messages") {
+								m_return.inbox = true;	
+							}
+						}
+					}
+				}
+				
+				m_return.activity = false;
+				if ($("body").hasClass("notifications_index") === true) {
+					m_return.activity = true;
+				} else {
+					if (document.location.href.indexOf("www.tumblr.com/blog/") !== -1) {
+						var m_array = document.location.href.split("/");
+						if (m_array[5] === "activity") {
+							m_return.activity = true;	
+						}
+					}
+				}
+				
+				m_return.queue = false;
+				if ($("body").hasClass("dashboard_post_queue") == true) {
+					m_return.queue = true;
+				} else {
+					if (document.location.href.indexOf("www.tumblr.com/blog/") !== -1) {
+						var m_array = document.location.href.split("/");
+						if (m_array[5] === "queue") {
+							m_return.queue = true;	
+						}
+					}
+				}
+				
+				m_return.drafts = false;
+				if ($("body").hasClass("dashboard_drafts") == true) {
+					m_return.drafts = true;
+				} else {
+					if (document.location.href.indexOf("www.tumblr.com/blog/") !== -1) {
+						var m_array = document.location.href.split("/");
+						if (m_array[5] === "drafts") {
+							m_return.drafts = true;	
+						}
+					}
+				}
+				
 				m_return.dashboard = $("body").hasClass("is_dashboard") === true;	
 				m_return.channel = $("body").hasClass("is_channel") === true;
-				
+
 				return m_return;	
 				
 			}

@@ -1,5 +1,5 @@
 //* TITLE Old Notifications **//
-//* VERSION 0.1 REV C **//
+//* VERSION 0.1 REV E **//
 //* DESCRIPTION Notifications where they were **//
 //* DETAILS This is a very experimental extension that brings back the notifications to your blog pages (ie: www.tumblr.com/blog/xkit-extension), just the way it was before Tumblr's Activity update. Only the last 10 notifications are displayed. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -13,7 +13,7 @@ XKit.extensions.old_notifications = new Object({
 	run: function() {
 		this.running = true;
 		
-		if (document.location.href.indexOf("http://www.tumblr.com/blog/") !== -1 && $("body").attr('id') === "dashboard_index") {
+		if (XKit.interface.where().channel == true) {
 			XKit.extensions.old_notifications.fetch();
 			$(document).on('click','.notification.by-xkit-old-notifications', XKit.extensions.old_notifications.open_notification);	
 		}

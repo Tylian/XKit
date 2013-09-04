@@ -9,6 +9,20 @@
 
 }
 
+#x1cpostage_quick_tags .xkit-no-tags {
+	padding: 8px;
+	font-size: 12px;
+	background: rgba(228,232,238,1);
+	color: #7a7f8e;
+	border: 1px solid #abafbc;
+	border-bottom: 0px;
+}
+
+#x1cpostage_quick_tags.xkit-no-reverse-ui .xkit-no-tags {
+	border-bottom: 1px solid #abafbc;
+	border-top: 0px;
+}
+
 #one_click_postage_warning_movage {
 	padding: 15px;
 	font-size: 12px;

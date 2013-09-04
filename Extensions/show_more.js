@@ -1,5 +1,5 @@
 //* TITLE User Menus+ **//
-//* VERSION 2.0 REV D **//
+//* VERSION 2.1 REV A **//
 //* DESCRIPTION More options on the user menu **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS This extension adds additional options to the user menu (the one that appears under user avatars on your dashboard), such as Avatar Magnifier, links to their Liked Posts page if they have them enabled. Note that this extension, especially the Show Likes and Show Submit options use a lot of network and might slow your computer down. **//
@@ -366,7 +366,7 @@ XKit.extensions.show_more = new Object({
 
                 	if (avatar_url !== "" && typeof avatar_url !== "undefined") {
                 		m_html = m_html + "<li>" +
-                				"<a onclick=\"return false;\" data-avatar-url=\"" + avatar_url + "\" class=\"xkit-show-more-item xkit-avatar-magnetizer-new xkit-avatar-magnetizer-button-" + user_url + "\" data-user-url=\"" + user_url + "\">" +
+                				"<a onclick=\"return false;\" data-avatar-url=\"" + avatar_url + "\" class=\" xkit-new-menu-fix xkit-show-more-item xkit-avatar-magnetizer-new xkit-avatar-magnetizer-button-" + user_url + "\" data-user-url=\"" + user_url + "\">" +
                 					"Magnifier" +
                 				"</a>" +
                 			  "</li>";
@@ -381,7 +381,7 @@ XKit.extensions.show_more = new Object({
                 	console.log("Likes found for " + user_url);
                 	
                 	m_html = m_html + "<li>" +
-                			"<a href=\"" + m_likes_url + "\" class=\"likes xkit-likes\">" +
+                			"<a href=\"" + m_likes_url + "\" class=\"likes xkit-likes xkit-new-menu-fix\">" +
                 				"<span class=\"hide_overflow\">Likes</span>" +
                 			"</a>" +
                 		  "</li>";
@@ -393,14 +393,33 @@ XKit.extensions.show_more = new Object({
                 	var m_likes_url = "http://" + user_url + ".tumblr.com/submit";
                 	
                 	m_html = m_html + "<li>" +
-                			"<a target=\"_new\" href=\"" + m_likes_url + "\" class=\"likes xkit-submit\">" +
+                			"<a target=\"_new\" href=\"" + m_likes_url + "\" class=\"likes xkit-submit xkit-new-menu-fix\">" +
                 				"<span class=\"hide_overflow\">Submit</span>" +
                 			"</a>" +
                 		  "</li>";
                 	
                 }
-               
-		
+                
+                console.log("EH? " + XKit.extensions.show_more.custom_menu_extension);
+                if (XKit.extensions.show_more.custom_menu_extension.length >= 0) {
+                
+                	var m_data = XKit.extensions.show_more.popup_data;
+                
+                	for (var i=0;i<XKit.extensions.show_more.custom_menu_extension.length;i++) {
+                		
+                		var returned_menu = "";
+                		
+                		try {
+                			returned_menu = XKit.extensions.show_more.custom_menu_function[i](m_data);
+                		} catch(e) {
+                			returned_menu = "";
+                		}
+                		
+                		m_html = m_html + returned_menu;
+                	}	
+                	
+                }
+
 		$(m_parent).append(m_html);
 		
 		console.log(m_html);

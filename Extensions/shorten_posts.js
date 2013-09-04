@@ -1,5 +1,5 @@
 //* TITLE Shorten Posts **//
-//* VERSION 0.1 REV D **//
+//* VERSION 0.1 REV E **//
 //* DESCRIPTION Makes scrolling easier **//
 //* DETAILS This extension shortens long posts, so if you are interested, you can just click on Show Full Post button to see it all, or scroll down if you are not interested. Useful for screens where long posts take a lot of space, and making it hard to scroll down.<br><br>By default, this extension only shortens text posts. You can toggle the setting to let it shorten the photo posts too. (This will 'cut off' long, vertical posts.) **//
 //* DEVELOPER STUDIOXENIX **//
@@ -13,7 +13,7 @@ XKit.extensions.shorten_posts = new Object({
 	slow: true,
 	
 	height_min: 200,
-	height_max: 700,
+	height_max: 1500,
 	height_default: 350,
 	
 	preferences: {
@@ -197,7 +197,7 @@ XKit.extensions.shorten_posts = new Object({
 	
 		$("#xkit-shorten-posts-height-help").click(function() {
 		
-			XKit.window.show("Maximum post height", "XKit will shorten posts longer than the height entered here.<br/><br/>The minimum value you can enter is <b>200</b>, and the maximum is <b>700</b>. If you enter a value bigger or smaller than these, XKit will return to it's default value, which is 350 pixels.","info","<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");	
+			XKit.window.show("Maximum post height", "XKit will shorten posts longer than the height entered here.<br/><br/>The minimum value you can enter is <b>200</b>, and the maximum is <b>" + XKit.extensions.shorten_posts.height_max + "</b>. If you enter a value bigger or smaller than these, XKit will return to it's default value, which is 350 pixels.","info","<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");	
 			
 		});	
 		
