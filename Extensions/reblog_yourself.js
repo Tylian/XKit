@@ -1,5 +1,5 @@
 //* TITLE Reblog Yourself **//
-//* VERSION 1.2 REV E **//
+//* VERSION 1.2 REV F **//
 //* DESCRIPTION Allows you to reblog posts back to your blog **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//
@@ -10,6 +10,18 @@ XKit.extensions.reblog_yourself = new Object({
 
 	running: false,
 	slow: true,
+	preferences: {
+		"dashboard": {
+			text: "Enable reblogging yourself from the dashboard",
+			default: true,
+			value: true
+		},
+		"postpages": {
+			text: "Enable reblogging yourself from post pages",
+			default: true,
+			value: true
+		}
+	},
 
 	run: function() {
 		this.running = true;
@@ -25,14 +37,18 @@ XKit.extensions.reblog_yourself = new Object({
 				}
 			});
 		}
-
-		XKit.post_listener.add("reblog_yourself", XKit.extensions.reblog_yourself.fix_dashboard);
-		XKit.extensions.reblog_yourself.fix_dashboard();
+		if(XKit.extensions.reblog_yourself.preferences.dashboard.value === true)
+		{
+			XKit.post_listener.add("reblog_yourself", XKit.extensions.reblog_yourself.fix_dashboard);
+			XKit.extensions.reblog_yourself.fix_dashboard();
+		}
 
 	},
 	
 	frame_run: function() {
 	
+		if(XKit.extensions.reblog_yourself.preferences.postpages.value === false)
+			return;
 		// This gets run on frame.
 		// Port of ugly code from XKit 6 but at least it works.
 
