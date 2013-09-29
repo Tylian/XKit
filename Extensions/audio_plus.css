@@ -1,0 +1,47 @@
+.xkit-audio-plus-slider-container {
+	position: absolute;
+	bottom: 7px;
+	left: 8px;
+	background: rgba(0,0,0,0.33) no-repeat 10px 50% url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAALCAYAAACZIGYHAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBNYWNpbnRvc2giIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6RUM5QjAxRTYxNzI3MTFFM0E2RkFCMjhCQTdGQjEwOTAiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6RUM5QjAxRTcxNzI3MTFFM0E2RkFCMjhCQTdGQjEwOTAiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDpFQzlCMDFFNDE3MjcxMUUzQTZGQUIyOEJBN0ZCMTA5MCIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDpFQzlCMDFFNTE3MjcxMUUzQTZGQUIyOEJBN0ZCMTA5MCIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PihVDREAAAB0SURBVHjaYmSgDHABsS4jBQaoArE2EP8nxxA+IDYGYmEo/zcLCZqZgFgDipmQJYg1RBhqOx82SUKGsED9rUpIES4gCcSG0BhgINUQdiDWB2I5YgML3RB5qAFspEQXzBBuqNMlyEkwIEPUgFiLhJjCAAABBgCzWgWZRwU92AAAAABJRU5ErkJggg==);
+	width: 145px;
+	height: 23px;
+	border-radius: 6px;
+	padding-left: 35px;
+	padding-right: 5px;
+	z-index: 10000;
+	opacity: 0.65;
+}
+
+.xkit-audio-plus-slider-container:hover {
+	opacity: 1;	
+}
+
+.xkit-audio-plus-slider-container * {
+	-moz-user-select: none;
+	-webkit-user-select: none;
+	user-select: none;
+}
+
+.xkit-audio-plus-slider-back {
+	width: 100px;
+	position: absolute;
+	top: 50%; height: 6px;
+	margin-top: -3px;
+	background: rgba(0,0,0,0.33);
+	box-shadow: inset 0px 1px 1px rgba(0,0,0,0.22);
+	border-radius: 6px;
+	overflow: visible;
+	cursor: pointer;	
+}
+
+.xkit-audio-plus-slider {
+	position: absolute;
+	width: 15px; height: 17px; top: -6px; cursor: pointer;
+	right: 0;
+	border-radius: 30px; background: rgb(245,245,245);
+	box-shadow: 0px 1px 2px rgba(0,0,0,0.22), inset 0px -1px 2px rgba(0,0,0,0.11);
+}
+
+.xkit-audio-plus-slider:hover {
+	opacity: 1; background: rgb(255,255,255);
+}
