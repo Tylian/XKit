@@ -1,5 +1,5 @@
 //* TITLE Notifications+ **//
-//* VERSION 1.4 REV D **//
+//* VERSION 1.4 REV E **//
 //* DESCRIPTION Enhances the notifications **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//
@@ -52,7 +52,7 @@ XKit.extensions.notifications_plus = new Object({
 		this.running = true;
 		
 		if (XKit.extensions.notifications_plus.preferences.only_replies.value === true) {
-			XKit.tools.add_css("ol#posts .notification { opacity: 0.29; } ol#posts .notification_answer, ol#posts .notification_reply, ol#posts .notification:hover { opacity: 1; } ", "notifications_plus_only_replies");
+			XKit.tools.add_css("ol#posts .notification { opacity: 0.29; } ol#posts .notification_answer, ol#posts .notification_reply, ol#posts .notification_photo_reply ol#posts .notification:hover { opacity: 1; } ", "notifications_plus_only_replies");
 		}
 
 		if (XKit.extensions.notifications_plus.preferences.dont_dim_on_reblogs.value === true) {

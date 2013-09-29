@@ -1,5 +1,5 @@
 //* TITLE Mass+ **//
-//* VERSION 0.3 REV C **//
+//* VERSION 0.3 REV D **//
 //* DESCRIPTION Enhancements for the Mass Editor **//
 //* DETAILS This extension allows you to select multiple posts by once, by type or month. It also comes with visual enhancements for the mass post editor, such as selected post count and more! **//
 //* DEVELOPER STUDIOXENIX **//
@@ -240,12 +240,16 @@ XKit.extensions.mass_plus = new Object({
 				$(".post", response.responseText).each(function() {
 					var m_tags = $(this).find(".tags").html();
 					if (typeof m_tags !== "undefined") {
+						m_tags = $.trim(m_tags);
 						var r_tags = m_tags.split("#");
+	
 						for (var i=0;i<r_tags.length;i++) {
+							
 							if (r_tags[i] === "") { continue; }
 							var mr_tag = r_tags[i].substring(0, r_tags[i].length - 1);
-							if (mr_tag.toLowerCase() === tag) {
-								var m_id = $(this).attr('data-id');
+	
+							if (mr_tag.toLowerCase() === tag || r_tags[i].toLowerCase() === tag.toLowerCase()) {
+								var m_id = $(this).attr('data-post-id');
 								XKit.extensions.mass_plus.search_found_posts.push(m_id);
 								XKit.extensions.mass_plus.search_found_count++;
 							}

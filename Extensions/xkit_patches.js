@@ -1,26 +1,206 @@
 //* TITLE XKit Patches **//
-//* VERSION 1.6 REV F **//
+//* VERSION 1.8 REV E **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER STUDIOXENIX **//
+
+XKit.extensions.lang_english = {
+		
+	common: {
+			
+		"ok": "OK",
+		"cancel": "Cancel"	
+				
+	}	
+			
+};
+
 XKit.extensions.xkit_patches = new Object({
 
 	running: false,
+	
+	check_unfollower_hater: function() {
+		
+		if ($("#unfollow_button").length > 0 || $("#pageCounter").length > 0) {
+			
+			if (XKit.storage.get("xkit_patches","shown_unfollower_hater_message","") === "true") { return; }
+			
+			XKit.window.show("Unfollower Hater found", "<b>Unfollower Hater causes problems with XKit, including but not limited to TagViewer and Quick Tags not working properly, and really slow page response on tumblr.com/blog/[url] pages.</b><br/><br/>You are not required to remove it in order to use XKit, but no support will be provided to you if you don't disable it.<br/><small style=\"color: rgb(120,120,120);\">This message will not be displayed again once you click \"OK\".</small>", "error", "<div id=\"xkit-patches-unfollower-hater-ok\" class=\"xkit-button default\">OK</div><a href=\"http://xkit-extension.tumblr.com/post/60595138775/quick-tags-tagviewer-and-unfollower-hater\" target=\"_BLANK\" class=\"xkit-button\">More information</a>");	
+			
+			$("#xkit-patches-unfollower-hater-ok").click(function() {
+				
+				XKit.storage.set("xkit_patches","shown_unfollower_hater_message","true");
+				XKit.window.close();	
+				
+			});
+			
+		}	
+		
+	},
+
+	do_support_links: function() {
+
+		var yes_do_it = false;
+                if (typeof XKit.extensions.show_more !== "undefined") {
+                	if (XKit.extensions.show_more.running === false) {
+				yes_do_it = true;
+			} else {
+				yes_do_it = false;
+			}
+		} else {
+			yes_do_it = true;
+		}
+
+		console.log("Doing support links? " + yes_do_it);
+
+		if (yes_do_it) {
+
+			$(document).on('click','.tumblelog_menu_btn', XKit.extensions.xkit_patches.patch_ask);
+
+		}
+
+	},
+
+	patch_ask: function() {
+
+		var m_parent;
+		if ($(".tumblelog_popover_v1").length > 0) {
+			m_parent = $(".tumblelog_popover_v1").find(".tumblelog_menu_popover").find("ul");
+		} else {
+			m_parent = $(".tumblelog_popover").find(".tumblelog_menu_popover").find("ul");
+		}
+
+		console.log("->" + $(m_parent).html());
+
+		if ($(m_parent).find(".ask").attr('data-tumblelog-name') === "xkit-extension") {
+			
+			$(m_parent).find(".ask").html("XKit Support");
+			$(m_parent).find(".ask").addClass("xkit-support-ask");
+			$(m_parent).find(".ask").removeClass("ask");
+
+		}
+
+	},
 
 	run: function() {
 		this.running = true;
 
 		XKit.tools.init_css("xkit_patches");
 		
-		XKit.extensions.lang_english = {
+		setTimeout(function() { XKit.extensions.xkit_patches.check_unfollower_hater(); }, 1000);
+
+		setTimeout(function() { XKit.extensions.xkit_patches.do_support_links(); }, 1500);
 		
-			common: {
+		XKit.dashboardGL = new Object({
 			
-				"ok": "OK",
-				"cancel": "Cancel"	
+			last_point: 0,
+			is_working: false,
+			interval: 0,
+			
+			scroll_top: $(window).scrollTop(),
+			view_height: $(window).height(),
+			
+			list_id: new Array(),
+			list_avatar: new Array(),
+			
+			blank_image: "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==",
+			
+			is_visible: function(elem, elemTop) {
+				
+				// From: http://stackoverflow.com/questions/487073/check-if-element-is-visible-after-scrolling
+			
+    				var docViewTop = XKit.dashboardGL.scroll_top;
+    				var docViewBottom = XKit.dashboardGL.view_height;
+    				
+    				var elemBottom = elemTop + $(elem).height();
+
+    				return ((elemBottom <= docViewBottom) && (elemTop >= docViewTop));
+				
+			},
+			
+			init: function() {
+				
+				XKit.console.add("Init XKit dashboardGL");	
+				
+				XKit.dashboardGL.interval = setInterval(XKit.dashboardGL.do, 750);
+				
+				$(window).resize(function() {
+  					XKit.dashboardGL.view_height = $(window).height();
+				});
+				
+			},
+			
+			do: function() {
+				
+				if (XKit.dashboardGL.is_working) { return; }
+				
+				//console.time('XKit dashboardGL');
+				
+				XKit.dashboardGL.is_working = true;
+				
+				XKit.dashboardGL.scroll_top = $(window).scrollTop();
+			
+				var current_point = $(window).scrollTop();
+				
+				// if (current_point === XKit.dashboardGL.last_point) { XKit.dashboardGL.last_point = current_point; XKit.dashboardGL.is_working = false; console.timeEnd('XKit dashboardGL'); return; }
+				
+				var m_difference = current_point - XKit.dashboardGL.last_point;
+				if (m_difference <= -1) { m_difference = m_difference * -1; }
+				if (m_difference >= 550) { console.timeEnd('XKit dashboardGL'); XKit.dashboardGL.last_point = current_point; XKit.dashboardGL.is_working = false; return; }
+				
+				XKit.dashboardGL.last_point = current_point;	
+				
+				var fix_count = 0;
+				
+				$(".post_avatar_link:visible").each(function() {
+						
+					var m_top = $(this).offset().top;
+						
+					if (m_top >= current_point + XKit.dashboardGL.view_height + 200) { return false; }
+					if (m_top <= current_point - 300) { return; }
+					
+					if (m_top >= XKit.dashboardGL.view_height + 200) {
+						if (XKit.dashboardGL.is_visible($(this), m_top) !== false) { return; }
+					}
+						
+					if ($(this).css("background-image").indexOf(XKit.dashboardGL.blank_image) !== -1) {
+						
+						var post_id = $(this).parentsUntil('.post').parent().attr('data-post-id');
+						var m_index = XKit.dashboardGL.list_id.indexOf(post_id);
+						
+						if (m_index !== -1) {
+						
+							$(this).css("background-image", "url('" + XKit.dashboardGL.list_avatar[m_index] + "')");	
+							
+						} else {
+						
+							XKit.dashboardGL.list_id.push(post_id);	
+							XKit.dashboardGL.list_avatar.push($(this).attr('data-avatar-url'));
+							$(this).css("background-image", "url('" + $(this).attr('data-avatar-url') + "')");	
+							
+						}			
+						
+			
+						fix_count++; 
+						//var m_object = $(this);
+						//setTimeout(function() {
+						//$(this).css("background-image", "url('" + $(this).attr('data-avatar-url') + "')");	
+						//}, (fix_count * 10) + 100);
+						
+						
+					}	
+					
+				});
+				
+				XKit.dashboardGL.is_working = false;
+				//console.timeEnd('XKit dashboardGL');
+				
+				//console.log("Fixed " + fix_count + " avatars");
 				
 			}	
 			
-		};
+		});
+		
+		XKit.dashboardGL.init();
 		
 		XKit.lang = new Object({
 			

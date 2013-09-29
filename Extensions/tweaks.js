@@ -1,5 +1,5 @@
 //* TITLE Tweaks **//
-//* VERSION 2.3 REV C **//
+//* VERSION 2.3 REV E **//
 //* DESCRIPTION Various little tweaks for your dashboard. **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS These are small little tweaks that allows you customize your dashboard. If you have used XKit 6, you will notice that some of the extensions have been moved here as options you can toggle. Keep in mind that some of the tweaks (the ones marked with a '*') can slow down your computer. **//
@@ -296,7 +296,7 @@ XKit.extensions.tweaks = new Object({
 		}
 
 		if (XKit.extensions.tweaks.preferences.hide_notes.value === true) {
-			XKit.tools.add_css(".post .post_notes { display: none; } ", "xkit_tweaks_hide_notes");
+			XKit.tools.add_css(".post .post_notes { visibility: hidden; } ", "xkit_tweaks_hide_notes");
 		}	
 		
 		if (XKit.extensions.tweaks.preferences.hide_tags.value === true) {
@@ -383,7 +383,7 @@ XKit.extensions.tweaks = new Object({
  				$("#new_post").removeClass("xkit-new-post-scrolls");
 				
 			});
-			XKit.tools.add_css(	"#new_post.xkit-new-post-scrolls { position: fixed; top: -5px; z-index: 100; opacity: 0.75; min-height: 88px !important; }" + 
+			XKit.tools.add_css(	"#new_post.xkit-new-post-scrolls { min-width: 540px; position: fixed; top: -5px; z-index: 100; opacity: 0.75; min-height: 88px !important; }" + 
 						"#new_post.xkit-new-post-scrolls:hover { opacity: 1; }" + 
 						"#new_post.xkit-new-post-scrolls #post_buttons { top: -5px !important; }" + 
 						"#new_post.xkit-new-post-scrolls .post_avatar { display: none; }", "xkit_tweaks_scroll_new_posts");

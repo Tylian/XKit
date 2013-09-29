@@ -1,5 +1,5 @@
 //* TITLE Panorama **//
-//* VERSION 1.2 REV C **//
+//* VERSION 1.2 REV D **//
 //* DESCRIPTION Widescreen dashboard **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//
@@ -30,14 +30,23 @@ XKit.extensions.panaroma = new Object({
 			
 		}
 		
+		XKit.post_listener.add("panorama_resize", XKit.extensions.panaroma.resized_auto);
 		$(window).on('resize', XKit.extensions.panaroma.resized);
 		XKit.extensions.panaroma.resized();
 	},
 	
-	resized: function() {
+	resized_auto: function() {
 		
-		var m_width = $(".post .post_body").width() - 60;
-		$(".post .note_item").css("width", m_width + "px");	
+		XKit.extensions.panaroma.resized(true);
+		
+	},
+	
+	resized: function(auto_mode) {
+		
+		var m_width = $(".post.is_note .post_wrapper").width() - 70;
+		console.log(m_width);
+		if (m_width <= 400) { m_width = 500; }
+		$(".post.is_note .note_item").css("width", m_width + "px");	
 		
 	},
 
@@ -45,6 +54,7 @@ XKit.extensions.panaroma = new Object({
 		XKit.tools.remove_css("panaroma");
 		XKit.tools.remove_css("panaroma_str");
 		$(window).off('resize', XKit.extensions.panaroma.resized);
+		XKit.post_listener.remove("panorama_resize");
 		this.running = false;
 	}
 

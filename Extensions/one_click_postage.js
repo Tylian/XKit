@@ -1,5 +1,5 @@
 //* TITLE One-Click Postage **//
-//* VERSION 2.7 REV B **//
+//* VERSION 2.7 REV F **//
 //* DESCRIPTION Lets you easily reblog, draft and queue posts **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//
@@ -684,7 +684,7 @@ XKit.extensions.one_click_postage = new Object({
 			$("#x1cpostage_box").slideUp('fast');
 		}
 		var post_id = $(XKit.extensions.one_click_postage.last_object).attr('data-post-id');
-		var form_key = $("body").attr('data-form-key');
+		var form_key = XKit.interface.form_key();
 		var reblog_key = $(XKit.extensions.one_click_postage.last_object).attr('data-reblog-key');
 		var post_type = $(XKit.extensions.one_click_postage.last_object).attr('data-type');
 		var channel_id = $(XKit.extensions.one_click_postage.last_object).attr('data-tumblelog-name');
@@ -724,6 +724,11 @@ XKit.extensions.one_click_postage = new Object({
 		
 		var caption = $("#x1cpostage_caption").val();
 		var tags = $("#x1cpostage_tags").val();
+		
+		if (quick_queue_mode) {
+			tags = "";
+			caption = "";	
+		}
 
 		GM_xmlhttpRequest({
 			method: "POST",
@@ -739,7 +744,7 @@ XKit.extensions.one_click_postage = new Object({
 						XKit.extensions.one_click_postage.show_error("OCP02 [Not Found]", state);
 					} else {
 						if (retry_mode !== true) {
-							XKit.extensions.one_click_postage.post(state, true, quick_queue_mode);
+							setTimeout(function() { XKit.extensions.one_click_postage.post(state, true, quick_queue_mode); }, 500);
 						} else {
 							XKit.extensions.one_click_postage.show_error("OCP03-" + response.status, state);
 						}
@@ -867,9 +872,9 @@ XKit.extensions.one_click_postage = new Object({
 				
 			if (caption !== "" && typeof caption !== "undefined") {
 				if ($("#x1cpostage_replace").hasClass("selected") === false) {
-					m_object[variable_to_use] = current_caption + "<p>" + caption + "</p>";
+					m_object[variable_to_use] = current_caption + "<p>" + caption.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;') + "</p>";
 				} else {
-					m_object[variable_to_use] = caption;
+					m_object[variable_to_use] = caption.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 				}
 			} else {
 				m_object[variable_to_use] = current_caption;
@@ -877,7 +882,6 @@ XKit.extensions.one_click_postage = new Object({
 			
 		}
 
-		
 		if (tags !== "" && typeof tags !== "undefined") {
 			m_object["post[tags]"] = tags;
 		} else {
@@ -1018,6 +1022,12 @@ XKit.extensions.one_click_postage = new Object({
 					"<li><b>Your browser settings are denying XKit cookies.</b><br/>If you have disabled \"Third Party Cookies\", One-Click Postage can not work properly. Please enable them and try again.</li>" +
 					"<li><b>There was a server error.</b><br/>Wait for a while and retry the " + m_word + " request.<br/>There might be some changes made to the Tumblr servers, in that case, a fix will be provided soon. Check the XKit blog for updates.</li>" +
 				"</ul>";
+		
+		if (state === 2 && XKit.interface.user().queue >= 299) {
+			m_causes = "<ul class=\"xkit-one-click-postage-error-list\">" +
+					"<li><b>You've filled your queue.</b><br/>You can not queue more than 300 posts.</li>" +
+				"</ul>";	
+		}
 		
 		XKit.window.show("I could not " + m_word + " your post.","<b>One of the following might be the reason for that:</b>" + m_causes + "<b>If the tips above did not solve the problem,</b><br/>please send me an ask along with the error code <b>" + code + "</b>.","error","<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div><a href=\"http://xkit-extension.tumblr.com/\" class=\"xkit-button\">Visit the XKit Blog</a><a href=\"http://xkit-extension.tumblr.com/ask\" class=\"xkit-button\">Send an ask</a>");	
 		

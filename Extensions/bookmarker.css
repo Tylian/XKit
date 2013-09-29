@@ -8,6 +8,12 @@
 	background-position: 50% 50%;
 }
 
+.fake_post {
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;	
+}
+
 .xkit_bookmarker_button.xkit_new_dashboard:after {
 	margin-top: -9px;	
 }

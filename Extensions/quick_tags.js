@@ -1,5 +1,5 @@
 //* TITLE Quick Tags **//
-//* VERSION 0.1 REV F **//
+//* VERSION 0.3 REV A **//
 //* DESCRIPTION Quickly add tags to posts **//
 //* DETAILS Allows you to create tag bundles and add tags to posts without leaving the dashboard. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -104,6 +104,9 @@ XKit.extensions.quick_tags = new Object({
 				var m_tags = data.data.post.tags;
 				
 				if (XKit.extensions.quick_tags.preferences.append_not_replace.value === true) {
+					if (typeof m_tags === "undefined" ||m_tags == "null") {
+						m_tags = "";	
+					}
 					m_tags = m_tags + "," + tags;
 				} else {
 					m_tags = tags;	
@@ -172,7 +175,11 @@ XKit.extensions.quick_tags = new Object({
 				if ($("#x1cpostage_tags").val() === "") {
 					$("#x1cpostage_tags").val(m_tags);
 				} else {
-					$("#x1cpostage_tags").val($("#x1cpostage_tags").val() + "," + m_tags);
+					var m_u_tags = $("#x1cpostage_tags").val();
+					if (typeof m_u_tags === "undefined" ||m_u_tags == "null") {
+						m_u_tags = "";	
+					}
+					$("#x1cpostage_tags").val(m_u_tags + "," + m_tags);
 				}
 			}
 		}
@@ -370,7 +377,7 @@ XKit.extensions.quick_tags = new Object({
 	
 	create_div: function(obj, id) {
 		
-		return "<div class=\"xkit-quick-tags-cp-tag\"><div class=\"xkit-tag-title\">" + obj.title + "</div><div class=\"xkit-tag-tags\">" + obj.tags + "</div><div data-id=\"" + id + "\" class=\"xkit-quick-tags-tag-delete\">&#10006;</div></div>";	
+		return "<div data-id=\"" + id + "\" class=\"xkit-quick-tags-cp-tag\"><div class=\"xkit-tag-title\">" + obj.title + "</div><div class=\"xkit-tag-tags\">" + obj.tags + "</div></div>";	
 		
 	},
 	
@@ -400,10 +407,10 @@ XKit.extensions.quick_tags = new Object({
 
 		$("#quick-tags-add-button").click(function() {
 			
-			var remaining = 15 - XKit.extensions.quick_tags.tag_array.length;
+			var remaining = 30 - XKit.extensions.quick_tags.tag_array.length;
 			
 			if (remaining <= 0) {
-				XKit.window.show("No slots left.","You can not add more than 15 bundles.<br/>Please delete some before adding new bundles.","error","<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
+				XKit.window.show("No slots left.","You can not add more than 30 bundles.<br/>Please delete some before adding new bundles.","error","<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
 				return;				
 			}
 			
@@ -436,6 +443,56 @@ XKit.extensions.quick_tags = new Object({
 				XKit.extensions.xkit_preferences.restart_extension("quick_tags");
 				
 			});
+			
+		});
+		
+		$(".xkit-quick-tags-cp-tag").click(function() {
+					
+			var m_id = parseInt($(this).attr('data-id'));
+				
+			var m_tags = XKit.extensions.quick_tags.tag_array[m_id].tags;
+			var m_title = XKit.extensions.quick_tags.tag_array[m_id].title;
+			XKit.window.show("Edit bundle","<b>Bundle Title</b><input type=\"text\" maxlength=\"40\" value=\"" + m_title + "\" placeholder=\"eg: Doctor Who\" class=\"xkit-textbox\" id=\"xkit-quick-tags-add-title\"><b>Bundled Tags, comma separated</b><input value=\"" + m_tags + "\" type=\"text\" maxlength=\"250\" placeholder=\"eg: Doctor Who, Dr. Who, Non-Medical Tv Show Doctor\" class=\"xkit-textbox\" id=\"xkit-quick-tags-add-tags\">","question","<div class=\"xkit-button default\" id=\"xkit-quick-tags-create-bundle\">Create Bundle</div><div class=\"xkit-button\" id=\"xkit-quick-tags-delete-bundle\">Delete This Bundle</div><div class=\"xkit-button\" id=\"xkit-close-message\">Cancel</div>")
+		
+			$("#xkit-quick-tags-delete-bundle").click(function() {
+				
+				XKit.extensions.quick_tags.tag_array.splice(m_id, 1);
+				
+				XKit.storage.set("quick_tags","user_tags", JSON.stringify(XKit.extensions.quick_tags.tag_array));
+
+				XKit.window.close();
+				XKit.extensions.quick_tags.cpanel(m_div);
+				XKit.extensions.xkit_preferences.restart_extension("quick_tags");
+				
+			});
+		
+			$("#xkit-quick-tags-create-bundle").click(function() {
+				
+				var title = $("#xkit-quick-tags-add-title").val();
+				var tags = $("#xkit-quick-tags-add-tags").val();
+				
+				if ($.trim(title) === "") {
+					alert("Please enter a title for your bundle.");
+					return;	
+				}
+				
+				if ($.trim(tags) === "") {
+					alert("Please enter the tags for your bundle.");
+					return;	
+				}
+				
+				var m_object = new Object();
+				XKit.extensions.quick_tags.tag_array[m_id].title = title;
+				XKit.extensions.quick_tags.tag_array[m_id].tags = tags;
+
+				XKit.storage.set("quick_tags","user_tags", JSON.stringify(XKit.extensions.quick_tags.tag_array));
+				
+				XKit.window.close();
+				XKit.extensions.quick_tags.cpanel(m_div);
+				XKit.extensions.xkit_preferences.restart_extension("quick_tags");
+				
+			});
+
 			
 		});
 		

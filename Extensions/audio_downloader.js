@@ -1,5 +1,5 @@
 //* TITLE Audio Downloader **//
-//* VERSION 1.2 REV B **//
+//* VERSION 2.0 REV A **//
 //* DESCRIPTION Lets you download audio posts hosted on Tumblr **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//
@@ -11,6 +11,8 @@ XKit.extensions.audio_downloader = new Object({
 
 	slow: true,
 	running: false,
+	
+	button_icon: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAATCAYAAAByUDbMAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBNYWNpbnRvc2giIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6QkY1MzdFN0ExNTU3MTFFMzlCNjJGNTNDQTgzRjc3M0UiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6QkY1MzdFN0IxNTU3MTFFMzlCNjJGNTNDQTgzRjc3M0UiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDpCRjUzN0U3ODE1NTcxMUUzOUI2MkY1M0NBODNGNzczRSIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDpCRjUzN0U3OTE1NTcxMUUzOUI2MkY1M0NBODNGNzczRSIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PuxbowMAAACcSURBVHja7NTBDYAgDABA6gKMQpzEURiFERyFERiFEZCamlTToqIvY5O+aO/RlEIpxUgBAOJDrQejxGBejB/7EobhcX0epl/3lZY2PoAiGhyzNXMHhD12hxHoOjC39e8wAv3dOakYgfMFaD72aRjOLzWgxOfUxNj8sjJwJ/WoGIGTgE1afRMjMDAotGoxQbu07OImurDj2VdaBBgAbglVZHbAZ/wAAAAASUVORK5CYII=",
 
 	run: function() {
 		
@@ -21,84 +23,110 @@ XKit.extensions.audio_downloader = new Object({
 			XKit.storage.set("audio_downloader","shown_welcome","true");
 		}
 		
-		if ($("#posts").length > 0) {
+		if ($(".post").length > 0) {
 			
-			$(document).on("click", ".xgetaudiobutton", function() {
-		
-				if ($(this).hasClass("xkit-audio-downloader-working") === true) {
-					return;
-				}
-				
-				$(this).addClass("xkit-audio-downloader-working");
-				XKit.extensions.audio_downloader.download($(this));
-				
-			});
-			
-			XKit.extensions.audio_downloader.check_posts();
+			XKit.interface.create_control_button("xkit-audio-downloader", this.button_icon, "Audio Downloader", "");
+			XKit.extensions.audio_downloader.init();
+			XKit.post_listener.add("audio_downloader", XKit.extensions.audio_downloader.do);
+			XKit.extensions.audio_downloader.do();
 			
 		}
 		
 	},
 	
-	download: function(obj) {
+	init: function() {
+		
+		$(document).on("click", ".xkit-audio-downloader", function(event) {
+			var post_id = $(this).attr('data-post-id');
+			var username = $(this).attr('data-xkit-audio-downloader-tumblelog-name');
+			XKit.extensions.audio_downloader.download(post_id, username);
+		});
+		
+	},
 	
-		//var obj_id = "#" + $(obj).attr('id').replace("xgetaudio_download_post_","post_");
-		var obj_id = "#" + $(obj).attr('data-post-id');
-		var div_html = $(obj_id).find(".post_content").html();
-
-		var this_control_html = $(obj_id).children('.post_controls').html();
-		var permalink = $(obj_id).find(".permalink").attr('href');
-
-		if ($(obj_id).find(".post_permalink").length > 0) {
-			permalink = $(obj_id).find(".post_permalink").attr('href');
-		}
-
-		var json_page = permalink.replace("/post/", "/api/read/json?id=");
-		json_page = json_page.replace("/private/", "/api/read/json?id=");
-
-
-		console.log(json_page);
-
+	download: function(post_id, username) {
+		
+		var json_page = "http://" + username + ".tumblr.com/api/read/json?id=" + post_id;
+		
 		GM_xmlhttpRequest({
 			method: "GET",
 			url: json_page,
 			onload: function(response) {
 				
-				console.log(response.responseText);
+				var m_data = response.responseText.replace("var tumblr_api_read = {", "{");
+				m_data = m_data.substring(0, m_data.length - 2);
 				
-				$(obj).removeClass("xkit-audio-downloader-working");
+				console.log(m_data);
 				
-				if (response.responseText.indexOf("?audio_file=") == -1) {
-					XKit.window.show("Can't fetch audio information", "I'm sorry but I could not fetch information needed to download this file. Please try again later.", "error", "<div id=\"xkit-close-message\" class=\"xkit-button\">OK</div>");
-					return;
-				}
-				var m_start = response.responseText.indexOf("?audio_file=") + 12;
-				var m_end = response.responseText.indexOf("\\\"", m_start);
-				var m_url = decodeURIComponent(response.responseText.substring(m_start, m_end));
-				if (m_url.indexOf('&color=') !== -1) {
-					m_url = m_url.substring(0, m_url.indexOf('&color='));
-				}
-				
+				try {
+					
+					var obj = JSON.parse(m_data);
+					
+					if (typeof obj.posts[0] === "undefined") {
+						return XKit.extensions.audio_downloader.show_error("13");
+					}
+					
+					if (typeof obj.posts[0]["audio-player"] === "undefined" ||obj.posts[0]["audio-player"] === "") {
+						return XKit.extensions.audio_downloader.show_error("14");
+					}	
+					
+					var m_text = obj.posts[0]["audio-player"];
+					
+					var m_start = m_text.indexOf("?audio_file=") + 12;
+					var m_end = m_text.indexOf("\"", m_start);
+					var m_url = decodeURIComponent(m_text.substring(m_start, m_end));
+					if (m_url.indexOf('&color=') !== -1) {
+						m_url = m_url.substring(0, m_url.indexOf('&color='));
+					}
+					
+					var m_id = "audio_" + XKit.extensions.audio_downloader.make_id();
+					
+					var audio_name = $("#post_" + post_id).find(".id3_tags").find(".track_name").html();
+					var audio_author = $("#post_" + post_id).find(".id3_tags").find(".artist_name").html();
+					
+					if (typeof audio_author == "undefined" || audio_author == "") {
+						audio_author = "unknown";
+					}
+					
+					if (typeof audio_name !== "undefined" && audio_name !== "") {
+						m_id = audio_name.replace(/\W/g, '') + "__" + audio_author.replace(/\W/g, '');
+					}
+					
+					
+					
+					var m_titles = [ "You probably wouldn't steal a car.", "The Big-Bro Warning", "Watch it, they are watching you.", "Do you want Metallica to starve to death?", "Psst. Behind you.", "Would you download a car?", "You are too pretty to go to jail.", "Oh I hope you are not doing what I think you are doing.", "Xenixlet Sez: Buy music!", "You are downloading a Mitt Romney audio snippet, right?" ];
+					var m_index = Math.floor(Math.random() * m_titles.length);
+					
+					var m_title = m_titles[m_index];
+					
+					if (XKit.browser().firefox === true || XKit.browser().safari === true) {
+						XKit.window.show(m_title, "<b>This functionality is provided in good faith.</b><br/>Please keep in mind the laws while using it: if you think downloading this file might be a copyright violation, hit Cancel now.", "warning", "<a href=\"http://www.xkit.info/seven/helpers/audioget.php?fln=" + m_url + "&id=" + m_id + "\" id=\"xkit-get-audio-button-start\" class=\"xkit-button default\">Download File</a><div id=\"xkit-close-message\" class=\"xkit-button\">Cancel</div>");			
+					} else {
+						m_url = m_url + "?plead=please-dont-download-this-or-our-lawyers-wont-let-us-host-audio";
+						XKit.window.show(m_title, "<b>This functionality is provided in good faith.</b><br/>Please keep in mind the laws while using it: if you think downloading this file might be a copyright violation, hit Cancel now.", "warning", "<a href=\"" + m_url + "\" download=\"" + m_id + "\" id=\"xkit-get-audio-button-start\" class=\"xkit-button default\">Download File</a><div id=\"xkit-close-message\" class=\"xkit-button\">Cancel</div>");	
+					}			
+					
+					$("#xkit-get-audio-button-start").click(function() {
 
-				var m_id = "audio_" + XKit.extensions.audio_downloader.make_id();
-
-				if (XKit.browser().firefox === true || XKit.browser().safari === true) {
-					XKit.window.show("The Big-Bro Warning", "This functionality is provided in good faith. Please keep in mind the laws while using it: if you think downloading this file might be a copyright violation, please hit Cancel Download now.", "warning", "<a href=\"http://www.xkit.info/seven/helpers/audioget.php?fln=" + m_url + "&id=" + m_id + "\" id=\"xkit-get-audio-button-start\" class=\"xkit-button default\">Download File</a><div id=\"xkit-close-message\" class=\"xkit-button\">Cancel</div>");			
-				} else {
-					m_url = m_url + "?plead=please-dont-download-this-or-our-lawyers-wont-let-us-host-audio";
-					XKit.window.show("The Big-Bro Warning", "This functionality is provided in good faith. Please keep in mind the laws while using it: if you think downloading this file might be a copyright violation, please hit Cancel Download now.", "warning", "<a href=\"" + m_url + "\" download=\"" + m_id + "\" id=\"xkit-get-audio-button-start\" class=\"xkit-button default\">Download File</a><div id=\"xkit-close-message\" class=\"xkit-button\">Cancel</div>");	
+						XKit.notifications.add("Your download will begin any second now.", "ok");
+						XKit.window.close();
+				
+					});	
+				
+				} catch(e) {
+					
+					XKit.extensions.audio_downloader.show_error("12 - " + e.message);
+					
 				}
 				
-				$("#xkit-get-audio-button-start").click(function() {
-
-					XKit.notifications.add("Your download will begin any second now.", "ok");
-					XKit.window.close();
-				
-				});
+			},
+			onerror: function() {
+			
+				XKit.extensions.audio_downloader.show_error("11");
 				
 			}
 		});
-	
+		
 	},
 	
 	make_id: function() {
@@ -112,36 +140,32 @@ XKit.extensions.audio_downloader = new Object({
 		return text;
 	
 	},
-		
-	check_posts: function() {
 	
-		var m_selector = ".is_audio";
+	show_error: function(error_code) {
+		
+		XKit.window.show("Can't fetch audio information", "I'm sorry but I could not fetch information needed to download this file.<br/><br/>There might be a problem with Tumblr servers, or perhaps the user removed the post.<br/><br/>Please try again later.<br/>(Error " + error_code + ")", "error", "<div id=\"xkit-close-message\" class=\"xkit-button\">OK</div>");	
+		
+	},
+	
+	do: function() {
+		
+		var posts = XKit.interface.get_posts("xkit-audio-downloader-done");
 
-		$(m_selector).not(".xgetaudioed").each(function() {
-
-			$(this).addClass("xgetaudioed");
-			if ($(this).find('.post_controls').html().indexOf('class="xgetaudiobutton"') !== -1) { return; }
-
-			if ($(this).find(".soundcloud_audio_player").length > 0) {
-				return;
-			}
-
-			if ($(this).find(".spotify_player").length > 0) {
-				return;
-			}
-
-			this_id = $(this).attr('id');
-			add_html =	'<div class="xgetaudiobutton post_control" data-post-id="' + this_id + '"></div>';
+		$(posts).each(function() {
 			
-			if ($(this).find('.post_controls').find('.like_button').length > 0) {
-				$(this).find('.post_controls').find('.like_button').before(add_html);
-			} else {
-				$(this).find('.post_controls_inner').find('.like').before(add_html);
-			}
+			$(this).addClass("xkit-audio-downloader-done");
+			
+			// Check if hosted by Tumblr:
+			if ($(this).find(".audio_player").length === 0) { return; }
+			
+	  		var m_post = XKit.interface.post($(this));
+	  		
+	  		// Post has no notes, skip.
+	  		if (m_post.type !== "audio") { return; }
+
+			XKit.interface.add_control_button(this, "xkit-audio-downloader", "data-xkit-audio-downloader-tumblelog-key=\"" + m_post.tumblelog_key + "\" data-xkit-audio-downloader-tumblelog-name=\"" + m_post.owner + "\"");
 
 		});
-		
-		setTimeout(function() { XKit.extensions.audio_downloader.check_posts(); }, 3000);
 	
 	},
 	

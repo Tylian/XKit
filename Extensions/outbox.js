@@ -1,5 +1,5 @@
 //* TITLE Outbox **//
-//* VERSION 0.4 REV B **//
+//* VERSION 0.5 REV A **//
 //* DESCRIPTION Saves your last 20 sent private replies and fan mail. **//
 //* DETAILS This extension stores and lets you view the last 20 asks you've answered privately. Please keep in mind that this is a highly experimental extension, so if you hit a bug, please send the XKit blog an ask with the problem you've found. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -16,7 +16,50 @@ XKit.extensions.outbox = new Object({
 
 		XKit.console.add("Outbox working on Frame mode...");
 		this.run_fan_mail();
+		if (document.location.href.indexOf('/ask_form') !== -1) {
+			this.run_ask_frame();
+		}
 
+	},
+	
+	run_ask_frame: function() {
+		
+		var form_key = $("#form_key").val();
+		if (typeof form_key === "undefined") { return; }
+		
+		$(document).on("click", "#ask_button", function() {
+			
+			var m_messages = XKit.storage.get("outbox", "messages_" + form_key, "");
+			
+			var m_messages_array = "";
+		
+			try {
+				m_messages_array = JSON.parse(m_messages);
+				if (m_messages_array.length >= 20) {
+					// remove the last element.
+					m_messages_array.pop();
+				}
+			} catch(e) {
+				m_messages_array = new Array();
+			}
+			
+			m_username = document.location.href.substring(document.location.href.indexOf('/ask_form') + 10);
+			m_username = m_username.substring(0, m_username.indexOf("."));
+			
+			var m_obj = new Object();
+			m_obj.avatar = "ask";
+			m_obj.username = $("#tumblelog_name").find(".name").html();
+			m_obj.message = $("#question").val();
+			m_obj.answer = "";
+			m_obj.to = m_username;
+			m_obj.time = new Date().getTime();
+				
+			m_messages_array.unshift(m_obj);
+			XKit.storage.set("outbox", "messages_" + form_key, JSON.stringify(m_messages_array));
+			
+			
+		});
+		
 	},
 	
 	run_fan_mail: function(wait) {
@@ -79,8 +122,49 @@ XKit.extensions.outbox = new Object({
 		
 	},
 	
+	check_indash_asks: function() {
+		
+		var form_key = XKit.interface.form_key();
+		
+		$(document).on("click", "#ask_button", function() {
+			
+			var m_messages = XKit.storage.get("outbox", "messages_" + form_key, "");
+			
+			var m_messages_array = "";
+		
+			try {
+				m_messages_array = JSON.parse(m_messages);
+				if (m_messages_array.length >= 20) {
+					// remove the last element.
+					m_messages_array.pop();
+				}
+			} catch(e) {
+				m_messages_array = new Array();
+			}
+			
+			m_username = document.location.href.substring(document.location.href.indexOf('/ask_form') + 10);
+			m_username = m_username.substring(0, m_username.indexOf("."));
+			
+			var m_obj = new Object();
+			m_obj.avatar = "ask";
+			m_obj.username = $("#from").find(".tumblelog_name").html();
+			m_obj.message = $("#question").val();
+			m_obj.answer = "";
+			m_obj.to = $("#recipient_label").html();
+			m_obj.time = new Date().getTime();
+				
+			m_messages_array.unshift(m_obj);
+			XKit.storage.set("outbox", "messages_" + form_key, JSON.stringify(m_messages_array));
+			
+			
+		});	
+		
+	},
+	
 	run: function() {
 		this.running = true;
+		
+		XKit.extensions.outbox.check_indash_asks();
 		
 		if (XKit.interface.where().inbox !== true && document.location.href.indexOf('http://www.tumblr.com/send/') == -1) {
 			XKit.console.add("Outbox -> Quitting, not in inbox");
@@ -296,6 +380,57 @@ XKit.extensions.outbox = new Object({
 		
 	},
 	
+	render_ask: function(obj, m_id) {
+		
+		var to_return = "<li class=\"post_container\"><div class=\"post is_note note is_mine post_full by-xkit-outbox is_mine is_original is_private_answer no_source\">";
+	
+		var m_link = "<a href=\"http://" + obj.to + ".tumblr.com/\">" + obj.to + "</a>";
+		
+		var av_link = "<a href=\"http://" + obj.username + ".tumblr.com/\"><img width=\"24\" height=\"24\" src=\"" + obj.avatar + "\"></a>";
+		var av_text = "<a href=\"http://" + obj.username + ".tumblr.com/\" class=\"post_question_asker\">" + obj.username + "</a>";
+		
+		var m_day = "";
+		var m_date = "";
+
+		if (obj.time !== "" && typeof obj.time !== "undefined") {
+			var m = moment(obj.time);
+			m_day = m.format('ddd');
+			m_date = m.format('hh:mm a');
+		} else {
+			m_day = "?";
+			m_date = "Unknown";	
+		}
+		
+		obj.message = $("<div>" + obj.message + "</div>").text();
+			
+		to_return = to_return + "<div class=\"post_avatar\"><div class=\"queue\">" +
+        				"<div class=\"publish_info day publish_on_day\">" + m_day + "</div>" + 
+       					"<div class=\"publish_info time publish_on_time\">" + m_date + "</div>" +
+				"</div></div>";
+		
+		to_return = to_return + "<div class=\"post-wrapper\">" +
+				"<span class=\"xkit-outbox-fanmail-indicator\">sent ask</span>" +
+				"<div class=\"post_header\"><div class=\"post_info\">You've sent to " + m_link + "</div></div>" +
+				"<div class=\"post_content clearfix\"><div class=\"post_content_inner clearfix\">" +
+					"<div class=\"post_body\">" +
+						"<div class=\"clear\">&nbsp;</div>" +
+						"<div class=\"post_question_fan_mail\">" + obj.message + "</div>" +
+					"</div>" +
+					"<div class=\"post_footer clearfix\" style=\"margin-bottom: -25px;\">" +
+						"<div class=\"post_notes\"><div class=\"post_notes_inner\"></div></div>" +
+						"<div class=\"post_controls\" role=\"toolbar\"><div class=\"post_controls_inner\">" +
+							"<div class=\"post_control deny-xoutbox xkit-outbox-delete\" data-outbox-id=\"" + m_id + "\" title=\"Delete\"></div>" +
+						"</div></div>" +
+					"</div>" +
+				"</div></div>" +
+			    "</div>";
+		
+		to_return = to_return + "</div></li>";
+		
+		return to_return;	
+		
+	},
+	
 	render_fan_mail: function(obj, m_id) {
 		
 		var to_return = "<li class=\"post_container\"><div class=\"post is_note note is_mine post_full by-xkit-outbox is_mine is_original is_private_answer no_source\">";
@@ -351,6 +486,10 @@ XKit.extensions.outbox = new Object({
 		
 		if (obj.avatar === "fan_mail") {
 			return XKit.extensions.outbox.render_fan_mail(obj, m_id);
+		}
+		
+		if (obj.avatar === "ask") {
+			return XKit.extensions.outbox.render_ask(obj, m_id);
 		}
 		
 		var to_return = "<li class=\"post_container\"><div class=\"post is_note note is_mine post_full by-xkit-outbox is_mine is_original is_private_answer no_source\">";

@@ -5,6 +5,13 @@
 	background: rgb(0,186,240);	
 }
 
+#xcloud-panel input[type=text],
+#xcloud-panel input[type=password]  {
+	-webkit-user-select: text;	
+	-o-user-select: text;
+	-moz-user-select: text;
+}
+
 #xcloud-overlay-title {
 	font-size: 16px;
 	font-weight: bold;

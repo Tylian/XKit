@@ -1,5 +1,5 @@
 //* TITLE XIM **//
-//* VERSION 3.3 REV B **//
+//* VERSION 3.3 REV C **//
 //* DESCRIPTION Instant messenger for XKit. **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS XIM allows you to send instant messages to other XKit 7 users.<br>Notification Sounds by pageofmelody.tumblr.com **//
@@ -201,6 +201,13 @@ XKit.extensions.XIM = new Object({
 			XKit.window.show("XIM Help","<b>Add / Remove People</b><br/>To add a person, just click on the <i>+ Add Person</i> button on your sidebar. To remove someone, click on their name while holding the ALT key.<br/><br/><b>Service Status</b><br/>Since XIM is in early beta, you'll experience downtime. For up to date information about server status, visit <a href=\"http://xim-status.tumblr.com\">xim-status.tumblr.com</a>","info","<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
 
 		});
+		
+		if (XKit.storage.get("xim","shown_shutdown_notice","") !== "true") {
+		
+			XKit.notifications.add("<b>XIM is scheduled to shutdown on October 5.</b> Please click here for more information.","warning",true, function() { window.open("http://xkit-extension.tumblr.com/post/60347032721/retiring-filter-by-type-and-xim"); });	
+			XKit.storage.set("xim","shown_shutdown_notice","true");
+				
+		}
 
 		$("#xim-add-person").click(function() {
 

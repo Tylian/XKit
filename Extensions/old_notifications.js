@@ -1,5 +1,5 @@
 //* TITLE Old Notifications **//
-//* VERSION 0.1 REV E **//
+//* VERSION 0.4 REV A **//
 //* DESCRIPTION Notifications where they were **//
 //* DETAILS This is a very experimental extension that brings back the notifications to your blog pages (ie: www.tumblr.com/blog/xkit-extension), just the way it was before Tumblr's Activity update. Only the last 10 notifications are displayed. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -9,13 +9,14 @@
 XKit.extensions.old_notifications = new Object({
 
 	running: false,
+	blacklisted: new Array(),
 
 	run: function() {
 		this.running = true;
 		
 		if (XKit.interface.where().channel == true) {
 			XKit.extensions.old_notifications.fetch();
-			$(document).on('click','.notification.by-xkit-old-notifications', XKit.extensions.old_notifications.open_notification);	
+			$(document).on('click','.notification.xkit-old-notifications', XKit.extensions.old_notifications.open_notification);	
 		}
 		
 	},
@@ -34,16 +35,232 @@ XKit.extensions.old_notifications = new Object({
 			return;
 		}
 		
-		var m_parent = $(m_target).parentsUntil(".by-xkit-old-notifications").parent();
-		window.open($(m_parent).attr('data-url'));
+		var m_parent = $(m_target).parentsUntil(".xkit-old-notifications").parent();
+		window.open($(m_parent).attr('data-load-url'));
 		
 	},
 	
 	alt_notification: false,
-	max_notifications: 10,
+	max_notifications: 9,
 	notification_count: 0,
 	
 	render_notification: function(obj) {
+		
+		if ($(obj).find(".ui_note").length <= 0) { return ""; }
+		
+		obj = $(obj).find(".ui_note");
+		
+		var notification_url = $(obj).find(".part_glass").attr('href');
+		
+		var notification_username = $(obj).attr('data-tumblelog-name');
+		var notification_user_url = $(obj).find(".activity").find("a").attr('href');
+		var notification_avatar = $(obj).find(".ui_avatar_link").attr('data-avatar-url');
+		
+		notification_avatar = notification_avatar.replace("_64.png","_40.png");
+		notification_avatar = notification_avatar.replace("_64.gif","_40.gif");
+		notification_avatar = notification_avatar.replace("_64.jpg","_40.jpg");
+		notification_avatar = notification_avatar.replace("_128.png","_40.png");
+		notification_avatar = notification_avatar.replace("_128.gif","_40.gif");
+		notification_avatar = notification_avatar.replace("_128.jpg","_40.jpg");
+		
+		var summary = "";
+		if ($(obj).find(".part_main").find(".summary").length > 0) {
+			summary = $(obj).find(".part_main").find(".summary").html();
+		}
+		
+		var response = "";
+		if ($(obj).find(".part_response").length > 0) {
+			response = $(obj).find(".part_response").html();
+		}
+		
+		var original_url = $(obj).find(".ui_post_badge").attr('href');
+		
+		if (typeof original_url !== "undefined") {
+			
+			if (typeof XKit.extensions.old_notifications !== "undefined") {
+				
+				for (var i=0;i<XKit.extensions.old_notifications.blacklisted.length;i++) {
+					if (XKit.extensions.old_notifications.blacklisted[i] == "") { continue; }
+					if (original_url.indexOf("/post/" + XKit.extensions.old_notifications.blacklisted[i]) !== -1) {
+						// console.log("[Old Notifications]Blocking notification because of post " + XKit.extensions.old_notifications.blacklisted[i]);
+						return "";
+					}
+				}
+			
+			}	
+			
+		}
+		
+		var notification_preview = $(obj).find(".ui_post_badge").css("background-image");
+		
+		if (notification_preview !== "" && typeof notification_preview !== "undefined") {
+			notification_preview = notification_preview.substring(4, notification_preview.length - 1); 	
+		}
+		
+		var is_reblog = $(obj).hasClass("is_reblog");
+		var is_reply = $(obj).hasClass("is_reply");
+		var is_answer = $(obj).hasClass("is_answer");
+		var is_like = $(obj).hasClass("is_like");
+		var is_follow = $(obj).hasClass("is_follower");
+				
+		var preview_frame_class = "icon regular";
+		var preview_image = notification_preview;
+		
+		var is_post_regular = $(obj).find(".ui_post_badge").hasClass("regular");
+		var is_post_photo = $(obj).find(".ui_post_badge").hasClass("photo");
+		var is_post_chat = $(obj).find(".ui_post_badge").hasClass("conversation");
+		var is_post_quote = $(obj).find(".ui_post_badge").hasClass("quote");
+		var is_post_link = $(obj).find(".ui_post_badge").hasClass("link");
+		var is_post_audio = $(obj).find(".ui_post_badge").hasClass("audio");
+		var is_post_video = $(obj).find(".ui_post_badge").hasClass("video");
+		
+		var m_post_type_text = "post";
+		if (is_post_photo) { m_post_type_text = "photo"; preview_frame_class = ""; }
+		if (is_post_chat) { m_post_type_text = "chat"; preview_frame_class = "icon chat"; }
+		if (is_post_quote) { m_post_type_text = "quote"; preview_frame_class = "icon quote"; }
+		if (is_post_link) { m_post_type_text = "link"; preview_frame_class = "icon link"; }
+		if (is_post_audio) { m_post_type_text = "audio post"; preview_frame_class = "icon audio"; }
+		if (is_post_video) { m_post_type_text = "video post"; preview_frame_class = "icon video"; }
+		
+		var load_url = "";
+		
+		var additional_classes = "";
+		
+		if (XKit.extensions.old_notifications.notification_count === 0)
+			additional_classes = additional_classes + " first_notification ";
+	
+		if (XKit.extensions.old_notifications.notification_count % 2 === 0)
+			additional_classes = additional_classes + " alt ";
+			
+		if (response !== "")
+			additional_classes = additional_classes + " with_commentary ";
+		
+		if (is_answer)
+			additional_classes = additional_classes + " notification_answer ";
+			
+		if (is_reply)
+			additional_classes = additional_classes + " notification_reply ";
+			
+		if (is_reblog)
+			additional_classes = additional_classes + " notification_reblog ";
+			
+		if (is_like)
+			additional_classes = additional_classes + " notification_like";
+			
+		if (is_follow)
+			additional_classes = additional_classes + " notification_follower";
+					
+		var m_inner_html = "";
+		var no_preview_frame = false;
+		
+		if (is_follow) {
+			
+			load_url = notification_user_url;
+			
+			m_inner_html = "<a class=\"username\" href=\"" + notification_user_url + "\">" + notification_username + "</a> started following you ";
+			no_preview_frame = true;
+			
+		}
+		
+		if (is_like) {
+			
+			load_url = notification_url;
+			
+			m_inner_html = "<a class=\"username\" href=\"" + notification_user_url + "\">" + notification_username + "</a> liked your ";
+			
+			if (summary !== "") {
+				m_inner_html = m_inner_html + m_post_type_text + "<span class=\"colon\">:</span> <em style=\"white-space:nowrap;\"><a class=\"notification_target\" href=\"" + notification_url + "\">" + summary + "</em></a>";
+			} else {
+				m_inner_html = m_inner_html + "<a class=\"notification_target\" href=\"" + notification_url + "\">" + m_post_type_text + "</a>";
+			}
+		}
+		
+		if (is_reblog) {
+			
+			load_url = notification_url;
+			
+			m_inner_html = "<a class=\"username\" href=\"" + notification_user_url + "\">" + notification_username + "</a> reblogged your ";
+			
+			if (summary !== "") {
+				m_inner_html = m_inner_html + m_post_type_text + "<span class=\"colon\">:</span> <em style=\"white-space:nowrap;\"><a class=\"notification_target\" href=\"" + notification_url + "\">" + summary + "</em></a>";
+			} else {
+				m_inner_html = m_inner_html + "<a class=\"notification_target\" href=\"" + notification_url + "\">" + m_post_type_text + "</a>";
+			}
+			
+			if (response !== "") {
+				m_inner_html = m_inner_html + "<span class=\"colon\">:</span>" + response;	
+			}
+			
+		}
+		
+		if (is_reply) {
+			
+			load_url = notification_url;
+			
+			m_inner_html = "<a class=\"username\" href=\"" + notification_user_url + "\">" + notification_username + "</a> replied to your ";
+			
+			if (summary !== "") {
+				m_inner_html = m_inner_html + m_post_type_text + "<span class=\"colon\">:</span> <em style=\"white-space:nowrap;\"><a class=\"notification_target\" href=\"" + notification_url + "\">" + summary + "</em></a>";
+			} else {
+				m_inner_html = m_inner_html + "<a class=\"notification_target\" href=\"" + notification_url + "\">" + m_post_type_text + "</a>";
+			}
+			
+			if (response !== "") {
+				m_inner_html = m_inner_html + "<span class=\"colon\">:</span>" + response;	
+			}
+			
+		}
+		
+		if (is_answer) {
+			
+			load_url = notification_url;
+			
+			m_inner_html = "<a class=\"username\" href=\"" + notification_user_url + "\">" + notification_username + "</a> answered your ";
+			
+			if (summary !== "") {
+				m_inner_html = m_inner_html + m_post_type_text + "<span class=\"colon\">:</span> <em style=\"white-space:nowrap;\"><a class=\"notification_target\" href=\"" + notification_url + "\">" + summary + "</em></a>";
+			} else {
+				m_inner_html = m_inner_html + "<a class=\"notification_target\" href=\"" + notification_url + "\">" + m_post_type_text + "</a>";
+			}
+			
+			if (response !== "") {
+				m_inner_html = m_inner_html + "<span class=\"colon\">:</span>" + response;	
+			}
+			
+		}
+		
+		var preview_img_html = "";
+		
+		if (is_post_photo) {
+			preview_img_html = "<img src=\"" + preview_image + "\">";
+		}
+		
+		var m_html = "<li data-url-original=\"" + original_url + "\" data-load-url=\"" + load_url + "\" id=\"xkit-old-notifications-" + (XKit.extensions.old_notifications.notification_count + 1) + "\" class=\"xkit-old-notifications notification " + additional_classes + "\">" +
+				"<div class=\"notification_inner  clearfix\">" +
+					"<div class=\"notification_sentence\">" +
+						"<div class=\"hide_overflow\">" +
+							m_inner_html + 
+						"</div>" +
+					"</div>" +
+				"</div>" +
+				"<a target=\"_blank\" href=\"" + notification_user_url + "\" class=\"avatar_frame\">" +
+					"<img alt=\"\" class=\"avatar\" src=\"" + notification_avatar +"\" data-src=\"" + notification_avatar +"\">" +
+				"</a>";
+				
+			if (!no_preview_frame) {
+				var m_html = m_html + "<div class=\"notification_right\">" +
+					"<a target=\"_blank\" class=\"preview_frame " + preview_frame_class + "\" href=\"" + notification_url + "\">" + preview_img_html + "</a>" +
+				"</div>";
+			}
+			m_html = m_html + "</li>";
+			     
+		XKit.extensions.old_notifications.notification_count++;
+			     
+		return m_html;
+		
+	},
+	
+	render_notification_old: function(obj) {
 		
 		var new_obj = $(obj);
 		
@@ -142,31 +359,58 @@ XKit.extensions.old_notifications = new Object({
 	
 	fetch_successful: function(data) {
 		
+		if (XKit.installed.check("notificationblock") === true) {
+			XKit.console.add("notificationblock installed.");
+			if (typeof XKit.extensions.notificationblock !== "undefined") {
+				if (XKit.extensions.notificationblock.running === true) {
+					if (XKit.extensions.notificationblock.blacklisted !== "undefined") {
+						XKit.extensions.old_notifications.blacklisted = XKit.extensions.notificationblock.blacklisted;
+					} else {
+						XKit.console.add("notificationblock blacklist is undefined.");	
+					}
+				} else {
+					XKit.console.add("notificationblock is not running.");	
+				}
+			} else {
+				XKit.console.add("notificationblock is undefined.");	
+			}
+		}
+		
 		var m_html = "";
 		$(".stage", data).each(function() {
 			if (XKit.extensions.old_notifications.notification_count >= XKit.extensions.old_notifications.max_notifications) { return false; }
 			m_html = m_html + XKit.extensions.old_notifications.render_notification("<div>" + $(this).parent()[0].outerHTML + "</div>");
 		});
 		$(".new_post_buttons_container").after(m_html);	
+		$("#xkit-old-notifications-" + XKit.extensions.old_notifications.notification_count).addClass("last_notification");
+		
+		if (XKit.installed.check("notificationblock") === true) {
+			if (typeof XKit.extensions.notificationblock !== "undefined") {
+				if (XKit.extensions.notificationblock.running === true) {
+					XKit.console.add("Found NotificationBlock, calling.");
+					XKit.extensions.notificationblock.do();	
+				}
+			}
+		}
 		
 	},
 	
 	fetch: function() {
 		
-		var to_fetch = document.location.href.replace("/blog/","/activity/");
-		
-		console.log("Trying to fetch " + to_fetch);
-		
-		GM_xmlhttpRequest({
-			method: "GET",
-			url: to_fetch,
-			onerror: function(response) {
-				XKit.extensions.old_notifications.fetch_failed(obj);
-			},
-			onload: function(response) {
-				XKit.extensions.old_notifications.fetch_successful(response.responseText);
-			}
-		});
+		setTimeout(function() {
+			var to_fetch = document.location.href.replace("/blog/","/activity/");
+			console.log("Trying to fetch " + to_fetch);
+			GM_xmlhttpRequest({
+				method: "GET",
+				url: to_fetch,
+				onerror: function(response) {
+					XKit.extensions.old_notifications.fetch_failed(obj);
+				},
+				onload: function(response) {
+					XKit.extensions.old_notifications.fetch_successful(response.responseText);
+				}
+			});
+		}, 300);
 		
 	},
 

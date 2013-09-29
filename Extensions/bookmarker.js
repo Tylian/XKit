@@ -1,5 +1,5 @@
 //* TITLE Bookmarker **//
-//* VERSION 2.0 REV B **//
+//* VERSION 2.0 REV E **//
 //* DESCRIPTION Dashboard Time Machine **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS The Bookmarker extension allows you to bookmark posts and get back to them whenever you want to. Just click on the Bookmark icon on posts and the post will be added to your Bookmark List on your sidebar. **//
@@ -58,9 +58,7 @@ XKit.extensions.bookmarker = new Object({
 			XKit.extensions.bookmarker.init();
 			XKit.post_listener.add("bookmarker", XKit.extensions.bookmarker.do);
 			XKit.extensions.bookmarker.do();
-			if (document.location.href.indexOf("?bookmark=true") !== -1) {
-				XKit.extensions.bookmarker.check_bookmark();
-			}
+			XKit.extensions.bookmarker.check_bookmark();
 			
 			// Check for new body layout.
 			if ($("body").hasClass("posts_v2") === true) {
@@ -71,33 +69,42 @@ XKit.extensions.bookmarker = new Object({
 	
 	check_bookmark: function() {
 		
-		var str = document.location.href.replace("/?bookmark=true","");
-		var str_sub = parseInt(str.substr(str.lastIndexOf("/")+1)) - 1;
+		var str = document.location.href.toLowerCase().split("/");
+		if (str.length < 5) { return; }
+		
+		if (str[3] !== "dashboard") { return; }
+		
+		var post_id = parseInt(str[5]);
+		if (isNaN(post_id) == true || post_id === 0) { return; }
+		
+		post_id = post_id - 1;
+		
+		if ($("#xkit_bookmark_" + post_id).length <= 0) { return; }
+		
+		$("#xkit_bookmark_" + post_id).removeClass("no_push");
+		$("#xkit_bookmark_" + post_id).addClass("selected");
+		
+		if ($("#post_" + post_id).length <= 0) {
 
-		$("#xkit_bookmark_" + str_sub).removeClass("no_push");
-		$("#xkit_bookmark_" + str_sub).addClass("selected");
-
-		if ($("#post_" + str_sub).length <= 0) {
-
-			$("#posts").prepend("<li class=\"post_container\"><div class=\"post post_full\" id=\"xkit-bookmarker-not-found-msg\"><div id=\"xkit-bookmarker-not-found-inner\"><b>Bookmarked post not found.</b>" + 
+			$("#posts").prepend("<li class=\"post_container\"><div class=\"fake_post post_full\" id=\"xkit-bookmarker-not-found-msg\"><div id=\"xkit-bookmarker-not-found-inner\"><b>Bookmarked post not found.</b>" + 
 			"<br/>This might be because the post has been deleted, or because of a temporary Tumblr error. Posts made around the same time as the bookmarked post is listed below.<br/><a href=\"#\" onclick=\"return false\"><div class=\"xkit-button\" id=\"xkit-delete-current-bookmark\">Delete this bookmark</div></a></div></div></li>");
 
 		} else {
 
-			$("#posts").prepend("<li class=\"post_container\"><div class=\"post post_full no-error-on-xbookmark\" id=\"xkit-bookmarker-not-found-msg\"><div id=\"xkit-bookmarker-not-found-inner\"><b>You are viewing a bookmark.</b><br/>" + 
+			$("#posts").prepend("<li class=\"post_container\"><div class=\"fake_post post_full no-error-on-xbookmark\" id=\"xkit-bookmarker-not-found-msg\"><div id=\"xkit-bookmarker-not-found-inner\"><b>You are viewing a bookmark.</b><br/>" + 
 			"If you are done with it, you can click the button below to remove it.<br/><div class=\"xkit-button\" id=\"xkit-delete-current-bookmark\">Delete this bookmark</div><a class=\"xkit-button\" href=\"/dashboard/\">Return to my dashboard</a></div></div></li>");		
 		
 		}
 
 		$("#xkit-delete-current-bookmark").click(function() {
 
-			XKit.extensions.bookmarker.remove_bookmark(str_sub);
+			XKit.extensions.bookmarker.remove_bookmark(post_id);
 			$("#xkit-bookmarker-not-found-msg").slideUp('fast', function() {
 				$(this).remove();	
 			});
 			// remove_bookmark(str_sub, jQ(this), true);
 
-		});	
+		});
 		
 	},
 	
@@ -254,13 +261,15 @@ XKit.extensions.bookmarker = new Object({
 			
 		}
 	
-		return	'<li class="no_push xbookmark xbookmark_to_slidedown" style="display: none;" id="xkit_bookmark_' + current_bookmark.id + '" data-xkit-bookmark-post-id="' + current_bookmark.id + '">' +
-				'<a href="#" onclick="return false"><span class="bookmark-caption">' + bookmark_caption + '</span></a>' +
+		return	'<li class="xbookmark no_push xbookmark_to_slidedown" style="display: none;" id="xkit_bookmark_' + current_bookmark.id + '" data-xkit-bookmark-post-id="' + current_bookmark.id + '">' +
+				'<a href="#" class="hide_overflow" onclick="return false"><span class="bookmark-caption">' + bookmark_caption + '</span></a>' +
 			'</li>';	
 		
 	},
 	
 	add_bookmark: function(post_id) {
+		
+		XKit.extensions.bookmarker.load_bookmarks();
 	
 		if (XKit.extensions.bookmarker.retrieve_bookmark_object(post_id) !== false) {
 			// Already bookmarked.
@@ -290,6 +299,8 @@ XKit.extensions.bookmarker = new Object({
 	
 	remove_all_bookmarks: function() {
 	
+		XKit.extensions.bookmarker.load_bookmarks();
+	
 		while(XKit.extensions.bookmarker.bookmarks.length>0) {
 			XKit.extensions.bookmarker.remove_bookmark(XKit.extensions.bookmarker.bookmarks[0].id);
 		}	
@@ -306,6 +317,9 @@ XKit.extensions.bookmarker = new Object({
 	},
 	
 	remove_bookmark: function(post_id,mass_mode) {
+	
+		// Reload everything.
+		XKit.extensions.bookmarker.load_bookmarks();
 	
 		var m_index = -1;
 		

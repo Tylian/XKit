@@ -1,5 +1,5 @@
 //* TITLE Blacklist **//
-//* VERSION 2.3 REV A **//
+//* VERSION 2.4 REV G **//
 //* DESCRIPTION Clean your dash **//
 //* DETAILS This extension allows you to block posts based on the words you specify. If a post has the text you've written in the post itself or it's tags, it will be replaced by a warning, or won't be shown on your dashboard, depending on your settings. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -105,6 +105,8 @@ XKit.extensions.blacklist = new Object({
 			$(document).on('keydown', XKit.extensions.blacklist.key_down);	
 			
 		}
+		
+		$(document).on('click', ".xblacklist_open_post", XKit.extensions.blacklist.unhide_post);
 		
 		if (this.preferences.mini_block.value === true) {
 			
@@ -364,129 +366,163 @@ XKit.extensions.blacklist = new Object({
 	
 	check: function() {
 		
+		var height_changed = false;
+		
 		$(".post").not(".xblacklist-done").each(function() {
 			
-			// Check if it's something we should not touch.
-			if ($(this).attr('id') === "new_post") { return; }
-			if ($(this).css("display") === "none") { return; }
+			try {
 			
-			// if has no text content, no need to do this.
-			// if ($(this).find(".post_content").length <= 0 && $(this).find(".post_body").length <=0 &&) { $(this).css("background","blue"); return; }
+				// Check if it's something we should not touch.
+				if ($(this).attr('id') === "new_post") { return; }
+				//if ($(this).css("display") === "none") { return; }
 			
-			// Add class to not do this twice.
-			$(this).addClass("xblacklist-done");
+				// $(this).css("background","green");
 			
-			// Collect the tags
-			var m_tags = "";
-			if ($(this).find(".tag").length > 0) {
-				$(this).find(".tag").each(function() {
-					m_tags = m_tags + " " + $(this).html().replace("#","");
-				});
-			} else {
+				// if has no text content, no need to do this.
+				// if ($(this).find(".post_content").length <= 0 && $(this).find(".post_body").length <=0 &&) { $(this).css("background","blue"); return; }
+			
+				// Add class to not do this twice.
+				$(this).addClass("xblacklist-done");
+			
+				// Collect the tags
+				var tag_array = new Array();
 				if ($(this).find(".post_tag").length > 0) {
 					$(this).find(".post_tag").each(function() {
-						m_tags = m_tags + " " + $(this).html().replace("#","");
+						tag_array.push($(this).html().replace("#","").toLowerCase());	
 					});
 				}
-			}
-			
-			// Collect the title contents too.
-			var m_title = "";
-			if ($(this).find(".post_title").length > 0) {
-				m_title = $(this).find(".post_title").html();
-			}
-			
-			// Collect the author info, if the option is toggled.
-			if (XKit.extensions.blacklist.preferences.check_authors.value == true) {
-				var m_author = "";
-				if ($(this).find(".post_info_fence a").length > 0) {
-					m_author = $(this).find(".post_info_fence a").html();
+				if ($(this).find(".tag").length > 0) {
+					$(this).find(".tag").each(function() {
+						tag_array.push($(this).html().replace("#","").toLowerCase());	
+					});
 				}
 				
-				if ($(this).find(".reblog_source").length > 0) {
-					m_author = m_author + " " + $(this).find(".reblog_source a").html();
+				//alert(tag_array);
+			
+				// Collect the title contents too.
+				var m_title = "";
+				if ($(this).find(".post_title").length > 0) {
+					m_title = $(this).find(".post_title").html();
 				}
+			
+				// Collect the author info, if the option is toggled.
+				if (XKit.extensions.blacklist.preferences.check_authors.value == true) {
+					var m_author = "";
+					if ($(this).find(".post_info_fence a").length > 0) {
+						m_author = $(this).find(".post_info_fence a").html();
+					}
 				
-				if ($(this).find(".post_source_link").length > 0) {
-					m_author = m_author + " " + $(this).find(".post_source_link").html();
+					if ($(this).find(".reblog_source").length > 0) {
+						m_author = m_author + " " + $(this).find(".reblog_source a").html();
+					}
+				
+					if ($(this).find(".post_source_link").length > 0) {
+						m_author = m_author + " " + $(this).find(".post_source_link").html();
+					}
+			
+					var m_bTitle = "";
+					if ($(this).find(".post_avatar_link").attr("title").length > 0) {
+						m_bTitle = $(this).find(".post_avatar_link").attr('title');
+					}	
 				}
 			
-				var m_bTitle = "";
-				if ($(this).find(".post_avatar_link").attr("title").length > 0) {
-					m_bTitle = $(this).find(".post_avatar_link").attr('title');
-				}	
+				// Collect the content.
+				var m_content = "";
+			
+				if ($(this).find(".post_text_wrapper").length > 0) {
+					m_content = $(this).find(".post_text_wrapper").html();	
+				}
+			
+				if ($(this).find(".post_body").length > 0) {
+					m_content = $(this).find(".post_body").html();	
+				}
+			
+				if ($(this).find(".caption").length > 0) {
+					m_content = $(this).find(".caption").html();
+				}
+			
+				m_content = m_content + " " + m_title;
+			
+				if (XKit.extensions.blacklist.preferences.check_authors.value == true) {
+					m_content = m_content + m_author;
+				}
+			
+				m_content = XKit.tools.replace_all(m_content, "&nbsp;", " ");
+				m_content = m_content.toLowerCase();
+			
+				// Strip HTML tags.
+				m_content = m_content.replace(/<(?:.|\n)*?>/gm, '');
+
+				var m_result = XKit.extensions.blacklist.do_post($(this), m_content, tag_array);
+				if (m_result !== "") {
+					height_changed = true;
+					//$(this).css("background","red");
+					XKit.extensions.blacklist.hide_post($(this), m_result);	
+				} else {
+					//$(this).css("background","green");	
+				}
+			
+			} catch(e) {
+			
+				XKit.console.add("Can't parse post: " + e.message);
+				// $(this).css("background","red");	
+			
 			}
-			
-			// Collect the content.
-			var m_content = "";
-			
-			if ($(this).find(".post_text_wrapper").length > 0) {
-				m_content = $(this).find(".post_text_wrapper").html();	
-			}
-			
-			if ($(this).find(".post_body").length > 0) {
-				m_content = $(this).find(".post_body").html();	
-			}
-			
-			if ($(this).find(".caption").length > 0) {
-				m_content = $(this).find(".caption").html();
-			}
-			
-			m_content = m_content + " " + m_title;
-			
-			if (XKit.extensions.blacklist.preferences.check_authors.value == true) {
-				m_content = m_content + m_author;
-			}
-			
-			m_content = XKit.tools.replace_all(m_content, "&nbsp;", " ");
-			m_content = m_content.toLowerCase();
-			
-			// Strip HTML tags.
-			m_content = m_content.replace(/<(?:.|\n)*?>/gm, '');
-			
-			var m_result = XKit.extensions.blacklist.do_post(m_content, m_tags.split(" "));
-			if (m_result !== "") {
-				XKit.extensions.blacklist.hide_post($(this), m_result);	
-			}
-			
 			
 		});
 		
-		$(".xblacklist_open_post").unbind("click");
-		$(".xblacklist_open_post").bind("click", function(e) {
+		if (height_changed) {
+			setTimeout(function() {
+				
+			XKit.tools.add_function(function() {
+				try {
+					if (typeof Tumblr === "undefined") {
+						setTimeout(function() {
+						
+							try {
+								Tumblr.Events.trigger("DOMEventor:updateRect");
+							} catch(e) {
+								console.log("!!! XKit blacklist ---> " + e.message);	
+							}	
+							
+						}, 1000);
+					}else {
+						Tumblr.Events.trigger("DOMEventor:updateRect");
+					}
+				} catch(e) {
+					console.log("!!! XKit blacklist ---> " + e.message);	
+				}
+			}, true, "");
 			
-			var m_div = $("#" + $(this).attr('data-post-id'));
-			$(m_div).removeClass("xblacklist_blacklisted_post");
-			$(m_div).find(".post_info").css("display","block");
-			$(m_div).find(".post_controls").css("display","block");
-			$(m_div).find(".post_footer_links").css('display','block');
-			$(m_div).find(".post_source").css('display','block');
-			$(m_div).find(".post_tags").css('display','block');
-			$(m_div).find(".post_footer").css('display','table');
-			
-			$(m_div).find(".post_answer").css("display","block");
-			
-			if ($(m_div).hasClass("xkit-shorten-posts-shortened") === true) {
-				$(m_div).find(".xkit-shorten-posts-embiggen").css("display","block");
-				var pre_hidden_height = $(m_div).attr('data-xkit-blacklist-old-height');	
-				$(m_div).css("height", pre_hidden_height);
-			}
-			
-			$(m_div).find(".xblacklist_excuse").remove();
-			$(m_div).find(".post_content").html($(m_div).find(".xblacklist_old_content").html());
-			
-		});
+			}, 300);
+		}
 		
-		XKit.tools.add_function(function() {
-			/*Tumblr.Events.on("DOMEventor:flatscroll", function(n) {
-				console.log(JSON.stringify(n));
-				//n.documentHeight = 0;	
-				// if ((n.documentHeight - n.windowScrollY) < n.windowHeight * 3) {
-				console.log(" -- 1] " + (n.documentHeight - n.windowScrollY));
-				console.log(" -- 2] " + n.windowHeight * 3 + " <-- must be smaller than this");
-			});*/
-			Tumblr.Events.trigger("DOMEventor:updateRect");
-		}, true, "");
+		setTimeout(function() { XKit.extensions.blacklist.check(); }, 2000);
+		
+	},
+	
+	unhide_post: function(e) {
+			
+		m_this = e.target;
+		var m_div = $("#" + $(m_this).attr('data-post-id'));
+		$(m_div).removeClass("xblacklist_blacklisted_post");
+		$(m_div).find(".post_info").css("display","block");
+		$(m_div).find(".post_controls").css("display","block");
+		$(m_div).find(".post_footer_links").css('display','block');
+		$(m_div).find(".post_source").css('display','block');
+		$(m_div).find(".post_tags").css('display','block');
+		$(m_div).find(".post_footer").css('display','table');
+			
+		$(m_div).find(".post_answer").css("display","block");
+			
+		if ($(m_div).hasClass("xkit-shorten-posts-shortened") === true) {
+			$(m_div).find(".xkit-shorten-posts-embiggen").css("display","block");
+			var pre_hidden_height = $(m_div).attr('data-xkit-blacklist-old-height');	
+			$(m_div).css("height", pre_hidden_height);
+		}
+			
+		$(m_div).find(".xblacklist_excuse").remove();
+		$(m_div).find(".post_content").html($(m_div).find(".xblacklist_old_content").html());
 		
 	},
 	
@@ -543,28 +579,23 @@ XKit.extensions.blacklist = new Object({
 		
 	},
 	
-	do_post: function(post_content, tags) {
+	do_post: function(obj, post_content, tags) {
 		
-		if ($.trim(post_content) === "") { return ""; }	
+		// if ($.trim(post_content) === "") { return ""; }	
 		post_content = post_content.replace(new RegExp('\n','g'), ' ');
 		var p_words = post_content.split(" ");
-		
-		if (XKit.extensions.blacklist.check_for_whitelist(p_words, post_content) !== "") {
-			console.log("Skipping because of " + XKit.extensions.blacklist.check_for_whitelist(p_words, post_content));
-			return "";
-		}
 		
 		var new_array = new Array();
 		
 		for (var i=0;i<p_words.length;i++) {
 		
 			if ($.trim(p_words[i]) !== "") {
-				new_array.push(p_words[i]);	
+				new_array.push(p_words[i].toLowerCase());	
 			}
 			
 		}
 		
-		var new_tags = new Array(); 
+		/*var new_tags = new Array(); 
 		
 		for (var i=0;i<tags.length;i++) {
 		
@@ -572,113 +603,31 @@ XKit.extensions.blacklist = new Object({
 				new_tags.push(tags[i].toLowerCase());	
 			}
 			
+		}*/
+		
+		console.log(tags);
+		
+		// $(obj).css("background","blue"); return;
+		
+		if (XKit.extensions.blacklist.check_for_whitelist(new_array, post_content, tags) !== "") {
+			// $(obj).css("background","cyan");
+			console.log("Skipping because of " + XKit.extensions.blacklist.check_for_whitelist(new_array, post_content, tags));
+			return "";
 		}
 
 		// Return our findings.
-		return XKit.extensions.blacklist.check_for_blacklist(new_array, post_content, new_tags);
+		// $(obj).find(".post_info").html("tags: " + tags);
+		
+		return XKit.extensions.blacklist.check_for_blacklist(new_array, post_content, tags);
 		
 		
 	},
 	
-	check_for_whitelist: function(p_words, post_content) {
+	check_contents: function(to_use, p_words, post_content, tags) {
 		
-		for (var i=0;i<XKit.extensions.blacklist.whitelisted.length;i++) {
+		for (var i=0;i<to_use.length;i++) {
 			
-			var m_word = XKit.extensions.blacklist.whitelisted[i].toLowerCase();
-			if ($.trim(m_word) === "") { continue; }
-			
-			var m_word_wildcard = false;
-			
-			if (m_word.substring(m_word.length - 1) === "*") {
-				// This word is wildcarded!	
-				m_word_wildcard = true;
-				m_word = m_word.substring(0, m_word.length - 1);
-			}
-			
-			if (m_word.indexOf(" ") !== -1) {
-				m_word_wildcard = true;	
-			}
-
-			if (m_word_wildcard === false) {
-				
-				// Well this one is easy:
-				
-				// First lets strip the dots or commas.
-				
-				if (p_words.indexOf(m_word) !== -1) {
-					// We've found the word!
-					return m_word;	
-				} else {
-					if (XKit.extensions.blacklist.preferences.use_improved.value === true) {
-						// This will use some CPU...
-						if (post_content.indexOf(m_word) !== -1) {
-							for (var m=0;m<p_words.length;m++) {
-								if (p_words[m].indexOf(m_word) !== -1) {
-									mp_word = p_words[m].replace(/\./g, '');
-									mp_word = mp_word.replace(/\,/g, '');
-									mp_word = mp_word.replace(/\u2026/g, '');
-									if (m_word === mp_word) {
-										return m_word;	
-									}	
-								}
-							}	
-						}
-					}	
-				}	
-				
-			} else {
-				
-				// Ugh. Wildcarded. This will
-				// require some processing power.
-				// To save CPU time, let's run it in the
-				// post_content first, continue only if
-				// we can find it there.
-				if (post_content.indexOf(m_word) !== -1) {
-					
-					// Ugh. Even worse, we've found it,
-					// now we need to get into a loop.
-					for (var m=0;m<p_words.length;m++) {
-						
-						if (p_words[m] === "") { continue; }
-						if (p_words[m].indexOf(m_word) !== -1) {
-							return m_word;	
-						}
-						
-						if (m < p_words.length) {
-							var tmp_word = p_words[m] + " " + p_words[m + 1];
-							
-							// This is a dirty fix but it should work for now.
-							if (p_words[m + 2] !== "" || typeof p_words[m + 2] !== "undefined") {
-								tmp_word = tmp_word + " " + p_words[m + 2];
-							}
-							if (p_words[m + 3] !== "" || typeof p_words[m + 3] !== "undefined") {
-								tmp_word = tmp_word + " " + p_words[m + 3];
-							}
-							if (p_words[m + 4] !== "" || typeof p_words[m + 4] !== "undefined") {
-								tmp_word = tmp_word + " " + p_words[m + 4];
-							}
-							
-							if (tmp_word.indexOf(m_word) !== -1) {
-								return m_word;	
-							}
-						}
-							
-					}
-						
-				}	
-			}
-			
-		}	
-		
-		return "";
-		
-	},
-	
-	check_for_blacklist: function(p_words, post_content, tags) {
-		
-		for (var i=0;i<XKit.extensions.blacklist.blacklisted.length;i++) {
-			
-			var m_word = XKit.extensions.blacklist.blacklisted[i].toLowerCase();
+			var m_word = to_use[i].toLowerCase();
 			if ($.trim(m_word) === "") { continue; }
 			
 			//console.log("blacklist -> current word is \"" + m_word + "\"");
@@ -699,18 +648,25 @@ XKit.extensions.blacklist = new Object({
 			var tag_search_mode = false;
 			
 			if (m_word.substring(0,1) === "#") {
-				//console.log("blacklist -> checking tags only...");
-				if (tags.length === 0) { console.log(" |--- won't be, no tags.");return ""; }
+				// console.log("blacklist -> checking tags only...");
+				if (tags.length === 0) { return ""; }
 				m_word = m_word.substring(1);
 				tag_search_mode = true;
 				m_p_words = tags;
 			} else {
-				//console.log("blacklist -> checking tags + content...");	
+				// console.log("blacklist -> checking tags + content...");	
 				m_p_words = p_words;
 				m_p_words = m_p_words.concat(tags);
+				//console.log(m_p_words);
 			}
+
+			var m_post_content = post_content;
 			
-			//console.log(m_p_words);
+			if (tag_search_mode) {
+				m_post_content = tags.join(" ");	
+			} else {
+				m_post_content = m_post_content + tags.join(" ");
+			}
 
 			if (m_word_wildcard === false) {
 				
@@ -728,12 +684,15 @@ XKit.extensions.blacklist = new Object({
 				} else {
 					if (XKit.extensions.blacklist.preferences.use_improved.value === true) {
 						// This will use some CPU...
-						if (post_content.indexOf(m_word) !== -1) {
+						if (m_post_content.indexOf(m_word) !== -1) {
+							// console.log('%c  found on m_post_content.', 'background: #a5edae; color: black');
 							for (var m=0;m<m_p_words.length;m++) {
 								if (m_p_words[m].indexOf(m_word) !== -1) {
 									mp_word = m_p_words[m].replace(/\./g, '');
 									mp_word = mp_word.replace(/\,/g, '');
 									mp_word = mp_word.replace(/\u2026/g, '');
+									mp_word = mp_word.replace(/[\.,-\/#!$%\^&\*;:{}=\-_`~()]/g,"").replace(/\s{2,}/g," ");
+									//console.log('%c  mp_word = ' + mp_word, 'background: #a5edae; color: black');
 									if (m_word === mp_word) {
 										if (tag_search_mode) {
 											return "#" + m_word;	
@@ -754,7 +713,7 @@ XKit.extensions.blacklist = new Object({
 				// To save CPU time, let's run it in the
 				// post_content first, continue only if
 				// we can find it there.
-				if (post_content.indexOf(m_word) !== -1) {
+				if (m_post_content.indexOf(m_word) !== -1) {
 					
 					// Ugh. Even worse, we've found it,
 					// now we need to get into a loop.
@@ -782,6 +741,17 @@ XKit.extensions.blacklist = new Object({
 							if (m_p_words[m + 4] !== "" || typeof m_p_words[m + 4] !== "undefined") {
 								tmp_word = tmp_word + " " + m_p_words[m + 4];
 							}
+							if (m_p_words[m + 5] !== "" || typeof m_p_words[m + 5] !== "undefined") {
+								tmp_word = tmp_word + " " + m_p_words[m + 5];
+							}
+							if (m_p_words[m + 6] !== "" || typeof m_p_words[m + 6] !== "undefined") {
+								tmp_word = tmp_word + " " + m_p_words[m + 6];
+							}
+							
+							tmp_word = tmp_word.replace(/\,/g, '').replace(/\u2026/g, '');
+							tmp_word = tmp_word.replace(/[\.,-\/#!$%\^&\*;:{}=\-_`~()]/g,"").replace(/\s{2,}/g," ");
+														
+							console.log("--------- " + tmp_word);
 							
 							if (tmp_word.indexOf(m_word) !== -1) {
 								if (tag_search_mode) {
@@ -800,6 +770,18 @@ XKit.extensions.blacklist = new Object({
 		}	
 		
 		return "";
+		
+	},
+	
+	check_for_whitelist: function(p_words, post_content, tags) {
+		
+		return XKit.extensions.blacklist.check_contents(XKit.extensions.blacklist.whitelisted, p_words, post_content, tags);
+		
+	},
+	
+	check_for_blacklist: function(p_words, post_content, tags) {
+		
+		return XKit.extensions.blacklist.check_contents(XKit.extensions.blacklist.blacklisted, p_words, post_content, tags);
 		
 	},
 
