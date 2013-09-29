@@ -1,5 +1,9 @@
 //* TITLE XInbox **//
+<<<<<<< HEAD
 //* VERSION 1.7 REV E **//
+=======
+//* VERSION 1.7 REV D **//
+>>>>>>> 7ad26853dc78771441eb2d8fa74e0344aea0754c
 //* DESCRIPTION Enhances your Inbox experience **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS XInbox allows you to tag posts before posting them, and see all your messages at once, and lets you delete multiple messages at once using the Mass Editor mode. To use this mode, go to your Inbox and click on the Mass Editor Mode button on your sidebar, click on the messages you want to delete then click the Delete Messages button.  **//
