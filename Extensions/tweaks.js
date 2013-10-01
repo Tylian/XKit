@@ -115,6 +115,11 @@ XKit.extensions.tweaks = new Object({
 			default: false,
 			value: false
 		},
+		"show_top_arrow": {
+			text: "Always show the scroll to top arrow",
+			default: false,
+			value: false
+		},
 		"hide_bubble": {
 			text: "Hide the new post bubble when you are not in dashboard",
 			default: false,
@@ -269,6 +274,10 @@ XKit.extensions.tweaks = new Object({
 
 		if (XKit.extensions.tweaks.preferences.hide_blog_search.value === true) {
 			XKit.tools.add_css(".blog.search_results_section { display: none !important }", "xkit_tweaks_hide_blog_search");
+		}
+		
+		if (XKit.extensions.tweaks.preferences.show_top_arrow.value === true) {
+			XKit.tools.add_css("#return_to_top { opacity: 1 !important; visibility: visible !important; }");
 		}
 		
 		if (XKit.extensions.tweaks.preferences.slim_popups.value === true) {
