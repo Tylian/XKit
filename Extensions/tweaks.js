@@ -1,5 +1,5 @@
 //* TITLE Tweaks **//
-//* VERSION 2.3 REV E **//
+//* VERSION 2.3 REV F **//
 //* DESCRIPTION Various little tweaks for your dashboard. **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS These are small little tweaks that allows you customize your dashboard. If you have used XKit 6, you will notice that some of the extensions have been moved here as options you can toggle. Keep in mind that some of the tweaks (the ones marked with a '*') can slow down your computer. **//
@@ -279,7 +279,7 @@ XKit.extensions.tweaks = new Object({
 		if (XKit.extensions.tweaks.preferences.show_top_arrow.value === true) {
 			XKit.tools.add_css("#return_to_top { opacity: 1 !important; visibility: visible !important; }", "xkit_tweaks_scroll_top");
 			XKit.tools.add_function(function() {
-				Tumblr.KeyCommands.elevate = function(){jQuery("html, body").animate({scrollTop:0},"slow");};
+				Tumblr.KeyCommands.elevate = function(){jQuery("html, body").stop(true).animate({scrollTop:0},"slow");};
 			}, true, "");
 		}
 		
