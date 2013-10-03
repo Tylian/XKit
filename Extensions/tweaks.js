@@ -277,7 +277,10 @@ XKit.extensions.tweaks = new Object({
 		}
 		
 		if (XKit.extensions.tweaks.preferences.show_top_arrow.value === true) {
-			XKit.tools.add_css("#return_to_top { opacity: 1 !important; visibility: visible !important; }");
+			XKit.tools.add_css("#return_to_top { opacity: 1 !important; visibility: visible !important; }", "xkit_tweaks_scroll_top");
+			XKit.tools.add_function(function() {
+				Tumblr.KeyCommands.elevate = function(){jQuery("html, body").animate({scrollTop:0},"slow");};
+			}, true, "");
 		}
 		
 		if (XKit.extensions.tweaks.preferences.slim_popups.value === true) {
@@ -590,6 +593,7 @@ XKit.extensions.tweaks = new Object({
 		XKit.tools.remove_css("xkit_tweaks_wrap_tags");
 		XKit.tools.remove_css("xkit_tweaks_wrap_tags_v2");
 		XKit.tools.remove_css("always_show_move_to_top");
+		XKit.tools.remove_css("xkit_tweaks_scroll_top");
 		$("#tumblr_radar").css("display","block");
 		$("#xkit_customize_button").remove();
 		$("a.spotlight").parent().css("display","block");
