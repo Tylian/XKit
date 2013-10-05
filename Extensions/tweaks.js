@@ -1,5 +1,5 @@
 //* TITLE Tweaks **//
-//* VERSION 2.3 REV E **//
+//* VERSION 2.3 REV F **//
 //* DESCRIPTION Various little tweaks for your dashboard. **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS These are small little tweaks that allows you customize your dashboard. If you have used XKit 6, you will notice that some of the extensions have been moved here as options you can toggle. Keep in mind that some of the tweaks (the ones marked with a '*') can slow down your computer. **//
@@ -112,6 +112,11 @@ XKit.extensions.tweaks = new Object({
 		},
 		"hide_tags": {
 			text: "Hide the tags on posts",
+			default: false,
+			value: false
+		},
+		"show_top_arrow": {
+			text: "Always show the scroll to top arrow",
 			default: false,
 			value: false
 		},
@@ -269,6 +274,13 @@ XKit.extensions.tweaks = new Object({
 
 		if (XKit.extensions.tweaks.preferences.hide_blog_search.value === true) {
 			XKit.tools.add_css(".blog.search_results_section { display: none !important }", "xkit_tweaks_hide_blog_search");
+		}
+		
+		if (XKit.extensions.tweaks.preferences.show_top_arrow.value === true) {
+			XKit.tools.add_css("#return_to_top { opacity: 1 !important; visibility: visible !important; }", "xkit_tweaks_scroll_top");
+			XKit.tools.add_function(function() {
+				Tumblr.KeyCommands.elevate = function(){jQuery("html, body").stop(true).animate({scrollTop:0},"slow");};
+			}, true, "");
 		}
 		
 		if (XKit.extensions.tweaks.preferences.slim_popups.value === true) {
@@ -581,6 +593,7 @@ XKit.extensions.tweaks = new Object({
 		XKit.tools.remove_css("xkit_tweaks_wrap_tags");
 		XKit.tools.remove_css("xkit_tweaks_wrap_tags_v2");
 		XKit.tools.remove_css("always_show_move_to_top");
+		XKit.tools.remove_css("xkit_tweaks_scroll_top");
 		$("#tumblr_radar").css("display","block");
 		$("#xkit_customize_button").remove();
 		$("a.spotlight").parent().css("display","block");
