@@ -12,14 +12,14 @@ XKit.extensions.scroll_to_bottom = new Object({
   
   post_listener: function() {
     if (XKit.extensions.scroll_to_bottom.activated === true) {
-      $(document.body).scrollTop($("#container").height());
+      $("body, html").scrollTop($("#container").height());
     }
   },
   
   toggle: function() {
     XKit.extensions.scroll_to_bottom.activated = !XKit.extensions.scroll_to_bottom.activated;
     if (XKit.extensions.scroll_to_bottom.activated) {
-      $(document.body).scrollTop($("#container").height());
+      $("body, html").scrollTop($("#container").height());
       $('.return_to_bottom').addClass("activated");
       $("#return_to_bottom_bar").show();
     } else {
