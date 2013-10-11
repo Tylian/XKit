@@ -1,5 +1,5 @@
 //* TITLE Mute! **//
-//* VERSION 2.0 REV F **//
+//* VERSION 2.1 REV A **//
 //* DESCRIPTION Better than 'shut up!' **//
 //* DETAILS This extension allows you to hide text and answer posts by an user while still seeing their other posts. Useful if a blogger has nice posts but a bad personality. Please note that you'll need to re-mute them if a user changes their URL. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -360,7 +360,7 @@ XKit.extensions.mute = new Object({
 				continue;	
 			}
 			
-			if (type === "note" && XKit.extensions.mute.muted[i].regular === true) {
+			if (type === "note" && XKit.extensions.mute.muted[i].asks === true) {
 				return true;	
 			}
 			
@@ -616,6 +616,7 @@ XKit.extensions.mute = new Object({
 		var m_chat_class = "";
 		var m_audio_class = "";
 		var m_video_class = "";
+		var m_asks_class = "";
 		
 		var user_object = XKit.extensions.mute.return_user_object(ud);
 		
@@ -627,11 +628,13 @@ XKit.extensions.mute = new Object({
 			if (user_object.chat === true) { m_chat_class = "selected"; }
 			if (user_object.audio === true) { m_audio_class = "selected"; }
 			if (user_object.video === true) { m_video_class = "selected"; }
+			if (user_object.asks === true) { m_asks_class = "selected"; }
 		}
 
 		
 		m_html =	"<div class=\"xkit-mute-options\">" +
 					"<div data-type=\"regular\" class=\"xkit-mute-option regular " + m_regular_class + "\">&nbsp;</div>" +
+					"<div data-type=\"asks\" class=\"xkit-mute-option asks " + m_asks_class + "\">&nbsp;</div>" +
 					"<div data-type=\"photo\" class=\"xkit-mute-option photo " + m_photo_class + "\">&nbsp;</div>" +
 					"<div data-type=\"quote\" class=\"xkit-mute-option quote " + m_quote_class + "\">&nbsp;</div>" +
 					"<div data-type=\"link\" class=\"xkit-mute-option link " + m_link_class + "\">&nbsp;</div>" +
@@ -661,6 +664,7 @@ XKit.extensions.mute = new Object({
 			m_object.chat = $(".xkit-mute-option.chat").hasClass("selected");
 			m_object.audio = $(".xkit-mute-option.audio").hasClass("selected");
 			m_object.video = $(".xkit-mute-option.video").hasClass("selected");
+			m_object.asks = $(".xkit-mute-option.asks").hasClass("selected");
 			
 			var found_user = false;
 			

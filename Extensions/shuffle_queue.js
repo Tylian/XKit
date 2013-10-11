@@ -1,5 +1,5 @@
 //* TITLE Shuffle Queue **//
-//* VERSION 1.4 REV A **//
+//* VERSION 1.4 REV B **//
 //* DESCRIPTION Shuffle items on your queue **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS Go to your queue and click on the Shuffle button on the sidebar to shuffle the posts. Note that only the posts you see will be shuffled. If you have more than 15 posts on your queue, scroll down and load more posts in order to shuffle them too. **//
@@ -43,7 +43,13 @@ XKit.extensions.shuffle_queue = new Object({
 		if ($("#xshufflequeue_button").hasClass("disabled") === true) {
 			return;
 		}
-		var new_post_html = $("#new_post").parent()[0].outerHTML;
+		
+		var new_post_html = "";
+		
+		if ($("#new_post").length > 0) {
+			new_post_html = $("#new_post").parent()[0].outerHTML;
+		}
+		
 		$("#posts").html(XKit.extensions.shuffle_queue.shuffle_data($("#posts").children().not("#new_post_buttons").get()));
 		$("#posts").prepend(new_post_html);
 		$("#xshufflequeue_button").addClass("disabled");

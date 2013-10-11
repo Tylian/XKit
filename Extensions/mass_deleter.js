@@ -1,5 +1,5 @@
 //* TITLE Mass Deleter **//
-//* VERSION 0.1 REV B **//
+//* VERSION 0.1 REV C **//
 //* DESCRIPTION Mass unlike likes / delete drafts **//
 //* DETAILS Used to mass unlike posts or delete drafts. Please use with caution, especially Mass Unlike part is extremely experimental. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -252,7 +252,7 @@ XKit.extensions.mass_deleter = new Object({
 			XKit.extensions.mass_deleter.unlike_likes(100);
 		});
 		
-		$("#xkit-mass-deleter-all").click(function() {
+		$("#xkit-mass-deleter-1000").click(function() {
 			XKit.extensions.mass_deleter.unlike_likes(1000);
 		});	
 		

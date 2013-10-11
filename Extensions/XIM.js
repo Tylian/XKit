@@ -1,5 +1,5 @@
 //* TITLE XIM **//
-//* VERSION 3.3 REV C **//
+//* VERSION 3.3 REV D **//
 //* DESCRIPTION Instant messenger for XKit. **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS XIM allows you to send instant messages to other XKit 7 users.<br>Notification Sounds by pageofmelody.tumblr.com **//
@@ -141,6 +141,10 @@ XKit.extensions.XIM = new Object({
 	run: function() {
 
 		this.running = true;
+		
+		XKit.notifications.add("<b>XIM is no longer available.</b> Please click here for more information. You can remove XIM from XKit Control Panel > XIM > Uninstall.","warning",true, function() { window.open("http://xkit-extension.tumblr.com/post/60347032721/retiring-filter-by-type-and-xim"); });	
+		
+		return;
 
 		/*alert(XKit.storage.quota("XIM"));
 		if (XKit.storage.quota("XIM") <= 3000) {

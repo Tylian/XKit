@@ -1,5 +1,5 @@
 //* TITLE Auto Tagger **//
-//* VERSION 0.3 REV E **//
+//* VERSION 0.4 REV A **//
 //* DESCRIPTION Tags posts automatically. **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS This extension allows you to automatically add tags to posts based on state (reblogged, original, queued) or post type (audio, video, etc) and keeping original tags while reblogging a post. **//
@@ -30,6 +30,13 @@ XKit.extensions.auto_tagger = new Object({
 		
 		"tag_for_text": {
 			text: "Tags for Text Posts",
+			type: "text",	
+			default: "",
+			value: ""
+		},
+		
+		"tag_for_ask": {
+			text: "Tags for reblogged Ask Posts",
 			type: "text",	
 			default: "",
 			value: ""
@@ -110,6 +117,12 @@ XKit.extensions.auto_tagger = new Object({
 		
 		"tag_person": {
 			text: "When reblogging, tag with the URL of the person I'm reblogging from",
+			default: false,
+			value: false
+		},
+		
+		"tag_person_replace_hyphens": {
+			text: "Replace hyphens in usernames with spaces",
 			default: false,
 			value: false
 		},
@@ -281,7 +294,12 @@ XKit.extensions.auto_tagger = new Object({
 		}
 		
 		if (XKit.extensions.auto_tagger.preferences.tag_person.value === true && m_post_object.owner !== "") {	
-			to_return = this.mreturn_add(to_return,  m_post_object.owner);
+			if (XKit.extensions.auto_tagger.preferences.tag_person_replace_hyphens.value === true) {
+				to_return = this.mreturn_add(to_return,  m_post_object.owner.replace(/-/g, ' '));
+			} else {
+				to_return = this.mreturn_add(to_return,  m_post_object.owner);
+			}
+			
 		}
 
 		if (XKit.extensions.auto_tagger.preferences.tag_date.value === true) {		
@@ -301,6 +319,10 @@ XKit.extensions.auto_tagger = new Object({
 		
 		if (obj.type === "regular" && XKit.extensions.auto_tagger.preferences.tag_for_text.value !== "") {
 			return XKit.extensions.auto_tagger.preferences.tag_for_text.value;
+		}	
+		
+		if (obj.type === "note" && XKit.extensions.auto_tagger.preferences.tag_for_text.value !== "") {
+			return XKit.extensions.auto_tagger.preferences.tag_for_ask.value;
 		}	
 		
 		if (obj.type === "photo" && XKit.extensions.auto_tagger.preferences.tag_for_photo.value !== "") {

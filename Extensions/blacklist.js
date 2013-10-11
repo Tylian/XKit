@@ -1,5 +1,5 @@
 //* TITLE Blacklist **//
-//* VERSION 2.4 REV G **//
+//* VERSION 2.5 REV C **//
 //* DESCRIPTION Clean your dash **//
 //* DETAILS This extension allows you to block posts based on the words you specify. If a post has the text you've written in the post itself or it's tags, it will be replaced by a warning, or won't be shown on your dashboard, depending on your settings. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -52,6 +52,11 @@ XKit.extensions.blacklist = new Object({
 			text: "Don't block my own posts",
 			default: true,
 			value: true
+		},
+		"dont_block_liked": {
+			text: "Don't block posts I've liked or replied to",
+			default: false,
+			value: false
 		},
 		"dont_show_cause": {
 			text: "Don't show why the post was blocked",
@@ -532,6 +537,11 @@ XKit.extensions.blacklist = new Object({
 			if ($(obj).hasClass("is_mine") === true) {
 				return;
 			}
+		}
+		
+		if (XKit.extensions.blacklist.preferences.dont_block_liked.value === true) {
+			if ($(obj).find('.post_control.like.liked').length > 0) { return; }
+			if ($(obj).find('.post_answer_input').attr ('readonly')) { return; }
 		}
 		
 		if (XKit.extensions.blacklist.preferences.dont_display.value === true) {

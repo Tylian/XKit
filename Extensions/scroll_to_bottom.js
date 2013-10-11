@@ -1,5 +1,5 @@
 //* TITLE Scroll To Bottom **//
-//* VERSION 1.0 REV B **//
+//* VERSION 1.0 REV C **//
 //* DESCRIPTION Scroll to the bottom of long lists, like the post queue. **//
 //* DEVELOPER jeratt **//
 //* FRAME false **//

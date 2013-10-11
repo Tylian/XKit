@@ -1,5 +1,5 @@
 //* TITLE Panorama **//
-//* VERSION 1.2 REV D **//
+//* VERSION 1.2 REV E **//
 //* DESCRIPTION Widescreen dashboard **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//
@@ -30,9 +30,28 @@ XKit.extensions.panaroma = new Object({
 			
 		}
 		
+		if (document.location.href.indexOf("http://www.tumblr.com/ignore") !== -1 ||
+			document.location.href.indexOf("http://www.tumblr.com/lookup") !== -1 ||
+			document.location.href.indexOf("http://www.tumblr.com/spotlight") !== -1 ||
+			document.location.href.indexOf("http://www.tumblr.com/following") !== -1) {
+			XKit.extensions.panaroma.do_directory_fixes();
+		}
+		
 		XKit.post_listener.add("panorama_resize", XKit.extensions.panaroma.resized_auto);
 		$(window).on('resize', XKit.extensions.panaroma.resized);
 		XKit.extensions.panaroma.resized();
+	},
+	
+	do_directory_fixes: function() {
+		
+		var m_css = " #content { padding-bottom: 30px; border-radius: 20px; background: white; } #content_top, #content_bottom { display: none; } #tabs { background: #eaeaea; } #tabs.tabs_3 .tab { width: 33%; } #tabs.tabs_3 .tab:last-child { width: 32%; } ";
+		
+		if (document.location.href.indexOf("http://www.tumblr.com/ignore") !== -1) {
+			m_css = m_css + " #left_column { width: 100%; } #content { padding-top: 30px;  } ";	
+		}
+		
+		XKit.tools.add_css(m_css, "panaroma_directory");	
+		
 	},
 	
 	resized_auto: function() {
@@ -53,6 +72,7 @@ XKit.extensions.panaroma = new Object({
 	destroy: function() {
 		XKit.tools.remove_css("panaroma");
 		XKit.tools.remove_css("panaroma_str");
+		XKit.tools.remove_css("panaroma_directory");
 		$(window).off('resize', XKit.extensions.panaroma.resized);
 		XKit.post_listener.remove("panorama_resize");
 		this.running = false;

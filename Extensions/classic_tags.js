@@ -1,5 +1,5 @@
-//* TITLE Classic Tags **//
-//* VERSION 1.0 REV B **//
+//* TITLE Tags on Sidebar **//
+//* VERSION 1.0 REV C **//
 //* DESCRIPTION Shows your tracked tags on your sidebar **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//

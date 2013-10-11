@@ -10,6 +10,12 @@
 	opacity: 0.7;	
 }
 
+.xblacklist_blacklisted_post .post_footer,
+.xblacklist_blacklisted_post .post_header,
+.xblacklist_blacklisted_post .xtimestamp {
+	display: none;	
+}
+
 .xblacklist_excuse {
 	padding: 0; text-align: left; font-size: 12px;
 	color: rgb(130,130,130); height: 40px; line-height: 40px;	

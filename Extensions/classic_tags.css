@@ -5,3 +5,8 @@
 	background-repeat: no-repeat;
 	background-position: 13px 50%;
 }
+
+.xtag .result_title {
+	width: 88% !important;
+	display: block;	
+}

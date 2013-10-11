@@ -1,5 +1,5 @@
 //* TITLE One-Click-Reply **//
-//* VERSION 1.7 REV A **//
+//* VERSION 1.7 REV B **//
 //* DESCRIPTION Lets you reply to notifications **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS To use this extension, hover over a notification and click on the Reply button. If Multi-Reply is on, hold down the ALT key while clicking on the Reply button to select/deselect posts and reply to all of them at once. **//
@@ -49,6 +49,11 @@ XKit.extensions.one_click_reply = new Object({
 			text: "Tag people by their usernames on my replies",
 			default: true,
 			value: true
+		},
+		"tag_person_replace_hyphens": {
+			text: "Replace hyphens in usernames with spaces on tags",
+			default: false,
+			value: false
 		},
 		"auto_tag": {
 			text: "Auto-tag the post with a custom one",
@@ -285,6 +290,7 @@ XKit.extensions.one_click_reply = new Object({
 			if (m_url.indexOf('?') !== -1) {
 				m_url = m_url.substring(0, m_url.indexOf('?'));
 			}
+			
 			
 			if (XKit.extensions.one_click_reply.preferences.tag_people.value === true) {
 				m_url = m_url + "?tags=" + tags;
@@ -596,6 +602,14 @@ XKit.extensions.one_click_reply = new Object({
 			user_url = $(obj).find("a.tumblelog").attr('href');	
 		}	
 		
+		if (XKit.extensions.one_click_reply.preferences.tag_person_replace_hyphens.value === true) {
+			try {
+				user_name = user_name.replace(/-/g, ' ');
+			} catch(e) {
+				console.log("Cant replace hyphens, " + e.message);	
+			}	
+		}
+		
 		if ($.trim(post_contents) === "") {
 			
 			if (m_post_type === "reply") {
@@ -810,6 +824,16 @@ XKit.extensions.one_click_reply = new Object({
 	make_post_reg: function(obj, pn_mode, event, silent_mode) {
 		
 		var username = $(obj).find(".username").html();
+		var real_username = username;
+		
+		if (XKit.extensions.one_click_reply.preferences.tag_person_replace_hyphens.value === true) {
+			try {
+				username = username.replace(/-/g, ' ');
+			} catch(e) {
+				console.log("Cant replace hyphens, " + e.message);	
+			}	
+		}
+		
 		var m_sentence = "";
 		if ( $(obj).find(".notification_sentence").find(".hide_overflow") > 0) {
 		 	m_sentence = "<p>" + $(obj).find(".notification_sentence").find(".hide_overflow").html() + "</p>";
@@ -894,7 +918,7 @@ XKit.extensions.one_click_reply = new Object({
 			obj_to_return.sentence = m_sentence;
 			obj_to_return.tags = m_tags_to_return;
 			obj_to_return.avatar = avatar_url;
-			obj_to_return.username = username;
+			obj_to_return.username = real_username;
 			return obj_to_return;
 			
 		} else {

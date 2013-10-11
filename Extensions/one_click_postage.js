@@ -1,5 +1,5 @@
 //* TITLE One-Click Postage **//
-//* VERSION 2.7 REV F **//
+//* VERSION 2.7 REV G **//
 //* DESCRIPTION Lets you easily reblog, draft and queue posts **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//
@@ -45,6 +45,11 @@ XKit.extensions.one_click_postage = new Object({
 			text: "Show blog selector",
 			default: true,
 			value: true
+		},
+		"enable_popup_html": {
+			text: "Enable HTML in One-Click Postage popup",
+			default: false,
+			value: false
 		},
 		"show_caption_remover": {
 			text: "Show the Remove Caption button",
@@ -872,15 +877,26 @@ XKit.extensions.one_click_postage = new Object({
 				
 			if (caption !== "" && typeof caption !== "undefined") {
 				if ($("#x1cpostage_replace").hasClass("selected") === false) {
-					m_object[variable_to_use] = current_caption + "<p>" + caption.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;') + "</p>";
+					if (XKit.extensions.one_click_postage.preferences.enable_popup_html.value !== true) {
+						m_object[variable_to_use] = current_caption + "<p>" + caption.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;') + "</p>";
+					} else {
+						m_object[variable_to_use] = current_caption + "<p>" + caption + "</p>";
+					}
 				} else {
-					m_object[variable_to_use] = caption.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+					if (XKit.extensions.one_click_postage.preferences.enable_popup_html.value !== true) {
+						m_object[variable_to_use] = caption.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+					} else {
+						m_object[variable_to_use] = caption;
+					}
 				}
 			} else {
 				m_object[variable_to_use] = current_caption;
 			}
 			
 		}
+		
+		m_object[variable_to_use] = XKit.tools.replace_all(m_object[variable_to_use], "&lt;br&gt;", "<br/>");
+		m_object[variable_to_use] = XKit.tools.replace_all(m_object[variable_to_use], "&lt;br/&gt;", "<br/>");
 
 		if (tags !== "" && typeof tags !== "undefined") {
 			m_object["post[tags]"] = tags;
