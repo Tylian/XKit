@@ -126,6 +126,11 @@ XKit.extensions.tweaks = new Object({
 			value: false,
 			slow: true
 		},
+		"no_animate_scroll": {
+			text: "Don't animate scrolling when using J/K to move between posts",
+			default: false,
+			value: false
+		},
 		"sep3": {
 			text: "Navigation and Search tweaks",
 			type: "separator",
@@ -280,6 +285,12 @@ XKit.extensions.tweaks = new Object({
 			XKit.tools.add_css("#return_to_top { opacity: 1 !important; visibility: visible !important; }", "xkit_tweaks_scroll_top");
 			XKit.tools.add_function(function() {
 				Tumblr.KeyCommands.elevate = function(){jQuery("html, body").stop(true).animate({scrollTop:0},"slow");};
+			}, true, "");
+		}
+
+		if (XKit.extensions.tweaks.preferences.no_animate_scroll.value === true) {
+			XKit.tools.add_function(function() {
+				Tumblr.KeyCommands.animate_scroll = false;
 			}, true, "");
 		}
 		
@@ -601,6 +612,9 @@ XKit.extensions.tweaks = new Object({
 		$("a.activity").parent().css("display","block");
 		$("xkit_post_tags_inner_add_back").addClass("post_tags_inner");
 		$("xkit_post_tags_inner_add_back").removeClass("xkit_post_tags_inner_add_back");
+		XKit.tools.add_function(function() {
+			Tumblr.KeyCommands.animate_scroll = true;
+		}, true, "");
 	}
 
 });
