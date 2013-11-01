@@ -1,0 +1,26 @@
+.xkit-disable-gifs-canvas-thumbnail {
+	max-width: 100%;
+	position: relative;	
+}
+
+.post.post_full.is_photo { display: none !important; }
+.post.disable-gifs-checked.post_full.is_photo { display: block !important; }
+
+.post.disable-gifs-checked.post_full.is_photo.xkit-disable-gifs-completely { display: none !important; }
+
+.xkit-disable-gifs-canvas-container {
+	position: relative;	
+}
+
+.xkit-disable-gifs-canvas-thumbnail.enlarged-canvas {
+	width: 100%;	
+}
+
+.xkit-disable-gifs-indicator {
+	position: absolute;
+	top: 50%; left: 50%;
+	margin-left: -19px;
+	margin-top: -19px;
+	z-index: 10;
+	pointer-events: none;	
+}
