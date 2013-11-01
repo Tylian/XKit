@@ -1,5 +1,5 @@
 //* TITLE Tweaks **//
-//* VERSION 2.5 REV D **//
+//* VERSION 2.5 REV C **//
 //* DESCRIPTION Various little tweaks for your dashboard. **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS These are small little tweaks that allows you customize your dashboard. If you have used XKit 6, you will notice that some of the extensions have been moved here as options you can toggle. Keep in mind that some of the tweaks (the ones marked with a '*') can slow down your computer. **//
@@ -160,6 +160,11 @@ XKit.extensions.tweaks = new Object({
 			default: false,
 			value: false
 		},
+		"hide_customize": {
+			text: "Hide Customize button on sidebar",
+			default: false,
+			value: false
+		},
 		"hide_activity": {
 			text: "Hide the Activity button on sidebar",
 			default: false,
@@ -266,6 +271,11 @@ XKit.extensions.tweaks = new Object({
 				
 			}	
 			
+		}
+		
+	
+		if (XKit.extensions.tweaks.preferences.hide_customize.value === true) {
+			$(".customize").parent().css("display","none");
 		}
 		
 		if (XKit.extensions.tweaks.preferences.hide_activity.value === true) {
@@ -637,6 +647,7 @@ XKit.extensions.tweaks = new Object({
 		$("a.spotlight").parent().css("display","block");
 		$("#recommended_tumblelogs").css("display","block");
 		$("a.activity").parent().css("display","block");
+		$(".customize").parent().css("display","block");
 		$("xkit_post_tags_inner_add_back").addClass("post_tags_inner");
 		$("xkit_post_tags_inner_add_back").removeClass("xkit_post_tags_inner_add_back");
 	}
