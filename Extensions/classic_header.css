@@ -12,7 +12,7 @@
 .xoldeheader-item {
 	display: inline-block; width: 26px; height: 26px; margin-top: 0px; margin-left: 0px;
 	margin-right: 0px; text-decoration: none; background-size: 26px 26px; border-radius: 40px;
-	opacity: 0.45; box-shadow: inset 0px 1px 3px rgba(0,0,0,0.42); 
+	opacity: 0.45;
 }
 
 .xoldeheader-item:hover {

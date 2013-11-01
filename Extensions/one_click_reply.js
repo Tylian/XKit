@@ -1,5 +1,5 @@
-//* TITLE One-Click-Reply **//
-//* VERSION 1.7 REV B **//
+//* TITLE One-Click Reply **//
+//* VERSION 1.7 REV F **//
 //* DESCRIPTION Lets you reply to notifications **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS To use this extension, hover over a notification and click on the Reply button. If Multi-Reply is on, hold down the ALT key while clicking on the Reply button to select/deselect posts and reply to all of them at once. **//
@@ -481,10 +481,15 @@ XKit.extensions.one_click_reply = new Object({
 		setTimeout(function() {
 
 			function set_post() {
-				var post_two   = (tinyMCE && tinyMCE.get('post_two'))
-                                             ? tinyMCE.get('post_two').setContent(add_tag)
-                                             : ($('post_two') ? $('post_two').value : add_tag);
-				$('post_two').value = add_tag;
+				try {
+					var post_two   = (tinyMCE && tinyMCE.get('post_two'))
+                                	             ? tinyMCE.get('post_two').setContent(add_tag)
+                                	             : ($('post_two') ? $('post_two').value : add_tag);
+					//$('post_two').value = add_tag;
+					$(post_two).value = add_tag;
+				} catch(e) {
+					console.log("OCR ERROR --> " + e.message);	
+				}
 			}
 		
 			var mx_sentence = XKit.tools.replace_all(m_sentence, "\\\n", "");
@@ -709,7 +714,7 @@ XKit.extensions.one_click_reply = new Object({
 		if (XKit.extensions.one_click_reply.preferences.enable_quick_reply.value === true && silent_mode !== true) {
 			if (!event.altKey && !pn_mode) {
 				// Do not open window if pressing alt key to select items.
-				if ($(".xkit-reply-selected").length <= 0 || $(".xkit-reply-selected-pn").length <= 0) {
+				if ($(".xkit-reply-selected").length <= 0 && $(".xkit-reply-selected-pn").length <= 0) {
 					// Do not open window if there are selected items.
 					
 					var m_return = XKit.extensions.one_click_reply.make_post(obj, false, "", true);

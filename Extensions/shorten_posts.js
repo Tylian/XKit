@@ -1,5 +1,5 @@
 //* TITLE Shorten Posts **//
-//* VERSION 0.1 REV E **//
+//* VERSION 0.1 REV F **//
 //* DESCRIPTION Makes scrolling easier **//
 //* DETAILS This extension shortens long posts, so if you are interested, you can just click on Show Full Post button to see it all, or scroll down if you are not interested. Useful for screens where long posts take a lot of space, and making it hard to scroll down.<br><br>By default, this extension only shortens text posts. You can toggle the setting to let it shorten the photo posts too. (This will 'cut off' long, vertical posts.) **//
 //* DEVELOPER STUDIOXENIX **//
@@ -55,6 +55,11 @@ XKit.extensions.shorten_posts = new Object({
 		
 		if ($(".post").length > 0) {
 			XKit.tools.init_css("shorten_posts");
+			if (typeof XKit.extensions.blacklist !== "undefined") {
+				if (XKit.extensions.blacklist.running === true) {
+					console.log(" ------ BLACKLIST IS ON SHORTEN POSTS DELAY");	
+				}	
+			}
 			$(document).on("click", ".xkit-shorten-posts-embiggen", XKit.extensions.shorten_posts.embiggen);
 			XKit.post_listener.add("shorten_posts", XKit.extensions.shorten_posts.check);	
 			XKit.extensions.shorten_posts.check();
@@ -70,6 +75,8 @@ XKit.extensions.shorten_posts = new Object({
 			
 			var m_height = $(this).height();
 			$(this).addClass("xkit-shorten-posts-done");
+			
+			if ($(this).hasClass("xblacklist_blacklisted_post")) { return; }
 			
 			if (XKit.extensions.shorten_posts.preferences.only_text.value === true) {
 				if ($(this).hasClass("is_regular") === false) {
@@ -132,6 +139,8 @@ XKit.extensions.shorten_posts = new Object({
 	
 	short: function(obj, m_height) {
 		
+		if ($(obj).hasClass("xblacklist_blacklisted_post")) { $(obj).removeClass("xkit-shorten-posts-shortened-show-tags"); return; }
+		
 		var post_id = $(obj).attr('data-post-id');
 		$(obj).attr('data-old-height', m_height);
 		$(obj).css('height',XKit.extensions.shorten_posts.preferences.height.value + "px");
@@ -160,11 +169,13 @@ XKit.extensions.shorten_posts = new Object({
 			$(this).css('height','auto');	
 		});
 		
-		$(".xkit-shorten-posts-shortened").removeClass("xkit-shorten-posts-shortened");
-		$(".xkit-shorten-posts-embiggened").removeClass("xkit-shorten-posts-embiggened");
 		$(".xkit-shorten-posts-embiggen").off("click", XKit.extensions.shorten_posts.embiggen);
-		$(".post").addClass("xkit-shorten-posts-shortened-show-tags");
+		
+		$(".post").removeClass("xkit-shorten-posts-shortened");
+		$(".post").removeClass("xkit-shorten-posts-embiggened");
+		$(".post").removeClass("xkit-shorten-posts-shortened-show-tags");
 		$(".post").removeClass("xkit-shorten-posts-done");
+		
 		XKit.tools.remove_css("shorten_posts");
 		
 		// Call Tumblr scroll helper update thingy.

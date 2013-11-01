@@ -1,5 +1,5 @@
 //* TITLE Mass+ **//
-//* VERSION 0.3 REV D **//
+//* VERSION 0.3 REV F **//
 //* DESCRIPTION Enhancements for the Mass Editor **//
 //* DETAILS This extension allows you to select multiple posts by once, by type or month. It also comes with visual enhancements for the mass post editor, such as selected post count and more! **//
 //* DEVELOPER STUDIOXENIX **//
@@ -198,7 +198,7 @@ XKit.extensions.mass_plus = new Object({
 	search: function(tag) {
 		
 		// Get the last timestamp:
-		var last_brick = $("a.brick:last-child");
+		var last_brick = $("a.brick").first();
 		var last_brick_classes = $(last_brick).attr('class');
 		
 		var last_ts_start = last_brick_classes.indexOf('timestamp_');
@@ -219,7 +219,7 @@ XKit.extensions.mass_plus = new Object({
 		this.search_url = "http://" + m_search_url + ".tumblr.com/archive";
 
 		this.search_found_count = 0;
-		this.search_last_timestamp = 0;
+		this.search_last_timestamp = last_timestamp;
 		this.search_page = 0;
 		this.search_found_posts = new Array();
 		this.search_next_page(tag.toLowerCase());
@@ -246,8 +246,8 @@ XKit.extensions.mass_plus = new Object({
 						for (var i=0;i<r_tags.length;i++) {
 							
 							if (r_tags[i] === "") { continue; }
+						
 							var mr_tag = r_tags[i].substring(0, r_tags[i].length - 1);
-	
 							if (mr_tag.toLowerCase() === tag || r_tags[i].toLowerCase() === tag.toLowerCase()) {
 								var m_id = $(this).attr('data-post-id');
 								XKit.extensions.mass_plus.search_found_posts.push(m_id);

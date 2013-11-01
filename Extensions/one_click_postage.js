@@ -1,5 +1,5 @@
 //* TITLE One-Click Postage **//
-//* VERSION 2.7 REV G **//
+//* VERSION 2.9 REV A **//
 //* DESCRIPTION Lets you easily reblog, draft and queue posts **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//
@@ -36,6 +36,11 @@ XKit.extensions.one_click_postage = new Object({
 			default: false,
 			value: false,
 			experimental: true
+		},
+		"enable_hide_alreadyreblogged": {
+			text: "Hide posts if they are AlreadyReblogged on my dashboard",
+			default: false,
+			value: false
 		},
 		"sep_1": {
 			text: "Popup Options",
@@ -401,6 +406,9 @@ XKit.extensions.one_click_postage = new Object({
 		
 		if (this.preferences.enable_quick_queue.value === true) {
 			
+			if (XKit.interface.where().drafts === true || XKit.interface.where().queue === true) { return; }
+			if ($("body").hasClass("is_private_channel")) {return; }
+			
 			XKit.interface.create_control_button("xkit-one-click-postage-quickqueue", this.qq_icon, "QuickQueue", "", this.qq_ok_icon);	
 			XKit.post_listener.add("quick_queue_do_posts", XKit.extensions.one_click_postage.quick_queue_do_posts);
 			XKit.extensions.one_click_postage.quick_queue_do_posts();
@@ -454,7 +462,13 @@ XKit.extensions.one_click_postage = new Object({
 			$(this).addClass("xkit_already_reblogged_check");
 			
 			if (XKit.extensions.one_click_postage.is_alreadyreblogged(post_id)) {
+				
+				if (XKit.extensions.one_click_postage.preferences.enable_hide_alreadyreblogged.value === true) {
+					if (XKit.interface.where().dashboard === true) { $(this).remove(); }	
+				}
+				
 				$(this).find(".post_control.reblog").addClass("xkit-one-click-reblog-done");
+				
 			}
 			
 		});
@@ -481,7 +495,7 @@ XKit.extensions.one_click_postage = new Object({
 
 	suspend_tumblr_key_commands: function(e) {
 		// 82 = R
-		if (e.metaKey || e.altKey || e.ctrlKey || e.sjiftKey || e.keyCode !== 82) {
+		if (e.metaKey || e.altKey || e.ctrlKey || e.shiftKey || e.keyCode !== 82) {
 			return;
 		}
 		XKit.tools.add_function(function(){Tumblr.KeyCommands.suspend()}, true, '');
@@ -496,6 +510,7 @@ XKit.extensions.one_click_postage = new Object({
 		}
 		// Tumblr puts 7-8px padding at the top of the screen when you use J/K to navigate
 		var screenPos = $(window).scrollTop() + 10;
+
 		// Find the post at the top of the screen, if there is one
 		$(".reblog_button,.post_control.reblog").filter(':visible').each(function() {
 			if ($(this).hasClass("radar_button")) {return; }

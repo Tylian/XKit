@@ -1,5 +1,5 @@
 //* TITLE Show Originals **//
-//* VERSION 1.0 REV C **//
+//* VERSION 1.0 REV E **//
 //* DESCRIPTION Only shows non-reblogged posts **//
 //* DETAILS This is a really experimental extension allows you see original (non-reblogged) posts made by users on your dashboard. Please keep in mind that if you don't have enough people creating new posts on your dashboard, it might slow down your computer. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -15,10 +15,24 @@ XKit.extensions.show_originals = new Object({
 	status: "false",
 	lbl_on: "on",
 	lbl_off: "off",
+	dont_show_mine: false,
 
 	run: function() {
 		this.running = true;
 		if (XKit.interface.where().dashboard !== true && XKit.interface.where().channel !== true) { return; }
+		
+		try {
+			if (typeof XKit.extensions.tweaks !== "undefined") {
+				if (XKit.extensions.tweaks.running === true) {
+					if (XKit.extensions.tweaks.preferences.dont_show_mine_on_dashboard.value === true) {
+						XKit.extensions.show_originals.dont_show_mine = true;
+					}	
+				}	
+			}
+		} catch(e) {
+			console.log("show_originals -> can't read tweaks property: " + e.message);
+			XKit.extensions.show_originals.dont_show_mine = false;
+		}
 		
 		if (!$("body").hasClass("with_auto_paginate")) {
 			if (XKit.storage.get("show_originals","shown_warning_about_scrolling","") !== "yass") {
@@ -33,8 +47,9 @@ XKit.extensions.show_originals = new Object({
 		XKit.extensions.show_originals.status = XKit.storage.get("show_originals","status","false");
 		
 		xf_html = '<ul class="controls_section" id="xshow_originals_ul">' + 
+			'<li class="section_header selected">SHOW ORIGINALS</li>' +
 			'<li class="no_push"><a href="#" onclick="return false;" id="xshoworiginals_button">' +
-			'<div class="hide_overflow">Show Originals</div>' +
+			'<div class="hide_overflow">Originals Only</div>' +
 			'<div class="count" id="xshoworiginalsstatus">' + XKit.extensions.show_originals.lbl_off + '</div>' +
 			'<div id="xshoworiginalsindicator">&nbsp;</div>' +
 			'</a></li></ul>';
@@ -94,6 +109,13 @@ XKit.extensions.show_originals = new Object({
 			
 			$(this).addClass("xkit-show-originals-checked");
 			$(this).css("display","");
+			
+			var dont_show_this = false;
+			if (XKit.extensions.show_originals.dont_show_mine === true) {
+				if ($(this).hasClass("is_mine")) {
+					dont_show_this = true;	
+				}
+			}
 			
 	  		if (!$(this).hasClass("is_original")) {
 	  			$(this).addClass("xkit-show-originals-not-so-original");	

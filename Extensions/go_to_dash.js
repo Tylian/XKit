@@ -1,5 +1,5 @@
 //* TITLE Go-To-Dash **//
-//* VERSION 1.0 REV E **//
+//* VERSION 1.0 REV F **//
 //* DESCRIPTION View a post on a blog on your dashboard. **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS This extension adds a 'view' button on peoples blogs that allows you to go back to that post on your dashboard. This feature only works on the blogs you follow. If the post was made before you followed them, you might not see them on your dashboard when you click the view button. **//

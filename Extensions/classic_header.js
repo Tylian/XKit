@@ -1,5 +1,5 @@
 //* TITLE Classic Header **//
-//* VERSION 1.0 REV C **//
+//* VERSION 1.0 REV E **//
 //* DESCRIPTION Switch between blogs from the header **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS This extension adds your blogs on the top of the page, so you can easily switch between blogs. The blog limit on the header is five, but you can limit this to three blogs and turn off the blog title bubble from the settings. **//

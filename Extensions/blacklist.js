@@ -1,5 +1,5 @@
 //* TITLE Blacklist **//
-//* VERSION 2.5 REV C **//
+//* VERSION 2.5 REV D **//
 //* DESCRIPTION Clean your dash **//
 //* DETAILS This extension allows you to block posts based on the words you specify. If a post has the text you've written in the post itself or it's tags, it will be replaced by a warning, or won't be shown on your dashboard, depending on your settings. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -528,6 +528,15 @@ XKit.extensions.blacklist = new Object({
 			
 		$(m_div).find(".xblacklist_excuse").remove();
 		$(m_div).find(".post_content").html($(m_div).find(".xblacklist_old_content").html());
+		
+		// Fix for canvases on Disable Gifs:
+		if ($(m_div).hasClass("disable-gifs-checked")) {
+			try {
+				XKit.extensions.disable_gifs.redraw_canvases($(m_div));
+			} catch(e) {
+				console.log("Unable to redraw canvases for Disable Gifs: " + e.message);	
+			}	
+		}
 		
 	},
 	

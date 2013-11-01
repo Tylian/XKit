@@ -1,5 +1,5 @@
 //* TITLE Mass Deleter **//
-//* VERSION 0.1 REV C **//
+//* VERSION 0.1 REV D **//
 //* DESCRIPTION Mass unlike likes / delete drafts **//
 //* DETAILS Used to mass unlike posts or delete drafts. Please use with caution, especially Mass Unlike part is extremely experimental. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -22,6 +22,8 @@ XKit.extensions.mass_deleter = new Object({
 	run: function() {
 		this.running = true;
 		
+		XKit.tools.init_css("mass_deleter");
+		
 		if (document.location.href.indexOf("http://www.tumblr.com/likes") !== -1) {
 			if (XKit.extensions.mass_deleter.preferences.enable_mass_unlike.value === true) {
 				XKit.extensions.mass_deleter.init_likes();
@@ -36,19 +38,39 @@ XKit.extensions.mass_deleter = new Object({
 	
 	init_drafts: function() {
 		
-		xf_html = '<ul class="controls_section" id="xkit-mass-deleter-ul">' + 
-			'<li class="no_push">' +
-				'<a href="#" class="customize" onclick="return false;" id="xkit-mass-deleter-100">' +
-					'<div class="hide_overflow">Delete 100 Drafts</div>' +
-				'</a>' +
-			'</li>' +
-			'<li class="no_push">' +
-				'<a href="#" class="customize" onclick="return false;" id="xkit-mass-deleter-1000">' +
-					'<div class="hide_overflow">Delete 1,000 Drafts</div>' +
-				'</a>' +
-			'</li>' +			
-			'</ul>';
-		$("ul.controls_section:eq(1)").after(xf_html);	
+		if ($("#drafts_plus_sidebar").length > 0) {
+			
+			xf_html = '<li class="no_push">' +
+					'<a href="#" class="customize xkit-mass-deleter" onclick="return false;" id="xkit-mass-deleter-100">' +
+						'<div class="hide_overflow">Delete 100 Drafts</div>' +
+					'</a>' +
+				'</li>' +
+				'<li class="no_push">' +
+					'<a href="#" class="customize xkit-mass-deleter" onclick="return false;" id="xkit-mass-deleter-1000">' +
+						'<div class="hide_overflow">Delete 1,000 Drafts</div>' +
+					'</a>' +
+				'</li>';
+				
+			$("#drafts_plus_sidebar").append(xf_html);		
+			
+		} else {
+		
+			xf_html = '<ul class="controls_section" id="xkit-mass-deleter-ul">' + 
+				'<li class="section_header selected">MASS DELETER</li>' +
+				'<li class="no_push">' +
+					'<a href="#" class="customize xkit-mass-deleter" onclick="return false;" id="xkit-mass-deleter-100">' +
+						'<div class="hide_overflow">Delete 100 Drafts</div>' +
+					'</a>' +
+				'</li>' +
+				'<li class="no_push">' +
+					'<a href="#" class="customize xkit-mass-deleter" onclick="return false;" id="xkit-mass-deleter-1000">' +
+						'<div class="hide_overflow">Delete 1,000 Drafts</div>' +
+					'</a>' +
+				'</li>' +			
+				'</ul>';
+			$("ul.controls_section:eq(1)").before(xf_html);	
+		
+		}
 		
 		$("#xkit-mass-deleter-100").click(function() {
 			XKit.extensions.mass_deleter.delete_drafts(100);
@@ -236,12 +258,12 @@ XKit.extensions.mass_deleter = new Object({
 		
 		xf_html = '<ul class="controls_section" id="xkit-mass-deleter-ul">' + 
 			'<li class="no_push">' +
-				'<a href="#" class="customize" onclick="return false;" id="xkit-mass-deleter-100">' +
+				'<a href="#" class="customize xkit-mass-deleter" onclick="return false;" id="xkit-mass-deleter-100">' +
 					'<div class="hide_overflow">Unlike 100 Likes</div>' +
 				'</a>' +
 			'</li>' +
 			'<li class="no_push">' +
-				'<a href="#" class="customize" onclick="return false;" id="xkit-mass-deleter-1000">' +
+				'<a href="#" class="customize xkit-mass-deleter" onclick="return false;" id="xkit-mass-deleter-1000">' +
 					'<div class="hide_overflow">Unlike 1,000 Likes</div>' +
 				'</a>' +
 			'</li>' +			

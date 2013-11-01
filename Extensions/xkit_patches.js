@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 1.8 REV E **//
+//* VERSION 1.8 REV F **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER STUDIOXENIX **//
 
@@ -1035,6 +1035,7 @@ XKit.extensions.xkit_patches = new Object({
 						m_return.body = "";	
 					}	
 				}
+				m_return.animated = $(obj).hasClass("is_animated");
 				m_return.is_reblogged = $(obj).hasClass("is_reblog");
 				m_return.is_mine = $(obj).hasClass("is_mine");
 				m_return.is_following = ($(obj).attr('data-following-tumblelog') === true);

@@ -1,5 +1,5 @@
 //* TITLE Audio Downloader **//
-//* VERSION 2.0 REV A **//
+//* VERSION 2.0 REV B **//
 //* DESCRIPTION Lets you download audio posts hosted on Tumblr **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//
@@ -94,7 +94,7 @@ XKit.extensions.audio_downloader = new Object({
 					
 					
 					
-					var m_titles = [ "You probably wouldn't steal a car.", "The Big-Bro Warning", "Watch it, they are watching you.", "Do you want Metallica to starve to death?", "Psst. Behind you.", "Would you download a car?", "You are too pretty to go to jail.", "Oh I hope you are not doing what I think you are doing.", "Xenixlet Sez: Buy music!", "You are downloading a Mitt Romney audio snippet, right?" ];
+					var m_titles = [ "You probably wouldn't steal a car.", "The Big-Bro Warning", "Watch it, they are watching you.", "Do you want Metallica to starve to death?", "Psst. Behind you.", "Would you download a car?", "You are too pretty to go to jail.", "Oh I hope you are not doing what I think you are doing.", "Xenixlet Sez: Buy music!", "You are downloading a Mitt Romney audio snippet, right?", "Insert sassy title here", "The P in MP3 might mean Prison y'know.", "NSA means No Stealing Audio (or something else perhaps, not sure.)", "Don't make the headlines" ];
 					var m_index = Math.floor(Math.random() * m_titles.length);
 					
 					var m_title = m_titles[m_index];

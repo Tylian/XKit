@@ -1,5 +1,5 @@
 //* TITLE Old Notifications **//
-//* VERSION 0.4 REV A **//
+//* VERSION 0.4 REV D **//
 //* DESCRIPTION Notifications where they were **//
 //* DETAILS This is a very experimental extension that brings back the notifications to your blog pages (ie: www.tumblr.com/blog/xkit-extension), just the way it was before Tumblr's Activity update. Only the last 10 notifications are displayed. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -13,6 +13,8 @@ XKit.extensions.old_notifications = new Object({
 
 	run: function() {
 		this.running = true;
+		
+		if (document.location.href.indexOf('/new/') !== -1) { return; }
 		
 		if (XKit.interface.where().channel == true) {
 			XKit.extensions.old_notifications.fetch();
@@ -95,6 +97,9 @@ XKit.extensions.old_notifications = new Object({
 		
 		if (notification_preview !== "" && typeof notification_preview !== "undefined") {
 			notification_preview = notification_preview.substring(4, notification_preview.length - 1); 	
+			if (notification_preview.indexOf("\"") !== -1) {
+				notification_preview = XKit.tools.replace_all(notification_preview, "\"", "");
+			}
 		}
 		
 		var is_reblog = $(obj).hasClass("is_reblog");
@@ -404,7 +409,7 @@ XKit.extensions.old_notifications = new Object({
 				method: "GET",
 				url: to_fetch,
 				onerror: function(response) {
-					XKit.extensions.old_notifications.fetch_failed(obj);
+					XKit.extensions.old_notifications.fetch_failed();
 				},
 				onload: function(response) {
 					XKit.extensions.old_notifications.fetch_successful(response.responseText);

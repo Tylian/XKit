@@ -1,5 +1,5 @@
 //* TITLE XKit Preferences **//
-//* VERSION 2.5 REV B **//
+//* VERSION 2.6 REV E **//
 //* DESCRIPTION Lets you customize XKit **//
 //* DEVELOPER STUDIOXENIX **//
 
@@ -1485,9 +1485,9 @@ XKit.extensions.xkit_preferences = new Object({
 				}
 
 				if (XKit.extensions[extension_id].preferences[pref].value === false) {
-					m_return = m_return + "<div data-extension-id=\"" + extension_id + "\" data-setting-id=\"" + pref + "\" class=\"xkit-checkbox\" id=\"xkit-extension-enabled\"><b>&nbsp;</b>" + pref_title + "</div>";
+					m_return = m_return + "<div data-extension-id=\"" + extension_id + "\" data-setting-id=\"" + pref + "\" class=\"xkit-checkbox xkit-change-ext-setting-checkbox\"><b>&nbsp;</b>" + pref_title + "</div>";
 				} else {
-					m_return = m_return + "<div data-extension-id=\"" + extension_id + "\" data-setting-id=\"" + pref + "\" class=\"xkit-checkbox selected\" id=\"xkit-extension-enabled\"><b>&nbsp;</b>" + pref_title + "</div>";
+					m_return = m_return + "<div data-extension-id=\"" + extension_id + "\" data-setting-id=\"" + pref + "\" class=\"xkit-checkbox selected xkit-change-ext-setting-checkbox\"><b>&nbsp;</b>" + pref_title + "</div>";
 				}
 
 				m_return = m_return + "</div>";
@@ -1654,7 +1654,7 @@ XKit.extensions.xkit_preferences = new Object({
 		var m_html = 	"<div class=\"xkit-others-panel\">" +
 				"<div class=\"title\">Storage</div>" +
 				"<div class=\"description\">" +
-					"XKit has it's own space on your browser, and gives most of this space away to the extensions you install on it. Since this space is not unlimited, you can check here how much space you have left." +
+					"XKit has its own space on your browser, and gives most of this space away to the extensions you install on it. Since this space is not unlimited, you can check here how much space you have left." +
 				"</div>" +
 				"<div class=\"bottom-part\">";
 

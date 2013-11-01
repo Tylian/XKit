@@ -1,5 +1,5 @@
 //* TITLE Bookmarker **//
-//* VERSION 2.0 REV E **//
+//* VERSION 2.2 REV B **//
 //* DESCRIPTION Dashboard Time Machine **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS The Bookmarker extension allows you to bookmark posts and get back to them whenever you want to. Just click on the Bookmark icon on posts and the post will be added to your Bookmark List on your sidebar. **//
@@ -137,6 +137,7 @@ XKit.extensions.bookmarker = new Object({
 		}
 		
 		if ($(".xbookmark").length > 0) {
+			$("#xbookmarks").prepend("<li class=\"section_header selected\">BOOKMARKS</li>");
 			$("#xbookmarks").slideDown('fast');
 			$("#xbookmarker_small_links").slideDown('fast');
 			$(".xbookmark_to_slidedown").slideDown('fast');
@@ -362,7 +363,20 @@ XKit.extensions.bookmarker = new Object({
 	
 	load_bookmarks: function() {
 		
-		var m_bookmarks = XKit.storage.get("bookmarks","my_bookmarks","");
+		var m_bookmarks = XKit.storage.get("bookmarker","my_bookmarks","");
+		if (m_bookmarks === "") {
+			m_bookmarks = XKit.storage.get("bookmarks","my_bookmarks","");
+		} else {
+			try {
+				XKit.extensions.bookmarker.bookmarks = JSON.parse(m_bookmarks);
+				if (XKit.extensions.bookmarker.bookmarks.length === 0) {
+					m_bookmarks = XKit.storage.get("bookmarks","my_bookmarks","");	
+				}
+			} catch(e) {
+				m_bookmarks = XKit.storage.get("bookmarks","my_bookmarks","");
+			}
+		}
+		
 		try {
 			XKit.extensions.bookmarker.bookmarks = JSON.parse(m_bookmarks);
 		} catch(e) {
@@ -375,6 +389,7 @@ XKit.extensions.bookmarker = new Object({
 	save_bookmarks: function() {
 	
 		XKit.storage.set("bookmarks","my_bookmarks", JSON.stringify(XKit.extensions.bookmarker.bookmarks));	
+		XKit.storage.set("bookmarker","my_bookmarks", JSON.stringify(XKit.extensions.bookmarker.bookmarks));
 		
 	},
 	

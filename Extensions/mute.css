@@ -15,7 +15,7 @@
 }
 
 .xmute-muted {
-	display: none;	
+	display: none !important;	
 }
 
 .xkit-muted-user {

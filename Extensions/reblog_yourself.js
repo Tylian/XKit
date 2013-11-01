@@ -1,5 +1,5 @@
 //* TITLE Reblog Yourself **//
-//* VERSION 1.2 REV F **//
+//* VERSION 1.3 REV B **//
 //* DESCRIPTION Allows you to reblog posts back to your blog **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//
@@ -29,6 +29,8 @@ XKit.extensions.reblog_yourself = new Object({
 		if (document.location.href.indexOf("http://www.tumblr.com/reblog/") !== -1) {
 			XKit.extensions.reblog_yourself.fix_page();
 		}
+	
+		if ($("body").hasClass("is_private_channel")) {return; }
 	
 		if ($(".post").length > 0) {
 			$(document).on("click", ".post_control.reblog", function() {
@@ -208,7 +210,7 @@ XKit.extensions.reblog_yourself = new Object({
 			*/
 			
 			var m_html = "<a class=\"post_control reblog added_by_xkit_reblog_yourself\" title=\"\" href=\"/reblog/" + post_id + "/" + reblog_key + "?redirect_to=%2Fdashboard\"><span class=\"offscreen\">Reblog</span></a>";
-			$(this).find('.post_controls_inner').prepend(m_html);
+			$(this).find('.post_control.post_control_menu.creator').before(m_html);
 		});
 	
 	},

@@ -1,5 +1,5 @@
 //* TITLE Post Crushes **//
-//* VERSION 1.0 REV B **//
+//* VERSION 1.0 REV D **//
 //* DESCRIPTION Lets you share your Tumblr Crushes **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS To use this extension, go to the 'Following' page on your dashboard, and click on the 'Post My Crushes' button below your Tumblr Crushes. **//
@@ -87,7 +87,7 @@ XKit.extensions.post_crushes = new Object({
 				crush_img_src = crush_img_src.substring(0, crush_img_src.indexOf("'"));
 			crush_img.push(crush_img_src);
 			crush_url.push($("#crush_" + i).attr('href'));
-			crush_name.push($("#crush_" + i).attr('href').replace(".tumblr.com/","").replace(".tumblr.com","").replace("http://",""));
+			crush_name.push($("#crush_" + i).attr('data-tumblelog-name'));
 			crush_val.push($("#crush_" + i).find("span").html().replace("%",""));
 		}
 
@@ -158,6 +158,8 @@ XKit.extensions.post_crushes = new Object({
 		m_object["post[photoset_order]"] = "o1";
 		m_object["post[photoset_layout]"] = "1";
 		m_object["photo_src[]"] = send_url;
+		m_object["images[o1]"] = send_url;
+		
 
 		GM_xmlhttpRequest({
 			method: "POST",
@@ -167,18 +169,25 @@ XKit.extensions.post_crushes = new Object({
 					"Content-Type": "application/json"
 			},
 			onerror: function(response) {
-				xkit_error("Can't post crushes", "Server returned invalid/blank page or could not be reached. Maybe you hit your post limit for today, or your account has been suspended. Please check your internet connection and try again later.");
+				XKit.extensions.post_crushes.post_crushes_error("Can't post crushes", "Server returned invalid/blank page or could not be reached. Maybe you hit your post limit for today, or your account has been suspended. Please check your internet connection and try again later.");
 			},
 			onload: function(response) {
 				var m_obj = jQuery.parseJSON(response.responseText);
+				console.log(m_obj);
 				if (m_obj.errors === false) {
 					$("#xkit_post_crushes").html("Posted!");
 					XKit.notifications.add("Your crushes have been posted to your main blog.", "ok");
 				} else {
-					xkit_error("Can't post crushes", "Server returned a non-JSON object. Maybe you hit your post limit for today, or your account has been suspended. Please try again later.");
+					XKit.extensions.post_crushes.post_crushes_error("Can't post crushes", "Server returned a non-JSON object. Maybe you hit your post limit for today, or your account has been suspended. Please try again later.");
 				}
 			}
 		});
+	},
+	
+	post_crushes_error: function(title, message) {
+		
+		XKit.window.show(title, message, "error", "<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");	
+		
 	},
 	
 	destroy: function() {

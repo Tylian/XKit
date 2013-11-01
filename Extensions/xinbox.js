@@ -1,5 +1,5 @@
 //* TITLE XInbox **//
-//* VERSION 1.7 REV F **//
+//* VERSION 1.8 REV B **//
 //* DESCRIPTION Enhances your Inbox experience **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS XInbox allows you to tag posts before posting them, and see all your messages at once, and lets you delete multiple messages at once using the Mass Editor mode. To use this mode, go to your Inbox and click on the Mass Editor Mode button on your sidebar, click on the messages you want to delete then click the Delete Messages button.  **//
@@ -18,8 +18,7 @@ XKit.extensions.xinbox = new Object({
 		"show_new_notification": {
 			text: "Show an XKit Notification when I receive new asks/fan mail",
 			default: false,
-			value: false,
-			experimental: true
+			value: false
 		},
 		"sep0": {
 			text: "Tagging while publishing",
@@ -227,6 +226,8 @@ XKit.extensions.xinbox = new Object({
 		if(XKit.extensions.xinbox.preferences.inbox_search.value === true) {
 			XKit.extensions.xinbox.init_inbox_search();
 		}
+		
+		$("#xinbox_sidebar").prepend("<li class=\"section_header selected\">INBOX TOOLS</li>");
 
 	},
 	
@@ -675,12 +676,7 @@ XKit.extensions.xinbox = new Object({
 	
 				var this_obj = m_parent;
 				var m_box_id = "xinbox_tags_" + post_id;
-			
-				/*
-				
-				OBSOLETE -- Tumblr changes.
-				
-				
+
 				
 				var asker = XKit.extensions.xinbox.preferences.anon_tag.value;
 				var respondant = $(m_parent).attr('data-tumblelog-name');
@@ -694,9 +690,15 @@ XKit.extensions.xinbox = new Object({
 						asker = XKit.extensions.xinbox.preferences.anon_tag.value;
 					}
 				}
-				*/
 				
-				var asker = XKit.extensions.xinbox.preferences.anon_tag.value;
+			
+				/*
+				
+				OBSOLETE -- Tumblr changes.
+				
+				*/	
+				
+				/*var asker = XKit.extensions.xinbox.preferences.anon_tag.value;
 				var respondant = $(m_parent).attr('data-tumblelog-name');
 				
 				if (respondant !== "" && typeof respondant !== "undefined" && !m_parent.hasClass("post_tumblelog_")) {
@@ -705,7 +707,31 @@ XKit.extensions.xinbox = new Object({
 					if (typeof asker === "undefined") {
 						asker = "";	
 					}	
-				}
+				}*/
+				
+				/* var asker = "";
+				
+				if ($(m_parent).find(".post_avatar_link").length > 0) {
+					
+					var avatar_json_data = $(m_parent).find(".post_avatar_link").attr('data-tumblelog-popover');
+					if (avatar_json_data !== "" && typeof avatar_json_data !== "undefined") {
+						try {
+							var avatar_json = JSON.parse(avatar_json_data);
+							if (avatar_json.name !== "" && typeof avatar_json.name !== "undefined") {
+								asker = avatar_json.name;	
+							}
+						}catch(e) {
+							XKit.console.add("Can't tag ask ---->" + e.message);	
+						}	
+					} else {
+						XKit.console.add("xinbox tagger -> data-tumblelog-popover data missing");		
+					}
+					
+				} else {
+					XKit.console.add("xinbox tagger -> post_avatar_link missing");	
+				}*/
+				
+				// return alert("asker = " + asker);
 
 				var all_buttons = $(m_parent).find('[id^="ask_publish_button_"], [id^="ask_draft_button_"], [id^="ask_queue_button_"]');
 				

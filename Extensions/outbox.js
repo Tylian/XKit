@@ -1,5 +1,5 @@
 //* TITLE Outbox **//
-//* VERSION 0.5 REV A **//
+//* VERSION 0.6 REV A **//
 //* DESCRIPTION Saves your last 20 sent private replies and fan mail. **//
 //* DETAILS This extension stores and lets you view the last 20 asks you've answered privately. Please keep in mind that this is a highly experimental extension, so if you hit a bug, please send the XKit blog an ask with the problem you've found. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -179,11 +179,13 @@ XKit.extensions.outbox = new Object({
 		
 		XKit.tools.init_css("outbox");
 		
-		xf_html = '<ul class="controls_section" id="xkit_outbox_ul">' + 
+		xf_html = '<ul class="controls_section" id="xkit_outbox_ul"><li class="section_header selected">OUTGOING</li>' + 
 			'<li class=""><a href="#" onclick="return false;" id="xkit-outbox-button">' +
-				'<div class="hide_overflow">Outbox</div>' +
+				'<div class="hide_overflow">My Outbox</div>' +
 			'</a></li></ul>';
 		$("ul.controls_section:eq(1)").before(xf_html);	
+		
+		$(".controls_section.inbox").prepend("<li class=\"section_header selected\">INCOMING</li>");
 
 		$("#xkit-outbox-button").click(function() {
 

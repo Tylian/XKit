@@ -1,5 +1,5 @@
 //* TITLE Tags on Sidebar **//
-//* VERSION 1.0 REV C **//
+//* VERSION 1.2 REV B **//
 //* DESCRIPTION Shows your tracked tags on your sidebar **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//
@@ -15,7 +15,12 @@ XKit.extensions.classic_tags = new Object({
 			text: "Only show tags with new posts",
 			default: false,
 			value: false
-		}
+		},
+		"open_in_new_tab": {
+			text: "Open the tag results in a new window",
+			default: false,
+			value: false
+		}		
 	},
 
 	run: function() {
@@ -77,31 +82,56 @@ XKit.extensions.classic_tags = new Object({
 				}
 			}
 			
-			if ($(this).find(".hide_overflow").html() == "#" + str_sub) {
+			var m_link = $(this).find(".result_link").attr('href').replace(/\+/g, '-');
+			
+			/*if ($(this).find(".hide_overflow").html() == "#" + str_sub) {
 				extra_classes = "selected";
 			} else {
 				extra_classes = "";
+			}*/
+			
+			// console.log("______________ " + m_link + "\n" + document.location.href);
+			if ($("body").attr('data-page-root') === m_link) {
+				extra_classes = "selected";
+			} else {
+				extra_classes = "";	
 			}
 			
-			var m_title = $(this).html().replace("#","");
-			m_html = m_html + '<li class="xtag ' + extra_classes + '"><div class="hide_overflow">' + m_title + '</div></li>';
+			var m_title = $(this);
+			
+			if (XKit.extensions.classic_tags.preferences.open_in_new_tab.value === true) {
+				$(m_title).find(".result_link").attr('target','_BLANK');	
+			} else {
+				$(m_title).find(".result_link").attr('target','');	
+			}
+			
+			$(m_title).find(".result_title").html($(m_title).find(".result_title").html().replace("#",""));
+			
+			m_html = m_html + '<li class="xtag ' + extra_classes + '"><div class="hide_overflow">' + $(m_title).html() + '</div></li>';
 		
 		});
 		
 		if (m_html !== "") {
 		
-			m_html = '<ul class="controls_section" id="xtags">' + m_html + '</ul>';
-		
-			if ($("ul.controls_section:eq(1)").length > 0) {
-				if ($("#xim_small_links").length > 0) {
-					$("#xim_small_links").after(m_html);
-				} else {
-					$("ul.controls_section:eq(1)").after(m_html);
-				}
+			m_html = '<ul class="controls_section" id="xtags"><li class=\"section_header selected\">TRACKED TAGS</li>' + m_html + '</ul>';
+			
+			if (document.location.href.indexOf('/tagged/') !== -1) {
+				
+				$("#right_column").append(m_html);
+				
 			} else {
-				$("#right_column").prepend(m_html);
+		
+				if ($("ul.controls_section:eq(1)").length > 0) {
+					if ($("#xim_small_links").length > 0) {
+						$("#xim_small_links").after(m_html);
+					} else {
+						$("ul.controls_section:eq(1)").after(m_html);
+					}
+				} else {
+					$("#right_column").prepend(m_html);
+				}
 			}
-	
+			
 			$(".xtag").each(function() {
 				$(this).find(".count").html(parseInt($(this).find(".count").html()));
 			});	
