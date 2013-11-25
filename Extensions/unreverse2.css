@@ -1,0 +1,52 @@
+.post_full .post_controls {
+	position: absolute;
+	top: 2px;
+	right: 0px;
+	text-align: right;
+	width: 100%;
+	padding-right: 18px;
+	display: block;
+	z-index: 900;
+	width: 60%;
+}
+
+.post_full .post_header {
+
+	position: relative;
+	z-index: 1000;
+	width: 40%;
+		
+}
+
+.unreverse_post_source {
+	
+	float: right;
+	display: block;
+	width: 350px;
+	font-size: 12px;
+	text-align: right;	
+	
+}
+
+.post_full .post_source { display: none !important; }
+
+.post .unreverse_post_source { font-weight: normal; }
+
+.post .unreverse_post_source .post_source_name_prefix {
+	
+	padding-right: 6px;
+	
+}
+
+.post .unreverse_post_source .post_source_link {
+
+	color: #a7a7a7;
+	text-decoration: none;
+		
+}
+
+.post .unreverse_post_source .post_source_link:hover{
+	
+	color: #969696;
+	
+}
