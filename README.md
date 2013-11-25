@@ -6,4 +6,4 @@ XKit
 To develop extensions for XKit, check out the [XKit Wiki](https://github.com/atesh/XKit/wiki).
 
 #### Get it
-You can go to the [official download page](https://www.xkit.info/download) to get it for Safari, Chrome and Firefox, or try the [unofficial mod](https://xkit-opera.tumblr.com) for Opera.
+You can go to the [official download page](http://www.xkit.info/download) to get it for Safari, Chrome, Firefox and Opera.
