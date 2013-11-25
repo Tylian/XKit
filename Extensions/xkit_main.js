@@ -1,5 +1,5 @@
 //* TITLE XKit Main **//
-//* VERSION 1.0 REV C **//
+//* VERSION 1.0 REV D **//
 //* DESCRIPTION Boots XKit up **//
 //* DEVELOPER STUDIOXENIX **//
 (function(){
@@ -194,6 +194,15 @@ XKit.extensions.xkit_main = new Object({
 			}
 
 			if (XKit.extensions[extension_id].preferences[pref].type === "text") {
+				XKit.extensions[extension_id].preferences[pref].value = XKit.storage.get(extension_id, "extension__setting__" + pref, "");
+				if (typeof XKit.extensions[extension_id].preferences[pref].value === "undefined" || XKit.extensions[extension_id].preferences[pref].value === "") {
+					if (typeof XKit.extensions[extension_id].preferences[pref].default !== "undefined") {
+						XKit.extensions[extension_id].preferences[pref].value = XKit.extensions[extension_id].preferences[pref].default;
+					}
+				}
+			}
+			
+			if (XKit.extensions[extension_id].preferences[pref].type === "combo") {
 				XKit.extensions[extension_id].preferences[pref].value = XKit.storage.get(extension_id, "extension__setting__" + pref, "");
 				if (typeof XKit.extensions[extension_id].preferences[pref].value === "undefined" || XKit.extensions[extension_id].preferences[pref].value === "") {
 					if (typeof XKit.extensions[extension_id].preferences[pref].default !== "undefined") {

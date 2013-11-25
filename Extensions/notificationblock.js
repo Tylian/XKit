@@ -1,5 +1,5 @@
 //* TITLE NotificationBlock **//
-//* VERSION 1.0 REV D **//
+//* VERSION 1.1 REV A **//
 //* DESCRIPTION Blocks notifications from a post **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS One post got way too popular and now just annoying you? Click on the notification block icon on that post to hide the notifications from that post. If you have Go-To-Dash installed, you can click on a notification, then click View button on top-right corner to quickly go back to the post on your dashboard.  **//
@@ -29,6 +29,28 @@ XKit.extensions.notificationblock = new Object({
 		
 		if (XKit.interface.where().inbox === true) {
 			return;	
+		}
+		
+		XKit.tools.init_css("notificationblock");
+		
+		try {
+			
+			if (XKit.interface.where().activity === true) {
+				if (XKit.installed.check("activity_plus") === true) {
+					if (typeof XKit.extensions.activity_plus !== "undefined") {
+						if (typeof XKit.extensions.activity_plus.preferences !== "undefined") {
+							if (XKit.extensions.activity_plus.preferences.condensed_notes.value !== false) {
+								return;	
+							}	
+						}
+					}
+				}
+			}
+		
+		} catch(e) {
+			
+			console.log("Init notificationblock error => " + e.message);
+			
 		}
 		
 		try {
@@ -164,6 +186,7 @@ XKit.extensions.notificationblock = new Object({
 				if (XKit.extensions.notificationblock.blacklisted[i] == "") { continue; }
 				if (target_url.indexOf("/post/" + XKit.extensions.notificationblock.blacklisted[i]) !== -1) {
 					console.log("Blocking notification because of post " + XKit.extensions.notificationblock.blacklisted[i]);
+					//$(this).addClass("notificationblock-notification-blocked");
 					$(this).remove();
 					//$(this).css("background","red");
 					return;

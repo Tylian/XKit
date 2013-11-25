@@ -1,5 +1,5 @@
 //* TITLE Outbox **//
-//* VERSION 0.6 REV A **//
+//* VERSION 0.7 REV A **//
 //* DESCRIPTION Saves your last 20 sent private replies and fan mail. **//
 //* DETAILS This extension stores and lets you view the last 20 asks you've answered privately. Please keep in mind that this is a highly experimental extension, so if you hit a bug, please send the XKit blog an ask with the problem you've found. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -534,13 +534,13 @@ XKit.extensions.outbox = new Object({
 						"</div>" +
 						"<div class=\"post_answer_bar\" style=\"margin-top: 15px; padding-top: 15px; border-top: 1px solid #e7eaec\">" + obj.answer + "</div>" +
 					"</div>" +
-					"<div class=\"post_footer clearfix\" style=\"margin-bottom: -25px;\">" +
-						"<div class=\"post_notes\"><div class=\"post_notes_inner\"></div></div>" +
-						"<div class=\"post_controls\" role=\"toolbar\"><div class=\"post_controls_inner\">" +
-							"<div class=\"post_control deny-xoutbox xkit-outbox-delete\" data-outbox-id=\"" + m_id + "\" title=\"Delete\"></div>" +
-						"</div></div>" +
-					"</div>" +
 				"</div></div>" +
+				"<div class=\"post_footer clearfix\">" +
+					"<div class=\"post_notes\"><div class=\"post_notes_inner\"></div></div>" +
+					"<div class=\"post_controls\" role=\"toolbar\"><div class=\"post_controls_inner\">" +
+						"<div class=\"post_control deny-xoutbox xkit-outbox-delete\" data-outbox-id=\"" + m_id + "\" title=\"Delete\"></div>" +
+					"</div></div>" +
+				"</div>" +
 			    "</div>";
 		
 		to_return = to_return + "</div></li>";

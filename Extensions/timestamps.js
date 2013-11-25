@@ -1,5 +1,5 @@
 //* TITLE Timestamps **//
-//* VERSION 2.2 REV F **//
+//* VERSION 2.3 REV B **//
 //* DESCRIPTION See when a post has been made. **//
 //* DETAILS This extension lets you see when a post was made, in full date or relative time (eg: 5 minutes ago). It also works on asks, and you can format your timestamps. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -15,6 +15,11 @@ XKit.extensions.timestamps = new Object({
 	preferences: {
 		only_relative: {
 			text: "Only show relative time (eg: 5 minutes ago)",
+			default: false,
+			value: false
+		},
+		only_inbox: {
+			text: "Only show timestamps on asks in my inbox",
 			default: false,
 			value: false
 		},
@@ -55,6 +60,10 @@ XKit.extensions.timestamps = new Object({
 			XKit.tools.add_css('.xtimestamp { position: absolute; top: 43px; color: white; font-size: 12px; left: 0; }', "timestamps_search");
 		}
 		
+		if (XKit.extensions.timestamps.preferences.only_inbox.value === true) {
+			if (XKit.interface.where().inbox !== true) { return; }	
+		}
+		
 		if (XKit.extensions.timestamps.preferences.format.value === "") {
 			alert("empty, restoring default");
 			XKit.extensions.timestamps.preferences.format.value = "MMMM Do YYYY, h:mm:ss a";
@@ -93,6 +102,102 @@ XKit.extensions.timestamps = new Object({
 		
 	},
 	
+	fetch_note_fan_mail: function(obj) {
+		
+		var m_id = $(obj).attr('data-post-id');	
+		
+		if ($(obj).find(".xkit-fan-timestamp").length > 0) {return; }
+		
+		var form_key = $("body").attr('data-form-key');
+
+		var m_object = new Object();
+		
+		m_object.post_id = parseInt(m_id);
+		m_object.form_key = form_key;
+		m_object.post_type = false;
+		
+		$(obj).find(".message").addClass("with-xkit-timestamp");
+		$(obj).find(".message_body").addClass("with-xkit-timestamp").prepend("<div class=\"xkit-fan-timestamp\">Loading</div>");
+		
+		var cached = XKit.storage.get("timestamps", "xkit_timestamp_cache_fanmail_" + m_id, "");
+		
+		if (cached === "") {
+
+			GM_xmlhttpRequest({
+				method: "POST",
+				url: "http://www.tumblr.com/svc/post/fetch",
+				data: JSON.stringify(m_object),
+				json: true,
+				onerror: function(response) {
+					console.log("Unable to load timestamp - Err 01");
+					XKit.extensions.timestamps.show_failed(obj);
+				},
+				onload: function(response) {
+					// We are done!
+					try {
+						var mdata = $.parseJSON(response.responseText);
+						console.log(mdata);
+					} catch(e) {
+						console.log("Unable to load timestamp - Err 02 : Not JSON");
+						XKit.extensions.timestamps.show_failed(obj);
+						return;
+					}
+					//$(obj).html(mdata.post.date);
+					
+					// Tumblr format: Jun 16th, 2013 12:42pm
+					
+					var dtx = moment(mdata.post.date, "MMM DD, YYYY hh:mma");
+					var nowdate = new Date();
+					var nowdatem = moment(nowdate);
+					var dt = moment(dtx);
+					
+					if (dtx.isValid() === true) {
+					
+						if (XKit.extensions.timestamps.preferences.only_relative.value === true) {
+    							$(obj).find(".xkit-fan-timestamp").html(dt.from(nowdatem));
+						} else {
+							$(obj).find(".xkit-fan-timestamp").html(dt.format(XKit.extensions.timestamps.preferences.format.value) + " &middot; " + dt.from(nowdatem));
+						}
+				
+					} else {
+				
+						$(obj).find(".xkit-fan-timestamp").html(mdata.post.date);
+				
+					}
+					
+					$(obj).find(".xkit-fan-timestamp").removeClass('xtimestamp_loading');
+					XKit.storage.set("timestamps", "xkit_timestamp_cache_fanmail_" + m_id, mdata.post.date);
+
+				}
+			});
+			
+		} else {
+			
+			var dtx = moment(cached, "MMM DD, YYYY hh:mma");
+			var nowdate = new Date();
+			var nowdatem = moment(nowdate);
+			var dt = moment(dtx);
+			
+			if (dtx.isValid() === true) {
+				
+				if (XKit.extensions.timestamps.preferences.only_relative.value === true) {
+    					$(obj).find(".xkit-fan-timestamp").html(dt.from(nowdatem));
+				} else {
+					$(obj).find(".xkit-fan-timestamp").html(dt.format(XKit.extensions.timestamps.preferences.format.value) + " &middot; " + dt.from(nowdatem));
+				}
+				
+			} else {
+				
+				$(obj).find(".xkit-fan-timestamp").html(cached);
+				
+			}
+			
+			$(obj).find(".xkit-fan-timestamp").removeClass('xtimestamp_loading');
+			
+		}
+		
+	},
+	
 	add_timestamps: function() {
 
 		if ($(".post").length === 0) {
@@ -105,6 +210,13 @@ XKit.extensions.timestamps = new Object({
 		$(".post").not(".xkit_timestamps").each(function() {
 		
 			try { 
+				
+				if ($(this).hasClass("fan_mail") === true) {
+					
+					XKit.extensions.timestamps.fetch_note_fan_mail($(this));
+					return;
+					
+				}
 			
 				$(this).addClass("xkit_timestamps");
 				if ($(this).attr('id') === "new_post" || $(this).hasClass("fan_mail") === true || 
@@ -347,6 +459,8 @@ XKit.extensions.timestamps = new Object({
 	
 	destroy: function() {
 		$(".xtimestamp").remove();
+		$(".xkit-fan-timestamp").remove();
+		$("with-xkit-timestamp").removeClass("with-xkit-timestamp");
 		$(".xkit_timestamps").removeClass("xkit_timestamps");
 		XKit.tools.remove_css("timestamps");
 		XKit.post_listener.remove("timestamps");

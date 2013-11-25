@@ -8,7 +8,10 @@
 
 .xblacklist_blacklisted_post {
 	opacity: 0.7;	
+	padding-bottom: 10px !important;
 }
+
+.xblacklist_blacklisted_post .post_footer { display: none !important; }
 
 .xblacklist_blacklisted_post .post_footer,
 .xblacklist_blacklisted_post .post_header,

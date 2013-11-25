@@ -88,13 +88,11 @@
 
 #x1cpostage_quick_tags .xkit-tag {
 	
-	background: rgb(228,232,238);
+	background: rgba(255,255,255,0.86);
 	color: #7a7f8e;
 	font-size: 12px;
 	padding: 5px 9px 5px 9px;
-	border-top: 1px solid #abafbc;
-	border-left: 1px solid #abafbc;
-	border-right: 1px solid #abafbc;
+	margin-top: 1px;
 	cursor: pointer;
 	
 }

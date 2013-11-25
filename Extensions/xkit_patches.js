@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 1.8 REV F **//
+//* VERSION 1.9 REV D **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER STUDIOXENIX **//
 
@@ -85,6 +85,20 @@ XKit.extensions.xkit_patches = new Object({
 		this.running = true;
 
 		XKit.tools.init_css("xkit_patches");
+		
+		try { 
+
+			XKit.retina = window.devicePixelRatio > 1;
+
+			if (XKit.retina === true) {
+				console.log("Retina screen mode.");
+			}
+
+		} catch(e) {
+
+			console.log("!!!!!!" + e.message);
+	
+		}
 		
 		setTimeout(function() { XKit.extensions.xkit_patches.check_unfollower_hater(); }, 1000);
 
@@ -285,6 +299,7 @@ XKit.extensions.xkit_patches = new Object({
 
 					XKit.tools.add_css("." + class_name + " {" + 
 							" background-image: url('" + icon + "') !important;" +
+							" background-size: auto auto !important;" +
 						   "}", "xkit_interface_post_window_icon___" + class_name);
 						   
 					$(document).on('click', '.' + class_name, function() {
@@ -345,8 +360,15 @@ XKit.extensions.xkit_patches = new Object({
 				tag_exists: function(tag) {
 					
 					var found = false;
+					tag = tag.toLowerCase();
+					
 					$("#post_content").find(".tag").each(function() {
-						if ($(this).html() === tag) {
+						var this_tag = $(this).html();
+						this_tag = this_tag.toLowerCase();
+						if (this_tag.substring(0) === "\"") {
+							this_tag = this_tag.substring(1, this_tag.length - 1);
+						}
+						if (this_tag === tag) {
 							found = true;
 						}	
 					});	
@@ -364,10 +386,20 @@ XKit.extensions.xkit_patches = new Object({
 				
 				remove_tag: function(tag) {
 					
+					tag = tag.toLowerCase();
+					
+					
 					$("#post_content").find(".tag").each(function() {
-						if ($(this).html() === tag) {
+
+						var this_tag = $(this).html();
+						this_tag = this_tag.toLowerCase();
+						if (this_tag.substring(0) === "\"") {
+							this_tag = this_tag.substring(1, this_tag.length - 1);
+						}
+						if (this_tag === tag) {
 							$(this).remove();
-						}	
+						}
+						
 					});
 	
 					try {
@@ -913,12 +945,14 @@ XKit.extensions.xkit_patches = new Object({
 				
 				XKit.tools.add_css("." + class_name + ":after {" + 
 							" background-image: url('" + icon + "') !important;" +
+							" background-size: auto auto !important;" +
 							" margin-top: -9px !important; " +
 						   "}", "xkit_interface_icon___" + class_name);
 						   
 				if (typeof ok_icon !== "undefined") {
 					XKit.tools.add_css("." + class_name + ".xkit-interface-completed:after {" + 
 							" background-image: url('" + ok_icon + "') !important;" +
+							" background-size: auto auto !important;" +
 							" opacity: 1 !important; " +
 						   "}", "xkit_interface_icon___completed___" + class_name);
 				}

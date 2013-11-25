@@ -1,5 +1,5 @@
 //* TITLE Activity+ **//
-//* VERSION 0.2 REV C **//
+//* VERSION 0.3 REV A **//
 //* DESCRIPTION Tweaks for the Activity page **//
 //* DETAILS This extension brings a couple of tweaks for the Activity page, such as the ability to filter notes by type and showing timestamps. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -14,6 +14,12 @@ XKit.extensions.activity_plus = new Object({
 		sep0: {
 			text: "Notes view",
 			type: "separator"	
+		},
+		condensed_notes: {
+			text: "Group notifications by post (disables NotificationBlock on Activity page)",
+			default: true,
+			value: true,
+			experimental: true
 		},
 		notes_filter: {
 			text: "Enable Filter Notes By Type",
@@ -60,7 +66,7 @@ XKit.extensions.activity_plus = new Object({
 			m_css = m_css + " #user_graphs, .ui_stats { display: none; }";
 		}
 		
-		if (this.preferences.show_timestamps.value === true) {
+		if (this.preferences.show_timestamps.value === true ||this.preferences.show_timestamps.condensed_notes.value === true) {
 			// m_css = m_css + " .part_activity { left: 95px !important; } .ui_note .part_avatar { left: 57px !important; } .part_response { padding-left: 95px !important; }";
 			new_note_check_interval = setInterval(XKit.extensions.activity_plus.do_on_new, 3000);
 		}
@@ -130,9 +136,121 @@ XKit.extensions.activity_plus = new Object({
 			
 		}
 		
-		XKit.tools.add_css(m_css, "activity_plus_additional");
-		XKit.extensions.activity_plus.do_on_new();
+		if (this.preferences.condensed_notes.value === true) {
+			XKit.extensions.activity_plus.do_condensed();	
+		}
 		
+		XKit.tools.add_css(m_css, "activity_plus_additional");
+		
+		if (XKit.installed.check("notificationblock")) {
+			setTimeout(function() { XKit.extensions.activity_plus.do_on_new(); }, 1000);
+		} else {
+			XKit.extensions.activity_plus.do_on_new();	
+		}
+		
+		
+		
+	},
+	
+	last_post_url: -1,
+	condensed_count: 0,
+	condensed_id: 0,
+	last_checked_item: "",
+	
+	do_condensed: function() {
+		
+		$(".ui_note").not(".xkit-activity-plus-condensed-done").each(function() {
+		
+			$(this).addClass("xkit-activity-plus-condensed-done");
+			
+			if ($(this).hasClass("notificationblock-notification-blocked")) { return; }
+			
+			if ($(this).hasClass("is_follower")) {
+				
+				if (XKit.extensions.activity_plus.last_post_url === "_FOLLOWER") {
+					
+					$(this).addClass("xkit-activity-plus-condensed-item");
+					$(this).addClass("xkit-activity-plus-condensed-item---" + XKit.extensions.activity_plus.condensed_id);
+					$(this).attr('xkit-activity-plus-condense-id', XKit.extensions.activity_plus.condensed_id);
+					XKit.extensions.activity_plus.condensed_count++;
+					
+					if (XKit.extensions.activity_plus.condensed_count === 2) {
+						try {
+							$(XKit.extensions.activity_plus.last_checked_item).addClass("xkit-activity-plus-condensed-item-parent").addClass("xkit-activity-plus-condensed-item---" + XKit.extensions.activity_plus.condensed_id);
+						} catch(e) {
+							// meh.	
+						}
+					}
+					
+				} else {
+					
+					XKit.extensions.activity_plus.do_condensed_condense();
+					
+					XKit.extensions.activity_plus.last_post_url = "_FOLLOWER";
+					XKit.extensions.activity_plus.condensed_count = 1;
+					XKit.extensions.activity_plus.condensed_id = XKit.tools.random_string();
+					XKit.extensions.activity_plus.last_checked_item = $(this);
+					
+				}
+				
+			} else {
+			
+				if ($(this).hasClass("is_like") || $(this).hasClass("is_reblog")) {
+				
+					var post_url = $(this).find(".part_icon").find("a").attr('href');
+	
+					if (post_url === XKit.extensions.activity_plus.last_post_url) {
+						
+						$(this).addClass("xkit-activity-plus-condensed-item");
+						$(this).addClass("xkit-activity-plus-condensed-item---" + XKit.extensions.activity_plus.condensed_id);
+						$(this).attr('xkit-activity-plus-condense-id', XKit.extensions.activity_plus.condensed_id);
+						XKit.extensions.activity_plus.condensed_count++;
+						
+						if (XKit.extensions.activity_plus.condensed_count === 2) {
+							try {
+								$(XKit.extensions.activity_plus.last_checked_item).addClass("xkit-activity-plus-condensed-item-parent").addClass("xkit-activity-plus-condensed-item---" + XKit.extensions.activity_plus.condensed_id);
+							} catch(e) {
+								// meh.	
+							}
+						}
+					
+					} else{
+						
+						XKit.extensions.activity_plus.do_condensed_condense();
+						XKit.extensions.activity_plus.last_post_url = post_url;	
+						XKit.extensions.activity_plus.condensed_count = 1;
+						XKit.extensions.activity_plus.condensed_id = XKit.tools.random_string();
+						XKit.extensions.activity_plus.last_checked_item = $(this);
+						
+					}
+					
+				}
+			
+			}
+			
+		});	
+		
+	},
+	
+	do_condensed_condense: function() {
+		
+		if ((XKit.extensions.activity_plus.condensed_count - 1) <= 1) { return; }
+
+		var m_html = 	"<div class=\"xkit-activity-plus-condensed-opener\" data-id=\"" + XKit.extensions.activity_plus.condensed_id + "\">" + 
+					"<b>" + (XKit.extensions.activity_plus.condensed_count - 1) + "</b> more items" +
+				"</div>";
+		$(".xkit-activity-plus-condensed-item---" + XKit.extensions.activity_plus.condensed_id).last().after(m_html);
+		
+		$(".xkit-activity-plus-condensed-item---" + XKit.extensions.activity_plus.condensed_id).addClass("xkit-activity-plus-yellow-mode-on");
+		
+		$(".xkit-activity-plus-condensed-opener").unbind("click");
+		$(".xkit-activity-plus-condensed-opener").bind("click", function() {
+			
+			$(".xkit-activity-plus-condensed-item---" + $(this).attr('data-id')).addClass("xkit-activity-plus-condensed-item-opened");
+			//$(".xkit-activity-plus-condensed-item---" + $(this).attr('data-id')).slideDown('slow');
+			$(this).slideUp('slow');
+				
+		});
 		
 	},
 	
@@ -140,6 +258,10 @@ XKit.extensions.activity_plus = new Object({
 		
 		if (XKit.extensions.activity_plus.preferences.show_timestamps.value === true) {
 			XKit.extensions.activity_plus.do_timestamps();	
+		}
+		
+		if (XKit.extensions.activity_plus.preferences.condensed_notes.value === true) {
+			XKit.extensions.activity_plus.do_condensed();	
 		}
 		
 	},

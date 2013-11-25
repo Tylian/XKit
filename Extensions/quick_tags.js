@@ -1,5 +1,5 @@
 //* TITLE Quick Tags **//
-//* VERSION 0.3 REV A **//
+//* VERSION 0.3 REV B **//
 //* DESCRIPTION Quickly add tags to posts **//
 //* DETAILS Allows you to create tag bundles and add tags to posts without leaving the dashboard. **//
 //* DEVELOPER STUDIOXENIX **//

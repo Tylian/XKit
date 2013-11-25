@@ -1,5 +1,5 @@
 //* TITLE Panorama **//
-//* VERSION 1.2 REV E **//
+//* VERSION 1.2 REV F **//
 //* DESCRIPTION Widescreen dashboard **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//
@@ -72,6 +72,7 @@ XKit.extensions.panaroma = new Object({
 	destroy: function() {
 		XKit.tools.remove_css("panaroma");
 		XKit.tools.remove_css("panaroma_str");
+		XKit.tools.remove_css("panaroma_two_column");
 		XKit.tools.remove_css("panaroma_directory");
 		$(window).off('resize', XKit.extensions.panaroma.resized);
 		XKit.post_listener.remove("panorama_resize");

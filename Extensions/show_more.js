@@ -1,5 +1,5 @@
 //* TITLE User Menus+ **//
-//* VERSION 2.3 REV E **//
+//* VERSION 2.3 REV F **//
 //* DESCRIPTION More options on the user menu **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS This extension adds additional options to the user menu (the one that appears under user avatars on your dashboard), such as Avatar Magnifier, links to their Liked Posts page if they have them enabled. Note that this extension, especially the Show Likes and Show Submit options use a lot of network and might slow your computer down. **//
@@ -132,7 +132,7 @@ XKit.extensions.show_more = new Object({
 			
 		}		
 		
-		$(document).on('mouseover', '.post_info_fence a', XKit.extensions.show_more.store_data_username);
+		$(document).on('mouseover', '.post_info_fence a, .post_info a, a.username', XKit.extensions.show_more.store_data_username);
 		$(document).on('mouseover', '.post_avatar_link', XKit.extensions.show_more.store_data_avatar);
 		$(document).on('click','.tumblelog_menu_btn', XKit.extensions.show_more.add_links_new);
 		
@@ -456,13 +456,14 @@ XKit.extensions.show_more = new Object({
 			} catch(e) {
 				XKit.extensions.show_more.popup_data = new Object();
 				XKit.extensions.show_more.popup_data.error = true;
-				XKit.console.add("show_more -> Can't parse popup_data");	
+				XKit.console.add("show_more -> Can't parse popup_data:" + e.message);	
 			}
 			
 		} else {
 		
 			XKit.extensions.show_more.popup_data = new Object();
-			XKit.extensions.show_more.popup_data.error = true;	
+			XKit.extensions.show_more.popup_data.error = true;
+			XKit.console.add("show_more -> Can't parse popup_data - not defined.");	
 			
 		}
 		
@@ -856,7 +857,7 @@ XKit.extensions.show_more = new Object({
 		$(".xkit-avatar-magnetizer").parent().remove();
 		XKit.tools.remove_css("show_more_hide_follows");
 		XKit.tools.remove_css("show_more_hide_previews");
-		$(document).off('mouseover', '.post_info_fence a', XKit.extensions.show_more.store_data_username);
+		$(document).off('mouseover', '.post_info_fence a, .post_info a, a.username', XKit.extensions.show_more.store_data_username);
 		$(document).off('mouseover', '.post_avatar_link', XKit.extensions.show_more.store_data_avatar);
 		$(document).off('click','.tumblelog_menu_btn', XKit.extensions.show_more.add_links_new);
 		this.running = false;

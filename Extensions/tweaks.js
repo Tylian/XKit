@@ -1,5 +1,5 @@
 //* TITLE Tweaks **//
-//* VERSION 2.5 REV C **//
+//* VERSION 2.6 REV C **//
 //* DESCRIPTION Various little tweaks for your dashboard. **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS These are small little tweaks that allows you customize your dashboard. If you have used XKit 6, you will notice that some of the extensions have been moved here as options you can toggle. Keep in mind that some of the tweaks (the ones marked with a '*') can slow down your computer. **//
@@ -92,6 +92,11 @@ XKit.extensions.tweaks = new Object({
 		},
 		"hide_sponsored": {
 			text: "Dim sponsored posts on dashboard (not recommended)",
+			default: false,
+			value: false
+		},
+		"no_footer_background": {
+			text: "Remove the gray post footer background",
 			default: false,
 			value: false
 		},
@@ -275,7 +280,7 @@ XKit.extensions.tweaks = new Object({
 		
 	
 		if (XKit.extensions.tweaks.preferences.hide_customize.value === true) {
-			$(".customize").parent().css("display","none");
+			$("#dashboard_controls_open_blog").find(".customize").parent().css("display","none");
 		}
 		
 		if (XKit.extensions.tweaks.preferences.hide_activity.value === true) {
@@ -295,6 +300,10 @@ XKit.extensions.tweaks = new Object({
 			this.run_interval = setInterval(function() {
 				$("#allow_photo_replies").attr('checked', true);
 			}, 2000);
+		}
+		
+		if (XKit.extensions.tweaks.preferences.no_footer_background.value === true) {
+			XKit.tools.add_css(".post_full .post_footer { background: transparent !important; border-top: 1px solid #e3e3e3; }", "xkit_tweaks_no_footer_background");
 		}
 
 		if (XKit.extensions.tweaks.preferences.hide_blog_search.value === true) {
@@ -375,7 +384,11 @@ XKit.extensions.tweaks = new Object({
 		}
 
 		if (XKit.extensions.tweaks.preferences.slim_sidebar.value === true) {
-			var m_css = "li.section_header { height: 22px !important; line-height: 20px !important; font-size: 11px !important; } .activity canvas { zoom: 0.6; } .controls_section li { height: 25px; line-height: 19px; } .controls_section li a, .controls_section li .hide_overflow { line-height: 19px; } .controls_section li a { padding: 3px 13px 10px 40px; font-size: 13px; } .controls_section li>a:after { zoom: 0.80; left: 14px; top: -2px; } .controls_section a .count { top: 4px; } .controls_section .sub_control.link_arrow { margin-top: -2px; } #popover_button_blogs { height: auto; } #fan_mail_controls, #fan_mail_controls li, #recommended_tumblelogs li, #tag_editors li, #tag_contributors li { height: auto; } .controls_section a .count { line-height: 19px; }";
+			var moz_fix = "";
+			if (XKit.browser().firefox === true) {
+				moz_fix = " top: -5px !important; ";
+			}
+			var m_css = "li.section_header { height: 22px !important; line-height: 20px !important; font-size: 11px !important; } .activity canvas { zoom: 0.6; -moz-transform: scale(0.6); } .controls_section li { height: 25px; line-height: 19px; } .controls_section li a, .controls_section li .hide_overflow { line-height: 19px; } .controls_section li a { padding: 3px 13px 10px 40px; font-size: 13px; } .controls_section li>a:after { zoom: 0.80; -moz-transform: scale(0.77); left: 14px; top: -2px; " + moz_fix + " } .controls_section a .count { top: 4px; } .controls_section .sub_control.link_arrow { margin-top: -2px; } #popover_button_blogs { height: auto; } #fan_mail_controls, #fan_mail_controls li, #recommended_tumblelogs li, #tag_editors li, #tag_contributors li { height: auto; } .controls_section a .count { line-height: 19px; } .controls_section li .icon_left { position: absolute; left: 12px; font-size: 18px; line-height: 21px; }";
 			XKit.tools.add_css(m_css, "xkit_tweaks_slim_sidebar");
 		}
 
@@ -583,7 +596,6 @@ XKit.extensions.tweaks = new Object({
 		
 			XKit.console.add("Tweaks, upload_photos: user in photo page.");
 			if ($("#post_content").length === 0) {
-				alert("waitin ");
 				XKit.console.add("Tweaks, upload_photos: waiting for panel.");
 				setTimeout(function() {
 					XKit.extensions.tweaks.upload_photos();
@@ -642,6 +654,8 @@ XKit.extensions.tweaks = new Object({
 		XKit.tools.remove_css("always_show_move_to_top");
 		XKit.tools.remove_css("xkit_tweaks_hide_section_headers");
 		XKit.tools.remove_css("xkit_tweaks_scroll_top");
+		XKit.tools.remove_css("xkit_tweaks_no_footer_background");
+	
 		$("#tumblr_radar").css("display","block");
 		$("#xkit_customize_button").remove();
 		$("a.spotlight").parent().css("display","block");

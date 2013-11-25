@@ -1,5 +1,5 @@
 //* TITLE XKit Preferences **//
-//* VERSION 2.6 REV E **//
+//* VERSION 2.8 REV A **//
 //* DESCRIPTION Lets you customize XKit **//
 //* DEVELOPER STUDIOXENIX **//
 
@@ -165,10 +165,50 @@ XKit.extensions.xkit_preferences = new Object({
 			
 		}
 		
+		XKit.extensions.xkit_preferences.spring_cleaning();
+		
 		/*if (shown_notification_notification === "0") {
 			XKit.notifications.add("<b>Turn off notifications</b><br/>You can turn off \"Unread XKit News\" notifications from XKit Control Panel > Other > News. If you have unread mail, please read them first.<br/>Click here to close this notification. This message will be shown only once.","warning",true);
 		 	XKit.storage.set("xkit_preferences","shown_notification_notification","1");
 		}*/
+	},
+	
+	spring_cleaning_m_list_html: "",
+	
+	spring_cleaning: function() {
+		
+		var clean_list = ["unreverse", "filter_by_type", "XIM"];
+		
+		var removed_list = new Array();
+		
+		var m_list_html = "<ul id=\"xkit-spring-cleaning-list\">";
+		
+		for (var i=0;i<clean_list.length;i++) {
+			
+			if (XKit.installed.check(clean_list[i]) === true) {
+				
+				removed_list.push(XKit.installed.title(clean_list[i]));
+				XKit.installed.remove(clean_list[i]);
+				m_list_html = m_list_html + "<li>" + XKit.installed.title(clean_list[i]) + "</li>";
+				
+			}	
+			
+		}	
+		
+		m_list_html = m_list_html + "</ul>";
+		
+		XKit.extensions.xkit_preferences.spring_cleaning_m_list_html = m_list_html;
+		
+		if (removed_list.length > 0) {
+			
+			XKit.notifications.add("XKit removed <b>" + removed_list.length + "</b> obsolete extension(s). Click here for more information.", "warning", true, function() {
+				
+					XKit.window.show("Spring Cleaning", "Due to them not working correctly anymore, the following obsolete extensions have been removed to speed up your computer:" + XKit.extensions.xkit_preferences.spring_cleaning_m_list_html + "For more information, including the reason(s) why they were removed, please click the button below.","warning","<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div><a href=\"http://www.xkit.info/notes/spring_cleaning.php\" target=\"_BLANK\" class=\"xkit-button\">More information</a>");
+				
+				});	
+			
+		}
+		
 	},
 
 	news: {
@@ -1337,6 +1377,18 @@ XKit.extensions.xkit_preferences = new Object({
 
 		$("#xkit-extensions-panel-right").nanoScroller();
 		$("#xkit-extensions-panel-right").nanoScroller({ scroll: 'top' });
+		
+		$(".xkit-extension-setting > .xkit-preference-combobox-select").change(function() {
+
+			var extension_id = $(this).attr('data-extension-id');
+			var preference_name = $(this).attr('data-setting-id');
+			
+			XKit.extensions[extension_id].preferences[preference_name].value = $(this).val();
+			XKit.storage.set(extension_id, "extension__setting__" + preference_name, $(this).val());
+			
+			XKit.extensions.xkit_preferences.restart_extension(extension_id);
+
+		});
 
 		$(".xkit-extension-setting > .xkit-checkbox").click(function() {
 
@@ -1395,6 +1447,66 @@ XKit.extensions.xkit_preferences = new Object({
 		try {
 
 		for(var pref in XKit.extensions[extension_id].preferences) {
+
+			if (XKit.extensions[extension_id].preferences[pref].type === "combo") {
+				
+				var m_extra_classes = "";
+				if (XKit.extensions[extension_id].preferences[pref].experimental === true || XKit.extensions[extension_id].preferences[pref].slow === true) {
+					m_extra_classes = "xkit-experimental-option";
+				}
+
+				m_return = m_return + "<div class=\"xkit-extension-setting xkit-combo-preference " + m_extra_classes + "\" data-extension-id=\"" + extension_id + "\" data-setting-id=\"" + pref + "\">";
+
+				if (XKit.extensions[extension_id].preferences[pref].experimental === true) {
+					m_return = m_return + "<div class=\"xkit-extension-experimental-bong\">&nbsp;</div>";
+				} else if (XKit.extensions[extension_id].preferences[pref].slow === true) {
+					m_return = m_return + "<div class=\"xkit-extension-experimental-turtle\">&nbsp;</div>";
+				}
+
+				if (typeof XKit.extensions[extension_id].preferences[pref].value === "undefined") {
+					XKit.extensions[extension_id].preferences[pref].value = "";
+				}
+				
+				if (XKit.extensions[extension_id].preferences[pref].value === "") {
+					if (typeof XKit.extensions[extension_id].preferences[pref].default !== "undefined") {
+						XKit.extensions[extension_id].preferences[pref].value = XKit.extensions[extension_id].preferences[pref].default;
+					}
+				}
+				
+				var pref_title = XKit.extensions[extension_id].preferences[pref].text;
+				if (XKit.lang.get([extension_id] + ".preferences." + pref) !== "???") {
+				
+					pref_title = XKit.lang.get([extension_id] + ".preferences." + pref);
+					
+				}
+				
+				m_return = m_return + "<div class=\"title\">" + pref_title + "</div>";
+
+				m_placeholder = "Enter value and hit Enter";
+				if (typeof XKit.extensions[extension_id].preferences[pref].placeholder !== "undefined") {
+					m_placeholder = XKit.extensions[extension_id].preferences[pref].placeholder;
+				}
+
+				m_return = m_return + "<select data-extension-id=\"" + extension_id + "\" data-setting-id=\"" + pref + "\" class=\"xkit-preference-combobox-select\">";
+				
+				for (var i=0;i<XKit.extensions[extension_id].preferences[pref].values.length;i++) {
+					
+					var extra_classes = "";
+					
+					if (XKit.extensions[extension_id].preferences[pref].values[i + 1] === XKit.extensions[extension_id].preferences[pref].value) {
+						extra_classes = "selected=\"true\"";	
+					}	
+					
+					m_return = m_return + "<option " + extra_classes + " value=\"" + XKit.extensions[extension_id].preferences[pref].values[i + 1] + "\">" + XKit.extensions[extension_id].preferences[pref].values[i] + "</option>";
+					
+					i++;
+					
+				}
+
+				m_return = m_return + "</select></div>";
+				
+
+			}
 
 			if (XKit.extensions[extension_id].preferences[pref].type === "text") {
 				
