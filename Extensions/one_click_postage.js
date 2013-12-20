@@ -1,5 +1,5 @@
 //* TITLE One-Click Postage **//
-//* VERSION 3.0 REV D **//
+//* VERSION 3.0 REV E **//
 //* DESCRIPTION Lets you easily reblog, draft and queue posts **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//
@@ -1069,6 +1069,7 @@ XKit.extensions.one_click_postage = new Object({
 		}, 700);
 	},
 	post: function(state, retry_mode, quick_queue_mode) {
+		
 		if (XKit.extensions.one_click_postage.preferences.show_reverse_ui.value === true) {
 			$("#x1cpostage_box").fadeOut('fast');
 		} else {
@@ -1119,6 +1120,17 @@ XKit.extensions.one_click_postage = new Object({
 		if (quick_queue_mode) {
 			tags = "";
 			caption = "";	
+		}
+		
+		var xkit_version = XKit.version.split(".");
+		var xkit_version_minor = parseInt(xkit_version[1]);
+		
+		if (xkit_version_minor < 3) {
+			
+			$(m_button).removeClass("xkit-one-click-reblog-working");
+			XKit.extensions.one_click_postage.show_error("666", state);
+			return;	
+			
 		}
 
 		GM_xmlhttpRequest({
@@ -1455,6 +1467,13 @@ XKit.extensions.one_click_postage = new Object({
 			m_causes = "<ul class=\"xkit-one-click-postage-error-list\">" +
 					"<li><b>You've filled your queue.</b><br/>You can not queue more than 300 posts.</li>" +
 				"</ul>";	
+		}
+		
+		if (code === "666") {
+			
+			XKit.window.show("I could not " + m_word + " your post.","You need XKit <b>7.3.0</b> or higher for One-Click Postage to work.<br/>You currently have XKit <b>" + XKit.version + "</b> installed.<br/><br/>Please <a target=\"_BLANK\" href=\"http://xkit.info/notes/upgrade.php\">click here</a> to learn how to update XKit.","error","<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div><a href=\"http://xkit-extension.tumblr.com/\" class=\"xkit-button\">Visit the XKit Blog</a>");	
+			return;	
+		
 		}
 		
 		XKit.window.show("I could not " + m_word + " your post.","<b>One of the following might be the reason for that:</b>" + m_causes + "<small>Error Code: <b>" + code + "</b>.</small>","error","<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div><a href=\"http://xkit-extension.tumblr.com/\" class=\"xkit-button\">Visit the XKit Blog</a><a href=\"http://xkit-extension.tumblr.com/ask\" class=\"xkit-button\">Send an ask</a>");	
