@@ -1,0 +1,42 @@
+#find-inactives-window-outer {
+	height: 230px;
+	border: 1px solid rgb(190,190,190);
+}
+
+.find-inactives-blog:hover {
+	background: rgb(245,245,245);
+}
+.find-inactives-blog {
+	border-bottom: 1px solid rgb(190,190,190);
+	height: 50px;
+	overflow: hidden;
+	position: relative;
+	padding-left: 60px;
+	font-size: 13px;
+	line-height: 16px;
+	cursor: pointer;
+}
+
+.find-inactives-blog .name {
+	position: absolute;
+	top: 8px;
+	left: 55px;
+	font-weight: bold;
+}
+
+.find-inactives-blog .days {
+	position: absolute;
+	top: 24px;
+	left: 55px;
+	font-weight: normal;
+	color: rgb(120,120,120);
+}
+
+.find-inactives-blog .avatar {
+	width: 32px;
+	height: 32px;
+	position: absolute;
+	top: 8px;
+	left: 10px;
+	border-radius: 4px;
+}
