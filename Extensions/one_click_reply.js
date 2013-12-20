@@ -1,5 +1,5 @@
 //* TITLE One-Click Reply **//
-//* VERSION 1.8 REV A **//
+//* VERSION 1.8 REV C **//
 //* DESCRIPTION Lets you reply to notifications **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS To use this extension, hover over a notification and click on the Reply button. If Multi-Reply is on, hold down the ALT key while clicking on the Reply button to select/deselect posts and reply to all of them at once. **//
@@ -205,32 +205,55 @@ XKit.extensions.one_click_reply = new Object({
 			console.log("OCR = Could not read Tweaks properties");
 			
 		}
-		
-		GM_xmlhttpRequest({
-			method: "POST",
-			url: "http://www.tumblr.com/svc/post/update",
-			data: JSON.stringify(m_object),
-			json: true,
-			onerror: function(response) {
+
+		XKit.interface.kitty.get(function(kitty_data) {
+			
+			if (kitty_data.errors === true) {
+			
+				// We fucked up for some reason.
 				if (retry_mode !== true) {
 					XKit.extensions.one_click_reply.quick_reply_post(sentence, tags, reply, blog, true);	
 				} else{
 					XKit.extensions.one_click_reply.quick_reply_error("101");
 				}
-			},
-			onload: function(response) {
-				// We are done!
-				try {
-					var mdata = jQuery.parseJSON(response.responseText);
-				} catch(e) {
-					XKit.extensions.one_click_reply.quick_reply_error("106");
-				}
-				if (mdata.errors === false) {
-					XKit.extensions.one_click_reply.quick_reply_close();
-				} else {
-					XKit.extensions.one_click_reply.quick_reply_error("103");
-				}
+				
+				return;
+				
 			}
+		
+			GM_xmlhttpRequest({
+				method: "POST",
+				url: "http://www.tumblr.com/svc/post/update",
+				data: JSON.stringify(m_object),
+				json: true,
+				headers: { 
+					"X-tumblr-puppies": kitty_data.kitten,
+					"X-tumblr-form-key": XKit.interface.form_key(),
+				},
+				onerror: function(response) {
+					XKit.interface.kitty.set("");
+					if (retry_mode !== true) {
+						XKit.extensions.one_click_reply.quick_reply_post(sentence, tags, reply, blog, true);	
+					} else{
+						XKit.extensions.one_click_reply.quick_reply_error("101");
+					}
+				},
+				onload: function(response) {
+					// We are done!
+					XKit.interface.kitty.set(response.getResponseHeader("X-tumblr-kittens"));
+					try {
+						var mdata = jQuery.parseJSON(response.responseText);
+					} catch(e) {
+						XKit.extensions.one_click_reply.quick_reply_error("106");
+					}
+					if (mdata.errors === false) {
+						XKit.extensions.one_click_reply.quick_reply_close();
+					} else {
+						XKit.extensions.one_click_reply.quick_reply_error("103");
+					}
+				}
+			});
+		
 		});
 		
 	},
@@ -666,7 +689,7 @@ XKit.extensions.one_click_reply = new Object({
 			// This is ugly but it works:
 			avatar_url_start = avatar_url.indexOf('.media.tumblr.com');
 			if (avatar_url_start !== -1) {
-				avatar_url = "http://" + avatar_url.substring(avatar_url_start + 1);	
+				avatar_url = "https://31." + avatar_url.substring(avatar_url_start + 1);	
 			}
 			m_sentence = "<img src=\"" + avatar_url + "\" class=\"image_thumbnail\">" + m_sentence;	
 		}
@@ -894,7 +917,7 @@ XKit.extensions.one_click_reply = new Object({
 			console.log("Can't fetch avatar.");
 		}	
 		if (avatar_url_start !== -1) {
-			avatar_url = "http://" + avatar_url.substring(avatar_url_start + 1);	
+			avatar_url = "https://31." + avatar_url.substring(avatar_url_start + 1);	
 		}
 		
 		if (XKit.extensions.one_click_reply.preferences.show_avatars.value === true) {
@@ -1001,7 +1024,7 @@ XKit.extensions.one_click_reply = new Object({
 				console.log("Can't fetch avatar.");
 			}	
 			if (avatar_url_start !== -1) {
-				avatar_url = "http://" + avatar_url.substring(avatar_url_start + 1);	
+				avatar_url = "https://31." + avatar_url.substring(avatar_url_start + 1);	
 			}
 			m_sentence = "<p><img src=\"" + avatar_url + "\" class=\"image_thumbnail\"></p>" + m_sentence;	
 		}

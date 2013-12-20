@@ -1,5 +1,5 @@
 //* TITLE XInbox **//
-//* VERSION 1.8 REV B **//
+//* VERSION 1.8 REV C **//
 //* DESCRIPTION Enhances your Inbox experience **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS XInbox allows you to tag posts before posting them, and see all your messages at once, and lets you delete multiple messages at once using the Mass Editor mode. To use this mode, go to your Inbox and click on the Mass Editor Mode button on your sidebar, click on the messages you want to delete then click the Delete Messages button.  **//
@@ -884,7 +884,7 @@ XKit.extensions.xinbox = new Object({
 	
 	},
 
-	send_publish_request: function(mdata, answer, tags, post_div, form_key, post_id, state) {
+	send_publish_request: function(mdata, answer, tags, post_div, form_key, post_id, state, retry_mode) {
 		
 		var m_object = new Object;
 		
@@ -918,39 +918,61 @@ XKit.extensions.xinbox = new Object({
 		m_object["post[tags]"] = "," + tags;
 		m_object["post[publish_on]"] = "";
 		m_object["post[state]"] = state;
-		
-		GM_xmlhttpRequest({
-			method: "POST",
-			url: "http://www.tumblr.com/svc/post/update",
-			data: JSON.stringify(m_object),
-			json: true,
-			onerror: function(response) {
-				XKit.extensions.xinbox.show_error("I was unable to reach Tumblr servers, or the server returned an error.");
-			},
-			onload: function(response) {
-				// We are done!
-				try {
-					var mdata = $.parseJSON(response.responseText);
-				} catch(e) {
-					XKit.extensions.xinbox.show_error("Server returned a non-JSON object. Maybe server overloaded, try again later. Error: " + e.message);
-					return;
-				}
-				if (mdata.errors === false) {
-					$(post_div).fadeOut('slow', function() {
-						$(post_div).parent().remove();
-						XKit.tools.add_function(function() {
-							Tumblr.Events.trigger("DOMEventor:updateRect");
-						}, true, "");
-					});
-					if (state === "" ||state === "0") { XKit.notifications.add("Published ask.","ok"); }
-					if (state === "1") { XKit.notifications.add("Drafted ask.","ok"); }	
-					if (state === "2") { XKit.notifications.add("Queued ask.","ok"); }
+
+		XKit.interface.kitty.get(function(kitty_data) {
+
+			if (kitty_data.errors === true) {
+
+				// We fucked up. Let's try again.
+				if (retry_mode === false) {
+					XKit.extensions.xinbox.send_publish_request(mdata, answer, tags, post_div, form_key, post_id, state, true);
 				} else {
-					XKit.extensions.xinbox.show_error("Server returned an error message. Maybe you hit your post limit or your account was suspended.");
+					XKit.extensions.xinbox.show_error("Could not authorize post request.");
 				}
+
+				return;
+
 			}
-		});
+		
+
+			GM_xmlhttpRequest({
+				method: "POST",
+				url: "http://www.tumblr.com/svc/post/update",
+				data: JSON.stringify(m_object),
+				json: true,
+				headers: { 
+					"X-tumblr-puppies": kitty_data.kitten,
+					"X-tumblr-form-key": XKit.interface.form_key(),
+				},
+				onerror: function(response) {
+					XKit.extensions.xinbox.show_error("I was unable to reach Tumblr servers, or the server returned an error.");
+				},
+				onload: function(response) {
+					// We are done!
+					XKit.interface.kitty.set(response.getResponseHeader("X-tumblr-kittens"));
+					try {
+						var mdata = $.parseJSON(response.responseText);
+					} catch(e) {
+						XKit.extensions.xinbox.show_error("Server returned a non-JSON object. Maybe server overloaded, try again later. Error: " + e.message);
+						return;
+					}
+					if (mdata.errors === false) {
+						$(post_div).fadeOut('slow', function() {
+							$(post_div).parent().remove();
+							XKit.tools.add_function(function() {
+								Tumblr.Events.trigger("DOMEventor:updateRect");
+							}, true, "");
+						});
+						if (state === "" ||state === "0") { XKit.notifications.add("Published ask.","ok"); }
+						if (state === "1") { XKit.notifications.add("Drafted ask.","ok"); }	
+						if (state === "2") { XKit.notifications.add("Queued ask.","ok"); }
+					} else {
+						XKit.extensions.xinbox.show_error("Server returned an error message. Maybe you hit your post limit or your account was suspended.");
+					}
+				}
+			});
 	
+		});
 	
 	},
 

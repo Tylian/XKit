@@ -1,15 +1,11 @@
-.post.post_full,
-.post.xkit-show-originals-not-so-original {
-	display: none;
-}
-
-.post.xkit-show-originals-pretty-original {
-	display: block;	
-}
+.post.post_full { visibility: hidden; }
+.post.xkit-show-originals-not-so-original { display: none; }
+.post.xkit-show-originals-pretty-original { display: block; visibility: visible; }
 
 #new_post_buttons,
 .new_post_buttons {
-	display: block !important;	
+	display: block !important;
+	visibility: visible !important;	
 }
 
 #xshoworiginals_button:after {

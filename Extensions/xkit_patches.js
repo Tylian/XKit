@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 1.9 REV D **//
+//* VERSION 2.1 REV C **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER STUDIOXENIX **//
 
@@ -50,7 +50,7 @@ XKit.extensions.xkit_patches = new Object({
 			yes_do_it = true;
 		}
 
-		console.log("Doing support links? " + yes_do_it);
+		//console.log("Doing support links? " + yes_do_it);
 
 		if (yes_do_it) {
 
@@ -69,7 +69,7 @@ XKit.extensions.xkit_patches = new Object({
 			m_parent = $(".tumblelog_popover").find(".tumblelog_menu_popover").find("ul");
 		}
 
-		console.log("->" + $(m_parent).html());
+		//console.log("->" + $(m_parent).html());
 
 		if ($(m_parent).find(".ask").attr('data-tumblelog-name') === "xkit-extension") {
 			
@@ -103,6 +103,74 @@ XKit.extensions.xkit_patches = new Object({
 		setTimeout(function() { XKit.extensions.xkit_patches.check_unfollower_hater(); }, 1000);
 
 		setTimeout(function() { XKit.extensions.xkit_patches.do_support_links(); }, 1500);
+		
+		var form_key_to_save = $("body").attr('data-form-key');
+				
+		if (typeof form_key_to_save !== "undefined" &&form_key_to_save !== "") {
+			XKit.storage.set("xkit_patches", "last_stored_form_key", window.btoa(form_key_to_save));
+		}
+		
+		XKit.window.close = function() {
+			
+			$("#xkit-window-shadow").fadeOut('fast');
+			$("#xkit-window-old").fadeOut('fast');
+			$("#tiptip_holder").css("z-index", "99999");
+			$("#xkit-window").fadeOut('fast', function() {
+				$(this).remove();
+				$("#xkit-window-shadow").remove();
+				$("#xkit-window-old").remove();
+			});
+			
+		};
+		
+		XKit.window.show = function(title, msg, icon, buttons, wide) {
+
+			if (typeof icon === "undefined") {
+				icon = "";
+			}
+			
+			var additional_classes = "";
+			
+			if (wide == true) {
+				additional_classes = "xkit-wide-window";	
+			}
+
+			if ($("#xkit-window").length > 0) {
+				$("#xkit-window").attr('id', "xkit-window-old");
+				$("#xkit-window-old").fadeOut('fast', function() {
+					$(this).remove();
+				});
+			}
+
+			var m_html = 	"<div id=\"xkit-window\" class=\"" + icon + " " + additional_classes + "\" style=\"display: none;\">" +
+								"<div class=\"xkit-window-title\">" + title + "</div>" +
+								"<div class=\"xkit-window-msg\">" + msg + "</div>";
+					
+			if (typeof buttons !== "undefined") {
+				m_html = m_html + "<div class=\"xkit-window-buttons\">" + buttons + "</div>";
+			}
+	
+			if ($("#xkit-window-shadow").length == 0) {
+				m_html = m_html + "</div><div id=\"xkit-window-shadow\"></div>";
+			}
+	
+			$("body").prepend(m_html);
+			
+			$("#tiptip_holder").css("z-index", "99000000");
+			
+			centerIt($("#xkit-window"));
+			$("#xkit-window").fadeIn('fast');
+	
+			$("#xkit-close-message").click(function() {
+				$("#xkit-window-shadow").fadeOut('fast', function() {
+					$(this).remove();
+				});
+				$("#xkit-window").fadeOut('fast', function() {
+					$(this).remove();
+				});
+			});
+
+		};
 		
 		XKit.dashboardGL = new Object({
 			
@@ -284,6 +352,59 @@ XKit.extensions.xkit_patches = new Object({
 			post_window_listener_func: new Array(),
 			post_window_listener_running: false,
 			post_window_listener_window_id: 0,
+			
+			kitty: {
+				
+				stored: "",
+				
+				set: function(kitty) {
+					
+					if (typeof kitty === "undefined") { kitty = ""; }
+					console.log("XKitty: Setting kitty to \"" + kitty + "\"");
+					XKit.interface.kitty.stored = kitty;	
+					
+				},	
+				
+				get: function(callback) {
+					
+					var m_object = {};
+					m_object.errors = false;
+					m_object.kitten = "";
+					
+					if (XKit.interface.kitty.stored !== "") {
+						console.log("XKitty: Kitty already received, passing: " + XKit.interface.kitty.stored);
+						m_object.kitten = XKit.interface.kitty.stored;
+						callback(m_object);
+						return;
+					}
+					
+					console.log("XKitty: Kitty blank, requesting new feline.");
+					
+					$.ajax({
+						type: "POST",
+						url: "/svc/secure_form_key",
+						headers: {
+							"X-tumblr-form-key": XKit.interface.form_key(),	
+						},
+						success: function (data, status, res) {
+							console.log("XKitty: YAY! Kitty request complete!");
+							XKit.interface.kitty.stored = res.getResponseHeader("X-tumblr-secure-form-key");
+							m_object.kitten = XKit.interface.kitty.stored;
+							callback(m_object);
+						},
+						error: function(data, status, res) {
+							console.log("XKitty: DAMN IT! Kitty request FAILED!");
+							m_object.errors = true;
+							m_object.kitten = "";
+							XKit.interface.kitty.stored = "";
+							callback(m_object);
+						}
+					})
+					
+				},
+				
+				
+			},
 			
 			post_window: {
 				
@@ -671,7 +792,7 @@ XKit.extensions.xkit_patches = new Object({
 				
 			},
 			
-			edit: function(tumblr_object, func) {
+			edit: function(tumblr_object, func, retry_mode) {
 				
 				// Used to edit a post.
 				// Takes a Tumblr Post Object (get it using Fetch.)
@@ -742,7 +863,10 @@ XKit.extensions.xkit_patches = new Object({
 					}
 				}
 				
-				m_object['post[tags]'] = tumblr_object.post.tags;	
+				var m_tags = tumblr_object.post.tags;
+				if (typeof m_tags === "undefined" || m_tags === "null") { m_tags = ""; }
+				
+				m_object['post[tags]'] = m_tags;	
 				m_object['post[slug]'] = tumblr_object.post.slug;	
 				
 				if (tumblr_object.post.type === "photo" || tumblr_object.post.type === "photoset") {
@@ -791,44 +915,82 @@ XKit.extensions.xkit_patches = new Object({
 				to_return.error_message = "";
 				to_return.status = 200;
 				to_return.data = "";
-				
-				GM_xmlhttpRequest({
-					method: "POST",
-					url: "http://www.tumblr.com/svc/post/update",
-					data: JSON.stringify(m_object),
-					json: true,
-					onerror: function(response) {
-						
-						to_return.error = true;
-						to_return.status = response.status;
-				
-						if (response.status === 401) {
-							to_return.message = "Permission Denied";
-						} else {
-							if (response.status === 404) {
-								to_return.message = "Post Not Found";
-							} else {
-								to_return.message = "Unknown";
-							}
-						}
-						
-						func(to_return);
 
-					},
-					onload: function(response) {
-						
-						try {
-							to_return.data = jQuery.parseJSON(response.responseText);
-							func(to_return);
-						} catch(e) {
+				XKit.interface.kitty.get(function(kitty_data) {
+
+					if (kitty_data.errors === true) {
+
+						// We fucked up. Let's try again.
+						if (retry_mode === false) {
+							XKit.interface.edit(tumblr_object, func, true);
+						} else {
+
 							to_return.error = true;
-							to_return.error_message = "Error parsing JSON";	
-							func(to_return);
-						}
-						
-					}
-				});
+							to_return.status = response.status;
 				
+							if (response.status === 401) {
+								to_return.message = "Permission Denied";
+							} else {
+								if (response.status === 404) {
+									to_return.message = "Post Not Found";
+								} else {
+									to_return.message = "Unknown";
+								}
+							}
+						
+							func(to_return);
+
+						}
+		
+						return;
+
+					}
+				
+					GM_xmlhttpRequest({
+						method: "POST",
+						url: "http://www.tumblr.com/svc/post/update",
+						data: JSON.stringify(m_object),
+						json: true,
+						headers: { 
+							"X-tumblr-puppies": kitty_data.kitten,
+							"X-tumblr-form-key": XKit.interface.form_key(),
+						},
+						onerror: function(response) {
+							
+							XKit.interface.kitty.set(response.getResponseHeader(""));
+							to_return.error = true;
+							to_return.status = response.status;
+				
+							if (response.status === 401) {
+								to_return.message = "Permission Denied";
+							} else {
+								if (response.status === 404) {
+									to_return.message = "Post Not Found";
+								} else {
+									to_return.message = "Unknown";
+								}
+							}
+						
+							func(to_return);
+
+						},
+						onload: function(response) {
+
+							XKit.interface.kitty.set(response.getResponseHeader("X-tumblr-kittens"));						
+
+							try {
+								to_return.data = jQuery.parseJSON(response.responseText);
+								func(to_return);
+							} catch(e) {
+								to_return.error = true;
+								to_return.error_message = "Error parsing JSON";	
+								func(to_return);
+							}
+						
+						}
+					});
+				
+				});
 				
 			},
 			
@@ -889,7 +1051,7 @@ XKit.extensions.xkit_patches = new Object({
 							func(to_return);
 						} catch(e) {
 							to_return.error = true;
-							to_return.error_message = "Error parsing JSON";	
+							to_return.error_message = e.message;	
 							func(to_return);
 						}
 						
@@ -1074,6 +1236,21 @@ XKit.extensions.xkit_patches = new Object({
 				m_return.is_mine = $(obj).hasClass("is_mine");
 				m_return.is_following = ($(obj).attr('data-following-tumblelog') === true);
 				
+				if (m_return.is_reblogged) {
+				
+					try {
+					
+						m_return.reblog_link = $(obj).find(".reblog_source").find("a").first().attr('href');
+						m_return.reblog_owner = $(obj).find(".reblog_source").find("a").first().text();
+						m_return.reblog_original_id = m_return.reblog_link.split('/')[4];
+						
+					} catch(e) {
+						
+						
+					}
+					
+				}
+				
 				var n_count = 0;
 				
 				if ($(obj).find(".note_link_current").length > 0) {
@@ -1109,7 +1286,22 @@ XKit.extensions.xkit_patches = new Object({
 			
 			form_key: function() {
 				
-				return $("body").attr('data-form-key');	
+				var to_return = $("body").attr('data-form-key');
+			
+				if (typeof to_return === "undefined" ||to_return === "") {
+					console.log(" --- XKit Interface: Form Key could not be fetched, using stored one.");
+					to_return = window.atob(XKit.storage.get("xkit_patches", "last_stored_form_key", ""));
+				} else {
+					console.log(" --- XKit Interface: Got form key, storing that one.");
+					XKit.storage.set("xkit_patches", "last_stored_form_key", window.btoa(to_return));
+				}
+				return to_return;	
+				
+			},
+			
+			check_key: function() {
+				
+				return $("body").attr('data-form-key') + $("body").attr('data-form-key');	
 				
 			},
 			
@@ -1165,6 +1357,8 @@ XKit.extensions.xkit_patches = new Object({
 					}
 				}
 				
+				m_return.user_url = "";
+				
 				m_return.activity = false;
 				if ($("body").hasClass("notifications_index") === true) {
 					m_return.activity = true;
@@ -1172,7 +1366,8 @@ XKit.extensions.xkit_patches = new Object({
 					if (document.location.href.indexOf("www.tumblr.com/blog/") !== -1) {
 						var m_array = document.location.href.split("/");
 						if (m_array[5] === "activity") {
-							m_return.activity = true;	
+							m_return.activity = true;
+							m_return.user_url = m_array[4];	
 						}
 					}
 				}
@@ -1185,6 +1380,7 @@ XKit.extensions.xkit_patches = new Object({
 						var m_array = document.location.href.split("/");
 						if (m_array[5] === "queue") {
 							m_return.queue = true;	
+							m_return.user_url = m_array[4];
 						}
 					}
 				}
@@ -1197,12 +1393,35 @@ XKit.extensions.xkit_patches = new Object({
 						var m_array = document.location.href.split("/");
 						if (m_array[5] === "drafts") {
 							m_return.drafts = true;	
+							m_return.user_url = m_array[4];
 						}
+					}
+				}
+				
+				m_return.followers = false;
+				if ($("body").hasClass("dashboard_useraction_followers") == true) {
+					m_return.followers = true;
+				} else {
+					if (document.location.href.indexOf("www.tumblr.com/blog/") !== -1) {
+						var m_array = document.location.href.split("/");
+						if (m_array[5] === "followers") {
+							m_return.followers = true;
+							m_return.user_url = m_array[4];	
+						}
+					}
+				}
+				
+				if (document.location.href.indexOf("www.tumblr.com/blog/") !== -1) {
+					var m_array = document.location.href.split("/");
+					if (m_array[3] === "blog") {
+						m_return.user_url = m_array[4];	
 					}
 				}
 				
 				m_return.dashboard = $("body").hasClass("is_dashboard") === true;	
 				m_return.channel = $("body").hasClass("is_channel") === true;
+
+				m_return.endless = $("body").hasClass("without_auto_paginate") === false;
 
 				return m_return;	
 				

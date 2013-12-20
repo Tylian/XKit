@@ -1,5 +1,5 @@
 //* TITLE Outbox **//
-//* VERSION 0.7 REV A **//
+//* VERSION 0.7 REV C **//
 //* DESCRIPTION Saves your last 20 sent private replies and fan mail. **//
 //* DETAILS This extension stores and lets you view the last 20 asks you've answered privately. Please keep in mind that this is a highly experimental extension, so if you hit a bug, please send the XKit blog an ask with the problem you've found. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -356,14 +356,19 @@ XKit.extensions.outbox = new Object({
 			m_messages_array = new Array();
 		}
 		
+		console.log(m_messages_array);
 		m_messages_array.splice(parseInt($(obj).attr('data-outbox-id')), 1);
+		
+		console.log(m_messages_array);
+		
+		XKit.storage.set("outbox", "messages_" + form_key, JSON.stringify(m_messages_array));
 			
 		var parent = $(obj).parentsUntil('#posts');
 		$(parent).fadeOut('slow', function() {
 			$(parent).remove();
 		});
 			
-		XKit.storage.set("outbox", "messages_" + form_key, JSON.stringify(m_messages_array));
+		
 		
 	},
 	
@@ -418,13 +423,13 @@ XKit.extensions.outbox = new Object({
 						"<div class=\"clear\">&nbsp;</div>" +
 						"<div class=\"post_question_fan_mail\">" + obj.message + "</div>" +
 					"</div>" +
-					"<div class=\"post_footer clearfix\" style=\"margin-bottom: -25px;\">" +
-						"<div class=\"post_notes\"><div class=\"post_notes_inner\"></div></div>" +
-						"<div class=\"post_controls\" role=\"toolbar\"><div class=\"post_controls_inner\">" +
-							"<div class=\"post_control deny-xoutbox xkit-outbox-delete\" data-outbox-id=\"" + m_id + "\" title=\"Delete\"></div>" +
-						"</div></div>" +
-					"</div>" +
 				"</div></div>" +
+				"<div class=\"post_footer clearfix\">" +
+					"<div class=\"post_notes\"><div class=\"post_notes_inner\"></div></div>" +
+					"<div class=\"post_controls\" role=\"toolbar\"><div class=\"post_controls_inner\">" +
+						"<div class=\"post_control deny-xoutbox xkit-outbox-delete\" data-outbox-id=\"" + m_id + "\" title=\"Delete\"></div>" +
+					"</div></div>" +
+				"</div>" +
 			    "</div>";
 		
 		to_return = to_return + "</div></li>";
@@ -469,13 +474,13 @@ XKit.extensions.outbox = new Object({
 						"<div class=\"clear\">&nbsp;</div>" +
 						"<div class=\"post_question_fan_mail\">" + obj.message + "</div>" +
 					"</div>" +
-					"<div class=\"post_footer clearfix\" style=\"margin-bottom: -25px;\">" +
-						"<div class=\"post_notes\"><div class=\"post_notes_inner\"></div></div>" +
-						"<div class=\"post_controls\" role=\"toolbar\"><div class=\"post_controls_inner\">" +
-							"<div class=\"post_control deny-xoutbox xkit-outbox-delete\" data-outbox-id=\"" + m_id + "\" title=\"Delete\"></div>" +
-						"</div></div>" +
-					"</div>" +
 				"</div></div>" +
+				"<div class=\"post_footer clearfix\">" +
+					"<div class=\"post_notes\"><div class=\"post_notes_inner\"></div></div>" +
+					"<div class=\"post_controls\" role=\"toolbar\"><div class=\"post_controls_inner\">" +
+						"<div class=\"post_control deny-xoutbox xkit-outbox-delete\" data-outbox-id=\"" + m_id + "\" title=\"Delete\"></div>" +
+					"</div></div>" +
+				"</div>" +
 			    "</div>";
 		
 		to_return = to_return + "</div></li>";

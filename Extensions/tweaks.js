@@ -1,5 +1,5 @@
 //* TITLE Tweaks **//
-//* VERSION 2.6 REV C **//
+//* VERSION 2.6 REV J **//
 //* DESCRIPTION Various little tweaks for your dashboard. **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS These are small little tweaks that allows you customize your dashboard. If you have used XKit 6, you will notice that some of the extensions have been moved here as options you can toggle. Keep in mind that some of the tweaks (the ones marked with a '*') can slow down your computer. **//
@@ -89,6 +89,11 @@ XKit.extensions.tweaks = new Object({
 		"sep2": {
 			text: "Dashboard tweaks",
 			type: "separator",
+		},
+		"hide_like_animation": {
+			text: "Hide the like/unlike heart animation",
+			default: false,
+			value: false
 		},
 		"hide_sponsored": {
 			text: "Dim sponsored posts on dashboard (not recommended)",
@@ -259,20 +264,33 @@ XKit.extensions.tweaks = new Object({
 
 		if (XKit.extensions.tweaks.preferences.show_new_on_secondary.value === true) {
 			
+			try {
+			
 			if (document.location.href.indexOf('/dashboard') !== -1) {
 			
 				if ($("#new_post_buttons").length > 0) {
 				
 					// Save this.
-					XKit.storage.set("tweaks","new_post_buttons", $("#new_post_buttons")[0].outerHTML);
+					var m_to_save = $("#new_post_buttons")[0].outerHTML;
+					m_to_save = "!" + btoa(m_to_save);
+					XKit.storage.set("tweaks","new_post_buttons_html", m_to_save);
 					
 				} else {
 					
-					var m_btn_html = XKit.storage.get("tweaks","new_post_buttons","");
+					var m_btn_html = XKit.storage.get("tweaks","new_post_buttons_html","");
 					if (m_btn_html !== "" ||typeof m_btn_html !== "undefined") {
-						$("#posts").prepend(m_btn_html);
+						if (m_btn_html.substring(0,1) === "!") {
+							m_btn_html = atob(m_btn_html.substring(1));
+							$("#posts").prepend(m_btn_html);
+						}
 					}
 				}	
+				
+			}
+			
+			} catch(e) {
+			
+				console.log("Tweaks -> Can't run show_on_secondary, " + e.message);	
 				
 			}	
 			
@@ -294,6 +312,7 @@ XKit.extensions.tweaks = new Object({
 
 		if (XKit.extensions.tweaks.preferences.hide_radar.value === true) {
 			$("#tumblr_radar").css("display","none");
+			$(".radar_header").parent().css("display","none");
 		}
 		
 		if (XKit.extensions.tweaks.preferences.photo_replies.value === true) {
@@ -326,6 +345,10 @@ XKit.extensions.tweaks = new Object({
 		if (XKit.extensions.tweaks.preferences.slim_popups.value === true) {
 			XKit.tools.add_css(".tumblelog_menu_link { padding: 6px 10px 6px 34px !important; font-size: 13px !important; }" +
 						".tumblelog_menu .tumblelog_menu_link:before { left: 7px !important; top: 5px !important; } ", "xkit_tweaks_slim_popups");
+		}
+
+		if (XKit.extensions.tweaks.preferences.hide_like_animation.value === true) {
+			XKit.tools.add_css(" .post .post_animated_heart { display: none !important; width: 0 !important; }", "xkit_tweaks_hide_like_animation");
 		}
 		
 		if (XKit.extensions.tweaks.preferences.hide_sponsored.value === true) {
@@ -393,7 +416,7 @@ XKit.extensions.tweaks = new Object({
 		}
 
 		if (XKit.extensions.tweaks.preferences.hide_follows.value === true) {
-			XKit.tools.add_css(".notification_follow, .reblog_follow_button { display: none !important; } #posts .notes_outer_container.popover .note a.follow { display: none !important; } #posts .notes_outer_container.popover .note.like a.block { right: 16px; }", "xkit_tweaks_hide_follows");
+			XKit.tools.add_css(".note a.follow {display: none !important; } .notification_follow, .reblog_follow_button { display: none !important; } #posts .notes_outer_container.popover .note a.follow { display: none !important; } #posts .notes_outer_container.popover .note.like a.block { right: 16px; }", "xkit_tweaks_hide_follows");
 		}
 
 		if (XKit.extensions.tweaks.preferences.fix_blockquotes.value === true) {
@@ -655,12 +678,15 @@ XKit.extensions.tweaks = new Object({
 		XKit.tools.remove_css("xkit_tweaks_hide_section_headers");
 		XKit.tools.remove_css("xkit_tweaks_scroll_top");
 		XKit.tools.remove_css("xkit_tweaks_no_footer_background");
+		XKit.tools.remove_css("xkit_tweaks_hide_like_animation");
+	
 	
 		$("#tumblr_radar").css("display","block");
 		$("#xkit_customize_button").remove();
 		$("a.spotlight").parent().css("display","block");
 		$("#recommended_tumblelogs").css("display","block");
 		$("a.activity").parent().css("display","block");
+		$(".radar_header").parent().css("display","block");
 		$(".customize").parent().css("display","block");
 		$("xkit_post_tags_inner_add_back").addClass("post_tags_inner");
 		$("xkit_post_tags_inner_add_back").removeClass("xkit_post_tags_inner_add_back");

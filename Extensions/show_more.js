@@ -1,5 +1,5 @@
 //* TITLE User Menus+ **//
-//* VERSION 2.3 REV F **//
+//* VERSION 2.4 REV B **//
 //* DESCRIPTION More options on the user menu **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS This extension adds additional options to the user menu (the one that appears under user avatars on your dashboard), such as Avatar Magnifier, links to their Liked Posts page if they have them enabled. Note that this extension, especially the Show Likes and Show Submit options use a lot of network and might slow your computer down. **//
@@ -73,6 +73,8 @@ XKit.extensions.show_more = new Object({
 		}
 		
 		$("body").append(askbox_template);
+		
+		return;
 		
 		if ($("body").hasClass("dashboard_messages_inbox") === true || $("body").hasClass("dashboard_messages_submissions") === true) {
 			$.getScript("http://assets.tumblr.com/assets/scripts/dashboard_ask.js?_v=" + XKit.tools.random_string(), function(data, textStatus, jqxhr) {
@@ -185,7 +187,7 @@ XKit.extensions.show_more = new Object({
 			if (user_url === "xkit-extension") {
 				m_html = m_html + "<a href=\"http://" + user_url + ".tumblr.com/ask\" target=\"_BLANK\" class=\"xkit-ask\">XKit Support</a>";
 			} else {
-				m_html = m_html + "<a data-anonymous-ask=\"" + anon_status + "\" data-tumblelog-name=\"" + user_url + "\" class=\"xkit-ask ask\">Ask</a>";
+				m_html = m_html + "<a href=\"http://" + user_url + ".tumblr.com/ask\" data-anonymous-ask=\"" + anon_status + "\" data-tumblelog-name=\"" + user_url + "\" class=\"xkit-ask ask\">Ask</a>";
 			}
 		}
 		
@@ -265,7 +267,7 @@ XKit.extensions.show_more = new Object({
 		$("#xkit-classic-user-menu").css("left", m_left + "px");
 		
 
-			console.log("Attaching bindings...");
+			// console.log("Attaching bindings...");
 			
 		setTimeout(function() {
 			
@@ -360,7 +362,7 @@ XKit.extensions.show_more = new Object({
 						json_obj.following = true;
 						$(m_parent).find(".post_avatar_link").attr('data-tumblelog-popover', JSON.stringify(json_obj));	
 					} catch(e) {
-						console.log("Unable to set popover obj data");
+						// console.log("Unable to set popover obj data");
 					}
 				}
 			}
@@ -370,7 +372,7 @@ XKit.extensions.show_more = new Object({
 	
 	unfollow_person: function(user_url, m_parent) {
 		
-		console.log("Unfollowing " + user_url);
+		// console.log("Unfollowing " + user_url);
 		var m_data = "form_key=" + XKit.interface.form_key() + "&data%5Btumblelog%5D=" + user_url + "&data%5Bsource%5D=FOLLOW_SOURCE_IFRAME";
 		GM_xmlhttpRequest({
 			method: "POST",
@@ -392,7 +394,7 @@ XKit.extensions.show_more = new Object({
 						json_obj.following = false;
 						$(m_parent).find(".post_avatar_link").attr('data-tumblelog-popover', JSON.stringify(json_obj));	
 					} catch(e) {
-						console.log("Unable to set popover obj data");
+						// console.log("Unable to set popover obj data");
 					}
 				}
 			}
@@ -568,7 +570,7 @@ XKit.extensions.show_more = new Object({
                 	
                 }
                 
-                console.log(XKit.extensions.show_more.custom_menu_extension);
+               // console.log(XKit.extensions.show_more.custom_menu_extension);
                 if (XKit.extensions.show_more.custom_menu_extension.length >= 0) {
                 
                 	var m_data = XKit.extensions.show_more.popup_data;

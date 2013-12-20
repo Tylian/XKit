@@ -1,5 +1,5 @@
 //* TITLE Audio+ **//
-//* VERSION 0.2 REV A **//
+//* VERSION 0.2 REV B **//
 //* DESCRIPTION Enhancements for the Audio Player **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//
@@ -223,9 +223,9 @@ XKit.extensions.audio_plus = new Object({
 							"</div>" +
 						"</div>";
 
-			$(this).find(".audio_visualizer").append(slider_html);
+			$(this).find(".post_media").append(slider_html);
 			
-			console.log("Volume is => " + $(this).find("audio").get(0).volume);
+			// console.log("Volume is => " + $(this).find("audio").get(0).volume);
 
 		});	
 		

@@ -41,6 +41,7 @@
 	right: 13px;
 	width: 20px;
 	height: 20px;	
+	z-index: 1000;
 }
 
 #replyviewer-mini-loader {

@@ -1,5 +1,5 @@
-//* TITLE View On Dash (preview) **//
-//* VERSION 0.2 REV A **//
+//* TITLE View On Dash **//
+//* VERSION 0.3 REV B **//
 //* DESCRIPTION View blogs on your dash **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS This is a preview version of an extension, missing most features due to legal/technical reasons for now. It lets you view the last 20 posts a person has made on their blogs right on your dashboard. If you have User Menus+ installed, you can also access it from their user menu under their avatar. **//
@@ -9,6 +9,7 @@
 XKit.extensions.view_on_dash = new Object({
 
 	running: false,
+	key: "vgXl8u0K1syFSAue6b9C7honIojHjC98i5WsBgSZ66HfqB0DKl",
 	
 	preferences: {
 		"show_sidebar_button": {
@@ -109,7 +110,6 @@ XKit.extensions.view_on_dash = new Object({
 			
 		}
 		
-		//this.view("xenix");
 	},
 	
 	menu_clicked: function(e) {
@@ -149,6 +149,18 @@ XKit.extensions.view_on_dash = new Object({
 		
 	},
 	
+	get_photo: function(data, index, width) {
+		
+		for (var i=0;i<data.photos[index].alt_sizes.length;i++) {
+			if (parseInt(data.photos[index].alt_sizes[i].width) === parseInt(width)) {	
+				return data.photos[index].alt_sizes[i].url;
+			}
+		}	
+		
+		return data.photos[index].alt_sizes[0].url;
+		
+	},
+	
 	parse_item: function(data, username) {
 		
 		console.log(data);
@@ -160,31 +172,89 @@ XKit.extensions.view_on_dash = new Object({
 		var post_tags = "";
 		var post_contents = "";
 		
-		if (data.type !== "regular" && data.type !== "photo") { return; }
-		
-		if (data.type === "regular") { 
+
+		if (data.type === "text") { 
 		
 			post_class = "is_regular"; 
 		
-			if (data["regular-title"] !== "" &&data["regular-title"] !== null) {
-				post_contents = post_contents + "<div class=\"post_title\">" + data["regular-title"] + "</div>";
+			if (data.title !== "" && data.title !== null) {
+				post_contents = post_contents + "<div class=\"post_title\">" + data.title + "</div>";
 			}
 		
-			if (data["regular-body"] !== "" && data["regular-body"] !== null) {
-				post_contents = post_contents + "<div class=\"post_body\">" + data["regular-body"] + "</div>";
+			if (data.body !== "" && data.body !== null) {
+				post_contents = post_contents + "<div class=\"post_body\">" + data.body + "</div>";
 			}
 			
 		}
+		
+		if (data.type === "quote") { 
+		
+			post_class = "is_quote"; 
+		
+			if (data["text"] !== "" && data["text"] !== null) {
+				post_contents = post_contents + '<div class="post_title medium"><span class="quote">' + data["text"] + '</span></div>';
+			}
+		
+			if (data["source"] !== "" && data["source"] !== null) {
+				post_contents = post_contents + '<div class="post_body"><table class="quote_source_table"><tbody><tr><td valign="top" class="quote_source_mdash">&nbsp;</td><td valign="top" class="quote_source">' + data.source + '</td></tr></tbody></table></div>';
+			}
+			
+		}
+		
+		if (data.type === "link") { 
+		
+			post_class = "is_link"; 
+		
+			post_contents = post_contents + '<div class="post_media"><div class="link_button clickable"><div class="link_thumbnail_container"><a href="' + data.url + '" target="_blank" class="link_thumbnail_click"><img class="link_thumbnail" src="' + data.link_image + '" alt=""></a></div><div class="link_text_container"><div class="link_text_outer"><div class="link_text"><a href="' + data.url + '" target="_blank" class="link_title">' + data.title + '</a><a href="' + data.url + '" target="_blank" class="link_source">' + data.url + '</a></div></div></div></div></div>';
+			
+		}
+		
+		if (data.type === "answer") { 
+		
+			post_class = "is_note"; 
+		
+			post_contents = post_contents + '<div class="post_body"><div class="note_item"><div class="text"><p class="asker"><span class="name">' + data.asking_name + '</span><span>&nbsp;asked:</span></p><p>' + data.question + '</p></div><div class="nipple"></div></div><div class="avatar"><img src="http://assets.tumblr.com/images/anonymous_avatar_96.gif" alt="" width="40" height="40"></div><div class="answer post_info">' + data.answer + '</div></div>';
+			
+		}
+		
+		if (data.type === "audio" ||data.type === "video") { 
+		
+			post_class = "is_unsupported"; 
+
+			var m_post_inner_html = '<div class="view-on-dash-not-supported">' + data.type + ' posts are not currently supported.</div>';	
+			
+			post_contents = post_contents + "<div class=\"post_media\">" + m_post_inner_html + "</div>";
+			
+			if (data["caption"] !== "" && data["caption"] !== null) {
+				post_contents = post_contents + "<div class=\"post_body\">" + data["caption"] + "</div>";
+			}
+			
+		}
+		
 		if (data.type === "photo") { 
 		
 			post_class = "is_photo"; 
 			
-			var m_post_inner_html = '<img class="image" width="500" alt="" src="' + data["photo-url-500"] + '" data-thumbnail="' + data["photo-url-100"] + '">';
+			//var m_post_inner_html = '<img class="image" width="500" alt="" src="' + data["photo-url-500"] + '" data-thumbnail="' + data["photo-url-100"] + '">';
+			
+			if (data.photos.length === 1) { post_class = "is_photo"; }else {post_class = "is_photoset"; }
+			
+			var m_post_inner_html = "";
+			
+			if (data.photos.length === 1) {
+				
+				m_post_inner_html = '<img class="image" width="500" alt="" src="' + XKit.extensions.view_on_dash.get_photo(data, 0, "500") + '" data-thumbnail="' + XKit.extensions.view_on_dash.get_photo(data, 0, "100") + '">';
+				
+			} else {
+			
+				m_post_inner_html = '<div class="view-on-dash-not-supported">Photosets are not currently supported.</div>';	
+				
+			}
 			
 			post_contents = post_contents + "<div class=\"post_media\">" + m_post_inner_html + "</div>";
 			
-			if (data["photo-caption"] !== "" && data["photo-caption"] !== null) {
-				post_contents = post_contents + "<div class=\"post_body\">" + data["photo-caption"] + "</div>";
+			if (data["caption"] !== "" && data["caption"] !== null) {
+				post_contents = post_contents + "<div class=\"post_body\">" + data["caption"] + "</div>";
 			}
 			
 		}
@@ -204,12 +274,29 @@ XKit.extensions.view_on_dash = new Object({
 			
 		}
 		
-		m_html = m_html + "<div class=\"post post_full " + post_class + " same_user_as_last with_permalink no_source\" id=\"post_" + data.id + "\"  data-post-id='" + data.id + "' data-root-id='" + data.id + "' data-tumblelog-name='" + username + "' data-tumblelog-key='0O2vwfwqS' data-reblog-key='" + data["reblog-key"] + "' data-type='" + data.type + "'>" +
+		var source_div = "";
+		var reblog_div = "";
+		
+		if (data.source_url !== "" && typeof data.source_url !== "undefined") {
+			
+			source_div = '<div class="post_source"><a class="post_source_link" target="_blank" href="' + data.source_url + '" title="' + data.source_title + '">' + data.source_title + '</a><span class="post_source_name_prefix">Source: </span></div>';
+			
+		}
+		
+		if (data.reblogged_from_id !== "" && typeof data.reblogged_from_id !== "undefined") {
+			
+			reblog_div = '<span class="reblog_source"><span class="reblog_icon" title="' + username + ' reblogged ' + data.reblogged_from_name + '">reblogged</span><a target="_BLANK" title="' + data.reblogged_from_name + '" href="' + data.reblogged_from_url + '" style="">' + data.reblogged_from_name + '</a></span>';
+			
+		}
+		
+		m_html = m_html + "<div class=\"post post_full " + post_class + " same_user_as_last with_permalink no_source\" id=\"post_" + data.id + "\"  data-post-id='" + data.id + "' data-root-id='" + data.id + "' data-tumblelog-name='" + username + "' data-reblog-key='" + data.reblog_key + "' data-type='" + data.type + "'>" +
 					"<div class=\"post_wrapper\">" + 
 						"<div class=\"post_header\">" +
 							"<div class=\"post_info\">" +
 								"<a href=\"http://\">" + username + "</a>" +
+								reblog_div +
 							"</div>" +
+							source_div +
 						"</div>" +
 						"<div class=\"post_content clearfix\">" +
 							"<div class=\"post_content_inner clearfix\">" +
@@ -220,7 +307,7 @@ XKit.extensions.view_on_dash = new Object({
 						"</div>" +
 						post_tags +
 						"<div class=\"post_footer clearfix\">" +
-							"<div class=\"post_notes\"><div class=\"post_notes_inner\"></div></div>" +
+							'<div class="post_notes"><div class="post_notes_inner"><div class="post_notes_label note_count"><span class="note_link_current">' + data.note_count + ' notes</span><div class="notes_outer_container popover popover_gradient nipple_on_left" style="display: none;"><div class="notes_container popover_inner"><div class="popover_scroll"><ol class="notes"></ol><div class="more_notes_link_container"><span class="notes_loading">Loading...</span><a class="more_notes_link" style="display:none;" data-next="" rel="nofollow" href="#">Show more notes</a></div></div></div></div></div></div></div>' +
 							"<div class=\"post_controls\" role=\"toolbar\">" +
 								"<div class=\"post_controls_inner\">" +
 									"<a class=\"post_control reblog\" href=\"/reblog/" + data.id  + "/" + data["reblog-key"] + "?redirect_to=%2Fdashboard\"><span class=\"offscreen\">Reblog</span></a>" +
@@ -233,7 +320,7 @@ XKit.extensions.view_on_dash = new Object({
 		//alert("<a style=\"display: none;\" class=\"post_permalink\" id=\"permalink_" + data.id + "\" href=\"" + data.url + "\" target=\"_blank\" title=\"View post - whatever\"></a>");
 		m_html = m_html + "</div>";
 		m_html = m_html + "</li>";
-		
+
 		//console.log(m_html);
 		return m_html;
 		
@@ -241,7 +328,140 @@ XKit.extensions.view_on_dash = new Object({
 	
 	last_scroll_point: -1,
 	
-	view: function(username) {
+	render: function(obj) {
+		
+		return "<li class=\"post post_full\">yo.</li>";
+		
+	},
+	
+	view: function(username, offset, page) {
+		
+		$("#view-on-dash-background,#view-on-dash-content").remove();
+		
+		$("body").append("<div id=\"view-on-dash-background\">&nbsp;</div><div class=\"loading\" id=\"view-on-dash-content\">&nbsp;</div>");
+		XKit.extensions.view_on_dash.last_scroll_point = $("body").scrollTop();
+		
+		$('html, body').animate({
+    			scrollTop: 0
+ 		}, 500);	
+ 		
+ 		if (typeof offset === "undefined") { offset = 0; }
+ 		if (typeof page === "undefined") { page = 0; }
+ 		
+		GM_xmlhttpRequest({
+			method: "GET",
+			url: "http://api.tumblr.com/v2/blog/" + username + ".tumblr.com/posts/?api_key=" + XKit.extensions.view_on_dash.key + "&reblog_info=true&offset=" + offset,
+			json: false,
+			onerror: function(response) {
+				console.log("view-on-dash -> Error getting page.");
+				XKit.extensions.view_on_dash.show_error("<b>Unable to get the blog information.</b><br/>Please try again later.<br/><br/>Error Code: VOD-230");
+				return;
+			},
+			onload: function(response) {
+				
+				try {
+					
+					data = JSON.parse(response.responseText);
+					$("#view-on-dash-content").removeClass("loading");
+					
+					var m_header = "<div id=\"view-on-dash-header\" data-username=\"" + username + "\" data-page=\"" + page + "\">" +
+								"<img id=\"view-on-dash-avatar\" src=\"http://api.tumblr.com/v2/blog/" + username + ".tumblr.com/avatar/64\">" +
+								"<div id=\"view-on-dash-title\">" + data.response.blog.title + "</div>" +
+								"<div id=\"view-on-dash-username\">" + data.response.blog.name + "</div>" +
+								"<a id=\"view-on-dash-open\" target=\"_BLANK\" href=\"http://" + username + ".tumblr.com\">Open</a>" +
+								"<div id=\"view-on-dash-back\" class=\"disabled\">&nbsp;</div>" +
+								"<div id=\"view-on-dash-forward\" class=\"disabled\">&nbsp;</div>" +
+							"</div>";
+					
+					if (data.response.posts.length === 0) {
+					
+						$("#view-on-dash-content").html(m_header + "<div id=\"view-on-dash-no-posts\">No posts found.</div>");
+						return;	
+						
+					}
+					
+					$("#view-on-dash-content").html(m_header + "<ol id=\"posts\" class=\"posts xkit-view-on-dash-ol\"></ol>");
+					
+					$("#view-on-dash-header").attr('data-total', data.response.blog.posts);
+					
+					for (var i=0;i<data.response.posts.length;i++) {
+						
+						$(".xkit-view-on-dash-ol").append(XKit.extensions.view_on_dash.parse_item(data.response.posts[i], username));
+						
+					}
+					
+					if (data.response.blog.posts > data.response.posts.length) {
+					
+						$("#view-on-dash-forward").removeClass("disabled");	
+						
+					}
+					
+					if (offset > 0) {
+					
+						$("#view-on-dash-back").removeClass("disabled");	
+						
+					}
+					
+					XKit.post_listener.run_callbacks();
+					
+					$("#view-on-dash-forward").click(function() {
+						
+						if ($(this).hasClass("disabled")) { return; }
+						
+						var page = parseInt($("#view-on-dash-header").attr('data-page')) + 1;	
+						var username = $("#view-on-dash-header").attr('data-username');
+						
+						XKit.extensions.view_on_dash.view(username, (page * 20), page);
+						
+					});
+					
+					$("#view-on-dash-back").click(function() {
+						
+						if ($(this).hasClass("disabled")) { return; }
+						
+						var page = parseInt($("#view-on-dash-header").attr('data-page')) - 1;	
+						var username = $("#view-on-dash-header").attr('data-username');
+						
+						XKit.extensions.view_on_dash.view(username, (page * 20), page);
+						
+					});
+					
+					$("#view-on-dash-background").click(function() {
+			
+						$("#view-on-dash-content").fadeOut('fast');
+						$("#view-on-dash-background").fadeOut('slow', function() {
+							
+							try { 
+							if (XKit.extensions.view_on_dash.last_scroll_point !== -1) {
+								
+								$('html, body').animate({
+    									scrollTop: XKit.extensions.view_on_dash.last_scroll_point
+ 								}, 500);
+								
+							}
+							} catch(e) {
+								// meh.	
+							}
+							
+							$("#view-on-dash-content").remove();
+							$("#view-on-dash-background").remove();
+				
+						});
+			
+					});
+					
+				} catch(e) {
+					console.log("view-on-dash -> Error parsing data. " + e.message);
+					XKit.extensions.view_on_dash.show_error("<b>Unable to read JSON received from API calls.</b><br/>Please try again later.<br/><br/>Error Code: VOD-235");
+					return;
+				}
+
+			}
+		});	
+		
+	},
+	
+	view_old: function(username) {
 		
 		$("body").append("<div id=\"view-on-dash-background\">&nbsp;</div><div class=\"loading\" id=\"view-on-dash-content\">&nbsp;</div>");
 		
@@ -277,6 +497,8 @@ XKit.extensions.view_on_dash = new Object({
 								"<div id=\"view-on-dash-title\">" + data.tumblelog.title + "</div>" +
 								"<div id=\"view-on-dash-username\">" + data.tumblelog.name + "</div>" +
 								"<a id=\"view-on-dash-open\" target=\"_BLANK\" href=\"http://" + username + ".tumblr.com\">Open</a>" +
+								"<div id=\"view-on-dash-back\" class=\"disabled\">&nbsp;</div>" +
+								"<div id=\"view-on-dash-forward\" class=\"disabled\">&nbsp;</div>" +
 							"</div>";
 					
 					$("#view-on-dash-content").html(m_header + "<ol id=\"posts\" class=\"posts xkit-view-on-dash-ol\"></div>");

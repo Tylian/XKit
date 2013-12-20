@@ -1,5 +1,5 @@
 //* TITLE Audio Downloader **//
-//* VERSION 2.0 REV B **//
+//* VERSION 2.0 REV C **//
 //* DESCRIPTION Lets you download audio posts hosted on Tumblr **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//
@@ -39,7 +39,13 @@ XKit.extensions.audio_downloader = new Object({
 		$(document).on("click", ".xkit-audio-downloader", function(event) {
 			var post_id = $(this).attr('data-post-id');
 			var username = $(this).attr('data-xkit-audio-downloader-tumblelog-name');
-			XKit.extensions.audio_downloader.download(post_id, username);
+			if (XKit.interface.where().queue === true || XKit.interface.where().drafts === true) {
+				var m_post = XKit.interface.find_post(post_id);
+				if (m_post.reblogged === false) { return; }
+				XKit.extensions.audio_downloader.download(m_post.reblog_original_id, m_post.reblog_owner);	
+			} else {
+				XKit.extensions.audio_downloader.download(post_id, username);	
+			}
 		});
 		
 	},
@@ -92,9 +98,7 @@ XKit.extensions.audio_downloader = new Object({
 						m_id = audio_name.replace(/\W/g, '') + "__" + audio_author.replace(/\W/g, '');
 					}
 					
-					
-					
-					var m_titles = [ "You probably wouldn't steal a car.", "The Big-Bro Warning", "Watch it, they are watching you.", "Do you want Metallica to starve to death?", "Psst. Behind you.", "Would you download a car?", "You are too pretty to go to jail.", "Oh I hope you are not doing what I think you are doing.", "Xenixlet Sez: Buy music!", "You are downloading a Mitt Romney audio snippet, right?", "Insert sassy title here", "The P in MP3 might mean Prison y'know.", "NSA means No Stealing Audio (or something else perhaps, not sure.)", "Don't make the headlines" ];
+					var m_titles = [ "You probably wouldn't steal a car.", "The Big-Bro Warning", "Watch it, they are watching you.", "Do you want Metallica to starve to death?", "Psst. Behind you.", "Would you download a car?", "You are too pretty to go to jail.", "Oh I hope you are not doing what I think you are doing.", "Xenixlet Sez: Buy music!", "You are downloading a Mitt Romney audio snippet, right?", "Insert sassy title here", "The P in MP3 might mean Prison y'know.", "NSA means No Stealing Audio (or something else perhaps, not sure.)", "Don't make the headlines", "STOP TAKING PICTURES OF ME IT IS MAKING ME UNCOMFORTABLE!" ];
 					var m_index = Math.floor(Math.random() * m_titles.length);
 					
 					var m_title = m_titles[m_index];
@@ -160,8 +164,11 @@ XKit.extensions.audio_downloader = new Object({
 			
 	  		var m_post = XKit.interface.post($(this));
 	  		
-	  		// Post has no notes, skip.
 	  		if (m_post.type !== "audio") { return; }
+	  		
+	  		if (XKit.interface.where().queue === true || XKit.interface.where().drafts === true) {
+	  			if (m_post.reblogged === false) { return; }	
+	  		}
 
 			XKit.interface.add_control_button(this, "xkit-audio-downloader", "data-xkit-audio-downloader-tumblelog-key=\"" + m_post.tumblelog_key + "\" data-xkit-audio-downloader-tumblelog-name=\"" + m_post.owner + "\"");
 

@@ -1,5 +1,5 @@
 //* TITLE Classic Search **//
-//* VERSION 1.0 REV C **//
+//* VERSION 1.0 REV D **//
 //* DESCRIPTION Get the old search back **//
 //* DETAILS This is a very simple extension that simply redirects your search requests to the old Tumblr tag search pages. Note that features of the new search page, such as multiple tag search will not work when this extension is enabled. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -24,18 +24,36 @@ XKit.extensions.disable_search = new Object({
 	
 
 	run: function() {
+		
 		this.running = true;
 		$('#search_form').on('submit', XKit.extensions.disable_search.do);
 		$('#search_query').on('keyup keydown', XKit.extensions.disable_search.do_suggestions);
+		
 	},
 	
 	do_suggestions: function(e, stop) {
 		
-		$(".result_link.search_typeahead").each(function() {
+		$(".popover_menu_item .result a").each(function() {
 			
 			var new_link = $(this).attr('href').replace('tumblr.com/search/', 'tumblr.com/tagged/');
 			console.log(new_link);
 			$(this).attr('href', new_link);		
+			
+		});
+		
+		$(".search_typeahead").unbind("click");
+		$(".search_typeahead").bind("click", function(ev) {
+			
+			ev.preventDefault();	
+			ev.stopPropagation();
+			
+			var new_link = $(this).attr('href').replace('tumblr.com/search/', 'tumblr.com/tagged/');
+			
+			if (XKit.extensions.disable_search.preferences.open_in_new_tab.value === true) {
+				window.open(new_link);	
+			} else {
+				document.location = new_link;
+			}
 			
 		});
 		

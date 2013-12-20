@@ -1,5 +1,5 @@
 //* TITLE Blacklist **//
-//* VERSION 2.5 REV E **//
+//* VERSION 2.5 REV H **//
 //* DESCRIPTION Clean your dash **//
 //* DETAILS This extension allows you to block posts based on the words you specify. If a post has the text you've written in the post itself or it's tags, it will be replaced by a warning, or won't be shown on your dashboard, depending on your settings. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -73,7 +73,7 @@ XKit.extensions.blacklist = new Object({
 			type: "separator"
 		},
 		"show_tags": {
-			text: "Show tags on blocked posts",
+			text: "Show tags on blocked posts (does not work with Mini-UI mode)",
 			default: false,
 			value: false
 		},
@@ -126,6 +126,7 @@ XKit.extensions.blacklist = new Object({
 					" .xblacklist_blacklisted_post .xblacklist_open_post { " +
 						" display: none; " +
 					" } " +
+					" .xblacklist_blacklisted_post .post_tags { display: none; } " +
 					" .xblacklist_blacklisted_post { " +
 						" height: 40px !important; " +
 						" opacity: 1 !important; padding: 0px !important; " + 
@@ -449,7 +450,7 @@ XKit.extensions.blacklist = new Object({
 				m_content = m_content + " " + m_title;
 			
 				if (XKit.extensions.blacklist.preferences.check_authors.value == true) {
-					m_content = m_content + m_author;
+					m_content = m_content + " " + m_author;
 				}
 			
 				m_content = XKit.tools.replace_all(m_content, "&nbsp;", " ");
@@ -469,7 +470,7 @@ XKit.extensions.blacklist = new Object({
 			
 			} catch(e) {
 			
-				XKit.console.add("Can't parse post: " + e.message);
+				// XKit.console.add("Can't parse post: " + e.message);
 				// $(this).css("background","red");	
 			
 			}
@@ -624,7 +625,7 @@ XKit.extensions.blacklist = new Object({
 			
 		}*/
 		
-		console.log(tags);
+		//console.log(tags);
 		
 		// $(obj).css("background","blue"); return;
 		
@@ -770,7 +771,7 @@ XKit.extensions.blacklist = new Object({
 							tmp_word = tmp_word.replace(/\,/g, '').replace(/\u2026/g, '');
 							tmp_word = tmp_word.replace(/[\.,-\/#!$%\^&\*;:{}=\-_`~()]/g,"").replace(/\s{2,}/g," ");
 														
-							console.log("--------- " + tmp_word);
+							// console.log("--------- " + tmp_word);
 							
 							if (tmp_word.indexOf(m_word) !== -1) {
 								if (tag_search_mode) {

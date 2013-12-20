@@ -12,6 +12,8 @@
 	opacity: 0.65;
 }
 
+.post_full .post_media { position: relative; }
+
 .xkit-audio-plus-slider-container:hover {
 	opacity: 1;	
 }

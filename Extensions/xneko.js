@@ -1,5 +1,5 @@
 //* TITLE XNeko **//
-//* VERSION 1.0 REV B **//
+//* VERSION 1.1 REV C **//
 //* DESCRIPTION One live cat for your dashboard **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//
@@ -21,6 +21,11 @@ XKit.extensions.xneko = new Object({
 			type: "text",
 			default: "Maneki-neko",
 			value: "Maneki-neko"
+		},
+		"stay_away": {
+			text: "Stay at least 10 pixels away from the cursor",
+			default: true,
+			value: true
 		}
 	},
 
@@ -41,13 +46,15 @@ XKit.extensions.xneko = new Object({
 		XKit.extensions.xneko.neko.alt_sprite = false;
 
 		XKit.extensions.xneko.neko.born = function() {
-			$("body").append('<div id="xneko">&nbsp;</div>');
+			$("body").append('<div id="xneko" class="santa">&nbsp;</div>');
 			this.int = setTimeout(function() {
 				// Do neko stuff here.
 				XKit.extensions.xneko.think(XKit.extensions.xneko.neko);
 			}, 200);
 			$("#xneko").click(function() {
 				XKit.notifications.add("Meow!","ok");
+				XKit.extensions.xneko.mouse_x = XKit.extensions.xneko.mouse_x + 60;
+				XKit.extensions.xneko.think(XKit.extensions.xneko.neko, true);
 			});
 		};
 
@@ -59,8 +66,8 @@ XKit.extensions.xneko = new Object({
 		XKit.extensions.xneko.neko.place = function(x, y) {
 			this.x = x;
 			this.y = y;
-			$("#xneko").css("top", y + "px");
-			$("#xneko").css("left", x + "px");
+			$("#xneko").css("top", Math.round(y) + "px");
+			$("#xneko").css("left", Math.round(x) + "px");
 		};	
 
 		// Make the cat born.
@@ -70,17 +77,31 @@ XKit.extensions.xneko = new Object({
 		XKit.extensions.xneko.neko.place($(window).width() / 2 - 16, $(window).height() / 2 - 16);
 
    		$(document).mousemove(function(e){
-			XKit.extensions.xneko.mouse_x = e.pageX;
-			XKit.extensions.xneko.mouse_y = e.pageY;
+   			if (XKit.extensions.xneko.preferences.stay_away.value === true) {
+				XKit.extensions.xneko.mouse_x = e.pageX - 15;
+				XKit.extensions.xneko.mouse_y = e.pageY - 15;
+   			} else {
+				XKit.extensions.xneko.mouse_x = e.pageX;
+				XKit.extensions.xneko.mouse_y = e.pageY;
+			}
    		}); 
 
 	},
 
-	think: function(cat) {
+	think: function(cat, force_mode) {
 
 		var m_cat_stopped = false;
 		var mc_diff = XKit.extensions.xneko.mouse_x - cat.x;
 		if (mc_diff < 0) { mc_diff = -1 * mc_diff; }
+		
+		// Force update on Webkit.. No idea what is going on.
+		$('#xneko').find("p").remove();
+		$('#xneko').append("<p>&nbsp;</p>");
+		
+		if (force_mode) {
+			clearInterval(cat.int);
+			cat.energy = cat.energy + 60;
+		}
 
 		// Check X
 
@@ -91,9 +112,15 @@ XKit.extensions.xneko = new Object({
 			// cat should go left.
 			cat.direction_x = -1;
 		}
-
-		if (mc_diff < 15) {
-			cat.direction_x = 0;
+		
+		if (XKit.extensions.xneko.preferences.stay_away.value === true) {
+			if (mc_diff < 40) {
+				cat.direction_x = 0;
+			}
+		}else {
+			if (mc_diff < 15) {
+				cat.direction_x = 0;
+			}
 		}
 
 		// Check Y
@@ -236,7 +263,7 @@ XKit.extensions.xneko = new Object({
 				cat.place(cat.x + (8 * cat.direction_x), cat.y + (8 * cat.direction_y));
 				cat.energy = cat.energy - 1;
 				cat.stand_count = 0;
-				cat.int = setTimeout(function() { XKit.extensions.xneko.think(XKit.extensions.xneko.neko); }, 110);
+				cat.int = setTimeout(function() { XKit.extensions.xneko.think(XKit.extensions.xneko.neko); }, 100);
 
 			} else {
 

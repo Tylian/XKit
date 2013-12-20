@@ -1,5 +1,5 @@
 //* TITLE Read Posts **//
-//* VERSION 0.1 REV C **//
+//* VERSION 0.1 REV D **//
 //* DESCRIPTION Dim old posts **//
 //* DETAILS Dims the posts on the dashboard that you've already seen on previous page loads. **//
 //* DEVELOPER bit-shift **//
@@ -70,7 +70,7 @@ XKit.extensions.read_posts = new Object({
 	mark_post_read: function(post_id) {
 		var read_posts = JSON.parse(XKit.storage.get('read_posts', 'read_posts', '[]'));
  
-		while(XKit.storage.quota('read_posts') < (post_id.length + 3)) {
+		while(XKit.storage.quota('read_posts') <= (post_id.length + 3)) {
 			/* drop oldest posts until enough room for new */
 			read_posts.shift();
 			XKit.storage.set('read_posts', 'read_posts', JSON.stringify(read_posts));

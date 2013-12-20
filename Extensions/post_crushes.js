@@ -1,5 +1,5 @@
 //* TITLE Post Crushes **//
-//* VERSION 1.0 REV D **//
+//* VERSION 1.0 REV E **//
 //* DESCRIPTION Lets you share your Tumblr Crushes **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS To use this extension, go to the 'Following' page on your dashboard, and click on the 'Post My Crushes' button below your Tumblr Crushes. **//
@@ -160,27 +160,42 @@ XKit.extensions.post_crushes = new Object({
 		m_object["photo_src[]"] = send_url;
 		m_object["images[o1]"] = send_url;
 		
-
-		GM_xmlhttpRequest({
-			method: "POST",
-			url: "http://www.tumblr.com/svc/post/update",
-			data: JSON.stringify(m_object),
-			headers: {
-					"Content-Type": "application/json"
-			},
-			onerror: function(response) {
-				XKit.extensions.post_crushes.post_crushes_error("Can't post crushes", "Server returned invalid/blank page or could not be reached. Maybe you hit your post limit for today, or your account has been suspended. Please check your internet connection and try again later.");
-			},
-			onload: function(response) {
-				var m_obj = jQuery.parseJSON(response.responseText);
-				console.log(m_obj);
-				if (m_obj.errors === false) {
-					$("#xkit_post_crushes").html("Posted!");
-					XKit.notifications.add("Your crushes have been posted to your main blog.", "ok");
-				} else {
-					XKit.extensions.post_crushes.post_crushes_error("Can't post crushes", "Server returned a non-JSON object. Maybe you hit your post limit for today, or your account has been suspended. Please try again later.");
-				}
+		XKit.interface.kitty.get(function(kitty_data) {
+			
+			if (kitty_data.errors === true) {
+			
+				XKit.extensions.post_crushes.post_crushes_error("Can't post crushes", "Unable to authorize post transaction. Please try again later.");
+				return;
+				
 			}
+
+			GM_xmlhttpRequest({
+				method: "POST",
+				url: "http://www.tumblr.com/svc/post/update",
+				data: JSON.stringify(m_object),
+				headers: { 
+					"X-tumblr-puppies": kitty_data.kitten,
+					"X-tumblr-form-key": XKit.interface.form_key(),
+					"Content-Type": "application/json"
+				},
+				onerror: function(response) {
+					XKit.interface.kitty.set("");
+					XKit.extensions.post_crushes.post_crushes_error("Can't post crushes", "Server returned invalid/blank page or could not be reached. Maybe you hit your post limit for today, or your account has been suspended. Please check your internet connection and try again later.");
+				},
+				onload: function(response) {
+					XKit.interface.kitty.set(response.getResponseHeader("X-tumblr-kittens"));
+					var m_obj = jQuery.parseJSON(response.responseText);
+					console.log(m_obj);
+					if (m_obj.errors === false) {
+						$("#xkit_post_crushes").html("Posted!");
+						XKit.notifications.add("Your crushes have been posted to your main blog.", "ok");
+					} else {
+						XKit.extensions.post_crushes.post_crushes_error("Can't post crushes", "Server returned a non-JSON object. Maybe you hit your post limit for today, or your account has been suspended. Please try again later.");
+					}
+				}
+			});
+		
+		
 		});
 	},
 	

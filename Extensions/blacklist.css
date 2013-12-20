@@ -39,7 +39,9 @@
 }
 
 .xblacklist_hidden_post {
-	display: none;	
+	display: none !important;
+	height: 0px !important; width: 0px !important;
+	overflow: hidden !important;	
 }
 
 .xkit-blacklist-add-margins-to-ul {

@@ -1,5 +1,5 @@
 //* TITLE Quick Tags **//
-//* VERSION 0.3 REV B **//
+//* VERSION 0.3 REV C **//
 //* DESCRIPTION Quickly add tags to posts **//
 //* DETAILS Allows you to create tag bundles and add tags to posts without leaving the dashboard. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -103,10 +103,11 @@ XKit.extensions.quick_tags = new Object({
 				// Use Interface to edit the post's tags:
 				var m_tags = data.data.post.tags;
 				
+				if (m_tags === "undefined" || typeof m_tags === "undefined" || m_tags == "null") {
+					m_tags = "";
+				}
+				
 				if (XKit.extensions.quick_tags.preferences.append_not_replace.value === true) {
-					if (typeof m_tags === "undefined" ||m_tags == "null") {
-						m_tags = "";	
-					}
 					m_tags = m_tags + "," + tags;
 				} else {
 					m_tags = tags;	

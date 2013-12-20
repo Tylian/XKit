@@ -1,5 +1,5 @@
 //* TITLE One-Click Postage **//
-//* VERSION 3.0 REV A **//
+//* VERSION 3.0 REV D **//
 //* DESCRIPTION Lets you easily reblog, draft and queue posts **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//
@@ -150,6 +150,12 @@ XKit.extensions.one_click_postage = new Object({
 					" background-repeat: no-repeat; " +
 					" background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBNYWNpbnRvc2giIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6MDZEMUIyMEM0MDFDMTFFM0I3QjRGNERGODZCRDlCN0MiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6MDZEMUIyMEQ0MDFDMTFFM0I3QjRGNERGODZCRDlCN0MiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDo3MDYxNTA2MTQwMUExMUUzQjdCNEY0REY4NkJEOUI3QyIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDo3MDYxNTA2MjQwMUExMUUzQjdCNEY0REY4NkJEOUI3QyIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PmHw4kUAAAErSURBVHjahJKxasMwEIblBNq1tHQyGJduhtLBfoDi2WOH0jxAKd27eMlbhEyBQN+gD+ApU8hS3N2blw7pYLxd/oOTOYQcH3yWdJbu9N8pICKjLAMFeAIP4vsBFfgGe+MaBxDeQE3jVssefcbow0eatqMbhD/ZRGbfTTIbYCaaE6UqAM9m3BI5M9SgcjLMJfpG1gG4dPZUWsKf55rG4Qo8ggsZ37UEn3Vqfgc+wAr8y3gN4jEJ1rbgHnyN/Gd/PJNH4jN+OC/g1TqKojBt29ol+xfn2ngLdjzpuo7SNKUwDKlpGr1nd+4hcfX7ofl1TVEUuQF6W8Q1+AS/jozD0Pwk8ck8uO1iOUsp7A0obSrOzjXP81zfoDSenmviqS5MBbBBSiloL2MpfnMSYADCFn1McDQb3wAAAABJRU5ErkJggg==); " +
 				"}" + 
+				"#x1cpostage_in_blog_draft:before {" +
+					" background-size: auto; " +
+					" background-position: 50% 50%; " +
+					" background-repeat: no-repeat; " +
+					" background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBNYWNpbnRvc2giIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6MjUxMEI2MUU0RjcxMTFFM0E2REZERTA4MTkxRkNEODEiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6ODlFMzUxNEU0Rjc4MTFFM0E2REZERTA4MTkxRkNEODEiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDoyNTEwQjYxQzRGNzExMUUzQTZERkRFMDgxOTFGQ0Q4MSIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDoyNTEwQjYxRDRGNzExMUUzQTZERkRFMDgxOTFGQ0Q4MSIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PnBnWXQAAADUSURBVHjapFI7DsMgDMVRLtElypw7sLByJM7Tq2TslgNkCjcIYnGNCqlDoESqpZfnGP+wAUQU/0gXGWsMAPz/In34QPQKaoXFzwT4ucfJ+ZvzECwl7W9WgrszaAkWr9DqgF0H8q01O6CAkWAIM8GRaSYYwpgcimDBTyxLsI8pACsJDI/QWuO2bdxkqjOgwweRDvq+70JKKay1wnvP3XSrA5dKLcuCwzDguq68A9c1tvBKyjRN5fOsg4PzGYTqwaSUOs2guoWI21toJTneQWQT7eItwABahmWkthQpGAAAAABJRU5ErkJggg==); " +
+				"}" + 
 				".btn.xkit-button-working:before { background-image: url(data:image/gif;base64,R0lGODlhEAAQAIAAAP///////yH/C05FVFNDQVBFMi4wAwEAAAAh/wtYTVAgRGF0YVhNUDw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBNYWNpbnRvc2giIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6MDZEMUIyMTQ0MDFDMTFFM0I3QjRGNERGODZCRDlCN0MiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6MDZEMUIyMTU0MDFDMTFFM0I3QjRGNERGODZCRDlCN0MiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDowNkQxQjIxMjQwMUMxMUUzQjdCNEY0REY4NkJEOUI3QyIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDowNkQxQjIxMzQwMUMxMUUzQjdCNEY0REY4NkJEOUI3QyIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PgH//v38+/r5+Pf29fTz8vHw7+7t7Ovq6ejn5uXk4+Lh4N/e3dzb2tnY19bV1NPS0dDPzs3My8rJyMfGxcTDwsHAv769vLu6ubi3trW0s7KxsK+urayrqqmop6alpKOioaCfnp2cm5qZmJeWlZSTkpGQj46NjIuKiYiHhoWEg4KBgH9+fXx7enl4d3Z1dHNycXBvbm1sa2ppaGdmZWRjYmFgX15dXFtaWVhXVlVUU1JRUE9OTUxLSklIR0ZFRENCQUA/Pj08Ozo5ODc2NTQzMjEwLy4tLCsqKSgnJiUkIyIhIB8eHRwbGhkYFxYVFBMSERAPDg0MCwoJCAcGBQQDAgEAACH5BAkQAAEALAAAAAAQABAAAAIVjI+py+0Po3QAmHptwoHzCYbiSDIFACH5BAkQAAEALAcABwAGAAIAAAIFBBJmaAUAIfkECRAAAQAsCwAHAAIAAgAAAgKEUQAh+QQFEAABACwAAAAAAQABAAACAkwBACH5BAUQAAEALAMABwACAAIAAAIChFEAIfkEBRAAAQAsBwAHAAIAAgAAAgKEUQAh+QQFEAABACwAAAAAAQABAAACAkwBADs=) !important; } " +
 				".btn.xkit-button-done { background-color: #59982a !important; }" +
 				".btn.xkit-button-error { background-color: #982a2a !important; }";
@@ -157,7 +163,8 @@ XKit.extensions.one_click_postage = new Object({
 		XKit.tools.add_css(m_css, "x1cpostage_in_blog");
 		
 		var m_html = 	"<a id=\"x1cpostage_in_blog_reblog\" onclick=\"return false\" class=\"btn icon reblog no_label\">1-Click Reblog</a>" +
-				"<a id=\"x1cpostage_in_blog_queue\" onclick=\"return false\" class=\"btn icon reblog no_label\">1-Click Queue</a>";
+				"<a id=\"x1cpostage_in_blog_queue\" onclick=\"return false\" class=\"btn icon reblog no_label\">1-Click Queue</a>" +
+				"<a id=\"x1cpostage_in_blog_draft\" onclick=\"return false\" class=\"btn icon reblog no_label\">1-Click Draft</a>";
 		
 		$(".btn.reblog").after(m_html);
 		
@@ -167,6 +174,10 @@ XKit.extensions.one_click_postage = new Object({
 		
 		$("#x1cpostage_in_blog_queue").click(function() {
 			XKit.extensions.one_click_postage.in_blog_post($(this), 2, false);	
+		});
+		
+		$("#x1cpostage_in_blog_draft").click(function() {
+			XKit.extensions.one_click_postage.in_blog_post($(this), 1, false);	
 		});
 		
 	},
@@ -283,7 +294,7 @@ XKit.extensions.one_click_postage = new Object({
 		
 		m_object.detached = true;
 		
-		console.log(_m_object);
+		// console.log(data.post);
 	
 		m_object.reblog = true;
 		m_object.reblog_id = parseInt(_m_object.reblog_id);
@@ -309,6 +320,32 @@ XKit.extensions.one_click_postage = new Object({
 		m_object["post[date]"] = "";
 	
 		m_object["post[type]"] = data.post.type;
+		
+		var reblog_as_text = false;
+		
+		if (XKit.installed.check("reblog_as_text") === true) {
+			if (XKit.installed.enabled("reblog_as_text") === true) {
+				reblog_as_text = true;	
+			}	
+		}
+		
+		if (reblog_as_text) {
+			
+			try {
+				
+				if (data.post.can_reblog_as[0] === "regular") {
+			
+					m_object["post[type]"] = "regular";
+			
+				}
+				
+			} catch(e) {
+				
+				console.log("Can't read can_reblog_as....");	
+				
+			}
+			
+		}
 		
 		m_object["post[tags]"] = "";
 
@@ -339,55 +376,80 @@ XKit.extensions.one_click_postage = new Object({
 			m_object["post[state]"] = state;
 		}
 		m_object.custom_tweet = "";
-
-		GM_xmlhttpRequest({
-			method: "POST",
-			url: "http://www.tumblr.com/svc/post/update",
-			data: JSON.stringify(m_object),
-			json: true,
-			onerror: function(response) {
-				if (response.status === 401) {
-					alert("Unable to QuickReblog/Queue:\nError Code: INOCP101");
+		
+		XKit.interface.kitty.get(function(kitty_data) {
+			
+			if (kitty_data.errors === true) {
+			
+				// We fucked up for some reason.
+				if (retry_mode !== true) {
+					XKit.extensions.one_click_postage.in_blog_process(data, state, obj, m_object, true);
+				} else {
+					alert("Unable to QuickReblog/Queue:\nError Code: INOCP109-SFORMKEYFAIL");
 					$(obj).removeClass("xkit-button-working");
 					$(obj).addClass("xkit-button-error");
-				} else {
-					if (response.status === 404) {
-						alert("Unable to QuickReblog/Queue:\nError Code: INOCP104 Not Found");
+				}
+				
+				return;
+				
+			}
+
+			GM_xmlhttpRequest({
+				method: "POST",
+				url: "http://www.tumblr.com/svc/post/update",
+				data: JSON.stringify(m_object),
+				json: true,
+				headers: { 
+					"X-tumblr-puppies": kitty_data.kitten,
+					"X-tumblr-form-key": XKit.interface.form_key(),
+				},
+				onerror: function(response) {
+					XKit.interface.kitty.set("");
+					if (response.status === 401) {
+						alert("Unable to QuickReblog/Queue:\nError Code: INOCP101");
 						$(obj).removeClass("xkit-button-working");
 						$(obj).addClass("xkit-button-error");
 					} else {
-						if (retry_mode !== true) {
-							//XKit.extensions.one_click_postage.process(data, state, form_key, "", post_id, caption, tags, reblog_key, m_button, true, root_id, quick_queue_mode);
-							XKit.extensions.one_click_postage.in_blog_process(data, state, obj, m_object, true);
-						} else {
-							alert("Unable to QuickReblog/Queue:\nError Code: INOCP109-" + response.status);
+						if (response.status === 404) {
+							alert("Unable to QuickReblog/Queue:\nError Code: INOCP104 Not Found");
 							$(obj).removeClass("xkit-button-working");
 							$(obj).addClass("xkit-button-error");
+						} else {
+							if (retry_mode !== true) {
+								//XKit.extensions.one_click_postage.process(data, state, form_key, "", post_id, caption, tags, reblog_key, m_button, true, root_id, quick_queue_mode);
+								XKit.extensions.one_click_postage.in_blog_process(data, state, obj, m_object, true);
+							} else {
+								alert("Unable to QuickReblog/Queue:\nError Code: INOCP109-" + response.status);
+								$(obj).removeClass("xkit-button-working");
+								$(obj).addClass("xkit-button-error");
+							}
 						}
 					}
+				},
+				onload: function(response) {
+					// We are done!
+					XKit.interface.kitty.set(response.getResponseHeader("X-tumblr-kittens"));
+					try {
+						var mdata = jQuery.parseJSON(response.responseText);
+						//console.log("---DONE!---");
+						//console.log(mdata);
+					} catch(e) {
+						alert("Unable to QuickReblog/Queue:\nError Code: INOCP181");
+						$(obj).removeClass("xkit-button-working");
+						$(obj).addClass("xkit-button-error");
+					}
+					if (mdata.errors === false) {
+						$(obj).removeClass("xkit-button-working");
+						$(obj).addClass("xkit-button-done");
+					} else {
+						// xkit_error(XKit.language.one_click_postage.status_error_title, XKit.language.generic_errors.server_error);
+						alert("Unable to QuickReblog/Queue:\nError Code: INOCP901");
+						$(obj).removeClass("xkit-button-working");
+						$(obj).addClass("xkit-button-error");
+					}
 				}
-			},
-			onload: function(response) {
-				// We are done!
-				try {
-					var mdata = jQuery.parseJSON(response.responseText);
-					console.log("---DONE!---");
-					console.log(mdata);
-				} catch(e) {
-					alert("Unable to QuickReblog/Queue:\nError Code: INOCP181");
-					$(obj).removeClass("xkit-button-working");
-					$(obj).addClass("xkit-button-error");
-				}
-				if (mdata.errors === false) {
-					$(obj).removeClass("xkit-button-working");
-					$(obj).addClass("xkit-button-done");
-				} else {
-					// xkit_error(XKit.language.one_click_postage.status_error_title, XKit.language.generic_errors.server_error);
-					alert("Unable to QuickReblog/Queue:\nError Code: INOCP901");
-					$(obj).removeClass("xkit-button-working");
-					$(obj).addClass("xkit-button-error");
-				}
-			}
+			});
+			
 		});
 	
 	},
@@ -449,7 +511,7 @@ XKit.extensions.one_click_postage = new Object({
 
 		/*XKit.extensions.one_click_postage.previous_div_id = "";*/
 		XKit.tools.init_css("one_click_postage");
-		
+
 		// Let's first check if we have auto_tagger installed and active.
 		XKit.extensions.one_click_postage.get_autotagger();
 		
@@ -591,13 +653,13 @@ XKit.extensions.one_click_postage = new Object({
 		$(document).on("mouseout",".reblog_button,.post_control.reblog", function() {
 			if ($(this).hasClass("radar_button") === true) {return; }
 			XKit.extensions.one_click_postage.user_on_box = false;
-			console.log("calling close_menu 1");
+			//console.log("calling close_menu 1");
 			XKit.extensions.one_click_postage.close_menu($(this));
 		});
 		
 		$(document).on("click",".reblog_button,.post_control.reblog", function() {
 			XKit.extensions.one_click_postage.user_on_box = false;
-			console.log("calling close_menu 2");
+			//console.log("calling close_menu 2");
 			XKit.extensions.one_click_postage.close_menu($(this), true);
 		});
 
@@ -611,7 +673,7 @@ XKit.extensions.one_click_postage = new Object({
 			// Only close the menu if it doesn't have keyboard or mouse focus
 			if ($("#x1cpostage_box").find('input:focus, textarea:focus').length == 0 && $('#x1cpostage_box:hover').length == 0) {
 				XKit.extensions.one_click_postage.user_on_box = false;
-				console.log("calling close_menu 3");
+				//console.log("calling close_menu 3");
 				XKit.extensions.one_click_postage.close_menu($(this));
 			}
 		};
@@ -628,7 +690,7 @@ XKit.extensions.one_click_postage = new Object({
 					&& event.which == 27) { // 27 = Escape
 				$(this).blur();
 				XKit.extensions.one_click_postage.user_on_box = false;
-				console.log("calling close_menu 4");
+				//console.log("calling close_menu 4");
 				XKit.extensions.one_click_postage.close_menu($(this), true);
 				event.preventDefault();
 			}
@@ -980,7 +1042,7 @@ XKit.extensions.one_click_postage = new Object({
 	},
 	close_menu: function(obj, force) {
 		
-		console.log("Close menu called: XKit.extensions.one_click_postage.user_on_box = " + XKit.extensions.one_click_postage.user_on_box);
+		//console.log("Close menu called: XKit.extensions.one_click_postage.user_on_box = " + XKit.extensions.one_click_postage.user_on_box);
 		clearTimeout(XKit.extensions.one_click_postage.menu_closer_int);
 		
 		if (force === true) {
@@ -995,7 +1057,7 @@ XKit.extensions.one_click_postage = new Object({
 		}
 		
 		XKit.extensions.one_click_postage.menu_closer_int = setTimeout(function() {
-			console.log("CLOSING! XKit.extensions.one_click_postage.user_on_box = " + XKit.extensions.one_click_postage.user_on_box);
+			// console.log("CLOSING! XKit.extensions.one_click_postage.user_on_box = " + XKit.extensions.one_click_postage.user_on_box);
 			if (XKit.extensions.one_click_postage.user_on_box === false) {
 				last_object = null;
 				if (XKit.extensions.one_click_postage.preferences.show_reverse_ui.value === true) {
@@ -1070,7 +1132,7 @@ XKit.extensions.one_click_postage = new Object({
 					XKit.extensions.one_click_postage.show_error("OCP01", state);
 				} else {
 					if (response.status === 404) {
-						XKit.extensions.one_click_postage.show_error("OCP02 [Not Found]", state);
+						XKit.extensions.one_click_postage.show_error("OCP02 [Post Not Found]", state);
 					} else {
 						if (retry_mode !== true) {
 							setTimeout(function() { XKit.extensions.one_click_postage.post(state, true, quick_queue_mode); }, 500);
@@ -1103,6 +1165,7 @@ XKit.extensions.one_click_postage = new Object({
 		});
 		
 	},
+
 	process: function(data, state, form_key, blog_id, post_id, caption, tags, reblog_key, m_button, retry_mode, root_id, quick_queue_mode) {
 
 		var m_object = new Object;
@@ -1249,70 +1312,95 @@ XKit.extensions.one_click_postage = new Object({
 			m_object["post[state]"] = state;
 		}
 		m_object.custom_tweet = "";
-
-		GM_xmlhttpRequest({
-			method: "POST",
-			url: "http://www.tumblr.com/svc/post/update",
-			data: JSON.stringify(m_object),
-			json: true,
-			onerror: function(response) {
-				if (response.status === 401) {
-					XKit.extensions.one_click_postage.show_error("OCP06", state);
+		
+		XKit.interface.kitty.get(function(kitty_data) {
+			
+			if (kitty_data.errors === true) {
+			
+				// We fucked up for some reason.
+				if (retry_mode !== true) {
+					XKit.extensions.one_click_postage.process(data, state, form_key, "", post_id, caption, tags, reblog_key, m_button, true, root_id, quick_queue_mode);
 				} else {
-					if (response.status === 404) {
-						XKit.extensions.one_click_postage.show_error("OCP07", state);
+					XKit.extensions.one_click_postage.show_error("OCP-FORMKEYREQFAIL08", state);
+				}
+				
+				return;
+				
+			}
+
+			GM_xmlhttpRequest({
+				method: "POST",
+				url: "http://www.tumblr.com/svc/post/update",
+				data: JSON.stringify(m_object),
+				json: true,
+				headers: { 
+					"X-tumblr-puppies": kitty_data.kitten,
+					"X-tumblr-form-key": XKit.interface.form_key(),
+				},
+				onerror: function(response) {
+					XKit.interface.kitty.set("");
+					if (response.status === 401) {
+						XKit.extensions.one_click_postage.show_error("OCP06", state);
 					} else {
-						if (retry_mode !== true) {
-							XKit.extensions.one_click_postage.process(data, state, form_key, "", post_id, caption, tags, reblog_key, m_button, true, root_id, quick_queue_mode);
+						if (response.status === 404) {
+							XKit.extensions.one_click_postage.show_error("OCP07", state);
 						} else {
-							XKit.extensions.one_click_postage.show_error("OCP08-" + response.status, state);
-						}
-					}
-				}
-				$(m_button).removeClass("xkit-one-click-reblog-working");
-			},
-			onload: function(response) {
-				// We are done!
-				try {
-					var mdata = jQuery.parseJSON(response.responseText);
-				} catch(e) {
-					//xkit_error(XKit.language.one_click_postage.status_error_title, XKit.language.generic_errors.not_json);
-					XKit.extensions.one_click_postage.show_error("OCP09-J", state);
-					$(m_button).removeClass("xkit-one-click-reblog-working");
-					return;
-				}
-				if (mdata.errors === false) {
-					$(m_button).removeClass("xkit-one-click-reblog-working");
-					if (mdata.message === "" || typeof mdata.message === "undefined") {
-					/*	if (state === 0) { XKit.notifications.add(XKit.language.one_click_postage.status_ok_reblogged, "ok"); }
-						if (state === 1) { XKit.notifications.add(XKit.language.one_click_postage.status_ok_drafted, "ok"); }
-						if (state === 2) { XKit.notifications.add(XKit.language.one_click_postage.status_ok_queued, "ok"); } */
-					} else {
-						if (XKit.extensions.one_click_postage.preferences.enable_alreadyreblogged.value === true) {
-							XKit.extensions.one_click_postage.add_to_alreadyreblogged(root_id);
-						}
-						if (XKit.extensions.one_click_postage.preferences.enable_alreadyreblogged.value === true ||XKit.extensions.one_click_postage.preferences.dim_posts_after_reblog.value === true) {
-							if (quick_queue_mode !== true) {
-								$(m_button).addClass("xkit-one-click-reblog-done");
+							if (retry_mode !== true) {
+								XKit.extensions.one_click_postage.process(data, state, form_key, "", post_id, caption, tags, reblog_key, m_button, true, root_id, quick_queue_mode);
 							} else {
-								XKit.interface.switch_control_button($(m_button), false);
-								XKit.interface.completed_control_button($(m_button), true);	
+								XKit.extensions.one_click_postage.show_error("OCP08-" + response.status, state);
 							}
 						}
-						if (XKit.extensions.one_click_postage.preferences.dont_show_notifications.value !== true) {
-							XKit.notifications.add(mdata.message, "ok");
-						}
 					}
-				} else {
-					// xkit_error(XKit.language.one_click_postage.status_error_title, XKit.language.generic_errors.server_error);
-					var m_error = "Unknown error at svc/post/update";
-					if (typeof mdata.error !== "undefined") {
-						m_error = mdata.error;	
-					}
-					XKit.extensions.one_click_postage.show_error("OCP10", state);
 					$(m_button).removeClass("xkit-one-click-reblog-working");
+				},
+				onload: function(response) {
+					// We are done!
+					XKit.interface.kitty.set(response.getResponseHeader("X-tumblr-kittens"));
+					try {
+						var mdata = jQuery.parseJSON(response.responseText);
+					} catch(e) {
+						//xkit_error(XKit.language.one_click_postage.status_error_title, XKit.language.generic_errors.not_json);
+						XKit.extensions.one_click_postage.show_error("OCP09-J", state);
+						$(m_button).removeClass("xkit-one-click-reblog-working");
+						return;
+					}
+					if (mdata.errors === false) {
+						$(m_button).removeClass("xkit-one-click-reblog-working");
+						if (mdata.message === "" || typeof mdata.message === "undefined") {
+						/*	if (state === 0) { XKit.notifications.add(XKit.language.one_click_postage.status_ok_reblogged, "ok"); }
+							if (state === 1) { XKit.notifications.add(XKit.language.one_click_postage.status_ok_drafted, "ok"); }
+							if (state === 2) { XKit.notifications.add(XKit.language.one_click_postage.status_ok_queued, "ok"); } */
+						} else {
+							
+							
+							if (XKit.extensions.one_click_postage.preferences.enable_alreadyreblogged.value === true) {
+								XKit.extensions.one_click_postage.add_to_alreadyreblogged(root_id);
+							}
+							if (XKit.extensions.one_click_postage.preferences.enable_alreadyreblogged.value === true ||XKit.extensions.one_click_postage.preferences.dim_posts_after_reblog.value === true) {
+								if (quick_queue_mode !== true) {
+									$(m_button).addClass("xkit-one-click-reblog-done");
+								} else {
+									XKit.interface.switch_control_button($(m_button), false);
+									XKit.interface.completed_control_button($(m_button), true);	
+								}
+							}
+							if (XKit.extensions.one_click_postage.preferences.dont_show_notifications.value !== true) {
+								XKit.notifications.add(mdata.message, "ok");
+							}
+						}
+					} else {
+						// xkit_error(XKit.language.one_click_postage.status_error_title, XKit.language.generic_errors.server_error);
+						var m_error = "Unknown error at svc/post/update";
+						if (typeof mdata.error !== "undefined") {
+							m_error = mdata.error;	
+						}
+						XKit.extensions.one_click_postage.show_error("OCP10", state);
+						$(m_button).removeClass("xkit-one-click-reblog-working");
+					}
 				}
-			}
+			});
+		
 		});
 	
 	},
@@ -1356,11 +1444,11 @@ XKit.extensions.one_click_postage = new Object({
 		if (state === 2) { m_word = "queue"; }
 		
 		var m_causes =	"<ul class=\"xkit-one-click-postage-error-list\">" +
-					"<li><b>You have used your post limit.</b><br/>The limit is 250 per day, set by Tumblr. Try again in 24 hours.</li>" +
-					"<li><b>You've filled your queue.</b><br/>You can not queue more than 300 posts.</li>" +
+					"<li><b>You have used your daily post limit. (<a href=\"#\">more information</a>)</b><br/>The limit is 250 per day, set by Tumblr. Try again in 24 hours.<br/>This affects the queue too, and can't be circumvented.</li>" +
+					"<li><b>You've filled up your queue.</b><br/>You can not queue more than 300 posts.</li>" +
 					"<li><b>The post is deleted.</b><br/>The post you are trying to " + m_word + " is deleted by the user.</li>" +
 					"<li><b>Your browser settings are denying XKit cookies.</b><br/>If you have disabled \"Third Party Cookies\", One-Click Postage can not work properly. Please enable them and try again.</li>" +
-					"<li><b>There was a server error.</b><br/>Wait for a while and retry the " + m_word + " request.<br/>There might be some changes made to the Tumblr servers, in that case, a fix will be provided soon. Check the XKit blog for updates.</li>" +
+					"<li><b>There was a server error / change.</b><br/>Wait for a while and retry the " + m_word + " request.<br/>Check the XKit blog for updates.</li>" +
 				"</ul>";
 		
 		if (state === 2 && XKit.interface.user().queue >= 299) {
@@ -1369,7 +1457,7 @@ XKit.extensions.one_click_postage = new Object({
 				"</ul>";	
 		}
 		
-		XKit.window.show("I could not " + m_word + " your post.","<b>One of the following might be the reason for that:</b>" + m_causes + "<b>If the tips above did not solve the problem,</b><br/>please send me an ask along with the error code <b>" + code + "</b>.","error","<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div><a href=\"http://xkit-extension.tumblr.com/\" class=\"xkit-button\">Visit the XKit Blog</a><a href=\"http://xkit-extension.tumblr.com/ask\" class=\"xkit-button\">Send an ask</a>");	
+		XKit.window.show("I could not " + m_word + " your post.","<b>One of the following might be the reason for that:</b>" + m_causes + "<small>Error Code: <b>" + code + "</b>.</small>","error","<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div><a href=\"http://xkit-extension.tumblr.com/\" class=\"xkit-button\">Visit the XKit Blog</a><a href=\"http://xkit-extension.tumblr.com/ask\" class=\"xkit-button\">Send an ask</a>");	
 		
 	}
 	

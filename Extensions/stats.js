@@ -1,5 +1,5 @@
 //* TITLE XStats **//
-//* VERSION 0.1 REV C **//
+//* VERSION 0.1 REV D **//
 //* DESCRIPTION The XKit Statistics Tool **//
 //* DETAILS This extension allows you to view statistics regarding your dashboard, such as the percentage of post types, top 4 posters, and more. In the future, it will allow you to view statistics regarding your and others blogs. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -336,27 +336,43 @@ XKit.extensions.stats = new Object({
 		m_object["post[publish_on]"] ="";
 		m_object.custom_tweet = "";
 		m_object["post[tags]"] = "xstats";
-
-		GM_xmlhttpRequest({
-			method: "POST",
-			url: "http://www.tumblr.com/svc/post/update",
-			data: JSON.stringify(m_object),
-			headers: {
-					"Content-Type": "application/json"
-			},
-			onerror: function(response) {
-				XKit.extensions.stats.post_error("Can't post stats", "Server returned invalid/blank page or could not be reached. Maybe you hit your post limit for today, or your account has been suspended. Please check your internet connection and try again later.");
-			},
-			onload: function(response) {
-				var m_obj = jQuery.parseJSON(response.responseText);
-				XKit.window.close();
-				if (m_obj.errors === false) {
-					$("#xkit_post_crushes").html("Posted!");
-					XKit.notifications.add("Your stats have been posted to the current blog.", "ok");
-				} else {
-					XKit.extensions.stats.post_error("Can't post stats", "Server returned a non-JSON object. Maybe you hit your post limit for today, or your account has been suspended. Please try again later.");
-				}
+		
+		
+		XKit.interface.kitty.get(function(kitty_data) {
+			
+			if (kitty_data.errors === true) {
+			
+				XKit.extensions.stats.post_error("Can't post stats", "Can't authenticate post. Please check your internet connection and try again later.");
+				return;
+				
 			}
+
+			GM_xmlhttpRequest({
+				method: "POST",
+				url: "http://www.tumblr.com/svc/post/update",
+				data: JSON.stringify(m_object),
+				headers: { 
+					"X-tumblr-puppies": kitty_data.kitten,
+					"X-tumblr-form-key": XKit.interface.form_key(),
+					"Content-Type": "application/json"
+				},
+				onerror: function(response) {
+					XKit.interface.kitty.set("");
+					XKit.extensions.stats.post_error("Can't post stats", "Server returned invalid/blank page or could not be reached. Maybe you hit your post limit for today, or your account has been suspended. Please check your internet connection and try again later.");
+				},
+				onload: function(response) {
+					var m_obj = jQuery.parseJSON(response.responseText);
+					XKit.interface.kitty.set(response.getResponseHeader("X-tumblr-kittens"));
+					XKit.window.close();
+					if (m_obj.errors === false) {
+						$("#xkit_post_crushes").html("Posted!");
+						XKit.notifications.add("Your stats have been posted to the current blog.", "ok");
+					} else {
+						XKit.extensions.stats.post_error("Can't post stats", "Server returned a non-JSON object. Maybe you hit your post limit for today, or your account has been suspended. Please try again later.");
+					}
+				}
+			});
+		
 		});
 		
 	},

@@ -24,8 +24,8 @@ XKit.extensions.xkit_installer = new Object({
 		this.running = true;
 
 		if (this.min_version > XKit.version) {
-			XKit.window.show("Framework version mismatch","<b>To be able to install XKit, you need XKit Framework version " + parseFloat(this.min_version) + ", but you have version " + XKit.version + ".</b><br/><br/>Please upgrade your XKit by going to the XKit website and try again or click on the Troubleshooting Help button below for more information.", "error","<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div><a href=\"http://www.xkit.info/troubleshooting\" class=\"xkit-button\">Troubleshooting Help</a>");
-			return;
+			// XKit.window.show("Framework version mismatch","<b>To be able to install XKit, you need XKit Framework version " + parseFloat(this.min_version) + ", but you have version " + XKit.version + ".</b><br/><br/>Please upgrade your XKit by going to the XKit website and try again or click on the Troubleshooting Help button below for more information.", "error","<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div><a href=\"http://www.xkit.info/troubleshooting\" class=\"xkit-button\">Troubleshooting Help</a>");
+			// return;
 		}
 
 		XKit.window.show("Installing XKit","<div id=\"xkit-install-process\" style=\"font-weight: bold;\">Starting installation..</div>Please do not navigate away from this page." + XKit.progress.add("installation"),"info");

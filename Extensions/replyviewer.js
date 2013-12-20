@@ -1,5 +1,5 @@
 //* TITLE ReplyViewer **//
-//* VERSION 0.1 REV A **//
+//* VERSION 0.1 REV C **//
 //* DESCRIPTION View post replies easily **//
 //* DETAILS The close relative of TagViewer, this extension allows you to see what replies, answers and additional content added to it while reblogging on any post. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -156,7 +156,7 @@ XKit.extensions.replyviewer = new Object({
       				}
       			} else {
       				if (XKit.extensions.replyviewer.found_count == 0) {
-      					$("#replyviewer-loading").html("No posts with tags found.");
+      					$("#replyviewer-loading").html("No posts with replies found.");
       				}
       				XKit.extensions.replyviewer.last_page = true;
       				XKit.console.add("Last page, quitting.");
