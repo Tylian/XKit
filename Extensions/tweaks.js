@@ -156,6 +156,12 @@ XKit.extensions.tweaks = new Object({
 			default: false,
 			value: false
 		},
+		"show_old_new_bubble": {
+			text: "Remove the web search button and show a \"new\" bubble when tracked tags update",
+			default: false,
+			value: false,
+			experimental: true
+		},
 		"sep4": {
 			text: "Sidebar tweaks",
 			type: "separator",
@@ -327,6 +333,18 @@ XKit.extensions.tweaks = new Object({
 
 		if (XKit.extensions.tweaks.preferences.hide_blog_search.value === true) {
 			XKit.tools.add_css(".blog.search_results_section { display: none !important }", "xkit_tweaks_hide_blog_search");
+		}
+		
+		if (XKit.extensions.tweaks.preferences.show_old_new_bubble.value === true) {
+			// only need to do this if the ( tumblr | web ) button is there
+			if ($(".search_query_btn_web").size() > 0) {
+				// hide the ( tumblr | web ) buttons
+				Xkit.tools.add_css(".search_query_btn_tumblr, .search_query_btn_web { display: none !important }", "xkit_tweaks_show_old_new_bubble");
+				// "X new posts" in the tracked tags is always a <small> tag
+				if ($(".tracked_tags small").size() > 0) {
+					$(".search_query_btn_tumblr").after('<button id="new_post_in_tracked_tags_bubble" class="search_query_btn pill">new</button>')
+				}
+			}
 		}
 		
 		if (XKit.extensions.tweaks.preferences.show_top_arrow.value === true) {
@@ -666,6 +684,8 @@ XKit.extensions.tweaks = new Object({
 		XKit.tools.remove_css("xkit_tweaks_small_quotes");
 		XKit.tools.remove_css("xkit_tweaks_hide_sponsored");
 		XKit.tools.remove_css("xkit_tweaks_hide_blog_search");
+        XKit.tools.remove_css("xkit_tweaks_show_old_new_bubble");
+        $("#new_post_in_tracked_tags_bubble").remove();
 		XKit.tools.remove_css("xkit_tweaks_hide_share");
 		XKit.tools.remove_css("xkit_tweaks_hide_notes");
 		XKit.tools.remove_css("xkit_tweaks_hide_tags");
