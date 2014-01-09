@@ -1,5 +1,5 @@
 //* TITLE One-Click Reply **//
-//* VERSION 1.8 REV C **//
+//* VERSION 1.8 REV F **//
 //* DESCRIPTION Lets you reply to notifications **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS To use this extension, hover over a notification and click on the Reply button. If Multi-Reply is on, hold down the ALT key while clicking on the Reply button to select/deselect posts and reply to all of them at once. **//
@@ -75,12 +75,14 @@ XKit.extensions.one_click_reply = new Object({
 		"like": "<p><a href=\"%l\">%u</a> liked your post: <a href=\"%p\">%t</a></p>",
 		"follow": "<p><a href=\"%l\">%u</a> started following %b</p>",
 		"reply": "<p><a href=\"%l\">%u</a> replied to your post: <a href=\"%p\">%t</a></p><blockquote>%r</blockquote>",
+		"reply_photo": "<p><a href=\"%l\">%u</a> replied to your post with a photo: <a href=\"%p\">%t</a></p><blockquote>%r</blockquote>",
 		"answer": "<p><a href=\"%l\">%u</a> answered your post: <a href=\"%p\">%t</a></p><blockquote>%r</blockquote>",	
 		
 		"nt_reblog": "<p><a href=\"%l\">%u</a> reblogged your <a href=\"%p\">post</a></p>",
 		"nt_reblog_with_comments": "<p><a href=\"%l\">%u</a> reblogged your <a href=\"%p\">post</a> and added:</p><blockquote>%r</blockquote>",
 		"nt_like": "<p><a href=\"%l\">%u</a> liked your <a href=\"%p\">post</a></p>",
 		"nt_reply": "<p><a href=\"%l\">%u</a> replied to your <a href=\"%p\">post:</a></p><blockquote>%r</blockquote>",
+		"nt_reply_photo": "<p><a href=\"%l\">%u</a> replied to your <a href=\"%p\">post</a> with a photo:</p><blockquote>%r</blockquote>",
 		"nt_answer": "<p><a href=\"%l\">%u</a> answered your <a href=\"%p\">post:</a></p><blockquote>%r</blockquote>",	
 		
 	},
@@ -188,6 +190,8 @@ XKit.extensions.one_click_reply = new Object({
 		
 		m_object["post[tags]"] = tags;
 		
+		reply = XKit.extensions.one_click_reply.JsAutoP(reply);
+		
 		m_object["post[one]"] = "";
 		m_object["post[two]"] = sentence + "<p>" + reply + "</p>";
 		m_object["post[three]"] = "";
@@ -256,6 +260,47 @@ XKit.extensions.one_click_reply = new Object({
 		
 		});
 		
+	},
+	
+	JsAutoP: function(s) {
+		
+		// From: http://ufku.com/personal/autop
+		
+		  if (!s || s.search(/\n|\r/) == -1) {
+			return s;
+		  }
+		  var  X = function(x, a, b) {return x.replace(new RegExp(a, 'g'), b)};
+		  var  R = function(a, b) {return s = X(s, a, b)};
+		  var blocks = '(table|thead|tfoot|caption|colgroup|tbody|tr|td|th|div|dl|dd|dt|ul|ol|li|pre|select'
+		  blocks += '|form|blockquote|address|math|style|script|object|input|param|p|h[1-6])';
+		  s += '\n';
+		  R('<br />\\s*<br />', '\n\n');
+		  R('(<' + blocks + '[^>]*>)', '\n$1');
+		  R('(</' + blocks + '>)', '$1\n\n');
+		  R('\r\n|\r', '\n'); // cross-platform newlines
+		  R('\n\n+', '\n\n');// take care of duplicates
+		  R('\n?((.|\n)+?)\n\\s*\n', '<p>$1</p>\n');// make paragraphs
+		  R('\n?((.|\n)+?)$', '<p>$1</p>\n');//including one at the end
+		  R('<p>\\s*?</p>', '');// under certain strange conditions it could create a P of entirely whitespace
+		  R('<p>(<div[^>]*>\\s*)', '$1<p>');
+		  R('<p>([^<]+)\\s*?(</(div|address|form)[^>]*>)', '<p>$1</p>$2');
+		  R('<p>\\s*(</?' + blocks + '[^>]*>)\\s*</p>', '$1');
+		  R('<p>(<li.+?)</p>', '$1');// problem with nested lists
+		  R('<p><blockquote([^>]*)>', '<blockquote$1><p>');
+		  R('</blockquote></p>', '</p></blockquote>');
+		  R('<p>\\s*(</?' + blocks + '[^>]*>)', '$1');
+		  R('(</?' + blocks + '[^>]*>)\\s*</p>', '$1');
+		  R('<(script|style)(.|\n)*?</\\1>', function(m0) {return X(m0, '\n', '<PNL>')});
+		  R('(<br />)?\\s*\n', '<br />\n');
+		  R('<PNL>', '\n');
+		  R('(</?' + blocks + '[^>]*>)\\s*<br />', '$1');
+		  R('<br />(\\s*</?(p|li|div|dl|dd|dt|th|pre|td|ul|ol)[^>]*>)', '$1');
+		  if (s.indexOf('<pre') != -1) {
+			R('(<pre(.|\n)*?>)((.|\n)*?)</pre>', function(m0, m1, m2, m3) {
+			  return X(m1, '\\\\([\'\"\\\\])', '$1') + X(X(X(m3, '<p>', '\n'), '</p>|<br />', ''), '\\\\([\'\"\\\\])', '$1') + '</pre>';
+			});
+		  }
+		  return R('\n</p>$', '</p>');
 	},
 	
 	quick_reply_open: function(sentence, tags, avatar, username) {
@@ -481,11 +526,20 @@ XKit.extensions.one_click_reply = new Object({
 				$(n_box).find(".block").after(m_html);
 			} else {
 				$(n_box).find(".notification_sentence").append(m_html);
-				$(n_box).find(".xkit-reply-button").css("top","12px");
+				
+				if ($(n_box).hasClass("xkit-old-notifications")) {
+					$(n_box).find(".xkit-reply-button").css("top","16px");
+				} else {
+					$(n_box).find(".xkit-reply-button").css("top","12px");	
+				}
 				if ($(n_box).hasClass("stretchy_kid_container") === true) {
 					$(n_box).find(".xkit-reply-button").css("right","8px");
 				} else {
-					$(n_box).find(".xkit-reply-button").css("right","38px");
+					if ($(n_box).hasClass("xkit-old-notifications")) {
+						$(n_box).find(".xkit-reply-button").css("right","43px");	
+					} else {
+						$(n_box).find(".xkit-reply-button").css("right","38px");
+					}
 				}
 			}
 			var m_right = 45 + $(n_box).find(".xkit-reply-button").width();
@@ -573,6 +627,7 @@ XKit.extensions.one_click_reply = new Object({
 		var m_sentence = "";
 		
 		if ($(obj).hasClass("is_reply") === true ||$(obj).hasClass("reply") === true) { m_post_type = "reply"; m_sentence = XKit.extensions.one_click_reply.sentences.reply; }
+		if ($(obj).find(".photo_reply_image_container").length > 0) { m_post_type = "reply"; m_sentence = XKit.extensions.one_click_reply.sentences.reply_photo; }
 		if ($(obj).hasClass("is_like") === true || $(obj).hasClass("like") === true) { m_post_type = "like"; m_sentence = XKit.extensions.one_click_reply.sentences.like;  }
 		if ($(obj).hasClass("is_answer") === true || $(obj).hasClass("answer") === true) { m_post_type = "answer"; m_sentence = XKit.extensions.one_click_reply.sentences.answer;  }
 		if ($(obj).hasClass("is_reblog") === true || $(obj).hasClass("reblog") === true) { 
@@ -589,6 +644,7 @@ XKit.extensions.one_click_reply = new Object({
 		
 		// Then the post contents:
 		var post_contents = "";
+		var contains_html = false;
 		if ($(post_div).find(".post_title").length > 0) {
 			// This post has a title! Let's use it.
 			post_contents = $(post_div).find(".post_title").html();	
@@ -599,26 +655,28 @@ XKit.extensions.one_click_reply = new Object({
 				post_contents = $(post_div).find(".post_text_wrapper").html();
 			}else {
 				// This is probably an image or audio post.
-				if ($(post_div).find(".caption").length > 0) {
-					// This is an image.
-					post_contents = $(post_div).find(".caption").html();
-				} else {
-					if ($(post_div).find(".post_body").length > 0) {
-						post_contents = $(post_div).find(".post_body").html();
+					if ($(post_div).find(".caption").length > 0) {
+						// This is an image.
+						post_contents = $(post_div).find(".caption").html();
 					} else {
-						if ($(post_div).find(".link_title").length > 0) {
+						if ($(post_div).find(".post_body").length > 0) {
 							post_contents = $(post_div).find(".post_body").html();
-						}	
-					}
-				}
+						} else {
+							if ($(post_div).find(".link_title").length > 0) {
+								post_contents = $(post_div).find(".post_body").html();
+								} else {
+	
+							}	
+						}
+					}	
 			}
 		}
 		
 		post_contents = post_contents.replace(/<(?:.|\n)*?>/gm, '');
-		if (post_contents.length > 40) {
+		if (post_contents.length > 40 && contains_html == false) {
 			post_contents = post_contents.substring(0, 38) + "...";	
 		}
-		
+
 		// Example sentence:
 		// "<p><a href=\"%l\">%u</a> reblogged <a href=\"%p\">your post</a> and added:</p><blockquote>%r</blockquote>"
 		
@@ -627,6 +685,11 @@ XKit.extensions.one_click_reply = new Object({
 		var user_name = "";
 		var user_url = "";
 		var commentary = $(obj).find(".answer_content").html();
+		
+		if ($(obj).find(".photo_reply_image_container").length > 0) {
+			commentary = $(obj).find(".photo_reply_image_container").html();
+		}
+		
 		if (m_post_type === "reblog_text") {
 			commentary = $(obj).find("blockquote").html();	
 			if ($(obj).find("blockquote").find("a").length > 0) {
@@ -652,7 +715,15 @@ XKit.extensions.one_click_reply = new Object({
 			}	
 		}
 		
+		//alert("post_contents: \n" + post_contents);
+		//alert("commentary: \n" + commentary);
+		//alert("m_sentence: \n" + m_sentence + "\n\nm_post_type:\n" + m_post_type);
+		
 		if ($.trim(post_contents) === "") {
+			
+			if (m_post_type === "reply_photo") {
+				m_sentence = XKit.extensions.one_click_reply.sentences.nt_reply_photo;	
+			}
 			
 			if (m_post_type === "reply") {
 				m_sentence = XKit.extensions.one_click_reply.sentences.nt_reply;	
@@ -693,6 +764,8 @@ XKit.extensions.one_click_reply = new Object({
 			}
 			m_sentence = "<img src=\"" + avatar_url + "\" class=\"image_thumbnail\">" + m_sentence;	
 		}
+		
+		//alert(m_sentence);
 		
 		XKit.tools.set_setting("xkit_one_click_reply_sentence", m_sentence);
 		XKit.tools.set_setting("xkit_one_click_reply_username", user_name);

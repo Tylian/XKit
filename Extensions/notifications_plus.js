@@ -1,5 +1,5 @@
 //* TITLE Notifications+ **//
-//* VERSION 1.4 REV E **//
+//* VERSION 1.4 REV F **//
 //* DESCRIPTION Enhances the notifications **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//

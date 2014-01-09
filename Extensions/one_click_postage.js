@@ -1,5 +1,5 @@
 //* TITLE One-Click Postage **//
-//* VERSION 3.0 REV E **//
+//* VERSION 3.1 REV B **//
 //* DESCRIPTION Lets you easily reblog, draft and queue posts **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//
@@ -66,6 +66,16 @@ XKit.extensions.one_click_postage = new Object({
 			text: "Show the Remove Caption button",
 			default: true,
 			value: true
+		},
+		"show_caption": {
+			text: "Show the Caption box",
+			default: true,
+			value: true
+		},
+		"show_tag_remover": {
+			text: "Show the Clear Tags button",
+			default: false,
+			value: false
 		},
 		"show_reverse_ui": {
 			text: "Use the Reverse UI on the popup-window (popup on top of reblog button)",
@@ -537,14 +547,26 @@ XKit.extensions.one_click_postage = new Object({
 			m_remove_button = "";
 		}	
 		
+		var m_remove_box_style = "";
+		if (this.preferences.show_caption.value !== true) {
+			m_remove_box_style = " style=\"display: none;\" ";
+		}
+		
+		var m_clear_tags_button = "<div id=\"x1cpostage_clear_tags\">clear tags</div>";
+		
+		if (this.preferences.show_tag_remover.value !== true) {
+			m_clear_tags_button = "";
+		}	
+		
 		var m_html = "";	
 		
 		if (this.preferences.show_reverse_ui.value === true) {
 			
 			var m_html = "<div id=\"x1cpostage_box\">" + 
 						"<input id=\"x1cpostage_tags\" placeholder=\"tags (comma separated)\" />" +
-						"<textarea id=\"x1cpostage_caption\" placeholder=\"caption\"></textarea>" +
-						"<div id=\"x1cpostage_replace\"><div>&nbsp;</div>replace caption, not append</div>" +
+						m_clear_tags_button +
+						"<textarea id=\"x1cpostage_caption\" " + m_remove_box_style + " placeholder=\"caption\"></textarea>" +
+						"<div id=\"x1cpostage_replace\" " + m_remove_box_style + "><div>&nbsp;</div>replace caption, not append</div>" +
 						m_remove_button + 
 						"<div id=\"x1cpostage_reblog\"><i>&nbsp;</i></div>" +
 						"<div id=\"x1cpostage_queue\"><i>&nbsp;</i></div>" +
@@ -560,10 +582,11 @@ XKit.extensions.one_click_postage = new Object({
 						"<div id=\"x1cpostage_reblog\"><i>&nbsp;</i></div>" +
 						"<div id=\"x1cpostage_queue\"><i>&nbsp;</i></div>" +
 						"<div id=\"x1cpostage_draft\"><i>&nbsp;</i></div>" +
-						"<textarea id=\"x1cpostage_caption\" placeholder=\"caption\"></textarea>" +
-						"<div id=\"x1cpostage_replace\"><div>&nbsp;</div>replace caption, not append</div>" +
+						"<textarea id=\"x1cpostage_caption\" + m_remove_box_style + placeholder=\"caption\"></textarea>" +
+						"<div id=\"x1cpostage_replace\" " + m_remove_box_style + "><div>&nbsp;</div>replace caption, not append</div>" +
 						m_remove_button + 
 						"<input id=\"x1cpostage_tags\" placeholder=\"tags (comma separated)\" />" +
+						m_clear_tags_button +
 					"</div>";
 					
 			
@@ -730,6 +753,12 @@ XKit.extensions.one_click_postage = new Object({
 			$("#x1cpostage_caption").addClass("x1cpostage_remove_caption_on");
 			$("#x1cpostage_tags").css("border-top","1px solid #abafbc");
 
+
+		});
+		
+		$("#x1cpostage_clear_tags").click(function() {
+			
+			$("#x1cpostage_tags").val("");
 
 		});
 		
@@ -959,8 +988,14 @@ XKit.extensions.one_click_postage = new Object({
 		}
 		
 		// Re-show the caption stuff.
-		$("#x1cpostage_caption").css("display","block");
-		$("#x1cpostage_replace").css("display","block");
+		if (XKit.extensions.one_click_postage.preferences.show_caption.value === true) {
+			$("#x1cpostage_caption").css("display","block");
+			$("#x1cpostage_replace").css("display","block");
+		} else {
+			$("#x1cpostage_caption").css("display","none");
+			$("#x1cpostage_replace").css("display","none");			
+		}
+		
 		$("#x1cpostage_remove_caption").css("display","block");
 		$("#x1cpostage_caption").removeClass("x1cpostage_remove_caption_on");
 		$("#x1cpostage_tags").css("border-top","0px");
@@ -1102,6 +1137,7 @@ XKit.extensions.one_click_postage = new Object({
 		var blog_id = XKit.extensions.one_click_postage.default_blog_id;
 		if ($("#x1cpostage_blog").length > 0) {
 			blog_id = $("#x1cpostage_blog").val();
+			XKit.extensions.one_click_postage.default_blog_id = $("#x1cpostage_blog").val();
 		}
 		
 		if (quick_queue_mode !== true) {

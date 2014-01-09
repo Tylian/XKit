@@ -1,5 +1,5 @@
 //* TITLE Profiler **//
-//* VERSION 1.1 REV A **//
+//* VERSION 1.1 REV C **//
 //* DESCRIPTION The User Inspection Gadget **//
 //* DETAILS Select Profiler option from the User Menu to see information such as when they started blogging, how many posts they have, timezone, and more.<br><br>Requires User Menus+ to be installed. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -19,8 +19,54 @@ XKit.extensions.profiler = new Object({
 		}
 	},
 	
+	
+	frame_run: function() {
+		
+		XKit.tools.init_css("profiler");
+		
+		var m_css = 	"#iframe_controls { width: auto !important; } " +
+				"#xkit_profiler_inblog_button:before {" +
+					" background-size: auto; " +
+					" background-position: 50% 50%; " +
+					" background-repeat: no-repeat; " +
+					" background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAOCAYAAAAfSC3RAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBNYWNpbnRvc2giIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6NjEzRkZBMkE2Q0QzMTFFMzlDNTZCMzI0NDhERkFFOUQiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6NjEzRkZBMkI2Q0QzMTFFMzlDNTZCMzI0NDhERkFFOUQiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDo2MTNGRkEyODZDRDMxMUUzOUM1NkIzMjQ0OERGQUU5RCIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDo2MTNGRkEyOTZDRDMxMUUzOUM1NkIzMjQ0OERGQUU5RCIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/Ptc21PYAAACFSURBVHjaYvz//z8DOYAFjS8LxMFA7A7ExlCxs0C8E4jXAvFjuEqQjVBsCcQb/uMGG6BqwOphmmTRNSEZjK5ZFlljAbrxODT+h6plYILKu6N7Ht0AJOCO7MdXJNj4CtlGkgETUpATC84ia9xJgsadyH4kOzpITgCMaCFOdJJjJDeRAwQYAEACMSh3yj0GAAAAAElFTkSuQmCC); " +
+				"}";
+				
+		XKit.tools.add_css(m_css, "profiler_in_blog");
+		
+		var m_html = 	"<a id=\"xkit_profiler_inblog_button\" onclick=\"return false\" class=\"btn icon reblog no_label\">Profiler</a>";
+		
+		$(".btn.dashboard").before(m_html);
+		
+		$("#xkit_profiler_inblog_button").click(function() {
+				
+			var blog_url = $("#tumblelog_name").attr('data-tumblelog-name');
+			
+			XKit.iframe.full();
+			
+			XKit.extensions.profiler.show(blog_url, true);
+			
+			
+		});
+
+	},
+	
 	add_nicks: function() {
 		
+		if ($(".follower").length > 0) {
+			
+			$(".follower").each(function() {	
+				
+				var m_url = $(this).find(".name").text();
+				var m_storage = XKit.storage.get("profiler","nick-for--" + m_url, "");	
+				if (m_storage === "") { return; }
+				
+				$(this).find(".name").append("<div class=\"xkit-profiler-nickname-inline\">(" + m_storage + ")</div>");
+				
+			});
+			
+		}
+
 		var posts = XKit.interface.get_posts("profiler-nicknamed");
 
 		$(posts).each(function() {
@@ -33,7 +79,7 @@ XKit.extensions.profiler = new Object({
 	  			if (m_post.is_mine === true) { return; }
 	  		}
 	  		
-	  		console.log(m_post);
+	  		// console.log(m_post);
 	  		
 	  		var post_owner = m_post.owner;
 	  		
@@ -74,6 +120,7 @@ XKit.extensions.profiler = new Object({
 	
 	redo_nicks: function() {
 		
+		$(".xkit-profiler-nickname-inline").remove();
 		$(".post .xkit-profiler-nickname").remove();
 		$(".post.profiler-nicknamed").removeClass("profiler-nicknamed");
 		XKit.extensions.profiler.add_nicks();
@@ -174,7 +221,11 @@ XKit.extensions.profiler = new Object({
 	
 	window_id: "",
 	
-	show: function(user_url) {
+	is_inframe: false,
+	
+	show: function(user_url, inframe) {
+		
+		XKit.extensions.profiler.is_inframe = inframe;
 		
 		var m_window_id = XKit.tools.random_string();
 		XKit.extensions.profiler.window_id = m_window_id;
@@ -249,8 +300,12 @@ XKit.extensions.profiler = new Object({
 		
 		$("#xkit-profiler-close").click(function() {
 			
+			$("body").css("overflow","auto");
 			XKit.window.close();
-			$("body").css("overflow","auto");	
+			
+			if (XKit.extensions.profiler.is_inframe === true) {
+				setTimeout(function() { XKit.iframe.restore();	}, 300);
+			}
 			
 		});
 		
@@ -286,19 +341,23 @@ XKit.extensions.profiler = new Object({
 		
 		$.ajax({
 			type: "POST",
-			url: "/check_if_user_is_friend",
+			url: "/svc/tumblelog/followed_by",
 			data: "tumblelog=" + blog_id + "&query=" + user_url,
+			dataType: "text",
 		}).done(function( msg ) {
 			if (XKit.extensions.profiler.window_id !== m_window_id) {return; }
-			if (msg === "1") {
-				// This user is following us!
-				$("#xkit-profiler-is-following").removeClass("loading-up").html("Yes");
-			} else {
-				// Nope.
-				$("#xkit-profiler-is-following").removeClass("loading-up").html("No");
+			try {
+				msg = JSON.parse(msg);
+				if (msg.response.is_friend === 1) {
+					$("#xkit-profiler-is-following").removeClass("loading-up").html("Yes");
+				} else {
+					$("#xkit-profiler-is-following").removeClass("loading-up").html("No");
+				}
+			} catch(e){
+				console.log("Profiler: " + e.message);	
 			}
 		});
-		
+	
 		GM_xmlhttpRequest({
 			method: "GET",
 			url: "http://" + user_url + ".tumblr.com/archive/",

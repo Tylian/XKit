@@ -1,5 +1,5 @@
 //* TITLE Mass Deleter **//
-//* VERSION 0.1 REV D **//
+//* VERSION 0.1 REV E **//
 //* DESCRIPTION Mass unlike likes / delete drafts **//
 //* DETAILS Used to mass unlike posts or delete drafts. Please use with caution, especially Mass Unlike part is extremely experimental. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -294,26 +294,31 @@ XKit.extensions.mass_deleter = new Object({
 	
 	unlike_likes: function(limit) {
 		
-		XKit.extensions.mass_deleter.unlike_likes_limit = limit;
-		XKit.extensions.mass_deleter.unlike_likes_array = new Array();
-		XKit.extensions.mass_deleter.unlike_likes_page = 1;
+		XKit.window.show("Warning!","Due to the way Tumblr works, mass unliking posts might or might not cause older likes to not show up. This is a very experimental feature and no support is provided. Please only continue if you are sure that you want to do this.","warning","<div class=\"xkit-button default\" id=\"xkit-mass-deleter-unlike-continue\">Continue</div><div class=\"xkit-button\" id=\"xkit-close-message\">Cancel</div>");
 		
-		XKit.window.show("Mass Unliking Posts","<b>This might take a long, long time...</b><div id=\"xkit-mass-deleter-status\">Initializing: Gathering post ids..</div>" + XKit.progress.add("mass-deleter-progress"),"info");	
+		$("#xkit-mass-deleter-unlike-continue").click(function() {
 		
-		var posts = XKit.interface.get_posts();
-
-		$(posts).each(function() {
+			XKit.extensions.mass_deleter.unlike_likes_limit = limit;
+			XKit.extensions.mass_deleter.unlike_likes_array = new Array();
+			XKit.extensions.mass_deleter.unlike_likes_page = 1;
 			
-			var m_post = XKit.interface.post($(this));
-			XKit.extensions.mass_deleter.unlike_likes_array.push(m_post.id + ";" + m_post.reblog_key);
+			XKit.window.show("Mass Unliking Posts","<b>This might take a long, long time...</b><div id=\"xkit-mass-deleter-status\">Initializing: Gathering post ids..</div>" + XKit.progress.add("mass-deleter-progress"),"info");	
+			
+			var posts = XKit.interface.get_posts();				
 
-		});
+			$(posts).each(function() {
+			
+				var m_post = XKit.interface.post($(this));
+				XKit.extensions.mass_deleter.unlike_likes_array.push(m_post.id + ";" + m_post.reblog_key);	
+
+			});	
 		
-		XKit.extensions.mass_deleter.unlike_fail_count = 0;
-		XKit.extensions.mass_deleter.unlike_next_current = 0;
-		XKit.extensions.mass_deleter.unlike_likes_page++;
-		XKit.extensions.mass_deleter.unlike_next_page();
-		
+			XKit.extensions.mass_deleter.unlike_fail_count = 0;
+			XKit.extensions.mass_deleter.unlike_next_current = 0;
+			XKit.extensions.mass_deleter.unlike_likes_page++;
+			XKit.extensions.mass_deleter.unlike_next_page();
+
+		});		
 		
 	},
 	

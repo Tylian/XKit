@@ -1,5 +1,5 @@
 //* TITLE View On Dash **//
-//* VERSION 0.3 REV B **//
+//* VERSION 0.3 REV C **//
 //* DESCRIPTION View blogs on your dash **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS This is a preview version of an extension, missing most features due to legal/technical reasons for now. It lets you view the last 20 posts a person has made on their blogs right on your dashboard. If you have User Menus+ installed, you can also access it from their user menu under their avatar. **//
@@ -22,6 +22,8 @@ XKit.extensions.view_on_dash = new Object({
 	run: function() {
 		this.running = true;
 		XKit.tools.init_css("view_on_dash");
+		
+		if (XKit.interface.where().queue === true) { return; }
 		
 		if (this.preferences.show_sidebar_button.value === true) {
 		
@@ -86,9 +88,9 @@ XKit.extensions.view_on_dash = new Object({
                 				
                 				XKit.extensions.show_more.add_custom_menu("view_on_dash", function(data) {
                 				
-                					console.log("******************************");
-                					console.log(data);
-                					console.log("******************************");
+                					//console.log("******************************");
+                					//console.log(data);
+                					//console.log("******************************");
                 					var user_url = data.name;
                 					
 							$(document).off("click", ".xkit-view_on_dash-button-" + user_url, XKit.extensions.view_on_dash.menu_clicked);
@@ -289,7 +291,7 @@ XKit.extensions.view_on_dash = new Object({
 			
 		}
 		
-		m_html = m_html + "<div class=\"post post_full " + post_class + " same_user_as_last with_permalink no_source\" id=\"post_" + data.id + "\"  data-post-id='" + data.id + "' data-root-id='" + data.id + "' data-tumblelog-name='" + username + "' data-reblog-key='" + data.reblog_key + "' data-type='" + data.type + "'>" +
+		m_html = m_html + "<div class=\"post post_full " + post_class + " same_user_as_last with_permalink no_source xkit_view_on_dash_post\" id=\"post_" + data.id + "\"  data-post-id='" + data.id + "' data-root-id='" + data.id + "' data-tumblelog-name='" + username + "' data-reblog-key='" + data.reblog_key + "' data-type='" + data.type + "'>" +
 					"<div class=\"post_wrapper\">" + 
 						"<div class=\"post_header\">" +
 							"<div class=\"post_info\">" +

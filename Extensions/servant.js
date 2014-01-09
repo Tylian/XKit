@@ -1,5 +1,5 @@
-//* TITLE Servant (Preview) **//
-//* VERSION 0.3 REV A **//
+//* TITLE Servant **//
+//* VERSION 0.4 REV A **//
 //* DESCRIPTION XKit Personal Assistant **//
 //* DETAILS Automator for XKit: lets you create little Servants that does tasks for you when the conditions you've set are met. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -318,6 +318,88 @@ XKit.extensions.servant = new Object({
 			
 		},
 		
+		sep_99a: {
+			
+			text: "Content Ratings",
+			type: "separator"	
+			
+		},
+		
+		post_adult: {
+			
+			text: "The post is made/reblogged by an Adult blog",
+			type: "",
+			compatibility: "post",
+			runs_on: "post",
+			description: "Runs on all posts reblogged/posted by a blog with Adult rating.<br/>(ie: a porn blog)",
+			
+			run: function(parameter, obj) {
+				
+				var m_object = {};
+				
+				if ($(obj).attr('data-tumblelog-content-rating') === "adult") {
+					m_object.run = true;
+				} else {
+					m_object.run = false;
+				}	
+					
+				m_object.pass = $(obj);
+				return m_object;
+				
+			},
+			
+		},
+		
+		post_nsfw: {
+			
+			text: "The post is made/reblogged by a NSFW blog",
+			type: "",
+			compatibility: "post",
+			runs_on: "post",
+			description: "Runs on all posts reblogged/posted by a blog with NSFW rating.<br/>(ie: a blog that might post porn/nsfw stuff from time to time)",
+			
+			run: function(parameter, obj) {
+				
+				var m_object = {};
+				
+				if ($(obj).attr('data-tumblelog-content-rating') === "nsfw") {
+					m_object.run = true;
+				} else {
+					m_object.run = false;
+				}	
+					
+				m_object.pass = $(obj);
+				return m_object;
+				
+			},
+			
+		},
+		
+		post_nsfw_adult: {
+			
+			text: "The post is made/reblogged by a NSFW/adult blog",
+			type: "",
+			compatibility: "post",
+			runs_on: "post",
+			description: "Runs on all posts reblogged/posted by a blog with an Adult or NSFW rating.",
+			
+			run: function(parameter, obj) {
+				
+				var m_object = {};
+				
+				if ($(obj).attr('data-tumblelog-content-rating') === "adult" || $(obj).attr('data-tumblelog-content-rating') === "nsfw") {
+					m_object.run = true;
+				} else {
+					m_object.run = false;
+				}	
+					
+				m_object.pass = $(obj);
+				return m_object;
+				
+			},
+			
+		},
+		
 		sep_99: {
 			
 			text: "Pages",
@@ -534,6 +616,33 @@ XKit.extensions.servant = new Object({
 				var m_today = new Date();
 
 				if (m_today.getDay() != 6 && m_today.getDay() != 0) {
+					m_object.run = true;
+				} else {
+					m_object.run = false;
+				}
+				
+				m_object.return = "";
+				
+				return m_object;
+				
+			},
+			
+		},
+		
+		time_day: {
+			
+			text: "The day is",
+			type: "day",
+			returns: "the date (0=sunday, 6=saturday)",
+			description: "Runs if the day is the thingy you've selected",
+			
+			run: function(parameter, obj) {
+				
+				var m_object = {};
+				
+				var m_today = new Date();
+
+				if (m_today.getDay() == parameter) {
 					m_object.run = true;
 				} else {
 					m_object.run = false;
@@ -1437,6 +1546,23 @@ XKit.extensions.servant = new Object({
 		
 	},
 	
+	settings_box_day: function(obj, parent, real_val) {
+		
+		var m_html = "<select class=\"xkit-servant-option-listbox\">";
+		
+		m_html = m_html + "<option value=\"1\">Monday</option>";
+		m_html = m_html + "<option value=\"2\">Tuesday</option>";
+		m_html = m_html + "<option value=\"3\">Wednesday</option>";
+		m_html = m_html + "<option value=\"4\">Thursday</option>";
+		m_html = m_html + "<option value=\"5\">Friday</option>";
+		m_html = m_html + "<option value=\"6\">Saturday</option>";
+		m_html = m_html + "<option value=\"0\">Sunday</option>";
+		
+		m_html = m_html + "</select>";
+		
+		$(obj).html(m_html);	
+		
+	},
 	
 	check_js: function() {
 		
@@ -1547,6 +1673,15 @@ XKit.extensions.servant = new Object({
 				$(settings_box).addClass("xkit-servant-options-shown");	
 				
 				XKit.extensions.servant.settings_box_post_type(settings_box, this, XKit.extensions.servant.add_window_option_get_real_value($(this)));
+				
+			}
+			
+			if (XKit.extensions.servant.add_window_option_get_real_value($(this)).attr('data-type') === "day") {
+			
+				$(this).addClass("xkit-servant-half-option");
+				$(settings_box).addClass("xkit-servant-options-shown");	
+				
+				XKit.extensions.servant.settings_box_day(settings_box, this, XKit.extensions.servant.add_window_option_get_real_value($(this)));
 				
 			}
 			

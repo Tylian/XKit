@@ -1,5 +1,5 @@
 //* TITLE Find Blogs **//
-//* VERSION 1.1 REV B **//
+//* VERSION 1.1 REV C **//
 //* DESCRIPTION Lets you find similar blogs **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//
@@ -17,14 +17,61 @@ XKit.extensions.find_blogs = new Object({
 			text: "Don't show the blogs I already follow (might take a long time)",
 			default: false,
 			value: false
-		}
+		},
+		"run_on_iframe": {
+			text: "Show the button when I visit a blog",
+			default: true,
+			value: true
+		},		
+	},
+	
+	is_in_iframe: false,
+	
+	frame_run: function() {
+		
+		XKit.extensions.find_blogs.is_in_iframe = true;
+		
+		if (XKit.extensions.find_blogs.preferences.run_on_iframe.value !== true) { return; }
+		
+		XKit.tools.init_css("find_blogs");
+		
+		var m_css = 	"#iframe_controls { width: auto !important; } " +
+				"#xkit_find_blogs_inblog_button:before {" +
+					" background-size: auto; " +
+					" background-position: 50% 50%; " +
+					" background-repeat: no-repeat; " +
+					" background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAOCAYAAAAfSC3RAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBNYWNpbnRvc2giIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6NjEzRkZBMkU2Q0QzMTFFMzlDNTZCMzI0NDhERkFFOUQiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6NjEzRkZBMkY2Q0QzMTFFMzlDNTZCMzI0NDhERkFFOUQiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDo2MTNGRkEyQzZDRDMxMUUzOUM1NkIzMjQ0OERGQUU5RCIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDo2MTNGRkEyRDZDRDMxMUUzOUM1NkIzMjQ0OERGQUU5RCIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/Plk4OxcAAACiSURBVHjanJKBDYAgDATRBXQDR3AERnAERmEUR3AURnAERqgleeKHFKM2aWjyuVKeDiLifgWDWnvNQ/PUzKj9I6hnkH7sJoibBLeEZoIMbbPAA2IwGtemyQLLm+TBh9TqI875l6s0qjf0FdppgRuZ40lb6pgasfcdO9mfCBBquvYWIDRAMS3Sl9zwm5XDOxle3NtdJbhMNLkvSw6zplJfAgwAwJVCqHZNx0YAAAAASUVORK5CYII=); " +
+				"}";
+				
+		XKit.tools.add_css(m_css, "profiler_in_blog");
+		
+		var m_html = 	"<a id=\"xkit_find_blogs_inblog_button\" onclick=\"return false\" class=\"btn icon reblog no_label\">Find Blogs</a>";
+		
+		$(".btn.dashboard").before(m_html);	
+		
+		$("#xkit_find_blogs_inblog_button").click(function() {
+				
+			var blog_url = $("#tumblelog_name").attr('data-tumblelog-name');
+			
+			XKit.iframe.full();
+			
+			XKit.extensions.find_blogs.show(blog_url);
+			
+			
+		});
+		
 	},
 
 	run: function() {
 		this.running = true;
 		
+		if (XKit.interface.where().queue === true) { return; }
+		
 		XKit.tools.init_css("find_blogs");
 		XKit.extensions.find_blogs.form_key = XKit.interface.form_key();
+		
+		if (XKit.interface.where().queue === true) { return; }
+		
 		
 		if (typeof XKit.extensions.show_more === "undefined") {
 			XKit.extensions.find_blogs.show_ump_error();
@@ -134,6 +181,10 @@ XKit.extensions.find_blogs = new Object({
 			$("#xkit-find-blogs-window").fadeOut('fast', function() { $(this).remove(); });	
 			XKit.extensions.find_blogs.window_id = -1;
 			
+			if (XKit.extensions.find_blogs.is_in_iframe === true) {
+				XKit.iframe.restore();	
+			}
+				
 		});
 		
 		XKit.extensions.find_blogs.fetch(url, 0, m_window_id, people);
@@ -380,7 +431,17 @@ XKit.extensions.find_blogs = new Object({
 		$("#xkit-find-blogs-background").remove();
 		$("#xkit-find-blogs-window").remove();	
 		
-		XKit.window.show("Oops.","An error prevented Find Blogs from finding similar blogs.<br/>Please try again later.<br/>Code: \"FINB" + err_code + "\"","error","<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
+		XKit.window.show("Oops.","An error prevented Find Blogs from finding similar blogs.<br/>Please try again later.<br/>Code: \"FINB" + err_code + "\"","error","<div id=\"xkit-close-message-find-blogs\" class=\"xkit-button default\">OK</div>");
+		
+		$("#xkit-close-message-find-blogs").click(function() {
+		
+			XKit.window.close();
+		
+			if (XKit.extensions.find_blogs.is_in_iframe === true) {
+				XKit.iframe.restore();	
+			}
+			
+		});
 		
 	},
 	

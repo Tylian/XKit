@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 2.1 REV C **//
+//* VERSION 2.2 REV D **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER STUDIOXENIX **//
 
@@ -17,6 +17,14 @@ XKit.extensions.lang_english = {
 XKit.extensions.xkit_patches = new Object({
 
 	running: false,
+	
+	preferences: {
+		debug_mode: {
+			text: "XKit Developer Mode",
+			default: true,
+			value: true
+		}
+	},
 	
 	check_unfollower_hater: function() {
 		
@@ -86,6 +94,39 @@ XKit.extensions.xkit_patches = new Object({
 
 		XKit.tools.init_css("xkit_patches");
 		
+		//Sorry, Atesh. I can't stand your spammy extension anymore. - Love, Ashish.
+
+		XKit.debug = XKit.extensions.xkit_patches.preferences.debug_mode.value; //If set to true, it'll spam again
+		XKit.debug_messages = []; //Holds debug messages
+		XKit.log_back = console.log; //Make a backup before replacing it!
+
+		XKit.out_to_console = function(text){
+			//A bit messy, but it fixes the "TypeError: Illegal invocation" 
+			console.log = XKit.log_back;
+			console.log(text);
+			console.log = XKit.log;
+		}
+
+		XKit.log = function(text) {
+			if(XKit.debug){
+				XKit.out_to_console(text);
+			}
+			XKit.debug_messages.push(text);
+		}
+
+		console.log = XKit.log; //Overload console.log
+
+		XKit.get_debug_logs = function(){
+			return XKit.debug_messages;
+		}
+
+		XKit.show_debug_logs = function(){
+			var messages = XKit.get_debug_logs();
+			for(var i = 0; i < messages.length; i++){
+				XKit.out_to_console(messages[i]);
+			}
+		}
+		
 		try { 
 
 			XKit.retina = window.devicePixelRatio > 1;
@@ -108,6 +149,62 @@ XKit.extensions.xkit_patches = new Object({
 				
 		if (typeof form_key_to_save !== "undefined" &&form_key_to_save !== "") {
 			XKit.storage.set("xkit_patches", "last_stored_form_key", window.btoa(form_key_to_save));
+		}
+		
+		XKit.iframe = {
+			
+			___resize: function(width, height) {
+				
+				try {
+				
+					var m_obj = {};
+					m_obj.width = width;
+					m_obj.height = height;
+				
+					XKit.tools.add_function(function() {
+						try {
+							add_tag = JSON.parse(add_tag);
+			 				_t.postMessage(["resize_iframe", add_tag.width, add_tag.height, "body_class", "top_bar", _t.protocol_host()], "*", window.parent);
+			 			} catch(e) {
+			 				console.log("[!!!] XKit Patches: Unable to resize the iframe: " + e.message);
+			 			}
+					}, true, JSON.stringify(m_obj));
+					
+			 	} catch(e) {
+			 		
+			 		console.log("[!!!] XKit Patches: Unable to resize the iframe: " + e.message);
+			 		
+			 	}	
+				
+			},
+			
+			resize: function(width, height) {
+				
+				XKit.iframe.___resize(width, height);
+				
+			},
+			
+			full: function() {
+				
+				XKit.iframe.___resize("100%", "100%");
+				
+			},
+			
+			restore: function() {
+				
+				XKit.iframe.___resize(360, 26);
+				
+			}
+			
+		};
+		
+		if (XKit.frame_mode === true) {
+			
+			console.log("XKit Patches determined that it's in frame mode, resizing stuff!");
+			
+			$("#iframe_controls").css("width","auto");
+			XKit.iframe.restore();	
+			
 		}
 		
 		XKit.window.close = function() {
@@ -356,6 +453,8 @@ XKit.extensions.xkit_patches = new Object({
 			kitty: {
 				
 				stored: "",
+				store_time: 0,
+				expire_time: 600000,
 				
 				set: function(kitty) {
 					
@@ -371,14 +470,21 @@ XKit.extensions.xkit_patches = new Object({
 					m_object.errors = false;
 					m_object.kitten = "";
 					
+					var current_ms = new Date().getTime();
+					var kitty_diff = current_ms - XKit.interface.kitty.store_time;
+					
 					if (XKit.interface.kitty.stored !== "") {
-						console.log("XKitty: Kitty already received, passing: " + XKit.interface.kitty.stored);
-						m_object.kitten = XKit.interface.kitty.stored;
-						callback(m_object);
-						return;
+						if (kitty_diff >= XKit.interface.kitty.expire_time || kitty_diff < 0) {
+							console.log("XKitty: Kitty expired? Let's try again.");
+						} else {
+							console.log("XKitty: Kitty already received, passing: " + XKit.interface.kitty.stored);
+							m_object.kitten = XKit.interface.kitty.stored;
+							callback(m_object);
+							return;
+						}
 					}
 					
-					console.log("XKitty: Kitty blank, requesting new feline.");
+					console.log("XKitty: Kitty blank / expired, requesting new feline.");
 					
 					$.ajax({
 						type: "POST",
@@ -388,6 +494,7 @@ XKit.extensions.xkit_patches = new Object({
 						},
 						success: function (data, status, res) {
 							console.log("XKitty: YAY! Kitty request complete!");
+							XKit.interface.kitty.store_time = new Date().getTime();
 							XKit.interface.kitty.stored = res.getResponseHeader("X-tumblr-secure-form-key");
 							m_object.kitten = XKit.interface.kitty.stored;
 							callback(m_object);
@@ -713,11 +820,12 @@ XKit.extensions.xkit_patches = new Object({
 					for (var i=0;i<tags_array.length;i++) {
 					
 						var formatted = encodeURIComponent(tags_array[i]);
+						
+						if (tags_array[i] === "" || tags_array[i] === " ") { continue; }
+						
 						if (tags_array[i].substring(0,1) === " ") {
 							tags_array[i] = tags_array[i].substring(1);	
 						}
-						
-						if (tags_array[i] === "") { continue; }
 						
 						m_inner = m_inner + "<a class=\"post_tag\" href=\"/tagged/" + formatted + "\">#" + tags_array[i] + "</a>";
 						added_tag_count++;	
@@ -1367,7 +1475,7 @@ XKit.extensions.xkit_patches = new Object({
 						var m_array = document.location.href.split("/");
 						if (m_array[5] === "activity") {
 							m_return.activity = true;
-							m_return.user_url = m_array[4];	
+							m_return.user_url = m_array[4].replace("#","");	
 						}
 					}
 				}
@@ -1380,7 +1488,7 @@ XKit.extensions.xkit_patches = new Object({
 						var m_array = document.location.href.split("/");
 						if (m_array[5] === "queue") {
 							m_return.queue = true;	
-							m_return.user_url = m_array[4];
+							m_return.user_url = m_array[4].replace("#","");
 						}
 					}
 				}
@@ -1393,7 +1501,7 @@ XKit.extensions.xkit_patches = new Object({
 						var m_array = document.location.href.split("/");
 						if (m_array[5] === "drafts") {
 							m_return.drafts = true;	
-							m_return.user_url = m_array[4];
+							m_return.user_url = m_array[4].replace("#","");
 						}
 					}
 				}
@@ -1406,7 +1514,7 @@ XKit.extensions.xkit_patches = new Object({
 						var m_array = document.location.href.split("/");
 						if (m_array[5] === "followers") {
 							m_return.followers = true;
-							m_return.user_url = m_array[4];	
+							m_return.user_url = m_array[4].replace("#","");	
 						}
 					}
 				}
@@ -1414,7 +1522,7 @@ XKit.extensions.xkit_patches = new Object({
 				if (document.location.href.indexOf("www.tumblr.com/blog/") !== -1) {
 					var m_array = document.location.href.split("/");
 					if (m_array[3] === "blog") {
-						m_return.user_url = m_array[4];	
+						m_return.user_url = m_array[4].replace("#","");	
 					}
 				}
 				
@@ -1460,11 +1568,12 @@ XKit.extensions.xkit_patches = new Object({
 		};
 		
 		// New Post Listener for Posts_v2
-		XKit.post_listener.check = function() {
+		XKit.post_listener.check = function(no_timeout) {
 			if ($("#posts").length === 0) {
 				return;
 			}
 			var post_count = $("#posts .post").length;
+			if (no_timeout === true) { post_count = -1; }
 			if (XKit.post_listener.count === 0) {
 				XKit.post_listener.count = post_count;
 			} else {
@@ -1473,9 +1582,16 @@ XKit.extensions.xkit_patches = new Object({
 					XKit.post_listener.run_callbacks();
 				}
 			} 
-			setTimeout(XKit.post_listener.check, 3500);
-		
+			if (no_timeout !== true) {
+				setTimeout(XKit.post_listener.check, 3500);
+			}
 		};
+		
+		if ($(".search_control.post_layout").length > 0) {
+			
+			setTimeout(function() { XKit.post_listener.check(true); }, 400);
+			
+		}
 
 		// Increasing storage for extensions from 50kb to 150kb.
 		XKit.storage.max_area_size = 153600;
@@ -1533,6 +1649,7 @@ XKit.extensions.xkit_patches = new Object({
 	},
 
 	destroy: function() {
+		console.log = XKit.log_back;
 		XKit.tools.remove_css("xkit_patches");
 		this.running = false;
 	}

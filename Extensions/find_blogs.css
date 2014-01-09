@@ -34,6 +34,12 @@
 	display: inline;	
 }
 
+.xkit-find-blogs-blog-list a {
+
+	float: none !important;	
+	
+}
+	
 .xkit-find-blogs-blog-list {
 	border-top: 1px solid rgb(200,200,200);
 	border-left: 1px solid rgb(200,200,200);
@@ -41,6 +47,7 @@
 	box-sizing: border-box;
 	-webkit-box-sizing: border-box;
 	-moz-box-sizing: border-box;
+	font-weight: normal;
 }
 
 .xkit-find-blogs-blog {

@@ -1,5 +1,5 @@
 //* TITLE User Menus+ **//
-//* VERSION 2.4 REV B **//
+//* VERSION 2.4 REV E **//
 //* DESCRIPTION More options on the user menu **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS This extension adds additional options to the user menu (the one that appears under user avatars on your dashboard), such as Avatar Magnifier, links to their Liked Posts page if they have them enabled. Note that this extension, especially the Show Likes and Show Submit options use a lot of network and might slow your computer down. **//
@@ -97,7 +97,9 @@ XKit.extensions.show_more = new Object({
 		if (XKit.interface.where().inbox === true) {
 			XKit.extensions.show_more.init_inbox_asks();	
 		} else {
-			XKit.storage.set("show_more","inbox_ask_template", $("#dashboard_ask_template")[0].outerHTML);
+			if ($("#dashboard_ask_template").length > 0) {
+				XKit.storage.set("show_more","inbox_ask_template", $("#dashboard_ask_template")[0].outerHTML);
+			}
 		}
 		
 		/*if (this.preferences.hide_previews.value === true) {
@@ -134,6 +136,7 @@ XKit.extensions.show_more = new Object({
 			
 		}		
 		
+		$(document).on('mouseover', 'a', XKit.extensions.show_more.store_data_username_if_userlink);
 		$(document).on('mouseover', '.post_info_fence a, .post_info a, a.username', XKit.extensions.show_more.store_data_username);
 		$(document).on('mouseover', '.post_avatar_link', XKit.extensions.show_more.store_data_avatar);
 		$(document).on('click','.tumblelog_menu_btn', XKit.extensions.show_more.add_links_new);
@@ -143,6 +146,7 @@ XKit.extensions.show_more = new Object({
 	},
 	
 	popup_data: "",
+	popup_data_req_id: 0,
 	classic_popup_last_object: "",
 	
 	hide_classic_menu: function() {
@@ -445,9 +449,29 @@ XKit.extensions.show_more = new Object({
 		
 	},
 	
-	store_data_username: function(e) {
+	store_data_username_if_userlink: function(e) {
 		
 		var m_obj = $(e.target);
+		
+		if (typeof $(m_obj).attr('href') === "undefined") { return; }
+		
+		var m_url = $(m_obj).attr('href').toLowerCase();
+		
+		if (m_url.substring(m_url.length - 1) === "/") {m_url = m_url.substring(0, m_url.length - 1); }
+		
+		if (m_url.substring(0, 7) === "http://" && m_url.substring(m_url.length - 11) === ".tumblr.com") {
+			var m_username = m_url.substring(7, m_url.length - 11);
+			XKit.extensions.show_more.store_data_username(e, true, m_username);
+		}
+		
+		
+	},
+	
+	store_data_username: function(e, userlink_mode, real_username) {
+		
+		var m_obj = $(e.target);
+		
+		XKit.extensions.show_more.popup_data.popup_data_req_id = XKit.tools.random_string() + XKit.tools.random_string();
 		
 		XKit.extensions.show_more.popup_data = new Object();	
 		
@@ -462,10 +486,38 @@ XKit.extensions.show_more = new Object({
 			}
 			
 		} else {
-		
-			XKit.extensions.show_more.popup_data = new Object();
-			XKit.extensions.show_more.popup_data.error = true;
-			XKit.console.add("show_more -> Can't parse popup_data - not defined.");	
+			
+			var m_req_id = XKit.extensions.show_more.popup_data.popup_data_req_id;
+			
+			if (!userlink_mode) { return; }
+			
+			GM_xmlhttpRequest({
+				method: "GET",
+				url: "http://www.tumblr.com/svc/tumblelog_popover/" + real_username + "?is_user_mention=false",
+				json: false,
+				headers: { 
+					"X-tumblr-form-key": XKit.interface.form_key(),
+				},
+				onerror: function(response) {
+					if (m_req_id !== XKit.extensions.show_more.popup_data.popup_data_req_id) { console.log("show_more: Could not fetch data, also ID mismatch."); return; }
+					console.log("show_more: Could not fetch data.");
+					XKit.extensions.show_more.popup_data = new Object();
+					XKit.extensions.show_more.popup_data.error = true;
+					XKit.console.add("show_more -> Can't parse popup_data - not defined.");	
+				},
+				onload: function(response) {
+				
+					if (m_req_id !== XKit.extensions.show_more.popup_data.popup_data_req_id) { console.log("show_more: Fetched data but ID mismatch."); return; }
+					console.log("show_more: Successfully fetched and stored popup_data.");
+					try {
+						XKit.extensions.show_more.popup_data = JSON.parse(response.responseText);
+					} catch(e){
+						XKit.extensions.show_more.popup_data = new Object();
+						XKit.extensions.show_more.popup_data.error = true;
+					}
+				
+				}
+			});	
 			
 		}
 		

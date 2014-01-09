@@ -1,5 +1,5 @@
 //* TITLE Auto Tagger **//
-//* VERSION 0.4 REV B **//
+//* VERSION 0.4 REV C **//
 //* DESCRIPTION Tags posts automatically. **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS This extension allows you to automatically add tags to posts based on state (reblogged, original, queued) or post type (audio, video, etc) and keeping original tags while reblogging a post. **//
@@ -278,19 +278,23 @@ XKit.extensions.auto_tagger = new Object({
 			to_return = this.mreturn_add(to_return,  m_post_object.tags);
 		}
 		
-		if ($("body").attr('data-page-root').indexOf('/tagged/') !== -1) {
-			var m_search_tag = $("body").attr('data-page-root').substring(8);
-			m_search_tag = decodeURIComponent(m_search_tag);
-			m_search_tag = XKit.tools.replace_all(m_search_tag, "\\+", " ");
-			m_search_tag = XKit.tools.replace_all(m_search_tag, "\\-", " ");
-			if (m_search_tag.indexOf("?before=") !== -1) {
-				m_search_tag = m_search_tag.substring(0, m_search_tag.indexOf('?before='));
+		if (XKit.extensions.auto_tagger.preferences.keep_tags.value === true) {
+			
+			if ($("body").attr('data-page-root').indexOf('/tagged/') !== -1) {
+				var m_search_tag = $("body").attr('data-page-root').substring(8);
+				m_search_tag = decodeURIComponent(m_search_tag);
+				m_search_tag = XKit.tools.replace_all(m_search_tag, "\\+", " ");
+				m_search_tag = XKit.tools.replace_all(m_search_tag, "\\-", " ");
+				if (m_search_tag.indexOf("?before=") !== -1) {
+					m_search_tag = m_search_tag.substring(0, m_search_tag.indexOf('?before='));
+				}
+					
+				if (m_search_tag.indexOf('/everything') !== -1) {
+					m_search_tag = m_search_tag.substring(0, m_search_tag.indexOf('/everything'));
+				}	
+				to_return = this.mreturn_add(to_return,  m_search_tag);
 			}
-				
-			if (m_search_tag.indexOf('/everything') !== -1) {
-				m_search_tag = m_search_tag.substring(0, m_search_tag.indexOf('/everything'));
-			}	
-			to_return = this.mreturn_add(to_return,  m_search_tag);
+		
 		}
 		
 		if (XKit.extensions.auto_tagger.preferences.tag_person.value === true && m_post_object.owner !== "") {	

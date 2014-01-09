@@ -1,5 +1,5 @@
 //* TITLE XStats **//
-//* VERSION 0.1 REV D **//
+//* VERSION 0.2 REV A **//
 //* DESCRIPTION The XKit Statistics Tool **//
 //* DETAILS This extension allows you to view statistics regarding your dashboard, such as the percentage of post types, top 4 posters, and more. In the future, it will allow you to view statistics regarding your and others blogs. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -9,6 +9,8 @@
 XKit.extensions.stats = new Object({
 
 	running: false,
+	
+	key: "vgXl8u0K1syFSAue6b9C7honIojHjC98i5WsBgSZ66HfqB0DKl",
 	
 	preferences: {
 		"promote": {
@@ -30,7 +32,7 @@ XKit.extensions.stats = new Object({
 					'<li class="no_push"><a href="#" onclick="return false;" id="xstats_dashboard_stats">' +
 						'<div class="hide_overflow">Dashboard Stats</div>' +
 					'</a></li>' +
-					'<li class="no_push" style="display: none;"><a href="#" onclick="return false;" id="xstats_blog_stats">' +
+					'<li class="no_push"><a href="#" onclick="return false;" style="display: none;" id="xstats_blog_stats">' +
 						'<div class="hide_overflow">Blog Stats</div>' +
 					'</a></li>' +
 				'</ul>';
@@ -42,9 +44,163 @@ XKit.extensions.stats = new Object({
 			
 		});
 		
+		if (XKit.interface.where().user_url === "") { return; }
+		
+		$("#xstats_blog_stats").css("display","block");
+		
+		$("#xstats_blog_stats").click(function() {
+			
+			XKit.extensions.stats.blog(XKit.interface.where().user_url);	
+			
+		});
+		
 	},
 	
 	window_id: -1,
+	
+	blog: function(url) {
+		
+		var m_window_id = XKit.tools.random_string();
+		XKit.extensions.stats.window_id = m_window_id;
+		
+		$("#xkit-stats-background, #xkit-stats-window").remove();
+		
+		$("body").append("<div id=\"xkit-stats-background\">&nbsp;</div><div id=\"xkit-stats-window\" class=\"xkit-stats-loading\"><div id=\"xkit-stats-inner\"><div id=\"xkit-stats-text\">I'm thinking, please wait...</div>" + XKit.progress.add("stats-progress") + "<div id=\"xkit-stats-subtext\">I'm gathering the information I need</div></div></div>");	
+		
+		$("#xkit-stats-background").click(function() {
+			XKit.extensions.stats.close_window();
+		});
+		
+		XKit.extensions.stats.blog_next_page(1, m_window_id, new Array(), url);
+		
+	},
+	
+	calculate_results_blog: function(m_window_id, posts, blog_url) {
+		
+		if (XKit.extensions.stats.window_id !== m_window_id) { return; }
+		
+		var users = new Array();
+		var types = new Object();
+		types.reblogged = 0;
+		types.original = 0;
+		types.liked = 0;
+		types.animated = 0;
+
+		var total_note_count = 0;
+		var posts_to_compute = posts.slice(0);
+		
+		while (posts_to_compute.length > 0) {
+			
+			var current = posts_to_compute.pop();
+			
+			console.log(current);
+			
+			if (typeof current.reblogged_from_name === "undefined") {
+				current.owner = "..original..";
+			} else {
+				current.owner = current.reblogged_from_name;
+			}
+			
+			
+			var in_list = XKit.extensions.stats.is_in_list(users, current.owner);
+			
+			if (current.type === "answer" || current.type === "text") { current.type = "regular"; }
+			if (current.type === "panoroma") { current.type = "photo"; }
+			if (current.type === "photoset") { current.type = "photo"; }
+			
+			if (current.type === "note") { current.type = "regular"; }
+			
+			if (isNaN(types[current.type]) === true) { types[current.type] = 0; }
+			types[current.type]++;
+			
+			if (typeof current.reblogged_from_name !== "undefined") {
+				types.reblogged++;	
+			} else {
+				types.original++;
+			}
+			
+			if (current.liked === true) {
+				types.liked++;	
+			}
+			
+			if (current.animated === true) {
+				types.animated++;	
+			}
+			
+			total_note_count = total_note_count + parseInt(current.note_count);
+			
+			if (typeof current.reblogged_from_name !== "undefined" && current.owner !== blog_url) {
+				
+				if (in_list !== -1) {
+					users[in_list].count++;	
+				} else {
+					var m_object = new Object();
+					m_object.url = current.owner;
+					m_object.count = 1;
+					users.push(m_object);
+				}
+			
+			}
+			
+		}
+		
+		users.sort(function(a,b) { return b.count-a.count; } );
+		
+		console.log(types);
+		console.log("total note count = " + total_note_count);
+		
+		XKit.extensions.stats.show_results(m_window_id, posts, types, users, true, blog_url);
+		
+	},
+	
+	blog_next_page: function(page, m_window_id, posts, blog_url) {
+		
+		if (XKit.extensions.stats.window_id !== m_window_id) { return; }
+		
+ 		
+ 		var offset = page * 20;
+ 		
+		GM_xmlhttpRequest({
+			method: "GET",
+			url: "http://api.tumblr.com/v2/blog/" + blog_url + ".tumblr.com/posts/?api_key=" + XKit.extensions.stats.key + "&reblog_info=true&offset=" + offset,
+			json: false,
+			onerror: function(response) {
+				console.log("Error getting page.");
+				XKit.extensions.stats.display_error(m_window_id, "501");
+				return;
+			},
+			onload: function(response) {
+				
+				if (XKit.extensions.stats.window_id !== m_window_id) {return; }
+
+				try {
+					
+					data = JSON.parse(response.responseText);
+					
+					for (var i=0;i<data.response.posts.length;i++) {
+					
+						posts.push(data.response.posts[i]);
+
+					}
+					
+					XKit.progress.value("stats-progress", posts.length / 3);
+					
+					if (posts.length >= 300 || data.response.posts.length == 0) {
+						XKit.extensions.stats.calculate_results_blog(m_window_id, posts, blog_url);
+					} else {
+						setTimeout(function() { XKit.extensions.stats.blog_next_page((page + 1), m_window_id, posts, blog_url); }, 400);
+					}
+					
+				} catch(e) {
+					console.log("Error parsing data: " + e.message);
+					XKit.extensions.stats.display_error(m_window_id, "102");
+					return;
+				}
+
+			}
+		});
+		
+	},
 	
 	dashboard: function() {
 		
@@ -181,13 +337,19 @@ XKit.extensions.stats = new Object({
 		
 	},
 	
-	show_results: function(m_window_id, posts, types, users) {
+	show_results: function(m_window_id, posts, types, users, blog_mode, blog_url) {
 		
 		if (XKit.extensions.stats.window_id !== m_window_id) { return; }
 		
-		var m_html = "<div class=\"m_window_title\">Results for your dashboard</div>" +
+		if (blog_mode !== true) {
+			var m_html = "<div class=\"m_window_title\">Results for your dashboard</div>" +
 					"<div class=\"xkit-stats-separator\"><div>Top 4 blogs</div></div>" +
 					"<div class=\"xkit-stats-blog-list\">";
+		} else {
+			var m_html = "<div class=\"m_window_title\">Results for \"" + blog_url + "\"</div>" +
+					"<div class=\"xkit-stats-separator\"><div>Top 4 blogs</div></div>" +
+					"<div class=\"xkit-stats-blog-list\">";			
+		}
 					
 		var m_count = 0;
 		
@@ -227,14 +389,23 @@ XKit.extensions.stats = new Object({
 		
 		m_html = m_html + "</div>";
 		
-		m_html = m_html + "</div>" +
-			"<div class=\"xkit-stats-separator\"><div>Post Stats</div></div>" +
-			"<div class=\"xkit-stats-post-types\">";
+		if (blog_mode !== true) {
+			m_html = m_html + "</div>" +
+				"<div class=\"xkit-stats-separator\"><div>Post Stats</div></div>" +
+				"<div class=\"xkit-stats-post-types\">";
+		} else {
+			m_html = m_html + "</div>" +
+				"<div class=\"xkit-stats-separator\"><div>Post Stats</div></div>" +
+				"<div class=\"xkit-stats-post-types xkit-stats-two-boxes\">";			
+		}
 			
 		m_html = m_html + XKit.extensions.stats.return_post_type_box("original",types, posts.length);
 		m_html = m_html + XKit.extensions.stats.return_post_type_box("reblogged",types, posts.length);
-		m_html = m_html + XKit.extensions.stats.return_post_type_box("liked",types, posts.length);
-		m_html = m_html + XKit.extensions.stats.return_post_type_box("animated",types, posts.length);
+		
+		if (blog_mode !== true) {
+			m_html = m_html + XKit.extensions.stats.return_post_type_box("liked",types, posts.length);
+			m_html = m_html + XKit.extensions.stats.return_post_type_box("animated",types, posts.length);
+		}
 		
 		m_html = m_html + "</div>";
 		
@@ -247,12 +418,12 @@ XKit.extensions.stats = new Object({
 		});
 		
 		$("#xstats-post-results").click(function() {
-			XKit.extensions.stats.post_results(posts, types, users);
+			XKit.extensions.stats.post_results(posts, types, users, blog_mode, blog_url);
 		});		
 		
 	},
 	
-	post_results: function(posts, types, users) {
+	post_results: function(posts, types, users, blog_mode, blog_url) {
 		
 		XKit.window.show("Please wait","Publishing the results...","info");	
 		
@@ -290,7 +461,11 @@ XKit.extensions.stats = new Object({
 		m_object["post[state]"] = "0";
 		m_object["post[type]"] = "regular";
 		
-		m_object["post[one]"] = "XStats Dashboard Results";
+		if (blog_mode !== true) {
+			m_object["post[one]"] = "XStats Dashboard Results";
+		} else {
+			m_object["post[one]"] = "XStats Results for " + blog_url;	
+		}
 
 		m_text = "<p><b>Top 4 blogs</b></p><ul>";
 		
@@ -319,11 +494,15 @@ XKit.extensions.stats = new Object({
 		var m_perc = Math.round((types["reblogged"] * 100) / posts.length);
 		m_text = m_text + "<li>Reblogged Posts: <small>" + m_perc + "%</small></li>";
 		
-		var m_perc = Math.round((types["animated"] * 100) / posts.length);
-		m_text = m_text + "<li>GIF Posts: <small>" + m_perc + "%</small></li>";
+		if (blog_mode !== true) {
+			
+			var m_perc = Math.round((types["animated"] * 100) / posts.length);
+			m_text = m_text + "<li>GIF Posts: <small>" + m_perc + "%</small></li>";
 		
-		var m_perc = Math.round((types["liked"] * 100) / posts.length);
-		m_text = m_text + "<li>Liked Posts: <small>" + m_perc + "%</small></li>";
+			var m_perc = Math.round((types["liked"] * 100) / posts.length);
+			m_text = m_text + "<li>Liked Posts: <small>" + m_perc + "%</small></li>";
+		
+		}
 		
 		m_text = m_text + "</ul>";
 		

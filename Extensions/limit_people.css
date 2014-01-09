@@ -1,0 +1,21 @@
+.xkit-limit-people-grouped-hidden {
+	display: none !important;
+	height: 0; visibility: hidden;
+	background: red;
+}
+
+.xkit-limit-people-opener {
+	color: rgba(255,255,255,0.43);
+	text-shadow: none;
+	font-size: 13px;
+	background: rgba(255,255,255,0.06);
+	padding: 10px;
+	border-radius: 6px;
+	text-align: center;
+	cursor: pointer;
+}
+
+.xkit-limit-people-opener:hover {
+	background: rgba(255,255,255,0.08);
+	
+}

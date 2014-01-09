@@ -1,5 +1,5 @@
 //* TITLE Timestamps **//
-//* VERSION 2.3 REV B **//
+//* VERSION 2.3 REV C **//
 //* DESCRIPTION See when a post has been made. **//
 //* DETAILS This extension lets you see when a post was made, in full date or relative time (eg: 5 minutes ago). It also works on asks, and you can format your timestamps. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -57,7 +57,7 @@ XKit.extensions.timestamps = new Object({
 		
 		if (document.location.href.indexOf('/search/') !== -1) { 
 			XKit.extensions.timestamps.in_search = true; 
-			XKit.tools.add_css('.xtimestamp { position: absolute; top: 43px; color: white; font-size: 12px; left: 0; }', "timestamps_search");
+			XKit.tools.add_css('.xtimestamp-in-search { position: absolute; top: 43px; color: white; font-size: 12px; left: 0; }', "timestamps_search");
 		}
 		
 		if (XKit.extensions.timestamps.preferences.only_inbox.value === true) {
@@ -245,13 +245,13 @@ XKit.extensions.timestamps = new Object({
 					var json_page = "http://" + json_page_parts[0] + "/api/read/json?id=" + post_id;
 				
 				}
-			
-				var m_html = '<div id="xkit_timestamp_' + post_id + '" class="xtimestamp xtimestamp_loading">&nbsp;</div>';
 				
-				if (XKit.extensions.timestamps.in_search !== true) {
-					$(this).find(".post_content").prepend(m_html);
-				} else {
+				if (XKit.extensions.timestamps.in_search === true && !$("#search_posts").hasClass("posts_view_list")) {
+					var m_html = '<div id="xkit_timestamp_' + post_id + '" class="xtimestamp-in-search xtimestamp_loading">&nbsp;</div>';
 					$(this).find(".post_controls_top").prepend(m_html);
+				} else {
+					var m_html = '<div id="xkit_timestamp_' + post_id + '" class="xtimestamp xtimestamp_loading">&nbsp;</div>';
+					$(this).find(".post_content").prepend(m_html);
 				}
 				
 				var in_inbox = false;

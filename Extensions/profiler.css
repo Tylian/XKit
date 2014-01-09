@@ -4,6 +4,13 @@
 	height: 200px;
 }
 
+.xkit-profiler-nickname-inline {
+	font-weight: normal;
+	display: inline-block;
+	margin-left: 5px;
+	color: rgb(100,100,100);
+}
+
 #xkit-profiler-contents.error-box {
 	text-align: center;
 	color: rgb(130,130,130);

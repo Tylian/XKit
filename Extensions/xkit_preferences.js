@@ -1,5 +1,5 @@
 //* TITLE XKit Preferences **//
-//* VERSION 2.8 REV G **//
+//* VERSION 2.8 REV L **//
 //* DESCRIPTION Lets you customize XKit **//
 //* DEVELOPER STUDIOXENIX **//
 
@@ -78,7 +78,7 @@ XKit.extensions.xkit_preferences = new Object({
 		console.log(XKit.storage.size("xkit_preferences"));
 		
 		// Load the festivus thing.
-		$('<img />').attr('src', XKit.extensions.xkit_preferences.festivus_lights).appendTo('body').css('display','none');
+		// $('<img />').attr('src', XKit.extensions.xkit_preferences.festivus_lights).appendTo('body').css('display','none');
 		
 		this.running = true;
 
@@ -87,12 +87,12 @@ XKit.extensions.xkit_preferences = new Object({
 
 		XKit.tools.init_css("xkit_preferences");
 		
-		var m_html = "<div class=\"tab iconic\" title=\"XKit\" id=\"xkit-control\">" +
+		var m_html = "<div class=\"tab iconic\" title=\"Happy New Year!\" id=\"xkit-control\">" +
 			"<a class=\"tab_anchor\" href=\"#\" onclick=\"return false\">XKit Control Panel</a>" +
 			"</div>";
 			
 		$("#header").find("#logout_button").parent().before(m_html);
-		/* $("#xkit-control").tipTip({maxWidth: "auto", edgeOffset: 0, delay: 10 }); */
+		$("#xkit-control").tipTip({maxWidth: "auto", edgeOffset: 0, delay: 10 });
 	
 		if(XKit.storage.get("xkit_preferences", "shown_welcome_bubble") !== "true") {
 			XKit.extensions.xkit_preferences.show_welcome_bubble();
@@ -101,7 +101,7 @@ XKit.extensions.xkit_preferences = new Object({
 		$("#xkit-control").click(function() {
 			XKit.extensions.xkit_preferences.open();
 		});
-
+		
 		// Check and deliver initial messages.
 		if (XKit.storage.get("xkit_preferences","initial_mail_sent","0") === "0") {
 			var randomnumber = 1000 + Math.floor(Math.random()*100000);
@@ -569,7 +569,7 @@ XKit.extensions.xkit_preferences = new Object({
 		}
 
 		var m_html = 	"<div id=\"xkit-control-panel\">" +
-					"<div data-id-light=\"1\" style=\"display: " + festivus_display + ";\" id=\"xkit-festivus\">&nbsp;</div>" +
+					"<div data-id-light=\"1\" style=\"display: none;\" id=\"xkit-festivus\">&nbsp;</div>" +
 					"<div id=\"xkit-control-panel-inner\"></div>" +
 					"<div id=\"xkit-control-panel-tabs\">" +
 						"<div id=\"xkit-cp-tab-my-extensions\" class=\"selected\">" + XKit.lang.get("xkit_preferences.tabs.my_xkit") + "</div>" +
@@ -578,7 +578,7 @@ XKit.extensions.xkit_preferences = new Object({
 						"<div id=\"xkit-cp-tab-xcloud\">XCloud</div>" +
 						"<div id=\"xkit-cp-tab-other\">" + XKit.lang.get("xkit_preferences.tabs.other") + "</div>" +
 						"<div id=\"xkit-cp-tab-about\">" + XKit.lang.get("xkit_preferences.tabs.about") + "</div>" +
-						"<div id=\"xkit-festivus-toggle\">" + festivus_text + "</div>" +
+						"<div id=\"xkit-festivus-toggle\" style=\"display: none;\">" + festivus_text + "</div>" +
 					"</div>" +
 				"</div>" +
 				"<div id=\"xkit-control-panel-shadow\">&nbsp;</div>";
@@ -2140,7 +2140,7 @@ XKit.extensions.xkit_preferences = new Object({
 				"<div id=\"xkit-about-window-text\">" +
 					"<div class=\"title\">XKit Version " + XKit.version + "</div>" +
 					"<div class=\"subtitle\">The Extension Framework for Tumblr.</div>" +
-					"<div class=\"copyright\">&copy; 2011 - 2013 STUDIOXENIX</div>" +
+					"<div class=\"copyright\">&copy; 2011 - 2014 STUDIOXENIX</div>" +
 					"<div class=\"thanks\">STUDIOXENIX would like to thank all the beta testers, bug reporters, and people who support, suggest features, donate to and use XKit.</div>" +
 				"</div>" +
 				"<div id=\"xkit-about-window-links\">" +
