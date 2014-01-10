@@ -71,19 +71,19 @@ XKit.extensions.one_click_reply = new Object({
 	sentences: {
 	
 		"reblog": "<p><a href=\"%l\">%u</a> reblogged your post: <a href=\"%p\">%t</a></p>",
-		"reblog_with_comments": "<p><a href=\"%l\">%u</a> reblogged your post <a href=\"%p\">%t</a> and added:</p><blockquote>%r</blockquote>",
+		"reblog_with_comments": "<p><a href=\"%l\">%u</a> reblogged your post <a href=\"%p\">%t</a> and added:</p><blockquote><p>%r</p></blockquote>",
 		"like": "<p><a href=\"%l\">%u</a> liked your post: <a href=\"%p\">%t</a></p>",
 		"follow": "<p><a href=\"%l\">%u</a> started following %b</p>",
-		"reply": "<p><a href=\"%l\">%u</a> replied to your post: <a href=\"%p\">%t</a></p><blockquote>%r</blockquote>",
-		"reply_photo": "<p><a href=\"%l\">%u</a> replied to your post with a photo: <a href=\"%p\">%t</a></p><blockquote>%r</blockquote>",
-		"answer": "<p><a href=\"%l\">%u</a> answered your post: <a href=\"%p\">%t</a></p><blockquote>%r</blockquote>",	
+		"reply": "<p><a href=\"%l\">%u</a> replied to your post: <a href=\"%p\">%t</a></p><blockquote><p>%r</p></blockquote>",
+		"reply_photo": "<p><a href=\"%l\">%u</a> replied to your post with a photo: <a href=\"%p\">%t</a></p><blockquote><p>%r</p></blockquote>",
+		"answer": "<p><a href=\"%l\">%u</a> answered your post: <a href=\"%p\">%t</a></p><blockquote><p>%r</p></blockquote>",	
 		
 		"nt_reblog": "<p><a href=\"%l\">%u</a> reblogged your <a href=\"%p\">post</a></p>",
-		"nt_reblog_with_comments": "<p><a href=\"%l\">%u</a> reblogged your <a href=\"%p\">post</a> and added:</p><blockquote>%r</blockquote>",
+		"nt_reblog_with_comments": "<p><a href=\"%l\">%u</a> reblogged your <a href=\"%p\">post</a> and added:</p><blockquote><p>%r</p></blockquote>",
 		"nt_like": "<p><a href=\"%l\">%u</a> liked your <a href=\"%p\">post</a></p>",
-		"nt_reply": "<p><a href=\"%l\">%u</a> replied to your <a href=\"%p\">post:</a></p><blockquote>%r</blockquote>",
-		"nt_reply_photo": "<p><a href=\"%l\">%u</a> replied to your <a href=\"%p\">post</a> with a photo:</p><blockquote>%r</blockquote>",
-		"nt_answer": "<p><a href=\"%l\">%u</a> answered your <a href=\"%p\">post:</a></p><blockquote>%r</blockquote>",	
+		"nt_reply": "<p><a href=\"%l\">%u</a> replied to your <a href=\"%p\">post:</a></p><blockquote><p>%r</p></blockquote>",
+		"nt_reply_photo": "<p><a href=\"%l\">%u</a> replied to your <a href=\"%p\">post</a> with a photo:</p><blockquote><p>%r</p></blockquote>",
+		"nt_answer": "<p><a href=\"%l\">%u</a> answered your <a href=\"%p\">post:</a></p><blockquote><p>%r</p></blockquote>",	
 		
 	},
 	
@@ -678,7 +678,7 @@ XKit.extensions.one_click_reply = new Object({
 		}
 
 		// Example sentence:
-		// "<p><a href=\"%l\">%u</a> reblogged <a href=\"%p\">your post</a> and added:</p><blockquote>%r</blockquote>"
+		// "<p><a href=\"%l\">%u</a> reblogged <a href=\"%p\">your post</a> and added:</p><blockquote><p>%r<p></blockquote>"
 		
 		var sentence_p = post_url;
 		
