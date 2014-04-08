@@ -2,6 +2,10 @@
 .post.xkit-show-originals-not-so-original { display: none; }
 .post.xkit-show-originals-pretty-original { display: block; visibility: visible; }
 
+#container {
+	min-height: 100%;
+}
+
 #new_post_buttons,
 .new_post_buttons {
 	display: block !important;
