@@ -33,5 +33,5 @@ Read it and use it for your extensions for maximum compatibility and minimum hai
 	Learn how to build XKit for your browser.
 
 ## Important Links
-* [XKit - Dev Blog](https://xkit-extension.tumblr.com)
-* [XKit - Main Blog](https://xkit-dev.tumblr.com)
+* [XKit - Dev Blog](https://xkit-dev.tumblr.com)
+* [XKit - Main Blog](https://xkit-extension.tumblr.com)
