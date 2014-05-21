@@ -1,5 +1,5 @@
 //* TITLE Read More Now **//
-//* VERSION 1.2 REV D **//
+//* VERSION 1.2 REV E **//
 //* DESCRIPTION Read Mores in your dash **//
 //* DETAILS This extension allows you to read 'Read More' posts without leaving your dash. Just click on the 'Read More Now!' button on posts and XKit will automatically load and display the post on your dashboard. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -16,6 +16,11 @@ XKit.extensions.read_more_now = new Object({
 			text: "Auto-open all Read More posts (not recommended)",
 			default: false,
 			value: false
+		},
+		inline_button: {
+			text: "Show a smaller, inline button for Read More Now",
+			default: true,
+			value: true
 		}
 	},
 
@@ -42,7 +47,7 @@ XKit.extensions.read_more_now = new Object({
 			GM_xmlhttpRequest({
 				method: "GET",
 				dataType: "json",
-				url: m_url,
+				url: m_url + "&getid=" + XKit.tools.random_string(),
 				onload: function(response) {
 					var rs = (response.responseText).replace('var tumblr_api_read = ','');
 					rs = rs.substring(0, rs.length - 2);
@@ -115,8 +120,11 @@ XKit.extensions.read_more_now = new Object({
 			
 			if ($(this).hasClass("xread-more-now-done") === true) { return; }
 			$(this).addClass("xread-more-now-done");
-			$(this).append("<div class=\"xkit-read-more-now xkit-button\" style=\"display: block; text-align: center; margin-top: 20px;\">" + XKit.extensions.read_more_now.button_caption + "</div>");
-			
+			if (XKit.extensions.read_more_now.preferences.inline_button.value === true) {
+				$(this).append("<div class=\"xkit-read-more-now xkit-button\" style=\"display: inline; text-align: center; margin: 10px;\">" + XKit.extensions.read_more_now.button_caption + "</div>");
+			}else{
+				$(this).append("<div class=\"xkit-read-more-now xkit-button\" style=\"display: block; text-align: center; margin-top: 20px;\">" + XKit.extensions.read_more_now.button_caption + "</div>");
+			}
 		});	
 		
 		if (XKit.extensions.read_more_now.preferences.auto_open.value === true) {
