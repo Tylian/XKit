@@ -40,3 +40,10 @@ Failure to name your extension with the format above will cause your extension t
 * Don't write malicious code: that includes, but not limited to, displaying ads, posting stuff without user permission, trying to gain control of the user's account, modify/break other extensions. If you're found to write malicious code, your XCloud account will be terminated.
 * Don't make excessive calls to Tumblr or XKit servers. Try to limit the calls, and store the data you receive using XKit store.
 * Don't use HTML5 APIs if there is an XKit equivalent for it. (ie: don't use localStorage, but do use XKit.storage)
+* Don't modify standard XKit objects.
+* Don't write extensions that are simply links/ads to a website/service.
+* Don't write "shock" extensions.
+* Don't write extensions that modify XKit user interface.
+* Don't write extensions that disable/enable/download extensions.
+
+Please keep in mind that XKit Packs have a server-side kill switch that disables your extensions. Failure to follow the instructions above will result in your extension getting removed from XCloud and all the user's devices, and your XCloud account terminated, without prior notice.
