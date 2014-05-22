@@ -38,6 +38,7 @@ Failure to name your extension with the format above will cause your extension t
 * Do write good descriptions that assist the user on using the extension.
 * Do pick a nice icon for your extension.
 * Do be nice to your users and take their feedback seriously.
+* Do create a sideblog and open it's ask box for bug reports and feedback.
 
 ### Don't
 * Don't write malicious code: that includes, but not limited to, displaying ads, posting stuff without user permission, trying to gain control of the user's account, modify/break other extensions. If you're found to write malicious code, your XCloud account will be terminated.
