@@ -10,7 +10,7 @@ With XKit Packs, you can publish your extensions without getting them added to t
 2. Your extension can't have several blacklisted words, including eval, document and script, even on comments.
 3. Huge, scary warning message when installing XKit Packs.
 
-## Get Started
+## Quick Start
 1. Go to [XCloud WebAccess](http://xkit.info/xcloud/webaccess/) page.
 2. Click on Create XKit Pack.
 3. Open [the XKit Editor](http://www.tumblr.com/xkit_editor)
@@ -19,3 +19,9 @@ With XKit Packs, you can publish your extensions without getting them added to t
 6. Click on My Packs
 7. Select your pack, and paste your Script and CSS code, and include a 64x64/PNG icon.
 
+## Very Important Warnings
+
+#### Extension Name
+Your extension name **must** match the ID you gave to your pack, and you **must** prepend your XCloud ID to it while creating the extension using XKit Editor.  
+
+For example, if your XCloud ID is **mrkittens** and you've ID'd your pack with **textextension**, the filename of the extension on XKit Editor **must** be **mrkittens_testextension**.
