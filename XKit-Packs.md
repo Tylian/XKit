@@ -6,6 +6,7 @@ With XKit Packs, you can publish your extensions without getting them added to t
 1. No waiting for XKit Guy to inspect/add your extension.
 2. No asking users to use XKit Editor.
 3. Extensions are stored on XKit servers, and updated when you update them.
+4. Perfect for beta-testing your extension.
 
 ### Disadvantages
 1. Your extension will not be listed on XKit Extension Gallery, you have to promote them yourself.
