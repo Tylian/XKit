@@ -1,3 +1,5 @@
+![Interface Logo](http://xkit.info/seven/packlogo.png)   
+
 With XKit Packs, you can publish your extensions without getting them added to the XKit Extension Gallery or inspected by The XKit Guy.
 
 ### Advantages
