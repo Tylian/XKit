@@ -45,5 +45,7 @@ Failure to name your extension with the format above will cause your extension t
 * Don't write "shock" extensions.
 * Don't write extensions that modify XKit user interface.
 * Don't write extensions that disable/enable/download extensions.
+* Don't write extensions that might be used to harass users, such as a follower checker or "anon tracker".
+* Don't write extensions that might get you, me, or the user in legal trouble.
 
 Please keep in mind that XKit Packs have a server-side kill switch that disables your extensions. Failure to follow the instructions above will result in your extension getting removed from XCloud and all the user's devices, and your XCloud account terminated, without prior notice.
