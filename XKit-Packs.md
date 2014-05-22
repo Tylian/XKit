@@ -23,7 +23,9 @@ With XKit Packs, you can publish your extensions without getting them added to t
 ## Very Important: Extension Name
 Your extension name **must** match the ID you gave to your pack, and you **must** prepend your XCloud ID to it while creating the extension using XKit Editor.  
 
-For example, if your XCloud ID is **mrkittens** and you've ID'd your pack with **textextension**, the filename of the extension on XKit Editor **must** be **mrkittens_testextension**.
+For example, if your XCloud ID is **mrkittens** and you've ID'd your pack with **textextension**, the filename of the extension on XKit Editor **must** be **mrkittens_testextension**.  
+
+Failure to name your extension with the format above will cause your extension to fail on run.
 
 
 ## Do's and Do Not Do's of XKit Packs
