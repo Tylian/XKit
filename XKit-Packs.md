@@ -14,5 +14,6 @@ With XKit Packs, you can publish your extensions without getting them added to t
 1. Go to [XCloud WebAccess](http://xkit.info/xcloud/webaccess/) page.
 2. Click on Create XKit Pack.
 3. Open [the XKit Editor](http://www.tumblr.com/xkit_editor)
-4. **IMPORTANT** Extension name **must** be [your XCloud ID]_[extension name]
+4. Create a new extension    
+**IMPORTANT** Extension name **must** be [your XCloud ID]_[extension name]
 `example: atesh_testextension`
