@@ -2,11 +2,11 @@
 
 ## Get started
 
-## New: Packs
-* Learn how to create an [XKit Pack](https://github.com/atesh/XKit/wiki/XKit-Packs)
-
 * Learn how to get started on writing [a new extension](https://github.com/atesh/XKit/wiki/Writing-a-New-Extension) for XKit.
 * Here is an [example extension](https://github.com/atesh/XKit/wiki/Example-Extension).
+
+## New: Packs
+* Learn how to create an [XKit Pack](https://github.com/atesh/XKit/wiki/XKit-Packs)!
 
 ## API Functions
 
