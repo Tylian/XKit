@@ -16,6 +16,8 @@ With XKit Packs, you can publish your extensions without getting them added to t
 ## Quick Start
 1. Go to [XCloud WebAccess](http://xkit.info/xcloud/webaccess/) page.
 2. Click on Create XKit Pack.
+	* You can't change the ID of a pack after creating it.
+	* For support blog, enter only the Tumblr username. (ie: xkit-extension)
 3. Open [the XKit Editor](http://www.tumblr.com/xkit_editor)
 4. Create a new extension (see below for naming your extension, it's important!)
 5. After you are done writing your extension, go back to XCloud WebAccess page.
