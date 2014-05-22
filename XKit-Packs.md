@@ -16,4 +16,4 @@ With XKit Packs, you can publish your extensions without getting them added to t
 3. Open [the XKit Editor](http://www.tumblr.com/xkit_editor)
 4. Create a new extension    
 **IMPORTANT** Extension name **must** be [your XCloud ID]_[extension name]   
-`example: atesh_testextension`
+`example: if your XCloud username is mrkittens, then **mrkittens_testextension**`
