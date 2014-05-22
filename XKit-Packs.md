@@ -51,4 +51,4 @@ Failure to name your extension with the format above will cause your extension t
 * Don't write extensions that might get you, me, or the user in legal trouble.
 * In short, don't do anything that might be considered "evil" or "jerk"-ish. Be nice.
 
-Please keep in mind that XKit Packs have a server-side kill switch that disables your extensions. Failure to follow the instructions above will result in your extension getting removed from XCloud and all the user's devices, and your XCloud account terminated, without prior notice.
+**Please keep in mind that XKit Packs have a server-side kill switch that disables your extensions. Failure to follow the instructions above will result in your extension getting removed from XCloud and all the user's devices, and your XCloud account terminated, without prior notice.**
