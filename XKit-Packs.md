@@ -46,10 +46,12 @@ Failure to name your extension with the format above will cause your extension t
 * Do pick a nice icon for your extension.
 * Do be nice to your users and take their feedback seriously.
 * Do create a sideblog and open it's ask box for bug reports and feedback.
+* Do follow XKit coding standards, including [Run/Destroy sequences](https://github.com/atesh/XKit/wiki/Run-Destroy-Sequences) and [https://github.com/atesh/XKit/wiki/Preferences](Preferences)
+* Do your best to limit your code to [XKit API](https://github.com/atesh/XKit/wiki/XKit-object).
 
 ### Don't
 * Don't write malicious code: that includes, but not limited to, displaying ads, posting stuff without user permission, trying to gain control of the user's account, modify/break other extensions. If you're found to write malicious code, your XCloud account will be terminated.
-* Don't make excessive calls to Tumblr or XKit servers. Try to limit the calls, and store the data you receive using XKit store.
+* Don't make excessive calls to Tumblr or XKit servers. Try to limit the calls, and store the data you receive using XKit storage.
 * Don't use HTML5 APIs if there is an XKit equivalent for it. (ie: don't use localStorage, but do use XKit.storage)
 * Don't modify standard XKit objects.
 * Don't write extensions that are simply links/ads to a website/service.
