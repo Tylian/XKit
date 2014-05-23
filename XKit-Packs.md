@@ -46,7 +46,7 @@ Failure to name your extension with the format above will cause your extension t
 * Do pick a nice icon for your extension.
 * Do be nice to your users and take their feedback seriously.
 * Do create a sideblog and open it's ask box for bug reports and feedback.
-* Do follow XKit coding standards, including [Run/Destroy sequences](https://github.com/atesh/XKit/wiki/Run-Destroy-Sequences) and [https://github.com/atesh/XKit/wiki/Preferences](Preferences)
+* Do follow XKit coding standards, including [Run/Destroy sequences](https://github.com/atesh/XKit/wiki/Run-Destroy-Sequences) and [Preferences](https://github.com/atesh/XKit/wiki/Preferences).
 * Do your best to limit your code to [XKit API](https://github.com/atesh/XKit/wiki/XKit-object).
 
 ### Don't
