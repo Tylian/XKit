@@ -1,5 +1,5 @@
 //* TITLE XCloud **//
-//* VERSION 0.1 REV E **//
+//* VERSION 0.2 REV B **//
 //* DESCRIPTION Sync XKit data on clouds **//
 //* DETAILS XCloud stores your XKit configuration on STUDIOXENIX servers so you can back up your data and synchronize it with other computers and browsers easily. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -18,25 +18,25 @@ XKit.extensions.xcloud = new Object({
 		this.load_user_login();
 		$("#xkit-cp-tab-xcloud").css("display","block");
 	},
-	
+
 	reload_welcome_panel: function() {
-		
+
 		$("#xcloud-welcome-panel").remove();
 		$("#xcloud-panel-right").append(XKit.extensions.xcloud.return_panel_welcome(true));
-		
+
 	},
-	
+
 	return_panel_welcome: function(is_reloading) {
-		
+
 		var m_html = "";
-		
+
 		var m_class = "current";
 		if (is_reloading) {
-			m_class = "previous forced";	
+			m_class = "previous forced";
 		}
-		
+
 		if (XKit.extensions.xcloud.username === "") {
-			
+
 			m_html =	"<div class=\"xcloud-panel logged_out " + m_class + "\" id=\"xcloud-welcome-panel\">" +
 						"<div class=\"xcloud-title\" style=\"margin-top: 60px;\">Welcome to XCloud!</div>" +
 						"<div class=\"xcloud-information\">" +
@@ -44,13 +44,13 @@ XKit.extensions.xcloud = new Object({
 							"and posts, and your preferences across computers and browsers using XKit servers." +
 						"</div>" +
 						"<div class=\"xcloud-welcome-buttons\">" +
-							"<div class=\"xcloud-welcome-button\" id=\"xcloud-login\">Sign In</div>" +	
-							"<div class=\"xcloud-welcome-button\" id=\"xcloud-signup\">Create Account</div>" +		
-						"</div>" +							
+							"<div class=\"xcloud-welcome-button\" id=\"xcloud-login\">Sign In</div>" +
+							"<div class=\"xcloud-welcome-button\" id=\"xcloud-signup\">Create Account</div>" +
+						"</div>" +
 					"</div>";
-					
+
 		} else {
-			
+
 			m_html =	"<div class=\"xcloud-panel logged_in " + m_class + "\" id=\"xcloud-welcome-panel\">" +
 						"<div class=\"xcloud-title\" style=\"margin-top: 60px;\">Welcome, " + XKit.extensions.xcloud.username + "!</div>" +
 						"<div class=\"xcloud-information\">" +
@@ -58,157 +58,157 @@ XKit.extensions.xcloud = new Object({
 							"Click <b>Restore</b> to restore your settings stored on your XCloud.<br/>" +
 						"</div>" +
 						"<div class=\"xcloud-welcome-buttons\">" +
-							"<div class=\"xcloud-welcome-button\" id=\"xcloud-upload\">Sync</div>" +	
-							"<div class=\"xcloud-welcome-button\" id=\"xcloud-restore\">Restore</div>" +	
-							"<div class=\"xcloud-welcome-button\" id=\"xcloud-logout\">Logout</div>" +	
-						"</div>" +						
-					"</div>";	
-			
+							"<div class=\"xcloud-welcome-button\" id=\"xcloud-upload\">Sync</div>" +
+							"<div class=\"xcloud-welcome-button\" id=\"xcloud-restore\">Restore</div>" +
+							"<div class=\"xcloud-welcome-button\" id=\"xcloud-logout\">Logout</div>" +
+						"</div>" +
+					"</div>";
+
 		}
-		
+
 		return m_html;
-		
+
 	},
-	
+
 	return_panel_upload: function() {
-		
+
 		var m_html = "";
-		
+
 		m_html =	"<div class=\"xcloud-title\" style=\"margin-top: 25px;\">Synchronize</div>" +
 					"<div class=\"xcloud-information\">" +
 						"<b>Replace your XCloud data with your current XKit configuration.</b><br/> " +
 						"Depending on your internet connection and the amount of extensions you have installed, this might take several minutes. It is highly recommended that you close other Tumblr tabs and not navigate away from this page." +
 					"</div>" +
-					"<div id=\"xcloud-upload-do\" class=\"xcloud-inline-button xkit-button default\">Continue</div>" +		
-					"<div id=\"xcloud-signup-cancel\" class=\"xcloud-inline-button xkit-button\">Cancel</div>" +						
+					"<div id=\"xcloud-upload-do\" class=\"xcloud-inline-button xkit-button default\">Continue</div>" +
+					"<div id=\"xcloud-signup-cancel\" class=\"xcloud-inline-button xkit-button\">Cancel</div>" +
 				"</div>";
-		
+
 		return m_html;
-		
+
 	},
-	
+
 	return_panel_restore: function() {
-		
+
 		var m_html = "";
-		
+
 		m_html =	"<div class=\"xcloud-title\" style=\"margin-top: 25px;\">Restore</div>" +
 					"<div class=\"xcloud-information\">" +
 						"<b>Replace your XKit configuration with the one on XCloud.</b><br/> " +
 						"Depending on your internet connection and the amount of extensions you have installed, this might take several minutes. It is highly recommended that you close other Tumblr tabs and not navigate away from this page." +
 					"</div>" +
-					"<div id=\"xcloud-restore-do\" class=\"xcloud-inline-button xkit-button default\">Continue</div>" +		
-					"<div id=\"xcloud-signup-cancel\" class=\"xcloud-inline-button xkit-button\">Cancel</div>" +						
+					"<div id=\"xcloud-restore-do\" class=\"xcloud-inline-button xkit-button default\">Continue</div>" +
+					"<div id=\"xcloud-signup-cancel\" class=\"xcloud-inline-button xkit-button\">Cancel</div>" +
 				"</div>";
-		
+
 		return m_html;
-		
+
 	},
-		
+
 	return_panel_signup: function() {
-		
+
 		var m_html = "";
-		
+
 		m_html =	"<div class=\"xcloud-title\" style=\"margin-top: 15px;\">Sign up</div>" +
 					"XCloud is free of charge and only needs a username and password." +
 					"<input type=\"text\" id=\"xcloud-login-username\" placeholder=\"Your username - doesn't need to be your URL\"></input>" +
 					"<input type=\"password\" id=\"xcloud-login-password\" placeholder=\"Your password - minimum 6 characters\"></input>" +
-					"<div id=\"xcloud-signup-do\" class=\"xcloud-inline-button xkit-button default\">Sign up!</div>" +		
-					"<div id=\"xcloud-signup-cancel\" class=\"xcloud-inline-button xkit-button\">Cancel</div>" +						
+					"<div id=\"xcloud-signup-do\" class=\"xcloud-inline-button xkit-button default\">Sign up!</div>" +
+					"<div id=\"xcloud-signup-cancel\" class=\"xcloud-inline-button xkit-button\">Cancel</div>" +
 				"</div>";
-		
+
 		return m_html;
-		
+
 	},
-	
+
 	return_panel_login: function() {
-		
+
 		var m_html = "";
-		
+
 		m_html =	"<div class=\"xcloud-title\" style=\"margin-top: 15px;\">Sign In</div>" +
 					"Sign in to XCloud to restore/upload your XKit configuration." +
 					"<input type=\"text\" id=\"xcloud-login-username\" placeholder=\"Username\"></input>" +
 					"<input type=\"password\" id=\"xcloud-login-password\" placeholder=\"Password\"></input>" +
-					"<div id=\"xcloud-login-do\" class=\"xcloud-inline-button xkit-button default\">Sign in</div>" +		
-					"<div id=\"xcloud-login-cancel\" class=\"xcloud-inline-button xkit-button\">Cancel</div>" +						
+					"<div id=\"xcloud-login-do\" class=\"xcloud-inline-button xkit-button default\">Sign in</div>" +
+					"<div id=\"xcloud-login-cancel\" class=\"xcloud-inline-button xkit-button\">Cancel</div>" +
 				"</div>";
-		
+
 		return m_html;
-		
+
 	},
-	
+
 	panel: function() {
-		
+
 		var m_html = 	"<div id=\"xcloud-panel\"><div id=\"xcloud-beta-tag\">&nbsp;</div>" +
 					"<div id=\"xcloud-panel-right\">" +
 						XKit.extensions.xcloud.return_panel_welcome() +
 					"</div>" +
 					"<div id=\"xcloud-panel-left\">&nbsp;</div>" +
 				"</div>";
-		
+
 		return m_html;
-		
+
 	},
-	
+
 	working_on: function() {
-		
+
 		$("#xcloud-panel-working").remove();
 		$("#xcloud-panel-right").append("<div id=\"xcloud-panel-working\">Please wait...</div>");
-		
+
 	},
-	
+
 	working_off: function() {
-		
+
 		$("#xcloud-panel-working").remove();
-		
+
 	},
-	
+
 	panel_appended: function() {
-		
+
 		$("#xcloud-login").unbind("click");
 		$("#xcloud-login").bind("click", function() {
-			
+
 			XKit.extensions.xcloud.change_panel(XKit.extensions.xcloud.return_panel_login());
-			
+
 		});
-		
-		
+
+
 		$("#xcloud-signup-do").unbind("click");
 		$("#xcloud-signup-do").bind("click", function() {
-			
+
 			var m_username = $("#xcloud-login-username").val();
 			var m_password = XKit.extensions.xcloud.md5($("#xcloud-login-password").val());
-			
+
 			if ($.trim(m_username) === "" || $.trim($("#xcloud-login-password").val()) === "") {
 				XKit.window.show("Hey there!","Please enter a username and password.","error","<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
 				return;
 			}
-			
+
 			if ($("#xcloud-login-password").val().length <= 5) {
 				XKit.window.show("Hey there!","Please enter a password that is at least 6 characters long.","error","<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
 				return;
 			}
-			
+
 			XKit.extensions.xcloud.working_on();
-			
+
 			XKit.download.page("../xcloud/register/?username=" + m_username + "&password=" + m_password, function(mdata) {
 
 				XKit.extensions.xcloud.working_off();
-				
+
 				if (mdata.server_down === true) {
 					XKit.window.show("Can't connect to server","XKit was unable to contact XCloud servers.<br/>Please try again or <a href=\"http://xkit-extension.tumblr.com/ask\">send a bug report</a>.","error","<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
 					return;
 				}
 
 				if (mdata.errors === "false") {
-					
+
 					XKit.extensions.xcloud.username = m_username;
 					XKit.extensions.xcloud.password = m_password;
 					XKit.extensions.xcloud.save_user_login();
 					XKit.extensions.xcloud.reload_welcome_panel();
 					XKit.extensions.xcloud.change_panel("<div class=\"xcloud-title\" style=\"margin-top: 75px;\">Horray!</div>XCloud account created successfully. <div id=\"xcloud-start-using\" class=\"xcloud-inline-button xkit-button default\">Start using XCloud</div>");
-					
+
 				} else {
-					
+
 					var err_desc = "";
 					if (mdata.error_code === "102") {
 						err_desc = "<br/>Usernames can only have letters and numbers.";
@@ -219,53 +219,53 @@ XKit.extensions.xcloud = new Object({
 					if (mdata.error_code === "100") {
 						err_desc = "<br/>Please pick another username.";
 					}
-					
+
 					XKit.window.show("Unable to sign up","<b>" + mdata.error_str + "</b> (code: " + mdata.error_code + ")" + err_desc,"error","<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
 					return;
-					
+
 				}
 
 			});
-			
+
 		});
-		
+
 		$("#xcloud-login-do").unbind("click");
 		$("#xcloud-login-do").bind("click", function() {
-			
+
 			var m_username = $("#xcloud-login-username").val();
 			var m_password = XKit.extensions.xcloud.md5($("#xcloud-login-password").val());
-			
+
 			if ($.trim(m_username) === "" || $.trim($("#xcloud-login-password").val()) === "") {
 				XKit.window.show("Hey there!","Please enter a username and password.","error","<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
 				return;
 			}
-			
+
 			if ($("#xcloud-login-password").val().length <= 5) {
 				XKit.window.show("Hey there!","Please enter a password that is at least 6 characters long.","error","<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
 				return;
 			}
-			
+
 			XKit.extensions.xcloud.working_on();
-			
+
 			XKit.download.page("../xcloud/auth/?username=" + m_username + "&password=" + m_password, function(mdata) {
 
 				XKit.extensions.xcloud.working_off();
-				
+
 				if (mdata.server_down === true) {
 					XKit.window.show("Can't connect to server","XKit was unable to contact XCloud servers.<br/>Please try again or <a href=\"http://xkit-extension.tumblr.com/ask\">send a bug report</a>.","error","<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
 					return;
 				}
 
 				if (mdata.errors === "false") {
-					
+
 					XKit.extensions.xcloud.username = m_username;
 					XKit.extensions.xcloud.password = m_password;
 					XKit.extensions.xcloud.save_user_login();
 					XKit.extensions.xcloud.reload_welcome_panel();
 					XKit.extensions.xcloud.change_panel("<div class=\"xcloud-title\" style=\"margin-top: 75px;\">Horray!</div>Signed in successfully.<div id=\"xcloud-start-using\" class=\"xcloud-inline-button xkit-button default\">Start using XCloud</div>");
-					
+
 				} else {
-					
+
 					var err_desc = "";
 					if (mdata.error_code === "102") {
 						err_desc = "<br/>Usernames can only have letters and numbers.";
@@ -282,92 +282,92 @@ XKit.extensions.xcloud = new Object({
 					if (mdata.error_code === "602") {
 						err_desc = "<br/>Please check your password and try again.";
 					}
-					
+
 					XKit.window.show("Unable to sign in","<b>" + mdata.error_str + "</b> (code: " + mdata.error_code + ")" + err_desc,"error","<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
 					return;
-					
+
 				}
 
 			});
-			
+
 		});
-		
+
 		$("#xcloud-signup").unbind("click");
 		$("#xcloud-signup").bind("click", function() {
-			
+
 			XKit.extensions.xcloud.change_panel(XKit.extensions.xcloud.return_panel_signup());
-			
+
 		});
-		
+
 		$("#xcloud-start-using").unbind("click");
 		$("#xcloud-start-using").bind("click", function() {
-			
+
 			XKit.extensions.xcloud.change_panel_back();
-			
+
 		});
-		
+
 		$("#xcloud-login-cancel, #xcloud-signup-cancel").unbind("click");
 		$("#xcloud-login-cancel, #xcloud-signup-cancel").bind("click", function() {
-			
+
 			XKit.extensions.xcloud.change_panel_back();
-			
+
 		});
-		
+
 		$("#xcloud-logout").unbind("click");
 		$("#xcloud-logout").bind("click", function() {
-			
+
 			XKit.extensions.xcloud.change_panel("<div class=\"xcloud-title\" style=\"margin-top: 60px;\">Sign out?</div>You sure you want to log out of XCloud?<div id=\"xcloud-logout-confirm\" class=\"xcloud-inline-button xkit-button default\">Yes, sign me out.</div><div id=\"xcloud-signup-cancel\" class=\"xcloud-inline-button xkit-button\">Cancel</div>");
-			
+
 		});
-		
+
 		$("#xcloud-logout-confirm").unbind("click");
 		$("#xcloud-logout-confirm").bind("click", function() {
-			
+
 			XKit.extensions.xcloud.username = "";
 			XKit.extensions.xcloud.password = "";
 			XKit.extensions.xcloud.save_user_login();
 			XKit.extensions.xcloud.reload_welcome_panel();
 			XKit.extensions.xcloud.change_panel("<div class=\"xcloud-title\" style=\"margin-top: 82px;\">Signed out</div>Signed out of XCloud.<div id=\"xcloud-start-using\" class=\"xcloud-inline-button xkit-button default\">Go back</div>");
-			
+
 		});
-		
+
 		$("#xcloud-upload").unbind("click");
 		$("#xcloud-upload").bind("click", function() {
-			
+
 			XKit.extensions.xcloud.change_panel(XKit.extensions.xcloud.return_panel_upload());
-			
+
 		});
-		
+
 		$("#xcloud-restore").unbind("click");
 		$("#xcloud-restore").bind("click", function() {
-			
+
 			XKit.extensions.xcloud.change_panel(XKit.extensions.xcloud.return_panel_restore());
-			
+
 		});
-		
+
 		$("#xcloud-upload-do").unbind("click");
 		$("#xcloud-upload-do").bind("click", function() {
-			
+
 			XKit.extensions.xcloud.start_upload();
-			
+
 		});
-		
+
 		$("#xcloud-restore-do").unbind("click");
 		$("#xcloud-restore-do").bind("click", function() {
-			
+
 			XKit.extensions.xcloud.start_fetch();
-			
+
 		});
-				
+
 	},
-	
+
 	show_overlay: function(fetch_mode) {
-		
+
 		$("#xcloud-overlay-background").remove();
 		$("#xcloud-overlay").remove();
-		
+
 		if (fetch_mode) {
-			
+
 			$("body").append(	"<div id=\"xcloud-overlay-background\">&nbsp;</div>" +
 						"<div id=\"xcloud-overlay\">" +
 							"<div id=\"xcloud-img-working-fetch\" class=\"xcloud-working-imagery\">&nbsp;</div>" +
@@ -376,9 +376,9 @@ XKit.extensions.xcloud = new Object({
 								"<div id=\"xcloud-overlay-message\">Do not navigate away from this page</div>" +
 							"</div>" +
 						"</div>");
-			
+
 		} else {
-		
+
 			$("body").append(	"<div id=\"xcloud-overlay-background\">&nbsp;</div>" +
 						"<div id=\"xcloud-overlay\">" +
 							"<div id=\"xcloud-img-working\" class=\"xcloud-working-imagery\">&nbsp;</div>" +
@@ -386,29 +386,29 @@ XKit.extensions.xcloud = new Object({
 								"<div id=\"xcloud-overlay-title\">Transmitting to Mothership</div>" +
 								"<div id=\"xcloud-overlay-message\">Do not navigate away from this page</div>" +
 							"</div>" +
-						"</div>");	
-			
+						"</div>");
+
 		}
-		
+
 		$("#xcloud-overlay-background").animate({ opacity: 1 }, 400);
 		$("#xcloud-overlay").fadeIn('slow');
-		
+
 	},
-	
+
 	hide_overlay: function() {
-	
+
 		$("#xcloud-overlay-background").fadeOut('fast');
-		$("#xcloud-overlay").fadeOut('slow', function() { $(this).remove(); $("#xcloud-overlay-background").remove(); });	
-		
+		$("#xcloud-overlay").fadeOut('slow', function() { $(this).remove(); $("#xcloud-overlay-background").remove(); });
+
 	},
-	
+
 	start_fetch: function() {
-		
+
 		XKit.extensions.xcloud.show_overlay(true);
-		
+
 		var m_username = XKit.extensions.xcloud.username;
 		var m_password = XKit.extensions.xcloud.password;
-		
+
 		XKit.download.page("../xcloud/fetch/?username=" + m_username + "&password=" + m_password, function(mdata) {
 
 			if (mdata.server_down === true) {
@@ -418,14 +418,14 @@ XKit.extensions.xcloud = new Object({
 			}
 
 			if (mdata.errors === "false") {
-					
+
 				// GM_deleteAllValues(function() {
 					XKit.extensions.xcloud.process_restore(mdata);
 				// });
-				
-						
+
+
 			} else {
-				
+
 				XKit.extensions.xcloud.hide_overlay();
 				var err_desc = "";
 				if (mdata.error_code === "102") {
@@ -440,196 +440,264 @@ XKit.extensions.xcloud = new Object({
 				if (mdata.error_code === "800") {
 					err_desc = "<br/>Click Sync from XCloud menu to synchronize your data with XCloud servers before restoring.";
 				}
-				
-				XKit.extensions.xcloud.change_panel_back();	
+
+				XKit.extensions.xcloud.change_panel_back();
 				XKit.window.show("Unable to restore","<b>" + mdata.error_str + "</b> (code: " + mdata.error_code + ")" + err_desc,"error","<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
 				return;
-					
+
 			}
 
 		});
-		
+
 	},
-	
+
 	extensions_to_download: new Array(),
 	extensions_to_download_enabled: new Array(),
 	extensions_to_download_count: 0,
 	errors_list: new Array(),
-	
+
 	process_restore: function(mdata) {
-		
+
 		try {
 			mdata.data = mdata.data.substring(3, mdata.data.length - 3);
 			var m_obj = JSON.parse(XKit.extensions.xcloud.base64_decode(mdata.data));
 		} catch(e) {
 			XKit.extensions.xcloud.process_error("Unable to parse JSON");
 		}
-			
-		
+
+
 
 		if (m_obj.identifier !== "XCLOUD") {
 			XKit.extensions.xcloud.process_error("Invalid Identifier");
-			return;	
+			return;
 		}
-		
+
 		$("#xcloud-overlay-title").html("Restoring settings...");
-		
+
 		XKit.extensions.xcloud.errors_list = new Array();
 		XKit.extensions.xcloud.extensions_to_download = new Array();
 		XKit.extensions.xcloud.extensions_to_download_enabled = new Array();
 		XKit.extensions.xcloud.extensions_to_download_count = 0;
-		
+
 		var m_installed = XKit.installed.list();
 		var full_list = new Array();
-		
+
 		for (var ext in m_obj.settings) {
-			
+
 			var mext = m_obj.settings[ext];
-			
+
 			var extension_name = mext.extension;
-			
+
 			XKit.console.add("Restoring settings of " + extension_name);
-			
+
 			var extension_settings = new Object();
 			try {
-				extension_settings = JSON.parse(XKit.extensions.xcloud.base64_decode(mext.preferences)); 
+				extension_settings = JSON.parse(XKit.extensions.xcloud.base64_decode(mext.preferences));
 			} catch(e) {
 				XKit.extensions.xcloud.errors_list.push("Unable to restore settings of " + extension_name);
 			}
 			var extension_enabled = mext.enabled;
-			
+
 			var install_this = false;
-			
+
 			if (m_installed.indexOf(extension_name) == -1) {
-				install_this = true;	
+				install_this = true;
 			}
-			
+
 			if (install_this) {
 				XKit.console.add(" |-- Need to install " + extension_name);
 				XKit.extensions.xcloud.extensions_to_download.push(extension_name);
-				XKit.extensions.xcloud.extensions_to_download_enabled.push(extension_enabled);	
+				XKit.extensions.xcloud.extensions_to_download_enabled.push(extension_enabled);
 			} else {
-				XKit.console.add(" |-- Skipping " + extension_name + ", already installed.");	
+				XKit.console.add(" |-- Skipping " + extension_name + ", already installed.");
 			}
-			
+
 			full_list.push(extension_name);
-			XKit.tools.set_setting("xkit_extension_storage__" + extension_name, JSON.stringify(extension_settings));			
+			XKit.tools.set_setting("xkit_extension_storage__" + extension_name, JSON.stringify(extension_settings));
 
 		}
 
 		for(var i=0;i<m_installed.length;i++) {
-		
+
 			if (m_installed[i].substring(0,5) === "xkit_") { continue; }
 			if (full_list.indexOf(m_installed[i]) == -1) {
-			
+
 				XKit.installed.remove(m_installed[i]);
 				XKit.storage.clear(m_installed[i]);
-				XKit.console.add("Removed " + m_installed[i]);	
-				
-			}	
-			
-		}
-		
+				XKit.console.add("Removed " + m_installed[i]);
 
-		
+			}
+
+		}
+
+
+
 		$("#xcloud-overlay-title").html("Restoring extensions...");
 		$("#xcloud-overlay-message").html(XKit.progress.add("xcloud-restore-process"));
-		
+
 		XKit.extensions.xcloud.process_download_extension_next();
-		
-		
+
+
 	},
-	
+
 	process_download_extension_next: function() {
-		
+
 		if (XKit.extensions.xcloud.extensions_to_download_count >= XKit.extensions.xcloud.extensions_to_download.length) {
-			XKit.extensions.xcloud.process_complete();	
+			XKit.extensions.xcloud.process_complete();
 			return;
-		}	
-		
+		}
+
 		var perc = Math.round((XKit.extensions.xcloud.extensions_to_download_count * 100) / XKit.extensions.xcloud.extensions_to_download.length);
-		
+
 		var m_name = XKit.extensions.xcloud.extensions_to_download[XKit.extensions.xcloud.extensions_to_download_count];
 		XKit.console.add("XCloud restore -> " + m_name);
-		
+
 		XKit.progress.value("xcloud-restore-process", perc);
-		
+
 		XKit.install(m_name, function(mdata) {
-		
+
 			if (mdata.server_down === true|| mdata.errors == true) {
 				XKit.extensions.xcloud.errors_list.push("Unable to restore extension " + extension_name);
 				XKit.extensions.xcloud.process_download_extension_next();
 				return;
 			}
-			
+
 			if (XKit.extensions.xcloud.extensions_to_download_enabled[XKit.extensions.xcloud.extensions_to_download_count] === false) {
 				XKit.installed.disable(XKit.extensions.xcloud.extensions_to_download[XKit.extensions.xcloud.extensions_to_download_count]);
 			}
-			
+
 			XKit.extensions.xcloud.extensions_to_download_count++;
 			XKit.extensions.xcloud.process_download_extension_next();
-			
-			
+
+
 		});
-		
-		
+
+
 	},
-	
+
 	process_complete: function() {
-		
+
 		XKit.extensions.xkit_preferences.close();
 		XKit.extensions.xcloud.hide_overlay();
 		XKit.window.show("Restore complete","<b>XCloud successfully restored your settings.</b><br/>Please restart your browser to continue.","info");
 		return;
-		
+
 	},
-	
+
 	process_error: function(txt) {
-		
+
 		XKit.window.show("Could not restore","Invalid/corrupt XCloud data received.<br/>" + txt + "<br/><br/>Please try again or <a href=\"http://xkit-extension.tumblr.com/ask\">send a bug report</a>.","error","<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
 		return;
-		
+
 	},
-	
+
+	str2ab: function(str) {
+ 		/*var buf = new ArrayBuffer(str.length*2); // 2 bytes for each char
+  		var bufView = new Uint16Array(buf);
+  		for (var i=0, strLen=str.length; i<strLen; i++) {
+    			bufView[i] = str.charCodeAt(i);
+  		}
+  		return buf;*/
+
+    		var strUtf8 = unescape(encodeURIComponent(str));
+    		var ab = new Uint8Array(strUtf8.length);
+    		for (var i = 0; i < strUtf8.length; i++) {
+        		ab[i] = strUtf8.charCodeAt(i);
+    		}
+    		return ab;
+
+	},
+
+	strFromUtf8Ab: function(buf) {
+        	var bufView = new Uint16Array(buf);
+        	var unis = [];
+        	for (var i = 0; i < bufView.length; i++) {
+        		unis.push(bufView[i]);
+        	}
+        	return String.fromCharCode.apply(null, unis);
+	},
+
 	start_upload: function() {
-		
+
 		// XKit.extensions.xkit_preferences.close();
-		
+
 		XKit.extensions.xcloud.show_overlay();
-					
+
 		// Get list of installed extensions:
 		var installed = XKit.installed.list();
-		
+
 		var to_send = new Object();
 		to_send.settings = new Array();
-		
+
+		var skipping = [];
+		var skipping_size = [];
+
 		for (i=0;i<installed.length;i++) {
-		
+
 			// Skip internal extensions.
 			if (installed[i].substring(0,5) === "xkit_") {
 				continue;
 			}
-			
-			var m_data = XKit.storage.get_all(installed[i]);
-			
+
+			var m_data = XKit.extensions.xcloud.base64_encode(JSON.stringify(XKit.storage.get_all(installed[i])));
+
 			var m_extension = XKit.installed.get(installed[i]);
-			
+
 			var m_to_add = new Object();
 			m_to_add.extension = installed[i];
-			m_to_add.preferences = XKit.extensions.xcloud.base64_encode(JSON.stringify(m_data));
+			m_to_add.preferences = m_data;
 			m_to_add.enabled = XKit.installed.enabled(installed[i]);
 
-			to_send.settings.push(m_to_add);
-			
+			if ((m_data.length / 1024 / 1024) >= 1.5) {
+				console.log("Skipping " + m_to_add.extension + " because length = " + (m_data.length / 1024 / 1024) + " kilobytes");
+				skipping.push(m_to_add.extension);
+				skipping_size.push((m_data.length / 1024 / 1024));
+			} else {
+				console.log("Added " + m_to_add.extension + " to upload object. Length = " + (m_data.length / 1024 / 1024) + " kilobytes");
+				to_send.settings.push(m_to_add);
+			}
+
 		}
-		
+
 		to_send.identifier = "XCLOUD";
 
+		console.log("Encoding upload object.");
+
 		to_send = JSON.stringify(to_send);
+		console.log("Original size = " + (to_send.length / 1024 / 1024) + " megabytes");
 		to_send = "XCS" + XKit.extensions.xcloud.base64_encode(to_send) + "XCE";
+
+		if ((to_send.length / 1024 / 1024) >= 5) {
+
+			XKit.window.show("Unable to back up data.", "The backup data file is bigger than 5 megabytes, which is the maximum the XCloud servers can handle. Please go to XKit Control Panel > My XKit and select on extensions you don't use and select the setting \"Reset Settings\" to free up data.", "error", "<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
+			return;
+
+		}
+
+		if (skipping.length > 0) {
+			m_html = "<ol>";
+			for (var i=0;i<skipping.length;i++) {
+				m_html += "<li><b>" + XKit.installed.title(skipping[i]) + "</b> &middot; " + Math.ceil(skipping_size[i]) + " MB</li>";
+			}
+			m_html += "</ol>";
+			XKit.window.show("Skipping some extensions","The following extensions will not be backed up to XCloud because they are storing more than 1.5 megabytes of data, making the backup bigger than XCloud servers can handle." + m_html + "<small style=\"color: rgb(110,110,110);\">If these extensions have data that you can remove, please try removing them and retry the backup process. If you are not using these extensions, click on \"Reset Settings\" button on top-right corner of their control panel to free up space on your computer.</small>", "warning", "<div class=\"xkit-button default\" id=\"xkit-xcloud-backup-skip-continue\">Continue</div><div class=\"xkit-button\" id=\"xkit-close-message\">Cancel</div>");
+			$("#xkit-xcloud-backup-skip-continue").click(function() {
+				XKit.window.close();
+				XKit.extensions.xcloud.send_upload_data(to_send);
+			});
+		} else {
+			XKit.extensions.xcloud.send_upload_data(to_send);
+		}
+
+
+	},
+
+	send_upload_data: function(to_send) {
 
 		var m_username = encodeURIComponent(XKit.extensions.xcloud.username);
 		var m_password = encodeURIComponent(XKit.extensions.xcloud.password);
+
+		console.log("Uploading upload object. Size = " + (to_send.length / 1024 / 1024) + " megabytes");
 
 		GM_xmlhttpRequest({
 			method: "POST",
@@ -637,11 +705,11 @@ XKit.extensions.xcloud = new Object({
 			data: "username=" + m_username + "&password=" + m_password + "&data=" + to_send,
 			json: false,
 			onerror: function(response) {
-				
+
 				XKit.extensions.xcloud.hide_overlay();
 				XKit.window.show("Can't connect to server","XKit was unable to contact XCloud servers.<br/>Error code: 1003<br/>Please try again or <a href=\"http://xkit-extension.tumblr.com/ask\">send a bug report</a>.","error","<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
 				return;
-				
+
 			},
 			onload: function(response) {
 				// We are done!
@@ -674,7 +742,7 @@ XKit.extensions.xcloud = new Object({
 					if (mdata.error_code === "602") {
 						err_desc = "<br/>Please check your password and try again.<br/>If you have changed your password, you might need to log out of XCloud and sign back in.";
 					}
-					
+
 					XKit.window.show("Unable to complete synchronization","<b>" + mdata.error_str + "</b> (code: " + mdata.error_code + ")" + err_desc,"error","<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
 					return;
 				}
@@ -682,57 +750,57 @@ XKit.extensions.xcloud = new Object({
 		});
 
 	},
-	
+
 	change_panel_back: function() {
-		
+
 		$(".xcloud-panel.current").animate({ left: "100%" }, 450 );
-		
+
 		if ($("#xcloud-welcome-panel").hasClass("forced")) {
 			$("#xcloud-welcome-panel").css("left","-100%");
-			$("#xcloud-welcome-panel").removeClass("forced");	
+			$("#xcloud-welcome-panel").removeClass("forced");
 		}
-		
+
 		$("#xcloud-welcome-panel").animate({ left: "0" }, 450, function() {
 			$(".xcloud-panel.current").remove();
 			$("#xcloud-welcome-panel").addClass("current");
 			$("#xcloud-welcome-panel").removeClass("previous");
-			XKit.extensions.xcloud.panel_appended();	
+			XKit.extensions.xcloud.panel_appended();
 		});
-		
+
 	},
-	
+
 	change_panel: function(html) {
-		
+
 		$("#xcloud-panel-right").append("<div class=\"xcloud-panel next\">" + html + "</div>");
-		
+
 		$(".xcloud-panel.current").animate({ left: "-100%" }, 450);
 		$(".xcloud-panel.next").animate({ left: "0" }, 450, function() {
 			$(".xcloud-panel.current").addClass("previous");
 			$(".xcloud-panel.previous").removeClass("current");
 			$(".xcloud-panel.next").addClass("current");
 			$(".xcloud-panel.next").removeClass("next");
-			XKit.extensions.xcloud.panel_appended();	
+			XKit.extensions.xcloud.panel_appended();
 			$(".xcloud-panel.previous").not("#xcloud-welcome-panel").remove();
 		});
-		
+
 	},
-	
+
 	save_user_login: function() {
-		
+
 		XKit.storage.set("xcloud","username", XKit.extensions.xcloud.username);
 		XKit.storage.set("xcloud","password", "[" + XKit.extensions.xcloud.password + "]");
-		
+
 	},
-	
+
 	load_user_login: function() {
-		
+
 		XKit.extensions.xcloud.username = XKit.storage.get("xcloud","username","");
 		XKit.extensions.xcloud.password = XKit.storage.get("xcloud","password","");
-		
+
 		if (XKit.extensions.xcloud.password.substring(0,1) === "[") {
 			if (XKit.extensions.xcloud.password.substring(XKit.extensions.xcloud.password.length - 1) == "]") {
-				XKit.extensions.xcloud.password = XKit.extensions.xcloud.password.substring(1, XKit.extensions.xcloud.password.length - 1);	
-			}	
+				XKit.extensions.xcloud.password = XKit.extensions.xcloud.password.substring(1, XKit.extensions.xcloud.password.length - 1);
+			}
 		}
 
 	},
@@ -740,7 +808,7 @@ XKit.extensions.xcloud = new Object({
 	destroy: function() {
 		this.running = false;
 	},
-	
+
 	md5: function(str) {
 
 		  // http://kevin.vanzonneveld.net
@@ -1024,7 +1092,7 @@ XKit.extensions.xcloud = new Object({
 
 		  return utftext;
 	},
-	
+
 	base64_encode: function(data) {
 	  // http://kevin.vanzonneveld.net
 	  // +   original by: Tyler Akins (http://rumkin.com)
@@ -1074,7 +1142,7 @@ XKit.extensions.xcloud = new Object({
 	  return (r ? enc.slice(0, r - 3) : enc) + '==='.slice(r || 3);
 
 	},
-	
+
 	base64_decode: function (data) {
 	  // http://kevin.vanzonneveld.net
 	  // +   original by: Tyler Akins (http://rumkin.com)

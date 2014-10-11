@@ -1,5 +1,5 @@
 //* TITLE XNeko **//
-//* VERSION 1.1 REV C **//
+//* VERSION 1.2 REV A **//
 //* DESCRIPTION One live cat for your dashboard **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//
@@ -16,6 +16,18 @@ XKit.extensions.xneko = new Object({
 	slow: true,
 
 	preferences: {
+		"appearance": {
+			text: "Appearance",
+			default: "default",
+			value: "default",
+			type: "combo",
+			values: [
+				"Default Neko", "default",
+				"Pink Neko", "pink",
+				"Santa Neko", "santa",
+				"Xenixlet Neko", "xenixlet",
+			],
+		},
 		"cat_name": {
 			text: "Your cat's name",
 			type: "text",
@@ -37,7 +49,7 @@ XKit.extensions.xneko = new Object({
 		XKit.extensions.xneko.neko = new Object();
 		XKit.extensions.xneko.neko.x = 0;
 		XKit.extensions.xneko.neko.y = 0;
-		XKit.extensions.xneko.neko.stopped = true;	
+		XKit.extensions.xneko.neko.stopped = true;
 		XKit.extensions.xneko.neko.energy = 100;
 		XKit.extensions.xneko.neko.stand_count = 0;
 		XKit.extensions.xneko.neko.sleeping = false;
@@ -46,7 +58,7 @@ XKit.extensions.xneko = new Object({
 		XKit.extensions.xneko.neko.alt_sprite = false;
 
 		XKit.extensions.xneko.neko.born = function() {
-			$("body").append('<div id="xneko" class="santa">&nbsp;</div>');
+			$("body").append('<div id="xneko" class="">&nbsp;</div>');
 			this.int = setTimeout(function() {
 				// Do neko stuff here.
 				XKit.extensions.xneko.think(XKit.extensions.xneko.neko);
@@ -61,14 +73,14 @@ XKit.extensions.xneko = new Object({
 		XKit.extensions.xneko.neko.die = function() {
 			clearInterval(this.int);
 			$("#xneko").remove();
-		};	
+		};
 
 		XKit.extensions.xneko.neko.place = function(x, y) {
 			this.x = x;
 			this.y = y;
 			$("#xneko").css("top", Math.round(y) + "px");
 			$("#xneko").css("left", Math.round(x) + "px");
-		};	
+		};
 
 		// Make the cat born.
 		XKit.extensions.xneko.neko.born();
@@ -84,7 +96,9 @@ XKit.extensions.xneko = new Object({
 				XKit.extensions.xneko.mouse_x = e.pageX;
 				XKit.extensions.xneko.mouse_y = e.pageY;
 			}
-   		}); 
+   		});
+
+   		$("#xneko").addClass(XKit.extensions.xneko.preferences.appearance.value);
 
 	},
 
@@ -93,11 +107,11 @@ XKit.extensions.xneko = new Object({
 		var m_cat_stopped = false;
 		var mc_diff = XKit.extensions.xneko.mouse_x - cat.x;
 		if (mc_diff < 0) { mc_diff = -1 * mc_diff; }
-		
+
 		// Force update on Webkit.. No idea what is going on.
 		$('#xneko').find("p").remove();
 		$('#xneko').append("<p>&nbsp;</p>");
-		
+
 		if (force_mode) {
 			clearInterval(cat.int);
 			cat.energy = cat.energy + 60;
@@ -112,7 +126,7 @@ XKit.extensions.xneko = new Object({
 			// cat should go left.
 			cat.direction_x = -1;
 		}
-		
+
 		if (XKit.extensions.xneko.preferences.stay_away.value === true) {
 			if (mc_diff < 40) {
 				cat.direction_x = 0;
@@ -220,8 +234,8 @@ XKit.extensions.xneko = new Object({
 
 		// Check energy.
 		var tmp_cat_health = cat.energy;
-		if (cat.sleeping === true) { 
-			tmp_cat_health = 0; 
+		if (cat.sleeping === true) {
+			tmp_cat_health = 0;
 		}
 
 		if (tmp_cat_health === 0) {
@@ -238,7 +252,7 @@ XKit.extensions.xneko = new Object({
 			}
 
 			cat.stand_count = 0;
-	
+
 			if (cat.alt_sprite === true) {
 				$("#xneko").css("background-position", "0px -" + (1*32) + "px");
 			} else {
@@ -296,7 +310,7 @@ XKit.extensions.xneko = new Object({
 					$("#xneko").css("background-position", "32px -" + (3*32) + "px");
 				}
 
-				cat.int = setTimeout(function() { XKit.extensions.xneko.think(XKit.extensions.xneko.neko); }, 520);		
+				cat.int = setTimeout(function() { XKit.extensions.xneko.think(XKit.extensions.xneko.neko); }, 520);
 
 			}
 
@@ -311,8 +325,8 @@ XKit.extensions.xneko = new Object({
 			if (typeof XKit.extensions.xneko.neko.die === "function") {
 				XKit.extensions.xneko.neko.die();
 			}
-		}	
-		
+		}
+
 	}
 
 });

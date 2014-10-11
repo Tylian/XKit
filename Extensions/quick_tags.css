@@ -9,15 +9,52 @@
 	border-radius: 6px;
 	display: none;
 	border: 1px solid #abafbc;
-	
+
+}
+
+.xkit-quick-tags-cp-tag:first-child .xkit-quick-tags-cp-up { display: none; }
+.xkit-quick-tags-cp-tag:last-child .xkit-quick-tags-cp-down { display: none; }
+
+.xkit-quick-tags-cp-up {
+	position: absolute;
+	top: 10px;
+	background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAANCAYAAAB2HjRBAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBNYWNpbnRvc2giIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6NzNEMTNERDg4MDY1MTFFM0I0MDc4NDA0OTRFNEYyQjQiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6NzNEMTNERDk4MDY1MTFFM0I0MDc4NDA0OTRFNEYyQjQiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDo3M0QxM0RENjgwNjUxMUUzQjQwNzg0MDQ5NEU0RjJCNCIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDo3M0QxM0RENzgwNjUxMUUzQjQwNzg0MDQ5NEU0RjJCNCIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PuwVTIsAAACFSURBVHjaYvz//z8DuYCJgRIAshmH7WZAfB6IpXHqwaEZpPEDSB0Q30M3AJ9mZI3/sRmASzM2jRgGYNOsi6bxJBAbAPETNAOEsGlOQ9PID3WNIpoBxjA92KLqFBC7AfFHKP8+ENsC8VNC8YyukQGvAUjOtkRyKi4A8oIiTA/jgCVPgAADABzFgQttkQ0QAAAAAElFTkSuQmCC);
+	left: 11px;
+	width: 15px;
+	height: 13px;
+	opacity: 0.35;
+	cursor: pointer;
+}
+
+.xkit-quick-tags-cp-down {
+	position: absolute;
+	bottom: 10px;
+	background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAANCAYAAAB2HjRBAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBNYWNpbnRvc2giIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6NzNEMTNERDQ4MDY1MTFFM0I0MDc4NDA0OTRFNEYyQjQiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6NzNEMTNERDU4MDY1MTFFM0I0MDc4NDA0OTRFNEYyQjQiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDo3M0QxM0REMjgwNjUxMUUzQjQwNzg0MDQ5NEU0RjJCNCIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDo3M0QxM0REMzgwNjUxMUUzQjQwNzg0MDQ5NEU0RjJCNCIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PqN5tMkAAACTSURBVHjaYvr//z8DuZiJgQIA18zIyKgIxQx4MD8QW2JoBgIhID4MxIo4LOIH4l1ArItNMwhI4zAAptEMq7PxGIBVIxjAQg7q7HsgISh+AsQGQHwSSewDyNlwPUiaYbYiG/AfTaMZioVomnEZ8AHZ2fg0oxvwAd2/hDTDDDiPLaBgeliQBdDAUyA2JCqFkQMAAgwAYE6LqrONWvwAAAAASUVORK5CYII=);
+	left: 11px;
+	width: 15px;
+	height: 13px;
+	opacity: 0.35;
+	cursor: pointer;
+}
+
+.xkit-quick-tags-cp-up:hover,
+.xkit-quick-tags-cp-down:hover {
+
+	opacity: 1;
+
 }
 
 .xkit-quick-tags-cp-tag {
-	border-bottom: 1px solid rgb(190,190,190);
-	padding: 6px 15px 6px 40px;	
+	border-bottom: 1px dotted rgb(190,190,190);
+	padding: 9px 16px 9px 35px;
 	color: rgb(100,100,100);
 	font-size: 12px;
-	position: relative;	
+	position: relative;
+	cursor: pointer;
+}
+
+.xkit-quick-tags-cp-tag:hover {
+	background: rgb(245,245,245);
 }
 
 .xkit-quick-tags-cp-tag .xkit-tag-title { font-weight: bold; }
@@ -39,7 +76,7 @@
 }
 
 .xkit-quick-tags-cp-tag:last-child {
-	border-bottom: 0;	
+	border-bottom: 0;
 }
 
 #xkit-quick-tags-user-tags {
@@ -49,80 +86,80 @@
 
 #xkit-quick-tags-user-tags.no-other-section{
 	border-radius: 5px;
-	height: 140px;	
+	height: 140px;
 }
 
 #xkit-quick-tags-user-tags.no-scroll-needed {
 	height: auto !important;
-	overflow: hidden;	
+	overflow: hidden;
 }
 
 #xkit-quick-tags-window .xkit-no-tags {
-	
+
 	background: rgba(228,232,238,1);
 	color: #7a7f8e;
 	border-bottom: 1px solid #abafbc;
 	padding: 10px;
 	text-align: center;
 	font-size: 13px;
-	
+
 }
 
 #xkit-quick-tags-window.no-other-section .xkit-no-tags {
 
-	border-bottom: 0;	
-	
+	border-bottom: 0;
+
 }
 
 #xkit-quick-tags-window .xkit-tag-other,
 #xkit-quick-tags-window .xkit-tag {
-	
+
 	background: rgb(228,232,238);
 	color: #7a7f8e;
 	font-size: 13px;
 	padding: 5px 9px 5px 9px;
 	border-bottom: 1px solid #abafbc;
 	cursor: pointer;
-	
+
 }
 
 #x1cpostage_quick_tags .xkit-tag {
-	
+
 	background: rgba(255,255,255,0.86);
 	color: #7a7f8e;
 	font-size: 12px;
 	padding: 5px 9px 5px 9px;
 	margin-top: 1px;
 	cursor: pointer;
-	
+
 }
 
 #x1cpostage_quick_tags.xkit-no-reverse-ui .xkit-tag {
-	
+
 	border-top: 0;
 	border-bottom: 1px solid #abafbc;
-		
+
 }
 
 #x1cpostage_quick_tags .xkit-tag:hover,
 #xkit-quick-tags-window .xkit-tag:hover {
 
 	background-color: rgba(234,239,246,1);
-	color: #696d7a;	
-	
+	color: #696d7a;
+
 }
 
 #xkit-quick-tags-window .xkit-tag-other {
-	
+
 	background-color: #c8ced7 !important;
 	box-shadow: inset 0px 1px 2px rgba(0,0,0,0.11);
 	background-image: none;
 	padding: 7px 9px;
 	cursor: default;
 	font-size: 12px;
-	color: #696d7a !important;	
+	color: #696d7a !important;
 	border-bottom: 0;
-		
+
 }
 
 #xkit-tag-input {
@@ -134,11 +171,11 @@
 	font-size: 13px;
 	margin-top: 4px;
 	box-shadow: 0px 1px 0px rgba(255,255,255,0.44);
-	
+
 }
 
 #xkit-quick-tags-window .xkit-tag-data {
-	
+
 	font-size: 11px;
 	color: #9fa3af;
 	width: 100%;
@@ -151,22 +188,22 @@
 }
 
 /*#xkit-quick-tags-window.no-other-section .xkit-tag:nth-last-child(2) {
-	
+
 	border-bottom: 0 !important;
-	
+
 }*/
 
 #xkit-quick-tags-window .xkit-tag:last-child {
-	
-	border: 0;	
-	
+
+	border: 0;
+
 }
 
 #xkit-quick-tags-window .xkit-tag-other .xkit-tag-name,
 #xkit-quick-tags-window .xkit-tag .xkit-tag-name {
-	
+
 	font-weight: bold;
-	
+
 }
 
 #xkit-quick-tags-window *{
@@ -178,7 +215,7 @@
 #quick-tags-toolbar {
 	background: rgb(245,245,245);
 	padding: 3px 15px;
-	border-bottom: 1px solid rgb(190,190,190);	
+	border-bottom: 1px solid rgb(190,190,190);
 }
 
 #xkit-quick-tags-none {
@@ -186,5 +223,5 @@
 	color: rgb(150,150,150);
 	font-size: 13px;
 	line-height: 22px;
-	text-align: center;	
+	text-align: center;
 }

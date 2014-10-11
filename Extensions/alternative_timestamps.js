@@ -1,5 +1,5 @@
 //* TITLE Alternative Timestamps **//
-//* VERSION 1.0 REV F **//
+//* VERSION 1.0 REV G **//
 //* DESCRIPTION Adds timestamps to dashboard posts using a parsing method instead of AJAX calls. English tumblr interface only for now. **//
 //* DEVELOPER Bit Shift **//
 //* FRAME false **//
@@ -75,10 +75,10 @@ XKit.extensions.alternative_timestamps = new Object({
 			var day_name = permalink_time.match(this.days_regex)[1];
 			var _permalink_time = permalink_time.replace(this.days_regex, "");
 			var moment_permalink_time = moment(_permalink_time, 'h:mma');
- 
+
 			moment_post_time.hours(moment_permalink_time.hours());
 			moment_post_time.minutes(moment_permalink_time.minutes());
- 
+
 			while(moment_post_time.format("dddd") !== day_name) {
 				moment_post_time.subtract(moment.duration(1, 'days'));
 			}
@@ -114,7 +114,7 @@ XKit.extensions.alternative_timestamps = new Object({
 
 		return moment_post_time;
 	},
- 
+
 	render_timestamp: function(moment_timestamp, format_string) {
 		format_string = format_string || this.preferences.format_string.value;
 
@@ -146,7 +146,7 @@ XKit.extensions.alternative_timestamps = new Object({
 			$syntax_line.append($('<div>').addClass('title').text(code));
 			$syntax_line.append($('<div>').text(description));
 			$syntax_line.append($('<div>').addClass('alternative_timestamps_preview').text(XKit.extensions.alternative_timestamps.render_timestamp(moment(), code)));
-			
+
 			$panel.append($syntax_line);
 		});
 	},

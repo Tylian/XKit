@@ -3,7 +3,7 @@
 	color: rgb(150,150,150);
 	font-size: 14px;
 	line-height: 22px;
-	text-align: center;	
+	text-align: center;
 }
 
 .xhighlighter-reason {
@@ -24,13 +24,13 @@
 
 .xhighlighter_highlightered_post,
 .xhighlighter_highlightered_post .post_content {
-	opacity: 1;	
+	opacity: 1;
 	background: #fffeee !important;
 }
 
 .xhighlighter_excuse {
 	padding: 0; text-align: left; font-size: 12px;
-	color: rgb(130,130,130); height: 40px; line-height: 40px;	
+	color: rgb(130,130,130); height: 40px; line-height: 40px;
 	position: relative; margin-top: 5px;
 }
 
@@ -48,7 +48,7 @@
 }
 
 .xhighlighter_hidden_post {
-	display: none;	
+	display: none;
 }
 
 .xkit-highlighter-add-margins-to-ul {
@@ -56,27 +56,27 @@
 }
 
 .xkit-highlighter-add-margins-to-ul li {
-	margin-bottom: 10px;	
+	margin-bottom: 10px;
 }
 
 #highlighter-toolbar {
 	background: rgb(245,245,245);
 	padding: 3px 15px;
-	border-bottom: 1px solid rgb(190,190,190);	
+	border-bottom: 1px solid rgb(190,190,190);
 }
 
 .xkit-highlightered-word {
 	border-bottom: 1px solid rgb(190,190,190);
-	padding: 0px 15px 0px 40px;	
+	padding: 0px 15px 0px 40px;
 	height: 30px;
 	line-height: 30px;
 	color: rgb(100,100,100);
 	font-size: 12px;
-	position: relative;	
+	position: relative;
 }
 
 .xkit-highlightered-word:last-child {
-	border-bottom: 0;	
+	border-bottom: 0;
 }
 
 .xkit-highlightered-word-delete {

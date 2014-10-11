@@ -16,7 +16,7 @@
 	font-size: 14px;
 	font-weight: bold;
 	text-align: center;
-	color: rgb(110,110,110);	
+	color: rgb(110,110,110);
 }
 
 .tagviewer-tag {
@@ -24,14 +24,14 @@
 }
 
 .tagviewer-tag:last-child {
-	border-bottom: 0 !important;	
+	border-bottom: 0 !important;
 }
 
 .tagviewer-by-avatar {
 	height: 13px;
 	width: 13px;
 	position: absolute;
-	top: 8px; left: 8px;	
+	top: 8px; left: 8px;
 }
 
 #tagviewer-loader-icon {
@@ -40,12 +40,12 @@
 	bottom: 12px;
 	right: 13px;
 	width: 20px;
-	height: 20px;	
+	height: 20px;
 	z-index: 1000;
 }
 
 #tagviewer-mini-loader {
-	display: block;	
+	display: block;
 	position: relative;
 	font-weight: bold;
 	height: 38px;
@@ -56,7 +56,7 @@
 }
 
 .tagviewer-by {
-	display: block;	
+	display: block;
 	position: relative;
 	font-weight: bold;
 	height: 30px;
@@ -68,7 +68,7 @@
 }
 
 .tagviewer-tag-tags {
-	padding: 7px 10px;	
+	padding: 7px 10px;
 }
 
 .tagviewer-tag-tag {

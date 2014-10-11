@@ -11,6 +11,65 @@
 	if (typeof XBridge !== "undefined") { return; }
 
 	XBridge = {
+	
+		storage: {
+		
+			storage: {},
+			
+			get_all: function() {
+			
+				var reKey = new RegExp("^" + "");
+				for (var i = 0, il = localStorage.length; i < il; i++) {
+						// only use the script's own keys
+						var key = localStorage.key(i);
+						if (key.match(reKey)) {
+							//console.log("!!!!!!! Loading value of " + key);
+							XBridge.storage.storage[key] = XBridge.storage.get_val(key);
+						}
+				}
+				
+				//console.log(XBridge.storage.storage);
+			
+			},
+			
+			clear_all: function() {
+			
+				var reKey = new RegExp("^" + "");
+				for (var i = 0, il = localStorage.length; i < il; i++) {
+						// only use the script's own keys
+						var key = localStorage.key(i);
+						if (key.match(reKey)) {
+							//console.log("!!!!!!! Loading value of " + key);
+							localStorage.removeItem(XBridge.storage.storage[key]);
+						}
+				}
+			
+			},
+			
+			get_val: function(key) {
+			
+				try {
+				var value = localStorage.getItem(key);
+				if (!value || typeof value === "undefined")
+					return "";
+				var type = value[0];
+				value = value.substring(1);
+				switch (type) {
+					case 'b':
+						return value === 'true';
+					case 'n':
+						return Number(value);
+					default:
+						return value;
+				}
+				return "";
+				}catch(e) {
+					console.log("GM_getValue error: " + e.message);
+				}
+			
+			}
+		
+		},
 		
 		framework_version: safari.extension.displayVersion,
 		
@@ -22,25 +81,43 @@
 		message: function(ev) {
 		
 			if (ev.name === "framework_version") {
-				ev.target.page.dispatchMessage("framework_version", XBridge.framework_version);
+				XBridge.storage.get_all();
+				var m_object = {};
+				m_object.version = XBridge.framework_version;
+				m_object.storage = XBridge.storage.storage;
+				ev.target.page.dispatchMessage("framework_version", m_object);
 			}
 			
 			if (ev.name === "http_request") {
-				console.log("Got HTTP Request");
+				//console.log("Got HTTP Request");
 				XBridge.http_request(ev.message, ev);
+			}
+			
+			if (ev.name === "save_storage") {
+				//console.log("Got Save Storage Request");
+				XBridge.storage.clear_all();
+				console.log(ev.message);
+				for (var obj in ev.message) {
+					var key = obj;
+					var value = ev.message[obj];
+					value = (typeof value)[0] + value;
+					localStorage.setItem(key, value);
+				}
 			}
 		
 		},
 		
 		http_request: function(obj, ev) {
 		
-			try {
+			//try {
 	
 			var settings = obj.settings;
 			var request = new XMLHttpRequest();
 			var m_event = ev;
 			
-			console.log("Requesting url " + settings['url']);
+			request.req_obj = obj;
+			
+			console.log("Requesting url " + settings['url'] + " with ID " + obj.request_id);
 
 			if (settings['method'] === "POST") {
 				request.open('POST', settings['url'], true);
@@ -50,18 +127,21 @@
 
 			request.onreadystatechange = function (oEvent) {  
 				if (request.readyState === 4) {  
-			  		console.log("state changed to " + request.status);
+			  		console.log(" HTTP Request state changed to " + request.status + " on " + request.req_obj.request_id);
 			  		var m_to_return = new Object();
 					// Re-object-ify the XHR object so Safari doesn't prevent it from going through
 			  		m_to_return.request = JSON.parse(JSON.stringify(request)); 
 			  		m_to_return.status = request.status;
 			  		m_to_return.settings = settings;
-			  		m_to_return.onload = obj.onload;
-			  		m_to_return.onerror = obj.onerror;
-			  		m_to_return.request_id = obj.request_id;
+			  		m_to_return.onload = request.req_obj.onload;
+			  		m_to_return.onerror = request.req_obj.onerror;
+			  		m_to_return.request_id = request.req_obj.request_id;
+			  		m_to_return.headers = request.getAllResponseHeaders();
 					if (request.status === 200) {  
 						if (typeof settings['onload'] !== "undefined") {
 							m_event.target.page.dispatchMessage("http_response", m_to_return);
+						} else {
+							console.log("No onload defined.");
 						}
 					} else {  
 						if (typeof settings['onerror'] !== "undefined") {
@@ -70,7 +150,21 @@
 				}  
 			  }  
 			};  
-
+			
+			if (typeof settings['headers'] !== "undefined") {
+				settings['headers'] = JSON.parse(settings['headers']);
+				//try {
+					for (var m_obj in settings['headers']) {
+						console.log(" -- Setting custom header \"" + m_obj + "\" to \"" + settings['headers'][m_obj] + "\"");
+						//console.log(settings['headers'][m_obj]);
+						request.setRequestHeader("" + m_obj + "", "" + settings['headers'][m_obj] + "");
+						//console.log(" ----- OK!");
+					}
+				//} catch(e) {
+				//	console.log(" !! Can't set custom header \"" + obj + "\": " + e.message);
+				//}
+			}
+			
 			if (settings['method'] === "POST") {
 				if (settings['json'] === true) {
 					request.setRequestHeader('Content-Type', "application/json");
@@ -84,9 +178,9 @@
 				request.send(null);
 			}
 
-			} catch(e) {
-				console.log("Bridge can not make request: " + e.message);
-			}
+			//} catch(e) {
+			//	console.log("Bridge can not make request: " + e.message);
+			//}
 		
 		}
 	

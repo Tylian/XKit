@@ -4,7 +4,7 @@
 	top: 0; left: 0;
 	width: 100%; height: 100%;
 	background: rgba(0,0,0,0.0);
-	display: none;	
+	display: none;
 }
 
 #xkit-theme-editor-window {
@@ -20,7 +20,7 @@
 }
 
 #xkit-theme-editor-window:hover {
-	opacity: 1;	
+	opacity: 1;
 }
 
 #xkit-theme-editor-buttons {
@@ -29,7 +29,7 @@
 	width: 100%; height: 40px;
 	box-sizing: border-box;
 	-webkit-box-sizing: border-box;
-	background: rgb(240,240,240);	
+	background: rgb(240,240,240);
 	padding-left: 8px; padding-top: 2px;
 	border-radius: 0px 0px 5px 5px;
 }
@@ -42,6 +42,6 @@
 	border-radius: 5px 5px 0px 0px;
 	padding: 10px;
 	width: 100%;
-	height: 400px;	
+	height: 400px;
 	resize: none;
 }

@@ -1,5 +1,5 @@
 //* TITLE Drafts+ **//
-//* VERSION 0.1 REV D **//
+//* VERSION 0.2 REV A **//
 //* DESCRIPTION Enhancements for Drafts page **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//
@@ -11,11 +11,11 @@ XKit.extensions.drafts_plus = new Object({
 
 	run: function() {
 		this.running = true;
-		
+
 		if (XKit.interface.where().drafts !== true) {return; }
-		
+
 		XKit.tools.init_css("drafts_plus");
-		
+
 		xf_html = '<ul class="controls_section" id="drafts_plus_sidebar">' +
 			'<li class="section_header selected">DRAFTS TOOLS</li>' +
 			'<li class="" id="drafts_plus_mass_edit_li">' +
@@ -23,6 +23,9 @@ XKit.extensions.drafts_plus = new Object({
 					'<div class="hide_overflow">Mass Edit Mode</div>' +
 				'</a>' +
 			'</li>' +
+			'<li class="no_push"><a href="#" onclick="return false;" id="xshrinkposts_button">' +
+				'<div class="hide_overflow">Shrink Posts <div class="count">off</div> </div>' +
+			'</a></li>' +
 			'</ul>';
 
 		$("ul.controls_section:eq(1)").before(xf_html);
@@ -30,12 +33,12 @@ XKit.extensions.drafts_plus = new Object({
 		$("#drafts_plus_mass_edit_button").click(function() {
 
 			if ($(this).parent().hasClass("xkit-selected") == false) {
-			
+
 				$(this).parent().addClass("xkit-selected");
 				$(this).parent().addClass("selected");
 				XKit.extensions.drafts_plus.start_mass_editor();
-	
-			} else {	
+
+			} else {
 
 				$(this).parent().removeClass("xkit-selected");
 				$(this).parent().removeClass("selected");
@@ -44,13 +47,37 @@ XKit.extensions.drafts_plus = new Object({
 			}
 
 		});
-		
+
+		$("#xshrinkposts_button").click(function() {
+
+			$(this).toggleClass("xkit-queue-option-button-on");
+
+			if ($(this).hasClass("xkit-queue-option-button-on")) {
+
+				$(this).find(".count").html("on");
+
+				XKit.storage.set("shuffle_queue", "shrink_posts", "true");
+
+				XKit.tools.add_css(" .post_header { display: none; }  .post .post_content_inner, .post .post_media { height: 70px !important; overflow: hidden !important; } .post .post_content { pointer-events: none !important; height: 70px !important; overflow: hidden !important; border: 1px dashed rgb(200,200,200); } ", "shuffle_queue_mini_posts");
+
+			} else {
+
+				$(this).find(".count").html("off");
+
+				XKit.storage.set("shuffle_queue", "shrink_posts", "false");
+
+				XKit.tools.remove_css("shuffle_queue_mini_posts");
+
+			}
+
+		});
+
 	},
-	
+
 	start_mass_editor: function() {
-		
+
 		XKit.tools.add_css(" #posts { padding: 0 !important; margin: 0 !important; } .xtimestamp { display: none; } .post_controls { display: none; }" +
-				" .post:last-child { display: block; } #left_column { min-height: 120%; } " +
+				" .post:not(.radar):last-child { display: block; } #left_column { min-height: 120%; } " +
 				" .post_full.is_note .avatar, #new_post_hidden { display: none; } " +
 				" #posts.posts>.post_container { margin-bottom: 0; } " +
 				" .post .post_source, .post.is_video, .post.is_audio { display: none; } " +
@@ -58,9 +85,9 @@ XKit.extensions.drafts_plus = new Object({
 				" .post .tumblr_video_container, .post .tumblr_video_container * { max-width: 164px !important; max-height: 164px !important; } " +
 				" .post .photoset_row { max-width: 164px;  height: auto; } " +
 				" .post .post_content img { max-height: 164px; max-width: 164px; height: auto; } " +
-				" .post { -moz-user-select: none; user-select: none; -webkit-user-select: none; float: left !important; width: 200px !important; height: 200px !important; " + 
-				"    opacity: 0.53; " + 
-				"    display: inline-block !important; clear: none !important; overflow: hidden !important; " + 
+				" .post { -moz-user-select: none; user-select: none; -webkit-user-select: none; float: left !important; width: 200px !important; height: 200px !important; " +
+				"    opacity: 0.53; " +
+				"    display: inline-block !important; clear: none !important; overflow: hidden !important; " +
 				"    margin: 0px 4px 8px 4px !important; } " +
 				" .fan_mail { display: none !important; } " +
 				" #xkit_delete_selected:hover { background: rgba(255,255,255,0.12); cursor: pointer; } " +
@@ -71,20 +98,20 @@ XKit.extensions.drafts_plus = new Object({
 				" #xkit_delete_selected { border: 1px solid rgba(0,0,0,0.32); border-radius: 6px; " +
 				" box-shadow: inset 0px 1px 0px rgba(255,255,255,0.12), 0px 1px 0px rgba(255,255,255,0.12); " +
 				" padding: 5px 15px; background: rgba(255,255,255,0.08); display: inline-block; margin-top: 5px;} " +
-				" .post * { pointer-events: none; cursor: default; } " +
+				" .post:not(.radar) * { pointer-events: none; cursor: default; } " +
 				" .post.xpost-selected { opacity: 1; } " +
-				" .post.xpost-working { animation: xpost-working-ani 1s infinite; " + 
+				" .post.xpost-working { animation: xpost-working-ani 1s infinite; " +
 				" -webkit-animation: xpost-working-ani 1s infinite; " +
 				" -webkit-animation: xpost-working-ani 1s infinite; } " +
 				" @-moz-keyframes xpost-working-ani { from { opacity: 1; } 50% { opacity: 0.32; } to { opacity: 1; } } " +
 				" @-webkit-keyframes xpost-working-ani { from { opacity: 1; } 50% { opacity: 0.32; } to { opacity: 1; } } ", "drafts_plus_mass_editor");
-		
+
 		$("#new_post_buttons").attr("id", "new_post_hidden");
-		
+
 		XKit.tools.add_function(function() {
 
 			try {
-				
+
 				if (typeof Tumblr === "undefined") {
 					window.top.Tumblr.AutoPaginator.stop();
 					window.top.Tumblr.Events.trigger("DOMEventor:updateRect");
@@ -92,33 +119,33 @@ XKit.extensions.drafts_plus = new Object({
 					Tumblr.AutoPaginator.stop();
 					Tumblr.Events.trigger("DOMEventor:updateRect");
 				}
-			
+
 			} catch(e) {
-				
+
 				console.log("Drafts Plus ==2==> !!! " + e.message);
-				
+
 			}
-			
+
 		}, true, "");
-		
+
 		$(window).scroll(XKit.extensions.drafts_plus.scrolled);
-		
+
 		XKit.extensions.drafts_plus.add_overlays();
 		XKit.extensions.drafts_plus.load_posts();
-		
+
 	},
-	
+
 	scroller_working: false,
 	current_page: 1,
-	
+
 	add_overlays: function() {
-		
+
 		console.log("drafts_plus -> Adding overlays...");
-		
-		$(".post").not(".drafts-plus-overlay-done").each(function() {
-			
+
+		$(".post").not(".drafts-plus-overlay-done").not(".radar").each(function() {
+
 			$(this).addClass("drafts-plus-overlay-done");
-			
+
 			var m_html = 	"<div class=\"xkit-drafts-plus-overlay\">" +
 						"<div class=\"xkit-drafts-plus-overlay-inner\">" +
 							"<div class=\"xkit-drafts-plus-delete\">&nbsp;</div>" +
@@ -127,23 +154,23 @@ XKit.extensions.drafts_plus = new Object({
 							"<div class=\"xkit-drafts-plus-queue\">&nbsp;</div>" +
 						"</div>" +
 					"</div>";
-			
-			$(this).append(m_html);	
-			
+
+			$(this).append(m_html);
+
 		});
-		
+
 		$(".xkit-drafts-plus-delete, .xkit-drafts-plus-edit, .xkit-drafts-plus-publish, .xkit-drafts-plus-queue").unbind("click");
-		
+
 		$(".xkit-drafts-plus-queue").bind("click", function() {
-			
+
 			var m_parent = $(this).parentsUntil('.post').parent();
-			
+
 			$(m_parent).addClass("xpost-working");
-			
+
 			var post_id = $(m_parent).attr('data-post-id');
-			
+
 			var m_object = new Object();
-			
+
 			m_object.post_id = post_id;
 			m_object.form_key = XKit.interface.form_key();
 			m_object.queue = "queue";
@@ -163,29 +190,29 @@ XKit.extensions.drafts_plus = new Object({
 					$(m_parent).fadeOut('slow', function() { $(m_parent).parent().remove(); });
 				}
 			});
-			
+
 		});
-		
+
 		$(".xkit-drafts-plus-edit").bind("click", function() {
-			
+
 			var m_parent = $(this).parentsUntil('.post').parent();
-			
+
 			var post_id = $(m_parent).attr('data-post-id');
-			
+
 			window.open("http://www.tumblr.com/edit/" + post_id);
-			
+
 		});
-		
+
 		$(".xkit-drafts-plus-publish").bind("click", function() {
-			
+
 			var m_parent = $(this).parentsUntil('.post').parent();
-			
+
 			$(m_parent).addClass("xpost-working");
-			
+
 			var post_id = $(m_parent).attr('data-post-id');
-			
+
 			var m_object = new Object();
-			
+
 			m_object.post_id = post_id;
 			m_object.form_key = XKit.interface.form_key();
 			m_object.queue = "queue";
@@ -205,19 +232,19 @@ XKit.extensions.drafts_plus = new Object({
 					$(m_parent).fadeOut('slow', function() { $(m_parent).parent().remove(); });
 				}
 			});
-			
+
 		});
-		
+
 		$(".xkit-drafts-plus-delete").bind("click", function() {
-			
+
 			var m_parent = $(this).parentsUntil('.post').parent();
-			
+
 			$(m_parent).addClass("xpost-working");
-			
+
 			var post_id = $(m_parent).attr('data-post-id');
-			
+
 			var m_object = new Object();
-			
+
 			var m_array = document.location.href.split("/");
 			var m_channel_id = m_array[4];
 
@@ -237,17 +264,27 @@ XKit.extensions.drafts_plus = new Object({
 					$(m_parent).fadeOut('slow', function() { $(m_parent).parent().remove(); });
 				}
 			});
-			
+
 		});
-		
+
 	},
-	
+
 	scrolled: function() {
-		
+
+		if($(window).scrollTop() + $(window).height() == $(document).height()) {
+
+			XKit.extensions.drafts_plus.load_posts();
+
+		}
+
+	},
+
+	load_posts: function() {
+
 		function __trigger_load() {
-			
+
 			try {
-				
+
 				if (typeof Tumblr === "undefined") {
 					window.top.Tumblr.Events.trigger("posts:load");
 					window.top.Tumblr.AudioPlayer.update_all();
@@ -257,38 +294,27 @@ XKit.extensions.drafts_plus = new Object({
 					Tumblr.AudioPlayer.update_all();
 					Tumblr.Events.trigger("DOMEventor:updateRect");
 				}
-			
-			} catch(e) {
-				
-				console.log("Drafts Plus ==2==> !!! " + e.message);
-				
-			}
-			
-			
-		}
-		
-		if($(window).scrollTop() + $(window).height() == $(document).height()) {
 
-			XKit.extensions.drafts_plus.load_posts();
-			
+			} catch(e) {
+
+				console.log("Drafts Plus ==2==> !!! " + e.message);
+
+			}
+
+
 		}
-		
-	},
-	
-	load_posts: function() {
-		
-		
+
 		if (XKit.extensions.drafts_plus.scroller_working === true) { return; }
-		
+
 		XKit.extensions.drafts_plus.scroller_working = true;
 		XKit.extensions.drafts_plus.current_page++;
 
-		var last_id = $(".post_container").last().find(".post").attr('data-post-id');
+		var last_id = $("#posts").find("li.post_container").last().find(".post").attr('data-post-id');
 
 		var m_url = document.location.href.replace("#","");
-		
+
 		// http://www.tumblr.com/blog/xenix/drafts/after/
-		
+
 		m_url = m_url + "/after/" + last_id;
 
 		GM_xmlhttpRequest({
@@ -298,35 +324,39 @@ XKit.extensions.drafts_plus = new Object({
 				XKit.extensions.drafts_plus.scroller_working = false;
 				$("#auto_pagination_loader_failure").css("display","block");
 				$("#auto_pagination_loader_loading").css("display","none");
-			
+
 			},
 			onload: function(response) {
 				XKit.extensions.drafts_plus.scroller_working = false;
-				var new_posts = $("ol#posts", response.responseText).html();
+				var new_posts = $("#posts", response.responseText).html();
 				// console.log(new_posts);
 				try {
 					$("ol#posts").append(new_posts);
 				} catch(e) {
-					console.log("Drafts Plus ==3==> !!! " + e.message);	
+					console.log("Drafts Plus ==3==> !!! " + e.message);
 				}
 				$("#auto_pagination_loader_failure").css("display","none");
 				$("#auto_pagination_loader_loading").css("display","block");
-				
+
 				XKit.extensions.drafts_plus.add_overlays();
-				XKit.tools.add_function(__trigger_load, true,"");
-				
+				try {
+					XKit.tools.add_function(__trigger_load, true,"");
+				} catch(e) {
+					console.log("Drafts+: " + e.message);
+				}
+
 			}
 		});
-		
+
 	},
-	
+
 	stop_mass_editor: function() {
-		
+
 		XKit.tools.remove_css("drafts_plus_mass_editor");
 		$(".post").removeClass("drafts-plus-overlay-done");
 		$(".xkit-drafts-plus-overlay").remove();
-		
-	},	
+
+	},
 
 	destroy: function() {
 		this.running = false;

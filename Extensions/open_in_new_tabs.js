@@ -14,35 +14,35 @@ XKit.extensions.open_in_new_tabs = new Object({
 
 	run: function() {
 		this.running = true;
-		
+
 		$("#content area").attr('target','_blank');
 		$(document).on("click", "#right_column a", XKit.extensions.open_in_new_tabs.do_open);
-		
+
 	},
-	
+
 	do_open: function(e) {
-	
+
 		var m_box = e.target;
 
 		var m_url = $(m_box).attr('href');
 		if (typeof m_url === "undefined") {
-			m_url = $(m_box).parent().attr('href');	
+			m_url = $(m_box).parent().attr('href');
 		}
-				
+
 		if (m_url === "#") { return; }
-		if (typeof $(m_box).attr('onclick') !== "undefined" || typeof $(m_box).parent().attr('onclick') !== "undefined") { return; } 
+		if (typeof $(m_box).attr('onclick') !== "undefined" || typeof $(m_box).parent().attr('onclick') !== "undefined") { return; }
 		if (typeof m_url === "undefined") { return; }
 		if ($(m_box).hasClass("photoset_photo") === true) { alert("no3"); return; }
-		
+
 		try {
 			var open_new_tab = false;
-			if (typeof $(m_box).attr('target') === "undefined") {	
+			if (typeof $(m_box).attr('target') === "undefined") {
 				open_new_tab = true;
 			} else {
 				if($(m_box).attr('target').toLowerCase() !== "_blank") {
 					open_new_tab = true;
 				}
-			}	
+			}
 
 			if(open_new_tab === true) {
 				e.preventDefault();
@@ -50,11 +50,11 @@ XKit.extensions.open_in_new_tabs = new Object({
 			}
 
 		} catch(e) {
-	
+
 			//alert(e.message);
 
-		}	
-		
+		}
+
 	},
 
 	destroy: function() {

@@ -15,7 +15,7 @@
 .post_full .post_media { position: relative; }
 
 .xkit-audio-plus-slider-container:hover {
-	opacity: 1;	
+	opacity: 1;
 }
 
 .xkit-audio-plus-slider-container * {
@@ -33,7 +33,7 @@
 	box-shadow: inset 0px 1px 1px rgba(0,0,0,0.22);
 	border-radius: 6px;
 	overflow: visible;
-	cursor: pointer;	
+	cursor: pointer;
 }
 
 .xkit-audio-plus-slider {

@@ -11,28 +11,44 @@ XKit = {
 		standard: false,
 		ask_frame: false,
 		blog_frame: false,
+		peepr: false,
 		xkit: false
 	},
 	init: function() {
 	
 		// Check page then return control to init_extension.
-		if (document.location.href.indexOf('http://www.tumblr.com/xkit_reset') !== -1 || 
-			document.location.href.indexOf('http://www.tumblr.com/xkit_log') !== -1 || 
-			document.location.href.indexOf('http://www.tumblr.com/xkit_editor') !== -1 || 
-			document.location.href.indexOf('http://www.tumblr.com/xkit_update=') !== -1) {
+		if (document.location.href.indexOf('://www.tumblr.com/xkit_reset') !== -1 || 
+			document.location.href.indexOf('://www.tumblr.com/xkit_log') !== -1 || 
+			document.location.href.indexOf('://www.tumblr.com/xkit_editor') !== -1 || 
+			document.location.href.indexOf('://www.tumblr.com/xkit_update=') !== -1) {
 			XKit.page.xkit = true;
 			XKit.init_extension();
 			return;
 		}
+		
+		// Are we in a blog archive?
+		if (typeof document.location.href !== "undefined") {
+			var m_array = document.location.href.split("/");
+			//console.log(m_array);	
+		}
+		
 		XKit.init_flags();
-		if (top === self && document.location.href.indexOf("http://www.tumblr.com/dashboard/iframe?") === -1) { 
+		if (top === self && document.location.href.indexOf("://www.tumblr.com/dashboard/iframe?") === -1) { 
 			XKit.page.standard = true;
 			XKit.init_extension();
-		}	else { 
-			if (document.location.href.indexOf("http://www.tumblr.com/dashboard/iframe?") !== -1) {
+		} else { 
+			XKit.console.add("In IFRAME, location: " + document.location.href);
+			if (document.location.href.indexOf("://www.tumblr.com/send") !== -1) { 
+				XKit.console.add("In Fan Mail page.");
 				XKit.page.blog_frame = true;
 			}
-			if (document.location.href.indexOf("http://www.tumblr.com/ask_form/") !== -1) {
+			if (document.location.href.indexOf("://www.tumblr.com/dashboard/iframe?") !== -1) {
+				XKit.page.blog_frame = true;
+			}
+			if ((document.location.href.indexOf("://www.tumblr.com/") !== -1 && document.location.href.indexOf("/peepr") !== -1) || document.location.href.indexOf("://www.tumblr.com/indash_blog/") !== -1) {
+				XKit.page.peepr = true;
+			}
+			if (document.location.href.indexOf("://www.tumblr.com/ask_form/") !== -1) {
 				XKit.page.ask_frame = true;
 			}
 			XKit.init_extension();
@@ -51,7 +67,7 @@ XKit = {
 			return;
 		}
 		
-		if (XKit.page.ask_frame == true || XKit.page.blog_frame == true) {
+		if (XKit.page.ask_frame == true || XKit.page.blog_frame == true || XKit.page.peepr == true) {
 			XKit.init_frame();
 			return;
 		}
@@ -97,6 +113,7 @@ XKit = {
 
 			if (XKit.tools.get_setting("xkit_installation_complete","") !== "true") {
 				// We need to install XKit!
+				console.log("Installation complete is not true, it is = " + XKit.tools.get_setting("xkit_installation_complete",""));
 				xkit_install();
 				return;
 			}
@@ -106,7 +123,7 @@ XKit = {
 	
 			// First lets check if it actually exists.
 			if (XKit.installed.check("xkit_main") === false) {
-				XKit.console.add("xkit_main not found! Re-installing....");
+				console.log("xkit_main not found! Re-installing....");
 				xkit_install();
 				return;
 			}
@@ -168,7 +185,7 @@ XKit = {
 	init_flags: function() {
 		for(var flag in XKit.flags) {
 			var m_value = XKit.tools.get_setting("xkit__flag__" + flag, "");
-			if (m_value === true) { m_value = true; } else { m_value = false; }
+			if (m_value === "true") { m_value = true; } else { m_value = false; }
 			XKit.set_flag(flag, m_value);
 		}
 	},
@@ -198,34 +215,26 @@ XKit = {
 	},
 	servers: {
 		list: [
-			"http://sds1.puaga.com",
-			"http://sds2.puaga.com",
-			"http://sds3.puaga.com",
-			"http://sds4.puaga.com",
-			"http://xds1.puaga.com",
-			"http://xds2.puaga.com",
-			"http://xds3.puaga.com",
-			"http://www.puaga.com",
-			"http://puaga.com",
-			"http://www.studioxenix.com",
-			"http://studioxenix.com"
+			"https://www.xkitcs.com"
 		],
-		count: 0,
+		count: 11,
 		get: function() {
-			return XKit.servers.list[XKit.servers.count];
+			var toReturn = XKit.servers.list[XKit.servers.count];
+			return toReturn;
 		},
 		next: function() {
 			XKit.servers.count++;
 			if (XKit.servers.count >= XKit.servers.list.length) {
 				XKit.servers.count = 0;
 			}
-			return XKit.servers.list[XKit.servers.count];
+			var toReturn = XKit.servers.list[XKit.servers.count];
+			return toReturn;
 		}
 	},
 	extensions: {},
 	download: {
 		try_count: 0,
-		max_try_count: 8,
+		max_try_count: 5,
 		extension: function(extension_id, callback) {
 			// Downloads the extension file.
 			if (XKit.download.try_count >= XKit.download.max_try_count) {
@@ -252,7 +261,7 @@ XKit = {
 					try {
 						var mdata = jQuery.parseJSON(response.responseText);
 					} catch(e) {
-						// Server returned bad thingy.
+						// Server return://ed bad thingy.
 						XKit.console.add("Unable to download extension '" + extension_id + "', server returned non-json object." + e.message);
 						XKit.download.try_count++;
 						return XKit.download.extension(extension_id, callback);
@@ -301,7 +310,7 @@ XKit = {
 						var mdata = jQuery.parseJSON(response.responseText);
 					} catch(e) {
 						// Server returned bad thingy.
-						XKit.console.add("Unable to download page '" + page + "', server returned non-json object.");
+						XKit.console.add("Unable to download page '" + page + "', server returned non-json object." + e.message);
 						XKit.download.try_count++;
 						return XKit.download.page(page, callback);
 					}
@@ -492,6 +501,7 @@ XKit = {
 		// Each extension is limited to 50 kb storage.
 		// Each extension's data is stored as a stringified JSON object.
 		max_area_size: 51200,
+		unlimited_storage: false,
 		size: function(extension_id) {
 			return XKit.tools.get_setting("xkit_extension_storage__" + extension_id, "").length;
 		},
@@ -1128,6 +1138,12 @@ function xkit_check_storage() {
 
 	if (storage_used === -1) {
 		setTimeout(function() { xkit_check_storage(); }, 100);
+		return;
+	}
+	
+	if (storage_max === -1) {
+		// No storage limit.
+		XKit.storage.unlimited_storage = true;
 		return;
 	}
 	

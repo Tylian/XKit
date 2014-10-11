@@ -8,5 +8,13 @@
 
 .xtag .result_title {
 	width: 88% !important;
-	display: block;	
+	display: block;
+}
+
+.classic-tags-too-much-tags-error {
+	font-size: 13px;
+	text-align: center;
+	padding: 10px 10px;
+	background: rgba(0,0,0,0.06);
+	color: rgba(255,255,255,0.54);
 }

@@ -7,7 +7,7 @@
 	opacity: 0.4;
 	transition: opacity 0.3s ease-in-out;
 }
- 
+
 .read_posts_read:hover {
 	opacity: 1.0;
 }

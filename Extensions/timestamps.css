@@ -7,9 +7,9 @@
 }
 
 .post.fan_mail .message_body.with-xkit-timestamp {
-	
+
 	margin-top: 15px;
-	
+
 }
 
 .post.fan_mail .message.with-xkit-timestamp {
@@ -17,23 +17,23 @@
 }
 
 .xkit-fan-timestamp {
-	
+
 	font-size: 11px;
 	font-family: "Helvetica Neue","Helvetica",sans-serif;
 	position: absolute;
 	top: 14px;
 	left: 20px;
 	line-height: 12px;
-	color: rgb(70,70,70);	
-	
+	color: rgb(70,70,70);
+
 }
 
-.xtimestamp { 
+.xtimestamp {
 
-	position: relative; top: -9px; color: rgb(168,177,184); 
-	text-align: left; font-weight: normal !important; font-size: 11px; margin-bottom: 10px; 
-	
-} 
+	position: relative; top: -9px; color: rgb(168,177,184);
+	text-align: left; font-weight: normal !important; font-size: 11px; margin-bottom: 10px;
+
+}
 
 .xtimestamp.xtimestamp_loading {
 

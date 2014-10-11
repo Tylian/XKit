@@ -75,7 +75,7 @@ XKit.extensions.autoscroll = new Object({
 			$(event.target).attr("selected","true");
 			currentStep = $(event.target).attr("number");
 			XKit.console.add("Scroll index: " + currentStep);
-			
+
 			// Start scrolling
 			var wasScrolling = isScrolling;
 			isScrolling = true;
@@ -106,7 +106,7 @@ XKit.extensions.autoscroll = new Object({
 		// HTML for control
 		var m_html = 	'<div class="auto_scroll_control_container"><table style="table-layout: fixed"><td>';
 		for(var j = 0; j < this.preferences.StepsOnControl.value; j++)
-		{ 
+		{
 			m_html += '<div class="auto_scroll_control_step" number = ' + j + '/>';
 
 			if(j + 1 == Math.round(this.preferences.StepsOnControl.value / 2))

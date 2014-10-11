@@ -13,7 +13,7 @@ XKit.extensions.glowing_follow = new Object({
 	run: function() {
 		this.running = true;
 		XKit.tools.init_css("glowing_follow");
-		
+
 		if ($(".follow").length > 0) {
 
 			// We got the follow button!
@@ -26,7 +26,7 @@ XKit.extensions.glowing_follow = new Object({
 			}
 
 			var username = document.location.href.indexOf("&name=");
-			username = document.location.href.substring(username + 6); 
+			username = document.location.href.substring(username + 6);
 
 			if (username.indexOf("&") !== -1) {
 				username = username.substring(0, username.indexOf("&"));
@@ -37,8 +37,8 @@ XKit.extensions.glowing_follow = new Object({
 			for(i=0;i<m_blogs.length;i++) {
 				if (m_blogs[i] !== "") {
 					blog_id = m_blogs[i];
-					break;	
-				}	
+					break;
+				}
 			}
 
 			if (blog_id === "") {
@@ -55,15 +55,15 @@ XKit.extensions.glowing_follow = new Object({
 				try {
 					msg = JSON.parse(msg);
 					if (msg.response.is_friend === 1) {
-						$(".follow").addClass("xglow");	
+						$(".follow").addClass("xglow");
 					}
 				} catch(e){
-					console.log("Glowing Follow: " + e.message);	
+					console.log("Glowing Follow: " + e.message);
 				}
 			});
 
 		}
-		
+
 	},
 
 	destroy: function() {
