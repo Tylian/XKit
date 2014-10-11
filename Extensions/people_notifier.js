@@ -1,5 +1,5 @@
 //* TITLE Blog Tracker **//
-//* VERSION 0.3 REV D **//
+//* VERSION 0.3 REV F **//
 //* DESCRIPTION Track people like tags **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS Blog Tracker lets you track blogs like you can track tags. Add them on your dashboard, and it will let you know how many new posts they've made the last time you've checked their blogs, or if they've changed their URLs. **//
@@ -9,6 +9,7 @@
 XKit.extensions.people_notifier = new Object({
 
 	running: false,
+	apiKey: "fuiKNFp9vQFvjLNvx4sUwti4Yb5yGutBN4Xh10LXZhhRKjWlV4",
 
 	blogs: new Array(),
 
@@ -195,10 +196,12 @@ XKit.extensions.people_notifier = new Object({
 
 	check_blog: function(url, obj) {
 
+		var api_url = "https://api.tumblr.com/v2/blog/" + url + ".tumblr.com/posts" + "?api_key=" + XKit.extensions.people_notifier.apiKey;
+
 		GM_xmlhttpRequest({
 			method: "GET",
-			url: "http://" + url + ".tumblr.com/api/read/json?xfetchid=" + XKit.tools.random_string() + XKit.tools.random_string(),
-			json: false,
+			url: api_url,
+			json: true,
 			onerror: function(response) {
 				console.log("people-notifier -> Error getting page.");
 				XKit.extensions.people_notifier.show_error_on_sidebar_blog(url);
@@ -206,14 +209,13 @@ XKit.extensions.people_notifier = new Object({
 			},
 			onload: function(response) {
 
-				var data = response.responseText.substring(22, response.responseText.length - 2);
-
 				try {
-					data = JSON.parse(data);
-					//console.log("people-notifier -> got data for " + url);
-					console.log(" |-- last post timestamp = " + (data.posts[0]["unix-timestamp"] * 1000) + " vs last-check = " + obj.last_check);
 
-					if (data["posts-total"] === 0 || data["posts-total"] <= 2) {
+					var data = JSON.parse(response.responseText).response;
+					//console.log("people-notifier -> got data for " + url);
+					console.log(" |-- last post timestamp = " + (data.posts[0].timestamp * 1000) + " vs last-check = " + obj.last_check);
+
+					if (data.blog.posts === 0 || data.blog.posts <= 2) {
 						XKit.extensions.people_notifier.show_error_on_sidebar_blog(url, true);
 						return;
 					}
@@ -248,7 +250,7 @@ XKit.extensions.people_notifier = new Object({
 						}
 
 						if (typeof data.posts[lad_count] !== "undefined" && add_this != false) {
-							if ((data.posts[lad_count]["unix-timestamp"] * 1000) >= obj.last_check) {
+							if ((data.posts[lad_count].timestamp * 1000) >= obj.last_check) {
 								console.log("\-- Found post = " + data.posts[lad_count].id);
 								//if (
 								found_count++;

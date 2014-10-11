@@ -1,5 +1,5 @@
 //* TITLE XStats **//
-//* VERSION 0.2 REV B **//
+//* VERSION 0.2 REV C **//
 //* DESCRIPTION The XKit Statistics Tool **//
 //* DETAILS This extension allows you to view statistics regarding your dashboard, such as the percentage of post types, top 4 posters, and more. In the future, it will allow you to view statistics regarding your and others blogs. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -10,7 +10,7 @@ XKit.extensions.stats = new Object({
 
 	running: false,
 
-	key: "vgXl8u0K1syFSAue6b9C7honIojHjC98i5WsBgSZ66HfqB0DKl",
+	apiKey: "fuiKNFp9vQFvjLNvx4sUwti4Yb5yGutBN4Xh10LXZhhRKjWlV4",
 
 	preferences: {
 		"promote": {
@@ -165,10 +165,12 @@ XKit.extensions.stats = new Object({
 
  		var offset = page * 20;
 
+		var api_url = "https://api.tumblr.com/v2/blog/" + blog_url + ".tumblr.com/posts/?api_key=" + XKit.extensions.stats.apiKey + "&reblog_info=true&offset=" + offset;
+
 		GM_xmlhttpRequest({
 			method: "GET",
-			url: "http://api.tumblr.com/v2/blog/" + blog_url + ".tumblr.com/posts/?api_key=" + XKit.extensions.stats.key + "&reblog_info=true&offset=" + offset,
-			json: false,
+			url: api_url,
+			json: true,
 			onerror: function(response) {
 				console.log("Error getting page.");
 				XKit.extensions.stats.display_error(m_window_id, "501");
@@ -180,17 +182,17 @@ XKit.extensions.stats = new Object({
 
 				try {
 
-					data = JSON.parse(response.responseText);
+					data = JSON.parse(response.responseText).response;
 
-					for (var i=0;i<data.response.posts.length;i++) {
+					for (var i=0;i<data.posts.length;i++) {
 
-						posts.push(data.response.posts[i]);
+						posts.push(data.posts[i]);
 
 					}
 
 					XKit.progress.value("stats-progress", posts.length / 3);
 
-					if (posts.length >= 300 || data.response.posts.length == 0) {
+					if (posts.length >= 300 || data.posts.length == 0) {
 						XKit.extensions.stats.calculate_results_blog(m_window_id, posts, blog_url);
 					} else {
 						setTimeout(function() { XKit.extensions.stats.blog_next_page((page + 1), m_window_id, posts, blog_url); }, 400);

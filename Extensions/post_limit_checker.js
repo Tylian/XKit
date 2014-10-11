@@ -1,5 +1,5 @@
 //* TITLE Post Limit Checker **//
-//* VERSION 0.1 REV B **//
+//* VERSION 0.1 REV C **//
 //* DESCRIPTION Are you close to the limit? **//
 //* DETAILS Shows you how many posts you can reblog today. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -9,7 +9,7 @@
 XKit.extensions.post_limit_checker = new Object({
 
 	running: false,
-	key: "vgXl8u0K1syFSAue6b9C7honIojHjC98i5WsBgSZ66HfqB0DKl",
+	apiKey: "fuiKNFp9vQFvjLNvx4sUwti4Yb5yGutBN4Xh10LXZhhRKjWlV4",
 
 	run: function() {
 		this.running = true;
@@ -78,35 +78,9 @@ XKit.extensions.post_limit_checker = new Object({
 
 	get_time: function(m_window_id, posts) {
 
-		if (m_window_id !== XKit.extensions.post_limit_checker.window_id) { console.log("wrong window id. 03"); return; }
-
-		XKit.download.page("ts.php?rnd=" + XKit.tools.random_string() + XKit.tools.random_string(), function(mdata) {
-
-			console.log(mdata);
-
-			if (mdata.server_down === true) { XKit.extensions.post_limit_checker.display_error(m_window_id, "751");return; }
-			if (mdata.errors === "true") { XKit.extensions.post_limit_checker.display_error(m_window_id, "752"); return; }
-
-			try {
-
-				XKit.extensions.post_limit_checker.calculate(m_window_id, posts, mdata.time);
-
-			} catch(e) {
-
-				XKit.extensions.post_limit_checker.display_error(m_window_id, "759");
-				console.log(e.message);
-
-			}
-
-		});
-
-	},
-
-	calculate: function(m_window_id, posts, time) {
-
 		// Calculate the date according to NY time.
 		// To-do: DST calculations?
-		var date = XKit.extensions.post_limit_checker.convert_timezone(time * 1000, - 4);
+		var date = XKit.extensions.post_limit_checker.convert_timezone(Math.round(+new Date()/1000) * 1000, - 4);
 
 		// Now we need to figure out when the next reset is.
 		var next_reset = new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1, 0, 0, 0);
@@ -194,7 +168,7 @@ XKit.extensions.post_limit_checker = new Object({
 		if (m_window_id !== XKit.extensions.post_limit_checker.window_id) { console.log("wrong window id. 01"); return; }
 
 		var offset = page * 20;
-		var api_url = "https://api.tumblr.com/v2/blog/" + XKit.interface.where().user_url + ".tumblr.com/posts/?api_key=" + XKit.extensions.post_limit_checker.key + "&offset=" + offset;
+		var api_url = "https://api.tumblr.com/v2/blog/" + XKit.interface.where().user_url + ".tumblr.com/posts/?api_key=" + XKit.extensions.post_limit_checker.apiKey + "&offset=" + offset;
 		GM_xmlhttpRequest({
 			method: "GET",
 			url: api_url,

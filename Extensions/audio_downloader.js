@@ -1,5 +1,5 @@
 //* TITLE Audio Downloader **//
-//* VERSION 2.0 REV D **//
+//* VERSION 2.0 REV F **//
 //* DESCRIPTION Lets you download audio posts hosted on Tumblr **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//
@@ -11,6 +11,7 @@ XKit.extensions.audio_downloader = new Object({
 
 	slow: true,
 	running: false,
+	apiKey: "fuiKNFp9vQFvjLNvx4sUwti4Yb5yGutBN4Xh10LXZhhRKjWlV4",
 
 	button_icon: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAATCAYAAAByUDbMAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBNYWNpbnRvc2giIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6QkY1MzdFN0ExNTU3MTFFMzlCNjJGNTNDQTgzRjc3M0UiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6QkY1MzdFN0IxNTU3MTFFMzlCNjJGNTNDQTgzRjc3M0UiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDpCRjUzN0U3ODE1NTcxMUUzOUI2MkY1M0NBODNGNzczRSIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDpCRjUzN0U3OTE1NTcxMUUzOUI2MkY1M0NBODNGNzczRSIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PuxbowMAAACcSURBVHja7NTBDYAgDABA6gKMQpzEURiFERyFERiFEZCamlTToqIvY5O+aO/RlEIpxUgBAOJDrQejxGBejB/7EobhcX0epl/3lZY2PoAiGhyzNXMHhD12hxHoOjC39e8wAv3dOakYgfMFaD72aRjOLzWgxOfUxNj8sjJwJ/WoGIGTgE1afRMjMDAotGoxQbu07OImurDj2VdaBBgAbglVZHbAZ/wAAAAASUVORK5CYII=",
 
@@ -52,43 +53,33 @@ XKit.extensions.audio_downloader = new Object({
 
 	download: function(post_id, username) {
 
-		var json_page = "http://" + username + ".tumblr.com/api/read/json?id=" + post_id;
+		var api_url = "https://api.tumblr.com/v2/blog/" + username + ".tumblr.com/posts" + "?api_key=" + XKit.extensions.audio_downloader.apiKey + "&id=" + post_id;
 
 		GM_xmlhttpRequest({
 			method: "GET",
-			url: json_page,
+			url: api_url,
+			json: true,
 			onload: function(response) {
-
-				var m_data = response.responseText.replace("var tumblr_api_read = {", "{");
-				m_data = m_data.substring(0, m_data.length - 2);
-
-				console.log(m_data);
-
 				try {
 
-					var obj = JSON.parse(m_data);
+					var data = JSON.parse(response.responseText);
+					var obj = data.response;
 
 					if (typeof obj.posts[0] === "undefined") {
 						return XKit.extensions.audio_downloader.show_error("13");
 					}
 
-					if (typeof obj.posts[0]["audio-player"] === "undefined" ||obj.posts[0]["audio-player"] === "") {
-						return XKit.extensions.audio_downloader.show_error("14");
-					}
-
-					var m_text = obj.posts[0]["audio-player"];
-
-					var m_start = m_text.indexOf("?audio_file=") + 12;
-					var m_end = m_text.indexOf("\"", m_start);
-					var m_url = decodeURIComponent(m_text.substring(m_start, m_end));
-					if (m_url.indexOf('&color=') !== -1) {
-						m_url = m_url.substring(0, m_url.indexOf('&color='));
+					if (obj.posts[0].audio_type == "tumblr") {
+						m_url = obj.posts[0]['audio_url'];
+						if (m_url.indexOf('https://www.tumblr.com/audio_file/') == 0) {
+							m_url = 'http://a.tumblr.com/' + m_url.substr(m_url.lastIndexOf('/') + 1) + 'o1.mp3';
+						}
 					}
 
 					var m_id = "audio_" + XKit.extensions.audio_downloader.make_id();
 
-					var audio_name = $("#post_" + post_id).find(".id3_tags").find(".track_name").html();
-					var audio_author = $("#post_" + post_id).find(".id3_tags").find(".artist_name").html();
+					var audio_name = obj.posts[0]['track_name'];
+					var audio_author = obj.posts[0].artist;
 
 					if (typeof audio_author == "undefined" || audio_author == "") {
 						audio_author = "unknown";

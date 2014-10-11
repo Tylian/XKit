@@ -1,5 +1,5 @@
 //* TITLE Notifications+ **//
-//* VERSION 1.5 REV B **//
+//* VERSION 1.5 REV C **//
 //* DESCRIPTION Enhances the notifications **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//
@@ -11,6 +11,7 @@ XKit.extensions.notifications_plus = new Object({
 
 	running: false,
 	slow: true,
+	apiKey: "fuiKNFp9vQFvjLNvx4sUwti4Yb5yGutBN4Xh10LXZhhRKjWlV4",
 
 	last_post_id: "",
 	last_post_notes: 0,
@@ -254,72 +255,26 @@ XKit.extensions.notifications_plus = new Object({
 			return;
 		}
 
-		XKit.console.add("Getting http://" + blog_id + ".tumblr.com/api/read?id=" + post_id);
+		var api_url = "https://api.tumblr.com/v2/blog/" + blog_id + ".tumblr.com/posts" + "?api_key=" + XKit.extensions.notifications_plus.apiKey + "&id=" + post_id;
 
 		GM_xmlhttpRequest({
-  			method: "GET",
-  			url: "http://" + blog_id + ".tumblr.com/api/read?id=" + post_id,
+			method: "GET",
+			url: api_url,
+			json: true,
   			onerror: function() {
   				XKit.console.add("Can not load page to load notes.");
   			},
   			onload: function(response) {
-				var data = response.responseText;
-       				var xstart = data.indexOf('unix-timestamp="');
-				var xend = data.indexOf('"', xstart + 18);
-				var xts = data.substring(xstart + 16, xend);
-				xts = parseInt(xts) + 10;
-				var new_url = "http://" + blog_id + ".tumblr.com/archive?before_time=" + xts;
-				if (XKit.extensions.notifications_plus.current_post_id !== post_id) {
-					return;
+				try {
+					var data = JSON.parse(response.responseText).response;
+					$("#xpreview-container").removeClass("loading");
+					$("#xpreview-notes").html("&hearts; " + data.posts[0]['note_count']);
+					XKit.extensions.notifications_plus.last_post = post_id;
+					XKit.extensions.notifications_plus.last_post_notes = data.posts[0]['note_count'];
+				} catch(e) {
+					XKit.console.add(e.message);
 				}
-				XKit.console.add(" -- Getting " + new_url);
-				GM_xmlhttpRequest({
-  					method: "GET",
-  					url: new_url,
-  					onload: function(response) {
-  						try {
-							data = response.responseText;
-							XKit.console.add(" -- Success!");
-							/*var post_cont = $("#post_" + post_id, data);
-							var real_html = $(post_cont).find(".notes").html();
-							if (real_html.indexOf(" ") !== -1) {
-								real_html = real_html.substring(0, real_html.indexOf(" "));
-							}
-							if (XKit.extensions.notifications_plus.current_post_id !== post_id) {
-								return;
-							}
-							*/
 
-							var real_html = "";
-
-							$(".post",data).each(function() {
-								var r_post_id = $(this).attr('data-post-id');
-								var r_post_id_2 = $(this).attr('data-id');
-								if (r_post_id_2 === post_id || r_post_id === post_id) {
-									real_html = $(this).find(".post_notes").html();
-									return false;
-								}
-							});
-
-							real_html = $.trim(real_html);
-
-							if (real_html.indexOf(" ") !== -1) {
-								real_html = real_html.substring(0, real_html.indexOf(" "));
-							}
-
-							if (XKit.extensions.notifications_plus.current_post_id !== post_id) {
-								return;
-							}
-
-							$("#xpreview-container").removeClass("loading");
-							$("#xpreview-notes").html("&hearts; " + real_html);
-							XKit.extensions.notifications_plus.last_post = post_id;
-							XKit.extensions.notifications_plus.last_post_notes = real_html;
-						} catch(e) {
-							XKit.console.add(e.message);
-						}
-  					}
-				});
 			}
 		});
 

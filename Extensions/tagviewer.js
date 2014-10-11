@@ -1,5 +1,5 @@
 //* TITLE TagViewer **//
-//* VERSION 0.2 REV H **//
+//* VERSION 0.2 REV I **//
 //* DESCRIPTION View post tags easily **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS This extension allows you to see what tags people added to a post while they reblogged it. It also provides access to the post, and to Tumblr search pages to find similar posts.<br><br>Based on the work of <a href='http://inklesspen.tumblr.com'>inklesspen</a> **//
@@ -82,7 +82,7 @@ XKit.extensions.tagviewer = new Object({
 
 	},
 
-	load_tags_no_api: function() {
+	load_tags: function() {
 
 		// Load the next set of notes and tags.
 
@@ -129,12 +129,12 @@ XKit.extensions.tagviewer = new Object({
       				var post_id = post_url.split("/")[4];
       				var blog_avatar = $(this).find("img.avatar").attr('src');
 
-      				// var api_url = "http://api.tumblr.com/v2/blog/" + blog_name + "/posts/text";
-      				var api_url = "http://" + blog_name + "/api/read/json?id=" + post_id;
+      				var api_url = "https://api.tumblr.com/v2/blog/" + blog_name + "/posts" + "?api_key=" + XKit.extensions.tagviewer.apiKey + "&id=" + post_id;
 
       				GM_xmlhttpRequest({
 					method: "GET",
 					url: api_url,
+					json: true,
 					onerror: function(response) {
 						XKit.console.add("tagviewer -> Can't fetch page " + api_url);
 					},
@@ -145,11 +145,10 @@ XKit.extensions.tagviewer = new Object({
     							return;
     						}
 
-						var data = response.responseText.substring(22, response.responseText.length - 2);
 						try {
 
-							data = JSON.parse(data);
-							var post = data.posts[0];
+							var data = JSON.parse(response.responseText);
+							var post = data.response.posts[0];
 
 							if (typeof post.tags !== "undefined") {
   								if (post.tags.length > 0) {
@@ -161,7 +160,6 @@ XKit.extensions.tagviewer = new Object({
 						} catch(e) {
 							XKit.console.add("tagviewer -> Can't parse JSON at " + api_url + " -> " + e.message);
 						}
-
 
 					}
 				});
@@ -193,94 +191,6 @@ XKit.extensions.tagviewer = new Object({
       			}
 
       		});
-
-	},
-
-	load_tags: function() {
-
-		// Load the next set of notes and tags.
-		// This uses APIv2, which I do not have a key and can't gather
-		// thanks to Tumblr's license agreement, which sounds like it was
-		// written especially to prevent XKit from using it.
-
-		XKit.extensions.tagviewer.load_tags_no_api();
-		return;
-
-		// v--- old code as follows:
-
-		var m_url = XKit.extensions.tagviewer.notes_url;
-
-		if (XKit.extensions.tagviewer.notes_url_from !== "") {
-			m_url += "?from_c=" + XKit.extensions.tagviewer.notes_url_from;
-		}
-
-    		$.ajax({
-      			url: m_url,
-      			dataType: 'html'
-    		}).error(function() {
-
-    			XKit.window.close();
-    			XKit.window.show("Unable to fetch required data", "TagViewer could not get the required data from Tumblr servers. Please try again later or <a href=\"http://xkit-extension.tumblr.com/ask/\">file a bug report</a> by going to the XKit Blog.","error","<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
-
-    		}).done(function(data, textStatus, jqXHR) {
-
-      			var next_note = jqXHR.getResponseHeader('X-next-note');
-
-      			var notes = $($.parseHTML(data));
-      			var reblogs = notes.find("li.reblog");
-
-      			XKit.extensions.tagviewer.loading_more = false;
-
-      			if (next_note > 0) {
-      				XKit.extensions.tagviewer.notes_url_from = next_note;
-      				XKit.console.add("Another page found.");
-      				if (XKit.extensions.tagviewer.found_count <= 10) {
-      					XKit.console.add(" -- Not enough posts loaded, auto-loading..");
-      					setTimeout(function() {
-      						XKit.extensions.tagviewer.load_tags();
-      					}, 1400);
-      				} else {
-      					XKit.console.add(" -- Enough loaded, waiting for user to scroll down.");
-      					XKit.extensions.tagviewer.activate_endless_scroll();
-      				}
-      			} else {
-      				XKit.extensions.tagviewer.last_page = true;
-      				XKit.console.add("Last page, quitting.");
-      			}
-
-      			$(reblogs).each(function() {
-
-      				var post_url = $(this).find(".action").attr('data-post-url');
-
-      				var blog_username = $(this).attr('data-tumblelog');
-      				var blog_name = post_url.split("/")[2];
-      				var post_id = post_url.split("/")[4];
-      				var blog_avatar = $(this).find("img.avatar").attr('src');
-
-      				var api_url = "http://api.tumblr.com/v2/blog/" + blog_name + "/posts/text";
-
-      				$.getJSON(api_url, {api_key: XKit.extensions.tagviewer.apiKey, id: post_id}, function(data) {
-
-      					try {
-
-      						var post = data.response.posts[0];
-
-      						if (post.tags.length > 0) {
-      							XKit.extensions.tagviewer.add_tags(blog_username, post.tags, post_url, blog_avatar);
-      							XKit.extensions.tagviewer.found_count++;
-      						}
-
-      					} catch(e) {
-
-      						XKit.console.add("Can't load post at " + api_url + ": " + e.message);
-
-      					}
-
-      				});
-
-      			});
-
-      		}).get();
 
 	},
 

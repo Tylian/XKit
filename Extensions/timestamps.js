@@ -1,5 +1,5 @@
 //* TITLE Timestamps **//
-//* VERSION 2.4 REV E **//
+//* VERSION 2.4 REV F **//
 //* DESCRIPTION See when a post has been made. **//
 //* DETAILS This extension lets you see when a post was made, in full date or relative time (eg: 5 minutes ago). It also works on asks, and you can format your timestamps. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -11,6 +11,7 @@ XKit.extensions.timestamps = new Object({
 
 	running: false,
 	slow: true,
+	apiKey: "fuiKNFp9vQFvjLNvx4sUwti4Yb5yGutBN4Xh10LXZhhRKjWlV4",
 
 	preferences: {
 		only_on_hover: {
@@ -263,7 +264,7 @@ XKit.extensions.timestamps = new Object({
 
 					// Ugly but it works?
 					var json_page_parts = permalink.replace("http://","").split("/");
-					var json_page = "http://" + json_page_parts[0] + "/api/read/json?id=" + post_id;
+					var blog_name = json_page_parts[0];
 
 				}
 
@@ -287,7 +288,7 @@ XKit.extensions.timestamps = new Object({
 
 				} else {
 
-					setTimeout(function() { XKit.extensions.timestamps.fetch_timestamp($(".xkit_timestamp_" + post_id), json_page, post_id); }, 10);
+					setTimeout(function() { XKit.extensions.timestamps.fetch_timestamp($(".xkit_timestamp_" + post_id), blog_name, post_id); }, 10);
 
 				}
 
@@ -393,7 +394,7 @@ XKit.extensions.timestamps = new Object({
 
 	},
 
-	fetch_timestamp: function(obj, json_page, post_id) {
+	fetch_timestamp: function(obj, blog_name, post_id) {
 
 		var nowdate = new Date();
 		var nowdatem = moment(nowdate);
@@ -410,7 +411,7 @@ XKit.extensions.timestamps = new Object({
 				var dt = moment(dtx);
 
 				if (XKit.extensions.timestamps.preferences.only_relative.value === true) {
-    					$(obj).html(dt.from(nowdatem));
+    				$(obj).html(dt.from(nowdatem));
 				} else {
 					$(obj).html(dt.format(XKit.extensions.timestamps.preferences.format.value) + " &middot; " + dt.from(nowdatem));
 				}
@@ -427,37 +428,45 @@ XKit.extensions.timestamps = new Object({
 
 		} else {
 
-		try {
-			// console.log(json_page);
-			GM_xmlhttpRequest({
-				method: "GET",
-				dataType: "json",
-				url: json_page,
-				onload: function(response) {
-					var rs = (response.responseText);
-					var xs = rs.search('"unix-timestamp":');
-					if (xs === -1) { XKit.extensions.timestamps.show_failed(obj); return; }
-					var xe = rs.indexOf(',', xs + 17);
-					if (xe === -1) { XKit.extensions.timestamps.show_failed(obj); return; }
-					var xd = rs.substring(xs + 17, xe);
-					var dtx = new Date(xd * 1000);
-					var dt = moment(dtx);
-					if (XKit.extensions.timestamps.preferences.only_relative.value === true) {
-    						$(obj).html(dt.from(nowdatem));
-					} else {
-						$(obj).html(dt.format(XKit.extensions.timestamps.preferences.format.value) + " &middot; " + dt.from(nowdatem));
-					}
-					$(obj).removeClass('xtimestamp_loading');
-					XKit.storage.set("timestamps", "xkit_timestamp_cache_" + post_id, xd);
-				},
-				onerror: function(response) {
-					// console.log("Unable to load timestamp - Err 22");
+try {
+				// console.log(blog_name);
+				var api_url = "https://api.tumblr.com/v2/blog/" + blog_name + "/posts" + "?api_key=" + XKit.extensions.timestamps.apiKey + "&id=" + post_id;
+				GM_xmlhttpRequest({
+					method: "GET",
+					url: api_url,
+					json: true,
+				onerror: function() {
+					XKit.console.add('Unable to load timestamp for post ' + post_id);
 					XKit.extensions.timestamps.show_failed(obj);
-				}
-			});
-		} catch(e) {
-			alert(e.message);
-		}
+				},
+				onload: function(response) {
+					try {
+
+						var data = JSON.parse(response.responseText);
+						var post = data.response.posts[0];
+						var xd = post.timestamp;
+						var dtx = new Date(xd * 1000);
+						var dt = moment(dtx);
+
+						if (XKit.extensions.timestamps.preferences.only_relative.value === true) {
+							$(obj).html(dt.from(nowdatem));
+						} else {
+							$(obj).html(dt.format(XKit.extensions.timestamps.preferences.format.value) + " &middot; " + dt.from(nowdatem));
+						}
+
+						$(obj).removeClass('xtimestamp_loading');
+						XKit.storage.set("timestamps", "xkit_timestamp_cache_" + post_id, xd);
+
+					} catch(e) {
+
+						XKit.console.add('Unable to load timestamp for post ' + post_id);
+						XKit.extensions.timestamps.show_failed(obj);
+
+					}
+				}});
+			} catch(e) {
+				alert(e.message);
+			}
 
 		}
 

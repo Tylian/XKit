@@ -1,5 +1,5 @@
 //* TITLE Find Inactives **//
-//* VERSION 0.1 REV C **//
+//* VERSION 0.1 REV D **//
 //* DESCRIPTION Find the inactive blogs you follow **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS This extension lets you find the blog that haven't been updated for over 30 days. Just go to list of blogs you follow, then click on &quot;Find Inactive Blogs&quot; button below your Crushes to get started. **//
@@ -9,6 +9,7 @@
 XKit.extensions.find_inactives = new Object({
 
 	running: false,
+	apiKey: "fuiKNFp9vQFvjLNvx4sUwti4Yb5yGutBN4Xh10LXZhhRKjWlV4",
 
 	timeout_time: 300,
 
@@ -161,10 +162,12 @@ XKit.extensions.find_inactives = new Object({
 
 		}
 
+		var api_url = "https://api.tumblr.com/v2/blog/" + XKit.extensions.find_inactives.people_list[XKit.extensions.find_inactives.people_index] + ".tumblr.com/info" + "?api_key=" + XKit.extensions.find_inactives.apiKey;
+
 		GM_xmlhttpRequest({
-			method: "GET",
-			url: "http://" + XKit.extensions.find_inactives.people_list[XKit.extensions.find_inactives.people_index] + ".tumblr.com/api/read/json?rd=" + XKit.tools.random_string(),
-			json: false,
+				method: "GET",
+				url: api_url,
+				json: true,
 			onerror: function(response) {
 				// Probably a bug in the list.
 				setTimeout(function() { XKit.extensions.find_inactives.next_person(); }, 800);
@@ -180,9 +183,8 @@ XKit.extensions.find_inactives = new Object({
 
 					XKit.progress.value("find-inactives", perc);
 
-					var data = JSON.parse(response.responseText.substring(22, response.responseText.length - 2));
-					console.log(data);
-					var post_date = new Date(data.posts[0]["unix-timestamp"] * 1000);
+					var data = JSON.parse(response.responseText).response;
+					var post_date = new Date(data.blog.updated * 1000);
 
 					var days = Math.round(Math.abs((post_date.getTime() - new Date().getTime())/(24*60*60*1000)));
 

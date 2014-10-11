@@ -1,5 +1,5 @@
 //* TITLE View On Dash **//
-//* VERSION 0.6 REV C **//
+//* VERSION 0.6 REV D **//
 //* DESCRIPTION View blogs on your dash **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS This is a preview version of an extension, missing most features due to legal/technical reasons for now. It lets you view the last 20 posts a person has made on their blogs right on your dashboard. If you have User Menus+ installed, you can also access it from their user menu under their avatar. **//
@@ -9,7 +9,7 @@
 XKit.extensions.view_on_dash = new Object({
 
 	running: false,
-	key: "vgXl8u0K1syFSAue6b9C7honIojHjC98i5WsBgSZ66HfqB0DKl",
+	apiKey: "fuiKNFp9vQFvjLNvx4sUwti4Yb5yGutBN4Xh10LXZhhRKjWlV4",
 
 	preferences: {
 		"show_sidebar_button": {
@@ -594,10 +594,12 @@ XKit.extensions.view_on_dash = new Object({
  		if (typeof page === "undefined") { page = 0; }
  		if (typeof type === "undefined") { type = ""; }
 
+		var api_url = "https://api.tumblr.com/v2/blog/" + username + ".tumblr.com/posts/" + type + "?api_key=" + XKit.extensions.view_on_dash.apiKey + "&reblog_info=true&offset=" + offset;
+
 		GM_xmlhttpRequest({
 			method: "GET",
-			url: "http://api.tumblr.com/v2/blog/" + username + ".tumblr.com/posts/" + type + "?api_key=" + XKit.extensions.view_on_dash.key + "&reblog_info=true&offset=" + offset,
-			json: false,
+			url: api_url,
+			json: true,
 			onerror: function(response) {
 				console.log("view-on-dash -> Error getting page.");
 				XKit.extensions.view_on_dash.show_error("<b>Unable to get the blog information.</b><br/>Please try again later.<br/><br/>Error Code: VOD-230");
@@ -616,7 +618,7 @@ XKit.extensions.view_on_dash = new Object({
 					if ($("#view-on-dash-header").length === 0) {
 
 						var m_header = "<div id=\"view-on-dash-header\" data-username=\"" + username + "\" data-page=\"" + page + "\">" +
-									"<img id=\"view-on-dash-avatar\" src=\"http://api.tumblr.com/v2/blog/" + username + ".tumblr.com/avatar/64\">" +
+									"<img id=\"view-on-dash-avatar\" src=\"https://api.tumblr.com/v2/blog/" + username + ".tumblr.com/avatar/64\">" +
 									"<div id=\"view-on-dash-title\">" + data.response.blog.title + "</div>" +
 									"<div id=\"view-on-dash-username\">" + data.response.blog.name + "</div>" +
 									"<a id=\"view-on-dash-open\" target=\"_BLANK\" href=\"http://" + username + ".tumblr.com\">Open</a>" +
@@ -788,94 +790,6 @@ XKit.extensions.view_on_dash = new Object({
 
 					XKit.extensions.view_on_dash.get_rand_id = XKit.tools.random_string();
 					XKit.extensions.view_on_dash.get_if_liked(XKit.extensions.view_on_dash.get_rand_id);
-
-				} catch(e) {
-					console.log("view-on-dash -> Error parsing data. " + e.message);
-					XKit.extensions.view_on_dash.show_error("<b>Unable to read JSON received from API calls.</b><br/>Please try again later.<br/><br/>Error Code: VOD-235");
-					return;
-				}
-
-			}
-		});
-
-	},
-
-	view_old: function(username) {
-
-		$("body").append("<div id=\"view-on-dash-background\">&nbsp;</div><div class=\"loading\" id=\"view-on-dash-content\">&nbsp;</div>");
-
-		XKit.extensions.view_on_dash.last_scroll_point = $("body").scrollTop();
-
-		$('html, body').animate({
-    			scrollTop: 0
- 		}, 500);
-
-		GM_xmlhttpRequest({
-			method: "GET",
-			url: "http://" + username + ".tumblr.com/api/read/json",
-			json: false,
-			onerror: function(response) {
-				console.log("view-on-dash -> Error getting page.");
-				XKit.extensions.view_on_dash.show_error("<b>Unable to get the blog information.</b><br/>Please try again later.<br/><br/>Error Code: VOD-230");
-				return;
-			},
-			onload: function(response) {
-
-				var data = response.responseText.substring(22, response.responseText.length - 2);
-
-				try {
-
-					data = JSON.parse(data);
-					var do_continue_lads = true;
-					var lad_count = -1;
-
-					$("#view-on-dash-content").removeClass("loading");
-
-					var m_header = "<div id=\"view-on-dash-header\">" +
-								"<img id=\"view-on-dash-avatar\" src=\"http://api.tumblr.com/v2/blog/" + username + ".tumblr.com/avatar/64\">" +
-								"<div id=\"view-on-dash-title\">" + data.tumblelog.title + "</div>" +
-								"<div id=\"view-on-dash-username\">" + data.tumblelog.name + "</div>" +
-								"<a id=\"view-on-dash-open\" target=\"_BLANK\" href=\"http://" + username + ".tumblr.com\">Open</a>" +
-								"<div id=\"view-on-dash-back\" class=\"disabled\">&nbsp;</div>" +
-								"<div id=\"view-on-dash-forward\" class=\"disabled\">&nbsp;</div>" +
-							"</div>";
-
-					$("#view-on-dash-content").html(m_header + "<ol id=\"posts\" class=\"posts xkit-view-on-dash-ol\"></div>");
-
-					while (do_continue_lads) {
-
-						lad_count++;
-						if (lad_count >= 30) {break; }
-
-						if (typeof data.posts[lad_count] !== "undefined") {
-							$(".xkit-view-on-dash-ol").append(XKit.extensions.view_on_dash.parse_item(data.posts[lad_count], username));
-						}
-
-					}
-
-					$("#view-on-dash-background").click(function() {
-
-						$("#view-on-dash-content").fadeOut('fast');
-						$("#view-on-dash-background").fadeOut('slow', function() {
-
-							try {
-							if (XKit.extensions.view_on_dash.last_scroll_point !== -1) {
-
-								$('html, body').animate({
-    									scrollTop: XKit.extensions.view_on_dash.last_scroll_point
- 								}, 500);
-
-							}
-							} catch(e) {
-								// meh.
-							}
-
-							$("#view-on-dash-content").remove();
-							$("#view-on-dash-background").remove();
-
-						});
-
-					});
 
 				} catch(e) {
 					console.log("view-on-dash -> Error parsing data. " + e.message);

@@ -1,5 +1,5 @@
 //* TITLE Profiler **//
-//* VERSION 1.2 REV B **//
+//* VERSION 1.2 REV C **//
 //* DESCRIPTION The User Inspection Gadget **//
 //* DETAILS Select Profiler option from the User Menu to see information such as when they started blogging, how many posts they have, timezone, and more.<br><br>Requires User Menus+ to be installed. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -10,7 +10,7 @@ XKit.extensions.profiler = new Object({
 
 	running: false,
 
-	apiKey: "vgXl8u0K1syFSAue6b9C7honIojHjC98i5WsBgSZ66HfqB0DKl",
+	apiKey: "fuiKNFp9vQFvjLNvx4sUwti4Yb5yGutBN4Xh10LXZhhRKjWlV4",
 
 	preferences: {
 		"show_nicknames": {
@@ -233,7 +233,7 @@ XKit.extensions.profiler = new Object({
 		XKit.extensions.profiler.window_id = m_window_id;
 
 		var m_html = 	"<div id=\"xkit-profiler-contents\" class=\"nano\">" +
-					"<div id=\"xkit-profiler-text\" class=\"content\">" +
+					"<div id=\"xkit-profiler-main\" class=\"content\">" +
 						"<div class=\"xkit-profiler-line separator\">" +
 							"Blog Information" +
 						"</div>" +
@@ -285,7 +285,7 @@ XKit.extensions.profiler = new Object({
 						"</div>" +
 						"<div class=\"xkit-profiler-line\">" +
 							"Text Posts" +
-							"<div id=\"xkit-profiler-regular\"></div>" +
+							"<div id=\"xkit-profiler-text\"></div>" +
 						"</div>" +
 						"<div class=\"xkit-profiler-line\">" +
 							"Photo / Photoset Posts" +
@@ -380,6 +380,7 @@ XKit.extensions.profiler = new Object({
 		});
 
 		var api_url = "https://api.tumblr.com/v2/blog/" + user_url + ".tumblr.com/info" + "?api_key=" + XKit.extensions.profiler.apiKey;
+
 		GM_xmlhttpRequest({
 			method: "GET",
 			url: api_url,
@@ -393,25 +394,52 @@ XKit.extensions.profiler = new Object({
 				if (XKit.extensions.profiler.window_id !== m_window_id) {return; }
 
 				var data = JSON.parse(response.responseText).response
+				var dtx = new Date(data.blog.updated * 1000);
+				var dt = moment(dtx);
+
+				$("#xkit-profiler-last-update").removeClass("loading-up").html(dt.from(new Date()));
+				$("#xkit-profiler-total").removeClass("loading-up").html(data.blog.posts);
+				$("#xkit-profiler-title").removeClass("loading-up").html(data.blog.title);
+
+				var m_custom_val = "None";
+				if (data.blog.url.indexOf(".tumblr.com") === -1) {
+					m_custom_val = "Yes (" + data.blog.url + ")";
+				}
+				$("#xkit-profiler-custom-domain").removeClass("loading-up").html(m_custom_val);
+
+				if (data.blog.is_nsfw === true) {
+						$("#xkit-profiler-nsfw").removeClass("loading-up").html("Yes");
+				} else {
+					$("#xkit-profiler-nsfw").removeClass("loading-up").html("No");
+				}
+
+				if (data.blog.share_likes === true) {
+					$("#xkit-profiler-is-sharing-likes").removeClass("loading-up").html("Yes (" + data.blog.likes + " posts)");
+				} else {
+					$("#xkit-profiler-is-sharing-likes").removeClass("loading-up").html("No");
+				}
 
 				var last_post = data.blog.posts - 1;
 				var new_url = "https://api.tumblr.com/v2/blog/" + user_url + ".tumblr.com/posts" + "?api_key=" + XKit.extensions.profiler.apiKey + "&offset=" + last_post + "&limit=1";
+
 				GM_xmlhttpRequest({
 					method: "GET",
 					url: new_url,
 					json: true,
-					onerror: function(response2) {
+					onerror: function(response) {
 						XKit.extensions.profiler.display_error(m_window_id);
 						return;
 					},
-					onload: function(response2) {
-						var data = JSON.parse(response2.responseText).response
-						var date = data.posts[0].timestamp;
-						$("#xkit-profiler-since").removeClass("loading-up").html(date.getYear());
-
-						XKit.extensions.profiler.get_json_p1(user_url, m_window_id);
+					onload: function(response) {
+						var data = JSON.parse(response.responseText).response
+						var date = new Date(data.posts[0].timestamp*1000);
+						$("#xkit-profiler-since").removeClass("loading-up").html(date.getFullYear());
 					}
 				});
+
+				XKit.extensions.profiler.get_json_p1(user_url, m_window_id);
+				XKit.extensions.profiler.get_json_p2(user_url, m_window_id, 1);
+
 			}
 		});
 	},
@@ -424,7 +452,7 @@ XKit.extensions.profiler = new Object({
 			json: false,
 			onerror: function(response) {
 				console.log("Error getting page.");
-				XKit.extensions.profiler.display_error(m_window_id);
+				// XKit.extensions.profiler.display_error(m_window_id);
 				return;
 			},
 			onload: function(response) {
@@ -441,68 +469,7 @@ XKit.extensions.profiler = new Object({
 					return;
 				}
 
-				var dtx = new Date(data.posts[0]["unix-timestamp"] * 1000);
-				var dt = moment(dtx);
-
-				$("#xkit-profiler-last-update").removeClass("loading-up").html(dt.from(new Date()));
-
-				$("#xkit-profiler-total").removeClass("loading-up").html(data["posts-total"]);
 				$("#xkit-profiler-timezone").removeClass("loading-up").html(data.tumblelog.timezone);
-				$("#xkit-profiler-title").removeClass("loading-up").html(data.tumblelog.title);
-
-				var m_custom_val = "None";
-				if (data.tumblelog.cname !== false) {
-					m_custom_val = "Yes (" + data.tumblelog.cname + ")";
-				}
-
-				$("#xkit-profiler-custom-domain").removeClass("loading-up").html(m_custom_val);
-
-				XKit.extensions.profiler.get_from_api2(user_url, m_window_id);
-
-			}
-		});
-
-	},
-
-	get_from_api2: function(user_url, m_window_id) {
-
-		GM_xmlhttpRequest({
-			method: "GET",
-			url: "http://api.tumblr.com/v2/blog/" + user_url + ".tumblr.com/posts/?api_key=" + XKit.extensions.profiler.apiKey,
-			json: false,
-			cache: false,
-			onerror: function(response) {
-				console.log("Error getting page.");
-				XKit.extensions.profiler.display_error(m_window_id);
-				return;
-			},
-			onload: function(response) {
-
-				try {
-
-					if (XKit.extensions.profiler.window_id !== m_window_id) {return; }
-
-					data = JSON.parse(response.responseText);
-
-					if (data.response.blog.is_nsfw === true) {
-						$("#xkit-profiler-nsfw").removeClass("loading-up").html("Yes");
-					} else {
-						$("#xkit-profiler-nsfw").removeClass("loading-up").html("No");
-					}
-
-					if (data.response.blog.share_likes === true) {
-						$("#xkit-profiler-is-sharing-likes").removeClass("loading-up").html("Yes (" + data.response.blog.likes + " posts)");
-					} else {
-						$("#xkit-profiler-is-sharing-likes").removeClass("loading-up").html("No");
-					}
-
-					XKit.extensions.profiler.get_json_p2(user_url, m_window_id, 1);
-
-				} catch(e) {
-					console.log("Error getting page.");
-					XKit.extensions.profiler.display_error(m_window_id);
-					return;
-				}
 
 			}
 		});
@@ -512,7 +479,7 @@ XKit.extensions.profiler = new Object({
 	get_json_p2: function(user_url, m_window_id, part) {
 
 		var to_get = "";
-		if (part === 1) { to_get = "regular"; }
+		if (part === 1) { to_get = "text"; }
 		if (part === 2) { to_get = "photo"; }
 		if (part === 3) { to_get = "quote"; }
 		if (part === 4) { to_get = "link"; }
@@ -521,10 +488,11 @@ XKit.extensions.profiler = new Object({
 		if (part === 7) { to_get = "video"; }
 		if (part === 8) { return; }
 
+		var api_url = "https://api.tumblr.com/v2/blog/" + user_url + ".tumblr.com/posts" + "?api_key=" + XKit.extensions.profiler.apiKey + "&type=" + to_get + "&limit=1";
 		GM_xmlhttpRequest({
 			method: "GET",
-			url: "http://" + user_url + ".tumblr.com/api/read/json?type=" + to_get,
-			json: false,
+			url: api_url,
+			json: true,
 			onerror: function(response) {
 				console.log("Error getting page.");
 				XKit.extensions.profiler.display_error(m_window_id);
@@ -534,17 +502,15 @@ XKit.extensions.profiler = new Object({
 
 				if (XKit.extensions.profiler.window_id !== m_window_id) {return; }
 
-				var data = response.responseText.substring(22, response.responseText.length - 2);
-
 				try {
-					data = JSON.parse(data);
+					var data = JSON.parse(response.responseText).response
 				} catch(e) {
 					console.log("Error parsing data.");
 					XKit.extensions.profiler.display_error(m_window_id);
 					return;
 				}
 
-				$("#xkit-profiler-" + to_get).removeClass("loading-up").html(data["posts-total"]);
+				$("#xkit-profiler-" + to_get).removeClass("loading-up").html(data["total_posts"]);
 
 				XKit.extensions.profiler.get_json_p2(user_url, m_window_id, (part + 1));
 

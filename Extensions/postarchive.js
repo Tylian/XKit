@@ -1,5 +1,5 @@
 //* TITLE Post Archiver **//
-//* VERSION 0.3 REV E **//
+//* VERSION 0.3 REV F **//
 //* DESCRIPTION Never lose a post again. **//
 //* DETAILS Post Archiver lets you save posts to your XKit.<br><br>Found a good recipe? Think those hotline numbers on that signal boost post might come in handy in the future?<br><br>Click on the save button, then click on the My Archive button on your sidebar anytime to access those posts. You can also name and categorize posts. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -13,7 +13,7 @@ XKit.extensions.postarchive = new Object({
 	button_icon: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAATCAYAAAByUDbMAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBNYWNpbnRvc2giIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6NDQ5RTU4RTU3MjVEMTFFMzkxNjc4NTlFOTA5MTY1RjciIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6NDQ5RTU4RTY3MjVEMTFFMzkxNjc4NTlFOTA5MTY1RjciPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDo0NDlFNThFMzcyNUQxMUUzOTE2Nzg1OUU5MDkxNjVGNyIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDo0NDlFNThFNDcyNUQxMUUzOTE2Nzg1OUU5MDkxNjVGNyIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/Pu91pc8AAACgSURBVHjaYvz//z8D1QDIMGSMLo0Fz8Sln4mBimCEGMaCRawLiKXx6HEC4qVQ9lwg3ocvNm2A+A+OmETGh4GYGUUvjqRRQcCgVzDXE2MYCGzBY5grNp/hM0wIiB9iMagRV6IllAMsgfgnkkF7QeGE0zA0W7GBIqjccyCWwJYjkfUTMgwE1kGTBAM+wxjRDGEkp6ygSQ5gJOC9YZLRAQIMAENzviFg3gnxAAAAAElFTkSuQmCC",
 	button_on: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAATCAYAAAByUDbMAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBNYWNpbnRvc2giIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6RTU0NzMyOUU3MjVEMTFFMzkxNjc4NTlFOTA5MTY1RjciIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6RTU0NzMyOUY3MjVEMTFFMzkxNjc4NTlFOTA5MTY1RjciPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDpFNTQ3MzI5QzcyNUQxMUUzOTE2Nzg1OUU5MDkxNjVGNyIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDpFNTQ3MzI5RDcyNUQxMUUzOTE2Nzg1OUU5MDkxNjVGNyIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/Pn1307MAAAC0SURBVHjaYvz//z8DtQBj/hK88thsmgXE6TDOhGiEEiYGKoIRYhgLFrEuIJbGo8cJiJdC2XOBeB8+wzYB8QEgZsZhmAoUHwHig4S8CVJUQ8BHr4E4Aoj/EhNmHUC8FY9h0UD8lJQIiAPiR1jEm4B4N6mx+Q7qlV9IYvughuGMTeQsw4gmfxyIK4G4F4hfQL2HEk4FSxn/44tNdNAHxDZAPAVqIEnpDBsIGvAc8H94ZnSAAAMAwKElB0jQE0QAAAAASUVORK5CYII=",
 
-	key: "vgXl8u0K1syFSAue6b9C7honIojHjC98i5WsBgSZ66HfqB0DKl",
+	apiKey: "fuiKNFp9vQFvjLNvx4sUwti4Yb5yGutBN4Xh10LXZhhRKjWlV4",
 
 	archived_posts: new Array,
 	categories: new Array,
@@ -1056,10 +1056,12 @@ var rows = [];
 
 		var m_post = XKit.interface.find_post(post_id);
 
+		var api_url = "http://api.tumblr.com/v2/blog/" + m_post.owner + ".tumblr.com/posts/?api_key=" + XKit.extensions.postarchive.apiKey + "&id=" + post_id;
+
 		GM_xmlhttpRequest({
 			method: "GET",
-			url: "http://api.tumblr.com/v2/blog/" + m_post.owner + ".tumblr.com/posts/?api_key=" + XKit.extensions.postarchive.key + "&id=" + post_id,
-			json: false,
+			url: api_url,
+			json: true,
 			onerror: function(response) {
 				XKit.extensions.postarchive.show_error("<b>Unable to get the blog information.</b><br/>Please try again later.<br/><br/>Error Code: POA-230");
 				return;
@@ -1068,12 +1070,7 @@ var rows = [];
 
 				try {
 
-					data = JSON.parse(response.responseText);
-
-					if (data.meta.status !== 200) {
-						XKit.extensions.postarchive.show_error("<b>Post Not Found</b><br/>Make sure the post was not deleted and please try again later.<br/><br/>Error Code: POA-404 (Status: " + data.meta.status + ")");
-						return;
-					}
+					data = JSON.parse(response.responseText).response;
 
 					var m_object = new Object();
 
@@ -1081,11 +1078,12 @@ var rows = [];
 
 					if (XKit.browser().firefox === true) {
 						// Firefox is a fucking bitch.
-						m_object.post = "XKIT-BTOA!!" + window.btoa(unescape(encodeURIComponent(JSON.stringify(data.response.posts[0]))));
+						m_object.post = "XKIT-BTOA!!" + window.btoa(unescape(encodeURIComponent(JSON.stringify(data.posts[0]))));
 						// alert("tosave: " + m_object.post);
 					} else {
-						m_object.post = JSON.stringify(data.response.posts[0]);
+						m_object.post = JSON.stringify(data.posts[0]);
 					}
+
 					m_object.post_id = post_id;
 					m_object.date = new Date().getTime();
 					m_object.category = m_category;
@@ -1097,19 +1095,14 @@ var rows = [];
 					setTimeout(function() {
 
 						XKit.extensions.postarchive.archived_posts.push(m_object);
-
 						console.log(XKit.extensions.postarchive.archived_posts);
-
 						XKit.extensions.postarchive.save_posts();
 
 						if (!in_blog_mode) {
 
 							XKit.interface.completed_control_button(obj, true);
-
 							XKit.notifications.add("Post added to Archive.", "ok");
-
 							XKit.extensions.postarchive.update_sidebar();
-
 							XKit.window.close();
 
 
@@ -1123,7 +1116,6 @@ var rows = [];
 
 					}, 1);
 
-
 				} catch(e) {
 					XKit.extensions.postarchive.show_error("<b>Unable to read JSON received from API calls.</b><br/>Please try again later.<br/><br/>Error Code: POS-535<br>" + e.message);
 					return;
@@ -1131,8 +1123,6 @@ var rows = [];
 
 			}
 		});
-
-
 
 	},
 

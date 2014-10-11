@@ -1,5 +1,5 @@
 //* TITLE User Menus+ **//
-//* VERSION 2.5 REV A **//
+//* VERSION 2.5 REV B **//
 //* DESCRIPTION More options on the user menu **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS This extension adds additional options to the user menu (the one that appears under user avatars on your dashboard), such as Avatar Magnifier, links to their Liked Posts page if they have them enabled. Note that this extension, especially the Show Likes and Show Submit options use a lot of network and might slow your computer down. **//
@@ -219,13 +219,13 @@ XKit.extensions.show_more = new Object({
 
                 if (XKit.extensions.show_more.preferences.show_archive.value === true) {
 
-                	m_html = m_html + "<a target=\"_blank\" href=\"https://" + user_url + ".tumblr.com/archive\" class=\"xkit-archive archive\">Archive</a>";
+                	m_html = m_html + "<a target=\"_blank\" href=\"http://" + user_url + ".tumblr.com/archive\" class=\"xkit-archive archive\">Archive</a>";
 
 		}
 
                 if (XKit.extensions.show_more.preferences.show_submits.value === true && XKit.extensions.show_more.submit_available[user_url] === true) {
 
-                	var m_likes_url = "https://" + user_url + ".tumblr.com/submit";
+                	var m_likes_url = "http://" + user_url + ".tumblr.com/submit";
 
                 	m_html = m_html + "<a target=\"_blank\" href=\"" + m_likes_url + "\" class=\"xkit-submit\">Submit</a>";
 
@@ -331,7 +331,7 @@ XKit.extensions.show_more = new Object({
 			$(".xkit-avatar-magnetizer-button-" + user_url).bind('click', function() {
 
 				XKit.extensions.show_more.hide_classic_menu();
-				XKit.extensions.show_more.show_avatar($(this).attr('data-avatar-url'));
+				XKit.extensions.show_more.show_avatar(user_url);
 				$(".tumblelog_popover_glass").trigger('click');
 				setTimeout(function() { $(".tumblelog_popover_glass").trigger('click'); }, 10);
 				$(".popover").hide();
@@ -589,35 +589,10 @@ XKit.extensions.show_more = new Object({
 
                 }
 
-                if (XKit.extensions.show_more.preferences.show_likes.value === true && XKit.extensions.show_more.likes_available[user_url] === true) {
-
-                	var m_likes_url = "https://www.tumblr.com/liked/by/" + user_url;
-
-                	// console.log("Likes found for " + user_url);
-
-                	m_html = m_html + "<li>" +
-                			"<a href=\"" + m_likes_url + "\" class=\"likes xkit-likes xkit-new-menu-fix\">" +
-                				"<span class=\"hide_overflow\">Likes</span>" +
-                			"</a>" +
-                		  "</li>";
-
-                }
-
-                 if (XKit.extensions.show_more.preferences.show_archive.value === true) {
-
-                 	var m_archive_url = "https://"  + user_url + ".tumblr.com/archive/";
-
-                	m_html = m_html + "<li>" +
-                			"<a href=\"" + m_archive_url + "\" class=\"archive xkit-archive xkit-new-menu-fix\">" +
-                				"<span class=\"hide_overflow\">Archive</span>" +
-                			"</a>" +
-                		  "</li>";
-
-                 }
 
                 if (XKit.extensions.show_more.preferences.show_submits.value === true && XKit.extensions.show_more.submit_available[user_url] === true) {
 
-                	var m_likes_url = "https://" + user_url + ".tumblr.com/submit";
+                	var m_likes_url = "http://" + user_url + ".tumblr.com/submit";
 
                 	m_html = m_html + "<li>" +
                 			"<a target=\"_new\" href=\"" + m_likes_url + "\" class=\"likes xkit-submit xkit-new-menu-fix\">" +
@@ -654,7 +629,7 @@ XKit.extensions.show_more = new Object({
 		$(".xkit-avatar-magnetizer-button-" + user_url).unbind('click');
 		$(".xkit-avatar-magnetizer-button-" + user_url).bind('click', function() {
 
-			XKit.extensions.show_more.show_avatar($(this).attr('data-avatar-url'));
+			XKit.extensions.show_more.show_avatar(user_url);
 			$(".tumblelog_popover_glass").trigger('click');
 			setTimeout(function() { $(".tumblelog_popover_glass").trigger('click'); }, 10);
 			$(".popover").hide();
@@ -684,7 +659,7 @@ XKit.extensions.show_more = new Object({
 					return;
 				}
 
-				var m_url = "https://" + username + ".tumblr.com/submit/";
+				var m_url = "https://www.tumblr.com/submit_form/" + username + ".tumblr.com";
 
 				if (typeof username === "undefined" || username === "") {
 					return;
@@ -830,7 +805,7 @@ XKit.extensions.show_more = new Object({
 
                 if (XKit.extensions.show_more.preferences.show_submits.value === true && XKit.extensions.show_more.submit_available[user_url] === true) {
 
-                	var m_likes_url = "https://" + user_url + ".tumblr.com/submit";
+                	var m_likes_url = "http://" + user_url + ".tumblr.com/submit";
 
                 	m_html = m_html + "<div class=\"popover_menu_item\">" +
                 			"<a target=\"_new\" href=\"" + m_likes_url + "\" class=\"tumblelog_menu_link likes xkit-submit\">" +
@@ -866,7 +841,7 @@ XKit.extensions.show_more = new Object({
 		$(".xkit-avatar-magnetizer-button-" + user_url).unbind('click');
 		$(".xkit-avatar-magnetizer-button-" + user_url).bind('click', function() {
 
-			XKit.extensions.show_more.show_avatar($(this).attr('data-avatar-url'));
+			XKit.extensions.show_more.show_avatar(user_url);
 			setTimeout(function() { $("#glass_overlay").trigger('click'); }, 10);
 
 			$(m_target).trigger('click');
@@ -876,19 +851,14 @@ XKit.extensions.show_more = new Object({
 
 	},
 
-	show_avatar: function(avatar_url) {
+	show_avatar: function(user_url) {
 
 		if ($("#xkit-avatar-magnetizer-shadow").length > 0) {
 			$("#xkit-avatar-magnetizer-shadow").remove();
 			$("#xkit-avatar-magnetizer-window").remove();
 		}
 
-		avatar_url = avatar_url.replace("_64.gif","_512.gif");
-		avatar_url = avatar_url.replace("_64.jpg","_512.jpg");
-		avatar_url = avatar_url.replace("_64.png","_512.png");
-		avatar_url = avatar_url.replace("_128.gif","_512.gif");
-		avatar_url = avatar_url.replace("_128.jpg","_512.jpg");
-		avatar_url = avatar_url.replace("_128.png","_512.png");
+		avatar_url = "http://api.tumblr.com/v2/blog/" + user_url + ".tumblr.com/avatar/512";
 
 		var m_html = 	"<div id=\"xkit-avatar-magnetizer-shadow\">&nbsp;</div>" +
 				"<div id=\"xkit-avatar-magnetizer-window\">" +

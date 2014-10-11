@@ -1,5 +1,5 @@
 //* TITLE Tag Replacer **//
-//* VERSION 0.2 REV A **//
+//* VERSION 0.2 REV B **//
 //* DESCRIPTION Replace old tags! **//
 //* DETAILS Allows you to bulk replace tags of posts. Go to your Posts page on your dashboard and click on the button on the sidebar and enter the tag you want replaced, and the new tag, and Tag Replacer will take care of the rest. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -9,6 +9,7 @@
 XKit.extensions.tag_replacer = new Object({
 
 	running: false,
+	apiKey: "fuiKNFp9vQFvjLNvx4sUwti4Yb5yGutBN4Xh10LXZhhRKjWlV4",
 
 	run: function() {
 
@@ -27,7 +28,7 @@ XKit.extensions.tag_replacer = new Object({
 		$("ul.controls_section:eq(1)").before(xf_html);
 
 		$("#tag_replacer_button").click(function() {
-			var m_url = $("#open_blog_link").attr('href');
+			var m_url = $("#open_blog_link").attr('href').replace("http://","");
 			if (m_url.substring(m_url.length - 1) === "/") { m_url = m_url.substring(0,m_url.length - 1); }
 			XKit.extensions.tag_replacer.show(m_url);
 		});
@@ -76,7 +77,7 @@ XKit.extensions.tag_replacer = new Object({
 
 	},
 
-	page: 1,
+	page: 0,
 	url: "",
 	t_replace: "",
 	t_with: "",
@@ -90,7 +91,7 @@ XKit.extensions.tag_replacer = new Object({
 
 		console.log("replace " + t_replace + " with " + t_with + " on " + url);
 
-		XKit.extensions.tag_replacer.page = 1;
+		XKit.extensions.tag_replacer.page = 0;
 		XKit.extensions.tag_replacer.url = url;
 		XKit.extensions.tag_replacer.t_replace = t_replace;
 		XKit.extensions.tag_replacer.t_with = t_with;
@@ -224,19 +225,12 @@ XKit.extensions.tag_replacer = new Object({
 
 	next: function(retry_mode) {
 
-		var m_url = XKit.extensions.tag_replacer.url + "/tagged/" + XKit.extensions.tag_replacer.t_replace + "/page/" + XKit.extensions.tag_replacer.page + "/json";
-
-		if (XKit.extensions.tag_replacer.page === 1) {
-			m_url = XKit.extensions.tag_replacer.url + "/tagged/" + XKit.extensions.tag_replacer.t_replace + "/json";
-		}
-
-		m_url = m_url + "?fetch_random_id=" + XKit.tools.random_string();
-		console.log("Fetching " + m_url);
+		var api_url = "https://api.tumblr.com/v2/blog/" +  XKit.extensions.tag_replacer.url + "/posts" + "?api_key=" + XKit.extensions.tag_replacer.apiKey + "&tag=" + XKit.extensions.tag_replacer.t_replace + "&limit=50" + "&offset=" + XKit.extensions.tag_replacer.page * 50;
 
 		GM_xmlhttpRequest({
 			method: "GET",
-			url: m_url,
-			json: false,
+			url: api_url,
+			json: true,
 			onerror: function(response) {
 				if (response.status === 404) {
 					XKit.window.show("Nothing for me to do.","Tag Replacer could not find any posts containing the tag you were searching for.","error", "<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
@@ -246,20 +240,18 @@ XKit.extensions.tag_replacer = new Object({
 				return;
 			},
 			onload: function(response) {
-
-				var data = response.responseText.substring(22, response.responseText.length - 2);
-
 				try {
 
-					data = JSON.parse(data);
+					var data = JSON.parse(response.responseText);
+					var posts = data.response.posts;
 
-					if (data.posts.length === 0) {
+					if (posts.length === 0) {
 						XKit.extensions.tag_replacer.start_replacing();
 						return;
 					}
 
-					for (var i=0;i<data.posts.length;i++) {
-						XKit.extensions.tag_replacer.p_array.push(data.posts[i].id);
+					for (var i=0;i<posts.length;i++) {
+						XKit.extensions.tag_replacer.p_array.push(posts[i].id);
 					}
 
 					$("#xkit-tag-replacer-progress").html("Loaded " + XKit.extensions.tag_replacer.p_array.length + " tagged posts..");
