@@ -1315,7 +1315,7 @@ Data.prototype = {
 		if ( !unlock ) {
 			unlock = Data.uid++;
 			descriptor[ this.expando ] = { value: unlock };
-			
+
 			// Secure it in a non-enumerable, non-writable property
 			try {
 				Object.defineProperties( owner, descriptor );
@@ -2338,7 +2338,7 @@ jQuery.event = {
 			tmp = rtypenamespace.exec( types[t] ) || [];
 			type = origType = tmp[1];
 			namespaces = ( tmp[2] || "" ).split( "." ).sort();
-			
+
 			// There *must* be a type, no attaching namespace-only handlers
 			if ( !type ) {
 				continue;
@@ -6634,7 +6634,7 @@ var
 	// Document location
 	ajaxLocParts,
 	ajaxLocation,
-	
+
 	ajax_nonce = jQuery.now(),
 
 	ajax_rquery = /\?/,

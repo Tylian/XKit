@@ -88,7 +88,7 @@ XBridge = {
 		}
 	},
 	retrieve: function(aUrl) {
-	
+
 		// Based on Userscript Compiler tool.
 
 		var	ioService=Components.classes["@mozilla.org/network/io-service;1"]
@@ -113,7 +113,7 @@ XBridge = {
 		} catch (e) {
 			return str;
 		}
-	
+
 	},
 	storage: {
 		prefs: "",
@@ -176,21 +176,21 @@ XBridge = {
 		if (!evt.originalTarget instanceof HTMLDocument) {
 			return;
 		}
-		
+
 		var view = evt.originalTarget.defaultView;
 		if (!view) {
 			return;
 		}
-		
+
 		var sandbox = new Components.utils.Sandbox(view, { sandboxPrototype: view, wantXrays: true, wantExportHelpers: true });
 		XBridge.sandbox = sandbox;
 		sandbox.unsafeWindow = view.window.wrappedJSObject;
 		sandbox.window = view.window;
 		sandbox.document = sandbox.window.document;
 		sandbox.__proto__ = sandbox.window;
-		
+
 		var http_requester = new XBridge.objects.httpRequester(window, sandbox.unsafeWindow);
-		
+
 		sandbox.framework_version = XBridge.framework_version;
 		sandbox.getBridgeError = XBridge.errors.get;
 		sandbox.bridge_version = XBridge.version;
@@ -201,28 +201,28 @@ XBridge = {
 		sandbox.GM_getValue = XBridge.storage.get;
 		sandbox.GM_deleteValue = XBridge.storage.delete;
 		sandbox.GM_deleteAllValues = XBridge.storage.delete_all;
-		
+
 		sandbox.window.GM_xmlhttpRequest = sandbox.GM_xmlhttpRequest;
-		
+
 		for (var i=0;i<XBridge.to_load.length;i++) {
 			var m_script = XBridge.retrieve('chrome://xkit/content/' + XBridge.to_load[i]);
 			Components.utils.evalInSandbox(m_script, sandbox, "1.8", "resource://xkit/" + XBridge.to_load[i]);
 		}
-		
+
 		var fileref = sandbox.document.createElement("link");
 		fileref.setAttribute("rel", "stylesheet");
 		fileref.setAttribute("type", "text/css");
 		fileref.setAttribute("href", "resource://xkit/resources/xkit.css");
 		sandbox.document.getElementsByTagName("head")[0].appendChild(fileref);
-		
+
 		Components.utils.evalInSandbox("XKit.init();", sandbox);
-		
+
 		return;
-		
+
 		setTimeout(function() {
-		
+
 		try {
-		
+
 			if (typeof sandbox.XKit === "undefined" || typeof sandbox.$ === "undefined") {
 				setTimeout(function() {
 					if (typeof sandbox.XKit === "undefined" || typeof sandbox.$ === "undefined") {
@@ -234,13 +234,13 @@ XBridge = {
 			} else {
 				sandbox.XKit.init();
 			}
-			
+
 		} catch(e) {
 			XBridge.display_error(e);
 		}
-		
+
 		}, 200);
-	
+
 	}
 };
 
@@ -251,39 +251,39 @@ XBridge = {
 XBridge.objects.httpRequester.prototype.request = function(settings) {
 
 	try {
-	
+
 	var request = new this.window.XMLHttpRequest();
 	request.mwindow = this.window;
-	
+
 	var msettings = settings.wrappedJSObject;
-	
+
 	console.log("[XBHTTPREQUEST] Request for " + settings['url'] + " from CS to XBridge");
-	
+
 	if (settings['method'] === "POST") {
 		request.open('POST', settings['url'], true);
 	} else {
 		request.open('GET', settings['url'], true);
 	}
-	
+
 	console.log("[XBHTTPREQUEST] Opened request.");
-	
+
 	if (typeof msettings == "undefined") {
 		msettings = settings;
 	}
-	
-	request.onreadystatechange = function (oEvent) {  
-	  if (request.readyState === 4) {  
-	    if (request.status === 200) {  
+
+	request.onreadystatechange = function (oEvent) {
+	  if (request.readyState === 4) {
+	    if (request.status === 200) {
 	    console.log(msettings);
 	    console.log(msettings.onload);
 		if (typeof msettings.onload != "undefined") {
-				
+
 				console.log("[XBHTTPREQUEST] Completed successfully.");
 			    // Since Firefox is a bitch, we have to create our own
 	    		// fake XMLHttpRequest object.
-	    		
-	    		try { 
-	    		
+
+	    		try {
+
 	    			//var fake_request = request;
 	    			//fake_request.__exposedProps__: { responseText: "r", status: "r" };
 	    			var m_XMLHttpRequest = { real_request: request, responseText : request.responseText, status: 200, __exposedProps__ : { getResponseHeader: "r", responseText: "r", status: "r" } };
@@ -291,7 +291,7 @@ XBridge.objects.httpRequester.prototype.request = function(settings) {
 	      				return this.real_request.getResponseHeader(requested_header);
 	      			};
 	      			msettings['onload'](m_XMLHttpRequest, m_XMLHttpRequest, m_XMLHttpRequest);
-	      			
+
 	      		} catch(e) {
 	      				var m_XMLHttpRequest = { real_request: request, responseText : request.responseText, status: 200, __exposedProps__ : { getResponseHeader: "r", responseText: "r", status: "r" } };
 	      				msettings['onload'](m_XMLHttpRequest, m_XMLHttpRequest, m_XMLHttpRequest);
@@ -300,36 +300,36 @@ XBridge.objects.httpRequester.prototype.request = function(settings) {
 		} else {
 			console.log("[XBHTTPREQUEST] Completed but can't call the function back.");
 		}
-	    } else {  
+	    } else {
 		if (typeof msettings['onerror'] != "undefined") {
-	    		
+
 	    		console.log("[XBHTTPREQUEST] Error.");
-	    		try { 
-	    		
+	    		try {
+
 	    			var m_XMLHttpRequest = { real_request: request, responseText : request.responseText, status: request.status, __exposedProps__ : { getResponseHeader: "r", responseText: "r", status: "r" } };
 	      			m_XMLHttpRequest.getResponseHeader = function(requested_header) {
 	      				return this.real_request.getResponseHeader(requested_header);
 	      			};
 	      			msettings['onerror'].call(m_XMLHttpRequest, m_XMLHttpRequest, m_XMLHttpRequest);
-	      		
+
 	      		} catch(e) {
 	      				XBridge.console.log(" -- XML Request error 12:" + e.message);
 	      		}
 		} else {
 			console.log("[XBHTTPREQUEST] Error but can't call the function back.");
 		}
-	    }  
-	  }  
-	};  
-	
+	    }
+	  }
+	};
+
 	if (typeof settings['headers'] !== "undefined") {
 		for (var obj in settings['headers']) {
 			request.setRequestHeader(obj, settings['headers'][obj]);
 		}
 	}
-	
+
 	console.log("[XBHTTPREQUEST] Sending data.");
-	
+
 	if (settings['method'] === "POST") {
 		if (settings['json'] === true) {
 			request.setRequestHeader('Content-Type', "application/json");
