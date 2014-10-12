@@ -1,5 +1,5 @@
 //* TITLE AccessKit **//
-//* VERSION 1.1 REV B **//
+//* VERSION 1.1 REV D **//
 //* DESCRIPTION Accessibility tools for Tumblr **//
 //* DETAILS Provides accessibility tools for XKit and your dashboard, such as increased font sizes, more contrast on icons and more. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -9,7 +9,7 @@
 XKit.extensions.accesskit = new Object({
 
 	running: false,
-	
+
 	preferences: {
 		"sep-1a": {
 			text: "Text Adjustments",
@@ -38,27 +38,27 @@ XKit.extensions.accesskit = new Object({
 		contrast_icons: {
 			text: "Increase the contrast of dashboard icons and text",
 			default: true,
-			value: true			
+			value: true
 		},
 		contrast_sidebar: {
 			text: "Increase the contrast of sidebar icons and text",
 			default: true,
-			value: true			
+			value: true
 		},
 		contrast_notifications: {
 			text: "Increase the contrast of notifications",
 			default: true,
-			value: true			
+			value: true
 		},
 		increase_font_size: {
 			text: "Increase the size of the text",
 			default: true,
-			value: true			
+			value: true
 		},
 		increase_post_margins: {
 			text: "Increase the space between posts",
 			default: false,
-			value: false			
+			value: false
 		},
 		"sep-3": {
 			text: "XKit User Interface Adjustments",
@@ -100,85 +100,85 @@ XKit.extensions.accesskit = new Object({
 
 	run: function() {
 		this.running = true;
-		
+
 		var m_css = "";
-		
+
 		var m_filters = "";
-		
+
 		if (this.preferences.font.value === "sans-serif") {
-			
+
 			m_css = m_css + " .post.post_full { font-family: \"Palatino Linotype\", \"Book Antiqua\", Palatino, serif; } ";
-			
+
 		}
-		
+
 		if (this.preferences.font.value === "opendyslexic") {
-			
+
 			m_css = m_css + " @font-face { font-family: open-dyslexic; src: url('http://puaga.com/seven/accesskit/OpenDyslexic-Regular.ttf'); }" +
 					" .post.post_full { font-family: open-dyslexic; } ";
-			
+
 		}
-			
-		
+
+
 		if (this.preferences.invert.value === true) {
-			
+
 			m_filters = " invert(100%) ";
 			//m_css = m_css + " html { -webkit-filter: invert(100%); } ";
 		}
-		
+
 		if (this.preferences.grayscale.value === true) {
-			
+
 			m_filters = m_filters + " grayscale(100%) ";
-			
+
 			/*if (this.preferences.invert.value === true) {
 				m_css = m_css + " html { -webkit-filter: invert(100%)  grayscale(100%); } ";
 			} else {
 				m_css = m_css + " html { -webkit-filter: grayscale(100%); } ";
 			}*/
 		}
-		
+
 		if (this.preferences.contrast.value === true) {
-			
+
 			if (this.preferences.invert.value !== true) {
 				m_filters = m_filters + " brightness(0.8) contrast(180%) ";
 			} else {
 				m_filters = m_filters + " contrast(160%) ";
 			}
-			
+
 		}
-		
+
 		if (m_filters !== "") {
-			
+
 			m_css = m_css + " html { -webkit-filter: " + m_filters + "; } ";
-			
+
 		}
-		
+
 		if (this.preferences.make_links_blue.value === true) {
 			m_css = m_css + " .post .post_body a { color: #2449c1 !important; font-weight: bold !important; } ";
 		}
-	
+
 		if (this.preferences.contrast_sidebar.value === true) {
-			
-			m_css = m_css + " .controls_section li a, .right_column .small_links a { color: white; } " + 
+
+			m_css = m_css + " .controls_section li a, .right_column .small_links a { color: white; } " +
 					" .controls_section li { border-top: 1px solid rgba(255,255,255,0.38); }" +
 					" .controls_section li.account_header, .controls_section li.editors_header, .controls_section li.contributors_header, .controls_section li.section_header { color: white; border-bottom: 2px solid rgba(255,255,255,0.43) } " +
-					" .controls_section li a .count { color: white !important; font-weight: bold; } " + 
+					" .controls_section li a .count { color: white !important; font-weight: bold; } " +
 					" .controls_section .open_blog .sub_control.link_arrow, .controls_section li.popover_button_blogs .open_blog_link, .blog_menu .selected_blog #open_blog_link { color: white; } ";
-			
+
 		}
-		
+
 		if (this.preferences.contrast_notifications.value === true) {
-			
+
 			m_css = m_css + " .notification .notification_sentence, .notification .notification_sentence a, .notification blockquote { color: white !important; }";
-			
+
 		}
-		
-	
-		
+
+
+
 		if (this.preferences.contrast_icons.value === true) {
 			m_css = m_css + " #posts .post .post_control.photo_reply .photo_reply_icon_base, .post_full .post_control:after { opacity: 0.5; } " +
 					" .post_full .post_header, .post .post_header a, .post .post_tags a, .post .post_tags .post_tag, .xtimestamp, .post_full .post_control.no_icon, .post_full .post_control.no_icon.show_label, .post_full .post_footer { color: rgb(100,100,100) !important; }" +
 					" .post .post_header a:hover, .post .post_tags a:hover, .post .post_tags .post_tag:hover, .post_full .post_control.no_icon:hover, .post_full .post_control.no_icon.show_label:hover { color: rgb(80,80,80) !important; text-decoration: underline; }" +
-					" .post_full .post_control:hover:after { opacity: 1; } " + 
+					" .post_full .post_control:hover:after { opacity: 1; } " +
 					" .post .post_info .reblog_icon { opacity: 0.55; } " +
 					" .post .post_body, .post .post_body * { color: black ; } " +
 					" .post .post_footer { border-top: 1px solid rgb(150,150,150) !important; } " +
@@ -188,18 +188,18 @@ XKit.extensions.accesskit = new Object({
 					" .post_full.is_note .answerer .name, .post_full.is_note .asker .name, .post_full.is_note .asker, .post_full.is_note .answerer { color: black; }" +
 					" .post.new_post .new_post_label { color: black; } " +
 					" .post_full .post_title { color: black; } " +
-					" .notes .note > *, .notes .note blockquote { color: black; }" + 
+					" .notes .note > *, .notes .note blockquote { color: black; }" +
 					" .notes_outer_container.popover .note blockquote { color: black !important; } " +
 					" .notes_outer_container.popover .note a { text-decoration: underline !important; font-weight: bold !important; color: black !important; } " +
 					" #post_form .popover_post_options .option { font-weight: bold; } " +
 					" #post_form .popover_post_options .option:first-child { border-top: 0; }" +
 					" #xkit-interface-buttons .xkit-interface-control-button { opacity: 0.56; } " +
 					" #xkit-interface-buttons .xkit-interface-control-button:hover { opacity: 1; } " +
-					" #tumblelog_select > * { color: black !important; } " + 
+					" #tumblelog_select > * { color: black !important; } " +
 					" #tumblelog_select .txt:not(.edit):after { border-top-color: black; } " +
 					" #new_post .cog { opacity: 0.68; } " +
 					" #new_post .cog:hover { opacity: 1; } " +
-					" button.chrome { background-color: #667079; border-color: #667079 !important; color: white !important; } " +
+					" button.chrome { background-color: #667079; border-color: #667079 !important; color: white; } " +
 					" button.chrome:hover { text-decoration: underline; } " +
 					" button.chrome:active { background-color: #343d45 !important; border-color: #343d45 !important; } " +
 					" .chrome .button_label { color: white !important; } " +
@@ -207,50 +207,50 @@ XKit.extensions.accesskit = new Object({
 					" .chrome.blue:active { background-color: #0c3b57 !important; } " +
 					" .split .chrome.blue[disabled], .split .chrome.blue[disabled]:active, .split .chrome.blue.ui_disabled, .split .chrome.blue.ui_disabled:active { color: rgba(255,255,255,0.40) !important; } " +
 					" button.chrome.flat.close { color: white !important; background-color: rgb(130,130,130) !important; border: 0px !important; } " +
-					" .post .link_button { background-color: #268154; border-color: #268154; } " + 
+					" .post .link_button { background-color: #268154; border-color: #268154; } " +
 					" .bluthSkin .mceButton { opacity: 1 !important; } " +
 					" .bluthSkin .mceButton:hover { background-color: #c3eaf8; border-radius: 5px; } " +
 					" .bluthSkin .mceButtonDisabled:hover .mceIcon, .bluthSkin .mceButtonDisabled:hover {background-color: transparent !important; } " +
-					" #post_content .main_content > * { border-color: black; } " + 
+					" #post_content .main_content > * { border-color: black; } " +
 					" .bluthSkin table.mceLayout tr.mceFirst td { border-color: black !important; }" +
 					" .bluthSkin .mceIframeContainer { border-top: 1px dashed black; } " +
-					" .main_content { border-color: black; }" + 
+					" .main_content { border-color: black; }" +
 					" .advanced_post_options label { color: rgb(100,100,100); } ";
-					
+
 		}
-		
+
 		if (this.preferences.increase_font_size.value === true) {
-			
-			m_css = m_css + " .post_full .post_notes_label, .post_container { font-size: 15px !important; } " + 
-					" .post_body * { font-size: 15px !important; } " +  
+
+			m_css = m_css + " .post_full .post_notes_label, .post_container { font-size: 15px !important; } " +
+					" .post_body * { font-size: 15px !important; } " +
 					" .xtimestamp { font-size: 13px; } " +
 					" .post_full .post_header { font-size: 14px; } " +
-					" .notification .notification_sentence > * { font-size: 14px; } " + 
+					" .notification .notification_sentence > * { font-size: 14px; } " +
 					" .notes .note > *, .notes .note blockquote { font-size: 14px; line-height: 22px; } " +
 					" .notes_outer_container.popover .note blockquote { font-size: 14px !important; } " +
-					" .post .post_tags a, .post .post_tags .post_tag { font-size: 14px !important; } " + 
+					" .post .post_tags a, .post .post_tags .post_tag { font-size: 14px !important; } " +
 					" .xkit-notification {font-size: 14px; } ";
-			
+
 		}
-		
+
 		if (this.preferences.increase_post_margins.value === true) {
-		
+
 			m_css = m_css + " #posts.posts>.post_container { margin-bottom: 40px; } ";
-							
-			
+
+
 		}
-		
+
 		if (this.preferences.xkit_disable_counter.value === true) {
-		
+
 			XKit.extensions.accesskit.disable_xkit_counter();
-		
+
 			setTimeout(function() { XKit.extensions.accesskit.disable_xkit_counter(); }, 1500);
-	
+
 		}
-		
+
 		if (this.preferences.xkit_contrast_icons.value === true) {
-		
-			m_css = m_css + " .xkit-extension-setting, .xkit-extension-setting-separator { color: black !important; border-bottom: 1px solid rgb(100,100,100); } " + 
+
+			m_css = m_css + " .xkit-extension-setting, .xkit-extension-setting-separator { color: black !important; border-bottom: 1px solid rgb(100,100,100); } " +
 					" .xkit-extension-setting-separator { background: rgb(230,230,230); }" +
 					" #xkit-extensions-panel-top { border-bottom: 1px solid black; } " +
 					" #xkit-extensions-panel-right, #xkit-extensions-panel-left, #xkit-extensions-panel-left-search { border-color: black; } " +
@@ -286,16 +286,16 @@ XKit.extensions.accesskit = new Object({
 					" #xkit-window-shadow { background-color: rgba(0,0,0,0.77); } " +
 					" .xkit-window-buttons { border-top: 1px solid black; } ";
 		}
-		
+
 		XKit.tools.add_css(m_css, "accesskit");
-		
+
 	},
-	
+
 	disable_xkit_counter: function() {
-		
+
 		XKit.tools.remove_css("xkit_tweaks_slim_sidebar");
 		XKit.tools.remove_css("xkit_tweaks_hide_section_headers");
-		
+
 	},
 
 	destroy: function() {

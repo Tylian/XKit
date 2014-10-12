@@ -19,7 +19,7 @@
 
 .xkit-profiler-nickname {
 	font-weight: normal;
-	margin-left: 5px;	
+	margin-left: 5px;
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
@@ -31,15 +31,15 @@
 	padding: 0px 10px;
 	height: 25px;
 	line-height: 25px;
-	position: relative;	
+	position: relative;
 }
 
 .xkit-profiler-line:last-child {
-	border-bottom: 0;	
+	border-bottom: 0;
 }
 
 .xkit-profiler-line.separator {
-	background: rgb(190,190,190);	
+	background: rgb(190,190,190);
 	font-weight: bold;
 }
 
@@ -57,5 +57,5 @@
 	max-width: 240px;
 	white-space: nowrap;
 	overflow: hidden;
-	text-overflow: ellipsis;	
+	text-overflow: ellipsis;
 }

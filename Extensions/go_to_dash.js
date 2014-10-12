@@ -10,7 +10,7 @@ XKit.extensions.go_to_dash = new Object({
 
 	running: false,
 
-	run: function() {	
+	run: function() {
 
 		if (XKit.page.blog_frame === false) {
 			return;
@@ -21,10 +21,10 @@ XKit.extensions.go_to_dash = new Object({
 		var go_ahead = false;
 		/*if ($(".btn.edit").length > 0) {
 			if ($(".btn.edit").hasClass("hidden") === false) {
-				go_ahead = true;	
+				go_ahead = true;
 			}
 		}*/
-		
+
 		if ($(".btn.unfollow").hasClass("hidden") === false ||go_ahead === true) {
 
 			if ($("#xkit_gotodash").length > 0) { return; }
@@ -41,11 +41,11 @@ XKit.extensions.go_to_dash = new Object({
 			var go_back_icon = '<a href="/dashboard/2/' + post_id + '" class="btn" target="_top" id="xkit_gotodash">View</a>';
 
 			$(".dashboard").html("");
-			
+
 			if ($(".controls").find(".unfollow").length > 0) {
 				$(".controls").find(".unfollow").before(go_back_icon);
 			} else {
-				$(".controls").find(".delete").before(go_back_icon);		
+				$(".controls").find(".delete").before(go_back_icon);
 			}
 
 		}

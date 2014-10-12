@@ -1,5 +1,5 @@
 //* TITLE J/K Across Pages **//
-//* VERSION 1.1.1 **//
+//* VERSION 1.1.2 **//
 //* DESCRIPTION Allow Tumblr's J/K navigation to move between pages **//
 //* DEVELOPER beiju **//
 //* FRAME false **//
@@ -36,12 +36,12 @@ XKit.extensions.jk_across_pages = new Object({
 		"sep0": {
 			type: 'separator',
 			text: "Other"
-		}, 
+		},
 		"show_notifications": {
 			text: "Show notifications when moving between pages",
 			'default': true,
 			value: true
-		}, 
+		},
 		"view_entire_posts": {
 			text: "Scroll through the entire post, even if it's longer than the screen",
 			'default': false,
@@ -87,7 +87,7 @@ XKit.extensions.jk_across_pages = new Object({
 
 				that.$posts = jQuery('.post_container').not('#new_post_buttons');
 
-				if (that.preferences.view_entire_posts.value == true && evt.which === 74 /* j */ && 
+				if (that.preferences.view_entire_posts.value == true && evt.which === 74 /* j */ &&
 					that.postAtY(that.scrollBufferJ+1)[0] == that.postAtY(window.innerHeight - that.scrollBufferJ)[0]){
 
 					evt.stopPropagation(); // Try to stop Tumblr's event listener
@@ -101,8 +101,8 @@ XKit.extensions.jk_across_pages = new Object({
 					return; // Don't try to go to the next page
 				}
 
-				/* console.log('key code', evt.which, 
-					'bottom scroll', that.$posts.last().offset().top - window.scrollY, 
+				/* console.log('key code', evt.which,
+					'bottom scroll', that.$posts.last().offset().top - window.scrollY,
 					'(threshold', that.scrollBufferJ, ')',
 					'top scroll', that.$posts.first().offset().top + that.$posts.first().height() - window.scrollY,
 					'(threshold', that.scrollBufferK, ')'); */

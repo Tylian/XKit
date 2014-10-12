@@ -1,26 +1,26 @@
-.xglow { 
-	animation:glow 1.75s; 
+.xglow {
+	animation:glow 1.75s;
 	-moz-animation:glow 1.75s;
 	-webkit-animation:glow 1.75s;
-	animation-iteration-count:infinite; 
-	-webkit-animation-iteration-count:infinite; 
+	animation-iteration-count:infinite;
+	-webkit-animation-iteration-count:infinite;
 	-moz-animation-iteration-count:infinite;
 }
 
-@keyframes glow { 
-	0% {background:rgba(0,0,0,0.70);} 
-	50% {background:rgba(0,0,0,0.38);} 
-	100% {background:rgba(0,0,0,0.70);} 
-}  
+@keyframes glow {
+	0% {background:rgba(0,0,0,0.70);}
+	50% {background:rgba(0,0,0,0.38);}
+	100% {background:rgba(0,0,0,0.70);}
+}
 
-@-moz-keyframes glow { 
-	0% {background:rgba(0,0,0,0.70);} 
-	50% {background:rgba(0,0,0,0.38);} 
-	100% {background:rgba(0,0,0,0.70);} 
-}  
+@-moz-keyframes glow {
+	0% {background:rgba(0,0,0,0.70);}
+	50% {background:rgba(0,0,0,0.38);}
+	100% {background:rgba(0,0,0,0.70);}
+}
 
-@-webkit-keyframes glow { 
-	0% {background:rgba(0,0,0,0.70);} 
-	50% {background:rgba(0,0,0,0.38);} 
-	100% {background:rgba(0,0,0,0.70);} 
-}  
+@-webkit-keyframes glow {
+	0% {background:rgba(0,0,0,0.70);}
+	50% {background:rgba(0,0,0,0.38);}
+	100% {background:rgba(0,0,0,0.70);}
+}

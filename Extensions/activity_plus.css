@@ -4,7 +4,7 @@
 }
 
 .xkit-activity-plus-condensed-item-parent.xkit-activity-plus-yellow-mode-on {
-	background: #fffcd5;	
+	background: #fffcd5;
 }
 
 .xkit-activity-plus-condensed-item-opened.xkit-activity-plus-yellow-mode-on {
@@ -28,21 +28,21 @@
 }
 
 .xkit-activity-plus-condensed-opener:hover {
-	background: rgb(250,250,250);	
+	background: rgb(250,250,250);
 }
 
 .xkit-activity-plus-timestamp {
 	font-size: 11px;
 	text-align: left;
-	padding: 0px 8px 7px 8px;	
+	padding: 0px 8px 7px 8px;
 }
 
 #xkit-activity-plus-note-filter {
 	position: absolute;
-	width: 156px;	
+	width: 183px;
 	height: 20px;
 	margin-top: -12px;
-	top: 50%; 
+	top: 50%;
 	right: 5px;
 	border: 1px solid rgb(200,200,200);
 	border-left: 0;
@@ -53,12 +53,12 @@
 
 	right: 50%;
 	margin-right: -78px;
-	
-	
+
+
 }
 
 #xkit-activity-plus-note-filter div {
-	display: inline-block;	
+	display: inline-block;
 	float: left;
 	width: 25px;
 	height: 20px;
@@ -76,10 +76,10 @@
 #xkit-activity-plus-note-filter div.selected:hover,
 #xkit-activity-plus-note-filter div.selected {
 
-	background-color: rgb(233,233,233);	
+	background-color: rgb(233,233,233);
 	box-shadow: inset 0px 1px 2px rgba(0,0,0,0.11);
 	cursor: default;
-	
+
 }
 
 #xkit-activity-plus-note-filter div.xkit-note-filter-reblog {
@@ -94,6 +94,10 @@
 	background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAARCAYAAAACCvahAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBNYWNpbnRvc2giIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6RjE5QjcyNTJFOTNFMTFFMkIxRURGNTc4RDA0Q0ZBQkIiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6RjE5QjcyNTNFOTNFMTFFMkIxRURGNTc4RDA0Q0ZBQkIiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDpGMTlCNzI1MEU5M0UxMUUyQjFFREY1NzhEMDRDRkFCQiIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDpGMTlCNzI1MUU5M0UxMUUyQjFFREY1NzhEMDRDRkFCQiIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/Pv7E/pEAAAC3SURBVHjaYvz//z8DuYCJgQJAkWYWGOOUj5s8kJoAxAFA/AGIF5ht2VUIFK8HsguAWACIN4DYQPGHID2MID8DFfAD2ReAWAHN8AdYxEAGKwAN+AhzdgIWRQw4xASg6uF+FiDRuwLImh+QqPkB3M/QANsPpByI0HgA6F9H9KgKgAYaPnABqg41nkGhB7X5Ah6NDlB1mIkEjwEYGrGmMCwGYNWIEmDoAJriDkA1PsSmhnFo5iqAAAMA/aBHH8UFbIkAAAAASUVORK5CYII=');
 }
 
+#xkit-activity-plus-note-filter div.xkit-note-filter-mention {
+	background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAARCAYAAAACCvahAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBNYWNpbnRvc2giIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6QkEzMEQ2RUZCOUJDMTFFM0EzQkZDNDZFMTUyNTJBQjYiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6QkEzMEQ2RjBCOUJDMTFFM0EzQkZDNDZFMTUyNTJBQjYiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDpCQTMwRDZFREI5QkMxMUUzQTNCRkM0NkUxNTI1MkFCNiIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDpCQTMwRDZFRUI5QkMxMUUzQTNCRkM0NkUxNTI1MkFCNiIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PoPYeVUAAADwSURBVHjaxFPRDYIwEC3EBXAEjBPoCDACK8AIMIKOACPQEewIMoGxI8gI9Zq8Jo/CF354yQu967177fVInHNqr6XqBzuExev4jvcugkwwCybeOH9OSzJZJbiB5JEj3gn0pjKsBbkUWIoXKOgL3bfIPqEWXKFY49gafiN4wLdxw2qq+oSvQBihqnGylXKF6oFUQtGCrOn+m08VjjtgHSw0Kud4GhEzJNjoOhP2Cu44kw2ObtBZn9jjq7DuWJnvPCChxJO1aOBMT5TR4CzIBhihYCieo7Cl+GpIGij28C2pDTwg3pLwV+2Z7eRvv+RXgAEAYG1IR6lbjGYAAAAASUVORK5CYII=);
+}
+
 #xkit-activity-plus-note-filter div.xkit-note-filter-reply {
 	background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAARCAYAAAACCvahAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBNYWNpbnRvc2giIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6RjE5QjcyNTZFOTNFMTFFMkIxRURGNTc4RDA0Q0ZBQkIiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6RjE5QjcyNTdFOTNFMTFFMkIxRURGNTc4RDA0Q0ZBQkIiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDpGMTlCNzI1NEU5M0UxMUUyQjFFREY1NzhEMDRDRkFCQiIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDpGMTlCNzI1NUU5M0UxMUUyQjFFREY1NzhEMDRDRkFCQiIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PhI4mUkAAADUSURBVHjaYvz//z8DuYCJgQJAkWYWEGHadRtZzBKIY4HYAIh5gPgjEF8A4rlQGgxOl6lCNEOBEBAvAmJvLJbYAHEOEK8E4hQg/gK3GQjYgHg7EJsRcGk4EIsCsTOyn/2I0AgDTkDsiqzZgMSwMkDW/JpEza+RNS8G4hdEagSpW4+s+R0QR0OjBR8AqQuCqUNOJPuAWBvqiu9YNPUBsRIQH8eVwp4CcRxUEQhMBGJDIBYG4mJ0l7HgcF4mEM8C4gKCyRMNMAPxGiC+TCjkGAcsSwIEGABy6Ci4W9JE0wAAAABJRU5ErkJggg==');
 }
@@ -103,9 +107,9 @@
 }
 
 #xkit-activity-plus-note-filter div:first-child {
-	border-radius: 5px 0px 0px 5px;	
+	border-radius: 5px 0px 0px 5px;
 }
 
 #xkit-activity-plus-note-filter div:last-child {
-	border-radius: 0px 5px 5px 0px;	
+	border-radius: 0px 5px 5px 0px;
 }

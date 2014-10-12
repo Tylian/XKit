@@ -1,5 +1,5 @@
 //* TITLE XKit Main **//
-//* VERSION 1.0 REV D **//
+//* VERSION 1.3 REV B **//
 //* DESCRIPTION Boots XKit up **//
 //* DEVELOPER STUDIOXENIX **//
 (function(){
@@ -14,6 +14,15 @@ XKit.extensions.xkit_main = new Object({
 
 	run: function() {
 
+		if (typeof document.location.href !== "undefined") {
+
+			if (document.location.href.indexOf("www.tumblr.com/login") !== -1 || document.location.href.indexOf("www.tumblr.com/settings") !== -1) {
+				console.log("Refusing to run XKit, login or settings page!");
+				return;
+			}
+
+		}
+
 		if (XKit.extensions.xkit_main.running === true) {
 			return;
 		}
@@ -22,21 +31,22 @@ XKit.extensions.xkit_main = new Object({
 		XKit.console.add("Welcome from XKit Main " + XKit.installed.version('xkit_main'));
 
 		if (XKit.frame_mode === true) {
-			if (document.location.href.indexOf("http://www.tumblr.com/dashboard/iframe?") === -1 
-				&& document.location.href.indexOf("http://www.tumblr.com/ask_form") === -1
-				&& document.location.href.indexOf("http://www.tumblr.com/send") === -1) {
+			if (document.location.href.indexOf("://www.tumblr.com/dashboard/iframe?") === -1
+				&& document.location.href.indexOf("://www.tumblr.com/ask_form") === -1
+				&& document.location.href.indexOf("://www.tumblr.com/indash_blog/peepr/") === -1
+				&& document.location.href.indexOf("://www.tumblr.com/send") === -1) {
 				XKit.console.add("Wrong page, quitting.");
 				return;
 			}
 			XKit.console.add("XKit Frame Work Mode");
 		}
-		
+
 
 
 		// Run XKit Patches first.
 		if (XKit.flags.do_not_load_xkit_patches !== true) {
 
-			var m_result = XKit.extensions.xkit_main.run_extension("xkit_patches", true);
+			var m_result = XKit.extensions.xkit_main.run_extension("xkit_patches", true, true);
 			if (m_result === false) {
 				XKit.console.add("Can not run xkit_patches! (version " + XKit.installed.version('xkit_patches') +")");
 			} else {
@@ -48,11 +58,33 @@ XKit.extensions.xkit_main = new Object({
 			XKit.console.add("Skipping xkit_patches (flag on)");
 
 		}
-			
+
 		// Get currently running extensions.
 		XKit.extensions.xkit_main.to_run = XKit.installed.list();
 
-		XKit.extensions.xkit_main.run_next_extension();
+		if (XKit.extensions.xkit_main.should_slow_down() === true) {
+			XKit.console.add("XKit Main: Slow-boot mode");
+			$(document).ready(function() {
+				setTimeout(function() { XKit.extensions.xkit_main.run_next_extension(); }, 300);
+			});
+		} else {
+			XKit.console.add("XKit Main: Fast-boot mode");
+			setTimeout(function() { XKit.extensions.xkit_main.run_next_extension(); }, 1);
+		}
+
+	},
+
+	should_slow_down: function() {
+
+		if (document.location.href.indexOf('://www.tumblr.com/new/') !== -1) { return true; }
+
+		if (document.location.href.substring(0, 27) === "://www.tumblr.com/blog/") {
+			if (document.location.href.indexOf('/new/') !== -1) {
+				return true;
+			}
+		}
+
+		return false;
 
 	},
 
@@ -64,10 +96,14 @@ XKit.extensions.xkit_main = new Object({
 			XKit.console.add("Enabled extensions: " + XKit.extensions.xkit_main.enabled_extensions);
 			XKit.console.add("Disabled extensions: " + XKit.extensions.xkit_main.disabled_extensions);
 			XKit.post_listener.check();
+			setTimeout(function() {
+				var diff = new Date().getTime() - start;
+				XKit.console.add("Booted XKit up in " + diff + " milliseconds.");
+			}, 1);
 		}
 	},
 
-	run_extension: function(extension_id, force) {
+	run_extension: function(extension_id, force, dont_run_next) {
 
 		// We don't want an infinite loop now do we?
 		if (extension_id === "xkit_main") { XKit.extensions.xkit_main.run_next_extension(); return; }
@@ -79,7 +115,7 @@ XKit.extensions.xkit_main = new Object({
 		if (extension_id === "xkit_patches" && force !== true) { XKit.extensions.xkit_main.run_next_extension(); return; }
 
 		var xkit_main = XKit.installed.get(extension_id);
-		
+
 		// Check if in Frame Mode.
 		if (XKit.frame_mode === true && extension_id !== "xkit_patches") {
 			// This is ugly: I don't want to eval script.
@@ -88,7 +124,7 @@ XKit.extensions.xkit_main = new Object({
 			try {
 				frame_script = XKit.extensions[extension_id].frame_run;
 			} catch(e) {
-				XKit.console.add("No frame_run on " + extension_id);	
+				XKit.console.add("No frame_run on " + extension_id);
 			}
 			if (frame_script !== "" && typeof frame_script !== "undefined") {
 				// This is a hybrid extension!
@@ -104,7 +140,10 @@ XKit.extensions.xkit_main = new Object({
 						XKit.extensions.xkit_main.run_next_extension(); return;
 					}
 				}
-				XKit.extensions.xkit_main.run_next_extension(); return;
+				if (!dont_run_next) {
+					XKit.extensions.xkit_main.run_next_extension();
+				}
+				return;
 			}
 			if (xkit_main.frame !== true) {
 				// not a frame extension, quit.
@@ -113,7 +152,10 @@ XKit.extensions.xkit_main = new Object({
 				} else {
 					XKit.extensions.xkit_main.disabled_extensions = XKit.extensions.xkit_main.disabled_extensions + ", " + extension_id + "(in frame)";
 				}
-				XKit.extensions.xkit_main.run_next_extension(); return;
+				if (!dont_run_next) {
+					XKit.extensions.xkit_main.run_next_extension();
+				}
+				return;
 			}
 		} else {
 			if (xkit_main.frame === true) {
@@ -128,11 +170,14 @@ XKit.extensions.xkit_main = new Object({
 				} else {
 					XKit.extensions.xkit_main.disabled_extensions = XKit.extensions.xkit_main.disabled_extensions + ", " + extension_id + "(not in frame)";
 				}
-				XKit.extensions.xkit_main.run_next_extension(); return;
+				if (!dont_run_next) {
+					XKit.extensions.xkit_main.run_next_extension();
+				}
+				return;
 			}
 		}
 
-		try { 
+		try {
 			eval(xkit_main.script);
 			if (XKit.installed.enabled(extension_id) === true) {
 				if (XKit.extensions.xkit_main.enabled_extensions === "") {
@@ -142,7 +187,7 @@ XKit.extensions.xkit_main = new Object({
 				}
 				try {
 					if (typeof XKit.extensions[extension_id].preferences !== "undefined") {
-						
+
 						XKit.extensions.xkit_main.load_extension_preferences(extension_id);
 
 					}
@@ -151,14 +196,20 @@ XKit.extensions.xkit_main = new Object({
 					XKit.console.add("Can not run " + extension_id + ": " + e.message);
 					XKit.extensions.xkit_main.run_next_extension(); return;
 				}
-				XKit.extensions.xkit_main.run_next_extension(); return;
+				if (!dont_run_next) {
+					XKit.extensions.xkit_main.run_next_extension();
+				}
+				return;
 			} else {
 				if (XKit.extensions.xkit_main.disabled_extensions === "") {
 					XKit.extensions.xkit_main.disabled_extensions = extension_id;
 				} else {
 					XKit.extensions.xkit_main.disabled_extensions = XKit.extensions.xkit_main.disabled_extensions + ", " + extension_id;
 				}
-				XKit.extensions.xkit_main.run_next_extension(); return;
+				if (!dont_run_next) {
+					XKit.extensions.xkit_main.run_next_extension();
+				}
+				return;
 			}
 		} catch(e) {
 			if (XKit.extensions.xkit_main.disabled_extensions === "") {
@@ -167,7 +218,10 @@ XKit.extensions.xkit_main = new Object({
 				XKit.extensions.xkit_main.disabled_extensions = XKit.extensions.xkit_main.disabled_extensions + ", " + extension_id + "(error)";
 			}
 			show_error_reset("Can't run " + extension_id + ":" + e.message);
-			XKit.extensions.xkit_main.run_next_extension(); return;
+			if (!dont_run_next) {
+				XKit.extensions.xkit_main.run_next_extension();
+			}
+			return;
 		}
 
 	},
@@ -201,13 +255,24 @@ XKit.extensions.xkit_main = new Object({
 					}
 				}
 			}
-			
+
 			if (XKit.extensions[extension_id].preferences[pref].type === "combo") {
 				XKit.extensions[extension_id].preferences[pref].value = XKit.storage.get(extension_id, "extension__setting__" + pref, "");
 				if (typeof XKit.extensions[extension_id].preferences[pref].value === "undefined" || XKit.extensions[extension_id].preferences[pref].value === "") {
 					if (typeof XKit.extensions[extension_id].preferences[pref].default !== "undefined") {
 						XKit.extensions[extension_id].preferences[pref].value = XKit.extensions[extension_id].preferences[pref].default;
 					}
+				}
+			}
+
+			if (XKit.extensions[extension_id].preferences[pref].type === "blog") {
+				XKit.extensions[extension_id].preferences[pref].value = XKit.storage.get(extension_id, "extension__setting__" + pref, "");
+				if (typeof XKit.extensions[extension_id].preferences[pref].value === "undefined" || XKit.extensions[extension_id].preferences[pref].value === "") {
+					if (typeof XKit.extensions[extension_id].preferences[pref].default !== "undefined") {
+						XKit.extensions[extension_id].preferences[pref].value = XKit.extensions[extension_id].preferences[pref].default;
+					}
+				} else {
+					XKit.extensions[extension_id].preferences[pref].value = XKit.extensions[extension_id].preferences[pref].value.substring(1, XKit.extensions[extension_id].preferences[pref].value.length - 1);
 				}
 			}
 
@@ -219,6 +284,6 @@ XKit.extensions.xkit_main = new Object({
 	destroy: function() {
 		this.running = false;
 	}
-	
+
 });
 }());

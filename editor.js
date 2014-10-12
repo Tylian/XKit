@@ -2,9 +2,9 @@
 
 	Extension Editor for XKit 7
 	Version 1.0
-	
+
 	(c) 2011 - 2013 STUDIOXENIX
-	
+
 */
 
 (function($) {
@@ -64,7 +64,7 @@ XKit.extensions.xkit_editor = new Object({
 		document.title = "XKit Extension Editor";
 		extension_editor_run();
 	}
-	
+
 });
 }());
 
@@ -77,7 +77,7 @@ function extension_editor_run() {
 						"<div id=\"xkit-editor-save\" class=\"xkit-button disabled block\">Save</div>" +
 						"<div id=\"xkit-editor-delete\" class=\"xkit-button disabled block\">Delete</div>" +
 						"<div id=\"xkit-editor-update\" class=\"xkit-button disabled block\" style=\"display: none !important;\">Update from XKit Servers</div>" +
-					"</div>" + 
+					"</div>" +
 					"<div id=\"xkit-editor-area\">" +
 						"<div id=\"xkit-editor-tabs\">" +
 							"<div id=\"xkit-editor-switch-to-script\" class=\"selected\">Script</div>" +
@@ -99,7 +99,7 @@ function extension_editor_run() {
 	$(window).resize(function() {
 		extension_editor_resize();
 	});
-	
+
 	$("#xkit-editor-switch-to-script").click(function() {
 		$("#xkit-editor-tabs > div").not(this).removeClass("selected");
 		$(this).addClass("selected");
@@ -108,7 +108,7 @@ function extension_editor_run() {
 		$("#xkit-editor-textarea-css").css("display","none");
 		$("#xkit-editor-textarea-icon").css("display","none");
 	});
-	
+
 	$("#xkit-editor-switch-to-object").click(function() {
 		$("#xkit-editor-tabs > div").not(this).removeClass("selected");
 		$(this).addClass("selected");
@@ -117,7 +117,7 @@ function extension_editor_run() {
 		$("#xkit-editor-textarea-css").css("display","none");
 		$("#xkit-editor-textarea-icon").css("display","none");
 	});
-	
+
 	$("#xkit-editor-switch-to-icon").click(function() {
 		$("#xkit-editor-tabs > div").not(this).removeClass("selected");
 		$(this).addClass("selected");
@@ -126,7 +126,7 @@ function extension_editor_run() {
 		$("#xkit-editor-textarea-css").css("display","none");
 		$("#xkit-editor-textarea-icon").css("display","block");
 	});
-	
+
 	$("#xkit-editor-switch-to-css").click(function() {
 		$("#xkit-editor-tabs > div").not(this).removeClass("selected");
 		$(this).addClass("selected");
@@ -135,26 +135,26 @@ function extension_editor_run() {
 		$("#xkit-editor-textarea-css").css("display","block");
 		$("#xkit-editor-textarea-icon").css("display","none");
 	});
-	
+
 	$("#xkit-editor-switch-to-script").trigger('click');
-	
+
 	$("#xkit-editor-new").click(function() {
-		
+
 		XKit.window.show("Create extension","<input type=\"text\" id=\"xkit-editor-filename\" placeholder=\"Filename (eg: my_extension)\"><br/>No spaces or special characters.","question","<div id=\"xkit-editor-create-extension\" class=\"xkit-button default\">OK</div><div id=\"xkit-close-message\" class=\"xkit-button\">Cancel</div>");
-	
+
 		$("#xkit-editor-create-extension").click(function() {
-		
+
 			var new_filename = $("#xkit-editor-filename").val();
 			if (new_filename === "" || new_filename.indexOf(" ") !== -1) {
 				XKit.window.show("Create extension failed","Invalid or blank filename","error","<div id=\"xkit-close-message\" class=\"xkit-button\">OK</div>");
 				return;
 			}
-			
+
 			if (XKit.installed.check(new_filename) === true) {
 				XKit.window.show("Create extension failed","Filename already exists.","error","<div id=\"xkit-close-message\" class=\"xkit-button\">OK</div>");
 				return;
 			}
-			
+
 			var default_script = 	"//* TITLE " + new_filename + " **//\n" +
 									"//* VERSION 1.0 REV A **//\n" +
 									"//* DESCRIPTION  **//\n" +
@@ -174,7 +174,7 @@ function extension_editor_run() {
 									"\t}\n" +
 									"\n" +
 									"});";
-			
+
 			var m_object = new Object();
 			m_object.id = new_filename;
 			m_object.title = "";
@@ -198,52 +198,52 @@ function extension_editor_run() {
 				// Something awful has happened.
 				XKit.window.show("Create extension failed","Unable to store data.","error","<div id=\"xkit-close-message\" class=\"xkit-button\">OK</div>");
 			}
-		
+
 		});
-	
+
 	});
-	
+
 	$("#xkit-editor-open").click(function() {
-	
+
 		var m_exts_list = "<div class=\"xkit-file-selector\">";
-		
+
 		var extensions = XKit.installed.list();
 		for (i=0;i<extensions.length;i++) {
 			m_exts_list = m_exts_list + "<div class=\"xkit-button block xkit-editor-open-file\" data-filename=\"" + extensions[i] + "\">" + extensions[i] + "</div>";
 		}
-		
+
 		m_exts_list = m_exts_list + "</div>";
-	
+
 		XKit.window.show("Open Extension...",m_exts_list,"question","<div id=\"xkit-close-message\" class=\"xkit-button\">Cancel</div>");
-	
+
 		$(".xkit-editor-open-file").click(function() {
 			extension_editor_load_extension($(this).attr('data-filename'));
 			XKit.window.close();
 		});
-	
+
 	});
-	
+
 	$("#xkit-editor-save").click(function() {
 		if ($(this).hasClass("disabled") === true) { return; }
 		if (XKit.extensions.xkit_editor.filename === "") { return; }
-		
+
 		var m_object = XKit.installed.get(XKit.extensions.xkit_editor.filename);
 		extension_editor_update_object(m_object);
-	
+
 	});
-	
+
 	$("#xkit-editor-delete").click(function() {
 		if ($(this).hasClass("disabled") === true) { return; }
 		if (XKit.extensions.xkit_editor.filename === "") { return; }
-		
+
 		XKit.window.show("Delete extension?", "Really to delete the extension '" + XKit.extensions.xkit_editor.filename + "'?<br/>You can not undo this action.","question","<div id=\"xkit-editor-delete-extension\" class=\"xkit-button default\">Delete</div><div id=\"xkit-close-message\" class=\"xkit-button\">Cancel</div>");
-		
+
 		$("#xkit-editor-delete-extension").click(function() {
 			XKit.installed.remove(XKit.extensions.xkit_editor.filename);
 			extension_editor_close_file();
 			XKit.window.close();
 		});
-	
+
 	});
 
 }
@@ -257,16 +257,16 @@ function extension_editor_load_extension(extension_id) {
 	$("#xkit-editor-textarea-css").val(m_extension.css);
 	$("#xkit-editor-textarea-object").val(JSON.stringify(m_extension));
 	$("#xkit-editor-switch-to-script").trigger('click');
-	
+
 }
 
 function extension_editor_update_object(m_object) {
 
 	// Check for title, description, developer, version etc. data
 	// here and update the object if neccessary.
-	
+
 	m_object.script = $("#xkit-editor-textarea").val();
-	
+
 	var version = extension_editor_legacy_get_attribute(m_object.script, "version");
 	if (version === "") {
 		XKit.window.show("Can't save file","Required VERSION attribute not found.<br/>Consult XKit Developer Documentation.","error","<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
@@ -274,30 +274,30 @@ function extension_editor_update_object(m_object) {
 	} else {
 		m_object.version = version;
 	}
-	
+
 	m_object.title = extension_editor_legacy_get_attribute(m_object.script, "title");
 	m_object.description = extension_editor_legacy_get_attribute(m_object.script, "description");
 	m_object.developer = extension_editor_legacy_get_attribute(m_object.script, "developer");
 	if (extension_editor_legacy_get_attribute(m_object.script, "frame").toLowerCase() === "true") {
 		m_object.frame = true;
 	} else {
-		m_object.frame = false;	
+		m_object.frame = false;
 	}
 	if (extension_editor_legacy_get_attribute(m_object.script, "beta").toLowerCase() === "true") {
 		m_object.beta = true;
 	} else {
-		m_object.beta = false;	
+		m_object.beta = false;
 	}
 	m_object.details = extension_editor_legacy_get_attribute(m_object.script, "details");
-	
+
 	m_object.icon = $("#xkit-editor-textarea-icon").val();
 	m_object.css = $("#xkit-editor-textarea-css").val();
-	
+
 	m_object.errors = false;
 
 	// Update this area too.
 	$("#xkit-editor-textarea-object").val(JSON.stringify(m_object));
-	
+
 	XKit.installed.update(XKit.extensions.xkit_editor.filename, m_object);
 	XKit.notifications.add("Extension " + XKit.extensions.xkit_editor.filename + " saved successfully.");
 
@@ -306,7 +306,7 @@ function extension_editor_update_object(m_object) {
 function extension_editor_legacy_get_attribute(text, info_needed) {
 
 	try {
-	
+
 		var tempdata = text;
 		info_needed = info_needed.toUpperCase();
 		var inf_string = "/* " + info_needed + " ";
@@ -318,11 +318,11 @@ function extension_editor_legacy_get_attribute(text, info_needed) {
 		var str_end = tempdata.indexOf("**/", str_start);
 		if (str_end === -1) { return ""; }
 		return tempdata.substring(str_start + (inf_string.length), str_end - 1);
-		
+
 	} catch(e) {
-	
+
 		return "";
-	
+
 	}
 
 }
@@ -330,7 +330,7 @@ function extension_editor_legacy_get_attribute(text, info_needed) {
 function extension_editor_update_filename(filename) {
 
 	XKit.extensions.xkit_editor.filename = filename;
-	
+
 	if (filename !== "") {
 		document.title = filename + " - XKit Extension Editor";
 		$("#xkit-editor-open-file").html(filename);
@@ -359,7 +359,7 @@ function extension_editor_close_file() {
 	$("#xkit-editor-textarea-css").val("");
 	$("#xkit-editor-textarea-object").val("");
 	$("#xkit-editor-switch-to-script").trigger('click');
-	
+
 }
 
 function extension_editor_resize() {
@@ -371,7 +371,7 @@ function extension_editor_resize() {
 	$("#xkit-editor-textarea-script").css("width", new_width + "px");
 	$("#xkit-editor-textarea-object").css("width", new_width + "px");
 	$("#xkit-editor-textarea-css").css("width", new_width + "px");
-	
+
 	var new_height = $(window).height() - 40;
 	$("#xkit-editor-area").css("height", new_height + "px");
 	$("#xkit-editor-textarea").css("height", new_height + "px");

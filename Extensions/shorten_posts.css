@@ -1,5 +1,5 @@
 .xkit-shorten-posts-shortened .post_wrapper {
-	overflow: hidden;	
+	overflow: hidden;
 	height: 100%;
 }
 
@@ -24,7 +24,7 @@
 
 .xkit-shorten-posts-embiggen:hover {
 	background: rgb(245,245,245);
-	color: rgb(100,100,100);	
+	color: rgb(100,100,100);
 }
 
 .xkit-shorten-posts-shortened-show-tags .post_tags {

@@ -2,8 +2,8 @@
 
 	border-top: 1px dashed rgb(190,190,190);
 	margin-top: 10px;
-	padding-top: 10px;	
-	
+	padding-top: 10px;
+
 }
 
 #tag_replacer_button:after {
@@ -17,5 +17,5 @@
 .xkit-tag-replacer-separator {
 	border-top: 1px dashed rgb(200,200,200);
 	margin-top: 10px; margin-bottom: 10px;
-	height: 0;	
+	height: 0;
 }

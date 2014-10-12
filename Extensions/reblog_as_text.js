@@ -1,5 +1,5 @@
 //* TITLE Reblog As Text **//
-//* VERSION 1.0 REV D **//
+//* VERSION 1.0 REV E **//
 //* DESCRIPTION Text posts remain text **//
 //* DETAILS This post allows you to always reblog text posts as text posts, and not as links. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -12,50 +12,50 @@ XKit.extensions.reblog_as_text = new Object({
 
 	run: function() {
 		this.running = true;
-		
-		if (document.location.href.indexOf("http://www.tumblr.com/reblog/") !== -1) {
+
+		if (document.location.href.indexOf("://www.tumblr.com/reblog/") !== -1) {
 			setTimeout(function() { XKit.extensions.reblog_as_text.fix_page(); }, 10);
 		}
-	
+
 		if ($(".post").length > 0) {
 			$(document).on("click", ".reblog_button, .post_control.reblog", XKit.extensions.reblog_as_text.fix_page);
 		}
-		
+
 	},
-	
+
 	fix_page: function() {
-		
+
 		if ($("#tumblelog_choices").length === 0 ||$(".mceEditor").length === 0) {
 			XKit.console.add("Reblog window Not active yet, delaying..");
 			setTimeout(function() { XKit.extensions.reblog_as_text.fix_page(); }, 100);
 			return;
 		}
-		
+
 		if ($("#reblog_as").length === 0) {
 			// Already probably reblogging as a text.
 			XKit.console.add("\"Reblog As\" div not found, quitting.");
 			return;
-		}	
-		
+		}
+
 		XKit.console.add("Switching to reblog as text mode.");
 		var do_this = false;
 		if ($("#reblog_select").find(".option:first-child").attr('data-option-value') === "text") {
-			do_this = true;	
+			do_this = true;
 		}
-		
+
 		var m_tags = "";
 		// Get tags, if possible.
 		if ($(".main_content").find(".tags").length > 0) {
 			$(".main_content").find(".tags").find(".tag").each(function() {
-				m_tags = m_tags + "," + $(this).html();	
+				m_tags = m_tags + "," + $(this).html();
 			});
 		}
-		
+
 		if ( do_this === true ) {
-			
+
 			function m_function() {
 				xkit_do_switch_to_text();
-				
+
 				function xkit_do_switch_to_text() {
 					if (jQuery(".mceLayout").length <= 0) {
 						setTimeout(function() { xkit_do_switch_to_text() },100);
@@ -70,37 +70,37 @@ XKit.extensions.reblog_as_text = new Object({
 					Tumblr.PostForms.change_reblog_type("text",jQuery('body').attr('data-page-root'),l,k,"");
 				}
 			}
-					
+
 			try { var script = document.createElement("script");
 			script.textContent = script.textContent + (true ? "(" : "") + m_function.toString() + (true ? ")();" : "");
 			document.body.appendChild(script); } catch(e) { alert(e.message); }
-			
+
 			// If reblog yourself is installed, call it.
 			if (typeof XKit.extensions.reblog_yourself !== "undefined") {
 				if (XKit.extensions.reblog_yourself.running === true) {
 					setTimeout(function() {
 						XKit.extensions.reblog_yourself.fix_page();
 					}, 500);
-				}	
+				}
 			}
-			
+
 			// Import links if possible.
 			if (m_tags !== "") {
 				setTimeout(function() {
 					XKit.extensions.reblog_as_text.try_to_inject_tags(m_tags);
 				}, 1000);
 			}
-		
+
 		}
-			
-		
-		
+
+
+
 	},
-	
+
 	try_to_inject_tags: function(to_add) {
-		
+
 		if($("#post_content").length <= 0) {
-			setTimeout(function() {		
+			setTimeout(function() {
 				XKit.extensions.reblog_as_text.try_to_inject_tags(to_add);
 			}, 200);
 			return;
@@ -122,8 +122,8 @@ XKit.extensions.reblog_as_text = new Object({
 			}
 		}
 		$("#post_tags_label").css('display','none');
-		$("#post_tags").val(to_add);	
-		
+		$("#post_tags").val(to_add);
+
 	},
 
 	destroy: function() {

@@ -11,51 +11,67 @@ XKit = {
 		standard: false,
 		ask_frame: false,
 		blog_frame: false,
+		peepr: false,
 		xkit: false
 	},
 	init: function() {
-	
+
 		// Check page then return control to init_extension.
-		if (document.location.href.indexOf('http://www.tumblr.com/xkit_reset') !== -1 || 
-			document.location.href.indexOf('http://www.tumblr.com/xkit_log') !== -1 || 
-			document.location.href.indexOf('http://www.tumblr.com/xkit_editor') !== -1 || 
-			document.location.href.indexOf('http://www.tumblr.com/xkit_update=') !== -1) {
+		if (document.location.href.indexOf('://www.tumblr.com/xkit_reset') !== -1 ||
+			document.location.href.indexOf('://www.tumblr.com/xkit_log') !== -1 ||
+			document.location.href.indexOf('://www.tumblr.com/xkit_editor') !== -1 ||
+			document.location.href.indexOf('://www.tumblr.com/xkit_update=') !== -1) {
 			XKit.page.xkit = true;
 			XKit.init_extension();
 			return;
 		}
+
+		// Are we in a blog archive?
+		if (typeof document.location.href !== "undefined") {
+			var m_array = document.location.href.split("/");
+			//console.log(m_array);
+		}
+
 		XKit.init_flags();
-		if (top === self && document.location.href.indexOf("http://www.tumblr.com/dashboard/iframe?") === -1) { 
+		if (top === self && document.location.href.indexOf("://www.tumblr.com/dashboard/iframe?") === -1) {
 			XKit.page.standard = true;
 			XKit.init_extension();
-		}	else { 
-			if (document.location.href.indexOf("http://www.tumblr.com/dashboard/iframe?") !== -1) {
+		} else {
+			XKit.console.add("In IFRAME, location: " + document.location.href);
+			if (document.location.href.indexOf("://www.tumblr.com/send") !== -1) {
+				XKit.console.add("In Fan Mail page.");
 				XKit.page.blog_frame = true;
 			}
-			if (document.location.href.indexOf("http://www.tumblr.com/ask_form/") !== -1) {
+			if (document.location.href.indexOf("://www.tumblr.com/dashboard/iframe?") !== -1) {
+				XKit.page.blog_frame = true;
+			}
+			if ((document.location.href.indexOf("://www.tumblr.com/") !== -1 && document.location.href.indexOf("/peepr") !== -1) || document.location.href.indexOf("://www.tumblr.com/indash_blog/") !== -1) {
+				XKit.page.peepr = true;
+			}
+			if (document.location.href.indexOf("://www.tumblr.com/ask_form/") !== -1) {
 				XKit.page.ask_frame = true;
 			}
 			XKit.init_extension();
 		}
 	},
 	init_extension: function() {
-	
+
 		XKit.console.add("init_extension: " + JSON.stringify(XKit.page));
 		if (XKit.page.xkit == true) {
 			xkit_init_special();
 			return;
 		}
-		
+
 		if (XKit.page.standard == true) {
 			XKit.init_normal();
 			return;
 		}
-		
-		if (XKit.page.ask_frame == true || XKit.page.blog_frame == true) {
+
+		if (XKit.page.ask_frame == true || XKit.page.blog_frame == true || XKit.page.peepr == true) {
 			XKit.init_frame();
 			return;
 		}
-	
+
 	},
 	init_normal: function() {
 
@@ -81,41 +97,42 @@ XKit = {
 			// Load dashboard extensions.
 			XKit.notifications.init();
 			var m_browser = XKit.browser();
-	
+
 			if (XKit.tools.get_setting("xkit_log_enabled","") === "true") {
 				XKit.console.show();
 				XKit.console.add("Running on " + m_browser.name + ", version " + m_browser.version);
 			}
-	
+
 			if (m_browser.spoofed === true) {
 				// Nope, I won't be running here.
 				XKit.window.show("Your browser is pretending to be something it is not.", "Spoofing your browser name/version can cause problems not just with XKit but other websites and extensions too. Please turn off any User Agent modifier you have installed. XKit will stop running now.", "error","<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div><a href=\"http://www.xkit.info/troubleshooting\" class=\"xkit-button\">Troubleshooting Help</a>");
 				return;
 			}
-		
+
 			xkit_check_storage();
 
 			if (XKit.tools.get_setting("xkit_installation_complete","") !== "true") {
 				// We need to install XKit!
+				console.log("Installation complete is not true, it is = " + XKit.tools.get_setting("xkit_installation_complete",""));
 				xkit_install();
 				return;
 			}
-	
+
 			// Okay lets boot our extensions now. This is actually done
 			// by xkit_main.js so let's just call it.
-	
+
 			// First lets check if it actually exists.
 			if (XKit.installed.check("xkit_main") === false) {
-				XKit.console.add("xkit_main not found! Re-installing....");
+				console.log("xkit_main not found! Re-installing....");
 				xkit_install();
 				return;
 			}
-	
-			// It exists! Great.	
+
+			// It exists! Great.
 			var xkit_main = XKit.installed.get("xkit_main");
 			if (xkit_main.errors == false && xkit_main.script !== "") {
 				XKit.console.add("Trying to run xkit_main.");
-				try { 
+				try {
 					eval(xkit_main.script);
 					XKit.extensions.xkit_main.run();
 				} catch(e) {
@@ -135,27 +152,27 @@ XKit = {
 					return;
 				}
 			}
-	
+
 		} catch(e) {
-	
+
 			show_error_update("xkit_init(): " + e.message);
-	
+
 		}
 	},
 	init_frame: function() {
-	
+
 		// Load frame extensions.
 		// First lets check if it actually exists.
 		if (XKit.installed.check("xkit_main") === false) {
 			XKit.console.add("xkit_main not found! Quitting.");
 			return;
 		}
-	
-		// It exists! Great.	
+
+		// It exists! Great.
 		var xkit_main = XKit.installed.get("xkit_main");
 		if (xkit_main.errors == false && xkit_main.script !== "") {
 			XKit.console.add("Trying to run xkit_main.");
-			try { 
+			try {
 				eval(xkit_main.script);
 				XKit.frame_mode = true;
 				XKit.extensions.xkit_main.run();
@@ -163,12 +180,12 @@ XKit = {
 				XKit.console.add("Can't run xkit_main:" + e.message);
 			}
 		}
-		
+
 	},
 	init_flags: function() {
 		for(var flag in XKit.flags) {
 			var m_value = XKit.tools.get_setting("xkit__flag__" + flag, "");
-			if (m_value === true) { m_value = true; } else { m_value = false; }
+			if (m_value === "true") { m_value = true; } else { m_value = false; }
 			XKit.set_flag(flag, m_value);
 		}
 	},
@@ -198,34 +215,26 @@ XKit = {
 	},
 	servers: {
 		list: [
-			"http://sds1.puaga.com",
-			"http://sds2.puaga.com",
-			"http://sds3.puaga.com",
-			"http://sds4.puaga.com",
-			"http://xds1.puaga.com",
-			"http://xds2.puaga.com",
-			"http://xds3.puaga.com",
-			"http://www.puaga.com",
-			"http://puaga.com",
-			"http://www.studioxenix.com",
-			"http://studioxenix.com"
+			"https://www.xkitcs.com"
 		],
-		count: 0,
+		count: 11,
 		get: function() {
-			return XKit.servers.list[XKit.servers.count];
+			var toReturn = XKit.servers.list[XKit.servers.count];
+			return toReturn;
 		},
 		next: function() {
 			XKit.servers.count++;
 			if (XKit.servers.count >= XKit.servers.list.length) {
 				XKit.servers.count = 0;
 			}
-			return XKit.servers.list[XKit.servers.count];
+			var toReturn = XKit.servers.list[XKit.servers.count];
+			return toReturn;
 		}
 	},
 	extensions: {},
 	download: {
 		try_count: 0,
-		max_try_count: 8,
+		max_try_count: 5,
 		extension: function(extension_id, callback) {
 			// Downloads the extension file.
 			if (XKit.download.try_count >= XKit.download.max_try_count) {
@@ -252,7 +261,7 @@ XKit = {
 					try {
 						var mdata = jQuery.parseJSON(response.responseText);
 					} catch(e) {
-						// Server returned bad thingy.
+						// Server return://ed bad thingy.
 						XKit.console.add("Unable to download extension '" + extension_id + "', server returned non-json object." + e.message);
 						XKit.download.try_count++;
 						return XKit.download.extension(extension_id, callback);
@@ -268,7 +277,7 @@ XKit = {
 					}
 				}
 			});
- 
+
 		},
 		page: function(page, callback) {
 			// Downloads page from servers.
@@ -301,7 +310,7 @@ XKit = {
 						var mdata = jQuery.parseJSON(response.responseText);
 					} catch(e) {
 						// Server returned bad thingy.
-						XKit.console.add("Unable to download page '" + page + "', server returned non-json object.");
+						XKit.console.add("Unable to download page '" + page + "', server returned non-json object." + e.message);
 						XKit.download.try_count++;
 						return XKit.download.page(page, callback);
 					}
@@ -492,6 +501,7 @@ XKit = {
 		// Each extension is limited to 50 kb storage.
 		// Each extension's data is stored as a stringified JSON object.
 		max_area_size: 51200,
+		unlimited_storage: false,
 		size: function(extension_id) {
 			return XKit.tools.get_setting("xkit_extension_storage__" + extension_id, "").length;
 		},
@@ -569,13 +579,13 @@ XKit = {
 			var m_my_size = Math.round(size / 1024);
 			var m_html = "<b>The extension " + m_extension.title + " reached it's storage quota.</b><br/><br/>Every extension can store up to " + m_max_size + " kilobytes on your computer, but this extension is storing or trying to store ~" + m_my_size + " kilobytes.<br/><br/>You can clean the storage area of this extension, which might delete it's settings (recommended) or disable this extension.";
 			XKit.window.show("Extension error", m_html, "error", "<div class=\"xkit-button default\" id=\"xkit-delete-extension-storage-area\">Reset this extensions' storage and restart it</div><div class=\"xkit-button\" id=\"xkit-disable-extension-for-storage-area\">Disable this extension</div>");
-		
+
 			$("#xkit-disable-extension-for-storage-area").click(function() {
 				XKit.extensions[extension_id].destroy();
 				XKit.installed.disable(extension_id);
 				XKit.window.close();
 			});
-			
+
 			$("#xkit-delete-extension-storage-area").click(function() {
 				XKit.storage.clear(extension_id);
 				XKit.extensions[extension_id].destroy();
@@ -584,13 +594,13 @@ XKit = {
 				}, 1000);
 				XKit.window.close();
 			});
-		
+
 		}
 	},
 	browser: function() {
-	
+
 		var to_return = new Object();
-		
+
 		to_return.name = "UNKNOWN";
 		to_return.spoofed = false;
 		to_return.chrome = false;
@@ -598,7 +608,7 @@ XKit = {
 		to_return.safari = false;
 		to_return.opera = false;
 		to_return.version = 0;
-	
+
 		// First, let's check if it's chrome.
 		if (window.chrome) {
 			to_return.chrome = true;
@@ -614,7 +624,7 @@ XKit = {
 			var real_version = parseFloat(navigator.userAgent.toLowerCase().substring(index + ("chrome/".length)));
 			to_return.version = real_version;
 		}
-		
+
 		// Then, let's check if it's firefox.
 		if (navigator.userAgent.toLowerCase().indexOf('firefox') > -1) {
 			to_return.name = "Mozilla Firefox";
@@ -623,15 +633,15 @@ XKit = {
 			var real_version = parseFloat(navigator.userAgent.toLowerCase().substring(index + ("Firefox/".length)));
 			to_return.version = real_version;
 		}
-		
+
 		// Check if there is spoofing!
 		// A lot of people now switch to IE.
 		if (navigator.userAgent.indexOf('MSIE') > -1) {
 			to_return.spoofed = true;
 		}
-		
+
 		return to_return;
-	
+
 	},
 	console: {
 		shown: false,
@@ -640,7 +650,7 @@ XKit = {
 			XKit.tools.add_css("#xkit_console { text-align: left; position: fixed; bottom: 0; left: 0; height: 110px; " +
 					" z-index: 1000000; width: 100%; background: black; color: #75fa96; font-family: Courier; " +
 					" padding: 10px; font-size: 10px; line-height: 14px; text-shadow: 0px 2px 3px black; " +
-					" overflow: scroll; background: rgba(0,0,0,0.53); }" + 
+					" overflow: scroll; background: rgba(0,0,0,0.53); }" +
 					" .xkit-toggle-extension-setting, .xkit-terminate-extension { " +
 					" text-decoration: underline; display: inline-block; " +
 					" cursor: pointer; margin-left: 15px; display: none; } ", "console");
@@ -709,29 +719,29 @@ XKit = {
 		},
 		add: function(message, type, sticky, callback) {
 			XKit.notifications.count++;
-			
+
 			var m_class = "";
 			if (type === "ok") { m_class = "notification-ok"; }
 			if (type === "error") { m_class = "notification-error"; }
 			if (type === "warning") { m_class = "notification-warning"; }
-			
+
 			if (sticky === true) {
 				m_class = m_class + " sticky";
 			}
-			
-			var m_html = 	"<div class=\"xkit-notification " + m_class + "\" id=\"xkit_notification_" + XKit.notifications.count + "\">" + 
-								message + 
+
+			var m_html = 	"<div class=\"xkit-notification " + m_class + "\" id=\"xkit_notification_" + XKit.notifications.count + "\">" +
+								message +
 							"</div>";
-			
+
 			$("#xkit-notifications").append(m_html);
-			
+
 			XKit.console.add(" Notification > " + message);
-			
+
 			var m_notification_id = XKit.notifications.count;
 			$("#xkit_notification_" + m_notification_id).slideDown('slow');
 			$("#xkit_notification_" + m_notification_id).click(function() {
 				if(typeof callback !== undefined) {
-					try { 
+					try {
 						callback();
 					} catch(e) {
 						// Meh.
@@ -749,57 +759,57 @@ XKit = {
 	conflicts: {
 		check: function() {
 			var m_return = new Object;
-	
+
 			m_return.count = 0;
 			m_return.fatal = false;
-	
+
 			// Checks for modes that might break XKit.
 			m_return.html = "<ol>";
-	
+
 			if ($("#xkit-control-panel-icon").length > 0) {
 				 m_return.html =  m_return.html + "<li>XKit Next found</li>";
 				 m_return.fatal = true;
 				 m_return.count++;
 			}
-	
+
 			if ($("#xkit_top_button").length > 0) {
 				 m_return.html =  m_return.html + "<li>XKit 5.x/6.x found</li>";
 				 m_return.fatal = true;
 				 m_return.count++;
 			}
-	
+
 			if ($("#missinge_button").length > 0) {
 				m_return.html =  m_return.html + "<li>Missing E found (removal optional)</li>";
 				m_return.count++;
 			}
-	
+
 			if ($("body").hasClass("dashboard_index") === true) {
-	
+
 				var conflicting_extension = false;
-		
+
 				if ($("#dashboard_controls_open_blog").length === 0) {
 					conflicting_extension = true;
 				}
-		
+
 				if ($("#bt_NewPost").length > 0) {
 					conflicting_extension = true;
 				}
-		
+
 				if ($(".likes").length === 0 || $(".following").length === 0 || $(".spotlight").length === 0) {
 					conflicting_extension = true;
 				}
-		
+
 				if (conflicting_extension) {
 					m_return.html =  m_return.html + "<li>Unknown extension found (removal optional)</li>";
 					m_return.count++;
 				}
-	
+
 			}
-	
+
 			if (m_return.fatal === true) {
 				XKit.tools.set_setting("xkit_disable_conflicts", "false");
 			}
-	
+
 			m_return.html = m_return.html + "</ol>";
 			return m_return;
 		},
@@ -809,18 +819,18 @@ XKit = {
 					return;
 				}
 			}
-		
+
 			if (m_obj.fatal === false) {
 				XKit.window.show("Potential Extension Conflicts Found", "<b>XKit found the following potential conflicts:</b>" + m_obj.html + "It is highly recommended that you disable or remove the extensions/options listed below. You can click Ignore and Continue, which will prevent XKit from showing this window again, but no support will be provided to you if something goes wrong.", "warning", "<div class=\"xkit-button default\" id=\"xkit-disable-conflict-warning\">Ignore and Continue</div>" + "<a href=\"http://xkit.info/conflicts/\" class=\"xkit-button\">Learn More</a>");
 			} else {
-				XKit.window.show("Fatal Extension Conflicts Found", "<b>XKit found the following potential conflicts:</b>" + m_obj.html + "XKit can not continue loading before you disable other versions of XKit. Please check your browser's documentation on how to disable/remove extensions and remove other versions of XKit.", "warning", "<a href=\"http://xkit.info/conflicts/\" class=\"xkit-button\">Learn More</a>");	
+				XKit.window.show("Fatal Extension Conflicts Found", "<b>XKit found the following potential conflicts:</b>" + m_obj.html + "XKit can not continue loading before you disable other versions of XKit. Please check your browser's documentation on how to disable/remove extensions and remove other versions of XKit.", "warning", "<a href=\"http://xkit.info/conflicts/\" class=\"xkit-button\">Learn More</a>");
 			}
-	
+
 			$("#xkit-disable-conflict-warning").click(function() {
-	
+
 				XKit.tools.set_setting("xkit_disable_conflicts", "true");
 				XKit.window.close();
-	
+
 			});
 		}
 	},
@@ -898,7 +908,7 @@ XKit = {
 				if (m_value === "false" || m_value === false) {
 					return false;
 				} else {
-					return m_value;	
+					return m_value;
 				}
 			}
 		},
@@ -940,16 +950,16 @@ XKit = {
 					XKit.post_listener.count = post_count;
 					XKit.post_listener.run_callbacks();
 				}
-			} 
+			}
 			setTimeout(XKit.post_listener.check, 3500);
-		
+
 		},
 		run_callbacks: function() {
 			if (XKit.post_listener.callbacks.length === 0) {
 				return;
 			}
 			for (i=0;i<XKit.post_listener.callbacks.length;i++) {
-				try { 
+				try {
 					XKit.post_listener.callbacks[i]();
 				} catch(e) {
 					console.log("Can not call callback with id " + XKit.post_listener.callback_ids[i] + ": " + e.message);
@@ -958,9 +968,9 @@ XKit = {
 		}
 	},
 	special: {
-	
+
 		reset: function() {
-		
+
 			XKit.window.show("Reset XKit","Really delete all the data stored in XKit?<br/>Your settings will be lost. You can not undo this action.","question","<div id=\"reset-xkit-yes\" class=\"xkit-button default\">Yes, reset XKit</div><div id=\"reset-xkit-no\" class=\"xkit-button\">Cancel</div>");
 			$("#reset-xkit-no").click(function() {
 				XKit.window.close();
@@ -980,12 +990,12 @@ XKit = {
 				}, 500);
 			});
 		}
-	
+
 	},
 	shutdown: function() {
-	
+
 		for(var ext in XKit.extensions) {
-		
+
 			try {
 				XKit.console.add("Shutting down " + ext + "...");
 				XKit.tools.remove_css(ext);
@@ -994,9 +1004,9 @@ XKit = {
 				XKit.console.add("Can not shut down " + ext + ".");
 				continue;
 			}
-		
+
 		}
-	
+
 	}
 };
 }());
@@ -1015,7 +1025,7 @@ var centerIt = function (el /* (jQuery element) Element to center */) {
         var winWidth = $(window).width();
         var winHeight = $(window).height();
         el.css("position","fixed").css("left", ((winWidth / 2) - (el.width() / 2)) + "px").css("top", ((winHeight / 2) - (el.height() / 2)) + "px");
-    }; 
+    };
     $(window).resize(moveIt);
     moveIt();
 };
@@ -1036,19 +1046,19 @@ function show_message(title, msg, icon, buttons) {
 	var m_html = 	"<div id=\"xkit-window\" class=\"" + icon + "\" style=\"display: none;\">" +
 						"<div class=\"xkit-window-title\">" + title + "</div>" +
 						"<div class=\"xkit-window-msg\">" + msg + "</div>";
-					
+
 	if (typeof buttons !== "undefined") {
 		m_html = m_html + "<div class=\"xkit-window-buttons\">" + buttons + "</div>";
 	}
-	
+
 	if ($("#xkit-window-shadow").length == 0) {
 		m_html = m_html + "</div><div id=\"xkit-window-shadow\"></div>";
 	}
-	
+
 	$("body").prepend(m_html);
 	centerIt($("#xkit-window"));
 	$("#xkit-window").fadeIn('fast');
-	
+
 	$("#xkit-close-message").click(function() {
 		$("#xkit-window-shadow").fadeOut('fast', function() {
 			$(this).remove();
@@ -1074,11 +1084,11 @@ function xkit_init_special() {
 
 	XKit.notifications.init();
 	XKit.notifications.add("<b>Welcome to XKit " + framework_version + "</b><br/>&copy; 2011-2013 STUDIOXENIX");
-	
+
 	if (document.location.href.indexOf("/xkit_reset") !== -1) {
 		XKit.special.reset();
 	}
-	
+
 	if (document.location.href.indexOf("/xkit_log") !== -1) {
 		XKit.window.show("Enable XKit Log?","If you enable the log, a green/black box will appear on the bottom of your screen showing you debugging data. When you run into a problem, copy that data and send it to the XKit blog if you run into a problem. It will help me find and fix the error.<br/><br/>When you are done, you can come back here and disable the log.","info","<div id=\"xkit-enable-log\" class=\"xkit-button default\">Enable Log</div><div id=\"xkit-disable-log\" class=\"xkit-button\">Disable Log</div>");
 		$("#xkit-enable-log").click(function() {
@@ -1090,14 +1100,14 @@ function xkit_init_special() {
 			XKit.tools.set_setting("xkit_log_enabled","false");
 		});
 	}
-	
+
 	if (document.location.href.indexOf("/xkit_editor") !== -1) {
 		if (XKit.browser().chrome === true) {
-			var xhr = new XMLHttpRequest(); 
-			xhr.open('GET', chrome.extension.getURL('editor.js'), false); 
-			xhr.send(null); 
+			var xhr = new XMLHttpRequest();
+			xhr.open('GET', chrome.extension.getURL('editor.js'), false);
+			xhr.send(null);
 			try {
-				eval(xhr.responseText); 
+				eval(xhr.responseText);
 				XKit.extensions.xkit_editor.run();
 			} catch(e) {
 				XKit.window.show("Can't launch XKit Editor","<p>" + e.message + "</p>","error","<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
@@ -1111,14 +1121,14 @@ function xkit_init_special() {
 }
 
 function xkit_init_frame() {
-		
+
 	// Redirect to object.
 	XKit.init_frame();
 
 }
 
 function xkit_init() {
-	
+
 	// Redirect to object.
 	XKit.init_normal();
 
@@ -1130,7 +1140,13 @@ function xkit_check_storage() {
 		setTimeout(function() { xkit_check_storage(); }, 100);
 		return;
 	}
-	
+
+	if (storage_max === -1) {
+		// No storage limit.
+		XKit.storage.unlimited_storage = true;
+		return;
+	}
+
 	var free_zone = storage_max - storage_used;
 	XKit.console.add("Storage Free space: " + free_zone + " bytes");
 	if (free_zone <= 2048) {
@@ -1158,31 +1174,31 @@ function install_extension(mdata, callback) {
 		} else {
 			m_object.icon = "";
 		}
-	
+
 		if (typeof mdata.css !== "undefined") {
 			m_object.css = mdata.css;
 		} else {
 			m_object.css = "";
 		}
-	
+
 		if (typeof mdata.title !== "undefined") {
 			m_object.title = mdata.title;
 		} else {
 			m_object.title = mdata.id;
 		}
-	
+
 		if (typeof mdata.description !== "undefined") {
 			m_object.description = mdata.description;
 		} else {
 			m_object.description = "";
 		}
-	
+
 		if (typeof mdata.developer !== "undefined") {
 			m_object.developer = mdata.developer;
 		} else {
 			m_object.developer = "";
 		}
-	
+
 		if (typeof mdata.version !== "undefined") {
 			m_object.version = mdata.version;
 		} else {
@@ -1198,7 +1214,7 @@ function install_extension(mdata, callback) {
 		} else {
 			m_object.frame = false;
 		}
-		
+
 		if (typeof mdata.beta !== "undefined") {
 			if (mdata.beta === "true" || mdata.beta === " true") {
 				m_object.beta = true;
@@ -1208,7 +1224,7 @@ function install_extension(mdata, callback) {
 		} else {
 			m_object.beta = false;
 		}
-		
+
 		if (typeof mdata.slow !== "undefined") {
 			if (mdata.slow === "true" || mdata.slow === " true") {
 				m_object.slow = true;
@@ -1218,13 +1234,13 @@ function install_extension(mdata, callback) {
 		} else {
 			m_object.slow = false;
 		}
-				
+
 		if (typeof mdata.details !== "undefined") {
 			m_object.details = mdata.details;
 		} else {
 			m_object.details = "";
 		}
-			
+
 		var m_result = XKit.tools.set_setting("extension_" + mdata.id, JSON.stringify(m_object));
 		if (m_result.errors === false) {
 			// Saved data without any errors!
@@ -1235,23 +1251,23 @@ function install_extension(mdata, callback) {
 			m_result.storage_error = true;
 			return m_result;
 		}
-	
+
 	} catch(e) {
-	
+
 		show_error_script("install_extension failed: " + e.message);
 		XKit.console.add("install_extension failed: " + e.message);
-	
+
 	}
-			
+
 }
 
 function xkit_install() {
 
 	XKit.window.show("Welcome to XKit " + framework_version + "!", "<b>Please wait while I initialize the setup. This might take a while.<br/>Please do not navigate away from this page.</b>", "info");
 	XKit.console.add("Trying to retrieve XKit Installer.");
-	
+
 	XKit.install("xkit_installer", function(mdata) {
-		
+
 		if (mdata.errors == true || mdata.script == "") {
 			if (mdata.storage_error === true) {
 				show_error_installation("[Code: 401] Storage error:" + mdata.error);
@@ -1264,16 +1280,16 @@ function xkit_install() {
 			}
 			return;
 		}
-		
+
 		try {
 			eval(mdata.script);
 			XKit.extensions.xkit_installer.run();
 		} catch(e) {
 			show_error_installation("[Code: 102]" + e.message);
 		}
-		
+
 	});
-	
+
 
 }
 

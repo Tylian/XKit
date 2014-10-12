@@ -1,10 +1,10 @@
 {
    "content_scripts": [ {
       "all_frames": true,
-      "exclude_matches": [ "http://www.tumblr.com/upload/image*" ],
-      "css": ["xkit.css"],
+      "css": [ "xkit.css" ],
+      "exclude_matches": [ "https://www.tumblr.com/upload/image*, http://www.tumblr.com/upload/image*" ],
       "js": [ "bridge.js", "jquery.js", "tiptip.js", "moment.js", "nano.js", "xkit.js" ],
-      "matches": [ "http://www.tumblr.com/*" ]
+      "matches": [ "http://www.tumblr.com/*", "https://www.tumblr.com/*" ]
    } ],
    "description": "The extension framework for Tumblr.",
    "homepage_url": "http://www.xkit.info/seven/",
@@ -13,11 +13,12 @@
       "16": "icon.png",
       "48": "icon.png"
    },
-   "minimum_chrome_version": "26.0",
-   "name": "XKit",
-   "permissions": [ "tabs", "http://*/*", "http://*/", "storage", "unlimitedStorage", "management" ],
-   "update_url": "http://clients2.google.com/service/update2/crx",
-   "web_accessible_resources": ["manifest.json", "editor.js"],
+   "key": "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCXGO7S9O58xYrrub2tKFuUJijUFdtlmwf31bHR5XCERzA7te++g4bbCVyv9oD5azpRzenezW5ZqaXC2+ApvPhti6St059y1EF/wbrpKY4kZbRneLnmHagrobXL5avzixDGjRVnKh9haO8WrKP3ZRLlby0Ea8glz4vwybiIsWPLbwIDAQAB",
    "manifest_version": 2,
-   "version": "7.0.3"
+   "minimum_chrome_version": "27.0",
+   "name": "XKit",
+   "permissions": [ "tabs", "*://*/*", "*://*/", "unlimitedStorage", "storage", "management" ],
+   "update_url": "http://clients2.google.com/service/update2/crx",
+   "version": "7.5.1",
+   "web_accessible_resources": [ "manifest.json", "editor.js" ]
 }

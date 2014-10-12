@@ -1,13 +1,13 @@
 body {
-	overflow-x: hidden;	
+	overflow-x: hidden;
 }
 
-#container {
+.l-container{
 	min-width: 900px; width: auto !important; margin: 0px !important;
 	padding: 0px !important;
-} 
+}
 
-#content {
+.l-content {
 	min-width: 900px;
 	margin: 0; width: 100%;
 	padding: 20px;
@@ -17,31 +17,32 @@ body {
 	-webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box;
 }
 
-#new_post { 
-	position: relative; 
+#new_post {
+	position: relative;
 }
 
 #new_post #post_buttons {
 	left: 50%;
-	margin-left:-266px;	
+	margin-left:-266px;
+	position: absolute;
 }
 
-#header {
+.l-header {
 	min-width: 900px; width: auto !important; padding: 0px !important;
 }
 
 
 .notification {
 	width: 100%;
-} 
+}
 
-.notes .note { 	
-	width: 100% !important; -webkit-box-sizing: border-box; 
-	-moz-box-sizing: border-box; box-sizing: border-box; 
+.notes .note {
+	width: 100% !important; -webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box; box-sizing: border-box;
 }
 
 #right_column {
-	width: 25%; min-width: 215px; padding-left: 15px; 
+	width: 25%; min-width: 215px; padding-left: 15px;
 	-webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box;
 }
 
@@ -50,15 +51,15 @@ body {
 }
 
 .new_post_buttons.xkit-new-post-scrolls {
-	max-width: 600px;	
+	max-width: 600px;
 }
 
 #posts .post_container .post_full {
 	width: 100% !important;
-	-webkit-box-sizing: border-box; 
-	-moz-box-sizing: border-box; box-sizing: border-box; 
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box; box-sizing: border-box;
 }
 
 #header #tabs_outter_container {
-	left: auto; right: 5px !important; 
+	left: auto; right: 5px !important;
 }

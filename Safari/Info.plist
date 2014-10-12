@@ -5,7 +5,7 @@
 	<key>Author</key>
 	<string>STUDIOXENIX</string>
 	<key>Builder Version</key>
-	<string>8536.29.13</string>
+	<string>9537.73.11</string>
 	<key>CFBundleDisplayName</key>
 	<string>XKit 7</string>
 	<key>CFBundleIdentifier</key>
@@ -13,9 +13,9 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleShortVersionString</key>
-	<string>7.0.5</string>
+	<string>7.4.2</string>
 	<key>CFBundleVersion</key>
-	<string>1</string>
+	<string>66621</string>
 	<key>Chrome</key>
 	<dict>
 		<key>Database Quota</key>
@@ -27,15 +27,17 @@
 	<dict>
 		<key>Scripts</key>
 		<dict>
+			<key>End</key>
+			<array>
+				<string>bridge.js</string>
+				<string>xkit.js</string>
+			</array>
 			<key>Start</key>
 			<array>
 				<string>jquery.js</string>
 				<string>moment.js</string>
-				<string>tiptip.js</string>
 				<string>nano.js</string>
-				<string>bridge.js</string>
-				<string>xkit.js</string>
-				<string>editor.js</string>
+				<string>tiptip.js</string>
 			</array>
 		</dict>
 		<key>Stylesheets</key>
@@ -45,6 +47,7 @@
 		<key>Whitelist</key>
 		<array>
 			<string>http://www.tumblr.com/*</string>
+			<string>https://www.tumblr.com/*</string>
 		</array>
 	</dict>
 	<key>Description</key>
@@ -55,6 +58,8 @@
 	<dict>
 		<key>Website Access</key>
 		<dict>
+			<key>Include Secure Pages</key>
+			<true/>
 			<key>Level</key>
 			<string>All</string>
 		</dict>

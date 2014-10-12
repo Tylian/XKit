@@ -13,58 +13,58 @@ XKit.extensions.theme_editor = new Object({
 
 	run: function() {
 		this.running = true;
-		
+
 		XKit.tools.init_css("theme_editor");
-		
+
 		if (typeof XKit.extensions.themes !== "undefined") {
 			if (XKit.extensions.themes.running === true) {
 				XKit.extensions.themes.destroy();
 			}
 		}
-		
+
 		if (typeof XKit.extensions.yahoo !== "undefined") {
 			if (XKit.extensions.yahoo.running === true) {
 				XKit.extensions.yahoo.destroy();
 			}
 		}
-		
-		xf_html = '<ul class="controls_section" id="xkit-theme-editor-ul">' + 
+
+		xf_html = '<ul class="controls_section" id="xkit-theme-editor-ul">' +
 			'<li class="no_push"><a href="#" onclick="return false;" class="customize" id="xkit-theme-editor-button">' +
 			'<div class="hide_overflow">Edit Theme</div>' +
 			'</a></li></ul>';
-		$("ul.controls_section:eq(1)").before(xf_html);	
+		$("ul.controls_section:eq(1)").before(xf_html);
 
 		$("#xkit-theme-editor-button").click(function() {
-			
+
 			XKit.extensions.theme_editor.open();
-			
+
 		});
-		
+
 		this.load_user_theme();
-		
+
 	},
-	
+
 	load_user_theme: function(passed_theme) {
-		
+
 		// Just in case.
-		$("#xkit-themes-user-theme").remove();	
-		$("#xkit-theme-editor-user-theme").remove();	
-		
+		$("#xkit-themes-user-theme").remove();
+		$("#xkit-theme-editor-user-theme").remove();
+
 		var m_theme = XKit.storage.get("theme_editor","my_theme",XKit.extensions.theme_editor.testing_theme);
-		
+
 		if (typeof passed_theme !== "undefined") {
-			m_theme = passed_theme;	
+			m_theme = passed_theme;
 		}
-		
+
 		$("body").append("<style id=\"xkit-theme-editor-user-theme\">" + m_theme + "</style>");
-		
+
 	},
-	
+
 	open: function() {
-		
+
 		if ($("#xkit-theme-editor-shadow").length > 0) {
 			$("#xkit-theme-editor-shadow").remove();
-			$("#xkit-theme-editor-window").remove();	
+			$("#xkit-theme-editor-window").remove();
 		}
 
 		var m_theme = XKit.storage.get("theme_editor","my_theme",XKit.extensions.theme_editor.testing_theme);
@@ -79,52 +79,52 @@ XKit.extensions.theme_editor = new Object({
 						"<div class=\"xkit-button\" id=\"xkit-theme-editor-close\">Close window</div>" +
 					"</div>" +
 				"</div>";
-		
+
 		$("body").append(m_html);
-		
+
 		$("#xkit-theme-editor-textarea").bind("keydown", function(event) {
 			if(event.which === 190) {
 				event.stopPropagation();
 				event.stopImmediatePropagation();
 			}
 		});
-		
+
 		$("#xkit-theme-editor-close, #xkit-theme-editor-shadow").click(function() {
-			XKit.extensions.theme_editor.close();			
+			XKit.extensions.theme_editor.close();
 		});
-		
+
 		$("#xkit-theme-editor-apply").click(function() {
-			XKit.extensions.theme_editor.load_user_theme($("#xkit-theme-editor-textarea").val());			
+			XKit.extensions.theme_editor.load_user_theme($("#xkit-theme-editor-textarea").val());
 		});
-		
+
 		$("#xkit-theme-editor-save").click(function() {
 			XKit.storage.set("theme_editor","my_theme",$("#xkit-theme-editor-textarea").val());
-			XKit.extensions.theme_editor.load_user_theme();	
-			XKit.extensions.theme_editor.close();	
+			XKit.extensions.theme_editor.load_user_theme();
+			XKit.extensions.theme_editor.close();
 		});
-		
+
 		$("#xkit-theme-editor-delete").click(function() {
 			XKit.window.show("Delete theme?","You can not undo this action.","question","<div class=\"xkit-button default\" id=\"xkit-theme-editor-delete-confirm\">Yes, delete my theme.</div><div class=\"xkit-button\" id=\"xkit-close-message\">Cancel</div>");
 			$("#xkit-theme-editor-delete-confirm").click(function() {
 				XKit.storage.set("theme_editor","my_theme","");
-				XKit.extensions.theme_editor.load_user_theme();	
-				XKit.extensions.theme_editor.close();	
+				XKit.extensions.theme_editor.load_user_theme();
+				XKit.extensions.theme_editor.close();
 				XKit.window.close();
 			});
 		});
-		
+
 	},
-	
+
 	close: function() {
-		
+
 		$("#xkit-theme-editor-shadow").fadeOut('slow');
-		$("#xkit-theme-editor-window").fadeOut('fast');	
-		
+		$("#xkit-theme-editor-window").fadeOut('fast');
+
 	},
 
 	destroy: function() {
 		this.running = false;
-		$("#xkit-theme-editor-user-theme").remove();	
+		$("#xkit-theme-editor-user-theme").remove();
 	}
 
 });

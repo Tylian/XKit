@@ -31,7 +31,7 @@ XKit.extensions.xkit_installer = new Object({
 		XKit.window.show("Installing XKit","<div id=\"xkit-install-process\" style=\"font-weight: bold;\">Starting installation..</div>Please do not navigate away from this page." + XKit.progress.add("installation"),"info");
 
 		XKit.extensions.xkit_installer.next();
-		
+
 	},
 
 	next: function() {
@@ -55,9 +55,9 @@ XKit.extensions.xkit_installer = new Object({
 		var to_install = XKit.extensions.xkit_installer.to_install[XKit.extensions.xkit_installer.installed];
 		XKit.console.add("Will be installing " + to_install);
 		$("#xkit-install-process").html("Installing package " + to_install + "...");
-		
+
 		XKit.install(to_install, function(mdata) {
-		
+
 			if (mdata.errors == true || mdata.script == "") {
 				if (mdata.storage_error === true) {
 					show_error_installation("[Code: 631] Can't store data on browser");
@@ -74,7 +74,7 @@ XKit.extensions.xkit_installer = new Object({
 				}
 				return;
 			}
-		
+
 			try {
 				// Try evaling the script.
 				// If it's working, then move to the next one.
@@ -84,7 +84,7 @@ XKit.extensions.xkit_installer = new Object({
 			} catch(e) {
 				show_error_installation("[Code: 102] Can't run " + to_install + ":<br/>" + e.message);
 			}
-		
+
 		});
 
 	},
@@ -92,5 +92,5 @@ XKit.extensions.xkit_installer = new Object({
 	destroy: function() {
 		this.running = false;
 	}
-	
+
 });
