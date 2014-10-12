@@ -43,7 +43,7 @@ XKit.extensions.read_more_now = new Object({
 			var post_id = json_page_parts[2];
 			var m_cont = $(this);
 
-			var api_url = "https://api.tumblr.com/v2/blog/" + blog_name + "/posts" + "?api_key=" + XKit.extensions.timestamps.apiKey + "&id=" + post_id;
+			var api_url = "https://api.tumblr.com/v2/blog/" + blog_name + "/posts" + "?api_key=" + XKit.extensions.read_more_now.apiKey + "&id=" + post_id;
 
 			GM_xmlhttpRequest({
 				method: "GET",
