@@ -36,6 +36,7 @@ module.exports = function(grunt) {
     browserList = parseBuildBrowsers(browsers);
 
     browserList.forEach( function(browser) {
+      gruntTaskList.push('jshint:' + browser);
       gruntTaskList.push('copy:' + browser);
       if(/firefox/.test(browser)) {
         gruntTaskList.push('compress:firefox');
@@ -63,6 +64,37 @@ module.exports = function(grunt) {
       build: ['build/*'],
       releases: ['build/releases/*'],
       modules: ['node_modules'],
+    },
+
+    // grunt-contrib-jshint task
+    jshint: {
+      options: {
+        jshintrc: ".jshintrc",
+      },
+      gruntfile: {
+        src: 'Gruntfile.js',
+      },
+      extensions: {
+        src: [
+          'Extensions/**/*.js',
+          '!Extensions/**/*.icon.js',
+        ],
+      },
+      chrome: {
+        src: [
+          'Chrome/**/*.js',
+        ],
+      },
+      firefox: {
+        src: [
+          'Firefox/**/*.js',
+        ],
+      },
+      safari: {
+        src: [
+          'Safari/**/*.js',
+        ],
+      },
     },
 
     // grunt-contrib-copy task
@@ -107,9 +139,11 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-compress');
+  grunt.loadNpmTasks('grunt-contrib-jshint');
+
 
   // Default task
-  grunt.registerTask('default', ['build']);
+  grunt.registerTask('default', ['jshint']);
 
   // Browser extension build task
   grunt.registerTask('build', function(browsers) {
