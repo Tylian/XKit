@@ -1,5 +1,5 @@
 //* TITLE Panorama **//
-//* VERSION 1.2 REV H **//
+//* VERSION 1.2 REV I **//
 //* DESCRIPTION Widescreen dashboard **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//
@@ -30,10 +30,10 @@ XKit.extensions.panaroma = new Object({
 
 		}
 
-		if (document.location.href.indexOf("http://www.tumblr.com/ignore") !== -1 ||
-			document.location.href.indexOf("http://www.tumblr.com/lookup") !== -1 ||
-			document.location.href.indexOf("http://www.tumblr.com/spotlight") !== -1 ||
-			document.location.href.indexOf("http://www.tumblr.com/following") !== -1) {
+		if (document.location.href.indexOf("://www.tumblr.com/ignore") !== -1 ||
+			document.location.href.indexOf("://www.tumblr.com/lookup") !== -1 ||
+			document.location.href.indexOf("://www.tumblr.com/spotlight") !== -1 ||
+			document.location.href.indexOf("://www.tumblr.com/following") !== -1) {
 			XKit.extensions.panaroma.do_directory_fixes();
 		}
 
@@ -44,10 +44,10 @@ XKit.extensions.panaroma = new Object({
 
 	do_directory_fixes: function() {
 
-		var m_css = " .l-content { padding-bottom: 30px; border-radius: 20px; background: white; } #content_top, #content_bottom { display: none; } #tabs { background: #eaeaea; } #tabs.tabs_3 .tab { width: 33%; } #tabs.tabs_3 .tab:last-child { width: 32%; } ";
+		var m_css = " .l-content { padding-bottom: 30px!important; border-radius: 20px!important; background: white!important; } .content_top, .content_bottom { display: none!important; } #tabs { background: #eaeaea!important; } #tabs.tabs_3 .tab { width: 33%!important; } #tabs.tabs_3 .tab:last-child { width: 32%!important; } ";
 
-		if (document.location.href.indexOf("http://www.tumblr.com/ignore") !== -1) {
-			m_css = m_css + " #left_column { width: 100%; } #content { padding-top: 30px;  } ";
+		if (document.location.href.indexOf("://www.tumblr.com/ignore") !== -1) {
+			m_css = m_css + " #left_column { width: 100%!important; } #content { padding-top: 30px!important;  } ";
 		}
 
 		XKit.tools.add_css(m_css, "panaroma_directory");
