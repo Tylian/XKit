@@ -1,5 +1,5 @@
 //* TITLE Mass Deleter **//
-//* VERSION 0.1 REV F **//
+//* VERSION 0.1 REV G **//
 //* DESCRIPTION Mass unlike likes / delete drafts **//
 //* DETAILS Used to mass unlike posts or delete drafts. Please use with caution, especially Mass Unlike part is extremely experimental. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -24,7 +24,7 @@ XKit.extensions.mass_deleter = new Object({
 
 		XKit.tools.init_css("mass_deleter");
 
-		if (document.location.href.indexOf("http://www.tumblr.com/likes") !== -1) {
+		if (XKit.interface.where().likes === true) {
 			if (XKit.extensions.mass_deleter.preferences.enable_mass_unlike.value === true) {
 				XKit.extensions.mass_deleter.init_likes();
 			}
