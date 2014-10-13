@@ -133,6 +133,39 @@ module.exports = function(grunt) {
       },
     },
 
+    // grunt-contrib-watch task
+    watch: {
+      gruntfile: {
+        files: '<%= jshint.gruntfile.src %>',
+        tasks: ['jshint:gruntfile'],
+      },
+      extensions: {
+        files: [
+          'Extensions/**/*.js',
+          '!Extensions/**/*.icon.js',
+        ],
+        tasks: ['jshint:extensions'],
+      },
+      chrome: {
+        files: [
+          'Chrome/**/*.js',
+        ],
+        tasks: ['jshint:chrome'],
+      },
+      firefox: {
+        files: [
+          'Firefox/**/*.js',
+        ],
+        tasks: ['jshint:firefox'],
+      },
+      safari: {
+        files: [
+          'Safari/**/*.js',
+        ],
+        tasks: ['jshint:safari'],
+      },
+    },
+
   });
 
   // Grunt-contrib tasks
@@ -140,7 +173,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-compress');
   grunt.loadNpmTasks('grunt-contrib-jshint');
-
+  grunt.loadNpmTasks('grunt-contrib-watch');
 
   // Default task
   grunt.registerTask('default', ['jshint']);
