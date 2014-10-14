@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 2.6 REV B **//
+//* VERSION 2.6 REV D **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER STUDIOXENIX **//
 
@@ -13,6 +13,8 @@ XKit.extensions.lang_english = {
 	}
 
 };
+
+XKit.api_key = "Ux4LGODTVuvFBSRAelySTNT1Mucd4xQcVNXLxbpMraEFVFmlVK";
 
 XKit.extensions.xkit_pack_launcher = new Object({
 
@@ -1799,6 +1801,12 @@ XKit.extensions.xkit_patches = new Object({
 					m_return.drafts = 0;
 				}
 
+				if ($("#dashboard_controls_open_blog").find(".likes").find(".count").length > 0) {
+					m_return.likes = parseInt($("#dashboard_controls_open_blog").find(".likes").find(".likes").html().replace(",",""));
+				} else {
+					m_return.likes = 0;
+				}
+
 				if ($("#dashboard_controls_open_blog").find(".queue").find(".count").length > 0) {
 					m_return.queue = parseInt($("#dashboard_controls_open_blog").find(".queue").find(".count").html().replace(",",""));
 				} else {
@@ -1870,6 +1878,15 @@ XKit.extensions.xkit_patches = new Object({
 					}
 				}
 
+				m_return.likes = false;
+				if ($("body").hasClass("dashboard_posts_likes") === true) {
+					m_return.likes = true;
+				} else {
+					if (document.location.href.indexOf("www.tumblr.com/likes") !== -1) {
+						m_return.likes = true;
+					}
+				}
+
 				m_return.followers = false;
 				if ($("body").hasClass("dashboard_useraction_followers") == true) {
 					m_return.followers = true;
@@ -1904,27 +1921,27 @@ XKit.extensions.xkit_patches = new Object({
 		XKit.init = function() {
 
 			// Check page then return control to init_extension.
-			if (document.location.href.indexOf('http://www.tumblr.com/xkit_reset') !== -1 ||
-				document.location.href.indexOf('http://www.tumblr.com/xkit_log') !== -1 ||
-				document.location.href.indexOf('http://www.tumblr.com/xkit_editor') !== -1 ||
-				document.location.href.indexOf('http://www.tumblr.com/xkit_update=') !== -1) {
+			if (document.location.href.indexOf('://www.tumblr.com/xkit_reset') !== -1 ||
+				document.location.href.indexOf('://www.tumblr.com/xkit_log') !== -1 ||
+				document.location.href.indexOf('://www.tumblr.com/xkit_editor') !== -1 ||
+				document.location.href.indexOf('://www.tumblr.com/xkit_update=') !== -1) {
 				XKit.page.xkit = true;
 				XKit.init_extension();
 				return;
 			}
 			XKit.init_flags();
-			if (top === self && document.location.href.indexOf("http://www.tumblr.com/dashboard/iframe?") === -1) {
+			if (top === self && document.location.href.indexOf("://www.tumblr.com/dashboard/iframe?") === -1) {
 				XKit.page.standard = true;
 				XKit.init_extension();
 			} else {
 				// XKit.console.add("In IFRAME, location: " + document.location.href);
-				if (document.location.href.indexOf("http://www.tumblr.com/send") === -1) {
+				if (document.location.href.indexOf("://www.tumblr.com/send") === -1) {
 					XKit.page.standard = true;
 				}
-				if (document.location.href.indexOf("http://www.tumblr.com/dashboard/iframe?") !== -1) {
+				if (document.location.href.indexOf("://www.tumblr.com/dashboard/iframe?") !== -1) {
 					XKit.page.blog_frame = true;
 				}
-				if (document.location.href.indexOf("http://www.tumblr.com/ask_form/") !== -1) {
+				if (document.location.href.indexOf("://www.tumblr.com/ask_form/") !== -1) {
 					XKit.page.ask_frame = true;
 				}
 				XKit.init_extension();

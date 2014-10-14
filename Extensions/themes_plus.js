@@ -1,5 +1,5 @@
 //* TITLE Themes+ (preview) **//
-//* VERSION 0.1 REV H **//
+//* VERSION 0.1 REV I **//
 //* DESCRIPTION Customize More **//
 //* DETAILS Themes+ lets you customize your dashboard to your liking by letting you choose the colors, the images and options yourself. You can also export and import the themes you and others made. Please note that this is the preview edition, so it's lacking some functionality. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -764,23 +764,23 @@ XKit.extensions.themes_plus = new Object({
 			return false;
 		}
 
-		if (document.location.href.indexOf('http://www.tumblr.com/following') !== -1) {
+		if (document.location.href.indexOf('://www.tumblr.com/following') !== -1) {
 			return false;
 		}
 
-		if (document.location.href.indexOf('http://www.tumblr.com/lookup') !== -1) {
+		if (document.location.href.indexOf('://www.tumblr.com/lookup') !== -1) {
 			return false;
 		}
 
-		if (document.location.href.indexOf('http://www.tumblr.com/spotlight') !== -1) {
+		if (document.location.href.indexOf('://www.tumblr.com/spotlight') !== -1) {
 			return false;
 		}
 
-		if (document.location.href.indexOf('http://www.tumblr.com/themes') !== -1) {
+		if (document.location.href.indexOf('://www.tumblr.com/themes') !== -1) {
 			return false;
 		}
 
-		if (document.location.href.indexOf('http://www.tumblr.com/help') !== -1) {
+		if (document.location.href.indexOf('://www.tumblr.com/help') !== -1) {
 			return false;
 		}
 

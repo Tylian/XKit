@@ -1,5 +1,5 @@
 //* TITLE Tweaks **//
-//* VERSION 2.9 REV G **//
+//* VERSION 2.9 REV H **//
 //* DESCRIPTION Various little tweaks for your dashboard. **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS These are small little tweaks that allows you customize your dashboard. If you have used XKit 6, you will notice that some of the extensions have been moved here as options you can toggle. Keep in mind that some of the tweaks (the ones marked with a '*') can slow down your computer. **//
@@ -239,7 +239,7 @@ XKit.extensions.tweaks = new Object({
 	run: function() {
 		this.running = true;
 
-		if (XKit.extensions.tweaks.preferences.hide_bubble.value === true && document.location.href.indexOf("http://www.tumblr.com/dashboard") === -1) {
+		if (XKit.extensions.tweaks.preferences.hide_bubble.value === true && XKit.interface.where().dashboard === false) {
 
 			XKit.extensions.tweaks.default_page_title = document.title;
 			$("#new_post_notice_container").remove();
@@ -250,10 +250,11 @@ XKit.extensions.tweaks = new Object({
 		}
 
 		if (XKit.extensions.tweaks.preferences.redirect_to_everything.value === true) {
-			if (document.location.href.indexOf("http://www.tumblr.com/tagged/") !== -1) {
-				var m_tag = document.location.href.replace("http://www.tumblr.com/tagged/","");
-				m_tag = m_tag.replace("http://tumblr.com/tagged/","");
+			if (document.location.href.indexOf("://www.tumblr.com/tagged/") !== -1 && $(".tag_editors").length > 0) {
+				var m_tag = document.location.href.replace("www.tumblr.com/tagged/","");
 				m_tag = m_tag.replace("tumblr.com/tagged/","");
+				m_tag = m_tag.replace("https://","");
+				m_tag = m_tag.replace("http://","");
 				m_tag = m_tag.replace("#","");
 				var redirect_me = true;
 				if (m_tag.substring(m_tag.length - 1) === "/") {
