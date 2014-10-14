@@ -952,7 +952,7 @@ XKit.extensions.themes_plus = new Object({
 
 				if (m_value === "") {
 
-					m_value = $(m_obj.of[0]).css(m_obj.attr[0]);
+					m_value = $(m_obj.of[0]).css("background-color");
 
 				}
 
