@@ -4,244 +4,200 @@
 <title>XKit global HTML page</title>
 <script type="text/javascript">
 
-	// XKit Bridge for Safari
-
+	// XKit Bridge for Safari Background Page.
 	(function(){
-
-	if (typeof XBridge !== "undefined") { return; }
-
-	XBridge = {
-
-		storage: {
-
-			storage: {},
-
-			get_all: function() {
-
-				var reKey = new RegExp("^" + "");
-				for (var i = 0, il = localStorage.length; i < il; i++) {
-						// only use the script's own keys
-						var key = localStorage.key(i);
-						if (key.match(reKey)) {
-							//console.log("!!!!!!! Loading value of " + key);
-							XBridge.storage.storage[key] = XBridge.storage.get_val(key);
-						}
-				}
-
-				//console.log(XBridge.storage.storage);
-
-			},
-
-			clear_all: function() {
-
-				var reKey = new RegExp("^" + "");
-				for (var i = 0, il = localStorage.length; i < il; i++) {
-						// only use the script's own keys
-						var key = localStorage.key(i);
-						if (key.match(reKey)) {
-							//console.log("!!!!!!! Loading value of " + key);
-							localStorage.removeItem(XBridge.storage.storage[key]);
-						}
-				}
-
-			},
-
-			get_val: function(key) {
-
-				try {
-				var value = localStorage.getItem(key);
-				if (!value || typeof value === "undefined")
-					return "";
-				var type = value[0];
-				value = value.substring(1);
-				switch (type) {
-					case 'b':
-						return value === 'true';
-					case 'n':
-						return Number(value);
-					default:
-						return value;
-				}
-				return "";
-				}catch(e) {
-					console.log("GM_getValue error: " + e.message);
-				}
-
-			}
-
-		},
-
+	
+	if (typeof XBackground !== "undefined") { return; }
+	
+	XBackground = {
+	
+		version: 1,
 		framework_version: safari.extension.displayVersion,
-
+		
 		init: function() {
-			console.log("XBridge working on framework " + XBridge.framework_version);
-			safari.application.addEventListener("message",XBridge.message,false);
+		
+			console.log("XBackground: Version " + XBackground.version + " working on framework " + XBackground.framework_version);
+			safari.application.addEventListener("message",XBackground.message,false);
+			XBackground.storage.read_all();
+			
 		},
-
-		message: function(ev) {
-
-			if (ev.name === "framework_version") {
-				XBridge.storage.get_all();
-				var m_object = {};
-				m_object.version = XBridge.framework_version;
-				m_object.storage = XBridge.storage.storage;
-				ev.target.page.dispatchMessage("framework_version", m_object);
-			}
-
-			if (ev.name === "http_request") {
-				//console.log("Got HTTP Request");
-				XBridge.http_request(ev.message, ev);
-			}
-
-			if (ev.name === "save_storage") {
-				//console.log("Got Save Storage Request");
-				XBridge.storage.clear_all();
-				console.log(ev.message);
-				for (var obj in ev.message) {
-					var key = obj;
-					var value = ev.message[obj];
-					value = (typeof value)[0] + value;
-					localStorage.setItem(key, value);
+		
+		storage: {
+		
+			data: "",
+			
+			read_all: function() {
+				
+				XBackground.storage.data = {};
+				
+				for (var i=0,len=localStorage.length;i<len;i++) {
+					XBackground.storage.data[localStorage.key(i)] = localStorage.getItem(localStorage.key(i));
 				}
-			}
+				
+				return XBackground.storage.data;
+			
+			},
+			
+			write_all: function() {
+			
+			
+			},
+			
+			delete_all: function() {
+			
+			
+			},
+			
+			size: function() {
+			
+				if (XBackground.storage.data == "")
+					XBackground.storage.read_all();
+					
+				// From: http://stackoverflow.com/questions/1248302/javascript-object-size
+				
+			   	var objectList = [];
+				var stack = [ XBackground.storage.data ];
+				var bytes = 0;
 
-		},
+				while ( stack.length ) {
+					var value = stack.pop();
 
-		http_request: function(obj, ev) {
-
-			//try {
-
-			var settings = obj.settings;
-			var request = new XMLHttpRequest();
-			var m_event = ev;
-
-			request.req_obj = obj;
-
-			console.log("Requesting url " + settings['url'] + " with ID " + obj.request_id);
-
-			if (settings['method'] === "POST") {
-				request.open('POST', settings['url'], true);
-			} else {
-				request.open('GET', settings['url'], true);
-			}
-
-			request.onreadystatechange = function (oEvent) {
-				if (request.readyState === 4) {
-			  		console.log(" HTTP Request state changed to " + request.status + " on " + request.req_obj.request_id);
-			  		var m_to_return = new Object();
-					// Re-object-ify the XHR object so Safari doesn't prevent it from going through
-			  		m_to_return.request = JSON.parse(JSON.stringify(request));
-			  		m_to_return.status = request.status;
-			  		m_to_return.settings = settings;
-			  		m_to_return.onload = request.req_obj.onload;
-			  		m_to_return.onerror = request.req_obj.onerror;
-			  		m_to_return.request_id = request.req_obj.request_id;
-			  		m_to_return.headers = request.getAllResponseHeaders();
-					if (request.status === 200) {
-						if (typeof settings['onload'] !== "undefined") {
-							m_event.target.page.dispatchMessage("http_response", m_to_return);
-						} else {
-							console.log("No onload defined.");
-						}
-					} else {
-						if (typeof settings['onerror'] !== "undefined") {
-							m_event.target.page.dispatchMessage("http_response", m_to_return);
-						}
-				}
-			  }
-			};
-
-			if (typeof settings['headers'] !== "undefined") {
-				settings['headers'] = JSON.parse(settings['headers']);
-				//try {
-					for (var m_obj in settings['headers']) {
-						console.log(" -- Setting custom header \"" + m_obj + "\" to \"" + settings['headers'][m_obj] + "\"");
-						//console.log(settings['headers'][m_obj]);
-						request.setRequestHeader("" + m_obj + "", "" + settings['headers'][m_obj] + "");
-						//console.log(" ----- OK!");
+					if ( typeof value === 'boolean' ) {
+						bytes += 4;
 					}
-				//} catch(e) {
-				//	console.log(" !! Can't set custom header \"" + obj + "\": " + e.message);
-				//}
-			}
+					else if ( typeof value === 'string' ) {
+						bytes += value.length * 2;
+					}
+					else if ( typeof value === 'number' ) {
+						bytes += 8;
+					}
+					else if
+					(
+						typeof value === 'object'
+						&& objectList.indexOf( value ) === -1
+					)
+					{
+						objectList.push( value );
 
-			if (settings['method'] === "POST") {
-				if (settings['json'] === true) {
-					request.setRequestHeader('Content-Type', "application/json");
-					console.log(" -- Bridge requesting post with json mode on");
-				} else {
-					request.setRequestHeader('Content-Type', "application/x-www-form-urlencoded");
-					console.log(" -- Bridge requesting post with json mode off");
+						for( var i in value ) {
+							stack.push( value[ i ] );
+						}
+					}
 				}
-				request.send(settings['data']);
-			} else {
-				request.send(null);
+				return bytes;
+			
 			}
+		
+		},
+		
+		message: function(ev) {
+		
+			if (typeof XBackground.messages[ev.name] != "undefined")
+				return XBackground.messages[ev.name](ev);
+		
+			console.log("XBackground: Unknown message '" + ev.name + "'");
+		
+		},
+		
+		messages: {
+			
+			framework_version: function(ev) {
+				var m_object = {};
+				m_object.version = XBackground.framework_version;
+				m_object.storage = JSON.stringify(XBackground.storage.data);
+				ev.target.page.dispatchMessage("framework_version", m_object);
+			},
+			
+			save_storage_value: function(ev) {
+				
+				XBackground.storage.data[ev.message.name] = ev.message.value;
+				localStorage[ev.message.name] = ev.message.value;
+			
+			},
+			
+			delete_storage_value: function(ev) {
+			
+				delete XBackground.storage.data[ev.message.name];
+				delete localStorage[ev.message.name];
+			
+			},
+			
+			delete_storage: function(ev) {
+				
+				XBackground.storage.data = {};
+				localStorage.clear();
+				
+				ev.target.page.dispatchMessage("delete_storage_complete", ev.message);
+			
+			},
+			
+			http_request: function(ev) {
+			
+				var settings = ev.message.settings;
+				var request = new XMLHttpRequest();
+				
+				// Save our settings to the XMLHttpRequest object.
+				request.xkit_request_object = ev.message;
 
-			//} catch(e) {
-			//	console.log("Bridge can not make request: " + e.message);
-			//}
-
+				if (settings['method'] === "POST") {
+					request.open('POST', settings['url'], true);
+				} else {
+					request.open('GET', settings['url'], true);
+				}
+				
+				// Learn to listen to event changes.
+				request.onreadystatechange = function(event) {
+				
+					if (request.readyState !== 4)
+						return;
+						
+					// Create response object.
+					var response = {};
+					response.request = JSON.stringify(request);
+					response.status = request.status;
+					response.settings = request.settings;
+					response.request_id = request.xkit_request_object.request_id;
+					response.headers = request.getAllResponseHeaders();
+					ev.target.page.dispatchMessage("http_response", response);					
+				
+				};
+				
+				// Set headers if available.
+				if (typeof settings['headers'] !== "undefined") {
+					settings['headers'] = JSON.parse(settings['headers']);
+					console.log(" ------      FOUND HEADERS YAY XKIT   ----- ");
+					console.log(settings['headers']);
+					for (var header in settings['headers']) {
+							request.setRequestHeader(header, settings['headers'][header]);
+					}
+				} else {
+					console.log(" ------ !! ----- NO HEADERS ------ !! ----- ");
+				}
+				
+				if (settings['method'] === "POST") {
+					if (settings['json'] === true) {
+						request.setRequestHeader('Content-Type', "application/json");
+					} else {
+						request.setRequestHeader('Content-Type', "application/x-www-form-urlencoded");
+					}
+					request.send(settings['data']);
+				} else {
+					request.send(null);
+				}
+				
+			
+			}
+			
+		
 		}
-
-	}
-
-	XBridge.init();
-
-	}());
-
-
-
-	/*function httpRequest(settings, event) {
-
-	try {
-
-	var request = new XMLHttpRequest();
-
-	if (settings['method'] === "POST") {
-		request.open('POST', settings['url'], true);
-	} else {
-		request.open('GET', settings['url'], true);
-	}
-
-	request.onreadystatechange = function (oEvent) {
-	  if (request.readyState === 4) {
-	    if (request.status === 200) {
-		if (typeof settings['onload'] !== "undefined") {
-			event.target.page.dispatchMessage("httpResponse", request);
-		}
-	    } else {
-		if (typeof settings['onerror'] !== "undefined") {
-			event.target.page.dispatchMessage("httpResponse", request);
-		}
-	    }
-	  }
+		
+	
 	};
-
-	if (settings['method'] === "POST") {
-		request.setRequestHeader('Content-Type', "application/x-www-form-urlencoded");
-		request.send(settings['data']);
-	} else {
-		request.send(null);
-	}
-
-	} catch(e) {
-		xlog("**** [httpRequest] Unable to do this: " + e.message,"SafariHTTPRequest");
-	}
-
-	}
-
-	function respondToMessage(theMessageEvent) {
-    		if(theMessageEvent.name === "httpRequest") {
-       			var settings = theMessageEvent.message;
-       			httpRequest(settings, theMessageEvent);
-    		}
-}
-
-	safari.application.addEventListener("message",respondToMessage,false);*/
+	
+	XBackground.init();
+	
+	}());
 
 </script>
 </head>
-<body>
-</body>
 </html>
