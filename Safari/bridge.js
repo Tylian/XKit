@@ -1,253 +1,283 @@
-var framework_version = "";
+var framework_version = 0;
 var storage_max = -1;
 var storage_used = -1;
 
-console.log("Yo!");
-
 (function(){
 
-if (typeof XBridge !== "undefined") { console.log("XBridge Already defined."); return; }
+	if (typeof XBridge !== "undefined") { return; }
 
-XBridge = {
-	version: "1.0.2",
-	framework_version: "",
-	request_callbacks: new Array(),
-	storage_area: "",
+	XBridge = {
 
-	init: function() {
-		// Fetch framework version.
-		if (top !== self) {
-			if (typeof safari === "undefined") {
-				console.log("XKit Bridge: Quitting, top!==self and safari is undefined.");
+		version: 1,
+		framework_version: 0,
+		storage_area: {},
+	
+		init: function() {
+	
+			console.log("XBridge: Version " + XBridge.version + ": Initializing..");
+			console.log("XBridge: Page is " + document.location.href);
+			
+			if (top !== self && typeof safari === "undefined") {
+				console.log("XBridge: Quitting, top!==self and safari is undefined.");
 				return;
 			}
-			console.log("XKit Bridge: top !== self!");
-		} else {
-			console.log("XKit Bridge: top === self!");
-		}
-		$(document).ready(function() {
-			try {
-				setTimeout(function() {
-
-					safari.self.addEventListener("message", XBridge.message, false);
-					safari.self.tab.dispatchMessage("framework_version");
-
-				}, 100);
-			} catch(e) {
-				console.log("XBridge error: " + e.message);
-				try {
-					// XKit.init();
-				} catch(e) {
-					console.log("XBridge error, recovery mode failed: " + e.message);
+			
+			// Let's first fetch the storage and framework version.
+			safari.self.addEventListener("message", XBridge.message, false);
+			safari.self.tab.dispatchMessage("framework_version");
+			
+		},
+		
+		message: function(ev) {
+		
+			if (typeof XBridge.messages[ev.name] != "undefined")
+				return XBridge.messages[ev.name](ev);
+		
+			console.log("XBridge: Unknown message '" + ev.name + "'");
+		
+		},
+		
+		messages: {
+		
+			framework_version: function(ev) {
+			
+				// Called after XBackground loads the storage and reads Framework version.
+				
+				console.log("XBridge: Running on Framework " + ev.message.version);
+				framework_version = ev.message.version;
+				XBridge.framework_version = ev.message.version;
+				XBridge.storage_area = JSON.parse(ev.message.storage);
+				
+				console.log(XBridge.storage_area);
+				
+				if (typeof jQuery == 'undefined') {  
+					console.log("XBridge: Warning! jQuery is not found!");
+					XBridge.init_XKit(0);
+				} else {
+					jQuery(document).ready(function() {
+						XBridge.init_XKit(0);
+					});
 				}
+				
+			},
+			
+			http_response: function(ev) {
+			
+				// Called after a network request is complete.
+			
+				console.log("XBridge: Received HTTP Request for ID " + ev.message.request_id);
+				ev.message.request = JSON.parse(ev.message.request);
+				
+				ev.message.request.f_headers = ev.message.headers.split("\r\n");
+
+				ev.message.request.getResponseHeader = function(header) {
+
+					for (var i=0; i<this.f_headers.length;i++) {
+						if (this.f_headers[i].substring(0, header.length + 1) === header + ":") {
+							return this.f_headers[i].substring(header.length + 2);
+						}
+					}
+
+					return "";
+
+				};
+				
+				for (var i=0;i<XBridge.network.callbacks.length;i++) {
+					
+					callback = XBridge.network.callbacks[i];
+					
+					if (callback.id == ev.message.request_id) {
+						
+						if (ev.message.status === 200) {
+							if (typeof callback.onload !== "undefined") {
+								callback.onload(ev.message.request, ev.message.request, ev.message.request);
+							}
+						} else {
+							if (typeof callback.onerror !== "undefined") {
+								callback.onerror(ev.message.request, ev.message.request, ev.message.request);
+							}
+						}
+						
+						XBridge.network.callbacks.splice(i, 1);
+						return;
+						
+					}
+				
+				}
+				
+				console.log("XBridge: Warning! Callback for HTTP Request " +  ev.message.request_id + " not found!");
+			
+			},
+			
+			delete_storage_complete: function(ev) {
+			
+				// Called after XBackground deletes all storage data.
+				
+				for (var i=0;i<XBridge.storage.callbacks.length;i++) {
+				
+					callback = XBridge.storage.callbacks[i];
+				
+					if (callback.id == ev.message) {
+						XBridge.storage.callbacks[i].callback();
+						XBridge.storage.callbacks.splice(i, 1);
+						return;
+					}
+					
+					console.log("XBridge: Warning! Callback for Storage Deletion Request " +  ev.message + " not found!");
+				
+				}
+			
 			}
-		});
-	},
-
-	message: function(ev) {
-
-		if (ev.name === "framework_version") {
-			console.log("Got framework version package, trying to init the extension.");
-			framework_version = ev.message.version;
-			XBridge.framework_version = ev.message.version;
+		
+		},
+		
+		init_XKit: function(tryCount) {
+		
+			if (typeof XKit == 'undefined') {
+				if (tryCount <= 5) {
+					setTimeout(function() { XBridge.init_XKit(tryCount + 1); }, 100);
+				} else {
+					console.log("XBridge: Fatal Error! XKit object is not found!");
+				}
+				return false;
+			}
+				
+			// Add the CSS here. By default, Safari adds our CSS first, and Tumblr's
+			// CSS completely overwrites stuff like DIV and A, making our CSS useless
+			// unless loaded after theirs.
+			var link = document.createElement("link");
+			link.href = safari.extension.baseURI + "xkit.css";
+			link.type = "text/css";
+			link.rel = "stylesheet";
+			link.media = "screen";
+			document.getElementsByTagName("head")[0].appendChild(link);
+			
 			XKit.version = framework_version;
-			XBridge.storage_area = ev.message.storage;
-			storage_used = get_storage_used();
-			//console.log("XKit Bridge: is window top? " + (top === self) + "\n" + document.location.href + "\nFramework_version = " + XBridge.framework_version);
-			try {
-				XKit.init();
-			} catch(e) {
-				console.log("Init Extension of XKit failed: " + e.message);
+			XKit.init();
+		
+		},
+		
+		make_id: function() {
+		
+			var text = "";
+			var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+			for( var i=0; i < 50; i++ )
+				text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+			return text;
+		
+		},
+		
+		network: {
+		
+			callbacks: [],
+		
+			request: function(settings) {
+			
+				settings['url'] = settings['url'].replace("http://api.tumblr.com","https://api.tumblr.com");
+				
+				if (settings['url'] == "http://www.tumblr.com/dashboard" || settings['url'] == "http://www.tumblr.com/dashboard/") {
+					settings['url'] = settings['url'].replace("http://","https://");
+				} 
+		
+				if (settings['url'].indexOf("http://") != -1 && settings['url'].indexOf("tumblr.com/svc/") != -1) {
+					settings['url'] = settings['url'].replace("http://","https://");
+				} 
+			
+				var toSend = new Object();
+				toSend.settings = settings;
+				toSend.request_id = XBridge.make_id();
+				
+				console.log("XBridge: Sending network request for " + settings["url"]);
+				console.log("XBridge: Network request ID is " + toSend.request_id);
+				
+				var callbacks = new Object();
+				callbacks.id = toSend.request_id;
+				callbacks.onload = settings['onload'];
+				callbacks.onerror = settings['onerror'];
+				XBridge.network.callbacks.push(callbacks);
+				
+				// Safari does not like us passing functions.
+				delete toSend.settings['onload'];
+				delete toSend.settings['onerror'];
+				toSend.settings['headers'] = JSON.stringify(toSend.settings['headers']);
+				
+				safari.self.tab.dispatchMessage("http_request", toSend);
+			
 			}
-		}
+		
+		},
+		
+		storage: {
+		
+			callbacks: [],
+		
+			write: function(name, value) {
+			
+				var toWrite = (typeof value)[0] + window.btoa(value);
+				XBridge.storage_area[name] = toWrite;
+				
+				// Send data to background page so it would get saved.
+				var toSend = new Object();
+				toSend.name = name;
+				toSend.value = toWrite;
+				safari.self.tab.dispatchMessage("save_storage_value", toSend);
+			
+			},
+			
+			read: function(name, defaultValue) {
+			
+				var value = XBridge.storage_area[name];
+				if (!value) { return defaultValue; }
 
-		if (ev.name === "http_response") {
-			/*
-				m_to_return.request = request;
-				m_to_return.status = request.status;
-				m_to_return.settings = settings;
-			*/
-
-			console.log("got event response from http request! - id is " + ev.message.request_id);
-			console.log(ev.message);
-
-			ev.message.request.f_headers = ev.message.headers.split("\r\n");
-
-			ev.message.request.getResponseHeader = function(header) {
-
-				for (var i=0; i<this.f_headers.length;i++) {
-					if (this.f_headers[i].substring(0, header.length + 1) === header + ":") {
-						return this.f_headers[i].substring(header.length + 2);
-					}
+				var type = value[0];
+				value = window.atob(value.substring(1));
+				
+				switch (type) {
+					case 'b':
+						return value === 'true';
+					case 'n':
+						return Number(value);
+					default:
+						return value;
 				}
-
-				return "";
-
-			};
-
-			console.log("Trying to call the callback with id " + ev.message.request_id);
-
-			for (var i=0;i<XBridge.request_callbacks.length;i++) {
-
-				console.log(" ---- Current Callback ID is " + XBridge.request_callbacks[i].id);
-				if (XBridge.request_callbacks[i].id === ev.message.request_id) {
-
-					if (ev.message.status === 200) {
-						if (typeof XBridge.request_callbacks[i].onload !== "undefined") {
-							XBridge.request_callbacks[i].onload(ev.message.request, ev.message.request, ev.message.request);
-						}
-					} else {
-						if (typeof XBridge.request_callbacks[i].onerror !== "undefined") {
-							XBridge.request_callbacks[i].onerror(ev.message.request, ev.message.request, ev.message.request);
-						}
-					}
-
-					XBridge.request_callbacks.splice(i, 1);
-					break;
-				}
-
+			
+			},
+			
+			erase: function(name) {
+			
+				delete XBridge.storage_area[name];
+				var toSend = { name: name };
+				safari.self.tab.dispatchMessage("delete_storage_value", toSend);
+			
+			},
+			
+			erase_all: function(callback) {
+			
+				var callbackObject = new Object();
+				callbackObject.id = XBridge.make_id();
+				callbackObject.callback = callback;
+				XBridge.storage.callbacks.push(callbackObject);
+			
+				safari.self.tab.dispatchMessage("delete_storage", callbackObject.id);
+			
 			}
+		
+		},
 
-		}
-
-	}
-
-};
+	};
 
 	XBridge.init();
 
 }());
 
-function make_request_id()
-{
-	var text = "";
-	var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-
-	for( var i=0; i < 50; i++ )
-		text += possible.charAt(Math.floor(Math.random() * possible.length));
-
-	return text;
-}
-
-function GM_xmlhttpRequest(settings) {
-
-	var to_send = new Object();
-	to_send.settings = settings;
-	to_send.request_id = make_request_id();
-
-	console.log("Sending http_request for " + settings["url"]);
-
-	console.log("Request ID is: " + to_send.request_id);
-
-	var m_callbacks = new Object();
-	m_callbacks.id = to_send.request_id;
-	m_callbacks.onload = settings['onload'];
-	m_callbacks.onerror = settings['onerror'];
-
-	// Safari 7 will refuse to send the message if functions are present
-	settings['onload'] = !!settings['onload']; // convert to boolean
-	settings['onerror'] = !!settings['onerror']; // convert to boolean
-	settings['headers'] = JSON.stringify(settings['headers']); // convert to boolean
-
-	XBridge.request_callbacks.push(m_callbacks);
-
-	safari.self.tab.dispatchMessage("http_request",to_send);
-
-}
-
-function getBridgeError() {
-
-	return "";
-
-}
-
-function get_storage_used() {
-
-	var to_count = GM_listValues();
-	var to_return = 0;
-
-	for (var i=0;i<to_count.length;i++) {
-		to_return = to_return + to_count[i].length;
-	}
-
-	return to_return;
-
-}
-
-function GM_deleteAllValues(callback) {
-
-	var to_delete = GM_listValues();
-
-	/*for (var i=0;i<to_delete.length;i++) {
-		GM_deleteValue(to_delete[i], true);
-	}*/
-
-	for (var obj in XBridge.storage_area) {
-		GM_deleteValue(obj, true);
-	}
-
-	safari.self.tab.dispatchMessage("save_storage", XBridge.storage_area);
-	callback();
-
-}
-
-function GM_getValue(name, defaultValue) {
-	try {
-	//console.log(XBridge.storage_area);
-	var value = XBridge.storage_area[name];
-	//console.log("trying to get \"" + name + "\": value is: \"" + value + "\"");
-	if (!value)
-		return defaultValue;
-	var type = value[0];
-	value = value.substring(1);
-	switch (type) {
-		case 'b':
-			return value === 'true';
-		case 'n':
-			return Number(value);
-		default:
-			return value;
-	}
-	}catch(e) {
-		console.log("GM_getValue error: " + e.message);
-	}
-}
-
-function GM_deleteValue(name, no_save) {
-	console.log("Deleting " + name);
-	delete XBridge.storage_area[name];
-	if (no_save !== true) {
-		safari.self.tab.dispatchMessage("save_storage", XBridge.storage_area);
-	}
-}
-
-function GM_log(message) {
-	console.log(message);
-}
-
-function GM_openInTab(url) {
-	return window.open(url, "_blank");
-}
-
-function GM_listValues() {
-	var list = [];
-	var reKey = new RegExp("^" + "");
-	for (var i = 0, il = XBridge.storage_area.length; i < il; i++) {
-			// only use the script's own keys
-			try {
-				var key = XBridge.storage_area.key(i);
-				if (key.match(reKey)) {
-					list.push(key);
-				}
-			} catch(e) {
-				console.log("XKit Bridge: " + e.message);
-			}
-	}
-	return list;
-}
-
-function GM_setValue(name, value) {
-	value = (typeof value)[0] + value;
-	XBridge.storage_area[name] = value;
-	safari.self.tab.dispatchMessage("save_storage", XBridge.storage_area);
-}
+// Legacy/Unused/GM functions
+function getBridgeError() { return ""; }
+function GM_log(message) { console.log(message); }
+function GM_openInTab(url) { return window.open(url, "_blank"); }
+function GM_xmlhttpRequest(settings) { XBridge.network.request(settings); }
+function GM_setValue(name, value) { XBridge.storage.write(name, value); }
+function GM_getValue(name, defaultValue) { return XBridge.storage.read(name, defaultValue); }
+function GM_deleteValue(name, no_save) { XBridge.storage.erase(name); }
+function GM_deleteAllValues(callback) { XBridge.storage.erase_all(callback); }
