@@ -1,7 +1,7 @@
 Here is a really simple, example extension that removes the Tumblr logo and changes the title of the window upon start.  
 
 For information about XKit API, check the [XKit Object](https://github.com/atesh/XKit/wiki/XKit-object).
-
+```javascript
 	//* TITLE Example Extension **//
 	//* VERSION 1.0 REV A **//
 	//* DESCRIPTION Nothing useful is done here? **//
@@ -63,3 +63,4 @@ For information about XKit API, check the [XKit Object](https://github.com/atesh
 		}
 
 	});
+```
