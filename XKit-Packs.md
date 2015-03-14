@@ -41,7 +41,7 @@ Failure to name your extension with the format above will cause your extension t
 ## Do's and Do Not Do's of XKit Packs
 
 ### Do
-* Do write extensions that is useful to users, and provide a good experience.
+* Do write extensions that are useful to and provide a good experience for users.
 * Do write good descriptions that assist the user on using the extension.
 * Do pick a nice icon for your extension.
 * Do be nice to your users and take their feedback seriously.
@@ -60,7 +60,7 @@ Failure to name your extension with the format above will cause your extension t
 * Don't write extensions that disable/enable/download extensions.
 * Don't write extensions that might be used to harass users, such as a follower checker or "anon tracker".
 * Don't write "follower train" extensions. Don't write extensions that follow/unfollow blogs.
-* Don't write extensions that allow the user the change the source of a post.
+* Don't write extensions that allow the user to change the source of a post.
 * Don't write extensions that might get you, me, or the user in legal trouble.
 * Don't obfuscate your code. Obfuscated extensions will be removed as soon as they are discovered, no matter if they are doing something malicious or not.
 * In short, don't do anything that might be considered "evil" or "jerk"-ish. Be nice.
