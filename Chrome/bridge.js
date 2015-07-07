@@ -81,7 +81,7 @@ function init_bridge() {
 			});
 			return;
 		}
-		for (key in items) {
+		for (var key in items) {
 			xkit_storage[key] = items[key];
 		}
 		storage_loaded = true;
@@ -125,7 +125,7 @@ function GM_flushStorage(callback) {
 function GM_deleteAllValues(callback) {
 
 	storage.get(function(items) {
-  		for (key in items) {
+  		for (var key in items) {
 			storage.remove(key);
   		}
   		storage.clear();
@@ -219,7 +219,7 @@ function GM_xmlhttpRequest(settings) {
 
 		settings['url'] = settings['url'].replace("http://api.tumblr.com","https://api.tumblr.com");
 
-		if (settings['url'].indexOf("http://www.tumblr.com/") == 0) {
+		if (settings['url'].indexOf("http://www.tumblr.com/") === 0) {
 
 			try {
 				console.log(" -- Bridge forwarding to HTTPS! (Dashboard)");

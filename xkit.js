@@ -154,9 +154,8 @@ XKit = {
 			}
 
 		} catch(e) {
-
+      console.log(e);
 			show_error_update("xkit_init(): " + e.message);
-
 		}
 	},
 	init_frame: function() {

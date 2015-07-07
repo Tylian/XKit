@@ -1,3 +1,5 @@
+/* jshint moz: true */
+
 (function(){
 
 if (typeof XBridge !== "undefined") { return; }
@@ -35,12 +37,12 @@ XBridge = {
 	},
 	destroy: function() {
 		window.removeEventListener('unload', XBridge.events.unload, false);
-		var appcontent=window.document.getElementById("appcontent");
+		let appcontent=window.document.getElementById("appcontent");
 		appcontent.removeEventListener("DOMContentLoaded", XBridge.events.window, false);
 		XBridge = null;
 	},
 	check: function(url) {
-		var scheme=Components.classes["@mozilla.org/network/io-service;1"]
+		let scheme=Components.classes["@mozilla.org/network/io-service;1"]
 			.getService(Components.interfaces.nsIIOService)
 			.extractScheme(url);
 		return (
@@ -53,7 +55,7 @@ XBridge = {
 			// Browser start event.
 			// Remove listener, no longer required, apparently.
 			window.removeEventListener('load', XBridge.events.load, false);
-			var appcontent=window.document.getElementById("appcontent");
+			let appcontent=window.document.getElementById("appcontent");
 			if (appcontent && !appcontent.xkit_bridge) {
 				appcontent.xkit_bridge=true;
 				appcontent.addEventListener("DOMContentLoaded", XBridge.events.window, false);
@@ -69,10 +71,10 @@ XBridge = {
 		window: function(e) {
 			// New window event
 			try {
-				var unsafeWin=e.target.defaultView;
+				let unsafeWin=e.target.defaultView;
 				if (unsafeWin.wrappedJSObject) unsafeWin=unsafeWin.wrappedJSObject;
-				var unsafeLoc=new XPCNativeWrapper(unsafeWin, "location").location;
-				var href=new XPCNativeWrapper(unsafeLoc, "href").href;
+				let unsafeLoc=new XPCNativeWrapper(unsafeWin, "location").location;
+				let href=new XPCNativeWrapper(unsafeLoc, "href").href;
 				try {
 					if (XBridge.check(href) && (/^http:\/\/www\.tumblr\.com\/.*$/.test(href) || /^https:\/\/www\.tumblr\.com\/.*$/.test(href))) {
 						// if (!( /^http:\/\/www\.tumblr\.com\/upload\/image.*$/.test(href)) {
@@ -91,20 +93,20 @@ XBridge = {
 
 		// Based on Userscript Compiler tool.
 
-		var	ioService=Components.classes["@mozilla.org/network/io-service;1"]
+		let	ioService=Components.classes["@mozilla.org/network/io-service;1"]
 			.getService(Components.interfaces.nsIIOService);
-		var	scriptableStream=Components
+		let	scriptableStream=Components
 			.classes["@mozilla.org/scriptableinputstream;1"]
 			.getService(Components.interfaces.nsIScriptableInputStream);
-		var unicodeConverter=Components
+		let unicodeConverter=Components
 			.classes["@mozilla.org/intl/scriptableunicodeconverter"]
 			.createInstance(Components.interfaces.nsIScriptableUnicodeConverter);
 		unicodeConverter.charset="UTF-8";
 
-		var	channel=ioService.newChannel(aUrl, "UTF-8", null);
-		var	input=channel.open();
+		let	channel=ioService.newChannel(aUrl, "UTF-8", null);
+		let	input=channel.open();
 		scriptableStream.init(input);
-		var	str=scriptableStream.read(input.available());
+		let	str=scriptableStream.read(input.available());
 		scriptableStream.close();
 		input.close();
 
@@ -124,9 +126,9 @@ XBridge = {
 			XBridge.prefs = XBridge.prefs_service.getBranch("extensions.xkit7.");
 		},
 		get_used: function() {
-			var children = XBridge.prefs.getChildList("", {});
-			var m_size = 0;
-			for (var i=0;i<children.length;i++) {
+			let children = XBridge.prefs.getChildList("", {});
+			let m_size = 0;
+			for (let i=0;i<children.length;i++) {
 				m_size = m_size + XBridge.storage.get(children[i], "").length;
 			}
 			//alert(m_size);
@@ -140,7 +142,7 @@ XBridge = {
 		},
 		get: function(name, default_value) {
 			try {
-				var value = XBridge.prefs.getCharPref(name);
+				let value = XBridge.prefs.getCharPref(name);
 				if (typeof value !== "undefined") {
 					return value;
 				} else {
@@ -160,7 +162,7 @@ XBridge = {
 	},
 	errors: {
 		get: function() {
-			var m_object = new Object();
+			let m_object = new Object();
 			m_object.errors = false;
 			return m_object;
 		}
@@ -173,23 +175,22 @@ XBridge = {
 	},
 	sandbox: "",
 	run: function(evt) {
-		if (!evt.originalTarget instanceof HTMLDocument) {
+		if (!(evt.originalTarget instanceof HTMLDocument)) {
 			return;
 		}
 
-		var view = evt.originalTarget.defaultView;
+		let view = evt.originalTarget.defaultView;
 		if (!view) {
 			return;
 		}
 
-		var sandbox = new Components.utils.Sandbox(view, { sandboxPrototype: view, wantXrays: true, wantExportHelpers: true });
+		let sandbox = new Components.utils.Sandbox(view, { sandboxPrototype: view, wantXrays: true, wantExportHelpers: true });
 		XBridge.sandbox = sandbox;
 		sandbox.unsafeWindow = view.window.wrappedJSObject;
 		sandbox.window = view.window;
 		sandbox.document = sandbox.window.document;
-		sandbox.__proto__ = sandbox.window;
 
-		var http_requester = new XBridge.objects.httpRequester(window, sandbox.unsafeWindow);
+		let http_requester = new XBridge.objects.httpRequester(window, sandbox.unsafeWindow);
 
 		sandbox.framework_version = XBridge.framework_version;
 		sandbox.getBridgeError = XBridge.errors.get;
@@ -204,43 +205,18 @@ XBridge = {
 
 		sandbox.window.GM_xmlhttpRequest = sandbox.GM_xmlhttpRequest;
 
-		for (var i=0;i<XBridge.to_load.length;i++) {
-			var m_script = XBridge.retrieve('chrome://xkit/content/' + XBridge.to_load[i]);
+		for (let i=0;i<XBridge.to_load.length;i++) {
+			let m_script = XBridge.retrieve('chrome://xkit/content/' + XBridge.to_load[i]);
 			Components.utils.evalInSandbox(m_script, sandbox, "1.8", "resource://xkit/" + XBridge.to_load[i]);
 		}
 
-		var fileref = sandbox.document.createElement("link");
+		let fileref = sandbox.document.createElement("link");
 		fileref.setAttribute("rel", "stylesheet");
 		fileref.setAttribute("type", "text/css");
 		fileref.setAttribute("href", "resource://xkit/resources/xkit.css");
 		sandbox.document.getElementsByTagName("head")[0].appendChild(fileref);
 
 		Components.utils.evalInSandbox("XKit.init();", sandbox);
-
-		return;
-
-		setTimeout(function() {
-
-		try {
-
-			if (typeof sandbox.XKit === "undefined" || typeof sandbox.$ === "undefined") {
-				setTimeout(function() {
-					if (typeof sandbox.XKit === "undefined" || typeof sandbox.$ === "undefined") {
-						sandbox.XKit.init();
-					} else {
-						// Give up here?
-					}
-				}, 1500);
-			} else {
-				sandbox.XKit.init();
-			}
-
-		} catch(e) {
-			XBridge.display_error(e);
-		}
-
-		}, 200);
-
 	}
 };
 
@@ -252,10 +228,10 @@ XBridge.objects.httpRequester.prototype.request = function(settings) {
 
 	try {
 
-	var request = new this.window.XMLHttpRequest();
+	let request = new this.window.XMLHttpRequest();
 	request.mwindow = this.window;
 
-	var msettings = settings.wrappedJSObject;
+	let msettings = settings.wrappedJSObject;
 
 	console.log("[XBHTTPREQUEST] Request for " + settings['url'] + " from CS to XBridge");
 
@@ -284,16 +260,16 @@ XBridge.objects.httpRequester.prototype.request = function(settings) {
 
 	    		try {
 
-	    			//var fake_request = request;
+	    			//let fake_request = request;
 	    			//fake_request.__exposedProps__: { responseText: "r", status: "r" };
-	    			var m_XMLHttpRequest = { real_request: request, responseText : request.responseText, status: 200, __exposedProps__ : { getResponseHeader: "r", responseText: "r", status: "r" } };
+	    			let m_XMLHttpRequest = { real_request: request, responseText : request.responseText, status: 200, __exposedProps__ : { getResponseHeader: "r", responseText: "r", status: "r" } };
 	      			m_XMLHttpRequest.getResponseHeader = function(requested_header) {
 	      				return this.real_request.getResponseHeader(requested_header);
 	      			};
 	      			msettings['onload'](m_XMLHttpRequest, m_XMLHttpRequest, m_XMLHttpRequest);
 
 	      		} catch(e) {
-	      				var m_XMLHttpRequest = { real_request: request, responseText : request.responseText, status: 200, __exposedProps__ : { getResponseHeader: "r", responseText: "r", status: "r" } };
+	      				let m_XMLHttpRequest = { real_request: request, responseText : request.responseText, status: 200, __exposedProps__ : { getResponseHeader: "r", responseText: "r", status: "r" } };
 	      				msettings['onload'](m_XMLHttpRequest, m_XMLHttpRequest, m_XMLHttpRequest);
 	      				XBridge.console.log(" -- XML Request error 13:" + e.message);
 	      		}
@@ -306,7 +282,7 @@ XBridge.objects.httpRequester.prototype.request = function(settings) {
 	    		console.log("[XBHTTPREQUEST] Error.");
 	    		try {
 
-	    			var m_XMLHttpRequest = { real_request: request, responseText : request.responseText, status: request.status, __exposedProps__ : { getResponseHeader: "r", responseText: "r", status: "r" } };
+	    			let m_XMLHttpRequest = { real_request: request, responseText : request.responseText, status: request.status, __exposedProps__ : { getResponseHeader: "r", responseText: "r", status: "r" } };
 	      			m_XMLHttpRequest.getResponseHeader = function(requested_header) {
 	      				return this.real_request.getResponseHeader(requested_header);
 	      			};
@@ -323,7 +299,7 @@ XBridge.objects.httpRequester.prototype.request = function(settings) {
 	};
 
 	if (typeof settings['headers'] !== "undefined") {
-		for (var obj in settings['headers']) {
+		for (let obj in settings['headers']) {
 			request.setRequestHeader(obj, settings['headers'][obj]);
 		}
 	}
@@ -347,5 +323,4 @@ XBridge.objects.httpRequester.prototype.request = function(settings) {
 		XBridge.console.log(" -- XML Request error 11:" + e.message);
 		XBridge.console.log("Bridge can not make request: " + e.message);
 	}
-
-}
+};
