@@ -1,12 +1,33 @@
-XKit.storage = (function() {
+/* jshint moz: true */
+
+storage_used = 0;
+storage_max = -1;
+
+/**
+ * Implement the storage component of XKit
+ */
+var AddonStorage = (function() {
   var database = {};
 
-  function get_used() {
-    return 0;
+  self.port.on('set', function(data) {
+    database[data.name] = data.value;
+  });
+
+  function init() {
+  }
+
+  function storageUsed() {
+    let size = 0;
+    for (let key of listKeys()) {
+      size += get(key, '').length;
+    }
+    return size;
   }
 
   function set(name, value) {
-    postRPC('set', {
+    database[name] = value;
+
+    self.port.emit('set', {
       name: name,
       value: value
     });
@@ -19,19 +40,28 @@ XKit.storage = (function() {
     return defaultValue;
   }
 
-  function delete_all() {
-    postRPC('delete_all', {});
+  function resetAll() {
+    self.port.emit('reset_all', {});
   }
 
-  function clear(name) {
-    postRPC('delete', {name: name});
+  function reset(name) {
+    self.port.emit('reset', {name: name});
+  }
+
+  function listKeys() {
+    return Object.keys(database);
+  }
+
+  function storageMax() {
+    return -1;
   }
 
   return {
+    storageUsed: storageUsed,
     get: get,
-    get_used: get_used,
     set: set,
-    delete_all: delete_all,
-    'delete': clear
+    resetAll: resetAll,
+    reset: reset,
+    listKeys: listKeys
   };
 })();

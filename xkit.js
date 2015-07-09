@@ -33,7 +33,8 @@ XKit = {
 		}
 
 		XKit.init_flags();
-		if (top === self && document.location.href.indexOf("://www.tumblr.com/dashboard/iframe?") === -1) {
+    // TODO what does top === self do?
+		if (document.location.href.indexOf("://www.tumblr.com/dashboard/iframe?") === -1) {
 			XKit.page.standard = true;
 			XKit.init_extension();
 		} else {
@@ -55,7 +56,6 @@ XKit = {
 		}
 	},
 	init_extension: function() {
-
 		XKit.console.add("init_extension: " + JSON.stringify(XKit.page));
 		if (XKit.page.xkit == true) {
 			xkit_init_special();
@@ -1134,7 +1134,6 @@ function xkit_init() {
 }
 
 function xkit_check_storage() {
-
 	if (storage_used === -1) {
 		setTimeout(function() { xkit_check_storage(); }, 100);
 		return;
