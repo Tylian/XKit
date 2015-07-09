@@ -1,0 +1,2 @@
+alert('Initing');
+XKit.init();

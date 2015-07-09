@@ -1,0 +1,14 @@
+{
+  "title": "XKit New",
+  "name": "xkit-new",
+  "fullName": "XKit New",
+  "version": "0.0.1",
+  "description": "XKit for recent Firefox",
+  "main": "index.js",
+  "author": "",
+  "engines": {
+    "firefox": ">=38.0a1",
+    "fennec": ">=38.0a1"
+  },
+  "license": "MIT"
+}
