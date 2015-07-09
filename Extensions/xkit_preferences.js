@@ -653,6 +653,7 @@ XKit.extensions.xkit_preferences = new Object({
 
 				XKit.storage.set("xkit_preferences","festivus","no");
 
+        stopFestivusInterval();
 			} else {
 
 				$("#xkit-festivus-toggle").html(festivus_off);
@@ -660,35 +661,42 @@ XKit.extensions.xkit_preferences = new Object({
 
 				XKit.storage.set("xkit_preferences","festivus","yes");
 
+        startFestivusInterval();
 			}
 
 		});
 
 		// $("#xkit-festivus").css("background-image","url('" + XKit.extensions.xkit_preferences.festivus_lights + "')");
 
-		clearInterval(XKit.extensions.xkit_preferences.festivus_lights_interval);
+    function stopFestivusInterval() {
+      clearInterval(XKit.extensions.xkit_preferences.festivus_lights_interval);
+    }
 
-		XKit.extensions.xkit_preferences.festivus_lights_interval = setInterval(function() {
+    function startFestivusInterval() {
+      stopFestivusInterval();
 
-			if ($("#xkit-festivus").attr('data-id-light') === "1") {
-				$("#xkit-festivus").css("background-position","0px 33px");
-				$("#xkit-festivus").attr('data-id-light', "2");
-				return;
-			}
+      XKit.extensions.xkit_preferences.festivus_lights_interval = setInterval(function() {
 
-			if ($("#xkit-festivus").attr('data-id-light') === "2") {
-				$("#xkit-festivus").css("background-position","0px 66px");
-				$("#xkit-festivus").attr('data-id-light', "3");
-				return;
-			}
+        if ($("#xkit-festivus").attr('data-id-light') === "1") {
+          $("#xkit-festivus").css("background-position","0px 33px");
+          $("#xkit-festivus").attr('data-id-light', "2");
+          return;
+        }
 
-			if ($("#xkit-festivus").attr('data-id-light') === "3") {
-				$("#xkit-festivus").css("background-position","0px 0px");
-				$("#xkit-festivus").attr('data-id-light', "1");
-				return;
-			}
+        if ($("#xkit-festivus").attr('data-id-light') === "2") {
+          $("#xkit-festivus").css("background-position","0px 66px");
+          $("#xkit-festivus").attr('data-id-light', "3");
+          return;
+        }
 
-		}, 1000);
+        if ($("#xkit-festivus").attr('data-id-light') === "3") {
+          $("#xkit-festivus").css("background-position","0px 0px");
+          $("#xkit-festivus").attr('data-id-light', "1");
+          return;
+        }
+
+      }, 1000);
+    }
 
 		if (XKit.extensions.xkit_preferences.hide_xcloud_if_not_installed === true) {
 			if (XKit.installed.check("xcloud") === false) {
