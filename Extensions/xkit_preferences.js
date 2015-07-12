@@ -654,35 +654,22 @@ XKit.extensions.xkit_preferences = new Object({
 				$("#xkit-festivus").css("display","block");
 				
 				XKit.storage.set("xkit_preferences","festivus","no");
-			
+
+			stopFestivusInterval();
 			} else {
 			
 				$("#xkit-festivus-toggle").html(festivus_off);
 				$("#xkit-festivus").css("display","none");
 				
-				XKit.storage.set("xkit_preferences","festivus","no");
-
-        stopFestivusInterval();
-			} else {
-
-				$("#xkit-festivus-toggle").html(festivus_off);
-				$("#xkit-festivus").css("display","none");
-
 				XKit.storage.set("xkit_preferences","festivus","yes");
-
-        startFestivusInterval();
+				
 			}
-
+			
 		});
-
+		
 		// $("#xkit-festivus").css("background-image","url('" + XKit.extensions.xkit_preferences.festivus_lights + "')");
-
-    function stopFestivusInterval() {
-      clearInterval(XKit.extensions.xkit_preferences.festivus_lights_interval);
-    }
-
-    function startFestivusInterval() {
-      stopFestivusInterval();
+		
+		clearInterval(XKit.extensions.xkit_preferences.festivus_lights_interval);
 		
 		XKit.extensions.xkit_preferences.festivus_lights_interval = setInterval(function() {
 			
