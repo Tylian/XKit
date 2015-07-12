@@ -1,5 +1,5 @@
 //* TITLE Tweaks **//
-//* VERSION 2.9 REV H **//
+//* VERSION 3.0 REV A **//
 //* DESCRIPTION Various little tweaks for your dashboard. **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS These are small little tweaks that allows you customize your dashboard. If you have used XKit 6, you will notice that some of the extensions have been moved here as options you can toggle. Keep in mind that some of the tweaks (the ones marked with a '*') can slow down your computer. **//
@@ -50,6 +50,30 @@ XKit.extensions.tweaks = new Object({
 			default: false,
 			value: false,
 			experimental: true
+		},
+		"sep001": {
+			text: "Post / Post Editor tweaks",
+			type: "separator",
+		},
+		"classic_post_titles": {
+			text: "Use 'Classic' (bold and smaller) post titles / headings",
+			default: false,
+			value: false
+		},
+		"bold_links": {
+			text: "Use 'Classic' (bold) links on text posts",
+			default: false,
+			value: false
+		},
+		"swap_buttons": {
+			text: "Swap Post/Save and Cancel buttons",
+			default: false,
+			value: false
+		},
+		"tag_slot_separator": {
+			text: "Add a separator line for Tag section on editor",
+			default: false,
+			value: false
 		},
 		"sep1": {
 			text: "User Interface tweaks",
@@ -344,6 +368,24 @@ XKit.extensions.tweaks = new Object({
 		if (XKit.extensions.tweaks.preferences.hide_blog_search.value === true) {
 			XKit.extensions.tweaks.add_css(".blog.search_results_section { display: none !important }", "xkit_tweaks_hide_blog_search");
 		}
+
+		if (XKit.extensions.tweaks.preferences.classic_post_titles.value === true) {
+			XKit.extensions.tweaks.add_css(".post-typography-update .post.is_conversation .post_content .post_title, .post-typography-update .post.is_regular .post_content .post_title, .post-typography-update .post .post-content .title-field * { font-family: \"Helvetica Neue\", Helvetica, sans-serif !important; font-size: 22px !important; font-weight: bold !important; line-height: normal !important; min-height: 25px !important; } .post_title { font-size: 22px !important; line-height: normal !important; font-weight: bold !important; font-family: \"Helvetica Neue\", Helvetica, sans-serif !important; }", "xkit_tweaks_classic_post_titles");
+			XKit.extensions.tweaks.add_css(".post .post_content h2 { font-size: 15px !important; line-height: normal !important; font-weight: bold !important; font-family: \"Helvetica Neue\", Helvetica, sans-serif !important; }", "xkit_tweaks_classic_post_titles");
+		}
+
+		if (XKit.extensions.tweaks.preferences.bold_links.value === true) {
+			XKit.extensions.tweaks.add_css(".post-typography-update .post .post-content a, .post-typography-update .post .post_content a { font-weight: bold !important; }", "xkit_tweaks_bold_links");
+		}
+
+		if (XKit.extensions.tweaks.preferences.swap_buttons.value === true) {
+			XKit.extensions.tweaks.add_css(".post_ask_answer_buttons_flipped .chrome.blue { margin-left: 0; } .post_ask_answer_buttons_flipped .chrome { margin-left: 0; margin-right: 5px; float: left; } .post_ask_answer_buttons_flipped .ask_cancel_button { float: right; margin-right: 0; } .post-form--controls .control.left { text-align: right; display: inline-block; width: auto; float: right; } .post-form--controls .control.right { text-align: left; display: inline-block; width: auto; float: left; } .post-forms--social-buttons .social-buttons { position: absolute; left: 50% }", "xkit_tweaks_bold_links");
+		}
+
+		if (XKit.extensions.tweaks.preferences.tag_slot_separator.value === true) {
+			XKit.extensions.tweaks.add_css(".post-form--tag-editor { border-top: 1px solid rgb(240,240,240); padding-top: 15px; }", "ffff");
+		}
+	
 
 		if (XKit.extensions.tweaks.preferences.show_old_new_bubble.value === true) {
 			// only need to do this if the ( tumblr | web ) button is there
