@@ -7,53 +7,6 @@
 
 */
 
-(function($) {
-    function pasteIntoInput(el, text) {
-        el.focus();
-        var val = el.value;
-        if (typeof el.selectionStart == "number") {
-            var selStart = el.selectionStart;
-            el.value = val.slice(0, selStart) + text + val.slice(el.selectionEnd);
-            el.selectionEnd = el.selectionStart = selStart + text.length;
-        } else if (typeof document.selection != "undefined") {
-            var textRange = document.selection.createRange();
-            textRange.text = text;
-            textRange.collapse(false);
-            textRange.select();
-        }
-    }
-
-    function allowTabChar(el) {
-        $(el).keydown(function(e) {
-            if (e.which == 9) {
-                pasteIntoInput(this, "\t");
-                return false;
-            }
-        });
-
-        // For Opera, which only allows suppression of keypress events, not keydown
-        $(el).keypress(function(e) {
-            if (e.which == 9) {
-                return false;
-            }
-        });
-    }
-
-    $.fn.allowTabChar = function() {
-        if (this.jquery) {
-            this.each(function() {
-                if (this.nodeType == 1) {
-                    var nodeName = this.nodeName.toLowerCase();
-                    if (nodeName == "textarea" || (nodeName == "input" && this.type == "text")) {
-                        allowTabChar(this);
-                    }
-                }
-            })
-        }
-        return this;
-    }
-})(jQuery);
-
 (function(){
 if (typeof XKit.extensions.xkit_editor !== "undefined") { return; }
 XKit.extensions.xkit_editor = new Object({
@@ -67,6 +20,8 @@ XKit.extensions.xkit_editor = new Object({
 
 });
 }());
+
+var script_editor, icon_editor, css_editor, object_editor;
 
 function extension_editor_run() {
 
@@ -85,15 +40,38 @@ function extension_editor_run() {
 							"<div id=\"xkit-editor-switch-to-icon\" class=\"\">Icon</div>" +
 							"<div id=\"xkit-editor-switch-to-object\" class=\"\">JSON</div>" +
 						"</div>" +
-						"<textarea id=\"xkit-editor-textarea\"></textarea>" +
-						"<textarea id=\"xkit-editor-textarea-object\"></textarea>" +
-						"<textarea id=\"xkit-editor-textarea-css\"></textarea>" +
-						"<textarea id=\"xkit-editor-textarea-icon\"></textarea>" +
+						"<div style=\"margin-top: 40px;\" id=\"xkit-editor-textarea\"></div>" +
+						"<div style=\"margin-top: 40px;\" id=\"xkit-editor-textarea-object\"></div>" +
+						"<div style=\"margin-top: 40px;\" id=\"xkit-editor-textarea-css\"></div>" +
+						"<div style=\"margin-top: 40px;\" id=\"xkit-editor-textarea-icon\"></div>" +
 					"</div>";
 	$("body").append(m_html);
-	$("#xkit-editor-textarea").allowTabChar();
-	$("#xkit-editor-textarea-object").allowTabChar();
-	$("#xkit-editor-textarea-css").allowTabChar();
+
+	var aceScript = document.createElement('script');
+	document.body.appendChild(aceScript);
+	aceScript.onload = extension_editor_finish_run;
+	aceScript.src = "//cdn.jsdelivr.net/ace/1.2.0/noconflict/ace.js";
+}
+
+
+function extension_editor_finish_run() {
+	script_editor = unsafeWindow.ace.edit('xkit-editor-textarea');
+	object_editor = unsafeWindow.ace.edit('xkit-editor-textarea-object');
+	css_editor = unsafeWindow.ace.edit('xkit-editor-textarea-css');
+	icon_editor = unsafeWindow.ace.edit('xkit-editor-textarea-icon');
+
+  var aceTheme = "ace/theme/tomorrow"
+
+	script_editor.setTheme(aceTheme);
+	script_editor.getSession().setMode("ace/mode/javascript");
+
+	object_editor.setTheme(aceTheme);
+	object_editor.getSession().setMode("ace/mode/json");
+	css_editor.setTheme(aceTheme);
+	css_editor.getSession().setMode("ace/mode/css");
+	icon_editor.setTheme(aceTheme);
+	icon_editor.getSession().setMode("ace/mode/javascript");
+
 	extension_editor_update_filename("");
 	extension_editor_resize();
 	$(window).resize(function() {
@@ -157,7 +135,7 @@ function extension_editor_run() {
 
 			var default_script = 	"//* TITLE " + new_filename + " **//\n" +
 									"//* VERSION 1.0 REV A **//\n" +
-									"//* DESCRIPTION  **//\n" +
+									"//* DESCRIPTION	**//\n" +
 									"//* DEVELOPER STUDIOXENIX **//\n" +
 									"//* FRAME false **//\n" +
 									"//* BETA false **//\n" +
@@ -245,17 +223,26 @@ function extension_editor_run() {
 		});
 
 	});
-
 }
 
 function extension_editor_load_extension(extension_id) {
 
 	var m_extension = XKit.installed.get(extension_id);
 	extension_editor_update_filename(extension_id);
-	$("#xkit-editor-textarea").val(m_extension.script);
-	$("#xkit-editor-textarea-icon").val(m_extension.icon);
-	$("#xkit-editor-textarea-css").val(m_extension.css);
-	$("#xkit-editor-textarea-object").val(JSON.stringify(m_extension));
+	script_editor.setValue(m_extension.script);
+	icon_editor.setValue(m_extension.icon);
+	css_editor.setValue(m_extension.css);
+	object_editor.setValue(JSON.stringify(m_extension));
+
+  function clear_selection(editor) {
+    editor.getSession().getSelection().clearSelection();
+  }
+
+  clear_selection(script_editor);
+  clear_selection(icon_editor);
+  clear_selection(css_editor);
+  clear_selection(object_editor);
+
 	$("#xkit-editor-switch-to-script").trigger('click');
 
 }
@@ -265,7 +252,7 @@ function extension_editor_update_object(m_object) {
 	// Check for title, description, developer, version etc. data
 	// here and update the object if neccessary.
 
-	m_object.script = $("#xkit-editor-textarea").val();
+	m_object.script = script_editor.getValue();
 
 	var version = extension_editor_legacy_get_attribute(m_object.script, "version");
 	if (version === "") {
@@ -290,13 +277,13 @@ function extension_editor_update_object(m_object) {
 	}
 	m_object.details = extension_editor_legacy_get_attribute(m_object.script, "details");
 
-	m_object.icon = $("#xkit-editor-textarea-icon").val();
-	m_object.css = $("#xkit-editor-textarea-css").val();
+	m_object.icon = icon_editor.getValue();
+	m_object.css = css_editor.getValue();
 
 	m_object.errors = false;
 
 	// Update this area too.
-	$("#xkit-editor-textarea-object").val(JSON.stringify(m_object));
+	object_editor.setValue(JSON.stringify(m_object));
 
 	XKit.installed.update(XKit.extensions.xkit_editor.filename, m_object);
 	XKit.notifications.add("Extension " + XKit.extensions.xkit_editor.filename + " saved successfully.");
@@ -354,10 +341,10 @@ function extension_editor_update_filename(filename) {
 function extension_editor_close_file() {
 
 	extension_editor_update_filename("");
-	$("#xkit-editor-textarea").val("");
-	$("#xkit-editor-textarea-icon").val("");
-	$("#xkit-editor-textarea-css").val("");
-	$("#xkit-editor-textarea-object").val("");
+	script_editor.setValue("");
+	icon_editor.setValue("");
+	css_editor.setValue("");
+	object_editor.setValue("");
 	$("#xkit-editor-switch-to-script").trigger('click');
 
 }
@@ -368,7 +355,6 @@ function extension_editor_resize() {
 	$("#xkit-editor-area").css("width", new_width + "px");
 	$("#xkit-editor-textarea").css("width", new_width + "px");
 	$("#xkit-editor-textarea-icon").css("width", new_width + "px");
-	$("#xkit-editor-textarea-script").css("width", new_width + "px");
 	$("#xkit-editor-textarea-object").css("width", new_width + "px");
 	$("#xkit-editor-textarea-css").css("width", new_width + "px");
 
@@ -376,7 +362,11 @@ function extension_editor_resize() {
 	$("#xkit-editor-area").css("height", new_height + "px");
 	$("#xkit-editor-textarea").css("height", new_height + "px");
 	$("#xkit-editor-textarea-icon").css("height", new_height + "px");
-	$("#xkit-editor-textarea-script").css("height", new_height + "px");
 	$("#xkit-editor-textarea-object").css("height", new_height + "px");
 	$("#xkit-editor-textarea-css").css("height", new_height + "px");
+
+	script_editor.resize();
+	icon_editor.resize();
+	css_editor.resize();
+	object_editor.resize();
 }
