@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 2.6 REV E **//
+//* VERSION 2.6 REV F **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER STUDIOXENIX **//
 
@@ -1831,31 +1831,57 @@ XKit.tools.get_blogs = function() {
 			user: function() {
 				
 				var m_return = new Object();
-				
-				if ($("#dashboard_controls_open_blog").find(".posts").find(".count").length > 0) {
-					m_return.posts = parseInt($("#dashboard_controls_open_blog").find(".posts").find(".count").html().replace(",",""));
+
+				$("#account_button").click(); // Because tab must be open to steal data from it
+
+				if ($(".blog-list-item").find(".blog-list-item-info").find(".blog-list-item-info-name").length > 0) {
+					m_return.name = $(".blog-list-item").find(".blog-list-item-info").find(".blog-list-item-info-name").html().replace(",","");
 				} else {
-					m_return.posts = 0;	
+					m_return.name = 'ERROR';
+				}	
+
+				if ($(".blog-list-item").find(".blog-list-item-info").find(".blog-list-item-info-title").length > 0) {
+					m_return.title = $(".blog-list-item").find(".blog-list-item-info").find(".blog-list-item-info-title").html().replace(",","");
+				} else {
+					m_return.title = 'ERROR';	
 				}	
 				
-				if ($("#dashboard_controls_open_blog").find(".followers").find(".count").length > 0) {
-					m_return.followers = parseInt($("#dashboard_controls_open_blog").find(".followers").find(".count").html().replace(",",""));
-				} else {
-					m_return.followers = 0;	
+				m_return.posts = 0;
+				m_return.followers = 0;
+				m_return.drafts = 0;
+				m_return.processing = 0;
+				m_return.queue = 0;
+				m_return.activity = '[0,0,0,0,0,0,0,0,0,0,0,0]';
+
+
+				if ($(".blog-sub-nav-details").find(".blog-sub-nav-item").length > 0) {
+					$(".blog-sub-nav-details").children(".blog-sub-nav-item").each(function(index, obj){
+						if ($(this).find(".blog-sub-nav-item-label").html() === 'Posts') {
+							m_return.posts = parseInt($(this).find(".blog-sub-nav-item-data").html().replace(",",""));
+						}
+						if ($(this).find(".blog-sub-nav-item-label").html() === 'Followers') {
+							m_return.followers = parseInt($(this).find(".blog-sub-nav-item-data").html().replace(",",""));
+						}
+						if ($(this).find(".blog-sub-nav-item-label").html() === 'Activity') {
+							// Hax. Won't properly retrieve $(this).find(".blog-sub-nav-item-data.sparkline") for some reason.
+							m_return.activity = $(this).find(".blog-sub-nav-item-link").html().slice(113).slice(0,-8);	
+						}
+						if ($(this).find(".blog-sub-nav-item-label").html() === 'Drafts') {
+							m_return.drafts = parseInt($(this).find(".blog-sub-nav-item-data").html().replace(",",""));
+						}
+						if ($(this).find(".blog-sub-nav-item-label").html() === 'Processing') {
+							m_return.processing = parseInt($(this).find(".blog-sub-nav-item-data").html().replace(",",""));
+						}
+						if ($(this).find(".blog-sub-nav-item-label").html() === 'Queue') {
+							m_return.queue = parseInt($(this).find(".blog-sub-nav-item-data").html().replace(",",""));
+						}
+					});
 				}
 				
-				if ($("#dashboard_controls_open_blog").find(".drafts").find(".count").length > 0) {
-					m_return.drafts = parseInt($("#dashboard_controls_open_blog").find(".drafts").find(".count").html().replace(",",""));
-				} else {
-					m_return.drafts = 0;	
-				}	
-				
-				if ($("#dashboard_controls_open_blog").find(".queue").find(".count").length > 0) {
-					m_return.queue = parseInt($("#dashboard_controls_open_blog").find(".queue").find(".count").html().replace(",",""));
-				} else {
-					m_return.queue = 0;	
-				}	
-				
+				$("#account_button").click();
+				$("#account_button").click();
+				// Hax. Probably a timing bug.
+
 				return m_return;	
 				
 			},
