@@ -33,7 +33,8 @@ XKit = {
 		}
 
 		XKit.init_flags();
-		if (top === self && document.location.href.indexOf("://www.tumblr.com/dashboard/iframe?") === -1) {
+    // TODO what does top === self do?
+		if (document.location.href.indexOf("://www.tumblr.com/dashboard/iframe?") === -1) {
 			XKit.page.standard = true;
 			XKit.init_extension();
 		} else {
@@ -55,7 +56,6 @@ XKit = {
 		}
 	},
 	init_extension: function() {
-
 		XKit.console.add("init_extension: " + JSON.stringify(XKit.page));
 		if (XKit.page.xkit == true) {
 			xkit_init_special();
@@ -858,23 +858,46 @@ XKit = {
 			return text;
 		},
 		get_blogs: function() {
-			var m_blogs_to_save = "";
-			var m_blogs = new Array();
-			if ($("#popover_blogs").length > 0) {
-				$("#popover_blogs > .popover_inner").children(".item").not(":last-child").each(function(index, obj) {
-					var mX = $(this).attr("id");
-					mX = mX.substring(9, mX.length);
-					m_blogs_to_save = m_blogs_to_save + ";" + mX;
-					m_blogs.push(mX);
-				});
-				XKit.tools.set_setting("xkit_cached_blogs", m_blogs_to_save);
-				return m_blogs;
-			} else {
-				var m_blogs = XKit.tools.get_setting("xkit_cached_blogs","");
-				if (m_blogs !== "") {
-					return m_blogs.split(";");
-				}
-			}
+      var m_blogs = [];
+
+      $('script').each(function() {
+        if ($(this).html().indexOf('require(\'context\').bootloader') >= 0) {
+
+          var s = $(this).html();
+
+          // This is quite hacky but quite frankly I don't give a fuck anymore.
+
+          s = s.replace('require(\'context\').bootloader(', '');
+          s = s.substring(0, s.length - 2);
+
+          var obj = JSON.parse(s);
+          var channels = obj.Context.userinfo.channels;
+
+          for (var item in channels) {
+             m_blogs.push(channels[item].name);
+          }
+
+          XKit.tools.set_setting('xkit_cached_blogs', m_blogs.join(';'));
+          return m_blogs;
+        }
+      });
+
+      var popoverBlogs = $('#popover_blogs');
+      if (popoverBlogs && popoverBlogs.length > 0) {
+          $('#popover_blogs > .popover_inner').children('.item')
+                                              .not(':last-child').each(function() {
+            var mX = $(this).attr('id');
+            mX = mX.substring(9, mX.length);
+            m_blogs.push(mX);
+         });
+         XKit.tools.set_setting('xkit_cached_blogs', m_blogs.join(';'));
+         return m_blogs;
+      } else {
+         var cachedBlogs = XKit.tools.get_setting('xkit_cached_blogs', '');
+         if (cachedBlogs !== '') {
+            return cachedBlogs.split(';');
+         }
+      }
 		},
 		replace_all: function(txt, replace, with_this) {
   			return txt.replace(new RegExp(replace, 'g'),with_this);
@@ -1134,7 +1157,6 @@ function xkit_init() {
 }
 
 function xkit_check_storage() {
-
 	if (storage_used === -1) {
 		setTimeout(function() { xkit_check_storage(); }, 100);
 		return;

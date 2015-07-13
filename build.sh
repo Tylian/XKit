@@ -22,13 +22,13 @@ fi
 
 if [ $1 == "firefox" ] || [ $1 == "all" ]; then 
   echo "Building XKit for Firefox"
-  rm -rf   FirefoxNew/data/xkit/
-  mkdir -p FirefoxNew/data/xkit/
-  cp *.js  FirefoxNew/data/xkit/
-  cp *.css FirefoxNew/data/xkit/
-  cp -r Extensions FirefoxNew/data/xkit/
-  (cd FirefoxNew && jpm xpi)
-  mv FirefoxNew/*.xpi build/
+  rm -rf   Firefox/data/xkit/
+  mkdir -p Firefox/data/xkit/
+  cp *.js  Firefox/data/xkit/
+  cp *.css Firefox/data/xkit/
+  cp -r Extensions Firefox/data/xkit/
+  (cd Firefox && jpm xpi)
+  mv Firefox/*.xpi build/
   built=true
 fi
 
