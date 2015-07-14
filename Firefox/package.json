@@ -2,7 +2,7 @@
   "title": "XKit New",
   "name": "xkit-new",
   "fullName": "XKit New",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "XKit for recent Firefox",
   "main": "index.js",
   "author": "",
