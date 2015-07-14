@@ -26,7 +26,6 @@ if [ $1 == "firefox" ] || [ $1 == "all" ]; then
   mkdir -p Firefox/data/xkit/
   cp *.js  Firefox/data/xkit/
   cp *.css Firefox/data/xkit/
-  cp -r Extensions Firefox/data/xkit/
   (cd Firefox && jpm xpi)
   mv Firefox/*.xpi build/
   built=true
