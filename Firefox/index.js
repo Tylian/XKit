@@ -2,6 +2,7 @@
 let self = require('sdk/self');
 let pageMod = require('sdk/page-mod');
 let prefs = require('sdk/preferences/service');
+let Request = require('sdk/request').Request;
 
 let scripts = [
   'bridge.js',
@@ -59,44 +60,44 @@ function onAttach(worker) {
   }
   // God forgive me for this is a sin
   port.emit('loading_complete', {});
-}
 
-function onCorsRequestComplete(response) {
-  if (response.status === 200) {
-    port.emit('cors-update', {
-      type: 'load',
-      response: {
-        responseText: response.text
-      }
-    });
-  } else {
-    port.emit('cors-update', {
-      type: 'error',
-      response: {
-        responseText: response.text || ''
-      }
-    });
+  function onCorsRequestComplete(response) {
+    if (response.status === 200) {
+      port.emit('cors-update', {
+        type: 'load',
+        response: {
+          responseText: response.text
+        }
+      });
+    } else {
+      port.emit('cors-update', {
+        type: 'error',
+        response: {
+          responseText: response.text || ''
+        }
+      });
+    }
   }
-}
 
-port.on('cors-request',
-        function({url, method, requestId, content, contentType}) {
-  var requestSettings = {
-    url: url,
-    onComplete: onCorsRequestComplete
-  };
-  if (content) {
-    requestSettings.content = content;
-  }
-  if (contentType) {
-    requestSettings.contentType = contentType;
-  }
-  var request = new Request(requestSettings);
-  switch (method.toUpperCase()) {
-    case 'GET':
-      request.get();
-      break;
-    case 'POST':
-      request.post();
-  }
-});
+  port.on('cors-request',
+          function({url, method, requestId, content, contentType}) {
+    var requestSettings = {
+      url: url,
+      onComplete: onCorsRequestComplete
+    };
+    if (content) {
+      requestSettings.content = content;
+    }
+    if (contentType) {
+      requestSettings.contentType = contentType;
+    }
+    var request = Request(requestSettings);
+    switch (method.toUpperCase()) {
+      case 'GET':
+        request.get();
+        break;
+      case 'POST':
+        request.post();
+    }
+  });
+}

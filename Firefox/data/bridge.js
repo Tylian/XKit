@@ -133,4 +133,3 @@ function GM_xmlhttpCorsRequest(settings) {
     onerror: settings.onerror
   };
 }
-
