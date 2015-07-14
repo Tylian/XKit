@@ -125,6 +125,19 @@ function writeGalleryFile(extensions) {
     }
     gallery.extensions.push(galleryExtension);
   });
+
+  // The gallery should display in sorted order because otherwise it is
+  // bothersome
+  gallery.extensions.sort(function(exA, exB) {
+    if (exA.title > exB.title) {
+      return 1;
+    }
+    if (exA.title < exB.title) {
+      return -1;
+    }
+    return 0;
+  });
+
   writePageFile('gallery.json', JSON.stringify(gallery));
 }
 
