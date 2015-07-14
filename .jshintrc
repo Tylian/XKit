@@ -1,10 +1,12 @@
 {
     "forin"         : false,
-    "browser"       : true,
-    "devel"         : true,
+    "browser"       : false,
+    "devel"         : false,
     "jquery"        : true,
     "nonstandard"   : true,
     "globals": {
+      "console"             : true,
+      "document"            : true,
       "jQuery"              : true,
       "$"                   : true,
       "XKit"                : true,
