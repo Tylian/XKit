@@ -234,14 +234,9 @@ XKit = {
 	download: {
 		try_count: 0,
 		max_try_count: 5,
-		extension: function(extension_id, callback) {
-			// Downloads the extension file.
-			var url = 'https://hobinjk.github.io/XKit/Extensions/dist/' + extension_id + '.json';
-
-			function fallback() {
-				return XKit.download.page("get.php?extension=" + extension_id, callback);
-			}
-
+		// TODO: implement as module, lose most of this code
+		github_fetch: function(path, callback, fallback) {
+			var url = 'https://hobinjk.github.io/XKit/Extensions/dist/' + path;
 			GM_xmlhttpRequest({
 				method: "GET",
 				url: url,
@@ -264,7 +259,28 @@ XKit = {
 				}
 			});
 		},
+		extension: function(extension_id, callback) {
+			// Downloads the extension file.
+			function fallback() {
+				return XKit.download.page("get.php?extension=" + extension_id, callback);
+			}
+
+			XKit.download.github_fetch(extension_id + '.json', callback, fallback);
+		},
 		page: function(page, callback) {
+			// Attempt to use Github distribution
+			function fallback() {
+				return XKit.download.page(page, callback);
+			}
+
+			if (page === 'list.php') {
+				XKit.download.github_fetch('page/list.json', callback, fallback);
+				return;
+			}
+			if (page === 'gallery.php') {
+				XKit.download.github_fetch('page/gallery.json', callback, fallback);
+				return;
+			}
 			// Downloads page from servers.
 			if (XKit.download.try_count >= XKit.download.max_try_count) {
 				XKit.download.try_count = 0;
