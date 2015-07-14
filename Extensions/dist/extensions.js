@@ -9,6 +9,8 @@ processExtensions();
 
 function processExtensions() {
   var extensionFiles = fs.readdirSync(extensionPath);
+  var extensions = [];
+
   extensionFiles.forEach(function(fileName) {
     // Look only for files for the form [a-z_]+.js, which exclues icon and css
     // files
@@ -22,8 +24,11 @@ function processExtensions() {
     }
     var extensionId = fileNameParts[0];
 
-    processExtension(extensionId);
+    extensions.push(processExtension(extensionId));
   });
+
+  writeGalleryFile(extensions);
+  writeListFile(extensions);
 }
 
 function readExtensionFile(path) {
@@ -34,6 +39,10 @@ function readExtensionFile(path) {
 
 function writeDistributionFile(path, contents) {
   fs.writeFileSync(distributionPath + '/' + path, contents);
+}
+
+function writePageFile(path, content) {
+  writeDistributionFile('page/' + path, content);
 }
 
 function existsExtensionFile(path) {
@@ -98,4 +107,34 @@ function processExtension(extensionId) {
   });
 
   writeDistributionFile(extensionId + '.json', JSON.stringify(extension));
+
+  return extension;
+}
+
+function writeGalleryFile(extensions) {
+  var gallery = {server: 'up', extensions: []};
+  extensions.forEach(function(extension) {
+    var galleryExtension = {
+      name: extension.id,
+      title: extension.title,
+      version: extension.version,
+      description: extension.description
+    };
+    if (extension.icon) {
+      galleryExtension.icon = extension.icon;
+    }
+    gallery.extensions.push(galleryExtension);
+  });
+  writePageFile('gallery.json', JSON.stringify(gallery));
+}
+
+function writeListFile(extensions) {
+  var list = {server: 'up', extensions: []};
+  extensions.forEach(function(extension) {
+    list.extensions.push({
+      name: extension.id,
+      version: extension.version
+    });
+  });
+  writePageFile('list.json', JSON.stringify(list));
 }
