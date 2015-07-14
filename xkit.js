@@ -1,6 +1,3 @@
-var available_extensions = new Array();
-var start = +new Date();  // log start timestamp
-
 (function(){
 
 if (typeof XKit !== "undefined") { return; }
@@ -33,7 +30,7 @@ XKit = {
 		}
 
 		XKit.init_flags();
-    // TODO what does top === self do?
+		// TODO what does top === self do?
 		if (document.location.href.indexOf("://www.tumblr.com/dashboard/iframe?") === -1) {
 			XKit.page.standard = true;
 			XKit.init_extension();
@@ -57,17 +54,17 @@ XKit = {
 	},
 	init_extension: function() {
 		XKit.console.add("init_extension: " + JSON.stringify(XKit.page));
-		if (XKit.page.xkit == true) {
+		if (XKit.page.xkit) {
 			xkit_init_special();
 			return;
 		}
 
-		if (XKit.page.standard == true) {
+		if (XKit.page.standard) {
 			XKit.init_normal();
 			return;
 		}
 
-		if (XKit.page.ask_frame == true || XKit.page.blog_frame == true || XKit.page.peepr == true) {
+		if (XKit.page.ask_frame || XKit.page.blog_frame || XKit.page.peepr) {
 			XKit.init_frame();
 			return;
 		}
@@ -130,9 +127,10 @@ XKit = {
 
 			// It exists! Great.
 			var xkit_main = XKit.installed.get("xkit_main");
-			if (xkit_main.errors == false && xkit_main.script !== "") {
+			if (!xkit_main.errors && xkit_main.script) {
 				XKit.console.add("Trying to run xkit_main.");
 				try {
+					/* jshint evil: true */
 					eval(xkit_main.script);
 					XKit.extensions.xkit_main.run();
 				} catch(e) {
@@ -154,7 +152,7 @@ XKit = {
 			}
 
 		} catch(e) {
-      console.log(e);
+			console.log(e);
 			show_error_update("xkit_init(): " + e.message);
 		}
 	},
@@ -169,9 +167,10 @@ XKit = {
 
 		// It exists! Great.
 		var xkit_main = XKit.installed.get("xkit_main");
-		if (xkit_main.errors == false && xkit_main.script !== "") {
+		if (!xkit_main.errors && xkit_main.script) {
 			XKit.console.add("Trying to run xkit_main.");
 			try {
+				/* jshint evil: true */
 				eval(xkit_main.script);
 				XKit.frame_mode = true;
 				XKit.extensions.xkit_main.run();
@@ -236,53 +235,13 @@ XKit = {
 		max_try_count: 5,
 		extension: function(extension_id, callback) {
 			// Downloads the extension file.
-			if (XKit.download.try_count >= XKit.download.max_try_count) {
-				XKit.download.try_count = 0;
-				var mdata = new Object();
-				mdata.errors = true;
-				mdata.server_down = true;
-				callback(mdata);
-				return;
-			}
-			var m_url = XKit.servers.next() + "/seven/get.php?extension=" + extension_id + "&ftch_id=" + XKit.tools.random_string();
-			XKit.console.add("Trying to fetch: " + m_url);
-
-			GM_xmlhttpRequest({
-				method: "GET",
-				url: m_url,
-				onerror: function(response) {
-					XKit.console.add("Server error, retrying download of page " + extension_id);
-					XKit.download.try_count++;
-					return XKit.download.extension(extension_id, callback);
-				},
-				onload: function(response) {
-					// We are done!
-					try {
-						var mdata = jQuery.parseJSON(response.responseText);
-					} catch(e) {
-						// Server return://ed bad thingy.
-						XKit.console.add("Unable to download extension '" + extension_id + "', server returned non-json object." + e.message);
-						XKit.download.try_count++;
-						return XKit.download.extension(extension_id, callback);
-					}
-					if (mdata.errors == true) {
-						XKit.download.try_count = 0;
-						XKit.console.add("Fetch successful, but mdata.errors is true or script is empty.");
-						callback(mdata);
-					} else {
-						XKit.download.try_count = 0;
-						XKit.console.add("Fetch successful, calling callback.");
-						callback(mdata);
-					}
-				}
-			});
-
+			XKit.download.page("get.php?extension=" + extension_id, callback);
 		},
 		page: function(page, callback) {
 			// Downloads page from servers.
 			if (XKit.download.try_count >= XKit.download.max_try_count) {
 				XKit.download.try_count = 0;
-				var mdata = new Object();
+				var mdata = {};
 				mdata.errors = true;
 				mdata.server_down = true;
 				callback(mdata);
@@ -305,15 +264,16 @@ XKit = {
 				},
 				onload: function(response) {
 					// We are done!
+					var mdata = {};
 					try {
-						var mdata = jQuery.parseJSON(response.responseText);
+						mdata = jQuery.parseJSON(response.responseText);
 					} catch(e) {
 						// Server returned bad thingy.
 						XKit.console.add("Unable to download page '" + page + "', server returned non-json object." + e.message);
 						XKit.download.try_count++;
 						return XKit.download.page(page, callback);
 					}
-					if (mdata.errors == true) {
+					if (mdata.errors) {
 						XKit.download.try_count = 0;
 						XKit.console.add("Fetch successful, but mdata.errors is true or script is empty.");
 						callback(mdata);
@@ -345,8 +305,7 @@ XKit = {
 			try {
 				installed_extensions = JSON.parse(m_string);
 			} catch(e) {
-				installed_extensions = new Object();
-				installed_extensions.extensions = new Array();
+				installed_extensions = {extensions: []};
 			}
 			installed_extensions.extensions.push(extension_id);
 			m_string = JSON.stringify(installed_extensions);
@@ -360,8 +319,7 @@ XKit = {
 					current_extensions.splice(i, 1);
 				}
 			}
-			var installed_extensions = new Object();
-			installed_extensions.extensions = current_extensions;
+			var installed_extensions = {extensions: current_extensions};
 			m_string = JSON.stringify(installed_extensions);
 			XKit.tools.set_setting("xkit_installed_extensions",m_string);
 		},
@@ -372,8 +330,7 @@ XKit = {
 			try {
 				installed_extensions = JSON.parse(m_string);
 			} catch(e) {
-				installed_extensions = new Object();
-				installed_extensions.extensions = new Array();
+				installed_extensions = {extensions: []};
 			}
 			return installed_extensions.extensions;
 		},
@@ -389,21 +346,22 @@ XKit = {
 		},
 		get: function(extension_id) {
 			// Returns the object.
-			var to_return = new Object();
 			var app_data = XKit.tools.get_setting("extension_" + extension_id, "");
 			if (app_data === "") {
-				to_return.errors = true;
-				to_return.error = "not_installed";
-				return to_return;
+				return {
+					errors: true,
+					error: "not_installed"
+				};
 			}
 			try {
 				var m_object = JSON.parse(app_data);
 				m_object.errors = false;
 				return m_object;
 			} catch(e) {
-				to_return.errors = true;
-				to_return.error = "parse_error";
-				return to_return;
+				return {
+					errors: true,
+					error: "parse_error"
+				};
 			}
 		},
 		update: function(extension_id, new_object) {
@@ -530,9 +488,7 @@ XKit = {
 		set: function(extension_id, key, value) {
 			var m_storage = XKit.storage.get_all(extension_id);
 			if (typeof m_storage[key] === "undefined") {
-				var m_object = new Object();
-				m_object.value = value;
-				m_storage[key] = m_object;
+				m_storage[key] = {value: value};
 			} else {
 				m_storage[key].value = value;
 			}
@@ -543,7 +499,7 @@ XKit = {
 			if (XKit.flags.do_not_limit_extension_storage === true) {
 				save_this = true;
 			}
-			if (save_this === false) {
+			if (!save_this) {
 				XKit.storage.show_error(extension_id, JSON.stringify(m_storage).length);
 				return false;
 			} else {
@@ -557,17 +513,13 @@ XKit = {
 		},
 		get_all: function(extension_id) {
 			var m_data = XKit.tools.get_setting("xkit_extension_storage__" + extension_id, "");
-			var m_object;
-			if (m_data === "") {
-				m_object = new Object();
-			} else {
+			if (m_data !== "") {
 				try {
-					m_object = JSON.parse(m_data);
+					return JSON.parse(m_data);
 				} catch(e) {
-					m_object = new Object();
 				}
 			}
-			return m_object;
+			return {};
 		},
 		clear: function(extension_id) {
 			XKit.tools.set_setting("xkit_extension_storage__" + extension_id, "");
@@ -597,16 +549,15 @@ XKit = {
 		}
 	},
 	browser: function() {
-
-		var to_return = new Object();
-
-		to_return.name = "UNKNOWN";
-		to_return.spoofed = false;
-		to_return.chrome = false;
-		to_return.firefox = false;
-		to_return.safari = false;
-		to_return.opera = false;
-		to_return.version = 0;
+		var to_return = {
+			name: "UNKNOWN",
+			spoofed: false,
+			chrome: false,
+			firefox: false,
+			safari: false,
+			opera: false,
+			version: 0
+		};
 
 		// First, let's check if it's chrome.
 		if (window.chrome) {
@@ -616,21 +567,24 @@ XKit = {
 			var is_chrome = navigator.userAgent.toLowerCase().indexOf('chrome') > -1;
 			to_return.chrome = is_chrome;
 		}
+
+		function get_real_version(ua_prefix) {
+			var ua_string = navigator.userAgent.toLowerCase();
+			var index = ua_string.indexOf(ua_prefix);
+			index += ua_prefix.length;
+			return parseFloat(ua_string.substring(index));
+		}
+
 		if (to_return.chrome === true) {
 			// Get version.
 			to_return.name = "Google Chrome";
-			var index = navigator.userAgent.toLowerCase().indexOf("chrome/");
-			var real_version = parseFloat(navigator.userAgent.toLowerCase().substring(index + ("chrome/".length)));
-			to_return.version = real_version;
+			to_return.version = get_real_version("chrome/");
 		}
-
 		// Then, let's check if it's firefox.
-		if (navigator.userAgent.toLowerCase().indexOf('firefox') > -1) {
+		else if (navigator.userAgent.toLowerCase().indexOf('firefox') > -1) {
 			to_return.name = "Mozilla Firefox";
 			to_return.firefox = true;
-			var index = navigator.userAgent.toLowerCase().indexOf("firefox/");
-			var real_version = parseFloat(navigator.userAgent.toLowerCase().substring(index + ("Firefox/".length)));
-			to_return.version = real_version;
+			to_return.version = get_real_version("firefox/");
 		}
 
 		// Check if there is spoofing!
@@ -640,7 +594,6 @@ XKit = {
 		}
 
 		return to_return;
-
 	},
 	console: {
 		shown: false,
@@ -757,28 +710,27 @@ XKit = {
 	},
 	conflicts: {
 		check: function() {
-			var m_return = new Object;
-
-			m_return.count = 0;
-			m_return.fatal = false;
-
-			// Checks for modes that might break XKit.
-			m_return.html = "<ol>";
+			var m_return = {
+				count: 0,
+				fatal: false,
+				// Checks for modes that might break XKit.
+				html: "<ol>"
+			};
 
 			if ($("#xkit-control-panel-icon").length > 0) {
-				 m_return.html =  m_return.html + "<li>XKit Next found</li>";
+				 m_return.html = m_return.html + "<li>XKit Next found</li>";
 				 m_return.fatal = true;
 				 m_return.count++;
 			}
 
 			if ($("#xkit_top_button").length > 0) {
-				 m_return.html =  m_return.html + "<li>XKit 5.x/6.x found</li>";
+				 m_return.html =	m_return.html + "<li>XKit 5.x/6.x found</li>";
 				 m_return.fatal = true;
 				 m_return.count++;
 			}
 
 			if ($("#missinge_button").length > 0) {
-				m_return.html =  m_return.html + "<li>Missing E found (removal optional)</li>";
+				m_return.html =	m_return.html + "<li>Missing E found (removal optional)</li>";
 				m_return.count++;
 			}
 
@@ -799,7 +751,7 @@ XKit = {
 				}
 
 				if (conflicting_extension) {
-					m_return.html =  m_return.html + "<li>Unknown extension found (removal optional)</li>";
+					m_return.html =	m_return.html + "<li>Unknown extension found (removal optional)</li>";
 					m_return.count++;
 				}
 
@@ -841,7 +793,7 @@ XKit = {
 			}
 		},
 		add_css: function(css, ext_id) {
-			if ($("#xkit-css-added-by-" + ext_id).length == 0) {
+			if ($("#xkit-css-added-by-" + ext_id).length === 0) {
 				$("head").append("<style id=\"xkit-css-added-by-" + ext_id + "\">" + css + "</style>");
 			} else {
 				$("#xkit-css-added-by-" + ext_id).append(css);
@@ -853,54 +805,55 @@ XKit = {
 		random_string: function() {
 			var text = "";
 			var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-			for( var i=0; i < 30; i++ )
-        		text += possible.charAt(Math.floor(Math.random() * possible.length));
+			for ( var i=0; i < 30; i++ ) {
+				text += possible.charAt(Math.floor(Math.random() * possible.length));
+			}
 			return text;
 		},
 		get_blogs: function() {
-      var m_blogs = [];
+			var m_blogs = [];
 
-      $('script').each(function() {
-        if ($(this).html().indexOf('require(\'context\').bootloader') >= 0) {
+			$('script').each(function() {
+				if ($(this).html().indexOf('require(\'context\').bootloader') >= 0) {
 
-          var s = $(this).html();
+					var s = $(this).html();
 
-          // This is quite hacky but quite frankly I don't give a fuck anymore.
+					// This is quite hacky but quite frankly I don't give a fuck anymore.
 
-          s = s.replace('require(\'context\').bootloader(', '');
-          s = s.substring(0, s.length - 2);
+					s = s.replace('require(\'context\').bootloader(', '');
+					s = s.substring(0, s.length - 2);
 
-          var obj = JSON.parse(s);
-          var channels = obj.Context.userinfo.channels;
+					var obj = JSON.parse(s);
+					var channels = obj.Context.userinfo.channels;
 
-          for (var item in channels) {
-             m_blogs.push(channels[item].name);
-          }
+					for (var item in channels) {
+						 m_blogs.push(channels[item].name);
+					}
 
-          XKit.tools.set_setting('xkit_cached_blogs', m_blogs.join(';'));
-          return m_blogs;
-        }
-      });
+					XKit.tools.set_setting('xkit_cached_blogs', m_blogs.join(';'));
+					return m_blogs;
+				}
+			});
 
-      var popoverBlogs = $('#popover_blogs');
-      if (popoverBlogs && popoverBlogs.length > 0) {
-          $('#popover_blogs > .popover_inner').children('.item')
-                                              .not(':last-child').each(function() {
-            var mX = $(this).attr('id');
-            mX = mX.substring(9, mX.length);
-            m_blogs.push(mX);
-         });
-         XKit.tools.set_setting('xkit_cached_blogs', m_blogs.join(';'));
-         return m_blogs;
-      } else {
-         var cachedBlogs = XKit.tools.get_setting('xkit_cached_blogs', '');
-         if (cachedBlogs !== '') {
-            return cachedBlogs.split(';');
-         }
-      }
+			var popoverBlogs = $('#popover_blogs');
+			if (popoverBlogs && popoverBlogs.length > 0) {
+				$('#popover_blogs > .popover_inner').children('.item')
+																						.not(':last-child').each(function() {
+					var mX = $(this).attr('id');
+					mX = mX.substring(9, mX.length);
+					m_blogs.push(mX);
+				});
+				XKit.tools.set_setting('xkit_cached_blogs', m_blogs.join(';'));
+				return m_blogs;
+			} else {
+				var cachedBlogs = XKit.tools.get_setting('xkit_cached_blogs', '');
+				if (cachedBlogs !== '') {
+					 return cachedBlogs.split(';');
+				}
+			}
 		},
 		replace_all: function(txt, replace, with_this) {
-  			return txt.replace(new RegExp(replace, 'g'),with_this);
+			return txt.replace(new RegExp(replace, 'g'),with_this);
 		},
 		get_setting: function(setting_name, default_value) {
 			try {
@@ -910,16 +863,15 @@ XKit = {
 			}
 		},
 		set_setting: function(setting_name, new_value) {
-			var to_return = new Object();
 			try {
 				GM_setValue(setting_name, new_value);
-				to_return.errors = false;
-				return to_return;
+				return {errors: false};
 			} catch(e) {
 				XKit.console.add("Can not save " + setting_name + ": " + e.message);
-				to_return.errors = true;
-				to_return.error = e.message;
-				return to_return;
+				return {
+					errors: true,
+					error: e.message
+				};
 			}
 		},
 		get_extension_setting: function(ext_id, setting_name, default_value) {
@@ -1040,16 +992,16 @@ function xerror(message) {
 }
 
 var centerIt = function (el /* (jQuery element) Element to center */) {
-    if (!el) {
-    	return;
-    }
-    var moveIt = function () {
-        var winWidth = $(window).width();
-        var winHeight = $(window).height();
-        el.css("position","fixed").css("left", ((winWidth / 2) - (el.width() / 2)) + "px").css("top", ((winHeight / 2) - (el.height() / 2)) + "px");
-    };
-    $(window).resize(moveIt);
-    moveIt();
+		if (!el) {
+			return;
+		}
+		var moveIt = function () {
+				var winWidth = $(window).width();
+				var winHeight = $(window).height();
+				el.css("position","fixed").css("left", ((winWidth / 2) - (el.width() / 2)) + "px").css("top", ((winHeight / 2) - (el.height() / 2)) + "px");
+		};
+		$(window).resize(moveIt);
+		moveIt();
 };
 
 function show_message(title, msg, icon, buttons) {
@@ -1073,7 +1025,7 @@ function show_message(title, msg, icon, buttons) {
 		m_html = m_html + "<div class=\"xkit-window-buttons\">" + buttons + "</div>";
 	}
 
-	if ($("#xkit-window-shadow").length == 0) {
+	if ($("#xkit-window-shadow").length === 0) {
 		m_html = m_html + "</div><div id=\"xkit-window-shadow\"></div>";
 	}
 
@@ -1129,6 +1081,7 @@ function xkit_init_special() {
 			xhr.open('GET', chrome.extension.getURL('editor.js'), false);
 			xhr.send(null);
 			try {
+				/* jshint evil: true */
 				eval(xhr.responseText);
 				XKit.extensions.xkit_editor.run();
 			} catch(e) {
@@ -1180,15 +1133,16 @@ function install_extension(mdata, callback) {
 
 	try {
 
-		if (mdata.errors == true || mdata.script == "") {
+		if (mdata.errors || !mdata.script) {
 			// Server returned an error or empty script.
 			XKit.console.add("install_extension failed: Empty script or errors.");
 			return callback(mdata);
 		}
 
-		var m_object = new Object();
-		m_object.script = mdata.script;
-		m_object.id = mdata.id;
+		var m_object = {
+			script: mdata.script,
+			id: mdata.id
+		};
 
 		if (typeof mdata.icon !== "undefined") {
 			m_object.icon = mdata.icon;
@@ -1303,6 +1257,7 @@ function xkit_install() {
 		}
 
 		try {
+			/* jshint evil: true */
 			eval(mdata.script);
 			XKit.extensions.xkit_installer.run();
 		} catch(e) {

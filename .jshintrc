@@ -1,15 +1,9 @@
 {
     "forin"         : false,
-    "quotmark"      : false,
-    "laxcomma"      : true,
-    "sub"           : true,
     "browser"       : true,
     "devel"         : true,
     "jquery"        : true,
     "nonstandard"   : true,
-    "-W002"         : true,
-    "-W009"         : true,
-    "-W010"         : true,
     "globals": {
       "jQuery"              : true,
       "$"                   : true,
