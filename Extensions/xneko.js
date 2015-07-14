@@ -3,7 +3,7 @@
 //* DESCRIPTION One live cat for your dashboard **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//
-//* DETAILS A free spirit Japanese cat for your dashboard.<br>It is based on the Neko application by Kenji Gotoh. **//
+//* DETAILS A free spirited Japanese cat for your dashboard.<br>It is based on the Neko application by Kenji Gotoh. **//
 //* BETA false **//
 //* SLOW true **//
 
