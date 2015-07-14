@@ -241,7 +241,7 @@ XKit = {
 				method: "GET",
 				url: url,
 				onerror: function(response) {
-					XKit.console.add("Server error, falling back for download of extension " + extension_id);
+					XKit.console.add("Server error, falling back for download of " + path);
 					return fallback();
 				},
 				onload: function(response) {
@@ -251,7 +251,7 @@ XKit = {
 						mdata = jQuery.parseJSON(response.responseText);
 					} catch(e) {
 						// Server returned bad thingy.
-						XKit.console.add("Unable to download extension '" + extension_id +
+						XKit.console.add("Unable to download '" + path +
 						                 "', server returned non-json object." + e.message);
 						return fallback();
 					}
