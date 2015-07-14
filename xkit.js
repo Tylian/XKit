@@ -1,3 +1,6 @@
+var available_extensions = [];
+var start = Date.now();  // log start timestamp
+
 (function(){
 
 if (typeof XKit !== "undefined") { return; }
