@@ -59,6 +59,8 @@ XKit.extensions.norecommended = new Object({
 
 	destroy: function() {
 		this.running = false;
+		
+		XKit.tools.remove_css("norecommended_no_liked");
 	}
 
 });
