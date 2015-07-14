@@ -61,29 +61,33 @@ function onAttach(worker) {
   // God forgive me for this is a sin
   port.emit('loading_complete', {});
 
-  function onCorsRequestComplete(response) {
-    if (response.status === 200) {
-      port.emit('cors-update', {
-        type: 'load',
-        response: {
-          responseText: response.text
-        }
-      });
-    } else {
-      port.emit('cors-update', {
-        type: 'error',
-        response: {
-          responseText: response.text || ''
-        }
-      });
-    }
+  function onCorsRequestComplete(requestId) {
+    return function(response) {
+      if (response.status === 200) {
+        port.emit('cors-update', {
+          type: 'load',
+          requestId: requestId,
+          response: {
+            responseText: response.text
+          }
+        });
+      } else {
+        port.emit('cors-update', {
+          type: 'error',
+          requestId: requestId,
+          response: {
+            responseText: response.text || ''
+          }
+        });
+      }
+    };
   }
 
   port.on('cors-request',
           function({url, method, requestId, content, contentType}) {
     var requestSettings = {
       url: url,
-      onComplete: onCorsRequestComplete
+      onComplete: onCorsRequestComplete(requestId)
     };
     if (content) {
       requestSettings.content = content;

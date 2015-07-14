@@ -113,7 +113,7 @@ self.port.on('cors-update', function(data) {
     return;
   }
   if (data.type === 'load') {
-    callback.onload(data.text);
+    callback.onload(data.response);
   } else {
     callback.onerror();
   }

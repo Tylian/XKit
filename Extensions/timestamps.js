@@ -174,7 +174,7 @@ XKit.extensions.timestamps = new Object({
 					if (dtx.isValid() === true) {
 
 						if (XKit.extensions.timestamps.preferences.only_relative.value === true) {
-    							$(obj).find(".xkit-fan-timestamp").html(dt.from(nowdatem));
+									$(obj).find(".xkit-fan-timestamp").html(dt.from(nowdatem));
 						} else {
 							$(obj).find(".xkit-fan-timestamp").html(dt.format(XKit.extensions.timestamps.preferences.format.value) + " &middot; " + dt.from(nowdatem));
 						}
@@ -201,7 +201,7 @@ XKit.extensions.timestamps = new Object({
 			if (dtx.isValid() === true) {
 
 				if (XKit.extensions.timestamps.preferences.only_relative.value === true) {
-    					$(obj).find(".xkit-fan-timestamp").html(dt.from(nowdatem));
+							$(obj).find(".xkit-fan-timestamp").html(dt.from(nowdatem));
 				} else {
 					$(obj).find(".xkit-fan-timestamp").html(dt.format(XKit.extensions.timestamps.preferences.format.value) + " &middot; " + dt.from(nowdatem));
 				}
@@ -243,7 +243,7 @@ XKit.extensions.timestamps = new Object({
 
 
 				if ($(this).attr('id') === "new_post" || $(this).hasClass("fan_mail") === true ||
-					$(this).find('.private_label').length > 0  || $(this).hasClass("note") === true) {
+					$(this).find('.private_label').length > 0	|| $(this).hasClass("note") === true) {
 					return;
 				}
 
@@ -350,7 +350,7 @@ XKit.extensions.timestamps = new Object({
 					if (dtx.isValid() === true) {
 
 						if (XKit.extensions.timestamps.preferences.only_relative.value === true) {
-    							$(obj).html(dt.from(nowdatem));
+									$(obj).html(dt.from(nowdatem));
 						} else {
 							$(obj).html(dt.format(XKit.extensions.timestamps.preferences.format.value) + " &middot; " + dt.from(nowdatem));
 						}
@@ -377,7 +377,7 @@ XKit.extensions.timestamps = new Object({
 			if (dtx.isValid() === true) {
 
 				if (XKit.extensions.timestamps.preferences.only_relative.value === true) {
-    					$(obj).html(dt.from(nowdatem));
+							$(obj).html(dt.from(nowdatem));
 				} else {
 					$(obj).html(dt.format(XKit.extensions.timestamps.preferences.format.value) + " &middot; " + dt.from(nowdatem));
 				}
@@ -411,7 +411,7 @@ XKit.extensions.timestamps = new Object({
 				var dt = moment(dtx);
 
 				if (XKit.extensions.timestamps.preferences.only_relative.value === true) {
-    				$(obj).html(dt.from(nowdatem));
+						$(obj).html(dt.from(nowdatem));
 				} else {
 					$(obj).html(dt.format(XKit.extensions.timestamps.preferences.format.value) + " &middot; " + dt.from(nowdatem));
 				}
@@ -431,42 +431,41 @@ XKit.extensions.timestamps = new Object({
 try {
 				// console.log(blog_name);
 				var api_url = "https://api.tumblr.com/v2/blog/" + blog_name + "/posts" + "?api_key=" + XKit.extensions.timestamps.apiKey + "&id=" + post_id;
-        // Shim CorsRequest for now
-        // if (!GM_xmlhttpCorsRequest) {
-        //   GM_xmlhttpCorsRequest = GM_xmlhttpRequest;
-        // }
-        GM_xmlhttpCorsRequest({
+				// Shim CorsRequest for now
+				// if (!GM_xmlhttpCorsRequest) {
+				//	 GM_xmlhttpCorsRequest = GM_xmlhttpRequest;
+				// }
+				GM_xmlhttpCorsRequest({
 					method: "GET",
 					url: api_url,
-				onerror: function() {
-					XKit.console.add('Unable to load timestamp for post ' + post_id);
-					XKit.extensions.timestamps.show_failed(obj);
-				},
-				onload: function(response) {
-					try {
-
-						var data = JSON.parse(response.responseText);
-						var post = data.response.posts[0];
-						var xd = post.timestamp;
-						var dtx = new Date(xd * 1000);
-						var dt = moment(dtx);
-
-						if (XKit.extensions.timestamps.preferences.only_relative.value === true) {
-							$(obj).html(dt.from(nowdatem));
-						} else {
-							$(obj).html(dt.format(XKit.extensions.timestamps.preferences.format.value) + " &middot; " + dt.from(nowdatem));
-						}
-
-						$(obj).removeClass('xtimestamp_loading');
-						XKit.storage.set("timestamps", "xkit_timestamp_cache_" + post_id, xd);
-
-					} catch(e) {
-
+					onerror: function() {
 						XKit.console.add('Unable to load timestamp for post ' + post_id);
 						XKit.extensions.timestamps.show_failed(obj);
+					},
+					onload: function(response) {
+						try {
 
+							var data = JSON.parse(response.responseText);
+							var post = data.response.posts[0];
+							var xd = post.timestamp;
+							var dtx = new Date(xd * 1000);
+							var dt = moment(dtx);
+
+							if (XKit.extensions.timestamps.preferences.only_relative.value === true) {
+								$(obj).html(dt.from(nowdatem));
+							} else {
+								$(obj).html(dt.format(XKit.extensions.timestamps.preferences.format.value) + " &middot; " + dt.from(nowdatem));
+							}
+
+							$(obj).removeClass('xtimestamp_loading');
+							XKit.storage.set("timestamps", "xkit_timestamp_cache_" + post_id, xd);
+
+						} catch(e) {
+							XKit.console.add('Unable to load timestamp for post ' + post_id);
+							XKit.extensions.timestamps.show_failed(obj);
+						}
 					}
-				}});
+				});
 			} catch(e) {
 				alert(e.message);
 			}
