@@ -432,9 +432,9 @@ try {
 				// console.log(blog_name);
 				var api_url = "https://api.tumblr.com/v2/blog/" + blog_name + "/posts" + "?api_key=" + XKit.extensions.timestamps.apiKey + "&id=" + post_id;
         // Shim CorsRequest for now
-        if (!GM_xmlhttpCorsRequest) {
-          GM_xmlhttpCorsRequest = GM_xmlhttpRequest;
-        }
+        // if (!GM_xmlhttpCorsRequest) {
+        //   GM_xmlhttpCorsRequest = GM_xmlhttpRequest;
+        // }
         GM_xmlhttpCorsRequest({
 					method: "GET",
 					url: api_url,
