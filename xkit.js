@@ -236,7 +236,7 @@ XKit = {
 		max_try_count: 5,
 		extension: function(extension_id, callback) {
 			// Downloads the extension file.
-			var url = 'http://hobinjk.github.io/XKit/Extensions/dist/' + extension_id + '.json';
+			var url = 'https://hobinjk.github.io/XKit/Extensions/dist/' + extension_id + '.json';
 
 			function fallback() {
 				return XKit.download.page("get.php?extension=" + extension_id, callback);
