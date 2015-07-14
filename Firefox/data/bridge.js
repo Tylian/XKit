@@ -103,3 +103,34 @@ function GM_xmlhttpRequest(settings) {
     }
   }, timeout);
 }
+
+// Implement an only-once delivery mechanism for CORS requests
+var corsCallbacks = {};
+
+self.port.on('cors-update', function(data) {
+  var callback = corsCallbacks[data.requestId];
+  if (!callback) {
+    return;
+  }
+  if (data.type === 'load') {
+    callback.onload(data.text);
+  } else {
+    callback.onerror();
+  }
+  corsCallbacks[data.requestId] = null;
+});
+
+function GM_xmlhttpCorsRequest(settings) {
+  var requestId = Math.floor(Math.random() * 4294967296);
+  self.port.emit('cors-request', {
+    method: settings.method,
+    url: settings.url,
+    requestId: requestId
+  });
+
+  corsCallbacks[requestId] = {
+    onload: settings.onload,
+    onerror: settings.onerror
+  };
+}
+

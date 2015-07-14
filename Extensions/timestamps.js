@@ -431,10 +431,13 @@ XKit.extensions.timestamps = new Object({
 try {
 				// console.log(blog_name);
 				var api_url = "https://api.tumblr.com/v2/blog/" + blog_name + "/posts" + "?api_key=" + XKit.extensions.timestamps.apiKey + "&id=" + post_id;
-				GM_xmlhttpRequest({
+        // Shim CorsRequest for now
+        if (!GM_xmlhttpCorsRequest) {
+          GM_xmlhttpCorsRequest = GM_xmlhttpRequest;
+        }
+        GM_xmlhttpCorsRequest({
 					method: "GET",
 					url: api_url,
-					json: true,
 				onerror: function() {
 					XKit.console.add('Unable to load timestamp for post ' + post_id);
 					XKit.extensions.timestamps.show_failed(obj);
