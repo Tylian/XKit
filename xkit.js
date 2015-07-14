@@ -220,16 +220,14 @@ XKit = {
 		],
 		count: 11,
 		get: function() {
-			var toReturn = XKit.servers.list[XKit.servers.count];
-			return toReturn;
+			return XKit.servers.list[XKit.servers.count];
 		},
 		next: function() {
 			XKit.servers.count++;
 			if (XKit.servers.count >= XKit.servers.list.length) {
 				XKit.servers.count = 0;
 			}
-			var toReturn = XKit.servers.list[XKit.servers.count];
-			return toReturn;
+			return XKit.servers.list[XKit.servers.count];
 		}
 	},
 	extensions: {},
@@ -238,7 +236,33 @@ XKit = {
 		max_try_count: 5,
 		extension: function(extension_id, callback) {
 			// Downloads the extension file.
-			XKit.download.page("get.php?extension=" + extension_id, callback);
+			var url = 'http://hobinjk.github.io/XKit/Extensions/dist/' + extension_id + '.json';
+
+			function fallback() {
+				return XKit.download.page("get.php?extension=" + extension_id, callback);
+			}
+
+			GM_xmlhttpRequest({
+				method: "GET",
+				url: url,
+				onerror: function(response) {
+					XKit.console.add("Server error, falling back for download of extension " + extension_id);
+					return fallback();
+				},
+				onload: function(response) {
+					// We are done!
+					var mdata = {};
+					try {
+						mdata = jQuery.parseJSON(response.responseText);
+					} catch(e) {
+						// Server returned bad thingy.
+						XKit.console.add("Unable to download extension '" + extension_id +
+						                 "', server returned non-json object." + e.message);
+						return fallback();
+					}
+					callback(mdata);
+				}
+			});
 		},
 		page: function(page, callback) {
 			// Downloads page from servers.
@@ -1245,8 +1269,7 @@ function xkit_install() {
 	XKit.console.add("Trying to retrieve XKit Installer.");
 
 	XKit.install("xkit_installer", function(mdata) {
-
-		if (mdata.errors == true || mdata.script == "") {
+		if (mdata.errors || !mdata.script) {
 			if (mdata.storage_error === true) {
 				show_error_installation("[Code: 401] Storage error:" + mdata.error);
 			} else {
