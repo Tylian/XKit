@@ -55,6 +55,7 @@ function extension_editor_run() {
 
 
 function extension_editor_finish_run() {
+  var unsafeWindow = unsafeWindow || window;
 	script_editor = unsafeWindow.ace.edit('xkit-editor-textarea');
 	object_editor = unsafeWindow.ace.edit('xkit-editor-textarea-object');
 	css_editor = unsafeWindow.ace.edit('xkit-editor-textarea-css');
