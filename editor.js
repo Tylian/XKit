@@ -53,25 +53,52 @@ function extension_editor_run() {
 	aceScript.src = "//cdn.jsdelivr.net/ace/1.2.0/noconflict/ace.js";
 }
 
+function makeEditorShim(id) {
+	var currentNode = document.getElementById(id);
+	var newNode = document.createElement('textarea');
+	newNode.id = id;
+	if (currentNode.hasAttribute('style')) {
+		newNode.setAttribute('style', currentNode.getAttribute('style'));
+	}
+	currentNode.parentNode.replaceChild(newNode, currentNode);
+	var elt = $('#' + id);
+
+	return {
+		getValue: function() {
+			return elt.val();
+		},
+		setValue: function(text) {
+			elt.val(text);
+		},
+		resize: function() {
+		}
+	};
+}
+
+
 
 function extension_editor_finish_run() {
-  var unsafeWindow = unsafeWindow || window;
-	script_editor = unsafeWindow.ace.edit('xkit-editor-textarea');
-	object_editor = unsafeWindow.ace.edit('xkit-editor-textarea-object');
-	css_editor = unsafeWindow.ace.edit('xkit-editor-textarea-css');
-	icon_editor = unsafeWindow.ace.edit('xkit-editor-textarea-icon');
+	if (typeof(unsafeWindow) !== 'undefined') {
+		script_editor = unsafeWindow.ace.edit('xkit-editor-textarea');
+		object_editor = unsafeWindow.ace.edit('xkit-editor-textarea-object');
+		css_editor = unsafeWindow.ace.edit('xkit-editor-textarea-css');
+		icon_editor = unsafeWindow.ace.edit('xkit-editor-textarea-icon');
 
-  var aceTheme = "ace/theme/tomorrow"
-
-	script_editor.setTheme(aceTheme);
-	script_editor.getSession().setMode("ace/mode/javascript");
-
-	object_editor.setTheme(aceTheme);
-	object_editor.getSession().setMode("ace/mode/json");
-	css_editor.setTheme(aceTheme);
-	css_editor.getSession().setMode("ace/mode/css");
-	icon_editor.setTheme(aceTheme);
-	icon_editor.getSession().setMode("ace/mode/javascript");
+		var aceTheme = "ace/theme/tomorrow";
+		script_editor.setTheme(aceTheme);
+		script_editor.getSession().setMode("ace/mode/javascript");
+		object_editor.setTheme(aceTheme);
+		object_editor.getSession().setMode("ace/mode/json");
+		css_editor.setTheme(aceTheme);
+		css_editor.getSession().setMode("ace/mode/css");
+		icon_editor.setTheme(aceTheme);
+		icon_editor.getSession().setMode("ace/mode/javascript");
+	} else {
+		script_editor = makeEditorShim('xkit-editor-textarea');
+		object_editor = makeEditorShim('xkit-editor-textarea-object');
+		css_editor = makeEditorShim('xkit-editor-textarea-css');
+		icon_editor = makeEditorShim('xkit-editor-textarea-icon');
+	}
 
 	extension_editor_update_filename("");
 	extension_editor_resize();
@@ -235,14 +262,16 @@ function extension_editor_load_extension(extension_id) {
 	css_editor.setValue(m_extension.css);
 	object_editor.setValue(JSON.stringify(m_extension));
 
-  function clear_selection(editor) {
-    editor.getSession().getSelection().clearSelection();
-  }
+	function clear_selection(editor) {
+		if (editor.getSession) {
+			editor.getSession().getSelection().clearSelection();
+		}
+	}
 
-  clear_selection(script_editor);
-  clear_selection(icon_editor);
-  clear_selection(css_editor);
-  clear_selection(object_editor);
+	clear_selection(script_editor);
+	clear_selection(icon_editor);
+	clear_selection(css_editor);
+	clear_selection(object_editor);
 
 	$("#xkit-editor-switch-to-script").trigger('click');
 
