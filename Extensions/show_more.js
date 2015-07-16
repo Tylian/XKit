@@ -858,7 +858,7 @@ XKit.extensions.show_more = new Object({
 			$("#xkit-avatar-magnetizer-window").remove();
 		}
 
-		avatar_url = "http://api.tumblr.com/v2/blog/" + user_url + ".tumblr.com/avatar/512";
+		avatar_url = "https://api.tumblr.com/v2/blog/" + user_url + ".tumblr.com/avatar/512";
 
 		var m_html = 	"<div id=\"xkit-avatar-magnetizer-shadow\">&nbsp;</div>" +
 				"<div id=\"xkit-avatar-magnetizer-window\">" +

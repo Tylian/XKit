@@ -364,7 +364,7 @@ XKit.extensions.stats = new Object({
 			if (m_count == 4) {break; }
 			var perc = Math.round((users[i].count * 100) / posts.length);
 			var mx_html = 	"<a target=\"_BLANK\" href=\"http://" + users[i].url + ".tumblr.com/\"><div class=\"xkit-stats-blog\">" +
-						"<img src=\"http://api.tumblr.com/v2/blog/" + users[i].url + ".tumblr.com/avatar/32\" class=\"m_avatar\">" +
+						"<img src=\"https://api.tumblr.com/v2/blog/" + users[i].url + ".tumblr.com/avatar/32\" class=\"m_avatar\">" +
 						"<div class=\"m_title\">" + users[i].url + "</div>" +
 						"<div class=\"m_percentage\">" + perc + "%</div>" +
 					"</div></a>";

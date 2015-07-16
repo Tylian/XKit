@@ -320,7 +320,7 @@ XKit.extensions.people_notifier = new Object({
 			for (var i=0;i<this.blogs.length;i++) {
 
 				m_html = m_html + 	"<li id=\"xkit-people-notifier-for---" + this.blogs[i].url + "\" data-url=\"" + this.blogs[i].url + "\" class=\"no_push xkit-people-notifier-person\">" +
-								"<img src=\"http://api.tumblr.com/v2/blog/" + this.blogs[i].url + ".tumblr.com/avatar/16\" class=\"people-notifier-avatar\">" +
+								"<img src=\"https://api.tumblr.com/v2/blog/" + this.blogs[i].url + ".tumblr.com/avatar/16\" class=\"people-notifier-avatar\">" +
 								"<a>" +
 									"<div class=\"hide_overflow\">" + this.blogs[i].url + "</div>";
 
