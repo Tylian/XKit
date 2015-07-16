@@ -48,10 +48,17 @@ self.port.on('cors-update', function(data) {
   if (!callback) {
     return;
   }
+  // Augment with shim for XHR-expected fields
+  // This could definitely be done better by looking into whether Response is
+  // cloneable.
+  data.response.getResponseHeader = function(key) {
+    return this.headers[key];
+  };
+
   if (data.type === 'load') {
     callback.onload(data.response);
   } else {
-    callback.onerror();
+    callback.onerror(data.response);
   }
   corsCallbacks[data.requestId] = null;
 });

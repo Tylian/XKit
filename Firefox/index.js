@@ -68,6 +68,7 @@ function onAttach(worker) {
           type: 'load',
           requestId: requestId,
           response: {
+            headers: response.headers,
             responseText: response.text
           }
         });
@@ -76,6 +77,8 @@ function onAttach(worker) {
           type: 'error',
           requestId: requestId,
           response: {
+            status: response.status,
+            headers: response.headers,
             responseText: response.text || ''
           }
         });
