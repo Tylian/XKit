@@ -40,70 +40,6 @@ function GM_listValues() {
   return AddonStorage.listKeys();
 }
 
-function GM_xmlhttpRequest(settings) {
-  function httpsify() {
-    settings.url = settings.url.replace('http://', 'https://');
-  }
-
-  var request = new XMLHttpRequest();
-  var timeout = 1;
-
-  if (settings.url.indexOf('http://') != -1 &&
-      settings.url.indexOf('tumblr.com/svc/') != -1) {
-    httpsify();
-  }
-
-  settings.url = settings.url.replace('http://api.tumblr.com',
-                                            'https://api.tumblr.com');
-
-  if (settings.url.indexOf('http://www.tumblr.com/') === 0) {
-    console.log(' -- Bridge forwarding to HTTPS! (Dashboard)');
-    httpsify();
-  }
-
-  setTimeout(function() {
-    if (settings.method === 'POST') {
-      request.open('POST', settings.url, true);
-    } else {
-      request.open('GET', settings.url, true);
-    }
-
-    request.onreadystatechange = function(oEvent) {
-      if (request.readyState === 4) {
-        if (request.status === 200) {
-          if (typeof settings.onload !== 'undefined') {
-              settings.onload.call(request, request);
-          }
-        } else {
-          if (typeof settings.onerror !== 'undefined') {
-              settings.onerror.call(request, request);
-          }
-        }
-      }
-    };
-
-    if (typeof settings.headers !== 'undefined') {
-      for (var obj in settings.headers) {
-        request.setRequestHeader(obj, settings.headers[obj]);
-      }
-    }
-
-    if (settings.method === 'POST') {
-      if (settings.json === true) {
-        request.setRequestHeader('Content-Type', 'application/json');
-        console.log(' -- Bridge requesting post with json mode on');
-      } else {
-        request.setRequestHeader('Content-Type',
-            'application/x-www-form-urlencoded');
-        console.log(' -- Bridge requesting post with json mode off');
-      }
-      request.send(settings.data);
-    } else {
-      request.send(null);
-    }
-  }, timeout);
-}
-
 // Implement an only-once delivery mechanism for CORS requests
 var corsCallbacks = {};
 
@@ -120,12 +56,32 @@ self.port.on('cors-update', function(data) {
   corsCallbacks[data.requestId] = null;
 });
 
-function GM_xmlhttpCorsRequest(settings) {
+function GM_xmlhttpRequest(settings) {
   var requestId = Math.floor(Math.random() * 4294967296);
+
+  if (settings.url.indexOf('tumblr.com/svc/') >= 0) {
+    settings.url = settings.url.replace(/^http:\/\//, 'https://');
+  }
+
+  var headers = settings.headers || {};
+  var data = null;
+
+  if (settings.method === 'POST') {
+    if (settings.json) {
+      headers['Content-Type'] = 'application/json';
+    } else {
+      headers['Content-Type'] = 'application/x-www-form-urlencoded';
+    }
+    data = settings.data;
+  }
+
+
   self.port.emit('cors-request', {
+    requestId: requestId,
     method: settings.method,
     url: settings.url,
-    requestId: requestId
+    data: data,
+    headers: headers
   });
 
   corsCallbacks[requestId] = {

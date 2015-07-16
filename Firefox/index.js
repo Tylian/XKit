@@ -84,16 +84,16 @@ function onAttach(worker) {
   }
 
   port.on('cors-request',
-          function({url, method, requestId, content, contentType}) {
+          function({url, method, requestId, data, headers}) {
     var requestSettings = {
       url: url,
       onComplete: onCorsRequestComplete(requestId)
     };
-    if (content) {
-      requestSettings.content = content;
+    if (headers) {
+      requestSettings.headers = headers;
     }
-    if (contentType) {
-      requestSettings.contentType = contentType;
+    if (data) {
+      requestSettings.data = data;
     }
     var request = Request(requestSettings);
     switch (method.toUpperCase()) {
