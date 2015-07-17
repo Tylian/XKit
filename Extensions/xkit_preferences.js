@@ -181,7 +181,7 @@ XKit.extensions.xkit_preferences = new Object({
 				
 				$("#xkit-follow-blog").html("Please wait...");
 				
-				var m_data = "form_key=" + form_key + "&data%5Btumblelog%5D=xkit-extension&data%5Bsource%5D=FOLLOW_SOURCE_IFRAME";
+				var m_data = "form_key=" + form_key + "&data%5Btumblelog%5D=new-xkit-extension&data%5Bsource%5D=FOLLOW_SOURCE_IFRAME";
 				GM_xmlhttpRequest({
 					method: "POST",
 					url: "http://www.tumblr.com/svc/follow",
@@ -191,7 +191,7 @@ XKit.extensions.xkit_preferences = new Object({
 					},
 					json: false,
 					onerror: function(response) {
-						alert("Well this is embarrassing.\n\nTumblr servers would not allow me to let you follow the XKit blog. You can try again later or go to xkit-extension.tumblr.com and follow it manually.");
+						alert("Well this is embarrassing.\n\nTumblr servers would not allow me to let you follow the XKit blog. You can try again later or go to new-xkit-extension.tumblr.com and follow it manually.");
 					},
 					onload: function(response) {
 						// Do nothing?
@@ -303,7 +303,7 @@ XKit.extensions.xkit_preferences = new Object({
 			XKit.download.page("paperboy/index.php", function(mdata) {
 
 				if (mdata.server_down === true) {
-					XKit.window.show("Can't connect to server","XKit was unable to contact the servers in order to download XKit News. You might be using an outdated or buggy version of XKit. Please visit <a href=\"http://xkit-extension.tumblr.com\">the Official XKit Blog</a> for updates and details.","error","<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
+					XKit.window.show("Can't connect to server","XKit was unable to contact the servers in order to download XKit News. You might be using an outdated or buggy version of XKit. Please visit <a href=\"http://new-xkit-extension.tumblr.com\">the unofficial XKit Blog</a> for updates and details.","error","<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
 					return;
 				}
 
@@ -321,7 +321,7 @@ XKit.extensions.xkit_preferences = new Object({
 			XKit.download.page("framework_version.php", function(mdata) {
 
 				if (mdata.server_down === true) {
-					XKit.window.show("Can't connect to server","XKit was unable to contact the servers in order to download framework version update file. You might be using an outdated or buggy version of XKit. Please visit <a href=\"http://xkit-extension.tumblr.com\">the Official XKit Blog</a> for updates and details.","error","<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
+					XKit.window.show("Can't connect to server","XKit was unable to contact the servers in order to download framework version update file. You might be using an outdated or buggy version of XKit. Please visit <a href=\"http://new-xkit-extension.tumblr.com\">the unofficial XKit Blog</a> for updates and details.","error","<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
 					return;
 				}
 				
@@ -2370,7 +2370,7 @@ XKit.extensions.xkit_preferences = new Object({
 				"<div id=\"xkit-about-window-links\">" +
 					"<a href=\"http://www.xkit.info/seven\">XKit Website</a>" +
 					"<a href=\"#\" onclick=\"return false\" id=\"xkit-open-credits\">Credits</a>" +
-					"<a href=\"http://xkit-extension.tumblr.com\">Official XKit Blog</a>" +
+					"<a href=\"http://new-xkit-extension.tumblr.com\">New XKit Blog</a>" +
 					"<a href=\"http://www.xkit.info/seven/donate\">Donate to XKit</a>" +
 					"<a href=\"http://www.xkit.info/seven/spread\">Spread XKit</a>" +
 					"<a href=\"http://www.xkit.info/seven/support\">Support & Documentation</a>" +

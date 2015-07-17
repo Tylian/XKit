@@ -1328,5 +1328,5 @@ function show_error_reset(message) {
 
 function show_error_update(message) {
 	// Shortcut to call when there is a javascript error.
-	XKit.window.show("XKit ran into an error.","<b>Generated Error message:</b><br/><p>" + message + "</p>You might need to update XKit manually. Please visit XKit Blog. Alternatively, you can write down the error message above and click on the Troubleshooting Help button to see how you can fix this or reload the page to try again.", "error","<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div><a href=\"http://xkit-extension.tumblr.com\" class=\"xkit-button\">Go to XKit Blog</a><a href=\"http://www.xkit.info/troubleshooting\" class=\"xkit-button\">Troubleshooting Help</a>");
+	XKit.window.show("XKit ran into an error.","<b>Generated Error message:</b><br/><p>" + message + "</p>You might need to update XKit manually. Please visit XKit Blog. Alternatively, you can write down the error message above and click on the Troubleshooting Help button to see how you can fix this or reload the page to try again.", "error","<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div><a href=\"http://new-xkit-extension.tumblr.com\" class=\"xkit-button\">Go to XKit Blog</a><a href=\"http://www.xkit.info/troubleshooting\" class=\"xkit-button\">Troubleshooting Help</a>");
 }

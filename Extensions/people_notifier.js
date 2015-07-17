@@ -422,7 +422,7 @@ XKit.extensions.people_notifier = new Object({
 					XKit.extensions.view_on_dash.view($(this).attr('data-url'));
 
 				} catch(e) {
-					alert("Unable to use View On Dash to open blog.\nPlease try again later or file a bug report at xkit-extension.tumblr.com/ask with error code PEP-119A");
+					alert("Unable to use View On Dash to open blog.\nPlease try again later or file a bug report at new-xkit-extension.tumblr.com/ask with error code PEP-119A");
 				}
 			}
 

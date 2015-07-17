@@ -547,7 +547,7 @@ XKit.extensions.view_on_dash = new Object({
 							"X-tumblr-form-key": XKit.interface.form_key(),
 						},
 						onerror: function(response) {
-							alert("Can't process like/unlike, please try again later or file for a bug report at http://xkit-extension.tumblr.com/ask.");
+							alert("Can't process like/unlike, please try again later or file for a bug report at http://new-xkit-extension.tumblr.com/ask.");
 							// Revert changes.
 							$(m_icon_obj).toggleClass("liked");
 						},

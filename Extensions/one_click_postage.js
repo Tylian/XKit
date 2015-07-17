@@ -1328,7 +1328,7 @@ XKit.extensions.one_click_postage = new Object({
 					blog_id = def_blog;
 					//alert("got id from def_blog");
 				} else {
-					XKit.window.show("Unable to process request","Unable to set Blog ID. Please return to the dashboard and try again, and send me an ask if this continues.<br/><br/>The error code to report is <b>OCP30</b>. Thank you.","error","<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div><a href=\"http://xkit-extension.tumblr.com/ask\" class=\"xkit-button\">Send an ask</a>");
+					XKit.window.show("Unable to process request","Unable to set Blog ID. Please return to the dashboard and try again, and send me an ask if this continues.<br/><br/>The error code to report is <b>OCP30</b>. Thank you.","error","<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div><a href=\"http://new-xkit-extension.tumblr.com/ask\" class=\"xkit-button\">Send an ask</a>");
 					return;
 				}
 			}
@@ -1612,12 +1612,12 @@ XKit.extensions.one_click_postage = new Object({
 
 		if (code === "666") {
 
-			XKit.window.show("I could not " + m_word + " your post.","You need XKit <b>7.3.0</b> or higher for One-Click Postage to work.<br/>You currently have XKit <b>" + XKit.version + "</b> installed.<br/><br/>Please <a target=\"_BLANK\" href=\"http://xkit.info/notes/upgrade.php\">click here</a> to learn how to update XKit.","error","<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div><a href=\"http://xkit-extension.tumblr.com/\" class=\"xkit-button\">Visit the XKit Blog</a>");
+			XKit.window.show("I could not " + m_word + " your post.","You need XKit <b>7.3.0</b> or higher for One-Click Postage to work.<br/>You currently have XKit <b>" + XKit.version + "</b> installed.<br/><br/>Please <a target=\"_BLANK\" href=\"http://xkit.info/notes/upgrade.php\">click here</a> to learn how to update XKit.","error","<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div><a href=\"http://new-xkit-extension.tumblr.com/\" class=\"xkit-button\">Visit the New XKit Blog</a>");
 			return;
 
 		}
 
-		XKit.window.show("I could not " + m_word + " your post.","<b>One of the following might be the reason for that:</b>" + m_causes + "<small>Error Code: <b>" + code + "</b>.</small>","error","<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div><a href=\"http://xkit-extension.tumblr.com/\" class=\"xkit-button\">Visit the XKit Blog</a><a href=\"http://xkit-extension.tumblr.com/ask\" class=\"xkit-button\">Send an ask</a>");
+		XKit.window.show("I could not " + m_word + " your post.","<b>One of the following might be the reason for that:</b>" + m_causes + "<small>Error Code: <b>" + code + "</b>.</small>","error","<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div><a href=\"http://new-xkit-extension.tumblr.com/\" class=\"xkit-button\">Visit the New XKit Blog</a><a href=\"http://new-xkit-extension.tumblr.com/ask\" class=\"xkit-button\">Send an ask</a>");
 
 	}
 

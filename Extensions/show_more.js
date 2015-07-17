@@ -172,8 +172,8 @@ XKit.extensions.show_more = new Object({
 			return;
 		}
 
-                var avatar_url = XKit.extensions.show_more.popup_data.avatar_url;
-                var user_url = XKit.extensions.show_more.popup_data.name;
+		var avatar_url = XKit.extensions.show_more.popup_data.avatar_url;
+		var user_url = XKit.extensions.show_more.popup_data.name;
 
 		var m_parent = $(m_obj).parentsUntil('.post').parent();
 		XKit.extensions.show_more.classic_popup_last_object = m_parent;
@@ -190,7 +190,7 @@ XKit.extensions.show_more = new Object({
 			if (XKit.extensions.show_more.popup_data.ask_allows_anonymous === true || XKit.extensions.show_more.popup_data.anonymous_asks === true ||XKit.extensions.show_more.popup_data.ask_allows_anonymous === 1 || XKit.extensions.show_more.popup_data.anonymous_asks === 1) {
 				anon_status = "1";
 			}
-			if (user_url === "xkit-extension") {
+			if (user_url === "xkit-extension" || user_url === "new-xkit-extension") {
 				m_html = m_html + "<a href=\"https://" + user_url + ".tumblr.com/ask\" target=\"_BLANK\" class=\"xkit-ask\">XKit Support</a>";
 			} else {
 				m_html = m_html + "<a href=\"https://" + user_url + ".tumblr.com/ask\" data-anonymous-ask=\"" + anon_status + "\" data-tumblelog-name=\"" + user_url + "\" class=\"xkit-ask ask\">Ask</a>";
@@ -207,57 +207,57 @@ XKit.extensions.show_more = new Object({
 			m_html = m_html + "<a data-tumblelog-name=\"" + user_url + "\" class=\"xkit-follow xkit-follow-" + user_url + "\">Follow</a>";
 		}
 
-                if (XKit.extensions.show_more.preferences.show_magnetizer.value === true) {
+		if (XKit.extensions.show_more.preferences.show_magnetizer.value === true) {
 
-                	if (avatar_url !== "" && typeof avatar_url !== "undefined") {
-                		m_html = m_html + "<div data-avatar-url=\"" + avatar_url + "\" class=\"xkit-magnetizer xkit-show-more-item xkit-avatar-magnetizer-new xkit-avatar-magnetizer-button-" + user_url + "\" data-user-url=\"" + user_url + "\">" +
-                					"Avatar Magnifier" +
-                				  "</div>";
-                	}
-
-		}
-
-                if (XKit.extensions.show_more.preferences.show_archive.value === true) {
-
-                	m_html = m_html + "<a target=\"_blank\" href=\"http://" + user_url + ".tumblr.com/archive\" class=\"xkit-archive archive\">Archive</a>";
+			if (avatar_url !== "" && typeof avatar_url !== "undefined") {
+				m_html = m_html + "<div data-avatar-url=\"" + avatar_url + "\" class=\"xkit-magnetizer xkit-show-more-item xkit-avatar-magnetizer-new xkit-avatar-magnetizer-button-" + user_url + "\" data-user-url=\"" + user_url + "\">" +
+							"Avatar Magnifier" +
+						  "</div>";
+			}
 
 		}
 
-                if (XKit.extensions.show_more.preferences.show_submits.value === true && XKit.extensions.show_more.submit_available[user_url] === true) {
+		if (XKit.extensions.show_more.preferences.show_archive.value === true) {
 
-                	var m_likes_url = "http://" + user_url + ".tumblr.com/submit";
+			m_html = m_html + "<a target=\"_blank\" href=\"http://" + user_url + ".tumblr.com/archive\" class=\"xkit-archive archive\">Archive</a>";
 
-                	m_html = m_html + "<a target=\"_blank\" href=\"" + m_likes_url + "\" class=\"xkit-submit\">Submit</a>";
+		}
 
-                }
+		if (XKit.extensions.show_more.preferences.show_submits.value === true && XKit.extensions.show_more.submit_available[user_url] === true) {
 
-                if (XKit.extensions.show_more.preferences.show_likes.value === true && XKit.extensions.show_more.likes_available[user_url] === true) {
+			var m_likes_url = "http://" + user_url + ".tumblr.com/submit";
 
-                	var m_likes_url = "https://www.tumblr.com/liked/by/" + user_url;
+			m_html = m_html + "<a target=\"_blank\" href=\"" + m_likes_url + "\" class=\"xkit-submit\">Submit</a>";
 
-                	m_html = m_html + "<a target=\"_blank\" href=\"" + m_likes_url + "\" class=\"xkit-likes\">Likes</a>";
+		}
 
-                }
+		if (XKit.extensions.show_more.preferences.show_likes.value === true && XKit.extensions.show_more.likes_available[user_url] === true) {
 
-                //// console.log("EH? " + XKit.extensions.show_more.custom_menu_extension);
-                if (XKit.extensions.show_more.custom_menu_extension.length >= 0) {
+			var m_likes_url = "https://www.tumblr.com/liked/by/" + user_url;
 
-                	var m_data = XKit.extensions.show_more.popup_data;
+			m_html = m_html + "<a target=\"_blank\" href=\"" + m_likes_url + "\" class=\"xkit-likes\">Likes</a>";
 
-                	for (var i=0;i<XKit.extensions.show_more.custom_menu_extension.length;i++) {
+		}
 
-                		var returned_menu = "";
+		//// console.log("EH? " + XKit.extensions.show_more.custom_menu_extension);
+		if (XKit.extensions.show_more.custom_menu_extension.length >= 0) {
 
-                		try {
-                			returned_menu = XKit.extensions.show_more.custom_menu_function[i](m_data);
-                		} catch(e) {
-                			returned_menu = "";
-                		}
+			var m_data = XKit.extensions.show_more.popup_data;
 
-                		m_html = m_html + returned_menu;
-                	}
+			for (var i=0;i<XKit.extensions.show_more.custom_menu_extension.length;i++) {
 
-                }
+				var returned_menu = "";
+
+				try {
+					returned_menu = XKit.extensions.show_more.custom_menu_function[i](m_data);
+				} catch(e) {
+					returned_menu = "";
+				}
+
+				m_html = m_html + returned_menu;
+			}
+
+		}
 
 		m_html = m_html + "</div><div id=\"xkit-classic-user-menu-glass\">&nbsp;</div>";
 
@@ -357,7 +357,9 @@ XKit.extensions.show_more = new Object({
 			},
 			json: false,
 			onerror: function(response) {
-				alert("Unable to follow/unfollow person, error: SM_FL013\n\nPlease try again later or file a bug report by going to xkit-extension.tumblr.com/ask");
+				alert("Unable to follow/unfollow person, error " +
+				      response.status + ": " + response.responseText +
+				      "\n\nPlease try again later or file a bug report by going to new-xkit-extension.tumblr.com/ask");
 			},
 			onload: function(response) {
 				XKit.notifications.add("User " + user_url + " followed.");
@@ -389,7 +391,9 @@ XKit.extensions.show_more = new Object({
 			},
 			json: false,
 			onerror: function(response) {
-				alert("Unable to follow/unfollow person, error: SM_FL013\n\nPlease try again later or file a bug report by going to xkit-extension.tumblr.com/ask");
+				alert("Unable to follow/unfollow person, error " +
+				      response.status + ": \"" + response.responseText +
+				      "\"\n\nPlease try again later or file a bug report by going to new-xkit-extension.tumblr.com/ask");
 			},
 			onload: function(response) {
 				XKit.notifications.add("User " + user_url + " unfollowed.");
@@ -559,17 +563,17 @@ XKit.extensions.show_more = new Object({
 		if ($(".info_popover").length > 0)
 			m_parent = $(".info_popover").find("ul");
 
-                $(m_parent).find(".xkit-avatar-magnetizer-new").parent().remove();
+		$(m_parent).find(".xkit-avatar-magnetizer-new").parent().remove();
 
-                if ($(m_parent).hasClass("show-more-done")) {return; }
+		if ($(m_parent).hasClass("show-more-done")) {return; }
 
-                $(m_parent).addClass("show-more-done");
+		$(m_parent).addClass("show-more-done");
 
-                var m_html = "";
-                var avatar_url = XKit.extensions.show_more.popup_data.avatar_url;
-                var user_url = XKit.extensions.show_more.popup_data.name;
+		var m_html = "";
+		var avatar_url = XKit.extensions.show_more.popup_data.avatar_url;
+		var user_url = XKit.extensions.show_more.popup_data.name;
 
-		if (user_url === "xkit-extension") {
+		if (user_url === "xkit-extension" || user_url === "new-xkit-extension") {
 
 			$(m_parent).find(".ask").html("XKit Support");
 			$(m_parent).find(".ask").addClass("xkit-support-ask");
@@ -577,50 +581,50 @@ XKit.extensions.show_more = new Object({
 
 		}
 
-                if (XKit.extensions.show_more.preferences.show_magnetizer.value === true) {
+		if (XKit.extensions.show_more.preferences.show_magnetizer.value === true) {
 
-                	if (avatar_url !== "" && typeof avatar_url !== "undefined") {
-                		m_html = m_html + "<li>" +
-                				"<a onclick=\"return false;\" data-avatar-url=\"" + avatar_url + "\" class=\" xkit-new-menu-fix xkit-show-more-item xkit-avatar-magnetizer-new xkit-avatar-magnetizer-button-" + user_url + "\" data-user-url=\"" + user_url + "\">" +
-                					"Magnifier" +
-                				"</a>" +
-                			  "</li>";
-                	}
+					if (avatar_url !== "" && typeof avatar_url !== "undefined") {
+						m_html = m_html + "<li>" +
+								"<a onclick=\"return false;\" data-avatar-url=\"" + avatar_url + "\" class=\" xkit-new-menu-fix xkit-show-more-item xkit-avatar-magnetizer-new xkit-avatar-magnetizer-button-" + user_url + "\" data-user-url=\"" + user_url + "\">" +
+									"Magnifier" +
+								"</a>" +
+							  "</li>";
+					}
 
-                }
+				}
 
 
-                if (XKit.extensions.show_more.preferences.show_submits.value === true && XKit.extensions.show_more.submit_available[user_url] === true) {
+				if (XKit.extensions.show_more.preferences.show_submits.value === true && XKit.extensions.show_more.submit_available[user_url] === true) {
 
-                	var m_likes_url = "http://" + user_url + ".tumblr.com/submit";
+					var m_likes_url = "http://" + user_url + ".tumblr.com/submit";
 
-                	m_html = m_html + "<li>" +
-                			"<a target=\"_new\" href=\"" + m_likes_url + "\" class=\"likes xkit-submit xkit-new-menu-fix\">" +
-                				"<span class=\"hide_overflow\">Submit</span>" +
-                			"</a>" +
-                		  "</li>";
+					m_html = m_html + "<li>" +
+							"<a target=\"_new\" href=\"" + m_likes_url + "\" class=\"likes xkit-submit xkit-new-menu-fix\">" +
+								"<span class=\"hide_overflow\">Submit</span>" +
+							"</a>" +
+						  "</li>";
 
-                }
+				}
 
-               // console.log(XKit.extensions.show_more.custom_menu_extension);
-                if (XKit.extensions.show_more.custom_menu_extension.length >= 0) {
+			   // console.log(XKit.extensions.show_more.custom_menu_extension);
+				if (XKit.extensions.show_more.custom_menu_extension.length >= 0) {
 
-                	var m_data = XKit.extensions.show_more.popup_data;
+					var m_data = XKit.extensions.show_more.popup_data;
 
-                	for (var i=0;i<XKit.extensions.show_more.custom_menu_extension.length;i++) {
+					for (var i=0;i<XKit.extensions.show_more.custom_menu_extension.length;i++) {
 
-                		var returned_menu = "";
+						var returned_menu = "";
 
-                		try {
-                			returned_menu = XKit.extensions.show_more.custom_menu_function[i](m_data);
-                		} catch(e) {
-                			returned_menu = "";
-                		}
+						try {
+							returned_menu = XKit.extensions.show_more.custom_menu_function[i](m_data);
+						} catch(e) {
+							returned_menu = "";
+						}
 
-                		m_html = m_html + returned_menu;
-                	}
+						m_html = m_html + returned_menu;
+					}
 
-                }
+				}
 
 		$(m_parent).append(m_html);
 
@@ -780,56 +784,56 @@ XKit.extensions.show_more = new Object({
 		var user_url = $(menu_box).parent().find(".tumblelog_menu_link").attr('data-tumblelog-name');
 		var m_class = "";
 
-                var m_html = "";
+		var m_html = "";
 
-                $(menu_box).find(".xkit-submit").parent().remove();
-                $(menu_box).find(".xkit-likes").parent().remove();
+		$(menu_box).find(".xkit-submit").parent().remove();
+		$(menu_box).find(".xkit-likes").parent().remove();
 
-                if (XKit.extensions.show_more.anon_available[user_url] === true) {
+		if (XKit.extensions.show_more.anon_available[user_url] === true) {
 
-                	$(menu_box).find(".tumblelog_menu_link.ask").attr('data-anonymous-ask','1');
+			$(menu_box).find(".tumblelog_menu_link.ask").attr('data-anonymous-ask','1');
 
-                }
+		}
 
-                if (XKit.extensions.show_more.preferences.show_likes.value === true && XKit.extensions.show_more.likes_available[user_url] === true) {
+		if (XKit.extensions.show_more.preferences.show_likes.value === true && XKit.extensions.show_more.likes_available[user_url] === true) {
 
-                	var m_likes_url = "https://www.tumblr.com/liked/by/" + user_url;
+			var m_likes_url = "https://www.tumblr.com/liked/by/" + user_url;
 
-                	m_html = m_html + "<div class=\"popover_menu_item\">" +
-                			"<a href=\"" + m_likes_url + "\" class=\"tumblelog_menu_link likes xkit-likes\">" +
-                				"<span class=\"hide_overflow\">Likes</span>" +
-                			"</a>" +
-                		  "</div>";
+			m_html = m_html + "<div class=\"popover_menu_item\">" +
+					"<a href=\"" + m_likes_url + "\" class=\"tumblelog_menu_link likes xkit-likes\">" +
+						"<span class=\"hide_overflow\">Likes</span>" +
+					"</a>" +
+				  "</div>";
 
-                }
+		}
 
-                if (XKit.extensions.show_more.preferences.show_submits.value === true && XKit.extensions.show_more.submit_available[user_url] === true) {
+		if (XKit.extensions.show_more.preferences.show_submits.value === true && XKit.extensions.show_more.submit_available[user_url] === true) {
 
-                	var m_likes_url = "http://" + user_url + ".tumblr.com/submit";
+			var m_likes_url = "http://" + user_url + ".tumblr.com/submit";
 
-                	m_html = m_html + "<div class=\"popover_menu_item\">" +
-                			"<a target=\"_new\" href=\"" + m_likes_url + "\" class=\"tumblelog_menu_link likes xkit-submit\">" +
-                				"<span class=\"hide_overflow\">Submit</span>" +
-                			"</a>" +
-                		  "</div>";
+			m_html = m_html + "<div class=\"popover_menu_item\">" +
+					"<a target=\"_new\" href=\"" + m_likes_url + "\" class=\"tumblelog_menu_link likes xkit-submit\">" +
+						"<span class=\"hide_overflow\">Submit</span>" +
+					"</a>" +
+				  "</div>";
 
-                }
+		}
 
-                $(menu_box).find(".xkit-avatar-magnetizer").parent().remove();
+		$(menu_box).find(".xkit-avatar-magnetizer").parent().remove();
 
-                if (XKit.extensions.show_more.preferences.show_magnetizer.value === true) {
+		if (XKit.extensions.show_more.preferences.show_magnetizer.value === true) {
 
-                	var avatar_url = $(menu_box).parentsUntil(".post_avatar").parent().find(".post_avatar_image").attr('src');
+			var avatar_url = $(menu_box).parentsUntil(".post_avatar").parent().find(".post_avatar_image").attr('src');
 
-                	if (avatar_url !== "" && typeof avatar_url !== "undefined") {
-                		m_html = m_html + "<div class=\"popover_menu_item\">" +
-                				"<a onclick=\"return false;\" data-avatar-url=\"" + avatar_url + "\" class=\"tumblelog_menu_link xkit-avatar-magnetizer xkit-avatar-magnetizer-button-" + user_url + "\" data-user-url=\"" + user_url + "\">" +
-                					"<span class=\"hide_overflow\">Magnifier</span>" +
-                				"</a>" +
-                			  "</div>";
-                	}
+			if (avatar_url !== "" && typeof avatar_url !== "undefined") {
+				m_html = m_html + "<div class=\"popover_menu_item\">" +
+						"<a onclick=\"return false;\" data-avatar-url=\"" + avatar_url + "\" class=\"tumblelog_menu_link xkit-avatar-magnetizer xkit-avatar-magnetizer-button-" + user_url + "\" data-user-url=\"" + user_url + "\">" +
+							"<span class=\"hide_overflow\">Magnifier</span>" +
+						"</a>" +
+					  "</div>";
+			}
 
-                }
+		}
 
 
 		//$(menu_box).find(".open_in_tab").parent().before(m_html);

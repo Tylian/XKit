@@ -26,7 +26,7 @@ try {
 	try {
 		call_xkit();
 	} catch(em) {
-		alert("Fatal XKit Error:\n" + em.message + "\n\nPlease go to xkit-extension.tumblr.com for support.");
+		alert("Fatal XKit Error:\n" + em.message + "\n\nPlease go to new-xkit-extension.tumblr.com for support.");
 		console.log("[XKIT] Caught bridge error: " + em.message);
 	}
 }
