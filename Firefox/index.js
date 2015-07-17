@@ -96,7 +96,7 @@ function onAttach(worker) {
       requestSettings.headers = headers;
     }
     if (data) {
-      requestSettings.data = data;
+      requestSettings.content = data;
     }
     var request = Request(requestSettings);
     switch (method.toUpperCase()) {

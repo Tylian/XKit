@@ -56,9 +56,9 @@ self.port.on('cors-update', function(data) {
   };
 
   if (data.type === 'load') {
-    callback.onload(data.response);
+    callback.onload.call(data.response, data.response);
   } else {
-    callback.onerror(data.response);
+    callback.onerror.call(data.response, data.response);
   }
   corsCallbacks[data.requestId] = null;
 });
@@ -66,7 +66,7 @@ self.port.on('cors-update', function(data) {
 function GM_xmlhttpRequest(settings) {
   var requestId = Math.floor(Math.random() * 4294967296);
 
-  if (settings.url.indexOf('tumblr.com/svc/') >= 0) {
+  if (/^http:\/\/([^.]+\.)?tumblr\.com/.test(settings.url)) {
     settings.url = settings.url.replace(/^http:\/\//, 'https://');
   }
 
