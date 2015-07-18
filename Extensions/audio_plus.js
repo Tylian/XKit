@@ -135,7 +135,8 @@ XKit.extensions.audio_plus = {
 			$(this).addClass("audio_plus_done");
 
 			var m_post = XKit.interface.post($(this));
-			if (m_post.type !== "audio") { return; }
+
+			if (!m_post || m_post.type !== "audio") { return; }
 
 			// Check if hosted by Tumblr:
 			if ($(this).find(".audio_player").length === 0 || $(this).find(".audio_visualizer").length === 0) { return; }
