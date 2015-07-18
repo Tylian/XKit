@@ -1,5 +1,5 @@
 //* TITLE Tweaks **//
-//* VERSION 3.0 REV A **//
+//* VERSION 3.1 REV A **//
 //* DESCRIPTION Various little tweaks for your dashboard. **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS These are small little tweaks that allows you customize your dashboard. If you have used XKit 6, you will notice that some of the extensions have been moved here as options you can toggle. Keep in mind that some of the tweaks (the ones marked with a '*') can slow down your computer. **//
@@ -143,6 +143,11 @@ XKit.extensions.tweaks = new Object({
 			text: "Don't show liked posts on my dashboard",
 			default: false,
 			value: false
+		},
+		"hide_explore": {
+		    text: "Hide explore button on trending posts",
+		    default: false,
+		    value: false
 		},
 		"hide_notes": {
 			text: "Hide the notes on posts",
@@ -439,6 +444,10 @@ XKit.extensions.tweaks = new Object({
 			XKit.extensions.tweaks.add_css(".post .post_controls .share_social_button { display: none; } ", "xkit_tweaks_hide_share");
 			XKit.post_listener.add("tweaks_check_for_share_on_private_posts", XKit.extensions.tweaks.check_for_share_on_private_posts);
 			XKit.extensions.tweaks.check_for_share_on_private_posts();
+		}
+
+		if (XKit.extensions.tweaks.preferences.hide_explore.value === true) {
+			XKit.extensions.tweaks.add_css(".post .explore-trending-badge-footer { display: none; } ", "xkit_tweaks_hide_explore");
 		}
 
 		if (XKit.extensions.tweaks.preferences.hide_notes.value === true) {
