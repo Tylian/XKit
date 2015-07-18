@@ -88,7 +88,14 @@ XKit.extensions.postarchive = new Object({
 					'</a></li>' +
 				'</ul>';
 
-		$("ul.controls_section:eq(1)").before(xf_html);
+		var controls_sections = document.querySelectorAll('ul.controls_section');
+		var controls_section = controls_sections[0];
+		// Emulate eq(1) selector
+		if (controls_sections.length > 1) {
+			controls_section = controls_sections[1];
+		}
+
+		$(controls_section).before(xf_html);
 
 		$("#postarchive_view").click(function() {
 
