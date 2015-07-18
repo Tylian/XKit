@@ -3,7 +3,7 @@
 //* DESCRIPTION Forgets posts once they scroll off the screen. **//
 //* DEVELOPER hobinjk **//
 //* FRAME false **//
-//* BETA false **//
+//* BETA true **//
 
 
 /** Export Lethe */
@@ -54,6 +54,9 @@ Lethe.prototype.updatePosts = function() {
   var i;
   for (i = 0; i < postMedias.length; i++) {
     var postMedia = postMedias[i];
+    if (postMedia.querySelector('.playing')) {
+      continue;
+    }
     var rect = postMedia.getBoundingClientRect();
 
     if (rect.bottom > this.TOP_CUTOFF) {
