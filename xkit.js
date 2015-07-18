@@ -267,19 +267,21 @@ XKit = {
 
 			XKit.download.github_fetch(extension_id + '.json', callback, fallback);
 		},
-		page: function(page, callback) {
+		page: function(page, callback, fallingBack) {
 			// Attempt to use Github distribution
 			function fallback() {
-				return XKit.download.page(page, callback);
+				return XKit.download.page(page, callback, true);
 			}
 
-			if (page === 'list.php') {
-				XKit.download.github_fetch('page/list.json', callback, fallback);
-				return;
-			}
-			if (page === 'gallery.php') {
-				XKit.download.github_fetch('page/gallery.json', callback, fallback);
-				return;
+			if (!fallingBack) {
+				if (page === 'list.php') {
+					XKit.download.github_fetch('page/list.json', callback, fallback);
+					return;
+				}
+				if (page === 'gallery.php') {
+					XKit.download.github_fetch('page/gallery.json', callback, fallback);
+					return;
+				}
 			}
 			// Downloads page from servers.
 			if (XKit.download.try_count >= XKit.download.max_try_count) {
@@ -429,63 +431,31 @@ XKit = {
 		},
 		version: function(extension_id) {
 			// Returns extension version if it's installed.
-			var app_data = XKit.tools.get_setting("extension_" + extension_id, "");
-			try {
-				var m_object = JSON.parse(app_data);
-				return m_object.version;
-			} catch(e) {
-				return "";
-			}
+			return XKit.installed.get(extension_id).version || "";
 		},
 		title: function(extension_id) {
 			// Returns extension title if it's installed.
-			var app_data = XKit.tools.get_setting("extension_" + extension_id, "");
-			try {
-				var m_object = JSON.parse(app_data);
-				return m_object.title;
-			} catch(e) {
-				return "";
-			}
+			return XKit.installed.get(extension_id).title || "";
 		},
 		developer: function(extension_id) {
 			// Returns extension developer if it's installed.
-			var app_data = XKit.tools.get_setting("extension_" + extension_id, "");
-			try {
-				var m_object = JSON.parse(app_data);
-				return m_object.developer;
-			} catch(e) {
-				return "";
-			}
+			return XKit.installed.get(extension_id).developer || "";
 		},
 		description: function(extension_id) {
 			// Returns extension description if it's installed.
-			var app_data = XKit.tools.get_setting("extension_" + extension_id, "");
-			try {
-				var m_object = JSON.parse(app_data);
-				return m_object.description;
-			} catch(e) {
-				return "";
-			}
+			return XKit.installed.get(extension_id).description || "";
+		},
+		script: function(extension_id) {
+			// Returns extension script if it's installed.
+			return XKit.installed.get(extension_id).script || "";
 		},
 		icon: function(extension_id) {
 			// Returns extension icon if it's installed.
-			var app_data = XKit.tools.get_setting("extension_" + extension_id, "");
-			try {
-				var m_object = JSON.parse(app_data);
-				return m_object.icon;
-			} catch(e) {
-				return "";
-			}
+			return XKit.installed.get(extension_id).icon || "";
 		},
 		css: function(extension_id) {
 			// Returns extension css if it's installed.
-			var app_data = XKit.tools.get_setting("extension_" + extension_id, "");
-			try {
-				var m_object = JSON.parse(app_data);
-				return m_object.css;
-			} catch(e) {
-				return "";
-			}
+			return XKit.installed.get(extension_id).css || "";
 		}
 	},
 	progress: {
@@ -1263,6 +1233,25 @@ function install_extension(mdata, callback) {
 		if (m_result.errors === false) {
 			// Saved data without any errors!
 			XKit.installed.add(mdata.id);
+			var ext_id = mdata.id;
+			Object.defineProperty(m_object, 'script', {
+				enumerable: true,
+				get: function() {
+					return XKit.installed.script(ext_id);
+				}
+			});
+			Object.defineProperty(m_object, 'icon', {
+				enumerable: true,
+				get: function() {
+					return XKit.installed.icon(ext_id);
+				}
+			});
+			Object.defineProperty(m_object, 'css', {
+				enumerable: true,
+				get: function() {
+					return XKit.installed.css(ext_id);
+				}
+			});
 			callback(m_object);
 		} else {
 			// Something awful has happened.
@@ -1285,7 +1274,7 @@ function xkit_install() {
 	XKit.console.add("Trying to retrieve XKit Installer.");
 
 	XKit.install("xkit_installer", function(mdata) {
-		if (mdata.errors || !mdata.script) {
+		if (mdata.errors) {
 			if (mdata.storage_error === true) {
 				show_error_installation("[Code: 401] Storage error:" + mdata.error);
 			} else {

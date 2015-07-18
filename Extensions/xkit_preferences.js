@@ -953,7 +953,7 @@ XKit.extensions.xkit_preferences = new Object({
 
 					var m_extension_id = mdata.id;
 
-					if (mdata.errors == true || mdata.script == "") {
+					if (mdata.errors) {
 						if (mdata.storage_error === true) {
 							show_error_installation("[Code: 631] Can't store data on browser");
 							return;

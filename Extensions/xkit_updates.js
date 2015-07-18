@@ -424,7 +424,7 @@ XKit.extensions.xkit_updates = new Object({
 
 		XKit.install(extension_id, function(mdata) {
 
-			if (mdata.errors == true || mdata.script == "") {
+			if (mdata.errors) {
 				if (mdata.storage_error === true) {
 					m_result.errors = true;
 					m_result.error = "Can't store data on browser";
