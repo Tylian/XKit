@@ -58,7 +58,7 @@ XKit.extensions.xkit_installer = new Object({
 
 		XKit.install(to_install, function(mdata) {
 
-			if (mdata.errors == true || mdata.script == "") {
+			if (mdata.errors) {
 				if (mdata.storage_error === true) {
 					show_error_installation("[Code: 631] Can't store data on browser");
 					return;

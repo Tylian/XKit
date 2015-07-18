@@ -101,15 +101,14 @@
 
 .xblacklist_open_post {
 	position: absolute;
-	height: 30px; line-height: 20px;
-	top: 50%; margin-top: -15px;
-	right: 0px; margin-bottom: 0;
+	height: 30px;
+	line-height: 30px;
+	right: 5px;
 }
 
 .xblacklist_open_post:active {
 	position: absolute !important;
-	top: 50% !important; margin-top: -14px !important;
-	right: 0px !important;
+	right: 5px !important;
 }
 
 .xblacklist_hidden_post {

@@ -1,4 +1,4 @@
-var framework_version = '7.4.4';
+var framework_version = '7.6.1';
 var Tumblr = unsafeWindow.Tumblr;
 
 function getBridgeError() {
@@ -40,66 +40,59 @@ function GM_listValues() {
   return AddonStorage.listKeys();
 }
 
+// Implement an only-once delivery mechanism for CORS requests
+var corsCallbacks = {};
+
+self.port.on('cors-update', function(data) {
+  var callback = corsCallbacks[data.requestId];
+  if (!callback) {
+    return;
+  }
+  // Augment with shim for XHR-expected fields
+  // This could definitely be done better by looking into whether Response is
+  // cloneable.
+  data.response.getResponseHeader = function(key) {
+    return this.headers[key];
+  };
+
+  if (data.type === 'load') {
+    callback.onload.call(data.response, data.response);
+  } else {
+    callback.onerror.call(data.response, data.response);
+  }
+  corsCallbacks[data.requestId] = null;
+});
+
 function GM_xmlhttpRequest(settings) {
-  function httpsify() {
-    settings.url = settings.url.replace('http://', 'https://');
+  var requestId = Math.floor(Math.random() * 4294967296);
+
+  if (/^http:\/\/([^.]+\.)?tumblr\.com/.test(settings.url)) {
+    settings.url = settings.url.replace(/^http:\/\//, 'https://');
   }
 
-  var request = new XMLHttpRequest();
-  var timeout = 1;
+  var headers = settings.headers || {};
+  var data = null;
 
-  if (settings.url.indexOf('http://') != -1 &&
-      settings.url.indexOf('tumblr.com/svc/') != -1) {
-    httpsify();
-  }
-
-  settings.url = settings.url.replace('http://api.tumblr.com',
-                                            'https://api.tumblr.com');
-
-  if (settings.url.indexOf('http://www.tumblr.com/') === 0) {
-    console.log(' -- Bridge forwarding to HTTPS! (Dashboard)');
-    httpsify();
-  }
-
-  setTimeout(function() {
-    if (settings.method === 'POST') {
-      request.open('POST', settings.url, true);
+  if (settings.method === 'POST') {
+    if (settings.json) {
+      headers['Content-Type'] = 'application/json';
     } else {
-      request.open('GET', settings.url, true);
+      headers['Content-Type'] = 'application/x-www-form-urlencoded';
     }
+    data = settings.data;
+  }
 
-    request.onreadystatechange = function(oEvent) {
-      if (request.readyState === 4) {
-        if (request.status === 200) {
-          if (typeof settings.onload !== 'undefined') {
-              settings.onload.call(request, request);
-          }
-        } else {
-          if (typeof settings.onerror !== 'undefined') {
-              settings.onerror.call(request, request);
-          }
-        }
-      }
-    };
 
-    if (typeof settings.headers !== 'undefined') {
-      for (var obj in settings.headers) {
-        request.setRequestHeader(obj, settings.headers[obj]);
-      }
-    }
+  self.port.emit('cors-request', {
+    requestId: requestId,
+    method: settings.method,
+    url: settings.url,
+    data: data,
+    headers: headers
+  });
 
-    if (settings.method === 'POST') {
-      if (settings.json === true) {
-        request.setRequestHeader('Content-Type', 'application/json');
-        console.log(' -- Bridge requesting post with json mode on');
-      } else {
-        request.setRequestHeader('Content-Type',
-            'application/x-www-form-urlencoded');
-        console.log(' -- Bridge requesting post with json mode off');
-      }
-      request.send(settings.data);
-    } else {
-      request.send(null);
-    }
-  }, timeout);
+  corsCallbacks[requestId] = {
+    onload: settings.onload,
+    onerror: settings.onerror
+  };
 }

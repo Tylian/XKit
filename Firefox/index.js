@@ -2,6 +2,7 @@
 let self = require('sdk/self');
 let pageMod = require('sdk/page-mod');
 let prefs = require('sdk/preferences/service');
+let Request = require('sdk/request').Request;
 
 let scripts = [
   'bridge.js',
@@ -59,4 +60,51 @@ function onAttach(worker) {
   }
   // God forgive me for this is a sin
   port.emit('loading_complete', {});
+
+  function onCorsRequestComplete(requestId) {
+    return function(response) {
+      if (response.status === 200) {
+        port.emit('cors-update', {
+          type: 'load',
+          requestId: requestId,
+          response: {
+            headers: response.headers,
+            responseText: response.text
+          }
+        });
+      } else {
+        port.emit('cors-update', {
+          type: 'error',
+          requestId: requestId,
+          response: {
+            status: response.status,
+            headers: response.headers,
+            responseText: response.text || ''
+          }
+        });
+      }
+    };
+  }
+
+  port.on('cors-request',
+          function({url, method, requestId, data, headers}) {
+    var requestSettings = {
+      url: url,
+      onComplete: onCorsRequestComplete(requestId)
+    };
+    if (headers) {
+      requestSettings.headers = headers;
+    }
+    if (data) {
+      requestSettings.content = data;
+    }
+    var request = Request(requestSettings);
+    switch (method.toUpperCase()) {
+      case 'GET':
+        request.get();
+        break;
+      case 'POST':
+        request.post();
+    }
+  });
 }

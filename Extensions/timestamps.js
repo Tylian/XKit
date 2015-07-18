@@ -1,5 +1,5 @@
 //* TITLE Timestamps **//
-//* VERSION 2.5 REV B **//
+//* VERSION 2.6 REV A **//
 //* DESCRIPTION See when a post has been made. **//
 //* DETAILS This extension lets you see when a post was made, in full date or relative time (eg: 5 minutes ago). It also works on asks, and you can format your timestamps. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -174,7 +174,7 @@ XKit.extensions.timestamps = new Object({
 					if (dtx.isValid() === true) {
 
 						if (XKit.extensions.timestamps.preferences.only_relative.value === true) {
-    							$(obj).find(".xkit-fan-timestamp").html(dt.from(nowdatem));
+									$(obj).find(".xkit-fan-timestamp").html(dt.from(nowdatem));
 						} else {
 							$(obj).find(".xkit-fan-timestamp").html(dt.format(XKit.extensions.timestamps.preferences.format.value) + " &middot; " + dt.from(nowdatem));
 						}
@@ -201,7 +201,7 @@ XKit.extensions.timestamps = new Object({
 			if (dtx.isValid() === true) {
 
 				if (XKit.extensions.timestamps.preferences.only_relative.value === true) {
-    					$(obj).find(".xkit-fan-timestamp").html(dt.from(nowdatem));
+							$(obj).find(".xkit-fan-timestamp").html(dt.from(nowdatem));
 				} else {
 					$(obj).find(".xkit-fan-timestamp").html(dt.format(XKit.extensions.timestamps.preferences.format.value) + " &middot; " + dt.from(nowdatem));
 				}
@@ -243,7 +243,7 @@ XKit.extensions.timestamps = new Object({
 
 
 				if ($(this).attr('id') === "new_post" || $(this).hasClass("fan_mail") === true ||
-					$(this).find('.private_label').length > 0  || $(this).hasClass("note") === true) {
+					$(this).find('.private_label').length > 0	|| $(this).hasClass("note") === true) {
 					return;
 				}
 
@@ -350,7 +350,7 @@ XKit.extensions.timestamps = new Object({
 					if (dtx.isValid() === true) {
 
 						if (XKit.extensions.timestamps.preferences.only_relative.value === true) {
-    							$(obj).html(dt.from(nowdatem));
+									$(obj).html(dt.from(nowdatem));
 						} else {
 							$(obj).html(dt.format(XKit.extensions.timestamps.preferences.format.value) + " &middot; " + dt.from(nowdatem));
 						}
@@ -377,7 +377,7 @@ XKit.extensions.timestamps = new Object({
 			if (dtx.isValid() === true) {
 
 				if (XKit.extensions.timestamps.preferences.only_relative.value === true) {
-    					$(obj).html(dt.from(nowdatem));
+							$(obj).html(dt.from(nowdatem));
 				} else {
 					$(obj).html(dt.format(XKit.extensions.timestamps.preferences.format.value) + " &middot; " + dt.from(nowdatem));
 				}
@@ -411,7 +411,7 @@ XKit.extensions.timestamps = new Object({
 				var dt = moment(dtx);
 
 				if (XKit.extensions.timestamps.preferences.only_relative.value === true) {
-    				$(obj).html(dt.from(nowdatem));
+						$(obj).html(dt.from(nowdatem));
 				} else {
 					$(obj).html(dt.format(XKit.extensions.timestamps.preferences.format.value) + " &middot; " + dt.from(nowdatem));
 				}
@@ -434,36 +434,34 @@ try {
 				GM_xmlhttpRequest({
 					method: "GET",
 					url: api_url,
-					json: true,
-				onerror: function() {
-					XKit.console.add('Unable to load timestamp for post ' + post_id);
-					XKit.extensions.timestamps.show_failed(obj);
-				},
-				onload: function(response) {
-					try {
-
-						var data = JSON.parse(response.responseText);
-						var post = data.response.posts[0];
-						var xd = post.timestamp;
-						var dtx = new Date(xd * 1000);
-						var dt = moment(dtx);
-
-						if (XKit.extensions.timestamps.preferences.only_relative.value === true) {
-							$(obj).html(dt.from(nowdatem));
-						} else {
-							$(obj).html(dt.format(XKit.extensions.timestamps.preferences.format.value) + " &middot; " + dt.from(nowdatem));
-						}
-
-						$(obj).removeClass('xtimestamp_loading');
-						XKit.storage.set("timestamps", "xkit_timestamp_cache_" + post_id, xd);
-
-					} catch(e) {
-
+					onerror: function() {
 						XKit.console.add('Unable to load timestamp for post ' + post_id);
 						XKit.extensions.timestamps.show_failed(obj);
+					},
+					onload: function(response) {
+						try {
 
+							var data = JSON.parse(response.responseText);
+							var post = data.response.posts[0];
+							var xd = post.timestamp;
+							var dtx = new Date(xd * 1000);
+							var dt = moment(dtx);
+
+							if (XKit.extensions.timestamps.preferences.only_relative.value === true) {
+								$(obj).html(dt.from(nowdatem));
+							} else {
+								$(obj).html(dt.format(XKit.extensions.timestamps.preferences.format.value) + " &middot; " + dt.from(nowdatem));
+							}
+
+							$(obj).removeClass('xtimestamp_loading');
+							XKit.storage.set("timestamps", "xkit_timestamp_cache_" + post_id, xd);
+
+						} catch(e) {
+							XKit.console.add('Unable to load timestamp for post ' + post_id);
+							XKit.extensions.timestamps.show_failed(obj);
+						}
 					}
-				}});
+				});
 			} catch(e) {
 				alert(e.message);
 			}

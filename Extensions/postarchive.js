@@ -88,7 +88,14 @@ XKit.extensions.postarchive = new Object({
 					'</a></li>' +
 				'</ul>';
 
-		$("ul.controls_section:eq(1)").before(xf_html);
+		var controls_sections = document.querySelectorAll('ul.controls_section');
+		var controls_section = controls_sections[0];
+		// Emulate eq(1) selector
+		if (controls_sections.length > 1) {
+			controls_section = controls_sections[1];
+		}
+
+		$(controls_section).before(xf_html);
 
 		$("#postarchive_view").click(function() {
 
@@ -651,7 +658,7 @@ var rows = [];
 					"<div class=\"post_wrapper\">" +
 						"<div class=\"post_header\">" +
 							"<div class=\"post_info\">" +
-								"<img src=\"http://api.tumblr.com/v2/blog/" + data.blog_name + ".tumblr.com/avatar/24\" class=\"xkit-post-archive-avatar\"><span style=\"font-weight:normal; margin-right: 8px;\">Archived from:</span><a target=\"_BLANK\" href=\"" + data.post_url + "\">" + data.blog_name + "</a>" +
+								"<img src=\"https://api.tumblr.com/v2/blog/" + data.blog_name + ".tumblr.com/avatar/24\" class=\"xkit-post-archive-avatar\"><span style=\"font-weight:normal; margin-right: 8px;\">Archived from:</span><a target=\"_BLANK\" href=\"" + data.post_url + "\">" + data.blog_name + "</a>" +
 							"</div>" +
 							source_div +
 						"</div>" +
@@ -1056,7 +1063,7 @@ var rows = [];
 
 		var m_post = XKit.interface.find_post(post_id);
 
-		var api_url = "http://api.tumblr.com/v2/blog/" + m_post.owner + ".tumblr.com/posts/?api_key=" + XKit.extensions.postarchive.apiKey + "&id=" + post_id;
+		var api_url = "https://api.tumblr.com/v2/blog/" + m_post.owner + ".tumblr.com/posts/?api_key=" + XKit.extensions.postarchive.apiKey + "&id=" + post_id;
 
 		GM_xmlhttpRequest({
 			method: "GET",

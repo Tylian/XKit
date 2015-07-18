@@ -106,7 +106,7 @@ XKit.extensions.tagviewer = new Object({
     		}).error(function() {
 
     			XKit.window.close();
-    			XKit.window.show("Unable to fetch required data", "TagViewer could not get the required data from Tumblr servers. Please try again later or <a href=\"http://xkit-extension.tumblr.com/ask/\">file a bug report</a> by going to the XKit Blog.","error","<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
+    			XKit.window.show("Unable to fetch required data", "TagViewer could not get the required data from Tumblr servers. Please try again later or <a href=\"http://new-xkit-extension.tumblr.com/ask/\">file a bug report</a> by going to the XKit Blog.","error","<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
 
     		}).done(function(data, textStatus, jqXHR) {
 

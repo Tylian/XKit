@@ -17,8 +17,8 @@
    "manifest_version": 2,
    "minimum_chrome_version": "27.0",
    "name": "XKit",
-   "permissions": [ "tabs", "*://*/*", "*://*/", "unlimitedStorage", "storage", "management" ],
+   "permissions": [ "tabs", "*://*/*", "*://*/", "unlimitedStorage", "storage", "management", "http://*.tumblr.com/", "https://*.tumblr.com/" ],
    "update_url": "http://clients2.google.com/service/update2/crx",
-   "version": "7.5.1",
+   "version": "7.6.1",
    "web_accessible_resources": [ "manifest.json", "editor.js" ]
 }

@@ -342,7 +342,7 @@ XKit.extensions.find_blogs = new Object({
 		for (var i=0;i<m_array.length;i++){
 			if (m_count >= 8) {break; }
 			var mx_html = 	"<a target=\"_BLANK\" href=\"http://" + m_array[i] + ".tumblr.com/\"><div class=\"xkit-find-blogs-blog\">" +
-						"<img src=\"http://api.tumblr.com/v2/blog/" + m_array[i] + ".tumblr.com/avatar/32\" class=\"m_avatar\">" +
+						"<img src=\"https://api.tumblr.com/v2/blog/" + m_array[i] + ".tumblr.com/avatar/32\" class=\"m_avatar\">" +
 						"<div class=\"m_title\">" + m_array[i] + "</div>" +
 					"</div></a>";
 			m_html = m_html + mx_html;
@@ -380,7 +380,7 @@ XKit.extensions.find_blogs = new Object({
 
 		GM_xmlhttpRequest({
 			method: "GET",
-			url: "http://api.tumblr.com/v2/blog/" + m_url + ".tumblr.com/posts/?api_key=" + XKit.extensions.find_blogs.key + "&reblog_info=true&offset=" + offset,
+			url: "https://api.tumblr.com/v2/blog/" + m_url + ".tumblr.com/posts/?api_key=" + XKit.extensions.find_blogs.key + "&reblog_info=true&offset=" + offset,
 			json: false,
 			onerror: function(response) {
 				console.log("Error getting page.");
