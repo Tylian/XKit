@@ -1,5 +1,5 @@
 //* TITLE Read More Now **//
-//* VERSION 1.3.1 **//
+//* VERSION 1.3.2 **//
 //* DESCRIPTION Read Mores in your dash **//
 //* DETAILS This extension allows you to read 'Read More' posts without leaving your dash. Just click on the 'Read More Now!' button on posts and XKit will automatically load and display the post on your dashboard. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -137,11 +137,16 @@ XKit.extensions.read_more_now = new Object({
 					if (a.text().trim() !== "Keep reading") {
 						return;
 					}
-					// Url must be of the form http://something.tumblr.com/post/numbers/whatever
-					if (!(/https?:\/\/[^.]+\.tumblr\.com\/post\/\d+/.test(a.attr("href")))) {
-						return;
+					if (/https?:\/\/[^.]+\.tumblr\.com\/post\/\d+/.test(a.attr("href"))) {
+						XKit.extensions.read_more_now.append_button_with_link(a.parent(), a.attr("href"));
+					} else {
+						// If url is not of the form
+						// http://something.tumblr.com/post/numbers/whatever it needs to be
+						// determined based on the post's author
+						var real_prefix = 'https://' + post.attr('data-tumblelog-name') + '.tumblr.com/';
+						var real_link = a.attr('href').replace(/https?:\/\/[^\/]+\//, real_prefix);
+						XKit.extensions.read_more_now.append_button_with_link(a.parent(), real_link);
 					}
-					XKit.extensions.read_more_now.append_button_with_link(a.parent(), a.attr("href"));
 				});
 			}
 		});
