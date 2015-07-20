@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 2.9.1 **//
+//* VERSION 2.9.2 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER STUDIOXENIX **//
 
@@ -937,6 +937,7 @@ XKit.tools.get_blogs = function() {
 				add_tag: function(tag_or_tags) {
 					function add_single_tag(tag) {
 						var tag_editor = $(".post-form--tag-editor").find(".editor-plaintext");
+						tag_editor.focus();
 						tag_editor.text(tag);
 						tag_editor.addClass(".editor-plaintext-has-text");
 						tag_editor.trigger({type: 'blur'});
