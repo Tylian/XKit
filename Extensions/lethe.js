@@ -1,5 +1,5 @@
 //* TITLE Lethe **//
-//* VERSION 1.0 REV A **//
+//* VERSION 1.1.0 **//
 //* DESCRIPTION Forgets posts once they scroll off the screen. **//
 //* DEVELOPER hobinjk **//
 //* FRAME false **//
@@ -50,7 +50,7 @@ Lethe.prototype.handleScroll = function() {
 Lethe.prototype.updatePosts = function() {
   this.scrollWaiting = false;
 
-  var postMedias = document.querySelectorAll('.post_wrapper');
+  var postMedias = document.querySelectorAll('.post_media');
   var i;
   for (i = 0; i < postMedias.length; i++) {
     var postMedia = postMedias[i];
@@ -84,7 +84,8 @@ Lethe.prototype.updatePosts = function() {
 Lethe.prototype.hidePost = function(post) {
   var rect = post.getBoundingClientRect();
   var placeholder = document.createElement('div');
-  placeholder.classList.add('post_wrapper_hidden');
+  placeholder.classList.add('post_media');
+  placeholder.classList.add('post_media_hidden');
   placeholder.style.width = rect.width + 'px';
   placeholder.style.height = rect.height + 'px';
 

@@ -1,5 +1,5 @@
 //* TITLE Tags on Sidebar **//
-//* VERSION 1.2 REV D **//
+//* VERSION 1.3.1 **//
 //* DESCRIPTION Shows your tracked tags on your sidebar **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//
@@ -33,13 +33,7 @@ XKit.extensions.classic_tags = new Object({
 		try {
 
 			XKit.tools.init_css("classic_tags");
-			var str_sub = "";
-			if (document.location.href.indexOf('/tagged') !== -1) {
-				str_sub = document.location.href.substr(document.location.href.lastIndexOf("/")+1);
-				str_sub = str_sub.replace("+"," ");
-			}
-
-			if ($("#dashboard_controls_open_blog").length === 0) {
+			if ($("#dashboard_index").length === 0) {
 				if (document.location.href.indexOf('/tagged') === -1) {
 					return;
 				}
@@ -57,21 +51,11 @@ XKit.extensions.classic_tags = new Object({
 	},
 
 	show: function() {
-
-		var str_sub = "";
-
-		if (document.location.href.indexOf('/tagged') !== -1) {
-			str_sub = document.location.href.substr(document.location.href.lastIndexOf("/")+1);
-			str_sub = str_sub.replace("+"," ");
-		}
-
-		if ($("#dashboard_controls_open_blog").length === 0) {
+		if ($("#dashboard_index").length === 0) {
 			if (document.location.href.indexOf('/tagged') === -1) {
 				return;
 			}
 		}
-
-		str_sub = XKit.tools.replace_all(str_sub, "\\\+", " ");
 
 		var show_this_tag = false;
 		var extra_classes = "";
@@ -125,16 +109,11 @@ XKit.extensions.classic_tags = new Object({
 				}
 			}
 
-			var m_link = $(this).find(".result_link").attr('href').replace(/\+/g, '-');
+			var result = $(this).find(".result_link");
+			var tag = result.attr('data-tag-result');
+			var href = result.attr('href');
 
-			/*if ($(this).find(".hide_overflow").html() == "#" + str_sub) {
-				extra_classes = "selected";
-			} else {
-				extra_classes = "";
-			}*/
-
-			// console.log("______________ " + m_link + "\n" + document.location.href);
-			if ($("body").attr('data-page-root') === m_link) {
+			if ($("body").attr('data-page-root') === href) {
 				extra_classes = "selected";
 			} else {
 				extra_classes = "";
@@ -143,12 +122,12 @@ XKit.extensions.classic_tags = new Object({
 			var m_title = $(this);
 
 			if (XKit.extensions.classic_tags.preferences.open_in_new_tab.value === true) {
-				$(m_title).find(".result_link").attr('target','_BLANK');
+				result.attr('target','_BLANK');
 			} else {
-				$(m_title).find(".result_link").attr('target','');
+				result.attr('target','');
 			}
-
-			$(m_title).find(".result_title").html($(m_title).find(".result_title").html().replace("#",""));
+			var result_title = $(m_title).find(".result_title");
+			result_title.html(result_title.html().replace("#",""));
 
 			m_html = m_html + '<li class="xtag ' + extra_classes + '"><div class="hide_overflow">' + $(m_title).html() + '</div></li>';
 
@@ -163,12 +142,16 @@ XKit.extensions.classic_tags = new Object({
 				$("#right_column").append(m_html);
 
 			} else {
-
-				if ($("ul.controls_section:eq(1)").length > 0) {
+				var sections = $("ul.controls_section");
+				if (sections.length > 0) {
+					var section = sections[0];
+					if (sections.length > 1) {
+						section = sections[1];
+					}
 					if ($("#xim_small_links").length > 0) {
 						$("#xim_small_links").after(m_html);
 					} else {
-						$("ul.controls_section:eq(1)").after(m_html);
+						$(section).after(m_html);
 					}
 				} else {
 					$("#right_column").prepend(m_html);
