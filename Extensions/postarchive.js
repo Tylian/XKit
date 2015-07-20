@@ -84,7 +84,7 @@ XKit.extensions.postarchive = new Object({
 		var xf_html = 	'<ul class="controls_section" id="postarchive_ul">' +
 					'<li class="section_header selected">Post Archive</li>' +
 					'<li class="no_push"><a href="#" onclick="return false;" id="postarchive_view">' +
-						'<div class="hide_overflow" style="color: rgba(255, 255, 255, 0.5) !important; font-weight: bold; padding-left: 10px; padding-top: 10px;">My Archive <span class="count" id="postarchive_view_count" style="padding-top: 10px;">' + XKit.extensions.postarchive.archived_posts.length + '</span></div>' +
+						'<div class="hide_overflow" style="color: rgba(255, 255, 255, 0.5) !important; font-weight: bold; padding-left: 10px; padding-top: 8px;">My Archive <span class="count" id="postarchive_view_count" style="padding-top: 8px;">' + XKit.extensions.postarchive.archived_posts.length + '</span></div>' +
 					'</a></li>' +
 				'</ul>';
 
