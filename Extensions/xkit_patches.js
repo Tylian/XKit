@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 2.8.0 **//
+//* VERSION 2.9.1 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER STUDIOXENIX **//
 
@@ -1034,27 +1034,25 @@ XKit.tools.get_blogs = function() {
 				}, 
 				
 				type: function() {
-					
-					var to_return = new Object();
-					
-					to_return.text = $("#post_content").find(".main_content").hasClass("regular_form") == true;	
-					to_return.photo = $("#post_content").find(".main_content").hasClass("photo_form") == true;
-					to_return.quote = $("#post_content").find(".main_content").hasClass("quote_form") == true;
-					to_return.link = $("#post_content").find(".main_content").hasClass("link_form") == true;
-					to_return.chat = $("#post_content").find(".main_content").hasClass("conversation_form") == true;
-					to_return.audio = $("#post_content").find(".main_content").hasClass("audio_form") == true;
-					to_return.video = $("#post_content").find(".main_content").hasClass("video_form") == true;
-					
-					return to_return;	
-					
+					var to_return = {};
+					var types = ['text', 'photo', 'quote', 'link', 'chat', 'audio', 'video'];
+					var form = $('.post-form');
+					for (var i = 0; i < types.length; i++) {
+						var type = types[i];
+						if (form.hasClass('post-form--' + type)) {
+							return type;
+						}
+					}
+					// Default to text
+					return 'text';
 				},
 				
 				origin: function() {
 					
 					var to_return = new Object();
 					
-					to_return.is_reblog = $("#post_header").find(".reblog_source").length > 0;
-					to_return.is_original = $("#post_header").find(".reblog_source").length <= 0;
+					to_return.is_reblog = $(".post-header").find(".reblog_source").length > 0;
+					to_return.is_original = $(".post-header").find(".reblog_source").length <= 0;
 					
 					return to_return;
 					

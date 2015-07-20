@@ -1,5 +1,5 @@
 //* TITLE Auto Tagger **//
-//* VERSION 0.4 REV D **//
+//* VERSION 0.5.0 **//
 //* DESCRIPTION Tags posts automatically. **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS This extension allows you to automatically add tags to posts based on state (reblogged, original, queued) or post type (audio, video, etc) and keeping original tags while reblogging a post. **//
@@ -172,16 +172,7 @@ XKit.extensions.auto_tagger = new Object({
 	},
 
 	check_if_tag_exists: function(tag) {
-
-		var found = false;
-		$("#post_content").find(".tag").each(function() {
-			if ($(this).html() === tag) {
-				found = true;
-			}
-		});
-
-		return found;
-
+		return XKit.interface.tag_exists(tag);
 	},
 
 	new_post_check: function() {
@@ -207,20 +198,17 @@ XKit.extensions.auto_tagger = new Object({
 
 		$("#post_form").addClass("xkit-auto-tagger-done-" + XKit.tools.random_string());
 
-		var post_type = $("#post_form").attr('data-post-type');
-
 		// Create fake post object:
-		var m_post = new Object();
-		m_post.type = post_type;
-
+		var type = XKit.interface.post_window.type();
 		var m_tags = "";
 
 		if (XKit.extensions.auto_tagger.preferences.tag_for_original.value !== "") {
 			m_tags = this.mreturn_add(m_tags, XKit.extensions.auto_tagger.preferences.tag_for_original.value);
 		}
 
-		if (XKit.extensions.auto_tagger.return_tag_based_on_type(m_post) !== "") {
-			m_tags = this.mreturn_add(m_tags, XKit.extensions.auto_tagger.return_tag_based_on_type(m_post));
+		var type_tags = this.return_tag_based_on_type({type: type});
+		if (type_tags !== "") {
+			m_tags = this.mreturn_add(m_tags, type_tags);
 		}
 
 		if (XKit.extensions.auto_tagger.preferences.tag_date.value === true) {
@@ -230,8 +218,6 @@ XKit.extensions.auto_tagger = new Object({
 		if (m_tags !== "") {
 			this.inject_to_window(m_tags);
 		}
-
-
 	},
 
 	return_tags_for_queue: function() {
@@ -321,7 +307,7 @@ XKit.extensions.auto_tagger = new Object({
 
 	return_tag_based_on_type: function(obj) {
 
-		if (obj.type === "regular" && XKit.extensions.auto_tagger.preferences.tag_for_text.value !== "") {
+		if ((obj.type === "regular" || obj.type === "text") && XKit.extensions.auto_tagger.preferences.tag_for_text.value !== "") {
 			return XKit.extensions.auto_tagger.preferences.tag_for_text.value;
 		}
 
@@ -370,61 +356,20 @@ XKit.extensions.auto_tagger = new Object({
 	},
 
 	remove_tag: function(tag) {
-
-		$("#post_content").find(".tag").each(function() {
-			if ($(this).html() === tag) {
-				$(this).remove();
-			}
-		});
-
-		try {
-
-			var m_tags = $("#post_content").find(".tags").find(".post_tags").val().split(",");
-			//("old: " + m_tags);
-			if (m_tags.length === 0) { return; }
-			var to_add = new Array();
-
-			for (var i=0;i<m_tags.length;i++) {
-				if (m_tags[i] !== tag) {
-					to_add.push(m_tags[i]);
-				}
-			}
-
-			// $("#post_tags").val(to_add.join(","));
-			//alert("new: " + to_add.join(","));
-			$("#post_content").find(".tags").find(".post_tags").val(to_add.join(","));
-
-		} catch(e) {
-			XKit.console.add("auto_tagger -> " + e.message);
-		}
-
+		XKit.interface.post_window.remove_tag(tag);
 	},
 
-	inject_to_window: function(to_add) {
+	inject_to_window: function(raw_string) {
 
-		if($("#post_content").length <= 0) {
+		if($(".post-form").length <= 0) {
 			setTimeout(function() {
-				XKit.extensions.auto_tagger.inject_to_window(to_add);
+				XKit.extensions.auto_tagger.inject_to_window(raw_string);
 			}, 200);
 			return;
 		}
 
-		var add_tag = "";
-		var xas;
-		var xae;
-		var last_point = 0;
-		var do_tags = true;
-		var tag_to_be_added = "";
-		var tags = to_add.split(",");
-		for (i=0;i<tags.length;i++) {
-			tag_to_be_added = tags[i];
-			var old_tags = $("#post_content").find(".tags").find(".post_tags").val();
-			$("#post_content").find(".tags").find(".post_tags").val(old_tags + "," + tag_to_be_added);
-			$("#post_content").find(".tags").find(".editor_wrapper").before('<span class="tag">' + tag_to_be_added + '</span>');
-		}
-		$("#post_tags_label").css('display','none');
-		$("#post_tags").val(to_add);
-
+		var tags = raw_string.split(",");
+		XKit.interface.post_window.add_tag(tags);
 	},
 
 	destroy: function() {
