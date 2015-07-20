@@ -355,7 +355,7 @@ XKit.extensions.people_notifier = new Object({
 				$("#xim_small_links").after(m_html);
 				//$("ul.controls_section:first").after(m_html);
 			} else {
-				$("ul.controls_section").after(m_html);
+				$("ul.controls_section:first").after(m_html);
 			}
 		} else {
 			$("#right_column").prepend(m_html);
