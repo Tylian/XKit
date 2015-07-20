@@ -1,5 +1,5 @@
 //* TITLE Post Archiver **//
-//* VERSION 0.3 REV F **//
+//* VERSION 0.4 REV B **//
 //* DESCRIPTION Never lose a post again. **//
 //* DETAILS Post Archiver lets you save posts to your XKit.<br><br>Found a good recipe? Think those hotline numbers on that signal boost post might come in handy in the future?<br><br>Click on the save button, then click on the My Archive button on your sidebar anytime to access those posts. You can also name and categorize posts. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -83,19 +83,12 @@ XKit.extensions.postarchive = new Object({
 
 		var xf_html = 	'<ul class="controls_section" id="postarchive_ul">' +
 					'<li class="section_header selected">Post Archive</li>' +
-					'<li class="no_push"><a href="#" onclick="return false;" id="postarchive_view">' +
-						'<div class="hide_overflow">My Archive <span class="count" id="postarchive_view_count">' + XKit.extensions.postarchive.archived_posts.length + '</span></div>' +
+					'<li class="no_push" style="height: 36px;"><a href="#" onclick="return false;" id="postarchive_view">' +
+						'<div class="hide_overflow" style="color: rgba(255, 255, 255, 0.5) !important; font-weight: bold; padding-left: 10px; padding-top: 8px;">My Archive <span class="count" id="postarchive_view_count" style="padding-top: 8px;">' + XKit.extensions.postarchive.archived_posts.length + '</span></div>' +
 					'</a></li>' +
 				'</ul>';
 
-		var controls_sections = document.querySelectorAll('ul.controls_section');
-		var controls_section = controls_sections[0];
-		// Emulate eq(1) selector
-		if (controls_sections.length > 1) {
-			controls_section = controls_sections[1];
-		}
-
-		$(controls_section).before(xf_html);
+		$("ul.controls_section").after(xf_html);
 
 		$("#postarchive_view").click(function() {
 
@@ -658,7 +651,7 @@ var rows = [];
 					"<div class=\"post_wrapper\">" +
 						"<div class=\"post_header\">" +
 							"<div class=\"post_info\">" +
-								"<img src=\"https://api.tumblr.com/v2/blog/" + data.blog_name + ".tumblr.com/avatar/24\" class=\"xkit-post-archive-avatar\"><span style=\"font-weight:normal; margin-right: 8px;\">Archived from:</span><a target=\"_BLANK\" href=\"" + data.post_url + "\">" + data.blog_name + "</a>" +
+								"<img src=\"http://api.tumblr.com/v2/blog/" + data.blog_name + ".tumblr.com/avatar/24\" class=\"xkit-post-archive-avatar\"><span style=\"font-weight:normal; margin-right: 8px;\">Archived from:</span><a target=\"_BLANK\" href=\"" + data.post_url + "\">" + data.blog_name + "</a>" +
 							"</div>" +
 							source_div +
 						"</div>" +
@@ -1063,7 +1056,7 @@ var rows = [];
 
 		var m_post = XKit.interface.find_post(post_id);
 
-		var api_url = "https://api.tumblr.com/v2/blog/" + m_post.owner + ".tumblr.com/posts/?api_key=" + XKit.extensions.postarchive.apiKey + "&id=" + post_id;
+		var api_url = "http://api.tumblr.com/v2/blog/" + m_post.owner + ".tumblr.com/posts/?api_key=" + XKit.extensions.postarchive.apiKey + "&id=" + post_id;
 
 		GM_xmlhttpRequest({
 			method: "GET",
