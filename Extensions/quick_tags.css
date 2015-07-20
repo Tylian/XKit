@@ -3,7 +3,7 @@
 	width: 210px;
 	badckground: rgba(222,224,230,0.47);
 	position: absolute;
-	z-index: 1000;
+	z-index: 100000;
 	top:30px; left:30px;
 	box-shadow: 0px 1px 3px rgba(0,0,0,0.42), 0px 0px 7px rgba(0,0,0,0.22), inset 0px 0px 1px white;
 	border-radius: 6px;

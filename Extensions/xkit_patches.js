@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 2.6 REV F **//
+//* VERSION 2.7.0 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER STUDIOXENIX **//
 
@@ -918,12 +918,16 @@ XKit.tools.get_blogs = function() {
 					var m_text = XKit.interface.post_window.added_icon_text[XKit.interface.post_window.added_icon.indexOf(class_name)];
 					var m_html = "<div title=\"" + m_text + "\" class=\"xkit-interface-control-button " + class_name + "\" " + additional + "></div>";
 
-		  			if ($("#post_controls").find("#xkit-interface-buttons").length > 0) {
-						$("#post_controls").find("#xkit-interface-buttons").prepend(m_html);
-		  			} else {
-		  				$("#post_controls").append("<div id=\"xkit-interface-buttons\">" + m_html + "</div>");
-		  			}	
-					
+					// Add to area above controls
+					var control_area = $(".post-form--controls");
+					if (control_area.length > 0) {
+						var xkit_area = control_area.find("#xkit-interface-buttons");
+						if (xkit_area.length > 0) {
+							xkit_area.prepend(m_html);
+						} else {
+							control_area.prepend("<div id=\"xkit-interface-buttons\">" + m_html + "</div>");
+						}
+					}
 				},
 				
 				add_tag: function(tag) {
@@ -1109,7 +1113,10 @@ XKit.tools.get_blogs = function() {
 				
 					if (!XKit.interface.post_window_listener_running) { XKit.interface.post_window_listener_window_id = 0; return XKit.interface.post_window_listener.set_listen(); }	
 					
-					if($("#post_content").length <= 0 ||$("#ask_form").length > 0) {
+					var post_content = $(".post-forms-modal");
+					var ask_form = $(".post_ask_answer_form");
+
+					if(post_content.length <= 0 || ask_form.length > 0 || post_content.css('display') === 'none') {
 						// No post window yet. Do nothing.
 						XKit.interface.post_window_listener_window_id = 0;
 						return XKit.interface.post_window_listener.set_listen();
@@ -1635,7 +1642,6 @@ XKit.tools.get_blogs = function() {
 				var m_text = XKit.interface.added_icon_text[XKit.interface.added_icon.indexOf(class_name)];
 		
 				var post_obj = XKit.interface.post(obj);
-				
 				var post_id = post_obj.id;
 				var post_type = post_obj.type;
 				var post_permalink = post_obj.permalink;
