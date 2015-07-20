@@ -1,5 +1,5 @@
 //* TITLE Tag Replacer **//
-//* VERSION 0.2 REV B **//
+//* VERSION 0.3 REV A **//
 //* DESCRIPTION Replace old tags! **//
 //* DETAILS Allows you to bulk replace tags of posts. Go to your Posts page on your dashboard and click on the button on the sidebar and enter the tag you want replaced, and the new tag, and Tag Replacer will take care of the rest. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -23,7 +23,7 @@ XKit.extensions.tag_replacer = new Object({
 		xf_html = '<ul class="controls_section" id="tag_replacer_ul">' +
 			'<li class="section_header selected">Tag Replacer</li>' +
 			'<li class="no_push"><a data-url="' + XKit.interface.where().user_url + '" href="#" onclick="return false;" id="tag_replacer_button">' +
-				'<div class="hide_overflow">Replace a tag<span class="sub_control link_arrow icon_right icon_arrow_carrot_right"></span></div>' +
+				'<div class="hide_overflow" style="color: rgba(255, 255, 255, 0.5) !important; font-weight: bold; padding-left: 10px; padding-top: 8px;">Replace a tag<span class="sub_control link_arrow icon_right icon_arrow_carrot_right"></span></div>' +
 			'</a></li></ul>';
 		$("ul.controls_section:eq(1)").before(xf_html);
 
