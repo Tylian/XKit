@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 2.7.0 **//
+//* VERSION 2.8.0 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER STUDIOXENIX **//
 
@@ -929,42 +929,34 @@ XKit.tools.get_blogs = function() {
 						}
 					}
 				},
-				
-				add_tag: function(tag) {
-					
-					// Adds tags to the post window.
-					// You can pass an array or a single string.
-					
-					if (typeof tag !== "string") {
-						
-						for (i=0;i<tag.length;i++) {
-							tag_to_be_added = tag[i];
-							if (tag_to_be_added.substring(0,1) === " ") {
-								tag_to_be_added = tag_to_be_added.substring(1);	
-							}
-							var old_tags = $("#post_content").find(".tags").find(".post_tags").val();
-							$("#post_content").find(".tags").find(".post_tags").val(old_tags + "," + tag_to_be_added);
-							$("#post_content").find(".tags").find(".editor_wrapper").before('<span class="tag">' + tag_to_be_added + '</span>');
-						}
-						
-					} else {
-						
-						var old_tags = $("#post_content").find(".tags").find(".post_tags").val();
-						$("#post_content").find(".tags").find(".post_tags").val(old_tags + "," + tag);
-						$("#post_content").find(".tags").find(".editor_wrapper").before('<span class="tag">' + tag + '</span>');
-						
+
+				/**
+				 * Adds tags to the post window.
+				 * @param {String|Array<String>} tag_or_tags
+				 */
+				add_tag: function(tag_or_tags) {
+					function add_single_tag(tag) {
+						var tag_editor = $(".post-form--tag-editor").find(".editor-plaintext");
+						tag_editor.text(tag);
+						tag_editor.addClass(".editor-plaintext-has-text");
+						tag_editor.trigger({type: 'blur'});
 					}
-					
-					
+					if (typeof tag !== "string") {
+						tag_or_tags.forEach(function(tag) {
+							add_single_tag(tag.trim());
+						});
+					} else {
+						add_single_tag(tag_or_tags);
+					}
 				},
-				
+
 				tag_exists: function(tag) {
 					
 					var found = false;
 					tag = tag.toLowerCase();
 					
-					$("#post_content").find(".tag").each(function() {
-						var this_tag = $(this).html();
+					$(".post-form--tag-editor").find(".tag-label").each(function() {
+						var this_tag = $(this).text();
 						this_tag = this_tag.toLowerCase();
 						if (this_tag.substring(0) === "\"") {
 							this_tag = this_tag.substring(1, this_tag.length - 1);
@@ -979,10 +971,7 @@ XKit.tools.get_blogs = function() {
 				},
 				
 				remove_all_tags: function() {
-					
-					$("#post_content").find(".tag").remove();
-					$("#post_content").find(".tags").find(".post_tags").val("");
-					
+					$(".post-form--tag-editor").find(".tag-label").click();
 				},
 				
 				remove_tag: function(tag) {
@@ -990,37 +979,18 @@ XKit.tools.get_blogs = function() {
 					tag = tag.toLowerCase();
 					
 					
-					$("#post_content").find(".tag").each(function() {
+					$(".post-form--tag-editor").find(".tag-label").each(function() {
 
-						var this_tag = $(this).html();
+						var this_tag = $(this).text();
 						this_tag = this_tag.toLowerCase();
 						if (this_tag.substring(0) === "\"") {
 							this_tag = this_tag.substring(1, this_tag.length - 1);
 						}
 						if (this_tag === tag) {
-							$(this).remove();
+							$(this).click();
 						}
 						
 					});
-	
-					try {
-		
-						var m_tags = $("#post_content").find(".tags").find(".post_tags").val().split(",");
-						if (m_tags.length === 0) { return; }
-						var to_add = new Array();
-		
-						for (var i=0;i<m_tags.length;i++) {
-							if (m_tags[i] !== tag) {
-								to_add.push(m_tags[i]);
-							}	
-						}
-						
-						$("#post_content").find(".tags").find(".post_tags").val(to_add.join(","));
-		
-					} catch(e) {
-						// XKit.console.add("interface -> remove_tag -> " + e.message);	
-					}
-					
 				},
 				
 				state: function() {
