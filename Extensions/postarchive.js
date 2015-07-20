@@ -89,7 +89,7 @@ XKit.extensions.postarchive = new Object({
             '</a></li>' +
           '</ul>';
 
-      $("ul.controls_section").after(xf_html);
+      $("ul.controls_section:first").before(xf_html);
     }
 
 		$("#postarchive_view").click(function() {
