@@ -22,7 +22,7 @@ XKit.extensions.tag_replacer = new Object({
 
 		xf_html = '<ul class="controls_section" id="tag_replacer_ul">' +
 			'<li class="section_header selected">Tag Replacer</li>' +
-			'<li class="no_push"><a data-url="' + XKit.interface.where().user_url + '" href="#" onclick="return false;" id="tag_replacer_button">' +
+			'<li class="no_push" style="height: 36px;"><a data-url="' + XKit.interface.where().user_url + '" href="#" onclick="return false;" id="tag_replacer_button">' +
 				'<div class="hide_overflow" style="color: rgba(255, 255, 255, 0.5) !important; font-weight: bold; padding-left: 10px; padding-top: 8px;">Replace a tag<span class="sub_control link_arrow icon_right icon_arrow_carrot_right"></span></div>' +
 			'</a></li></ul>';
 		$("ul.controls_section:eq(1)").before(xf_html);
