@@ -182,21 +182,21 @@ XKit.extensions.auto_tagger = new Object({
 
 		XKit.console.add("Auto Tagger -> new_post_check -> user in new post page!");
 
-		if($("#post_form").length <= 0) {
+		if($(".post-form").length <= 0) {
 			XKit.console.add("Auto Tagger -> new_post_check -> delaying, not on page...");
 			return;
 		}
 
-		if ($("#post_form").hasClass("xkit-auto-tagger-done") === true) {
+		if ($(".post-form").hasClass("xkit-auto-tagger-done") === true) {
 			XKit.console.add("Auto Tagger -> new_post_check -> quitting, already done.");
 			return;
 		}
 
 		XKit.console.add("Auto Tagger -> new_post_check -> page is shown.");
 
-		$("#post_form").addClass("xkit-auto-tagger-done");
+		$(".post-form").addClass("xkit-auto-tagger-done");
 
-		$("#post_form").addClass("xkit-auto-tagger-done-" + XKit.tools.random_string());
+		$(".post-form").addClass("xkit-auto-tagger-done-" + XKit.tools.random_string());
 
 		// Create fake post object:
 		var type = XKit.interface.post_window.type();
