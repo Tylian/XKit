@@ -1,5 +1,5 @@
 //* TITLE Auto Tagger **//
-//* VERSION 0.5.1 **//
+//* VERSION 0.6.0 **//
 //* DESCRIPTION Tags posts automatically. **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS This extension allows you to automatically add tags to posts based on state (reblogged, original, queued) or post type (audio, video, etc) and keeping original tags while reblogging a post. **//
@@ -136,8 +136,6 @@ XKit.extensions.auto_tagger = new Object({
 	},
 
 	new_post_check_interval: 0,
-	last_post_id: 0,
-
 	run: function() {
 		this.running = true;
 		new_post_check_interval = setInterval(function() { XKit.extensions.auto_tagger.new_post_check(); }, 1000);
@@ -145,14 +143,7 @@ XKit.extensions.auto_tagger = new Object({
 
 	reblog_do: function() {
 
-		// Lets first get the post ID.
-		if ($("#post_header").length <= 0) { setTimeout(function() { XKit.extensions.auto_tagger.reblog_do(); }, 100); return; }
-
-		var post_id = $("input[name='reblog_post_id']").val();
-
-		// if (XKit.extensions.auto_tagger.last_post_id === post_id) {return; }
-
-		XKit.extensions.auto_tagger.last_post_id = post_id;
+		if ($(".post-header").length <= 0) { setTimeout(function() { XKit.extensions.auto_tagger.reblog_do(); }, 100); return; }
 
 		if ($("#post_state").val() === "2") {
 			if (XKit.extensions.auto_tagger.preferences.tag_for_queued.value !== "") {
@@ -177,57 +168,49 @@ XKit.extensions.auto_tagger = new Object({
 
 	new_post_check: function() {
 
-		if (document.location.href.indexOf("://www.tumblr.com/reblog/") !== -1) { this.reblog_do(); return; }
-		if (document.location.href.indexOf("://www.tumblr.com/new/") === -1) { return; }
+		var original = true;
+		if (document.location.href.indexOf("://www.tumblr.com/reblog/") !== -1) {
+			original = false;
+		} else if (document.location.href.indexOf("://www.tumblr.com/new/") === -1) {
+			// Url is wrong for a new post, neither new nor reblog
+			return;
+		}
+
+		var post_forms = $(".post-form");
 
 		XKit.console.add("Auto Tagger -> new_post_check -> user in new post page!");
 
-		if($(".post-form").length <= 0) {
+		if(post_forms.length <= 0) {
 			XKit.console.add("Auto Tagger -> new_post_check -> delaying, not on page...");
 			return;
 		}
 
-		if ($(".post-form").hasClass("xkit-auto-tagger-done") === true) {
+		var post_form = $(post_forms[0]);
+
+		if (post_form.hasClass("xkit-auto-tagger-done") === true) {
 			XKit.console.add("Auto Tagger -> new_post_check -> quitting, already done.");
 			return;
 		}
 
 		XKit.console.add("Auto Tagger -> new_post_check -> page is shown.");
 
-		$(".post-form").addClass("xkit-auto-tagger-done");
+		post_form.addClass("xkit-auto-tagger-done");
 
-		$(".post-form").addClass("xkit-auto-tagger-done-" + XKit.tools.random_string());
-
-		// Create fake post object:
-		var type = XKit.interface.post_window.type();
-		var m_tags = "";
-
-		if (XKit.extensions.auto_tagger.preferences.tag_for_original.value !== "") {
-			m_tags = this.mreturn_add(m_tags, XKit.extensions.auto_tagger.preferences.tag_for_original.value);
+		var post_object = null;
+		if (original) {
+			// Create fake post object:
+			var type = XKit.interface.post_window.type();
+			post_object = {type: type, tags: '', owner: ''};
+		} else {
+			var post_id = document.location.href.match(/tumblr.com\/reblog\/(\d+)\//)[1];
+			post_object = XKit.interface.find_post(post_id);
 		}
 
-		var type_tags = this.return_tag_based_on_type({type: type});
-		if (type_tags !== "") {
-			m_tags = this.mreturn_add(m_tags, type_tags);
-		}
-
-		if (XKit.extensions.auto_tagger.preferences.tag_date.value === true) {
-			m_tags = this.mreturn_add(m_tags, XKit.extensions.auto_tagger.return_date_tag());
-		}
+		var m_tags = return_tags(post_object, original);
 
 		if (m_tags !== "") {
 			this.inject_to_window(m_tags);
 		}
-	},
-
-	return_tags_for_queue: function() {
-
-		if (XKit.extensions.auto_tagger.preferences.tag_for_queued.value !== "") {
-			return XKit.extensions.auto_tagger.preferences.tag_for_queued.value;
-		} else {
-			return "";
-		}
-
 	},
 
 	return_date_tag: function() {
@@ -248,23 +231,21 @@ XKit.extensions.auto_tagger = new Object({
 		// Get the object from XKit interface.
 		var m_post_object = XKit.interface.post(obj);
 
-		if (XKit.extensions.auto_tagger.preferences.tag_for_reblogged.value !== "" && original !== true) {
+		if (!original) {
 			to_return = this.mreturn_add(to_return, XKit.extensions.auto_tagger.preferences.tag_for_reblogged.value);
 		}
 
-		if (XKit.extensions.auto_tagger.preferences.tag_for_original.value !== "" && original === true) {
+		if (original) {
 			to_return = this.mreturn_add(to_return, XKit.extensions.auto_tagger.preferences.tag_for_original.value);
 		}
 
-		if (XKit.extensions.auto_tagger.return_tag_based_on_type(m_post_object) !== "") {
-			to_return = this.mreturn_add(to_return, XKit.extensions.auto_tagger.return_tag_based_on_type(m_post_object));
+		to_return = this.mreturn_add(to_return, XKit.extensions.auto_tagger.return_tag_based_on_type(m_post_object));
+
+		if (XKit.extensions.auto_tagger.preferences.keep_tags.value) {
+			to_return = this.mreturn_add(to_return, m_post_object.tags);
 		}
 
-		if (XKit.extensions.auto_tagger.preferences.keep_tags.value === true && m_post_object.tags !== "") {
-			to_return = this.mreturn_add(to_return,  m_post_object.tags);
-		}
-
-		if (XKit.extensions.auto_tagger.preferences.keep_tags.value === true) {
+		if (XKit.extensions.auto_tagger.preferences.keep_tags.value) {
 
 			if ($("body").attr('data-page-root').indexOf('/tagged/') !== -1) {
 				var m_search_tag = $("body").attr('data-page-root').substring(8);
@@ -278,23 +259,23 @@ XKit.extensions.auto_tagger = new Object({
 				if (m_search_tag.indexOf('/everything') !== -1) {
 					m_search_tag = m_search_tag.substring(0, m_search_tag.indexOf('/everything'));
 				}
-				to_return = this.mreturn_add(to_return,  m_search_tag);
+				to_return = this.mreturn_add(to_return, m_search_tag);
 			}
 
 		}
 
-		if (XKit.extensions.auto_tagger.preferences.tag_person.value === true && m_post_object.owner !== "") {
-			if (XKit.extensions.auto_tagger.preferences.tag_person_replace_hyphens.value === true) {
-				to_return = this.mreturn_add(to_return,  m_post_object.owner.replace(/-/g, ' '));
+		if (XKit.extensions.auto_tagger.preferences.tag_person.value && m_post_object.owner !== "") {
+			if (XKit.extensions.auto_tagger.preferences.tag_person_replace_hyphens.value) {
+				to_return = this.mreturn_add(to_return, m_post_object.owner.replace(/-/g, ' '));
 			} else {
-				to_return = this.mreturn_add(to_return,  m_post_object.owner);
+				to_return = this.mreturn_add(to_return, m_post_object.owner);
 			}
 
 		}
 
-		if (XKit.extensions.auto_tagger.preferences.tag_date.value === true) {
+		if (XKit.extensions.auto_tagger.preferences.tag_date.value) {
 			var m_date = XKit.extensions.auto_tagger.return_date_tag();
-			to_return = this.mreturn_add(to_return,  m_date);
+			to_return = this.mreturn_add(to_return, m_date);
 		}
 
 		if ($.trim(to_return) !== "") {
@@ -350,8 +331,10 @@ XKit.extensions.auto_tagger = new Object({
 	mreturn_add: function(m_return, tag) {
 		if (m_return === "") {
 			return tag;
-		} else {
+		} else if (tag !== "" && typeof(tag) === 'string') {
 			return m_return + "," + tag;
+		} else {
+			return m_return;
 		}
 	},
 
