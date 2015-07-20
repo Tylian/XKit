@@ -1,5 +1,5 @@
 //* TITLE Drafts+ **//
-//* VERSION 0.2 REV A **//
+//* VERSION 0.2 REV B **//
 //* DESCRIPTION Enhancements for Drafts page **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//
@@ -18,13 +18,13 @@ XKit.extensions.drafts_plus = new Object({
 
 		xf_html = '<ul class="controls_section" id="drafts_plus_sidebar">' +
 			'<li class="section_header selected">DRAFTS TOOLS</li>' +
-			'<li class="" id="drafts_plus_mass_edit_li">' +
+			'<li class="" id="drafts_plus_mass_edit_li" style="height: 36px;">' +
 				'<a href="#" class="customize" id="drafts_plus_mass_edit_button">' +
-					'<div class="hide_overflow">Mass Edit Mode</div>' +
+					'<div class="hide_overflow" style="color: rgba(255, 255, 255, 0.5) !important; font-weight: bold; padding-left: 10px; padding-top: 8px;">Mass Edit Mode</div>' +
 				'</a>' +
 			'</li>' +
-			'<li class="no_push"><a href="#" onclick="return false;" id="xshrinkposts_button">' +
-				'<div class="hide_overflow">Shrink Posts <div class="count">off</div> </div>' +
+			'<li class="no_push" style="height: 36px;"><a href="#" onclick="return false;" id="xshrinkposts_button">' +
+				'<div class="hide_overflow" style="color: rgba(255, 255, 255, 0.5) !important; font-weight: bold; padding-left: 10px; padding-top: 8px;">Shrink Posts <div class="count" style="padding-top: 8px;">off</div> </div>' +
 			'</a></li>' +
 			'</ul>';
 
