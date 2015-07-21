@@ -222,6 +222,12 @@ XKit.extensions.auto_tagger = new Object({
 
 	},
 
+	/**
+	 * Return tags for the post object returned by XKit.interface.post or
+	 * XKit.interface.find_post.
+	 * Uses tag_for_reblogged, tag_for_original, tag_based_on_type, keep_tags,
+	 * some weird bullshit, tag_person, and tag_date
+	 */
 	return_tags: function(obj, original) {
 
 		var to_return = "";

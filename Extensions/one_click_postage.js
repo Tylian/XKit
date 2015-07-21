@@ -1,5 +1,5 @@
 //* TITLE One-Click Postage **//
-//* VERSION 3.4 REV A **//
+//* VERSION 4.0.0 **//
 //* DESCRIPTION Lets you easily reblog, draft and queue posts **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//
@@ -421,21 +421,7 @@ XKit.extensions.one_click_postage = new Object({
 			data.post.two = "";
 		}
 
-		m_object["post[tags]"] = "";
-
-		if (XKit.extensions.one_click_postage.auto_tagger == true && typeof XKit.extensions.auto_tagger != "undefined") {
-			// Call Auto Tagger for tags.
-			if (state === 2) {
-				var additional_tags = XKit.extensions.auto_tagger.return_tags_for_queue();
-				if (additional_tags !== "") {
-					if (m_object["post[tags]"] === "") {
-						m_object["post[tags]"] = additional_tags;
-					} else {
-						m_object["post[tags]"] = m_object["post[tags]"] + "," + additional_tags;
-					}
-				}
-			}
-		}
+		m_object["post[tags]"] = this.get_auto_tagger_tags(data.post, state, false);
 
 		m_object["post[publish_on]"] ="";
 		if (state === 0) {
@@ -520,6 +506,31 @@ XKit.extensions.one_click_postage = new Object({
 
 		});
 
+	},
+
+	/**
+	 * If auto_tagger is enabled use it to get tags. Otherwise return ""
+	 * @param {Object} post - Post object, like those returned by
+	 * XKit.interface.post and XKit.interface.find_post
+	 * @param {number} state - Post state: 0 is reblog, 1 is draft, 2 is queue
+	 * @param {Boolean} isOriginal
+	 * @return {String} tags
+	 */
+	get_auto_tagger_tags: function(post, state, isOriginal) {
+		if (!this.auto_tagger) {
+			return "";
+		}
+		var auto_tagger = XKit.extensions.auto_tagger;
+		if (typeof(auto_tagger) == "undefined") {
+			return "";
+		}
+		// Call Auto Tagger for tags.
+		var additional_tags = auto_tagger.return_tags(post, isOriginal);
+		if (state === 2) {
+			var queue_tags = auto_tagger.return_tags_for_queue();
+			additional_tags = auto_tagger.mreturn_add(additional_tags, queue_tags);
+		}
+		return additional_tags;
 	},
 
 	cpanel: function(obj) {
@@ -1016,13 +1027,17 @@ XKit.extensions.one_click_postage = new Object({
 		XKit.tools.add_function(function(){Tumblr.KeyCommands.resume()}, true, '');
 	},
 
+	/**
+	 * Allows keep_tags to continue to work even in the post editor.
+	 */
 	process_click: function(e) {
 
 		var parent_box = $(e.target).parentsUntil('.post').parent();
 
 		if (XKit.extensions.one_click_postage.auto_tagger == true && typeof XKit.extensions.auto_tagger != "undefined") {
-			// Call Auto Tagger for tags.
-			var additional_tags = XKit.extensions.auto_tagger.return_tags($(parent_box));
+			// Call Auto Tagger for tags. Specifies that this is a reblog
+			var post_obj = XKit.interface.post($(parent_box));
+			var additional_tags = XKit.extensions.auto_tagger.return_tags(post_obj, false);
 			if (additional_tags !== "") {
 				setTimeout(function() {
 					XKit.extensions.auto_tagger.inject_to_window(additional_tags);
@@ -1076,13 +1091,10 @@ XKit.extensions.one_click_postage = new Object({
 		$(obj).attr('title','');
 		/*XKit.extensions.one_click_postage.previous_div_id = box_id;*/
 
-		if (XKit.extensions.one_click_postage.auto_tagger == true && typeof XKit.extensions.auto_tagger != "undefined") {
-			// Call Auto Tagger for tags.
-			var post_obj = XKit.interface.post($(parent_box));
-			alert('returning tags: ' + post_obj.toSource());
-			var additional_tags = XKit.extensions.auto_tagger.return_tags(post_obj, false);
-			$("#x1cpostage_tags").val(additional_tags);
-		}
+		// Call Auto Tagger for tags. Will be "" if auto_tagger is disabled
+		var post_obj = XKit.interface.post($(parent_box));
+		var state = 0; // reblog
+		$("#x1cpostage_tags").val(this.get_auto_tagger_tags(post_obj, state, false));
 
 		// Quick Tags?
 		$("#x1cpostage_quick_tags").remove();
@@ -1435,17 +1447,15 @@ XKit.extensions.one_click_postage = new Object({
 			m_object["post[tags]"] = "";
 		}
 
-		if (XKit.extensions.one_click_postage.auto_tagger == true && typeof XKit.extensions.auto_tagger != "undefined") {
-			// Call Auto Tagger for tags.
-			if (state === 2) {
-				var additional_tags = XKit.extensions.auto_tagger.return_tags_for_queue();
-				if (additional_tags !== "") {
-					if (m_object["post[tags]"] === "") {
-						m_object["post[tags]"] = additional_tags;
-					} else {
-						m_object["post[tags]"] = m_object["post[tags]"] + "," + additional_tags;
-					}
-				}
+
+
+		// Call Auto Tagger for tags if enabled
+		var additional_tags = this.get_auto_tagger_tags(data.post, state, false);
+		if (additional_tags !== "") {
+			if (m_object["post[tags]"] === "") {
+				m_object["post[tags]"] = additional_tags;
+			} else {
+				m_object["post[tags]"] = m_object["post[tags]"] + "," + additional_tags;
 			}
 		}
 
