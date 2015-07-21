@@ -126,7 +126,7 @@ XKit.extensions.bookmarker = new Object({
 			$("#right_column").prepend(m_html);
 		} else {
 			if (XKit.extensions.bookmarker.preferences.display_on_top.value === true) {
-				$("ul.controls_section:eq(1)").after(m_html);
+				$("ul.controls_section:first").after(m_html);
 			} else{
 				if ($("#tumblr_radar").length > 0) {
 					$("#tumblr_radar").before(m_html);
@@ -263,7 +263,7 @@ XKit.extensions.bookmarker = new Object({
 		}
 
 		return	'<li class="xbookmark no_push xbookmark_to_slidedown" style="display: none;" id="xkit_bookmark_' + current_bookmark.id + '" data-xkit-bookmark-post-id="' + current_bookmark.id + '">' +
-				'<a href="#" class="hide_overflow" onclick="return false"><span class="bookmark-caption">' + bookmark_caption + '</span></a>' +
+				'<a href="#" class="hide_overflow" onclick="return false"><span class="bookmark-caption" style="color: rgba(255, 255, 255, 0.5) !important; padding-left: 10px; height: 28px;">' + bookmark_caption + '</span></a>' +
 			'</li>';
 
 	},
