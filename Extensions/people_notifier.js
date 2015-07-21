@@ -1,5 +1,5 @@
 //* TITLE Blog Tracker **//
-//* VERSION 0.3 REV F **//
+//* VERSION 0.3 REV G **//
 //* DESCRIPTION Track people like tags **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS Blog Tracker lets you track blogs like you can track tags. Add them on your dashboard, and it will let you know how many new posts they've made the last time you've checked their blogs, or if they've changed their URLs. **//
@@ -319,10 +319,10 @@ XKit.extensions.people_notifier = new Object({
 
 			for (var i=0;i<this.blogs.length;i++) {
 
-				m_html = m_html + 	"<li id=\"xkit-people-notifier-for---" + this.blogs[i].url + "\" data-url=\"" + this.blogs[i].url + "\" class=\"no_push xkit-people-notifier-person\">" +
-								"<img src=\"https://api.tumblr.com/v2/blog/" + this.blogs[i].url + ".tumblr.com/avatar/16\" class=\"people-notifier-avatar\">" +
-								"<a>" +
-									"<div class=\"hide_overflow\">" + this.blogs[i].url + "</div>";
+				m_html = m_html + 	'<li style="padding-top: 2px; height: 24px;" id="xkit-people-notifier-for---' + this.blogs[i].url + '" data-url="' + this.blogs[i].url + '" class="no_push xkit-people-notifier-person">' +
+								'<img src="https://api.tumblr.com/v2/blog/' + this.blogs[i].url + '.tumblr.com/avatar/16" class="people-notifier-avatar">' +
+								'<a>' +
+									'<div class="hide_overflow" style="color: rgba(255, 255, 255, 0.5) !important; padding-left: 36px;">' + this.blogs[i].url + '</div>';
 
 
 				var difference = current_ms - this.blogs[i].last_check;
@@ -346,15 +346,16 @@ XKit.extensions.people_notifier = new Object({
 		}
 
 
-		m_html = m_html + "<li id=\"xkit-people-notifier-new-btn\" class=\"no_push xkit-people-notifier-new\"><a class=\"members\"><div class=\"\">Add a new person</div></a></li>";
+		m_html = m_html + '<li id="xkit-people-notifier-new-btn" class="no_push xkit-people-notifier-new" style="height: 36px;"><a class="members"><div class="" style="color: rgba(255, 255, 255, 0.5) !important; font-weight: bold; padding-left: 10px; padding-top: 8px;">Add a new person</div></a></li>';
 
 		m_html = '<ul class="controls_section" id="xpeoplenotifier"><li class=\"section_header selected\">TRACKED BLOGS</li>' + m_html + '</ul>';
 
-		if ($("ul.controls_section:eq(1)").length > 0) {
+		if ($("ul.controls_section:first").length > 0) {
 			if ($("#xim_small_links").length > 0) {
 				$("#xim_small_links").after(m_html);
+				//$("ul.controls_section:first").after(m_html);
 			} else {
-				$("ul.controls_section:eq(1)").after(m_html);
+				$("ul.controls_section:first").after(m_html);
 			}
 		} else {
 			$("#right_column").prepend(m_html);
