@@ -179,7 +179,7 @@ XKit.extensions.one_click_postage = new Object({
 
 		if ($(".btn.reblog").length === 0) {return; }
 
-		var m_css = 	"#iframe_controls { width: auto !important; } " +
+		var m_css = "#iframe_controls { width: auto !important; } " +
 				"#x1cpostage_in_blog_reblog:before {" +
 					" background-size: auto; " +
 					" background-position: 50% 50%; " +
@@ -204,7 +204,7 @@ XKit.extensions.one_click_postage = new Object({
 
 		XKit.tools.add_css(m_css, "x1cpostage_in_blog");
 
-		var m_html = 	"<a id=\"x1cpostage_in_blog_reblog\" onclick=\"return false\" class=\"btn icon reblog no_label\">1-Click Reblog</a>" +
+		var m_html = "<a id=\"x1cpostage_in_blog_reblog\" onclick=\"return false\" class=\"btn icon reblog no_label\">1-Click Reblog</a>" +
 				"<a id=\"x1cpostage_in_blog_queue\" onclick=\"return false\" class=\"btn icon reblog no_label\">1-Click Queue</a>" +
 				"<a id=\"x1cpostage_in_blog_draft\" onclick=\"return false\" class=\"btn icon reblog no_label\">1-Click Draft</a>";
 
@@ -540,7 +540,7 @@ XKit.extensions.one_click_postage = new Object({
 			XKit.extensions.one_click_postage.auto_tagger = false;
 		} else {
 			if (XKit.installed.enabled("auto_tagger") === true) {
-				if (typeof XKit.extensions.auto_tagger	=== "undefined") {
+				if (typeof XKit.extensions.auto_tagger === "undefined") {
 					// Not booted up yet?
 					setTimeout(function() { XKit.extensions.one_click_postage.get_autotagger(); }, 100);
 				} else {
@@ -561,7 +561,7 @@ XKit.extensions.one_click_postage = new Object({
 			XKit.extensions.one_click_postage.quick_tags = false;
 		} else {
 			if (XKit.installed.enabled("quick_tags") === true) {
-				if (typeof XKit.extensions.quick_tags	=== "undefined") {
+				if (typeof XKit.extensions.quick_tags === "undefined") {
 					// Not booted up yet?
 					setTimeout(function() { XKit.extensions.one_click_postage.get_quicktags(); }, 100);
 				} else {
@@ -593,7 +593,7 @@ XKit.extensions.one_click_postage = new Object({
 		if (this.preferences.show_small_ui.value === true) {
 
 			this.caption_height = 50;
-			var slim_css = 	"#x1cpostage_caption { height: 50px; }" +
+			var slim_css = "#x1cpostage_caption { height: 50px; }" +
 					"#x1cpostage_reblog, #x1cpostage_queue, #x1cpostage_draft { height: 32px; }";
 			XKit.tools.add_css(slim_css, "one_click_postage_slim");
 
@@ -710,7 +710,7 @@ XKit.extensions.one_click_postage = new Object({
 			var m_html = "<div id=\"xkit-1cp-social\">" +
 					"<div data-site=\"facebook\" id=\"xkit-1cp-social-facebook\">&nbsp;</div>" +
 					"<div data-site=\"twitter\" id=\"xkit-1cp-social-twitter\">&nbsp;</div>" +
-				     "</div>";
+					"</div>";
 			if (this.preferences.show_reverse_ui.value === true) {
 				$("#x1cpostage_reblog").before(m_html);
 			} else {
@@ -1078,13 +1078,15 @@ XKit.extensions.one_click_postage = new Object({
 
 		if (XKit.extensions.one_click_postage.auto_tagger == true && typeof XKit.extensions.auto_tagger != "undefined") {
 			// Call Auto Tagger for tags.
-			var additional_tags = XKit.extensions.auto_tagger.return_tags($(parent_box));
+			var post_obj = XKit.interface.post($(parent_box));
+			alert('returning tags: ' + post_obj.toSource());
+			var additional_tags = XKit.extensions.auto_tagger.return_tags(post_obj, false);
 			$("#x1cpostage_tags").val(additional_tags);
 		}
 
 		// Quick Tags?
 		$("#x1cpostage_quick_tags").remove();
-		if (XKit.extensions.one_click_postage.quick_tags === true  && typeof XKit.extensions.quick_tags != "undefined") {
+		if (XKit.extensions.one_click_postage.quick_tags === true && typeof XKit.extensions.quick_tags != "undefined") {
 			// Call Quick Tags to render our box.
 			if (XKit.extensions.quick_tags.preferences.show_in_one_click_postage.value === true) {
 				var m_html = "<div id=\"x1cpostage_quick_tags\">" + XKit.extensions.quick_tags.return_for_one_click_postage() + "</div>";
@@ -1596,7 +1598,7 @@ XKit.extensions.one_click_postage = new Object({
 		if (state === 1) { m_word = "draft"; }
 		if (state === 2) { m_word = "queue"; }
 
-		var m_causes =	"<ul class=\"xkit-one-click-postage-error-list\">" +
+		var m_causes = "<ul class=\"xkit-one-click-postage-error-list\">" +
 					"<li><b>You have used your daily post limit. (<a href=\"#\">more information</a>)</b><br/>The limit is 250 per day, set by Tumblr. Try again in 24 hours.<br/>This affects the queue too, and can't be circumvented.</li>" +
 					"<li><b>You've filled up your queue.</b><br/>You can not queue more than 300 posts.</li>" +
 					"<li><b>The post is deleted.</b><br/>The post you are trying to " + m_word + " is deleted by the user.</li>" +
