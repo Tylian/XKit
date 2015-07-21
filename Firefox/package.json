@@ -7,8 +7,8 @@
   "main": "index.js",
   "author": "",
   "engines": {
-    "firefox": ">=32",
-    "fennec": ">=32"
+    "firefox": ">=35.0",
+    "fennec": ">=35.0"
   },
   "license": "GPL",
   "icon": "icon.png"
