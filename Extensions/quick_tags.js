@@ -1,5 +1,5 @@
 //* TITLE Quick Tags **//
-//* VERSION 0.5.0 **//
+//* VERSION 0.5.1 **//
 //* DESCRIPTION Quickly add tags to posts **//
 //* DETAILS Allows you to create tag bundles and add tags to posts without leaving the dashboard. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -159,7 +159,7 @@ XKit.extensions.quick_tags = new Object({
 
 			}, false);
 		} else {
-			XKit.window.show("Unable to edit post","Something went wrong, my apologizes.<br/>Please try again later or file a bug report with the error code:<br/>QT02","error","<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
+			XKit.window.show("Unable to edit post","Something went wrong, my apologies.<br/>Please try again later or file a bug report with the error code:<br/>QT02","error","<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
 		}
 
 	},

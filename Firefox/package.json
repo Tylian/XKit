@@ -1,14 +1,14 @@
 {
-  "title": "XKit New",
-  "name": "xkit-new",
-  "fullName": "XKit New",
+  "title": "New XKit",
+  "name": "new-xkit",
+  "fullName": "New XKit",
   "version": "0.1.0",
-  "description": "XKit for recent Firefox",
+  "description": "Fork of XKit, the Tumblr extension framework",
   "main": "index.js",
   "author": "",
   "engines": {
-    "firefox": ">=32",
-    "fennec": ">=32"
+    "firefox": ">=35.0",
+    "fennec": ">=35.0"
   },
   "license": "GPL",
   "icon": "icon.png"

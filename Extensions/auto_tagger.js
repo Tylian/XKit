@@ -1,5 +1,5 @@
 //* TITLE Auto Tagger **//
-//* VERSION 0.4 REV D **//
+//* VERSION 0.6.3 **//
 //* DESCRIPTION Tags posts automatically. **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS This extension allows you to automatically add tags to posts based on state (reblogged, original, queued) or post type (audio, video, etc) and keeping original tags while reblogging a post. **//
@@ -136,8 +136,6 @@ XKit.extensions.auto_tagger = new Object({
 	},
 
 	new_post_check_interval: 0,
-	last_post_id: 0,
-
 	run: function() {
 		this.running = true;
 		new_post_check_interval = setInterval(function() { XKit.extensions.auto_tagger.new_post_check(); }, 1000);
@@ -145,14 +143,7 @@ XKit.extensions.auto_tagger = new Object({
 
 	reblog_do: function() {
 
-		// Lets first get the post ID.
-		if ($("#post_header").length <= 0) { setTimeout(function() { XKit.extensions.auto_tagger.reblog_do(); }, 100); return; }
-
-		var post_id = $("input[name='reblog_post_id']").val();
-
-		// if (XKit.extensions.auto_tagger.last_post_id === post_id) {return; }
-
-		XKit.extensions.auto_tagger.last_post_id = post_id;
+		if ($(".post-header").length <= 0) { setTimeout(function() { XKit.extensions.auto_tagger.reblog_do(); }, 100); return; }
 
 		if ($("#post_state").val() === "2") {
 			if (XKit.extensions.auto_tagger.preferences.tag_for_queued.value !== "") {
@@ -172,76 +163,54 @@ XKit.extensions.auto_tagger = new Object({
 	},
 
 	check_if_tag_exists: function(tag) {
-
-		var found = false;
-		$("#post_content").find(".tag").each(function() {
-			if ($(this).html() === tag) {
-				found = true;
-			}
-		});
-
-		return found;
-
+		return XKit.interface.tag_exists(tag);
 	},
 
 	new_post_check: function() {
 
-		if (document.location.href.indexOf("://www.tumblr.com/reblog/") !== -1) { this.reblog_do(); return; }
-		if (document.location.href.indexOf("://www.tumblr.com/new/") === -1) { return; }
+		var original = true;
+		if (document.location.href.indexOf("://www.tumblr.com/reblog/") !== -1) {
+			original = false;
+		} else if (document.location.href.indexOf("://www.tumblr.com/new/") === -1) {
+			// Url is wrong for a new post, neither new nor reblog
+			return;
+		}
+
+		var post_forms = $(".post-form");
 
 		XKit.console.add("Auto Tagger -> new_post_check -> user in new post page!");
 
-		if($("#post_form").length <= 0) {
+		if(post_forms.length <= 0) {
 			XKit.console.add("Auto Tagger -> new_post_check -> delaying, not on page...");
 			return;
 		}
 
-		if ($("#post_form").hasClass("xkit-auto-tagger-done") === true) {
+		var post_form = $(post_forms[0]);
+
+		if (post_form.hasClass("xkit-auto-tagger-done") === true) {
 			XKit.console.add("Auto Tagger -> new_post_check -> quitting, already done.");
 			return;
 		}
 
 		XKit.console.add("Auto Tagger -> new_post_check -> page is shown.");
 
-		$("#post_form").addClass("xkit-auto-tagger-done");
+		post_form.addClass("xkit-auto-tagger-done");
 
-		$("#post_form").addClass("xkit-auto-tagger-done-" + XKit.tools.random_string());
-
-		var post_type = $("#post_form").attr('data-post-type');
-
-		// Create fake post object:
-		var m_post = new Object();
-		m_post.type = post_type;
-
-		var m_tags = "";
-
-		if (XKit.extensions.auto_tagger.preferences.tag_for_original.value !== "") {
-			m_tags = this.mreturn_add(m_tags, XKit.extensions.auto_tagger.preferences.tag_for_original.value);
+		var post_object = null;
+		if (original) {
+			// Create fake post object:
+			var type = XKit.interface.post_window.type();
+			post_object = {type: type, tags: '', owner: ''};
+		} else {
+			var post_id = document.location.href.match(/tumblr.com\/reblog\/(\d+)\//)[1];
+			post_object = XKit.interface.find_post(post_id);
 		}
 
-		if (XKit.extensions.auto_tagger.return_tag_based_on_type(m_post) !== "") {
-			m_tags = this.mreturn_add(m_tags, XKit.extensions.auto_tagger.return_tag_based_on_type(m_post));
-		}
-
-		if (XKit.extensions.auto_tagger.preferences.tag_date.value === true) {
-			m_tags = this.mreturn_add(m_tags, XKit.extensions.auto_tagger.return_date_tag());
-		}
+		var m_tags = this.return_tags(post_object, original);
 
 		if (m_tags !== "") {
 			this.inject_to_window(m_tags);
 		}
-
-
-	},
-
-	return_tags_for_queue: function() {
-
-		if (XKit.extensions.auto_tagger.preferences.tag_for_queued.value !== "") {
-			return XKit.extensions.auto_tagger.preferences.tag_for_queued.value;
-		} else {
-			return "";
-		}
-
 	},
 
 	return_date_tag: function() {
@@ -259,26 +228,21 @@ XKit.extensions.auto_tagger = new Object({
 
 		if (typeof XKit.interface === "undefined") { return ""; }
 
-		// Get the object from XKit interface.
-		var m_post_object = XKit.interface.post(obj);
-
-		if (XKit.extensions.auto_tagger.preferences.tag_for_reblogged.value !== "" && original !== true) {
+		if (!original) {
 			to_return = this.mreturn_add(to_return, XKit.extensions.auto_tagger.preferences.tag_for_reblogged.value);
 		}
 
-		if (XKit.extensions.auto_tagger.preferences.tag_for_original.value !== "" && original === true) {
+		if (original) {
 			to_return = this.mreturn_add(to_return, XKit.extensions.auto_tagger.preferences.tag_for_original.value);
 		}
 
-		if (XKit.extensions.auto_tagger.return_tag_based_on_type(m_post_object) !== "") {
-			to_return = this.mreturn_add(to_return, XKit.extensions.auto_tagger.return_tag_based_on_type(m_post_object));
+		to_return = this.mreturn_add(to_return, XKit.extensions.auto_tagger.return_tag_based_on_type(obj));
+
+		if (XKit.extensions.auto_tagger.preferences.keep_tags.value) {
+			to_return = this.mreturn_add(to_return, obj.tags);
 		}
 
-		if (XKit.extensions.auto_tagger.preferences.keep_tags.value === true && m_post_object.tags !== "") {
-			to_return = this.mreturn_add(to_return,  m_post_object.tags);
-		}
-
-		if (XKit.extensions.auto_tagger.preferences.keep_tags.value === true) {
+		if (XKit.extensions.auto_tagger.preferences.keep_tags.value) {
 
 			if ($("body").attr('data-page-root').indexOf('/tagged/') !== -1) {
 				var m_search_tag = $("body").attr('data-page-root').substring(8);
@@ -292,23 +256,23 @@ XKit.extensions.auto_tagger = new Object({
 				if (m_search_tag.indexOf('/everything') !== -1) {
 					m_search_tag = m_search_tag.substring(0, m_search_tag.indexOf('/everything'));
 				}
-				to_return = this.mreturn_add(to_return,  m_search_tag);
+				to_return = this.mreturn_add(to_return, m_search_tag);
 			}
 
 		}
 
-		if (XKit.extensions.auto_tagger.preferences.tag_person.value === true && m_post_object.owner !== "") {
-			if (XKit.extensions.auto_tagger.preferences.tag_person_replace_hyphens.value === true) {
-				to_return = this.mreturn_add(to_return,  m_post_object.owner.replace(/-/g, ' '));
+		if (XKit.extensions.auto_tagger.preferences.tag_person.value && obj.owner !== "") {
+			if (XKit.extensions.auto_tagger.preferences.tag_person_replace_hyphens.value) {
+				to_return = this.mreturn_add(to_return, obj.owner.replace(/-/g, ' '));
 			} else {
-				to_return = this.mreturn_add(to_return,  m_post_object.owner);
+				to_return = this.mreturn_add(to_return, obj.owner);
 			}
 
 		}
 
-		if (XKit.extensions.auto_tagger.preferences.tag_date.value === true) {
+		if (XKit.extensions.auto_tagger.preferences.tag_date.value) {
 			var m_date = XKit.extensions.auto_tagger.return_date_tag();
-			to_return = this.mreturn_add(to_return,  m_date);
+			to_return = this.mreturn_add(to_return, m_date);
 		}
 
 		if ($.trim(to_return) !== "") {
@@ -321,7 +285,7 @@ XKit.extensions.auto_tagger = new Object({
 
 	return_tag_based_on_type: function(obj) {
 
-		if (obj.type === "regular" && XKit.extensions.auto_tagger.preferences.tag_for_text.value !== "") {
+		if ((obj.type === "regular" || obj.type === "text") && XKit.extensions.auto_tagger.preferences.tag_for_text.value !== "") {
 			return XKit.extensions.auto_tagger.preferences.tag_for_text.value;
 		}
 
@@ -364,67 +328,28 @@ XKit.extensions.auto_tagger = new Object({
 	mreturn_add: function(m_return, tag) {
 		if (m_return === "") {
 			return tag;
-		} else {
+		} else if (tag !== "" && typeof(tag) === 'string') {
 			return m_return + "," + tag;
+		} else {
+			return m_return;
 		}
 	},
 
 	remove_tag: function(tag) {
-
-		$("#post_content").find(".tag").each(function() {
-			if ($(this).html() === tag) {
-				$(this).remove();
-			}
-		});
-
-		try {
-
-			var m_tags = $("#post_content").find(".tags").find(".post_tags").val().split(",");
-			//("old: " + m_tags);
-			if (m_tags.length === 0) { return; }
-			var to_add = new Array();
-
-			for (var i=0;i<m_tags.length;i++) {
-				if (m_tags[i] !== tag) {
-					to_add.push(m_tags[i]);
-				}
-			}
-
-			// $("#post_tags").val(to_add.join(","));
-			//alert("new: " + to_add.join(","));
-			$("#post_content").find(".tags").find(".post_tags").val(to_add.join(","));
-
-		} catch(e) {
-			XKit.console.add("auto_tagger -> " + e.message);
-		}
-
+		XKit.interface.post_window.remove_tag(tag);
 	},
 
-	inject_to_window: function(to_add) {
+	inject_to_window: function(raw_string) {
 
-		if($("#post_content").length <= 0) {
+		if($(".post-form").length <= 0) {
 			setTimeout(function() {
-				XKit.extensions.auto_tagger.inject_to_window(to_add);
+				XKit.extensions.auto_tagger.inject_to_window(raw_string);
 			}, 200);
 			return;
 		}
 
-		var add_tag = "";
-		var xas;
-		var xae;
-		var last_point = 0;
-		var do_tags = true;
-		var tag_to_be_added = "";
-		var tags = to_add.split(",");
-		for (i=0;i<tags.length;i++) {
-			tag_to_be_added = tags[i];
-			var old_tags = $("#post_content").find(".tags").find(".post_tags").val();
-			$("#post_content").find(".tags").find(".post_tags").val(old_tags + "," + tag_to_be_added);
-			$("#post_content").find(".tags").find(".editor_wrapper").before('<span class="tag">' + tag_to_be_added + '</span>');
-		}
-		$("#post_tags_label").css('display','none');
-		$("#post_tags").val(to_add);
-
+		var tags = raw_string.split(",");
+		XKit.interface.post_window.add_tag(tags);
 	},
 
 	destroy: function() {
