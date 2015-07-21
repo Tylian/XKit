@@ -8,6 +8,8 @@
 
 .post.disable-gifs-checked.post_full.is_photo.xkit-disable-gifs-completely { display: none !important; }
 
+.xkit-disable-gifs-completely { display: none !important; }
+
 .xkit-disable-gifs-canvas-container {
 	position: relative;
 }
