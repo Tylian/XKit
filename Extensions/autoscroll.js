@@ -1,5 +1,5 @@
 //* TITLE Auto Scroll **//
-//* VERSION 1.0 REV A **//
+//* VERSION 1.1.0 **//
 //* DESCRIPTION Scrolls the page at a variable pace. **//
 //* DETAILS Automatically scrolls the dashboard. Scrolling stops upon clicking outside the control.  **//
 //* DEVELOPER Fr33dan **//
@@ -115,8 +115,9 @@ XKit.extensions.autoscroll = new Object({
 			}
 		}
 		m_html += '</td><td>' + this.imageCode + '</td></div>';
-		// Place it after primary content container (just before the footer).
-		$("#container").after(m_html);
+		// Place it at the bottom of the document because it is fixed position
+		// anyway
+		$(document.body).append(m_html);
 	},
 
 	destroy: function() {
