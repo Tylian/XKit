@@ -10,7 +10,13 @@
 	width: 88% !important;
 	display: block;
 	color: rgba(255, 255, 255, 0.5);
-	padding-left: 36px;
+	padding: 8px 0 8px 40px;
+	font-weight: 700;
+}
+
+.result_sub_title {
+	font-weight: 700 !important;
+	padding: 9px 0;
 }
 
 .classic-tags-too-much-tags-error {
