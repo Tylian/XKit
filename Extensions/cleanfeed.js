@@ -78,7 +78,7 @@ XKit.extensions.cleanfeed = new Object({
 			'<li class="section_header selected">CLEANFEED</li>' +
 			'<li class="no_push" style="height: 36px;"><a href="#" onclick="return false;" id="xcleanfeed_button">' +
 			'<div class="hide_overflow" style="color: rgba(255, 255, 255, 0.5) !important; font-weight: bold; padding-left: 10px; padding-top: 8px;">Filtering</div>' +
-			'<div class="count" id="xcleanfeedstatus">' + XKit.extensions.cleanfeed.lbl_off + '</div>' +
+			'<div class="count" id="xcleanfeedstatus" style="padding-top: 8px;">' + XKit.extensions.cleanfeed.lbl_off + '</div>' +
 			'<div id="xcleanfeedindicator">&nbsp;</div>' +
 			'</a></li>' +
 			'<div class="small_links by-xkit-cleanfeed">' +
