@@ -1,5 +1,5 @@
 //* TITLE Find Blogs **//
-//* VERSION 1.1 REV C **//
+//* VERSION 1.1 REV D **//
 //* DESCRIPTION Lets you find similar blogs **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//
@@ -128,10 +128,10 @@ XKit.extensions.find_blogs = new Object({
 
 		xf_html = '<ul class="controls_section" id="find_blogs_ul">' +
 			'<li class="section_header selected">FIND BLOGS</li>' +
-			'<li class="no_push"><a href="#" onclick="return false;" id="find_blogs_button">' +
-				'<div class="hide_overflow">Similar to ' + XKit.interface.where().user_url + '<span class="sub_control link_arrow arrow_right"></span></div>' +
+			'<li class="no_push" style="height: 36px;"><a href="#" onclick="return false;" id="find_blogs_button">' +
+				'<div class="hide_overflow" style="color: rgba(255, 255, 255, 0.5) !important; font-weight: bold; padding-left: 10px; padding-top: 8px;">Similar to ' + XKit.interface.where().user_url + '<span class="sub_control link_arrow arrow_right"></span></div>' +
 			'</a></li></ul>';
-		$("ul.controls_section:eq(1)").before(xf_html);
+		$("ul.controls_section:first").before(xf_html);
 
 		$("#find_blogs_button").click(function() {
 
