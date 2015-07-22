@@ -1155,18 +1155,25 @@ XKit.tools.get_blogs = function() {
 					
 					
 				},
-				
+
+				/**
+				 * Call func whenever a new create post window appears
+				 * @param {String} id - globally unique identifier of function for removal
+				 * @param {Function} func - function to call
+				 */
 				add: function(id, func) {
-					
 					// Call a function when the manual reblog window appears.
-					
 					XKit.interface.post_window_listener_id.push(id);
 					XKit.interface.post_window_listener_func.push(func);
 					XKit.interface.post_window_listener.run();
-					
-					
+
+					if (XKit.interface.post_window_listener.open()) {
+						// This is one of the many reasons why nearly every extension uses
+						// fully qualified names
+						func.call();
+					}
 				},
-				
+
 				remove: function(id) {
 					
 					var m_id = XKit.interface.post_window_listener_id.indexOf(id);
