@@ -95,7 +95,7 @@
 #xkit-one-click-reply-quick-reply-text {
 	border: 1px solid rgb(200,200,200);
 	resize: none;
-	width: 378px;
+	width: 100%;
 	padding: 10px;
 	border-radius: 4px;
 	box-shadow: 0px 1px 0px white;
