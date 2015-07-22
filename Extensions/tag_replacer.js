@@ -1,5 +1,5 @@
 //* TITLE Tag Replacer **//
-//* VERSION 0.3 REV B **//
+//* VERSION 0.4.0 **//
 //* DESCRIPTION Replace old tags! **//
 //* DETAILS Allows you to bulk replace tags of posts. Go to your Posts page on your dashboard and click on the button on the sidebar and enter the tag you want replaced, and the new tag, and Tag Replacer will take care of the rest. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -48,7 +48,7 @@ XKit.extensions.tag_replacer = new Object({
 
 			var t_replace = "";
 
-			if ($("#xkit-tag-replacer-case-sensitive").hasClass("selected")) {
+			if (XKit.extensions.tag_replacer.case_sensitive) {
 				t_replace = $.trim($("#xkit-tag-replacer-replace").val().replace(/\s+/g, '-'));
 			} else {
 				t_replace = $.trim($("#xkit-tag-replacer-replace").val().replace(/\s+/g, '-').toLowerCase());
@@ -86,6 +86,7 @@ XKit.extensions.tag_replacer = new Object({
 	p_array: new Array(),
 	p_array_index: 0,
 	append_mode: false,
+	case_sensitive: false,
 	success_count: 0,
 	fail_count: 0,
 
@@ -102,6 +103,7 @@ XKit.extensions.tag_replacer = new Object({
 		XKit.extensions.tag_replacer.success_count = 0;
 		XKit.extensions.tag_replacer.fail_count = 0;
 		XKit.extensions.tag_replacer.append_mode = append_mode;
+		XKit.extensions.tag_replacer.case_sensitive = $("#xkit-tag-replacer-case-sensitive").hasClass("selected");
 
 		XKit.extensions.tag_replacer.next();
 
@@ -159,13 +161,18 @@ XKit.extensions.tag_replacer = new Object({
 			}
 
 			var m_tags = data.data.post.tags.split(",");
+			if (!XKit.extensions.tag_replacer.case_sensitive) {
+				m_tags = m_tags.map(function(tag){
+					return tag.toLowerCase();
+				});
+			}
 
 			var found_tag = false;
 
 			if (XKit.extensions.tag_replacer.append_mode === false) {
 
 				for (var i=0;i<m_tags.length;i++) {
-					if (encodeURIComponent(m_tags[i].replace(/\s+/g, '-').toLowerCase()) === XKit.extensions.tag_replacer.t_replace) {
+					if (encodeURIComponent(m_tags[i].replace(/\s+/g, '-') === XKit.extensions.tag_replacer.t_replace) {
 						found_tag = true;
 						m_tags[i] = XKit.extensions.tag_replacer.t_with;
 						break;
