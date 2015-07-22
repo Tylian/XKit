@@ -358,55 +358,73 @@ XKit.extensions.xkit_patches = new Object({
 		
 		XKit.extensions.xkit_pack_launcher.run();
 		
+XKit.tools.get_current_blog = function() {
+	var avatar = $("#post_controls_avatar");
+	if (avatar.length > 0) {
+		var image = avatar.find(".post_avatar_image");
+		if (image.length > 0) {
+			return image.attr("alt");
+		}
+	}
+	XKit.console.add('XKit.tools.get_current_blog: Warning, fell back to main blog');
+	return XKit.tools.get_blogs()[0];
+};
+
 XKit.tools.get_blogs = function() {
-	
-	var m_blogs_to_save = "";
-	var m_blogs = new Array();	
-	
-		$("script").each(function(index, obj) {
-			
-			if ($(this).html().indexOf("require(\"context\").bootloader") >= 0) {
-				
-				var s = $(this).html();	
-				
-				// This is quite hacky but quite frankly I don't give a fuck anymore.
-				
-				s = s.replace("require(\"context\").bootloader(", "");
-				s = s.substring(0, s.length - 2);
-				
-				var obj = JSON.parse(s);
-				var channels = obj.Context.userinfo.channels;
-				
-				for (var item in channels) {
-					m_blogs_to_save = m_blogs_to_save + ";" + channels[item].name;
-					m_blogs.push(channels[item].name);
-				}
-				
-				XKit.tools.set_setting("xkit_cached_blogs", m_blogs_to_save);
-				return m_blogs;
-				
-			}
-			
+	var m_blogs = [];
+	// Approach 1: Scrape the hidden tab switching element
+	var tab_switching = $("#tab_switching");
+	if (tab_switching.length > 0) {
+		tab_switching.find(".tab_blog.item").not(".tab_dashboard").each(function() {
+			m_blogs.push($(this).attr('id').replace(/^tab_blog_/,''));
 		});
-	
+		if (m_blogs.length > 0) {
+			XKit.tools.set_setting('xkit_cached_blogs', m_blogs.join(';'));
+			return m_blogs;
+		}
+	}
+
+	// Approach 2: Find where Tumblr invokes its bootstrap function
+	var script_tags = $("script");
+	for (var i = 0; i < script_tags.length; i++) {
+		var s = $(script_tags[i]).html();
+
+		if (s.indexOf("require(\"context\").bootloader") < 0) {
+			continue;
+		}
+
+		s = s.replace("require(\"context\").bootloader(", "");
+		s = s.substring(0, s.length - 2);
+
+		var obj = JSON.parse(s);
+		var channels = obj.Context.userinfo.channels;
+
+		for (var item in channels) {
+			m_blogs.push(channels[item].name);
+		}
+
+		XKit.tools.set_setting("xkit_cached_blogs", m_blogs.join(';'));
+		return m_blogs;
+	}
+
+	// Approach 3: Scrape from the dynamically-created popover element.
 	if ($("#popover_blogs").length > 0) {
 		$("#popover_blogs > .popover_inner").children(".item").not(":last-child").each(function(index, obj) {
 			var mX = $(this).attr("id");
 			mX = mX.substring(9, mX.length);
-			m_blogs_to_save = m_blogs_to_save + ";" + mX;
 			m_blogs.push(mX);
 		});
-		XKit.tools.set_setting("xkit_cached_blogs", m_blogs_to_save);
+		XKit.tools.set_setting("xkit_cached_blogs", m_blogs.join(';'));
 		return m_blogs;
-	} else {
-		var m_blogs = XKit.tools.get_setting("xkit_cached_blogs","");
-		if (m_blogs !== "") {
-			return m_blogs.split(";");
-		}
 	}
-	
+
+	// Approach 4: Use the last good cached data that we saved in settings
+	m_blogs = XKit.tools.get_setting("xkit_cached_blogs","");
+	if (m_blogs !== "") {
+		return m_blogs.split(";");
+	}
 };
-		
+
 	XKit.browser = function() {
 	
 		var to_return = new Object();
@@ -940,7 +958,7 @@ XKit.tools.get_blogs = function() {
 						tag_editor.focus();
 						tag_editor.text(tag);
 						tag_editor.addClass(".editor-plaintext-has-text");
-						tag_editor.trigger({type: 'blur'});
+						tag_editor.blur();
 					}
 					if (typeof tag !== "string") {
 						tag_or_tags.forEach(function(tag) {
