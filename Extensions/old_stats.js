@@ -1,5 +1,5 @@
 //* TITLE Old Stats **//
-//* VERSION 0.1 REV A **//
+//* VERSION 0.2.0 **//
 //* DESCRIPTION  **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//
@@ -8,6 +8,42 @@
 XKit.extensions.old_stats = new Object({
 
 	running: false,
+	
+	/*
+	old_stats_draw: function() {
+        var canvas = document.getElementById('xkit-activity-canvas');
+        if (canvas.getContext){
+            var ctx = canvas.getContext('2d');
+            
+            
+            var activity_sparkline = XKit.interface.user().activity.slice(1,-1).split(",");
+            // Convert each string to int in array
+            for (var i=0; i<activity_sparkline.length; i++) {
+                activity_sparkline[i] = parseInt(activity_sparkline[i], 10);
+            }
+        
+            var activity_max = getMaxOfArray(activity_sparkline);
+            var activity_min = getMinOfArray(activity_sparkline);
+            
+            var path=new Path2D();
+            
+            path.moveTo(0, Math.round(15 - (activity_sparkline[0]-activity_min)/(activity_max-activity_min)*15));
+            
+            for (var n=1; n<activity_sparkline.length; n++) {
+                activity_sparkline[n] = Math.round(15 - (activity_sparkline[n]-activity_min)/(activity_max-activity_min)*15);
+                path.lineTo(n*3, activity_sparkline[n]);
+                path.moveTo(n*3, activity_sparkline[n]);
+            }
+
+            var path=new Path2D();
+            path.moveTo(0,7);
+            path.lineTo(36,15);
+            path.lineTo(3,0);
+            //ctx.fill(path);
+
+            ctx.stroke(path);
+        }
+	}, */
 
 	run: function() {
 		this.running = true;
@@ -38,6 +74,14 @@ XKit.extensions.old_stats = new Object({
 		if (m_user.queue === 0) {
 			queue_show = " count_0 ";
 		}
+		
+		/*var m_account = $("#account_button");
+		m_account.click();
+		var activity_graph = document.getElementsByClassName("popover--account-popover")[0];
+		window.setTimeout(function() {
+			m_account.click();
+		}, 1000); */
+
 
 		var xf_html = 	'<ul data-blog-name="' + m_user.name + '" id="dashboard_controls_open_blog" class="controls_section">' +
 					'<li class="no_push selected_blog">' +
@@ -62,12 +106,12 @@ XKit.extensions.old_stats = new Object({
 							'<span class="count">' + m_user.followers.toLocaleString() + '</span>' +
 						'</a>' +
 					'</li>' +
-					'<li class="controls_section_item">' +
+					'<li class="controls_section_item popover_menu_item_blog_details">' +
 						'<a class="control-item control-anchor activity" href="/blog/' + m_user.name + '/activity">' +
-							'<div class="hide_overflow">Activity</div>' +
+							'<div class="hide_overflow" id="old_stats_activity">Activity</div>' + 
 							'<span data-sparkline="' + m_user.activity + '" class="count sparkline">' +
 								'<canvas style="display: inline-block; vertical-align: top; height: 15px; width: 36px;" width="72" height="30"></canvas>' +
-							'</span>' +
+							'</span>' + 
 						'</a>' +
 					'</li>' +
 					'<li class="controls_section_item' + drafts_show + '" data-blog-controls-count="draft_count">' +
@@ -96,14 +140,52 @@ XKit.extensions.old_stats = new Object({
 						'</a>' +
 					'</li>' +
 				'</ul>' +
+				'<ul id="xkit-dashboard-account" class="controls_section">' +
 				'<div class="small_links">' +
 					'<a href="/mega-editor/' + m_user.name + '" target="_mass_post_editor">Mass Post Editor</a>' +
 					'<a class="xkit-small-blog-setting-link" href="/blog/' + m_user.name + '/settings/" target="_blog_settings">Blog Settings</a>' +
 				'</div>';
 
 		$(".recommended_tumblelogs").before(xf_html);
+		
+	//	$("#old_stats_activity").after(activity_graph.childNodes[0].childNodes[0].childNodes[0].childNodes[1].childNodes[1].childNodes[0].childNodes[0].childNodes[0].childNodes[1]);
+		
+		/*
+		var canvas = $('#xkit-activity-canvas');
+        if (canvas.getContext){
+            var ctx = canvas.getContext('2d');
+            
+            
+            var activity_sparkline = XKit.interface.user().activity.slice(1,-1).split(",");
+            // Convert each string to int in array
+            for (var i=0; i<activity_sparkline.length; i++) {
+                activity_sparkline[i] = parseInt(activity_sparkline[i], 10);
+            }
+        
+            var activity_max = getMaxOfArray(activity_sparkline);
+            var activity_min = getMinOfArray(activity_sparkline);
+            
+            var path=new Path2D();
+            
+            path.moveTo(0, Math.round(15 - (activity_sparkline[0]-activity_min)/(activity_max-activity_min)*15));
+            
+            for (var n=1; n<activity_sparkline.length; n++) {
+                activity_sparkline[n] = Math.round(15 - (activity_sparkline[n]-activity_min)/(activity_max-activity_min)*15);
+                path.lineTo(n*3, activity_sparkline[n]);
+                path.moveTo(n*3, activity_sparkline[n]);
+            }
+
+            var path=new Path2D();
+            path.moveTo(0,7);
+            path.lineTo(36,15);
+            path.lineTo(3,0);
+            ctx.fill(path);
+
+            //ctx.stroke(path);
+        }*/
 
 	},
+
 
 	destroy: function() {
 		this.running = false;
