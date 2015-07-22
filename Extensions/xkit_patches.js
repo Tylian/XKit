@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 2.9.2 **//
+//* VERSION 2.9.3 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER STUDIOXENIX **//
 
@@ -1806,8 +1806,19 @@ XKit.tools.get_blogs = function() {
 			user: function() {
 				
 				var m_return = new Object();
+				
+				// Init variables
+				m_return.posts = 0;
+				m_return.followers = 0;
+				m_return.drafts = 0;
+				m_return.processing = 0;
+				m_return.queue = 0;
+				m_return.activity = '[0,0,0,0,0,0,0,0,0,0,0,0]';
+				
+				// Needs to be in a variable, otherwise account button can't be clicked. (Weird as fuck)
+				m_account = $("#account_button");
 
-				$("#account_button").click(); // Because tab must be open to steal data from it
+				m_account.click(); // Because tab must be open to steal data from it
 
 				if ($(".blog-list-item").find(".blog-list-item-info").find(".blog-list-item-info-name").length > 0) {
 					m_return.name = $(".blog-list-item").find(".blog-list-item-info").find(".blog-list-item-info-name").html().replace(",","");
@@ -1820,13 +1831,6 @@ XKit.tools.get_blogs = function() {
 				} else {
 					m_return.title = 'ERROR';	
 				}	
-				
-				m_return.posts = 0;
-				m_return.followers = 0;
-				m_return.drafts = 0;
-				m_return.processing = 0;
-				m_return.queue = 0;
-				m_return.activity = '[0,0,0,0,0,0,0,0,0,0,0,0]';
 
 
 				if ($(".blog-sub-nav-details").find(".blog-sub-nav-item").length > 0) {
@@ -1853,9 +1857,9 @@ XKit.tools.get_blogs = function() {
 					});
 				}
 				
-				$("#account_button").click();
-				$("#account_button").click();
-				// Hax. Probably a timing bug.
+				window.setTimeout(function() {
+				    m_account.click();
+				}, 1000);
 
 				return m_return;	
 				
