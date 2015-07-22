@@ -1,5 +1,5 @@
 //* TITLE One-Click Reply **//
-//* VERSION 1.9 REV G **//
+//* VERSION 2.0.0 **//
 //* DESCRIPTION Lets you reply to notifications **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS To use this extension, hover over a notification and click on the Reply button. If Multi-Reply is on, hold down the ALT key while clicking on the Reply button to select/deselect posts and reply to all of them at once. **//
@@ -186,9 +186,17 @@ XKit.extensions.one_click_reply = new Object({
 
 	},
 
+	/**
+	 * Creates blog post
+	 * @param {String} sentence - html content
+	 * @param {String} tags - comma-separated tags
+	 * @param {Object} reply - A "reply" to append to the sentence
+	 * @param {String} blog - the id of the blog to post as
+	 * @param {Boolean?} retry_mode - If false, allows one retry
+	 */
 	quick_reply_post: function(sentence, tags, reply, blog, retry_mode) {
 
-		var m_object = new Object();
+		var m_object = {};
 
 		reply = reply.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 
@@ -359,7 +367,7 @@ XKit.extensions.one_click_reply = new Object({
 		XKit.tools.set_setting("xkit_one_click_reply_sentence", "");
 		XKit.tools.set_setting("xkit_one_click_reply_username", "");
 
-		var m_blog = $("#popover_blogs .popover_menu_item.item:first-child").attr('id').replace("menuitem-","");
+		var m_blog = XKit.tools.get_current_blog();
 
 		$("#xkit-one-click-reply-quick-reply-ok").unbind("click");
 		$("#xkit-one-click-reply-quick-reply-ok").click(function() {
