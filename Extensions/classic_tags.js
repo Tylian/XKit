@@ -141,12 +141,10 @@ XKit.extensions.classic_tags = new Object({
 
 				$("#right_column").children(".tag_controls").after(m_html);
 
+			} else if ($("#xim_small_links").length > 0) {
+				$("#xim_small_links").after(m_html);
 			} else {
-				if ($("#xim_small_links").length > 0) {
-					$("#xim_small_links").after(m_html);
-				} else {
-					$("#right_column").prepend(m_html);
-				}
+				$("#right_column").prepend(m_html);
 			}
 
 			$(".xtag").each(function() {
