@@ -960,6 +960,7 @@ XKit.tools.get_blogs = function() {
 					}
 					content_editor.focus();
 					content_editor.html(new_content);
+					content_editor.addClass("editor-richtext-has-text");
 					content_editor.blur();
 				},
 
@@ -972,7 +973,7 @@ XKit.tools.get_blogs = function() {
 					function add_single_tag(tag) {
 						tag_editor.focus();
 						tag_editor.text(tag);
-						tag_editor.addClass(".editor-plaintext-has-text");
+						tag_editor.addClass("editor-plaintext-has-text");
 						tag_editor.blur();
 					}
 					if (typeof tag !== "string") {
@@ -1115,7 +1116,7 @@ XKit.tools.get_blogs = function() {
 				
 					if (!XKit.interface.post_window_listener_running) { XKit.interface.post_window_listener_window_id = 0; return XKit.interface.post_window_listener.set_listen(); }	
 					
-					var post_content = $(".post-forms-modal");
+					var post_content = $(".post-form");
 					var ask_form = $(".post_ask_answer_form");
 
 					if(post_content.length <= 0 || ask_form.length > 0 || post_content.css('display') === 'none') {
@@ -1167,7 +1168,7 @@ XKit.tools.get_blogs = function() {
 					XKit.interface.post_window_listener_func.push(func);
 					XKit.interface.post_window_listener.run();
 
-					if (XKit.interface.post_window_listener.open()) {
+					if (XKit.interface.post_window.open()) {
 						// This is one of the many reasons why nearly every extension uses
 						// fully qualified names
 						func.call();
