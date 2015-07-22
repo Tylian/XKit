@@ -1859,7 +1859,7 @@ XKit.tools.get_blogs = function() {
 				
 				window.setTimeout(function() {
 				    m_account.click();
-				}, 1000);
+				}, 500);
 
 				return m_return;	
 				
