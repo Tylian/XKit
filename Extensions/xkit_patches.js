@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 2.9.2 **//
+//* VERSION 3.0.0 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER STUDIOXENIX **//
 
