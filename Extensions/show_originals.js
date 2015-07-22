@@ -1,5 +1,5 @@
 //* TITLE Show Originals **//
-//* VERSION 1.1 REV C **//
+//* VERSION 1.2.0 **//
 //* DESCRIPTION Only shows non-reblogged posts **//
 //* DETAILS This is a really experimental extension allows you see original (non-reblogged) posts made by users on your dashboard. Please keep in mind that if you don't have enough people creating new posts on your dashboard, it might slow down your computer. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -58,12 +58,12 @@ XKit.extensions.show_originals = new Object({
 
 		xf_html = '<ul class="controls_section" id="xshow_originals_ul">' +
 			'<li class="section_header selected">SHOW ORIGINALS</li>' +
-			'<li class="no_push"><a href="#" onclick="return false;" id="xshoworiginals_button">' +
-			'<div class="hide_overflow">Originals Only</div>' +
-			'<div class="count" id="xshoworiginalsstatus">' + XKit.extensions.show_originals.lbl_off + '</div>' +
+			'<li class="no_push" style="height:36px;"><a href="#" onclick="return false;" id="xshoworiginals_button">' +
+			'<div class="hide_overflow" style="color: rgba(255, 255, 255, 0.5) !important; font-weight: bold; padding-left: 10px; padding-top: 8px;">Originals Only</div>' +
+			'<div class="count" id="xshoworiginalsstatus" style="padding-top: 8px;">' + XKit.extensions.show_originals.lbl_off + '</div>' +
 			'<div id="xshoworiginalsindicator">&nbsp;</div>' +
 			'</a></li></ul>';
-		$("ul.controls_section:eq(1)").before(xf_html);
+		$("ul.controls_section:first").before(xf_html);
 
 		XKit.extensions.show_originals.update_button();
 
