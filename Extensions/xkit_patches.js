@@ -949,12 +949,27 @@ XKit.tools.get_blogs = function() {
 				},
 
 				/**
+				 * Sets the content of the post window.
+				 * @param {String} new_content
+				 */
+				set_content_html: function(new_content) {
+					var content_editor = $('.post-form--form').find('.editor.editor-richtext');
+					if (content_editor.length === 0) {
+						XKit.console.add('ERROR: unable to set content html');
+						return;
+					}
+					content_editor.focus();
+					content_editor.html(new_content);
+					content_editor.blur();
+				},
+
+				/**
 				 * Adds tags to the post window.
 				 * @param {String|Array<String>} tag_or_tags
 				 */
 				add_tag: function(tag_or_tags) {
+					var tag_editor = $(".post-form--tag-editor").find(".editor-plaintext");
 					function add_single_tag(tag) {
-						var tag_editor = $(".post-form--tag-editor").find(".editor-plaintext");
 						tag_editor.focus();
 						tag_editor.text(tag);
 						tag_editor.addClass(".editor-plaintext-has-text");
