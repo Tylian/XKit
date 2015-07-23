@@ -1,5 +1,5 @@
 //* TITLE Outbox **//
-//* VERSION 0.9 REV F **//
+//* VERSION 0.9.1 **//
 //* DESCRIPTION Saves your sent replies, fan mail and asks. **//
 //* DETAILS This extension stores and lets you view the last 50 asks you've answered privately. Please keep in mind that this is a highly experimental extension, so if you hit a bug, please send the XKit blog an ask with the problem you've found. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -93,16 +93,24 @@ XKit.extensions.outbox = new Object({
 
 	run_fan_mail: function(wait) {
 
+		function get_fanmail_send_button() {
+			var fanmail_iframe = document.getElementById("send_fan_mail_lightbox");
+			if (fanmail_iframe == null)
+				return null;
+
+			var send_button = fanmail_iframe.contentWindow.document.getElementsByClassName("send");
+			return send_button.length > 0 ? send_button[0] : null;
+		}
+
 		if (wait === true) {
-			//console.log($("#fan_mail").length);
-			if (!$(".submit_controls .send").length > 0) {
+			if (get_fanmail_send_button() == null) {
 				XKit.console.add("Waiting for fan-mail window to pop up..");
 				setTimeout(function() { XKit.extensions.outbox.run_fan_mail(true); }, 200);
 				return;
 			}
+			get_fanmail_send_button().onclick = XKit.extensions.outbox.save_fan_mail;
 		}
 
-		$(document).on("click",".submit_controls .send", XKit.extensions.outbox.save_fan_mail);
 		XKit.console.add("Activating run_fan_mail on outbox...");
 		XKit.extensions.outbox.fan_mail_form_key = $('meta[name=tumblr-form-key]').attr("content");
 
