@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 3.0.2 **//
+//* VERSION 3.0.3 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER STUDIOXENIX **//
 
@@ -1669,59 +1669,47 @@ XKit.tools.get_blogs = function() {
 	  			}				
 				
 			},
-			
+
+			/**
+			 * Get the posts on the screen without the given tag
+			 * @param {String} without_tag - Class that the posts should not have
+			 * @param {Boolean} mine - Whether the posts must be the user's
+			 * @param {Boolean} can_edit - Whether the posts must be editable
+			 * @return {Array<Object>} The posts
+			 */
 			get_posts: function(without_tag, mine, can_edit) {
-				
-				var to_return = new Array();
-				
+				var posts = [];
+
 				var selector = ".post";
-				
-				if (can_edit) {
-					
-					if (typeof without_tag !== "undefined") {
-					
-						$(selector).not(".radar").not(".new_post_buttons").not("." + without_tag).each(function() {
-							if ($(this).find(".post_control.edit").length > 0) {
-								to_return.push($(this));
-							}	
-						});	
-					
-					} else {
-				
-						$(selector).not(".radar").not(".new_post_buttons").each(function() {
-							if ($(this).find(".post_control.edit").length > 0) {
-								to_return.push($(this));
-							}		
-						});	
-					
-					}
-					
-				} else {
-				
-					if (mine === true) {
-						selector = ".post.is_mine";	
-					}
-				
-					if (typeof without_tag !== "undefined") {
-					
-						$(selector).not(".radar").not(".new_post_buttons").not("." + without_tag).each(function() {
-							to_return.push($(this));	
-						});	
-					
-					} else {
-				
-						$(selector).not(".radar").not(".new_post_buttons").each(function() {
-							to_return.push($(this));	
-						});	
-					
-					}
-					
+
+				if (mine) {
+					selector = ".post.is_mine";
 				}
-				
-				return to_return;
-				
+
+				var selection = $(selector);
+
+				var exclusions = [".radar", ".new_post_buttons"];
+
+				if (typeof without_tag !== "undefined") {
+					exclusions.push("." + without_tag);
+				}
+
+				for (var i = 0; i < exclusions.length; i++) {
+					selection = selection.not(exclusions[i]);
+				}
+
+				selection.each(function() {
+					// If can_edit is requested and we don't have an edit post control,
+					// don't push the post
+					if (can_edit && $(this).find(".post_control.edit").length === 0) {
+						return;
+					}
+					posts.push($(this));
+				});
+
+				return posts;
 			},
-			
+
 			find_post: function(post_id) {
 				
 				// Return a post object based on post ID.
