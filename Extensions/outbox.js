@@ -1,5 +1,5 @@
 //* TITLE Outbox **//
-//* VERSION 0.9.3 **//
+//* VERSION 0.9.4 **//
 //* DESCRIPTION Saves your sent replies, fan mail and asks. **//
 //* DETAILS This extension stores and lets you view the last 50 asks you've answered privately. Please keep in mind that this is a highly experimental extension, so if you hit a bug, please send the XKit blog an ask with the problem you've found. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -118,7 +118,9 @@ XKit.extensions.outbox = new Object({
 
 	save_fan_mail: function(e) {
 
-		var m_msg = $(".message").val();
+		var fanmail_iframe = document.getElementById("send_fan_mail_lightbox");
+		var message_textarea = fanmail_iframe.contentWindow.document.getElementsByClassName("message")[0];
+		var m_msg = message_textarea.value;
 		var check_status = $("#checkmark").css("display") !== "none";
 
 		if ($("#to_input").attr('type') === "hidden") {
@@ -151,10 +153,10 @@ XKit.extensions.outbox = new Object({
 
 		var m_obj = new Object();
 		m_obj.avatar = "fan_mail";
-		m_obj.username = $("#select_tumblelog_from").val();
-		m_obj.message = $(".message").val();
+		m_obj.username = fanmail_iframe.contentWindow.document.getElementById("select_tumblelog_from").value;
+		m_obj.message = m_msg;
 		m_obj.answer = "";
-		m_obj.to = $("#to_input").val();
+		m_obj.to = fanmail_iframe.contentWindow.document.getElementById("to_input").value
 		m_obj.time = new Date().getTime();
 
 		var form_key = $('meta[name=tumblr-form-key]').attr("content");
