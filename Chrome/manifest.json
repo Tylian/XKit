@@ -15,6 +15,6 @@
    "minimum_chrome_version": "27.0",
    "name": "New XKit",
    "permissions": [ "tabs", "*://*/*", "*://*/", "unlimitedStorage", "storage", "management", "http://*.tumblr.com/", "https://*.tumblr.com/" ],
-   "version": "7.6.1",
+   "version": "7.6.2",
    "web_accessible_resources": [ "manifest.json", "editor.js" ]
 }
