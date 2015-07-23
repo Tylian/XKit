@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 3.0.3 **//
+//* VERSION 3.0.4 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER STUDIOXENIX **//
 
@@ -1682,7 +1682,7 @@ XKit.tools.get_blogs = function() {
 
 				var selector = ".post";
 
-				if (mine) {
+				if (mine && !XKit.interface.where().channel) {
 					selector = ".post.is_mine";
 				}
 
