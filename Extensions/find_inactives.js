@@ -1,5 +1,5 @@
 //* TITLE Find Inactives **//
-//* VERSION 0.1 REV D **//
+//* VERSION 0.2.0 **//
 //* DESCRIPTION Find the inactive blogs you follow **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS This extension lets you find the blog that haven't been updated for over 30 days. Just go to list of blogs you follow, then click on &quot;Find Inactive Blogs&quot; button below your Crushes to get started. **//
@@ -66,31 +66,21 @@ XKit.extensions.find_inactives = new Object({
 	},
 
 	get_count: function() {
-
-		GM_xmlhttpRequest({
-			method: "GET",
-			url: "http://www.tumblr.com/dashboard/",
-			json: false,
-			onerror: function(response) {
-				XKit.extensions.find_inactives.show_error("<b>Unable to get the blog information.</b><br/>Please try again later.<br/><br/>Error Code: FIA-330");
+		var done = false;
+		$("#tabs").children().each(function() {
+			if (done) {
 				return;
-			},
-			onload: function(response) {
-
-				try {
-
-					XKit.extensions.find_inactives.people_count = parseInt($(".following", response.responseText).find(".hide_overflow").attr('data-count'));
-					$("#xkit-find-inactives-status").html("Fetching the people you follow...");
-					XKit.extensions.find_inactives.next_page();
-
-				} catch(e) {
-					XKit.extensions.find_inactives.show_error("<b>Unable to get the blog information.</b><br/>Please try again later.<br/><br/>Error Code: FIA-730<br/>" + e.message);
-					return;
-				}
-
 			}
-		});
+			var tab = $(this);
+			if (tab.attr('href') !== '/following') {
+				return;
+			}
+			done = true;
 
+			// Extract the first number found
+			XKit.extensions.find_inactives.people_count = parseInt(tab.text().match(/\d+/));
+			XKit.extensions.find_inactives.next_page();
+		});
 	},
 
 	show_error: function(message) {
