@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 3.0.1 **//
+//* VERSION 3.0.2 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER STUDIOXENIX **//
 
@@ -372,17 +372,6 @@ XKit.tools.get_current_blog = function() {
 
 XKit.tools.get_blogs = function() {
 	var m_blogs = [];
-	// Approach 1: Scrape the hidden tab switching element
-	var tab_switching = $("#tab_switching");
-	if (tab_switching.length > 0) {
-		tab_switching.find(".tab_blog.item").not(".tab_dashboard").each(function() {
-			m_blogs.push($(this).attr('id').replace(/^tab_blog_/,''));
-		});
-		if (m_blogs.length > 0) {
-			XKit.tools.set_setting('xkit_cached_blogs', m_blogs.join(';'));
-			return m_blogs;
-		}
-	}
 
 	// Approach 2: Find where Tumblr invokes its bootstrap function
 	var script_tags = $("script");
@@ -405,6 +394,18 @@ XKit.tools.get_blogs = function() {
 
 		XKit.tools.set_setting("xkit_cached_blogs", m_blogs.join(';'));
 		return m_blogs;
+	}
+
+	// Approach 1: Scrape the hidden tab switching element
+	var tab_switching = $("#tab_switching");
+	if (tab_switching.length > 0) {
+		tab_switching.find(".tab_blog.item").not(".tab_dashboard").each(function() {
+			m_blogs.push($(this).attr('id').replace(/^tab_blog_/,''));
+		});
+		if (m_blogs.length > 0) {
+			XKit.tools.set_setting('xkit_cached_blogs', m_blogs.join(';'));
+			return m_blogs;
+		}
 	}
 
 	// Approach 3: Scrape from the dynamically-created popover element.
