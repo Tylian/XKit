@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 3.0.4 **//
+//* VERSION 3.0.5 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER STUDIOXENIX **//
 
@@ -1605,7 +1605,10 @@ XKit.tools.get_blogs = function() {
 					XKit.tools.add_css("." + class_name + "{" + 
 							" background-image: url('" + icon + "') !important;" +
 							" background-size: auto auto !important;" +
+							" background-repeat: no-repeat !important;" +
+							" background-position: center !important;" +
 							" margin-top: 9px !important; " +
+							" opacity: 0.3;" +
 						   "}", "xkit_interface_icon___" + class_name);
 					
 					if (typeof ok_icon !== "undefined") {
