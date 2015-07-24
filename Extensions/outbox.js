@@ -1,5 +1,5 @@
 //* TITLE Outbox **//
-//* VERSION 0.9.4 **//
+//* VERSION 0.9.5 **//
 //* DESCRIPTION Saves your sent replies, fan mail and asks. **//
 //* DETAILS This extension stores and lets you view the last 50 asks you've answered privately. Please keep in mind that this is a highly experimental extension, so if you hit a bug, please send the XKit blog an ask with the problem you've found. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -36,7 +36,7 @@ XKit.extensions.outbox = new Object({
 	frame_run: function() {
 
 		XKit.console.add("Outbox working on Frame mode...");
-		this.run_fan_mail();
+		this.run_fan_mail(true);
 		if (document.location.href.indexOf('/ask_form') !== -1) {
 			this.run_ask_frame();
 		}
@@ -95,10 +95,9 @@ XKit.extensions.outbox = new Object({
 
 		function get_fanmail_send_button() {
 			var fanmail_iframe = document.getElementById("send_fan_mail_lightbox");
-			if (fanmail_iframe == null)
-				return null;
-
-			var send_button = fanmail_iframe.contentWindow.document.getElementsByClassName("send");
+			var send_button = fanmail_iframe != null
+				? fanmail_iframe.contentWindow.document.getElementsByClassName("send")
+				: document.getElementsByClassName("send");
 			return send_button.length > 0 ? send_button[0] : null;
 		}
 
@@ -118,8 +117,10 @@ XKit.extensions.outbox = new Object({
 
 	save_fan_mail: function(e) {
 
-		var fanmail_iframe = document.getElementById("send_fan_mail_lightbox");
-		var message_textarea = fanmail_iframe.contentWindow.document.getElementsByClassName("message")[0];
+		var base_document = document.getElementById("send_fan_mail_lightbox") != null
+			? document.getElementById("send_fan_mail_lightbox").contentWindow.document
+			: document;
+		var message_textarea = base_document.getElementsByClassName("message")[0];
 		var m_msg = message_textarea.value;
 		var check_status = $("#checkmark").css("display") !== "none";
 
@@ -153,10 +154,10 @@ XKit.extensions.outbox = new Object({
 
 		var m_obj = new Object();
 		m_obj.avatar = "fan_mail";
-		m_obj.username = fanmail_iframe.contentWindow.document.getElementById("select_tumblelog_from").value;
+		m_obj.username = base_document.getElementById("select_tumblelog_from").value;
 		m_obj.message = m_msg;
 		m_obj.answer = "";
-		m_obj.to = fanmail_iframe.contentWindow.document.getElementById("to_input").value
+		m_obj.to = base_document.getElementById("to_input").value
 		m_obj.time = new Date().getTime();
 
 		var form_key = $('meta[name=tumblr-form-key]').attr("content");
@@ -228,7 +229,7 @@ XKit.extensions.outbox = new Object({
 			return;
 		}
 
-		XKit.extensions.outbox.run_fan_mail();
+		XKit.extensions.outbox.run_fan_mail(true);
 
 		if (document.location.href.indexOf('://www.tumblr.com/send') !== -1) {
 			return;
