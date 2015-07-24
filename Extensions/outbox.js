@@ -1,5 +1,5 @@
 //* TITLE Outbox **//
-//* VERSION 0.9 REV F **//
+//* VERSION 0.9.4 **//
 //* DESCRIPTION Saves your sent replies, fan mail and asks. **//
 //* DETAILS This extension stores and lets you view the last 50 asks you've answered privately. Please keep in mind that this is a highly experimental extension, so if you hit a bug, please send the XKit blog an ask with the problem you've found. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -93,16 +93,24 @@ XKit.extensions.outbox = new Object({
 
 	run_fan_mail: function(wait) {
 
+		function get_fanmail_send_button() {
+			var fanmail_iframe = document.getElementById("send_fan_mail_lightbox");
+			if (fanmail_iframe == null)
+				return null;
+
+			var send_button = fanmail_iframe.contentWindow.document.getElementsByClassName("send");
+			return send_button.length > 0 ? send_button[0] : null;
+		}
+
 		if (wait === true) {
-			//console.log($("#fan_mail").length);
-			if (!$(".submit_controls .send").length > 0) {
+			if (get_fanmail_send_button() == null) {
 				XKit.console.add("Waiting for fan-mail window to pop up..");
 				setTimeout(function() { XKit.extensions.outbox.run_fan_mail(true); }, 200);
 				return;
 			}
+			get_fanmail_send_button().onclick = XKit.extensions.outbox.save_fan_mail;
 		}
 
-		$(document).on("click",".submit_controls .send", XKit.extensions.outbox.save_fan_mail);
 		XKit.console.add("Activating run_fan_mail on outbox...");
 		XKit.extensions.outbox.fan_mail_form_key = $('meta[name=tumblr-form-key]').attr("content");
 
@@ -110,7 +118,9 @@ XKit.extensions.outbox = new Object({
 
 	save_fan_mail: function(e) {
 
-		var m_msg = $(".message").val();
+		var fanmail_iframe = document.getElementById("send_fan_mail_lightbox");
+		var message_textarea = fanmail_iframe.contentWindow.document.getElementsByClassName("message")[0];
+		var m_msg = message_textarea.value;
 		var check_status = $("#checkmark").css("display") !== "none";
 
 		if ($("#to_input").attr('type') === "hidden") {
@@ -143,10 +153,10 @@ XKit.extensions.outbox = new Object({
 
 		var m_obj = new Object();
 		m_obj.avatar = "fan_mail";
-		m_obj.username = $("#select_tumblelog_from").val();
-		m_obj.message = $(".message").val();
+		m_obj.username = fanmail_iframe.contentWindow.document.getElementById("select_tumblelog_from").value;
+		m_obj.message = m_msg;
 		m_obj.answer = "";
-		m_obj.to = $("#to_input").val();
+		m_obj.to = fanmail_iframe.contentWindow.document.getElementById("to_input").value
 		m_obj.time = new Date().getTime();
 
 		var form_key = $('meta[name=tumblr-form-key]').attr("content");
@@ -213,14 +223,14 @@ XKit.extensions.outbox = new Object({
 
 		XKit.extensions.outbox.check_indash_asks();
 
-		if (XKit.interface.where().inbox !== true && document.location.href.indexOf('://www.tumblr.com/send/') == -1) {
+		if (XKit.interface.where().inbox !== true && document.location.href.indexOf('://www.tumblr.com/send') == -1) {
 			XKit.console.add("Outbox -> Quitting, not in inbox");
 			return;
 		}
 
 		XKit.extensions.outbox.run_fan_mail();
 
-		if (document.location.href.indexOf('://www.tumblr.com/send/') !== -1) {
+		if (document.location.href.indexOf('://www.tumblr.com/send') !== -1) {
 			return;
 		}
 
@@ -230,7 +240,7 @@ XKit.extensions.outbox = new Object({
 			'<li class="" style="height: 36px;"><a href="#" onclick="return false;" id="xkit-outbox-button">' +
 				'<div class="hide_overflow" style="color: rgba(255, 255, 255, 0.5) !important; font-weight: bold; padding-left: 10px; padding-top: 8px;">My Outbox</div>' +
 			'</a></li></ul>';
-		$("ul.controls_section:eq(1)").before(xf_html);
+		$("ul.controls_section:last").before(xf_html);
 
 		$(".controls_section.inbox").prepend("<li class=\"section_header selected\">INCOMING</li>");
 

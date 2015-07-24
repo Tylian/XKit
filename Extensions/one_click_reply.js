@@ -1,5 +1,5 @@
 //* TITLE One-Click Reply **//
-//* VERSION 1.9 REV G **//
+//* VERSION 2.0.2 **//
 //* DESCRIPTION Lets you reply to notifications **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS To use this extension, hover over a notification and click on the Reply button. If Multi-Reply is on, hold down the ALT key while clicking on the Reply button to select/deselect posts and reply to all of them at once. **//
@@ -186,9 +186,17 @@ XKit.extensions.one_click_reply = new Object({
 
 	},
 
+	/**
+	 * Creates blog post
+	 * @param {String} sentence - html content
+	 * @param {String} tags - comma-separated tags
+	 * @param {Object} reply - A "reply" to append to the sentence
+	 * @param {String} blog - the id of the blog to post as
+	 * @param {Boolean?} retry_mode - If false, allows one retry
+	 */
 	quick_reply_post: function(sentence, tags, reply, blog, retry_mode) {
 
-		var m_object = new Object();
+		var m_object = {};
 
 		reply = reply.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 
@@ -343,7 +351,7 @@ XKit.extensions.one_click_reply = new Object({
 		  return R('\n</p>$', '</p>');
 	},
 
-	quick_reply_open: function(sentence, tags, avatar, username) {
+	quick_reply_open: function(sentence, default_tags, avatar, username) {
 
 		$("#xkit-one-click-reply-quick-reply-username").html(username);
 		$("#xkit-one-click-reply-quick-reply-title").find(".xkit-qr-avatar").attr('src', avatar);
@@ -356,10 +364,22 @@ XKit.extensions.one_click_reply = new Object({
 		$("#xkit-one-click-reply-quick-reply-new-tab, #xkit-one-click-reply-quick-reply-close, #xkit-one-click-reply-quick-reply-window-shadow").removeClass("disabled");
 		$("#xkit-one-click-reply-quick-reply-ok").addClass("disabled");
 
-		XKit.tools.set_setting("xkit_one_click_reply_sentence", "");
-		XKit.tools.set_setting("xkit_one_click_reply_username", "");
+		XKit.tools.set_setting("xkit_one_click_reply_data", "{}");
 
-		var m_blog = $("#popover_blogs .popover_menu_item.item:first-child").attr('id').replace("menuitem-","");
+		var m_blog = XKit.tools.get_current_blog();
+
+		var initial_tags = "";
+		if (XKit.extensions.one_click_reply.preferences.tag_people.value === true) {
+			initial_tags = default_tags;
+			if (XKit.extensions.one_click_reply.preferences.auto_tag.value === true && XKit.extensions.one_click_reply.preferences.auto_tag_text.value !== "") {
+				initial_tags += "," + XKit.extensions.one_click_reply.preferences.auto_tag_text.value;
+			}
+		} else {
+			if (XKit.extensions.one_click_reply.preferences.auto_tag.value === true && XKit.extensions.one_click_reply.preferences.auto_tag_text.value !== "") {
+				initial_tags += "," + XKit.extensions.one_click_reply.preferences.auto_tag_text.value;
+			}
+		}
+		$("#xkit-one-click-reply-quick-reply-tags").val(initial_tags);
 
 		$("#xkit-one-click-reply-quick-reply-ok").unbind("click");
 		$("#xkit-one-click-reply-quick-reply-ok").click(function() {
@@ -370,23 +390,8 @@ XKit.extensions.one_click_reply = new Object({
 
 			$("#xkit-one-click-reply-quick-reply-ok, #xkit-one-click-reply-quick-reply-new-tab, #xkit-one-click-reply-quick-reply-close, #xkit-one-click-reply-quick-reply-window-shadow").addClass("disabled");
 
-			var m_tags = "";
-			if (XKit.extensions.one_click_reply.preferences.tag_people.value === true) {
-				m_tags = tags;
-				if (XKit.extensions.one_click_reply.preferences.auto_tag.value === true && XKit.extensions.one_click_reply.preferences.auto_tag_text.value !== "") {
-					m_tags = m_tags + "," + XKit.extensions.one_click_reply.preferences.auto_tag_text.value;
-				}
-			} else {
-				if (XKit.extensions.one_click_reply.preferences.auto_tag.value === true && XKit.extensions.one_click_reply.preferences.auto_tag_text.value !== "") {
-					m_tags = m_tags + "," + XKit.extensions.one_click_reply.preferences.auto_tag_text.value;
-				}
-			}
-
-			if ($("#xkit-one-click-reply-quick-reply-tags").val() !== "") {
-				m_tags = m_tags + "," +	$("#xkit-one-click-reply-quick-reply-tags").val();
-			}
-
-			XKit.extensions.one_click_reply.quick_reply_post(sentence, m_tags, $("#xkit-one-click-reply-quick-reply-text").val(), m_blog);
+			var tags = $("#xkit-one-click-reply-quick-reply-tags").val();
+			XKit.extensions.one_click_reply.quick_reply_post(sentence, tags, $("#xkit-one-click-reply-quick-reply-text").val(), m_blog);
 
 		});
 
@@ -395,8 +400,13 @@ XKit.extensions.one_click_reply = new Object({
 
 			if ($(this).hasClass("disabled")) { return; }
 
-			XKit.tools.set_setting("xkit_one_click_reply_sentence", sentence + "<p></p>");
-			XKit.tools.set_setting("xkit_one_click_reply_username", tags);
+			var tags = $("#xkit-one-click-reply-quick-reply-tags").val();
+
+			var data = {
+				tags: tags,
+				sentence: sentence + "<p></p>"
+			};
+			XKit.tools.set_setting("xkit_one_click_reply_data", JSON.stringify(data));
 
 			var m_url = "http://www.tumblr.com/new/text";
 
@@ -592,72 +602,43 @@ XKit.extensions.one_click_reply = new Object({
 	},
 
 	fill_post: function() {
-
 		try {
+			var raw_data = XKit.tools.get_setting("xkit_one_click_reply_data", "{}");
+			var data = JSON.parse(raw_data);
 
-		var m_sentence = XKit.tools.get_setting("xkit_one_click_reply_sentence", "");
-		var username = XKit.tools.get_setting("xkit_one_click_reply_username", "");
-
-		if (m_sentence === "" || username === "") {
-			return;
-		}
-
-		if (m_sentence.substring(m_sentence.length - 7, m_sentence.length) !== "<p></p>") {
-			m_sentence = m_sentence + "<p></p>";
-		}
-		m_sentence = $.trim(m_sentence);
-
-		if (XKit.extensions.one_click_reply.preferences.mention_people.value === true) {
-
-			var sentence_obj = $("<div>" + m_sentence + "</div>");
-
-			$(sentence_obj).find("a").each(function() {
-				if (typeof $(this).attr('href') !== "undefined") {
-					if ($(this).attr('href').indexOf('/post/') === -1) {
-						$(this).removeAttr('href').removeAttr('class').addClass("tumblelog");
-					}
-				}
-			});
-
-			m_sentence = sentence_obj.html();
-
-		}
-
-		$("#post_two").val(m_sentence);
-
-		setTimeout(function() {
-
-			function set_post() {
-				try {
-					var post_two   = (tinyMCE && tinyMCE.get('post_two'))
-                                	             ? tinyMCE.get('post_two').setContent(add_tag)
-                                	             : ($('post_two') ? $('post_two').value : add_tag);
-					//$('post_two').value = add_tag;
-					$(post_two).value = add_tag;
-				} catch(e) {
-					console.log("OCR ERROR --> " + e.message);
-				}
+			if (!data || !data.sentence) {
+				// Terribly enough, we can't alert an error here because
+				// post_window_listener might just not be referring to us
+				return;
 			}
 
-			var mx_sentence = XKit.tools.replace_all(m_sentence, "\\\n", "");
-			mx_sentence = XKit.tools.replace_all(m_sentence, "\\\r", "");
-			mx_sentence = XKit.tools.replace_all(m_sentence, "'", "&#39;");
-			//mx_sentence = XKit.tools.replace_all(m_sentence, "\"", "&#34;");
-			XKit.tools.add_function(set_post, true, mx_sentence);
+			var m_sentence = $.trim(data.sentence);
+			var tags = data.tags;
 
-			XKit.tools.set_setting("xkit_one_click_reply_sentence", "");
-			XKit.tools.set_setting("xkit_one_click_reply_username", "");
+			if (XKit.extensions.one_click_reply.preferences.mention_people.value) {
+				var sentence_obj = $("<div>" + m_sentence + "</div>");
 
-		}, 400);
+				$(sentence_obj).find("a").each(function() {
+					if (typeof $(this).attr('href') !== "undefined") {
+						if ($(this).attr('href').indexOf('/post/') === -1) {
+							$(this).removeAttr('href').removeAttr('class').addClass("tumblelog");
+						}
+					}
+				});
 
-		XKit.interface.post_window_listener.remove("one_click_reply_fill_post");
+				m_sentence = sentence_obj.html();
+			}
 
+			XKit.interface.post_window.set_content_html(m_sentence);
+			if (tags) {
+				XKit.interface.post_window.add_tag(tags.split(","));
+			}
+
+			XKit.interface.post_window_listener.remove("one_click_reply_fill_post");
+			XKit.tools.set_setting("xkit_one_click_reply_data", "{}");
 		} catch(e) {
-
-			alert("Error 02: " + e.message);
-
+			alert("OCR: Error \"" + e.message + "\", data = " + raw_data);
 		}
-
 	},
 
 	make_post_pn: function(obj, silent_mode) {
@@ -825,11 +806,6 @@ XKit.extensions.one_click_reply = new Object({
 			m_sentence = "<img src=\"" + avatar_url + "\" class=\"image_thumbnail\">" + m_sentence;
 		}
 
-		//alert(m_sentence);
-
-		XKit.tools.set_setting("xkit_one_click_reply_sentence", m_sentence);
-		XKit.tools.set_setting("xkit_one_click_reply_username", user_name);
-
 		var m_url = "http://www.tumblr.com/new/text";
 
 		if (document.location.href.indexOf("/blog/") !== -1) {
@@ -857,15 +833,15 @@ XKit.extensions.one_click_reply = new Object({
 			}
 		}
 
+		var data = {
+			sentence: m_sentence,
+			tags: m_tags_to_return
+		};
+
 		if (silent_mode === true) {
-
-			var obj_to_return = new Object();
-			obj_to_return.sentence = m_sentence;
-			obj_to_return.tags = m_tags_to_return;
-
-			return obj_to_return;
-
+			return data;
 		} else {
+			XKit.tools.set_setting("xkit_one_click_reply_data", JSON.stringify(data));
 
 			if (this.preferences.open_in_new_tab.value === true) {
 				window.open(m_url,'_BLANK');
@@ -938,8 +914,11 @@ XKit.extensions.one_click_reply = new Object({
 
 					});
 
-					XKit.tools.set_setting("xkit_one_click_reply_sentence", m_text);
-					XKit.tools.set_setting("xkit_one_click_reply_username", m_tags);
+					var data = {
+						sentence: m_text,
+						tags: m_tags
+					};
+					XKit.tools.set_setting("xkit_one_click_reply_data", JSON.stringify(data));
 
 					var m_url = "http://www.tumblr.com/new/text";
 
@@ -1066,9 +1045,6 @@ XKit.extensions.one_click_reply = new Object({
 			m_sentence = "<img src=\"" + avatar_url + "\" class=\"image_thumbnail\">" + m_sentence;
 		}
 
-		XKit.tools.set_setting("xkit_one_click_reply_sentence", m_sentence);
-		XKit.tools.set_setting("xkit_one_click_reply_username", username);
-
 		var m_url = "http://www.tumblr.com/new/text";
 
 		if (document.location.href.indexOf("/blog/") !== -1) {
@@ -1096,16 +1072,17 @@ XKit.extensions.one_click_reply = new Object({
 			}
 		}
 
+		var data = {
+			sentence: m_sentence,
+			tags: m_tags_to_return
+		};
+
 		if (silent_mode === true) {
-
-			var obj_to_return = new Object();
-			obj_to_return.sentence = m_sentence;
-			obj_to_return.tags = m_tags_to_return;
-			obj_to_return.avatar = avatar_url;
-			obj_to_return.username = real_username;
-			return obj_to_return;
-
+			data.avatar = avatar_url;
+			data.username = real_username;
+			return data;
 		} else {
+			XKit.tools.set_setting("xkit_one_click_reply_data", JSON.stringify(data));
 
 			if (this.preferences.open_in_new_tab.value === true) {
 				window.open(m_url,'_BLANK');
@@ -1180,9 +1157,6 @@ XKit.extensions.one_click_reply = new Object({
 			m_sentence = "<p><img src=\"" + avatar_url + "\" class=\"image_thumbnail\"></p>" + m_sentence;
 		}
 
-		XKit.tools.set_setting("xkit_one_click_reply_sentence", m_sentence);
-		XKit.tools.set_setting("xkit_one_click_reply_username", username);
-
 		var m_url = "http://www.tumblr.com/new/text";
 
 		if (document.location.href.indexOf("/blog/") !== -1) {
@@ -1210,14 +1184,14 @@ XKit.extensions.one_click_reply = new Object({
 			}
 		}
 
+		var data = {
+			sentence: m_sentence,
+			tags: m_tags_to_return
+		};
 		if (silent_mode === true) {
-
-			var obj_to_return = new Object();
-			obj_to_return.sentence = m_sentence;
-			obj_to_return.tags = m_tags_to_return;
-			return obj_to_return;
-
+			return data;
 		} else {
+			XKit.tools.set_setting("xkit_one_click_reply_data", JSON.stringify(data));
 
 			if (this.preferences.open_in_new_tab.value === true) {
 				window.open(m_url,'_BLANK');
@@ -1233,7 +1207,7 @@ XKit.extensions.one_click_reply = new Object({
 
 		m_sentence = XKit.tools.replace_all(m_sentence, "[[MORE]]", "");
 		m_sentence = m_sentence.replace(/[^ -~]/g, function(chr) {
-    			return "&#"+chr.charCodeAt(0)+";";
+			return "&#"+chr.charCodeAt(0)+";";
 		});
 
 		m_sentence = m_sentence.replace("<p></p>","");

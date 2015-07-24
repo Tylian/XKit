@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 2.9.3 **//
+//* VERSION 3.0.4 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER STUDIOXENIX **//
 
@@ -358,55 +358,74 @@ XKit.extensions.xkit_patches = new Object({
 		
 		XKit.extensions.xkit_pack_launcher.run();
 		
+XKit.tools.get_current_blog = function() {
+	var avatar = $("#post_controls_avatar");
+	if (avatar.length > 0) {
+		var image = avatar.find(".post_avatar_image");
+		if (image.length > 0) {
+			return image.attr("alt");
+		}
+	}
+	XKit.console.add('XKit.tools.get_current_blog: Warning, fell back to main blog');
+	return XKit.tools.get_blogs()[0];
+};
+
 XKit.tools.get_blogs = function() {
-	
-	var m_blogs_to_save = "";
-	var m_blogs = new Array();	
-	
-		$("script").each(function(index, obj) {
-			
-			if ($(this).html().indexOf("require(\"context\").bootloader") >= 0) {
-				
-				var s = $(this).html();	
-				
-				// This is quite hacky but quite frankly I don't give a fuck anymore.
-				
-				s = s.replace("require(\"context\").bootloader(", "");
-				s = s.substring(0, s.length - 2);
-				
-				var obj = JSON.parse(s);
-				var channels = obj.Context.userinfo.channels;
-				
-				for (var item in channels) {
-					m_blogs_to_save = m_blogs_to_save + ";" + channels[item].name;
-					m_blogs.push(channels[item].name);
-				}
-				
-				XKit.tools.set_setting("xkit_cached_blogs", m_blogs_to_save);
-				return m_blogs;
-				
-			}
-			
+	var m_blogs = [];
+
+	// Approach 2: Find where Tumblr invokes its bootstrap function
+	var script_tags = $("script");
+	for (var i = 0; i < script_tags.length; i++) {
+		var s = $(script_tags[i]).html();
+
+		if (s.indexOf("require(\"context\").bootloader") < 0) {
+			continue;
+		}
+
+		s = s.replace("require(\"context\").bootloader(", "");
+		s = s.substring(0, s.length - 2);
+
+		var obj = JSON.parse(s);
+		var channels = obj.Context.userinfo.channels;
+
+		for (var item in channels) {
+			m_blogs.push(channels[item].name);
+		}
+
+		XKit.tools.set_setting("xkit_cached_blogs", m_blogs.join(';'));
+		return m_blogs;
+	}
+
+	// Approach 1: Scrape the hidden tab switching element
+	var tab_switching = $("#tab_switching");
+	if (tab_switching.length > 0) {
+		tab_switching.find(".tab_blog.item").not(".tab_dashboard").each(function() {
+			m_blogs.push($(this).attr('id').replace(/^tab_blog_/,''));
 		});
-	
+		if (m_blogs.length > 0) {
+			XKit.tools.set_setting('xkit_cached_blogs', m_blogs.join(';'));
+			return m_blogs;
+		}
+	}
+
+	// Approach 3: Scrape from the dynamically-created popover element.
 	if ($("#popover_blogs").length > 0) {
 		$("#popover_blogs > .popover_inner").children(".item").not(":last-child").each(function(index, obj) {
 			var mX = $(this).attr("id");
 			mX = mX.substring(9, mX.length);
-			m_blogs_to_save = m_blogs_to_save + ";" + mX;
 			m_blogs.push(mX);
 		});
-		XKit.tools.set_setting("xkit_cached_blogs", m_blogs_to_save);
+		XKit.tools.set_setting("xkit_cached_blogs", m_blogs.join(';'));
 		return m_blogs;
-	} else {
-		var m_blogs = XKit.tools.get_setting("xkit_cached_blogs","");
-		if (m_blogs !== "") {
-			return m_blogs.split(";");
-		}
 	}
-	
+
+	// Approach 4: Use the last good cached data that we saved in settings
+	m_blogs = XKit.tools.get_setting("xkit_cached_blogs","");
+	if (m_blogs !== "") {
+		return m_blogs.split(";");
+	}
 };
-		
+
 	XKit.browser = function() {
 	
 		var to_return = new Object();
@@ -931,16 +950,32 @@ XKit.tools.get_blogs = function() {
 				},
 
 				/**
+				 * Sets the content of the post window.
+				 * @param {String} new_content
+				 */
+				set_content_html: function(new_content) {
+					var content_editor = $('.post-form--form').find('.editor.editor-richtext');
+					if (content_editor.length === 0) {
+						XKit.console.add('ERROR: unable to set content html');
+						return;
+					}
+					content_editor.focus();
+					content_editor.html(new_content);
+					content_editor.addClass("editor-richtext-has-text");
+					content_editor.blur();
+				},
+
+				/**
 				 * Adds tags to the post window.
 				 * @param {String|Array<String>} tag_or_tags
 				 */
 				add_tag: function(tag_or_tags) {
+					var tag_editor = $(".post-form--tag-editor").find(".editor-plaintext");
 					function add_single_tag(tag) {
-						var tag_editor = $(".post-form--tag-editor").find(".editor-plaintext");
 						tag_editor.focus();
 						tag_editor.text(tag);
-						tag_editor.addClass(".editor-plaintext-has-text");
-						tag_editor.trigger({type: 'blur'});
+						tag_editor.addClass("editor-plaintext-has-text");
+						tag_editor.blur();
 					}
 					if (typeof tag !== "string") {
 						tag_or_tags.forEach(function(tag) {
@@ -1082,7 +1117,7 @@ XKit.tools.get_blogs = function() {
 				
 					if (!XKit.interface.post_window_listener_running) { XKit.interface.post_window_listener_window_id = 0; return XKit.interface.post_window_listener.set_listen(); }	
 					
-					var post_content = $(".post-forms-modal");
+					var post_content = $(".post-form");
 					var ask_form = $(".post_ask_answer_form");
 
 					if(post_content.length <= 0 || ask_form.length > 0 || post_content.css('display') === 'none') {
@@ -1122,18 +1157,25 @@ XKit.tools.get_blogs = function() {
 					
 					
 				},
-				
+
+				/**
+				 * Call func whenever a new create post window appears
+				 * @param {String} id - globally unique identifier of function for removal
+				 * @param {Function} func - function to call
+				 */
 				add: function(id, func) {
-					
 					// Call a function when the manual reblog window appears.
-					
 					XKit.interface.post_window_listener_id.push(id);
 					XKit.interface.post_window_listener_func.push(func);
 					XKit.interface.post_window_listener.run();
-					
-					
+
+					if (XKit.interface.post_window.open()) {
+						// This is one of the many reasons why nearly every extension uses
+						// fully qualified names
+						func.call();
+					}
 				},
-				
+
 				remove: function(id) {
 					
 					var m_id = XKit.interface.post_window_listener_id.indexOf(id);
@@ -1627,59 +1669,47 @@ XKit.tools.get_blogs = function() {
 	  			}				
 				
 			},
-			
+
+			/**
+			 * Get the posts on the screen without the given tag
+			 * @param {String} without_tag - Class that the posts should not have
+			 * @param {Boolean} mine - Whether the posts must be the user's
+			 * @param {Boolean} can_edit - Whether the posts must be editable
+			 * @return {Array<Object>} The posts
+			 */
 			get_posts: function(without_tag, mine, can_edit) {
-				
-				var to_return = new Array();
-				
+				var posts = [];
+
 				var selector = ".post";
-				
-				if (can_edit) {
-					
-					if (typeof without_tag !== "undefined") {
-					
-						$(selector).not(".radar").not(".new_post_buttons").not("." + without_tag).each(function() {
-							if ($(this).find(".post_control.edit").length > 0) {
-								to_return.push($(this));
-							}	
-						});	
-					
-					} else {
-				
-						$(selector).not(".radar").not(".new_post_buttons").each(function() {
-							if ($(this).find(".post_control.edit").length > 0) {
-								to_return.push($(this));
-							}		
-						});	
-					
-					}
-					
-				} else {
-				
-					if (mine === true) {
-						selector = ".post.is_mine";	
-					}
-				
-					if (typeof without_tag !== "undefined") {
-					
-						$(selector).not(".radar").not(".new_post_buttons").not("." + without_tag).each(function() {
-							to_return.push($(this));	
-						});	
-					
-					} else {
-				
-						$(selector).not(".radar").not(".new_post_buttons").each(function() {
-							to_return.push($(this));	
-						});	
-					
-					}
-					
+
+				if (mine && !XKit.interface.where().channel) {
+					selector = ".post.is_mine";
 				}
-				
-				return to_return;
-				
+
+				var selection = $(selector);
+
+				var exclusions = [".radar", ".new_post_buttons"];
+
+				if (typeof without_tag !== "undefined") {
+					exclusions.push("." + without_tag);
+				}
+
+				for (var i = 0; i < exclusions.length; i++) {
+					selection = selection.not(exclusions[i]);
+				}
+
+				selection.each(function() {
+					// If can_edit is requested and we don't have an edit post control,
+					// don't push the post
+					if (can_edit && $(this).find(".post_control.edit").length === 0) {
+						return;
+					}
+					posts.push($(this));
+				});
+
+				return posts;
 			},
-			
+
 			find_post: function(post_id) {
 				
 				// Return a post object based on post ID.

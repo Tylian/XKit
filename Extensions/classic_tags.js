@@ -1,5 +1,5 @@
 //* TITLE Tags on Sidebar **//
-//* VERSION 1.3.2 **//
+//* VERSION 1.3.4 **//
 //* DESCRIPTION Shows your tracked tags on your sidebar **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//
@@ -139,23 +139,12 @@ XKit.extensions.classic_tags = new Object({
 
 			if (document.location.href.indexOf('/tagged/') !== -1) {
 
-				$("#right_column").append(m_html);
+				$("#right_column").children(".tag_controls").after(m_html);
 
+			} else if ($("#xim_small_links").length > 0) {
+				$("#xim_small_links").after(m_html);
 			} else {
-				var sections = $("ul.controls_section");
-				if (sections.length > 0) {
-					var section = sections[0];
-					if (sections.length > 1) {
-						section = sections[1];
-					}
-					if ($("#xim_small_links").length > 0) {
-						$("#xim_small_links").after(m_html);
-					} else {
-						$(section).after(m_html);
-					}
-				} else {
-					$("#right_column").prepend(m_html);
-				}
+				$("#right_column").prepend(m_html);
 			}
 
 			$(".xtag").each(function() {

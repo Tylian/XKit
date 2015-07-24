@@ -33,8 +33,8 @@ XKit = {
 		}
 
 		XKit.init_flags();
-		// TODO what does top === self do?
-		if (document.location.href.indexOf("://www.tumblr.com/dashboard/iframe?") === -1) {
+		// If not in an iframe
+		if ((!window.frameElement) && document.location.href.indexOf("://www.tumblr.com/dashboard/iframe?") === -1) {
 			XKit.page.standard = true;
 			XKit.init_extension();
 		} else {
