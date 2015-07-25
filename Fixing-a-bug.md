@@ -14,6 +14,6 @@ An extension broke and it's time to fix it. Here's how!
 This requires a bit of knowledge of git and pretty in-depth understanding of Github. This is only necessary if you 
 want to see local changes to the Extensions directory without going through the XKit Editor.
 
-Edit xkit.js, replacing `hobinjk` with your username in the github_fetch function. Run `npm install --dev-dependencies` to get the libraries required to rebuild the addon. Rebuild with the new xkit.js by running `./build.sh all` and reinstall using any of the finished products in the `build` directory.
+Edit xkit.js, replacing `hobinjk` with your username in the `github_fetch` function. Run `npm install --dev-dependencies` to get the libraries required to rebuild the addon. Rebuild with the new xkit.js by running `./build.sh all` and reinstall using any of the finished products in the `build` directory.
 
 Now you can edit the extension files in your local Extensions directory. To see your local changes run `create-extensions-dist.sh`.
