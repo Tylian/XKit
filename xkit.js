@@ -28,7 +28,7 @@ XKit = {
 
 		XKit.init_flags();
 		// If not in an iframe
-		if ((window.self === window.top) && document.location.href.indexOf("://www.tumblr.com/dashboard/iframe?") === -1) {
+		if ((window.window === window.top) && document.location.href.indexOf("://www.tumblr.com/dashboard/iframe?") === -1) {
 			XKit.page.standard = true;
 			XKit.init_extension();
 		} else {
