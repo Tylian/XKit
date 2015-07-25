@@ -1,12 +1,12 @@
 ### Things you need
-1. XKit 6.9 or higher, with all the internal extensions up to date.
+1. XKit 7.6.2 or higher, with all the internal extensions up to date.
 2. Javascript and jQuery knowledge.
 3. Patience and enough hair to pull when Tumblr changes something and breaks your extension.
-	* XKit users (well, actually, all the computer users) like their extensions updated when Tumblr changes something and breaks them. If you are going to get bored with your extension after a few days and not provide any updates to it, it's better to keep the extension to yourself.
+4. Firefox has a better looking XKit Editor than chrome (completely optional)
 
 ### Get started
 1. Open the XKit Control Panel > Other > XKit Editor
-	or go to www.tumblr.com/xkit_editor
+	or go to [tumblr.com/xkit_editor](https://tumblr.com/xkit_editor)
 2. Click on **New Extension** 
 3. Give a name to your extension (eg: my_extension) 
 4. Update the **"[Legacy Headers](https://github.com/atesh/XKit/wiki/Legacy-Headers)"**:
