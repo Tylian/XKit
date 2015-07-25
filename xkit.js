@@ -26,24 +26,18 @@ XKit = {
 			return;
 		}
 
-		// Are we in a blog archive?
-		if (typeof document.location.href !== "undefined") {
-			var m_array = document.location.href.split("/");
-			//console.log(m_array);
-		}
-
 		XKit.init_flags();
 		// If not in an iframe
-		if ((!window.frameElement) && document.location.href.indexOf("://www.tumblr.com/dashboard/iframe?") === -1) {
+		if ((window.self === window.top) && document.location.href.indexOf("://www.tumblr.com/dashboard/iframe?") === -1) {
 			XKit.page.standard = true;
 			XKit.init_extension();
 		} else {
-			XKit.console.add("In IFRAME, location: " + document.location.href);
 			if (document.location.href.indexOf("://www.tumblr.com/send") !== -1) {
 				XKit.console.add("In Fan Mail page.");
 				XKit.page.blog_frame = true;
 			}
-			if (document.location.href.indexOf("://www.tumblr.com/dashboard/iframe?") !== -1) {
+			if (document.location.href.indexOf("://www.tumblr.com/dashboard/iframe?") !== -1 ||
+			    document.location.href.indexOf("://secure.assets.tumblr.com/assets/html/iframe/") !== -1) {
 				XKit.page.blog_frame = true;
 			}
 			if ((document.location.href.indexOf("://www.tumblr.com/") !== -1 && document.location.href.indexOf("/peepr") !== -1) || document.location.href.indexOf("://www.tumblr.com/indash_blog/") !== -1) {

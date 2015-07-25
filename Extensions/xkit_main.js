@@ -30,19 +30,6 @@ XKit.extensions.xkit_main = new Object({
 
 		XKit.console.add("Welcome from XKit Main " + XKit.installed.version('xkit_main'));
 
-		if (XKit.frame_mode === true) {
-			if (document.location.href.indexOf("://www.tumblr.com/dashboard/iframe?") === -1
-				&& document.location.href.indexOf("://www.tumblr.com/ask_form") === -1
-				&& document.location.href.indexOf("://www.tumblr.com/indash_blog/peepr/") === -1
-				&& document.location.href.indexOf("://www.tumblr.com/send") === -1) {
-				XKit.console.add("Wrong page, quitting.");
-				return;
-			}
-			XKit.console.add("XKit Frame Work Mode");
-		}
-
-
-
 		// Run XKit Patches first.
 		if (XKit.flags.do_not_load_xkit_patches !== true) {
 
