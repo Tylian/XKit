@@ -10,6 +10,8 @@ An extension broke and it's time to fix it. Here's how!
 7. Commit the changes and submit a pull request.
 [Github's documentation](https://help.github.com/articles/using-pull-requests/) has more information.
 
+[This](https://github.com/hobinjk/XKit/pull/18) is a particularly great example of a pull request.
+
 ## Creating your own fork
 This requires a bit of knowledge of git and pretty in-depth understanding of Github. This is only necessary if you 
 want to see local changes to the Extensions directory without going through the XKit Editor.
