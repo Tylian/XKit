@@ -1,5 +1,5 @@
 //* TITLE User Menus+ **//
-//* VERSION 2.5 REV B **//
+//* VERSION 2.5.1 **//
 //* DESCRIPTION More options on the user menu **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS This extension adds additional options to the user menu (the one that appears under user avatars on your dashboard), such as Avatar Magnifier, links to their Liked Posts page if they have them enabled. Note that this extension, especially the Show Likes and Show Submit options use a lot of network and might slow your computer down. **//
@@ -674,11 +674,11 @@ XKit.extensions.show_more = new Object({
 
 				setTimeout(function() {
 
-					$.ajax({
+					GM_xmlhttpRequest({
  						url: m_url,
-  						success: function(data, xhr) {
+						onload: function() {
 							XKit.extensions.show_more.submit_available[username] = true;
-  						}
+						}
 					});
 
 				}, 100 + (m_delay_count * 100));
@@ -714,18 +714,16 @@ XKit.extensions.show_more = new Object({
 				XKit.extensions.show_more.anon_available[username] = false;
 
 				setTimeout(function() {
-
-					$.ajax({
+					GM_xmlhttpRequest({
  						url: m_url,
-  						success: function(data, xhr) {
-  							if ($("#ask_anonymously", data).length > 0) {
+						onload: function(data) {
+							if ($("#ask_anonymously", data).length > 0) {
 								XKit.extensions.show_more.anon_available[username] = true;
 							} else {
 								XKit.console.add("No anon messages for " + username);
 							}
-  						}
+						}
 					});
-
 				}, 100 + (m_delay_count * 100));
 
 				m_delay_count++;
@@ -761,11 +759,11 @@ XKit.extensions.show_more = new Object({
 
 				setTimeout(function() {
 
-					$.ajax({
+					GM_xmlhttpRequest({
  						url: m_url,
-  						success: function(data, xhr) {
+						onload: function() {
 							XKit.extensions.show_more.likes_available[username] = true;
-  						}
+						}
 					});
 
 				}, 100 + (m_delay_count * 100));
