@@ -1,5 +1,5 @@
 //* TITLE Post Archiver **//
-//* VERSION 0.4 REV D **//
+//* VERSION 0.5.0 **//
 //* DESCRIPTION Never lose a post again. **//
 //* DETAILS Post Archiver lets you save posts to your XKit.<br><br>Found a good recipe? Think those hotline numbers on that signal boost post might come in handy in the future?<br><br>Click on the save button, then click on the My Archive button on your sidebar anytime to access those posts. You can also name and categorize posts. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -217,7 +217,7 @@ XKit.extensions.postarchive = new Object({
 		if (XKit.extensions.postarchive.archived_posts.length === 0) {
 
 			XKit.window.show("No posts yet.","<b>You have no archived posts yet.</b><br/>If you've archived them on another computer, you might need to sync them using XCloud.","error","<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
-			return;
+			//return;
 
 		}
 
@@ -266,6 +266,8 @@ XKit.extensions.postarchive = new Object({
 						"</div>" +
 					"</div>" +
 					"<input type=\"text\" placeholder=\"Search archived post titles..\" id=\"xkit-postarchive-search\">" +
+					"<div id=\"xkit-postarchive-export\" class=\"xkit-button\">Export</div>" +
+					"<div id=\"xkit-postarchive-import\" class=\"xkit-button\">Import</div>" +
 					"<div id=\"xkit-postarchive-content\" class=\"xkit-postarchive-no-post-selected\">" +
 						"Select a post from the right to get started." +
 					"</div>" +
@@ -330,6 +332,97 @@ XKit.extensions.postarchive = new Object({
 			});
 
 		}
+		
+		$("#xkit-postarchive-export").bind("click", function() {
+		    
+		    var m_data = {};
+		    
+            m_data.posts = XKit.storage.get("postarchive", "archived_posts","");
+            m_data.categories = XKit.storage.get("postarchive", "categories","");
+
+    		var m_html = 	"<div id=\"xkit-postarchive-share-code\" class=\"nano\">" +
+	    	    			"<div class=\"content\">" +
+		    				"<div id=\"xkit-postarchive-share-code-inner\">" +
+				    			JSON.stringify(m_data) +
+	    					"</div>" +
+		    			"</div>" +
+			    	"</div>";
+
+			XKit.window.show("Export Archive","Copy and paste the following into a file:" + m_html,"info","<div class=\"xkit-button default\" id=\"xkit-postarchive-export-confirm\">OK</div>");
+
+            $("#xkit-postarchive-share-code").nanoScroller();
+		    $("#xkit-postarchive-share-code").nanoScroller({ scroll: 'top' });
+
+	    	$("#xkit-postarchive-share-code").click(function() { $(this).selectText();});
+
+			$("#xkit-postarchive-export-confirm").click(function() {
+
+				XKit.window.close();
+				XKit.extensions.postarchive.view();
+
+			});
+
+		});
+		
+		$("#xkit-postarchive-import").bind("click", function() { //Import Function
+
+	    	XKit.window.show("Import","<b>You can import settings from XKit.</b><br/>Click XKit''s Export button and paste the text below to import your archived posts.<input type=\"text\" placeholder=\"Paste preferences text here.\" class=\"xkit-textbox\" id=\"xkit-postarchive-import-words\">","question","<div class=\"xkit-button default\" id=\"xkit-postarchive-add-words\">Import!</div><div class=\"xkit-button\" id=\"xkit-close-message\">Cancel</div>")
+
+	    	$("#xkit-postarchive-replace-on-import").click(function() {
+	    		$(this).toggleClass("selected");
+	    	});
+
+	    	$("#xkit-postarchive-add-words").click(function() {
+
+			var m_to_add = $("#xkit-postarchive-import-words").val();
+
+			    if (m_to_add === "" ||$.trim(m_to_add) === "") {
+				    XKit.window.close();
+				    XKit.window.show("Noodlebops!", "m_to_add is being weird?? " + m_to_add,"error","<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
+				    return;
+			    }
+
+		    	try {
+
+	    			var m_obj = JSON.parse(m_to_add);
+	    			//XKit.window.show("m_obj:", JSON.stringify(m_obj),"error","<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
+	    			//return;
+
+	    		} catch(e) {
+	    			alert("Invalid/Corrupt JSON object found.\nImport can not continue.");
+	    			return;
+	    		}
+	    		
+	    		m_posts = JSON.parse(m_obj.posts);
+	    		m_categories = JSON.parse(m_obj.categories);
+	    		
+	    		XKit.extensions.postarchive.load_posts();
+	    		
+	    		if (m_categories.length > 30 || m_posts.length > 30) {
+	    		    XKit.window.show("TOO MANY", m_catetories.length + "<br/>" + m_posts.length,"<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
+	    		    return;
+	    		}
+	    		
+	    		for (var n=0;n<m_categories.length;n++) {
+	    		    XKit.extensions.postarchive.categories.push(m_categories[n]);
+					console.log(XKit.extensions.postarchive.categories);
+					XKit.extensions.postarchive.save_posts();
+	    		}
+	    		
+	    		for (var i=0;i<m_posts.length;i++) {
+	    		    XKit.extensions.postarchive.archived_posts.push(m_posts[i]);
+					console.log(XKit.extensions.postarchive.archived_posts);
+					XKit.extensions.postarchive.save_posts();
+	    		}
+	    		
+	    		XKit.extensions.postarchive.update_sidebar();
+	    		
+	    		XKit.window.show("Done!", "Your posts should exist!", "info","<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
+	    		return;
+
+	    	});
+
+        });
 
 		$("#xkit-postarchive-search").keyup(function() {
 
