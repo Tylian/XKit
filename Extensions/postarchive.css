@@ -187,6 +187,62 @@
 
 }
 
+#xkit-postarchive-export {
+
+	position: absolute;
+	right: 12px;
+	top: 310px;
+	width: 230px;
+	border: 0px;
+	height: 29px;
+	padding: 5px 10px 5px 30px;
+	box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	border-radius: 6px;
+	background: white;
+
+}
+
+#xkit-postarchive-import {
+
+	position: absolute;
+	right: 12px;
+	top: 350px;
+	width: 230px;
+	border: 0px;
+	height: 29px;
+	padding: 5px 10px 5px 30px;
+	box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	border-radius: 6px;
+	background: white;
+
+}
+
+#xkit-postarchive-share-code {
+
+	height: 203px;
+	border: 1px solid rgb(190,190,190);
+	margin-top: 10px;
+	background: rgb(244,244,244);
+
+}
+
+#xkit-postarchive-share-code-inner {
+
+	font-family: "Courier New", Courier, monospace;
+	font-size: 14px;
+	background: rgb(244,244,244);
+	padding: 15px;
+	word-wrap: break-word;
+	-moz-user-select: text !important;
+	-webkit-user-select: text !important;
+	user-select: text !important;
+
+}
+
 #xkit-postarchive-sidebar {
 
 	width: 230px;
