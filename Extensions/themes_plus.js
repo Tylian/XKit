@@ -1,5 +1,5 @@
 //* TITLE Themes+ (preview) **//
-//* VERSION 0.2.0 **//
+//* VERSION 0.2.1 **//
 //* DESCRIPTION Customize More **//
 //* DETAILS Themes+ lets you customize your dashboard to your liking by letting you choose the colors, the images and options yourself. You can also export and import the themes you and others made. Please note that this is the preview edition, so it's lacking some functionality. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -519,7 +519,7 @@ XKit.extensions.themes_plus = new Object({
 			type: "separator"
 		},
 		run_everywhere: {
-			text: "Run everywhere instead of just the dashboard",
+			text: "Run on people's blogs in addition to Tumblr's pages",
 			default: false,
 			value: false
 		}
@@ -744,10 +744,14 @@ XKit.extensions.themes_plus = new Object({
 	},
 
 	render: function(skip_id) {
-		if (!XKit.interface.where().dashboard) {
-			if (!XKit.extensions.themes_plus.preferences.run_everywhere.value) {
-				return;
-			}
+		var where = XKit.interface.where();
+		// This is extremely kludgey and sad
+		var in_tumblr_themed_page = where.dashboard || where.inbox ||
+			where.activity || where.queue || where.drafts || where.followers ||
+			where.search;
+
+		if (!in_tumblr_themed_page && !this.preferences.run_everywhere.value) {
+			return;
 		}
 
 		//XKit.tools.remove_css("themes_plus_cp");
