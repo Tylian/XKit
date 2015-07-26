@@ -276,6 +276,10 @@ XKit = {
 					XKit.download.github_fetch('page/gallery.json', callback, fallback);
 					return;
 				}
+				if (page === 'themes/index.php') {
+					XKit.download.github_fetch('page/themes.json', callback, fallback);
+					return;
+				}
 			}
 			// Downloads page from servers.
 			if (XKit.download.try_count >= XKit.download.max_try_count) {
