@@ -138,6 +138,12 @@ function writeGalleryFile(extensions) {
     return 0;
   });
 
+  // WIP: Print out a gallery for embedding purposes
+  // gallery.extensions.forEach(function(item) {
+  //   console.log('<h2>' + item.title + ' v' + item.version + '</h2>');
+  //   console.log('<small>' + item.description + '</small>');
+  //   console.log('<h3>Known Issues</h3>');
+  // });
   writePageFile('gallery.json', JSON.stringify(gallery));
 }
 

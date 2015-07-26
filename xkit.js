@@ -26,24 +26,24 @@ XKit = {
 			return;
 		}
 
-		// Are we in a blog archive?
-		if (typeof document.location.href !== "undefined") {
-			var m_array = document.location.href.split("/");
-			//console.log(m_array);
-		}
-
 		XKit.init_flags();
 		// If not in an iframe
-		if ((!window.frameElement) && document.location.href.indexOf("://www.tumblr.com/dashboard/iframe?") === -1) {
+		if ((window.window === window.top) && document.location.href.indexOf("://www.tumblr.com/dashboard/iframe?") === -1) {
+			if (!document.location.href.match(/https?:\/\/(www.)?tumblr.com/)) {
+				// We are likely on a blog's page, like http://new-xkit-extension.tumblr.com
+				// For now it makes the most sense to just quit here because blogs
+				// should be moderately private and are hard to interface with
+				return;
+			}
 			XKit.page.standard = true;
 			XKit.init_extension();
 		} else {
-			XKit.console.add("In IFRAME, location: " + document.location.href);
 			if (document.location.href.indexOf("://www.tumblr.com/send") !== -1) {
 				XKit.console.add("In Fan Mail page.");
 				XKit.page.blog_frame = true;
 			}
-			if (document.location.href.indexOf("://www.tumblr.com/dashboard/iframe?") !== -1) {
+			if (document.location.href.indexOf("://www.tumblr.com/dashboard/iframe?") !== -1 ||
+			    document.location.href.indexOf("://secure.assets.tumblr.com/assets/html/iframe/") !== -1) {
 				XKit.page.blog_frame = true;
 			}
 			if ((document.location.href.indexOf("://www.tumblr.com/") !== -1 && document.location.href.indexOf("/peepr") !== -1) || document.location.href.indexOf("://www.tumblr.com/indash_blog/") !== -1) {
@@ -280,6 +280,10 @@ XKit = {
 				}
 				if (page === 'gallery.php') {
 					XKit.download.github_fetch('page/gallery.json', callback, fallback);
+					return;
+				}
+				if (page === 'themes/index.php') {
+					XKit.download.github_fetch('page/themes.json', callback, fallback);
 					return;
 				}
 			}

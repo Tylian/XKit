@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 3.0.5 **//
+//* VERSION 3.0.6 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER STUDIOXENIX **//
 
@@ -1897,30 +1897,36 @@ XKit.tools.get_blogs = function() {
 				return m_return;	
 				
 			},
-			
+
 			where: function() {
-				
-				var m_return = new Object();
-				
-				m_return.inbox = false;	
+				var m_return = {
+					inbox: false,
+					user_url: "",
+					activity: false,
+					queue: false,
+					channel: false,
+					search: false,
+					drafts: false,
+					followers: false,
+					endless: false,
+					dashboard: false
+				};
+
 				if ($("body").hasClass("dashboard_messages_inbox") === true || $("body").hasClass("dashboard_messages_submissions") === true) {
 					m_return.inbox = true;
 				} else {
 					if (document.location.href.indexOf("www.tumblr.com/inbox") !== -1) {
-						m_return.inbox = true;	
+						m_return.inbox = true;
 					} else {
 						if (document.location.href.indexOf("www.tumblr.com/blog/") !== -1) {
 							var m_array = document.location.href.split("/");
 							if (m_array[5] === "messages") {
-								m_return.inbox = true;	
+								m_return.inbox = true;
 							}
 						}
 					}
 				}
-				
-				m_return.user_url = "";
-				
-				m_return.activity = false;
+
 				if ($("body").hasClass("notifications_index") === true) {
 					m_return.activity = true;
 				} else {
@@ -1928,38 +1934,35 @@ XKit.tools.get_blogs = function() {
 						var m_array = document.location.href.split("/");
 						if (m_array[5] === "activity") {
 							m_return.activity = true;
-							m_return.user_url = m_array[4].replace("#","");	
+							m_return.user_url = m_array[4].replace("#","");
 						}
 					}
 				}
-				
-				m_return.queue = false;
+
 				if ($("body").hasClass("dashboard_post_queue") == true) {
 					m_return.queue = true;
 				} else {
 					if (document.location.href.indexOf("www.tumblr.com/blog/") !== -1) {
 						var m_array = document.location.href.split("/");
 						if (m_array[5] === "queue") {
-							m_return.queue = true;	
+							m_return.queue = true;
 							m_return.user_url = m_array[4].replace("#","");
 						}
 					}
 				}
-				
-				m_return.drafts = false;
+
 				if ($("body").hasClass("dashboard_drafts") == true) {
 					m_return.drafts = true;
 				} else {
 					if (document.location.href.indexOf("www.tumblr.com/blog/") !== -1) {
 						var m_array = document.location.href.split("/");
 						if (m_array[5] === "drafts") {
-							m_return.drafts = true;	
+							m_return.drafts = true;
 							m_return.user_url = m_array[4].replace("#","");
 						}
 					}
 				}
-				
-				m_return.followers = false;
+
 				if ($("body").hasClass("dashboard_useraction_followers") == true) {
 					m_return.followers = true;
 				} else {
@@ -1967,27 +1970,28 @@ XKit.tools.get_blogs = function() {
 						var m_array = document.location.href.split("/");
 						if (m_array[5] === "followers") {
 							m_return.followers = true;
-							m_return.user_url = m_array[4].replace("#","");	
+							m_return.user_url = m_array[4].replace("#","");
 						}
 					}
 				}
-				
+
 				if (document.location.href.indexOf("www.tumblr.com/blog/") !== -1) {
 					var m_array = document.location.href.split("/");
 					if (m_array[3] === "blog") {
-						m_return.user_url = m_array[4].replace("#","");	
+						m_return.user_url = m_array[4].replace("#","");
 					}
 				}
-				
-				m_return.dashboard = $("body").hasClass("is_dashboard") === true;	
-				m_return.channel = $("body").hasClass("is_channel") === true;
 
+				if (document.location.href.indexOf("tumblr.com/search/") !== -1) {
+					m_return.search = true;
+				}
+
+				m_return.dashboard = $("body").hasClass("is_dashboard") === true;
+				m_return.channel = $("body").hasClass("is_channel") === true;
 				m_return.endless = $("body").hasClass("without_auto_paginate") === false;
 
-				return m_return;	
-				
+				return m_return;
 			}
-			
 		});
 		
 		XKit.init = function() {

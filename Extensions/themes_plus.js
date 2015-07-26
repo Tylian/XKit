@@ -1,5 +1,5 @@
 //* TITLE Themes+ (preview) **//
-//* VERSION 0.2.0 **//
+//* VERSION 0.2.2 **//
 //* DESCRIPTION Customize More **//
 //* DETAILS Themes+ lets you customize your dashboard to your liking by letting you choose the colors, the images and options yourself. You can also export and import the themes you and others made. Please note that this is the preview edition, so it's lacking some functionality. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -513,18 +513,6 @@ XKit.extensions.themes_plus = new Object({
 
 	running: false,
 
-	preferences: {
-		sep0: {
-			text: "Scope",
-			type: "separator"
-		},
-		run_everywhere: {
-			text: "Run everywhere instead of just the dashboard",
-			default: false,
-			value: false
-		}
-	},
-
 	current_theme: "",
 	theme_compatibility: "1",
 
@@ -744,14 +732,6 @@ XKit.extensions.themes_plus = new Object({
 	},
 
 	render: function(skip_id) {
-		if (!XKit.interface.where().dashboard) {
-			if (!XKit.extensions.themes_plus.preferences.run_everywhere.value) {
-				return;
-			}
-		}
-
-		//XKit.tools.remove_css("themes_plus_cp");
-		//XKit.tools.remove_css("themes_plus");
 		XKit.tools.remove_css("themes_plus_current_theme");
 
 		if (!skip_id) {
