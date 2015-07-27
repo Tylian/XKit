@@ -1,5 +1,5 @@
 //* TITLE Timestamps **//
-//* VERSION 2.7.1 **//
+//* VERSION 2.7.2 **//
 //* DESCRIPTION See when a post has been made. **//
 //* DETAILS This extension lets you see when a post was made, in full date or relative time (eg: 5 minutes ago). It also works on asks, and you can format your timestamps. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -153,13 +153,11 @@ XKit.extensions.timestamps = new Object({
 					permalink = post.find(".post_permalink").attr('href');
 				}
 
-				if (!permalink) {
-					return;
+				if (permalink) {
+					// Split permalink into sections, discarding the scheme
+					var link_parts = permalink.replace(/https?:\/\//, "").split("/");
+					blog_name = link_parts[0];
 				}
-
-				// Split permalink into sections, discarding the scheme
-				var link_parts = permalink.replace(/https?:\/\//, "").split("/");
-				blog_name = link_parts[0];
 			}
 
 			if (XKit.extensions.timestamps.in_search && !$("#search_posts").hasClass("posts_view_list")) {
