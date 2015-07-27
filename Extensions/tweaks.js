@@ -339,7 +339,7 @@ XKit.extensions.tweaks = new Object({
 
 
 		if (XKit.extensions.tweaks.preferences.hide_customize.value === true) {
-			$("#dashboard_controls_open_blog").find(".customize").parent().css("display","none");
+			$("#right_column").find(".customize").parent().css("display","none");
 		}
 
 		if (XKit.extensions.tweaks.preferences.hide_activity.value === true) {
@@ -567,36 +567,17 @@ XKit.extensions.tweaks = new Object({
 		}
 
 		if (XKit.extensions.tweaks.preferences.show_customize.value === true) {
-			var user_url = "";
-			if (document.location.href.indexOf('/blog') !== -1) {
-				user_url = document.location.href.substring(document.location.href.indexOf('/blog/') + 6);
-			} else {
-				if ($("#open_blog_link").length > 0) {
-					user_url = $("#open_blog_link").html().replace(".tumblr.com","");
-				} else {
-					XKit.tools.add_css(XKit.extensions.tweaks.css_to_add, "xkit_tweaks"); return;
-				}
-			}
-			if (typeof user_url === "undefined") { XKit.tools.add_css(XKit.extensions.tweaks.css_to_add, "xkit_tweaks"); return; }
-			user_url = user_url.replace("#","");
+			var user_url = XKit.tools.get_current_blog();
 
-			if (user_url.indexOf("/") !== -1) {
-				user_url = user_url.substring(0, user_url.indexOf("/"));
+			if (typeof user_url === "undefined") {
+				XKit.tools.add_css(XKit.extensions.tweaks.css_to_add, "xkit_tweaks");
+				return;
 			}
 
 			// Patch for custom domains.
 			if ($("#popover_blogs > .popover_inner").length > 0) {
 				user_url = $("#popover_blogs > .popover_inner").children(".item:first-child").attr('id').substring(9);
 			}
-
-			/*m_html = '<li class="no_push" id="xkit_customize_button">' +
-				 '<a href="/customize/' + user_url + '" class="customize">' +
-				 '<div class="hide_overflow">Customize</div>' +
-				 '</a></li>';*/
-
-			m_html = "";
-
-			$("#dashboard_controls_open_blog").append(m_html);
 
 			var add_mega_link = true;
 			if ($(".small_links").length > 0) {
@@ -611,32 +592,26 @@ XKit.extensions.tweaks = new Object({
 				} catch(e) {
 					// Meh.
 				}
-			} else {
-				add_mega_link = true;
 			}
 
-			//if (add_mega_link) {
+			var x_html = '<a class=\"xkit-small-blog-setting-link\" href="/blog/' + user_url.replace("/","") + '/settings/" target="_blog_settings">Blog Settings</a>';
+			if (add_mega_link) {
 				x_html = '<div class="small_links by-xkit">' +
-           					'<a href="/mega-editor/' + user_url + '" target="_mass_post_editor">Mass Post Editor</a>' +
-           					'<a href="/blog/' + user_url.replace("/","") + '/settings/" target="_mass_post_editor">Blog Settings</a>' +
-					'</div>';
-					
-			//}
-
-            var xf_html = "";
-
-			if ($("#dashboard_controls_open_blog").length >= 1) {
-				if ($(".small_links").length > 0 && add_mega_link === false) {
-				    //$(".small_links:first").append(x_html);
-					$(".small_links:first").append('<a class=\"xkit-small-blog-setting-link\" href="/blog/' + user_url.replace("/","") + '/settings/" target="_blog_settings">Blog Settings</a>');
-				} else {
-					$("#dashboard_controls_open_blog").after(x_html);
-				}
-
-			} else {
-			    $("#right_column").prepend(x_html);
+											'<a href="/mega-editor/' + user_url + '" target="_mass_post_editor">Mass Post Editor</a>' +
+											'<a href="/blog/' + user_url.replace("/","") + '/settings/" target="_mass_post_editor">Blog Settings</a>' +
+						'</div>';
 			}
-
+			if ($(".small_links").length > 0 && !add_mega_link) {
+				$(".small_links:first").append(x_html);
+			} else {
+				if ($("#dashboard_controls_open_blog").length > 0) {
+					// If using Old Stats, append there
+					$("#dashboard_controls_open_blog").after(x_html);
+				} else {
+					// Otherwise just tack it onto the end of the right column's controls
+					$(".controls_section:last").after(x_html);
+				}
+			}
 		}
 
 		XKit.tools.add_css(XKit.extensions.tweaks.css_to_add, "xkit_tweaks");

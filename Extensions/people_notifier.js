@@ -1,5 +1,5 @@
 //* TITLE Blog Tracker **//
-//* VERSION 0.3 REV G **//
+//* VERSION 0.3.1 **//
 //* DESCRIPTION Track people like tags **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS Blog Tracker lets you track blogs like you can track tags. Add them on your dashboard, and it will let you know how many new posts they've made the last time you've checked their blogs, or if they've changed their URLs. **//
@@ -85,10 +85,6 @@ XKit.extensions.people_notifier = new Object({
 		this.running = true;
 
 		XKit.tools.init_css("people_notifier");
-
-		if ($("#dashboard_controls_open_blog").length === 0) {
-			return;
-		}
 
 		this.load_blogs();
 
