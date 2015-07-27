@@ -1,5 +1,5 @@
 //* TITLE No Recommended **//
-//* VERSION 2.0 REV A **//
+//* VERSION 2.1.0 **//
 //* DESCRIPTION Removes recommended posts **//
 //* DETAILS This extension removes recommended posts from your dashboard. To remove Recommended Blogs on the sidebar, please use Tweaks extension. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -17,16 +17,29 @@ XKit.extensions.norecommended = new Object({
 	},
 
 	preferences: {
+	    "sep-0": {
+	        text: "Options",
+	        type: "separator"
+	    },
 		"no_liked": {
 			text: "Get rid of recommended likes",
 			default: false,
 			value: false
+		},
+		"no_mini_recs": {
+		    text: "Get rid of two-column recommended blogs",
+		    default: true,
+		    value: true
 		}
 	},
 
 	do: function() {
+	    
+	    if (XKit.extensions.norecommended.preferences.no_mini_recs.value === true) {
+			XKit.tools.add_css(" .recommended-unit-container.blog-card-compact {display: none;}", "norecommended_no_mini_recs");
+		}
 
-		if (XKit.extensions.norecommended.preferences.no_liked.value == true) {
+		if (XKit.extensions.norecommended.preferences.no_liked.value === true) {
 			XKit.tools.add_css(" .rapid-recs {display: none;}", "norecommended_no_liked");
 		}
 		
@@ -59,7 +72,7 @@ XKit.extensions.norecommended = new Object({
 
 	destroy: function() {
 		this.running = false;
-		
+		XKit.tools.remove_css("norecommended_no_mini_recs");
 		XKit.tools.remove_css("norecommended_no_liked");
 	}
 
