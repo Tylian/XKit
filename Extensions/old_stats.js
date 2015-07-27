@@ -1,5 +1,5 @@
 //* TITLE Old Stats **//
-//* VERSION 0.2.0 **//
+//* VERSION 0.2.1 **//
 //* DESCRIPTION  **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//
@@ -140,11 +140,7 @@ XKit.extensions.old_stats = new Object({
 						'</a>' +
 					'</li>' +
 				'</ul>' +
-				'<ul id="xkit-dashboard-account" class="controls_section">' +
-				'<div class="small_links">' +
-					'<a href="/mega-editor/' + m_user.name + '" target="_mass_post_editor">Mass Post Editor</a>' +
-					'<a class="xkit-small-blog-setting-link" href="/blog/' + m_user.name + '/settings/" target="_blog_settings">Blog Settings</a>' +
-				'</div>';
+				'<ul id="xkit-dashboard-account" class="controls_section"></ul>';
 
 		$(".recommended_tumblelogs").before(xf_html);
 		
