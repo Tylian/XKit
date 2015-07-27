@@ -1,5 +1,5 @@
 //* TITLE Themes+ (preview) **//
-//* VERSION 0.2.2 **//
+//* VERSION 0.2.3 **//
 //* DESCRIPTION Customize More **//
 //* DETAILS Themes+ lets you customize your dashboard to your liking by letting you choose the colors, the images and options yourself. You can also export and import the themes you and others made. Please note that this is the preview edition, so it's lacking some functionality. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -744,6 +744,10 @@ XKit.extensions.themes_plus = new Object({
 		console.log("[Themes+] Rendering user defined theme.");
 
 		var m_css = "";
+		// Default m_css to make tumblr bits transparent
+		m_css += ".l-header-container--refresh { background: none; } ";
+		m_css += ".post_avatar { background: none; } ";
+		m_css += ".identity .controls_section.user_list li .follow_list_item_blog::before { display: none; } ";
 
 		for (var obj in XKit.extensions.themes_plus.current_theme) {
 
