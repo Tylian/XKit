@@ -1,5 +1,5 @@
 //* TITLE Blacklist **//
-//* VERSION 2.7 REV C **//
+//* VERSION 2.7.1 **//
 //* DESCRIPTION Clean your dash **//
 //* DETAILS This extension allows you to block posts based on the words you specify. If a post has the text you've written in the post itself or it's tags, it will be replaced by a warning, or won't be shown on your dashboard, depending on your settings. **//
 //* DEVELOPER STUDIOXENIX **//

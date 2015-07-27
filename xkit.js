@@ -85,8 +85,8 @@ XKit = {
 				return;
 			}
 
-			if (XKit.conflicts.check().count > 0) {
-				if (XKit.tools.get_setting("xkit_disable_conflicts", "false") !== "true") {
+			if (XKit.tools.get_setting("xkit_disable_conflicts", "false") !== "true") {
+				if (XKit.conflicts.check().count > 0) {
 					XKit.conflicts.show(XKit.conflicts.check());
 				}
 				if (XKit.conflicts.check().fatal === true) {

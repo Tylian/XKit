@@ -99,6 +99,7 @@ function onAttach(worker) {
       requestSettings.content = data;
     }
     var request = Request(requestSettings);
+    method = method || 'GET';
     switch (method.toUpperCase()) {
       case 'GET':
         request.get();

@@ -1,5 +1,5 @@
 //* TITLE View On Dash **//
-//* VERSION 0.6 REV D **//
+//* VERSION 0.7.0 **//
 //* DESCRIPTION View blogs on your dash **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS This is a preview version of an extension, missing most features due to legal/technical reasons for now. It lets you view the last 20 posts a person has made on their blogs right on your dashboard. If you have User Menus+ installed, you can also access it from their user menu under their avatar. **//
@@ -65,54 +65,43 @@ XKit.extensions.view_on_dash = new Object({
 
 		}
 
-		if (typeof XKit.extensions.show_more !== "undefined") {
-
+		if (XKit.installed.check('show_more')) {
 			setTimeout(function() {
-
-				if (XKit.extensions.show_more.running === true) {
-
-                			if (XKit.extensions.show_more.preferences.use_classic_menu.value === true) {
-
-                				XKit.extensions.show_more.add_custom_menu("view_on_dash", function(data) {
-
-                					console.log(data);
-                					var user_url = data.name;
-
-							$(document).off("click", ".xkit-view_on_dash-button-" + user_url, XKit.extensions.view_on_dash.menu_clicked);
-							$(document).on("click", ".xkit-view_on_dash-button-" + user_url, XKit.extensions.view_on_dash.menu_clicked);
-
-							return "<div data-url=\"" + user_url + "\" class=\"xkit-view_on_dash-button-" + user_url + " xkit-view-on-dashboard\">View on Dash</div>";
-
-                				});
-
-                			} else {
-
-                				XKit.extensions.show_more.add_custom_menu("view_on_dash", function(data) {
-
-                					//console.log("******************************");
-                					//console.log(data);
-                					//console.log("******************************");
-                					var user_url = data.name;
-
-							$(document).off("click", ".xkit-view_on_dash-button-" + user_url, XKit.extensions.view_on_dash.menu_clicked);
-							$(document).on("click", ".xkit-view_on_dash-button-" + user_url, XKit.extensions.view_on_dash.menu_clicked);
-
-							return "<li>" +
-                						"<a data-url=\"" + user_url + "\" class=\"xkit-view_on_dash-button-" + user_url + " xkit-view-on-dashboard xkit-new-menu-fix\">" +
-                							"<span class=\"hide_overflow\">View On Dash</span>" +
-                						"</a>" +
-                			 		 "</li>";
-
-                				});
-
-                			}
-
+				if (typeof XKit.extensions.show_more === "undefined") {
+          // XKit lied about show_more being installed
+					return;
+				}
+				if (!XKit.extensions.show_more.running) {
+          // For some reason show_more isn't complete
+					return;
 				}
 
+				if (XKit.extensions.show_more.preferences.use_classic_menu.value) {
+					XKit.extensions.show_more.add_custom_menu("view_on_dash", function(data) {
+						console.log(data);
+						var user_url = data.name;
+
+						$(document).off("click", ".xkit-view_on_dash-button-" + user_url, XKit.extensions.view_on_dash.menu_clicked);
+						$(document).on("click", ".xkit-view_on_dash-button-" + user_url, XKit.extensions.view_on_dash.menu_clicked);
+
+						return "<div data-url=\"" + user_url + "\" class=\"xkit-view_on_dash-button-" + user_url + " xkit-view-on-dashboard\">View on Dash</div>";
+					});
+				} else {
+					XKit.extensions.show_more.add_custom_menu("view_on_dash", function(data) {
+						var user_url = data.name;
+
+						$(document).off("click", ".xkit-view_on_dash-button-" + user_url, XKit.extensions.view_on_dash.menu_clicked);
+						$(document).on("click", ".xkit-view_on_dash-button-" + user_url, XKit.extensions.view_on_dash.menu_clicked);
+
+						return "<li>" +
+							"<a data-url=\"" + user_url + "\" class=\"xkit-view_on_dash-button-" + user_url + " xkit-view-on-dashboard xkit-new-menu-fix\">" +
+								"<span class=\"hide_overflow\">View On Dash</span>" +
+							"</a>" +
+						"</li>";
+					});
+				}
 			}, 2000);
-
 		}
-
 	},
 
 	show_open: function() {
