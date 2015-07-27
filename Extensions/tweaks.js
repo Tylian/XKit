@@ -1,5 +1,5 @@
 //* TITLE Tweaks **//
-//* VERSION 3.2.0 **//
+//* VERSION 3.2.1 **//
 //* DESCRIPTION Various little tweaks for your dashboard. **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS These are small little tweaks that allows you customize your dashboard. If you have used XKit 6, you will notice that some of the extensions have been moved here as options you can toggle. Keep in mind that some of the tweaks (the ones marked with a '*') can slow down your computer. **//
@@ -619,15 +619,16 @@ XKit.extensions.tweaks = new Object({
            					'<a href="/mega-editor/' + user_url + '" target="_mass_post_editor">Mass Post Editor</a>' +
            					'<a href="/blog/' + user_url.replace("/","") + '/settings/" target="_mass_post_editor">Blog Settings</a>' +
 					'</div>';
+					
 			//}
+
+            var xf_html = "";
 
 			if ($("#dashboard_controls_open_blog").length >= 1) {
 				if ($(".small_links").length > 0 && add_mega_link === false) {
 					$(".small_links:first").append('<a class=\"xkit-small-blog-setting-link\" href="/blog/' + user_url.replace("/","") + '/settings/" target="_blog_settings">Blog Settings</a>');
-				    //$("#right_column").prepend(x_html);
 				} else {
-					$("#dashboard_controls_open_blog:first").after(x_html);
-					//$("#right_column").prepend(x_html);
+					$("#dashboard_controls_open_blog").after(x_html);
 				}
 
 			} else {
