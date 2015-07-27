@@ -398,11 +398,6 @@ XKit.extensions.postarchive = new Object({
 	    		
 	    		XKit.extensions.postarchive.load_posts();
 	    		
-	    		if (m_categories.length > 30 || m_posts.length > 30) {
-	    		    XKit.window.show("TOO MANY", m_catetories.length + "<br/>" + m_posts.length,"<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
-	    		    return;
-	    		}
-	    		
 	    		for (var n=0;n<m_categories.length;n++) {
 	    		    XKit.extensions.postarchive.categories.push(m_categories[n]);
 					console.log(XKit.extensions.postarchive.categories);
