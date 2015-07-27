@@ -1,5 +1,5 @@
 //* TITLE Post Archiver **//
-//* VERSION 0.5.0 **//
+//* VERSION 0.5.1 **//
 //* DESCRIPTION Never lose a post again. **//
 //* DETAILS Post Archiver lets you save posts to your XKit.<br><br>Found a good recipe? Think those hotline numbers on that signal boost post might come in handy in the future?<br><br>Click on the save button, then click on the My Archive button on your sidebar anytime to access those posts. You can also name and categorize posts. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -1145,15 +1145,20 @@ var rows = [];
 		$("#xkit-postarchive-save").addClass("disabled");
 
 		var m_post = XKit.interface.find_post(post_id);
+		var blog_url = m_post.owner;
+		
+		if (blog_url == undefined) {
+		    blog_url = window.location.href.split('%2F')[2].split('.')[0];
+		}
 
-		var api_url = "http://api.tumblr.com/v2/blog/" + m_post.owner + ".tumblr.com/posts/?api_key=" + XKit.extensions.postarchive.apiKey + "&id=" + post_id;
+		var api_url = "http://api.tumblr.com/v2/blog/" + blog_url + ".tumblr.com/posts/?api_key=" + XKit.extensions.postarchive.apiKey + "&id=" + post_id;
 
 		GM_xmlhttpRequest({
 			method: "GET",
 			url: api_url,
 			json: true,
 			onerror: function(response) {
-				XKit.extensions.postarchive.show_error("<b>Unable to get the blog information.</b><br/>Please try again later.<br/><br/>Error Code: POA-230");
+				XKit.extensions.postarchive.show_error("<b>Unable to get the blog information.</b><br/>Please try again later.<br/><br/>Error Code: POA-230 <br/><br/>"+blog_url);
 				return;
 			},
 			onload: function(response) {

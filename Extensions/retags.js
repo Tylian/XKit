@@ -1,6 +1,6 @@
 //* TITLE       Retags **//
 //* DEVELOPER   alexhong **//
-//* VERSION     0.6.5 **//
+//* VERSION     0.6.6 **//
 //* DESCRIPTION Adds tags to reblog notes **//
 //* FRAME       false **//
 //* SLOW        false **//
@@ -156,7 +156,7 @@ var retags = {
 	css_toggle:
 	$('<style class="retags">\
 		.ui_note { display: none; }\
-		.ui_note.is_retags, .ui_note.is_response { display: block; }\
+		.ui_note.is_retags, .ui_note.is_response, .ui_note.is_user_mention { display: block; }\
 	</style>')
 	,
 	html_toggle:
