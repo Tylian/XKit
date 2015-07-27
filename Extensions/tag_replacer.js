@@ -1,5 +1,5 @@
 //* TITLE Tag Replacer **//
-//* VERSION 0.4.1 **//
+//* VERSION 0.4.2 **//
 //* DESCRIPTION Replace old tags! **//
 //* DETAILS Allows you to bulk replace tags of posts. Go to your Posts page on your dashboard and click on the button on the sidebar and enter the tag you want replaced, and the new tag, and Tag Replacer will take care of the rest. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -49,9 +49,9 @@ XKit.extensions.tag_replacer = new Object({
 			var t_replace = "";
 
 			if (XKit.extensions.tag_replacer.case_sensitive) {
-				t_replace = $.trim($("#xkit-tag-replacer-replace").val().replace(/\s+/g, '-'));
+				t_replace = $.trim($("#xkit-tag-replacer-replace").val());
 			} else {
-				t_replace = $.trim($("#xkit-tag-replacer-replace").val().replace(/\s+/g, '-').toLowerCase());
+				t_replace = $.trim($("#xkit-tag-replacer-replace").val().toLowerCase());
 			}
 
 			var t_with = $.trim($("#xkit-tag-replacer-with").val());
@@ -172,7 +172,7 @@ XKit.extensions.tag_replacer = new Object({
 			if (XKit.extensions.tag_replacer.append_mode === false) {
 
 				for (var i=0;i<m_tags.length;i++) {
-					if (encodeURIComponent(m_tags[i].replace(/\s+/g, '-')) === XKit.extensions.tag_replacer.t_replace) {
+					if (encodeURIComponent(m_tags[i]) === XKit.extensions.tag_replacer.t_replace) {
 						found_tag = true;
 						m_tags[i] = XKit.extensions.tag_replacer.t_with;
 						break;
