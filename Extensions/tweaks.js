@@ -625,7 +625,7 @@ XKit.extensions.tweaks = new Object({
 				if ($(".small_links").length > 0 && add_mega_link === false) {
 					$(".small_links:first").append('<a class=\"xkit-small-blog-setting-link\" href="/blog/' + user_url.replace("/","") + '/settings/" target="_blog_settings">Blog Settings</a>');
 				} else {
-					$("ul.controls_section:first").after(x_html);
+					$("#dashboard_controls_open_blog").after(x_html);
 				}
 
 			}
