@@ -1,5 +1,5 @@
 //* TITLE Tweaks **//
-//* VERSION 3.2.1 **//
+//* VERSION 3.2.2 **//
 //* DESCRIPTION Various little tweaks for your dashboard. **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS These are small little tweaks that allows you customize your dashboard. If you have used XKit 6, you will notice that some of the extensions have been moved here as options you can toggle. Keep in mind that some of the tweaks (the ones marked with a '*') can slow down your computer. **//
@@ -492,7 +492,8 @@ XKit.extensions.tweaks = new Object({
 				moz_fix = " top: -5px !important; ";
 			}
 			var m_css = "li.section_header { height: 22px !important; line-height: 20px !important; font-size: 11px !important; } .activity canvas { zoom: 0.6; -moz-transform: scale(0.6); } .controls_section li { height: 25px; line-height: 19px; } .controls_section li a, .controls_section li .hide_overflow { line-height: 23px; font-size: 12px; } .controls_section li a { padding: 3px 13px 10px 40px; font-size: 13px; } .controls_section li>a:after { zoom: 0.80; -moz-transform: scale(0.77); left: 14px; top: -2px; " + moz_fix + " } .controls_section a .count { top: 3px !important; } .controls_section .sub_control.link_arrow { margin-top: -6px; } #popover_button_blogs { height: auto; } #fan_mail_controls, #fan_mail_controls li, #recommended_tumblelogs li, #tag_editors li, #tag_contributors li { height: auto; } .controls_section a .count { line-height: 19px; } .controls_section li .icon_left { top: 2px !important; position: absolute; left: 12px !important; font-size: 18px !important; line-height: 21px !important; }" +
-				".controls_section.follow_list.recommended_tumblelogs>li, .controls_section.follow_list>li { height: auto !important; }";
+				".controls_section.follow_list.recommended_tumblelogs>li, .controls_section.follow_list>li { height: auto !important; } .controls_section li a, .controls_section li .hide_overflow {line-height: 20px !important;}" +
+				".controls_section li a {padding: 0 0 0 0; } .xtag .result_title {padding: 1px 0px 8px 40px !important; } .result_sub_title {padding: 1px 0px !important; } .controls_section a .count {top: 0px !important; } .identity .controls_section a .count {right: 15px; } .icon_plus.follow_icon { font-size: 24px; }";
 			if (!$("body").hasClass("settings_actions_tumblelog")) {
 				XKit.extensions.tweaks.add_css(m_css, "xkit_tweaks_slim_sidebar");
 			}
@@ -626,6 +627,7 @@ XKit.extensions.tweaks = new Object({
 
 			if ($("#dashboard_controls_open_blog").length >= 1) {
 				if ($(".small_links").length > 0 && add_mega_link === false) {
+				    //$(".small_links:first").append(x_html);
 					$(".small_links:first").append('<a class=\"xkit-small-blog-setting-link\" href="/blog/' + user_url.replace("/","") + '/settings/" target="_blog_settings">Blog Settings</a>');
 				} else {
 					$("#dashboard_controls_open_blog").after(x_html);
