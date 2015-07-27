@@ -623,11 +623,10 @@ XKit.extensions.tweaks = new Object({
 
 			if ($("#dashboard_controls_open_blog").length >= 1) {
 				if ($(".small_links").length > 0 && add_mega_link === false) {
-				    $(".small_links:first").append(x_html);
-					//$(".small_links:first").append('<a class=\"xkit-small-blog-setting-link\" href="/blog/' + user_url.replace("/","") + '/settings/" target="_blog_settings">Blog Settings</a>');
+					$(".small_links:first").append('<a class=\"xkit-small-blog-setting-link\" href="/blog/' + user_url.replace("/","") + '/settings/" target="_blog_settings">Blog Settings</a>');
 				    //$("#right_column").prepend(x_html);
 				} else {
-					$("#dashboard_controls_open_blog").after(x_html);
+					$("#dashboard_controls_open_blog:first").after(x_html);
 					//$("#right_column").prepend(x_html);
 				}
 
