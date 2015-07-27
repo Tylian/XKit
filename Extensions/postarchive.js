@@ -1,5 +1,5 @@
 //* TITLE Post Archiver **//
-//* VERSION 0.5.0 **//
+//* VERSION 0.5.1 **//
 //* DESCRIPTION Never lose a post again. **//
 //* DETAILS Post Archiver lets you save posts to your XKit.<br><br>Found a good recipe? Think those hotline numbers on that signal boost post might come in handy in the future?<br><br>Click on the save button, then click on the My Archive button on your sidebar anytime to access those posts. You can also name and categorize posts. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -397,6 +397,11 @@ XKit.extensions.postarchive = new Object({
 	    		m_categories = JSON.parse(m_obj.categories);
 	    		
 	    		XKit.extensions.postarchive.load_posts();
+	    		
+	    		if (m_categories.length > 30 || m_posts.length > 30) {
+	    		    XKit.window.show("TOO MANY", m_catetories.length + "<br/>" + m_posts.length,"<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
+	    		    return;
+	    		}
 	    		
 	    		for (var n=0;n<m_categories.length;n++) {
 	    		    XKit.extensions.postarchive.categories.push(m_categories[n]);
@@ -1145,15 +1150,20 @@ var rows = [];
 		$("#xkit-postarchive-save").addClass("disabled");
 
 		var m_post = XKit.interface.find_post(post_id);
+		var blog_url = m_post.owner;
+		
+		if (blog_url == undefined) {
+		    blog_url = window.location.href.split('%2F')[2].split('.')[0];
+		}
 
-		var api_url = "http://api.tumblr.com/v2/blog/" + m_post.owner + ".tumblr.com/posts/?api_key=" + XKit.extensions.postarchive.apiKey + "&id=" + post_id;
+		var api_url = "http://api.tumblr.com/v2/blog/" + blog_url + ".tumblr.com/posts/?api_key=" + XKit.extensions.postarchive.apiKey + "&id=" + post_id;
 
 		GM_xmlhttpRequest({
 			method: "GET",
 			url: api_url,
 			json: true,
 			onerror: function(response) {
-				XKit.extensions.postarchive.show_error("<b>Unable to get the blog information.</b><br/>Please try again later.<br/><br/>Error Code: POA-230");
+				XKit.extensions.postarchive.show_error("<b>Unable to get the blog information.</b><br/>Please try again later.<br/><br/>Error Code: POA-230 <br/><br/>"+blog_url);
 				return;
 			},
 			onload: function(response) {
