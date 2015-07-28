@@ -1,5 +1,5 @@
 //* TITLE Open In Tabs **//
-//* VERSION 1.1.3 **//
+//* VERSION 1.1.4 **//
 //* DESCRIPTION Changes links to open in new tabs **//
 //* DETAILS Open In Tabs allows you to open links on new tabs, useful if you don't like being confined to one tab. Since some links, if opened in new tabs, can break functionality, they are not effected by this extension. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -17,6 +17,11 @@ XKit.extensions.open_in_new_tabs = new Object({
 			text: "Options",
 			type: "separator"
 		},
+		"button_tabs": {
+		    text: "Make buttons open in tabs",
+		    default: true,
+		    value: true
+		},
 		"no_sidebar": {
 			text: "Open in new tab instead of blog sidebar",
 			default: false,
@@ -27,8 +32,10 @@ XKit.extensions.open_in_new_tabs = new Object({
 	run: function() {
 		this.running = true;
 
-		$("#content area").attr('target','_blank');
-		$(document).on("click", XKit.extensions.open_in_new_tabs.do_open);
+        if (XKit.extensions.open_in_new_tabs.button_tabs.value === true) {
+		    $("#content area").attr('target','_blank');
+		    $(document).on("click", XKit.extensions.open_in_new_tabs.do_open);
+        }
 		
 		if (document.location.href.indexOf('/mega-editor/') != -1)
 			return;
