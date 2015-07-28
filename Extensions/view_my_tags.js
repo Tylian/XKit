@@ -1,5 +1,5 @@
 //* TITLE View My Tags **//
-//* VERSION 0.3 REV C **//
+//* VERSION 0.4.0 **//
 //* DESCRIPTION Lets you view your recently used tags **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//
@@ -72,7 +72,8 @@ XKit.extensions.view_my_tags = new Object({
 
 			} else {
 
-				$("ul.controls_section:first").before(xf_html);
+				//$("ul.controls_section:first").after(xf_html);
+				$(".controls_section_radar").before(xf_html);
 
 			}
 

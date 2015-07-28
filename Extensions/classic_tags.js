@@ -1,5 +1,5 @@
 //* TITLE Tags on Sidebar **//
-//* VERSION 1.3.4 **//
+//* VERSION 1.4.0 **//
 //* DESCRIPTION Shows your tracked tags on your sidebar **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//
@@ -26,6 +26,11 @@ XKit.extensions.classic_tags = new Object({
 			default: false,
 			value: false
 		},
+		"prepend_sidebar": {
+		    text: "Put tags at top of sidebar",
+		    default: false,
+		    value: false
+		}
 	},
 
 	run: function() {
@@ -79,15 +84,18 @@ XKit.extensions.classic_tags = new Object({
 				$("#right_column").append(m_html);
 
 			} else {
-
-				if ($("ul.controls_section:eq(1)").length > 0) {
+                
+                if (XKit.extensions.classic_tags.preferences.prepend_sidebar.value === true) {
+				    $("#right_column").prepend(m_html);
+				} else if ($("ul.controls_section:eq(1)").length > 0) {
 					if ($("#xim_small_links").length > 0) {
 						$("#xim_small_links").after(m_html);
 					} else {
 						$("ul.controls_section:eq(1)").after(m_html);
 					}
 				} else {
-					$("#right_column").prepend(m_html);
+					//$("#right_column").append(m_html);
+					$(".controls_section_radar").before(m_html);
 				}
 			}
 
@@ -101,7 +109,7 @@ XKit.extensions.classic_tags = new Object({
 				show_this_tag = true;
 			} else {
 				if (XKit.extensions.classic_tags.preferences.only_new_tags.value === true) {
-					if (total_tag_count >= 21 && XKit.extensions.classic_tags.preferences.turn_off_warning.value == true) {
+					if (total_tag_count >= 21 && XKit.extensions.classic_tags.preferences.turn_off_warning.value === true) {
 						// Show everything!
 					} else {
 						return;
@@ -140,11 +148,13 @@ XKit.extensions.classic_tags = new Object({
 			if (document.location.href.indexOf('/tagged/') !== -1) {
 
 				$("#right_column").children(".tag_controls").after(m_html);
-
+			} else if (XKit.extensions.classic_tags.preferences.prepend_sidebar.value === true) {
+			    $("#right_column").prepend(m_html);
 			} else if ($("#xim_small_links").length > 0) {
 				$("#xim_small_links").after(m_html);
 			} else {
-				$("#right_column").prepend(m_html);
+			    //$("#right_column").append(m_html);
+				$(".controls_section_radar").before(m_html);
 			}
 
 			$(".xtag").each(function() {
