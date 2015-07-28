@@ -85,7 +85,7 @@ XKit.extensions.open_in_new_tabs = new Object({
 		        open_new_tab = false;
 		    }
 		    
-		    if ($(m_box).attr('title').toLowerCase() == "activity") {
+		    if ($(m_box).attr('title').toLowerCase() == "activity" || $(m_box).attr('title').toLowerCase() == "edit" ) {
 		        open_new_tab = false;
 		    }
 
