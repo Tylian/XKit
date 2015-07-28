@@ -1,6 +1,9 @@
 .alternative_timestamp {
+	font-size: 11px;
 	font-weight: normal;
+	color: rgb(168,177,184);
 	clear:left;
+	margin-bottom: 10px;
 }
 
 .old_tumblr_done .alternative_timestamp {
