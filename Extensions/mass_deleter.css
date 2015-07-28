@@ -7,3 +7,14 @@
 	opacity: 0.42;
 
 }
+
+#xkit-mass-deleter-ul > .no_push {
+	height: 36px;
+}
+
+#xkit-mass-deleter-ul .hide_overflow {
+	color: rgba(255, 255, 255, 0.5) !important;
+	font-weight: bold;
+	padding-left: 10px;
+	padding-top: 8px;
+}
