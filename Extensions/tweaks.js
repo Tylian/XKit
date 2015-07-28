@@ -1,5 +1,5 @@
 //* TITLE Tweaks **//
-//* VERSION 3.2.4 **//
+//* VERSION 3.2.5 **//
 //* DESCRIPTION Various little tweaks for your dashboard. **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS These are small little tweaks that allows you customize your dashboard. If you have used XKit 6, you will notice that some of the extensions have been moved here as options you can toggle. Keep in mind that some of the tweaks (the ones marked with a '*') can slow down your computer. **//
@@ -274,7 +274,7 @@ XKit.extensions.tweaks = new Object({
 		this.running = true;
 		
 		if (XKit.extensions.tweaks.preferences.grey_urls.value === true) {
-		    XKit.tools.add_css(".post_full .post_header .post_info .post_info_link:first-child {color: #A1A1A1 !important; } .post-form--header .tumblelog-select .caption {color: #A1A1A1 !important; } .post_brick .post_header .post_info_tumblelog {color: #A1A1A1 !important; }", "tweaks_grey_urls")
+		    XKit.tools.add_css(".xkit-outbox-link {color: #A1A1A1 !important; } .post_full .post_header .post_info .post_info_link:first-child {color: #A1A1A1 !important; } .post-form--header .tumblelog-select .caption {color: #A1A1A1 !important; } .post_brick .post_header .post_info_tumblelog {color: #A1A1A1 !important; }", "tweaks_grey_urls");
 		}
 
 		if (XKit.extensions.tweaks.preferences.hide_bubble.value === true && XKit.interface.where().dashboard === false) {
