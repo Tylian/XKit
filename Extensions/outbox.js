@@ -1,5 +1,5 @@
 //* TITLE Outbox **//
-//* VERSION 0.9.5 **//
+//* VERSION 0.9.6 **//
 //* DESCRIPTION Saves your sent replies, fan mail and asks. **//
 //* DETAILS This extension stores and lets you view the last 50 asks you've answered privately. Please keep in mind that this is a highly experimental extension, so if you hit a bug, please send the XKit blog an ask with the problem you've found. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -484,7 +484,7 @@ XKit.extensions.outbox = new Object({
 
 		var to_return = "<li class=\"post_container\"><div class=\"post is_note note is_mine post_full by-xkit-outbox is_mine is_original is_private_answer no_source\">";
 
-		var m_link = "<a href=\"http://" + obj.to + ".tumblr.com/\">" + obj.to + "</a>";
+		var m_link = "<a class=\"xkit-outbox-link\" href=\"http://" + obj.to + ".tumblr.com/\">" + obj.to + "</a>";
 
 		var av_link = "<a href=\"http://" + obj.username + ".tumblr.com/\"><img width=\"24\" height=\"24\" src=\"" + obj.avatar + "\"></a>";
 		var av_text = "<a href=\"http://" + obj.username + ".tumblr.com/\" class=\"post_question_asker\">" + obj.username + "</a>";
@@ -535,7 +535,7 @@ XKit.extensions.outbox = new Object({
 
 		var to_return = "<li class=\"post_container\"><div class=\"post is_note note is_mine post_full by-xkit-outbox is_mine is_original is_private_answer no_source\">";
 
-		var m_link = "<a href=\"http://" + obj.to + ".tumblr.com/\">" + obj.to + "</a>";
+		var m_link = "<a class=\"xkit-outbox-link\" href=\"http://" + obj.to + ".tumblr.com/\">" + obj.to + "</a>";
 
 		var av_link = "<a href=\"http://" + obj.username + ".tumblr.com/\"><img width=\"24\" height=\"24\" src=\"" + obj.avatar + "\"></a>";
 		var av_text = "<a href=\"http://" + obj.username + ".tumblr.com/\" class=\"post_question_asker\">" + obj.username + "</a>";
@@ -594,7 +594,7 @@ XKit.extensions.outbox = new Object({
 
 		var to_return = "<li class=\"post_container\"><div class=\"post is_note note is_mine post_full by-xkit-outbox is_mine is_original is_private_answer no_source\">";
 
-		var m_link = "<a href=\"http://" + obj.username + ".tumblr.com/\">" + obj.username + "</a>";
+		var m_link = "<a class=\"xkit-outbox-link\" href=\"http://" + obj.username + ".tumblr.com/\">" + obj.username + "</a>";
 
 		var av_link = "<a href=\"http://" + obj.username + ".tumblr.com/\"><img width=\"24\" height=\"24\" src=\"" + obj.avatar + "\"></a>";
 		var av_text = "<a href=\"http://" + obj.username + ".tumblr.com/\" class=\"post_question_asker\">" + obj.username + "</a>";
