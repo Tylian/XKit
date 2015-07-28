@@ -1,5 +1,5 @@
 //* TITLE Tweaks **//
-//* VERSION 3.2.2 **//
+//* VERSION 3.2.3 **//
 //* DESCRIPTION Various little tweaks for your dashboard. **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS These are small little tweaks that allows you customize your dashboard. If you have used XKit 6, you will notice that some of the extensions have been moved here as options you can toggle. Keep in mind that some of the tweaks (the ones marked with a '*') can slow down your computer. **//
@@ -24,6 +24,11 @@ XKit.extensions.tweaks = new Object({
 			text: "Wrap tags for easier reading",
 			default: true,
 			value: true
+		},
+		"grey_urls": {
+		    text: "Make URLs grey again",
+		    default: false,
+		    value: false
 		},
 		"fix_blockquotes": {
 			text: "Slim block quotes for easier reading",
@@ -267,6 +272,10 @@ XKit.extensions.tweaks = new Object({
 
 	run: function() {
 		this.running = true;
+		
+		if (XKit.extensions.tweaks.preferences.grey_urls.value === true) {
+		    XKit.tools.add_css(".post_full .post_header .post_info .post_info_link:first-child {color: #A1A1A1 !important; }", "tweaks_grey_urls")
+		}
 
 		if (XKit.extensions.tweaks.preferences.hide_bubble.value === true && XKit.interface.where().dashboard === false) {
 
@@ -748,6 +757,7 @@ XKit.extensions.tweaks = new Object({
 		$(".customize").parent().css("display","block");
 		$("xkit_post_tags_inner_add_back").addClass("post_tags_inner");
 		$("xkit_post_tags_inner_add_back").removeClass("xkit_post_tags_inner_add_back");
+		XKit.tools.remove_css("tweaks_grey_urls")
 
 	}
 
