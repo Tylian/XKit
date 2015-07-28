@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 3.0.6 **//
+//* VERSION 3.0.7 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER STUDIOXENIX **//
 
@@ -1909,7 +1909,8 @@ XKit.tools.get_blogs = function() {
 					drafts: false,
 					followers: false,
 					endless: false,
-					dashboard: false
+					dashboard: false,
+					likes: false
 				};
 
 				if ($("body").hasClass("dashboard_messages_inbox") === true || $("body").hasClass("dashboard_messages_submissions") === true) {
@@ -1984,6 +1985,11 @@ XKit.tools.get_blogs = function() {
 
 				if (document.location.href.indexOf("tumblr.com/search/") !== -1) {
 					m_return.search = true;
+				}
+
+				if ($("body").hasClass("dashboard_posts_likes") == true ||
+						document.location.href.indexOf("tumblr.com/likes/") !== -1) {
+					m_return.likes = true;
 				}
 
 				m_return.dashboard = $("body").hasClass("is_dashboard") === true;
