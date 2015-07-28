@@ -274,7 +274,7 @@ XKit.extensions.tweaks = new Object({
 		this.running = true;
 		
 		if (XKit.extensions.tweaks.preferences.grey_urls.value === true) {
-		    XKit.tools.add_css(".post_full .post_header .post_info .post_info_link:first-child {color: #A1A1A1 !important; }", "tweaks_grey_urls")
+		    XKit.tools.add_css(".post_full .post_header .post_info .post_info_link:first-child {color: #A1A1A1 !important; } .post-form--header .tumblelog-select .caption {color: #A1A1A1 !important; } ", "tweaks_grey_urls")
 		}
 
 		if (XKit.extensions.tweaks.preferences.hide_bubble.value === true && XKit.interface.where().dashboard === false) {
