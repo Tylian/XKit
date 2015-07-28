@@ -1,5 +1,5 @@
 //* TITLE Blog Tracker **//
-//* VERSION 0.3.1 **//
+//* VERSION 0.3.3 **//
 //* DESCRIPTION Track people like tags **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS Blog Tracker lets you track blogs like you can track tags. Add them on your dashboard, and it will let you know how many new posts they've made the last time you've checked their blogs, or if they've changed their URLs. **//
@@ -351,10 +351,11 @@ XKit.extensions.people_notifier = new Object({
 				$("#xim_small_links").after(m_html);
 				//$("ul.controls_section:first").after(m_html);
 			} else {
-				$("ul.controls_section:first").after(m_html);
+				//$("ul.controls_section:first").after(m_html);
+				$(".controls_section_radar").before(m_html);
 			}
 		} else {
-			$("#right_column").prepend(m_html);
+			$("#right_column").append(m_html);
 		}
 
 		$(".xkit-people-notifier-person").bind("click", function(event) {
@@ -386,38 +387,24 @@ XKit.extensions.people_notifier = new Object({
 				return;
 			}
 
-			var open_in_vod = false;
-			if (XKit.extensions.people_notifier.preferences.view_on_dash.value === true) {
+			var open_in_vod = XKit.extensions.people_notifier.preferences.view_on_dash.value;
 
-				if (XKit.installed.check("xcloud") === false) {
-					open_in_vod = false;
-				} else {
-					if (XKit.extensions.xcloud.running === false) {
-						open_in_vod = false;
-					} else {
-						open_in_vod = true;
-					}
+			// Reset unread counter to 0 because we're going to the blog
+			XKit.extensions.people_notifier.load_blogs();
+			for (var person in XKit.extensions.people_notifier.blogs) {
+				if (XKit.extensions.people_notifier.blogs[person].url === $(this).attr('data-url')) {
+					XKit.extensions.people_notifier.blogs[person].last_check = new Date().getTime();
+					XKit.extensions.people_notifier.blogs[person].count = 0;
+					XKit.extensions.people_notifier.save();
+					break;
 				}
-
 			}
 
 			if (!open_in_vod) {
 				window.open("http://" + $(this).attr('data-url') + ".tumblr.com/");
 			} else {
 				try {
-
-					XKit.extensions.people_notifier.load_blogs();
-					for (var person in XKit.extensions.people_notifier.blogs) {
-						if (XKit.extensions.people_notifier.blogs[person].url === $(this).attr('data-url')) {
-							XKit.extensions.people_notifier.blogs[person].last_check = new Date().getTime();
-							XKit.extensions.people_notifier.blogs[person].count = 0;
-							XKit.extensions.people_notifier.save();
-							break;
-						}
-					}
-
 					XKit.extensions.view_on_dash.view($(this).attr('data-url'));
-
 				} catch(e) {
 					alert("Unable to use View On Dash to open blog.\nPlease try again later or file a bug report at new-xkit-extension.tumblr.com/ask with error code PEP-119A");
 				}
