@@ -1,5 +1,5 @@
 //* TITLE Post Limit Checker **//
-//* VERSION 0.1 REV D **//
+//* VERSION 0.1 REV E **//
 //* DESCRIPTION Are you close to the limit? **//
 //* DETAILS Shows you how many posts you can reblog today. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -16,8 +16,8 @@ XKit.extensions.post_limit_checker = new Object({
 
 		XKit.tools.init_css("post_limit_checker");
 
-		// if (XKit.interface.where().dashboard !== true && XKit.interface.where().channel !== true) { return; }
-		if (XKit.interface.where().user_url === "") { return; }
+		if (XKit.interface.where().dashboard !== true && XKit.interface.where().channel !== true) { return; }
+		// if (XKit.interface.where().user_url === "") { return; }
 
 		var xf_html = 	'<ul class="controls_section" id="post_limit_checker_ul">' +
 					'<li class="section_header selected">Post Limit</li>' +
@@ -168,7 +168,7 @@ XKit.extensions.post_limit_checker = new Object({
 		if (m_window_id !== XKit.extensions.post_limit_checker.window_id) { console.log("wrong window id. 01"); return; }
 
 		var offset = page * 20;
-		var api_url = "https://api.tumblr.com/v2/blog/" + XKit.interface.where().user_url + ".tumblr.com/posts/?api_key=" + XKit.extensions.post_limit_checker.apiKey + "&offset=" + offset;
+		var api_url = "https://api.tumblr.com/v2/blog/" + XKit.tools.get_blogs()[0] + ".tumblr.com/posts/?api_key=" + XKit.extensions.post_limit_checker.apiKey + "&offset=" + offset;
 		GM_xmlhttpRequest({
 			method: "GET",
 			url: api_url,
