@@ -1,5 +1,5 @@
 //* TITLE Find Blogs **//
-//* VERSION 1.1 REV D **//
+//* VERSION 1.2.0 **//
 //* DESCRIPTION Lets you find similar blogs **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//
@@ -76,53 +76,37 @@ XKit.extensions.find_blogs = new Object({
 		if (typeof XKit.extensions.show_more === "undefined") {
 			XKit.extensions.find_blogs.show_ump_error();
 			return;
-		} else {
-
-			setTimeout(function() {
-
-				if (XKit.extensions.show_more.running !== true) {
-					XKit.extensions.find_blogs.show_ump_error();
-					return;
-				} else {
-
-                			if (XKit.extensions.show_more.preferences.use_classic_menu.value === true) {
-
-                				XKit.extensions.show_more.add_custom_menu("find_blogs", function(data) {
-
-                					console.log(data);
-                					var user_url = data.name;
-
-							$(document).off("click", ".xkit-find_blogs-button-" + user_url, XKit.extensions.find_blogs.menu_clicked);
-							$(document).on("click", ".xkit-find_blogs-button-" + user_url, XKit.extensions.find_blogs.menu_clicked);
-
-							return "<div data-url=\"" + user_url + "\" class=\"xkit-find_blogs-button-" + user_url + " xkit-find_blogs\">Find Blogs</div>";
-
-                				});
-
-                			} else {
-
-                				XKit.extensions.show_more.add_custom_menu("find_blogs", function(data) {
-
-                					var user_url = data.name;
-
-							$(document).off("click", ".xkit-find_blogs-button-" + user_url, XKit.extensions.find_blogs.menu_clicked);
-							$(document).on("click", ".xkit-find_blogs-button-" + user_url, XKit.extensions.find_blogs.menu_clicked);
-
-							return "<li>" +
-                						"<a data-url=\"" + user_url + "\" class=\"xkit-find_blogs-button-" + user_url + " xkit-find_blogs xkit-new-menu-fix\">" +
-                							"<span class=\"hide_overflow\">Find Blogs</span>" +
-                						"</a>" +
-                			 		 "</li>";
-
-                				});
-
-                			}
-
-				}
-
-			}, 2000);
-
 		}
+
+		setTimeout(function() {
+			if (!XKit.installed.is_running("show_more")) {
+				XKit.extensions.find_blogs.show_ump_error();
+				return;
+			}
+			if (XKit.extensions.show_more.preferences.use_classic_menu.value === true) {
+				XKit.extensions.show_more.add_custom_menu("find_blogs", function(data) {
+					var user_url = data.name;
+
+					$(document).off("click", ".xkit-find_blogs-button-" + user_url, XKit.extensions.find_blogs.menu_clicked);
+					$(document).on("click", ".xkit-find_blogs-button-" + user_url, XKit.extensions.find_blogs.menu_clicked);
+
+					return "<div data-url=\"" + user_url + "\" class=\"xkit-find_blogs-button-" + user_url + " xkit-find_blogs\">Find Blogs</div>";
+				});
+			} else {
+				XKit.extensions.show_more.add_custom_menu("find_blogs", function(data) {
+					var user_url = data.name;
+
+					$(document).off("click", ".xkit-find_blogs-button-" + user_url, XKit.extensions.find_blogs.menu_clicked);
+					$(document).on("click", ".xkit-find_blogs-button-" + user_url, XKit.extensions.find_blogs.menu_clicked);
+
+					return "<li>" +
+						"<a data-url=\"" + user_url + "\" class=\"xkit-find_blogs-button-" + user_url + " xkit-find_blogs xkit-new-menu-fix\">" +
+							"<span class=\"hide_overflow\">Find Blogs</span>" +
+						"</a>" +
+					"</li>";
+				});
+			}
+		}, 2000);
 
 		if (XKit.interface.where().user_url === "") { return; }
 
@@ -166,7 +150,7 @@ XKit.extensions.find_blogs = new Object({
 
 	window_id: -1,
 
-	show: function(url, m_window_id) {
+	show: function(url) {
 
 		var m_window_id = XKit.tools.random_string();
 		XKit.extensions.find_blogs.window_id = m_window_id;
