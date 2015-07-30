@@ -1,5 +1,5 @@
 //* TITLE View My Tags **//
-//* VERSION 0.4.1 **//
+//* VERSION 0.4.2 **//
 //* DESCRIPTION Lets you view your recently used tags **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//
@@ -54,30 +54,19 @@ XKit.extensions.view_my_tags = new Object({
 				json: true,
 				onload: function(response) {
 					var data = JSON.parse(response.responseText);
-					var user_tags = [];
+					var user_tags_array = [];
+					var user_tags_hashmap = {};
 					data.response.posts.forEach(function(post){
-						user_tags = user_tags.concat(post.tags);
+						//user_tags = user_tags.concat(post.tags);
+						post.tags.forEach(function(tag){
+							if (!user_tags_hashmap.hasOwnProperty(tag)) {
+								user_tags_array.push(tag);
+								user_tags_hashmap[tag] = 1;
+							}
+						});
 					});
 
-					// http://stackoverflow.com/a/11911532/2073440
-					function unique(arr) {
-						var u = {}, a = [];
-						for(var i = 0, l = arr.length; i < l; ++i){
-							if(!u.hasOwnProperty(arr[i])) {
-								a.push(arr[i]);
-								u[arr[i]] = 1;
-							}
-						}
-						return a;
-					}
-
-					user_tags = unique(user_tags);
-
-					try {
-						jQuery("#xkit-view-my-tags-data").html(JSON.stringify(user_tags));
-					} catch(e){
-						jQuery("#xkit-view-my-tags-data").html("");
-					}
+					$("#xkit-view-my-tags-data").html(JSON.stringify(user_tags_array));
 				}
 			});
 		}
