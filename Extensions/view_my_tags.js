@@ -57,7 +57,6 @@ XKit.extensions.view_my_tags = new Object({
 					var user_tags_array = [];
 					var user_tags_hashmap = {};
 					data.response.posts.forEach(function(post){
-						//user_tags = user_tags.concat(post.tags);
 						post.tags.forEach(function(tag){
 							if (!user_tags_hashmap.hasOwnProperty(tag)) {
 								user_tags_array.push(tag);
