@@ -1,5 +1,5 @@
 //* TITLE View On Dash **//
-//* VERSION 0.7.0 **//
+//* VERSION 0.7.1 **//
 //* DESCRIPTION View blogs on your dash **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS This is a preview version of an extension, missing most features due to legal/technical reasons for now. It lets you view the last 20 posts a person has made on their blogs right on your dashboard. If you have User Menus+ installed, you can also access it from their user menu under their avatar. **//
@@ -65,43 +65,33 @@ XKit.extensions.view_on_dash = new Object({
 
 		}
 
-		if (XKit.installed.check('show_more')) {
-			setTimeout(function() {
-				if (typeof XKit.extensions.show_more === "undefined") {
-          // XKit lied about show_more being installed
-					return;
-				}
-				if (!XKit.extensions.show_more.running) {
-          // For some reason show_more isn't complete
-					return;
-				}
+		XKit.installed.when_running("show_more", function() {
+      var show_more = XKit.extensions.show_more;
+			if (show_more.preferences.use_classic_menu.value) {
+				show_more.add_custom_menu("view_on_dash", function(data) {
+					console.log(data);
+					var user_url = data.name;
 
-				if (XKit.extensions.show_more.preferences.use_classic_menu.value) {
-					XKit.extensions.show_more.add_custom_menu("view_on_dash", function(data) {
-						console.log(data);
-						var user_url = data.name;
+					$(document).off("click", ".xkit-view_on_dash-button-" + user_url, XKit.extensions.view_on_dash.menu_clicked);
+					$(document).on("click", ".xkit-view_on_dash-button-" + user_url, XKit.extensions.view_on_dash.menu_clicked);
 
-						$(document).off("click", ".xkit-view_on_dash-button-" + user_url, XKit.extensions.view_on_dash.menu_clicked);
-						$(document).on("click", ".xkit-view_on_dash-button-" + user_url, XKit.extensions.view_on_dash.menu_clicked);
+					return "<div data-url=\"" + user_url + "\" class=\"xkit-view_on_dash-button-" + user_url + " xkit-view-on-dashboard\">View on Dash</div>";
+				});
+			} else {
+				show_more.add_custom_menu("view_on_dash", function(data) {
+					var user_url = data.name;
 
-						return "<div data-url=\"" + user_url + "\" class=\"xkit-view_on_dash-button-" + user_url + " xkit-view-on-dashboard\">View on Dash</div>";
-					});
-				} else {
-					XKit.extensions.show_more.add_custom_menu("view_on_dash", function(data) {
-						var user_url = data.name;
+					$(document).off("click", ".xkit-view_on_dash-button-" + user_url, XKit.extensions.view_on_dash.menu_clicked);
+					$(document).on("click", ".xkit-view_on_dash-button-" + user_url, XKit.extensions.view_on_dash.menu_clicked);
 
-						$(document).off("click", ".xkit-view_on_dash-button-" + user_url, XKit.extensions.view_on_dash.menu_clicked);
-						$(document).on("click", ".xkit-view_on_dash-button-" + user_url, XKit.extensions.view_on_dash.menu_clicked);
-
-						return "<li>" +
-							"<a data-url=\"" + user_url + "\" class=\"xkit-view_on_dash-button-" + user_url + " xkit-view-on-dashboard xkit-new-menu-fix\">" +
-								"<span class=\"hide_overflow\">View On Dash</span>" +
-							"</a>" +
-						"</li>";
-					});
-				}
-			}, 2000);
-		}
+					return "<li>" +
+						"<a data-url=\"" + user_url + "\" class=\"xkit-view_on_dash-button-" + user_url + " xkit-view-on-dashboard xkit-new-menu-fix\">" +
+							"<span class=\"hide_overflow\">View On Dash</span>" +
+						"</a>" +
+					"</li>";
+				});
+			}
+		});
 	},
 
 	show_open: function() {
@@ -746,7 +736,7 @@ XKit.extensions.view_on_dash = new Object({
 							if (XKit.extensions.view_on_dash.last_scroll_point !== -1) {
 
 								$('html, body').animate({
-    									scrollTop: XKit.extensions.view_on_dash.last_scroll_point
+ 									scrollTop: XKit.extensions.view_on_dash.last_scroll_point
  								}, 500);
 
 							}
@@ -795,11 +785,11 @@ XKit.extensions.view_on_dash = new Object({
 		this.running = false;
 		$(document).off('keydown', XKit.extensions.view_on_dash.key_down);
 		$("#view_on_dash_ul").remove();
-              	try {
-              		XKit.extensions.show_more.remove_custom_menu("view_on_dash");
-              	} catch(e){
-              		XKit.console.add("Can't remove custom menu, " + e.message);
-              	}
+		try {
+			XKit.extensions.show_more.remove_custom_menu("view_on_dash");
+		} catch(e){
+			XKit.console.add("Can't remove custom menu, " + e.message);
+		}
 	}
 
 });
