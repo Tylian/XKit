@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 3.1.1 **//
+//* VERSION 3.1.2 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER STUDIOXENIX **//
 
@@ -947,6 +947,19 @@ XKit.tools.get_blogs = function() {
 							control_area.prepend("<div id=\"xkit-interface-buttons\">" + m_html + "</div>");
 						}
 					}
+				},
+
+				/**
+				 * Gets the content of the post window.
+				 * @param {String} new_content
+				 */
+				get_content_html: function() {
+					var content_editor = $('.post-form--form').find('.editor.editor-richtext');
+					if (content_editor.length === 0) {
+						XKit.console.add('ERROR: unable to set content html');
+						return '';
+					}
+          return content_editor.html();
 				},
 
 				/**
