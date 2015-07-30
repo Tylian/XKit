@@ -1,5 +1,5 @@
 //* TITLE Show Originals **//
-//* VERSION 1.2.0 **//
+//* VERSION 1.2.1 **//
 //* DESCRIPTION Only shows non-reblogged posts **//
 //* DETAILS This is a really experimental extension allows you see original (non-reblogged) posts made by users on your dashboard. Please keep in mind that if you don't have enough people creating new posts on your dashboard, it might slow down your computer. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -32,11 +32,9 @@ XKit.extensions.show_originals = new Object({
 		if (XKit.interface.where().dashboard !== true && XKit.interface.where().channel !== true) { return; }
 
 		try {
-			if (typeof XKit.extensions.tweaks !== "undefined") {
-				if (XKit.extensions.tweaks.running === true) {
-					if (XKit.extensions.tweaks.preferences.dont_show_mine_on_dashboard.value === true) {
-						XKit.extensions.show_originals.dont_show_mine = true;
-					}
+			if (XKit.installed.is_running("tweaks")) {
+				if (XKit.extensions.tweaks.preferences.dont_show_mine_on_dashboard.value) {
+					XKit.extensions.show_originals.dont_show_mine = true;
 				}
 			}
 		} catch(e) {

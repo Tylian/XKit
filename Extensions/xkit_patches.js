@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 3.0.7 **//
+//* VERSION 3.1.2 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER STUDIOXENIX **//
 
@@ -947,6 +947,19 @@ XKit.tools.get_blogs = function() {
 							control_area.prepend("<div id=\"xkit-interface-buttons\">" + m_html + "</div>");
 						}
 					}
+				},
+
+				/**
+				 * Gets the content of the post window.
+				 * @param {String} new_content
+				 */
+				get_content_html: function() {
+					var content_editor = $('.post-form--form').find('.editor.editor-richtext');
+					if (content_editor.length === 0) {
+						XKit.console.add('ERROR: unable to set content html');
+						return '';
+					}
+          return content_editor.html();
 				},
 
 				/**
@@ -2142,3 +2155,38 @@ XKit.tools.get_blogs = function() {
 	}
 	
 });
+
+/**
+ * @param {String} extension
+ * @return {Boolean} Whether the extension is running
+ */
+XKit.installed.is_running = function(extension) {
+  return XKit.installed.check(extension) &&
+         typeof(XKit.extensions[extension]) !== "undefined" &&
+         XKit.extensions[extension].running;
+};
+
+/**
+ * Schedule a callback to be run only if `extension` is installed and running.
+ * @param {String} extension
+ * @param {Function} callback
+ */
+XKit.installed.when_running = function(extension, callback) {
+  if (!XKit.installed.check(extension)) {
+    return;
+  }
+  var tries = 5;
+  function check() {
+    if (tries < 0) {
+      return;
+    }
+    if (!XKit.installed.is_running(extension)) {
+      tries--;
+      setTimeout(check, 250);
+      return;
+    }
+    // The extension exists and has been installed
+    callback(XKit.extensions[extension]);
+  }
+  setTimeout(check, 0);
+};

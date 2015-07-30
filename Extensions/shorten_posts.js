@@ -1,5 +1,5 @@
 //* TITLE Shorten Posts **//
-//* VERSION 0.1 REV H **//
+//* VERSION 0.2.0 **//
 //* DESCRIPTION Makes scrolling easier **//
 //* DETAILS This extension shortens long posts, so if you are interested, you can just click on Show Full Post button to see it all, or scroll down if you are not interested. Useful for screens where long posts take a lot of space, and making it hard to scroll down.<br><br>By default, this extension only shortens text posts. You can toggle the setting to let it shorten the photo posts too. (This will 'cut off' long, vertical posts.) **//
 //* DEVELOPER STUDIOXENIX **//
@@ -55,11 +55,6 @@ XKit.extensions.shorten_posts = new Object({
 
 		if ($(".post").length > 0) {
 			XKit.tools.init_css("shorten_posts");
-			if (typeof XKit.extensions.blacklist !== "undefined") {
-				if (XKit.extensions.blacklist.running === true) {
-					console.log(" ------ BLACKLIST IS ON SHORTEN POSTS DELAY");
-				}
-			}
 			$(document).on("click", ".xkit-shorten-posts-embiggen", XKit.extensions.shorten_posts.embiggen);
 			XKit.post_listener.add("shorten_posts", XKit.extensions.shorten_posts.check);
 			XKit.extensions.shorten_posts.check();

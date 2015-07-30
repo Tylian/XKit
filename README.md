@@ -9,7 +9,8 @@ XKit, look [here](https://github.com/hobinjk/XKit/releases).
 ## Contribute
 XKit needs all the help it can get! If you want to help out, the first step is
 finding something going wrong. There's a long list of known issues
-[here](http://new-xkit-extension.tumblr.com/known-bugs). The next step is to
+[on our issues page](https://github.com/hobinjk/XKit/issues) and
+[on the original issues page](https://github.com/atesh/XKit/issues). The next step is to
 [fix the bug](https://github.com/hobinjk/XKit/wiki/Fixing-a-bug).
 
 ## Writing a New Extension
