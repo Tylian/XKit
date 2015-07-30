@@ -1,5 +1,5 @@
 //* TITLE Editable Reblogs **//
-//* VERSION 1.0.5 **//
+//* VERSION 1.0.6 **//
 //* DESCRIPTION	Restores ability to edit previous reblogs of a post **//
 //* DEVELOPER dlmarquis **//
 //* FRAME false **//
@@ -34,7 +34,7 @@ XKit.extensions.editable_reblogs = new Object({
 		// 	old_content = content_editor.html();
 		// }
 
-		XKit.interface.post_window.set_content_html(reblog_content + old_content + "<br/>");
+		XKit.interface.post_window.set_content_html(reblog_content + old_content);
 
 		$(".btn-remove-tree").click();
 
