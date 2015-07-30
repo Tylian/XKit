@@ -24,7 +24,7 @@ XKit.extensions.editable_reblogs = new Object({
 	    
 	    //alert(reblog_content);
 	    
-	    XKit.interface.post_window.set_content_html(reblog_content + $(".editor").html() + "<br/>");
+	    XKit.interface.post_window.set_content_html(reblog_content + "<br/>" + $(".editor").html() + "<br/>");
 	    
 	    //$(".reblog-tree).html("");
 	    //window.setTimeout(function() {
