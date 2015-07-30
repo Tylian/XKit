@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 3.0.7 **//
+//* VERSION 3.1.0 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER STUDIOXENIX **//
 
@@ -2142,3 +2142,29 @@ XKit.tools.get_blogs = function() {
 	}
 	
 });
+
+/**
+ * Schedule a callback to be run only if `extension` is installed and running.
+ * @param {String} extension
+ * @param {Function} callback
+ */
+XKit.installed.when_running = function(extension, callback) {
+  if (!XKit.installed.check(extension)) {
+    return;
+  }
+  var tries = 5;
+  function check() {
+    if (tries < 0) {
+      return;
+    }
+    if (typeof(XKit.extensions[extension]) === "undefined" ||
+        !XKit.extensions[extension].running) {
+      tries--;
+      setTimeout(check, 250);
+      return;
+    }
+    // The extension exists and has been installed
+    callback(XKit.extensions[extension]);
+  }
+  setTimeout(check, 0);
+};
