@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 3.1.0 **//
+//* VERSION 3.1.1 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER STUDIOXENIX **//
 
@@ -2144,6 +2144,16 @@ XKit.tools.get_blogs = function() {
 });
 
 /**
+ * @param {String} extension
+ * @return {Boolean} Whether the extension is running
+ */
+XKit.installed.is_running = function(extension) {
+  return XKit.installed.check(extension) &&
+         typeof(XKit.extensions[extension]) !== "undefined" &&
+         XKit.extensions[extension].running;
+};
+
+/**
  * Schedule a callback to be run only if `extension` is installed and running.
  * @param {String} extension
  * @param {Function} callback
@@ -2157,8 +2167,7 @@ XKit.installed.when_running = function(extension, callback) {
     if (tries < 0) {
       return;
     }
-    if (typeof(XKit.extensions[extension]) === "undefined" ||
-        !XKit.extensions[extension].running) {
+    if (!XKit.installed.is_running(extension)) {
       tries--;
       setTimeout(check, 250);
       return;
