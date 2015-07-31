@@ -32,7 +32,7 @@ try {
 }
 
 function getBridgeError() {
-	var m_object = new Object();
+	var m_object = {};
 	m_object.errors = bridge_error;
 	m_object.error = bridge_error_object;
 	return m_object;
@@ -157,7 +157,7 @@ function GM_deleteValue(name) {
 
 function GM_setValue(name, value) {
 
-	var m_object = new Object();
+	var m_object = {};
 	var m_name = name;
 	m_object[ m_name ] = value;
 	xkit_storage[name] = value;
@@ -205,11 +205,11 @@ function GM_xmlhttpRequest(settings) {
 		var request = new XMLHttpRequest();
 		var timeout = 1;
 
-		if (settings['url'].indexOf("http://") != -1 && settings['url'].indexOf("tumblr.com/svc/") != -1) {
+		if (settings.url.indexOf("http://") != -1 && settings.url.indexOf("tumblr.com/svc/") != -1) {
 
 			try {
 				console.log(" -- Bridge forwarding to HTTPS!");
-				settings['url'] = settings['url'].replace("http://","https://");
+				settings.url = settings.url.replace("http://","https://");
 				timeout = 1;
 			} catch(e) {
 				console.log(" -- Bridge forwarding to HTTPS FAIL..!");
@@ -217,13 +217,13 @@ function GM_xmlhttpRequest(settings) {
 
 		}
 
-		settings['url'] = settings['url'].replace("http://api.tumblr.com","https://api.tumblr.com");
+		settings.url = settings.url.replace("http://api.tumblr.com","https://api.tumblr.com");
 
-		if (settings['url'].indexOf("http://www.tumblr.com/") === 0) {
+		if (settings.url.indexOf("http://www.tumblr.com/") === 0) {
 
 			try {
 				console.log(" -- Bridge forwarding to HTTPS! (Dashboard)");
-				settings['url'] = settings['url'].replace("http://","https://");
+				settings.url = settings.url.replace("http://","https://");
 				timeout = 1;
 			} catch(e) {
 				console.log(" -- Bridge forwarding to HTTPS FAIL..!");
@@ -233,41 +233,41 @@ function GM_xmlhttpRequest(settings) {
 
 		setTimeout(function() {
 
-			if (settings['method'] === "POST") {
-				request.open('POST', settings['url'], true);
+			if (settings.method === "POST") {
+				request.open('POST', settings.url, true);
 			} else {
-				request.open('GET', settings['url'], true);
+				request.open('GET', settings.url, true);
 			}
 
 			request.onreadystatechange = function (oEvent) {
 			  if (request.readyState === 4) {
 				if (request.status === 200) {
-				if (typeof settings['onload'] !== "undefined") {
-						settings['onload'].call(request, request);
+				if (typeof settings.onload !== "undefined") {
+						settings.onload.call(request, request);
 				}
 				} else {
-				if (typeof settings['onerror'] !== "undefined") {
-						settings['onerror'].call(request, request);
+				if (typeof settings.onerror !== "undefined") {
+						settings.onerror.call(request, request);
 				}
 				}
 			  }
 			};
 
-			if (typeof settings['headers'] !== "undefined") {
-				for (var obj in settings['headers']) {
-					request.setRequestHeader(obj, settings['headers'][obj]);
+			if (typeof settings.headers !== "undefined") {
+				for (var obj in settings.headers) {
+					request.setRequestHeader(obj, settings.headers[obj]);
 				}
 			}
 
-			if (settings['method'] === "POST") {
-				if (settings['json'] === true) {
+			if (settings.method === "POST") {
+				if (settings.json === true) {
 					request.setRequestHeader('Content-Type', "application/json");
 					console.log(" -- Bridge requesting post with json mode on");
 				} else {
 					request.setRequestHeader('Content-Type', "application/x-www-form-urlencoded");
 					console.log(" -- Bridge requesting post with json mode off");
 				}
-				request.send(settings['data']);
+				request.send(settings.data);
 			} else {
 				request.send(null);
 			}
