@@ -908,13 +908,13 @@ var rows = [];
 				XKit.extensions.postarchive.archived_posts = JSON.parse(m_storage);
 				console.log(" --- Storage loaded successfully.. (" + XKit.extensions.postarchive.archived_posts.length + " items)");
 			} catch(e) {
-				XKit.extensions.postarchive.archived_posts = new Array();
+				XKit.extensions.postarchive.archived_posts = [];
 				XKit.notifications.add("Post Archiver storage error: POSTA-101<br/>Please refresh the page and/or file a bug report.", "error");
 				console.log(" --- Storage Error!! " + e.message);
 			}
 		} else {
 			console.log(" --- Storage is empty");
-			XKit.extensions.postarchive.archived_posts = new Array();
+			XKit.extensions.postarchive.archived_posts = [];
 		}
 
 		m_storage = XKit.storage.get("postarchive", "categories","");
@@ -923,10 +923,10 @@ var rows = [];
 			try {
 				XKit.extensions.postarchive.categories = JSON.parse(m_storage);
 			} catch(e) {
-				XKit.extensions.postarchive.categories = new Array();
+				XKit.extensions.postarchive.categories = [];
 			}
 		} else {
-			XKit.extensions.postarchive.categories = new Array();
+			XKit.extensions.postarchive.categories = [];
 		}
 
 		//console.log("Load result:");
@@ -1168,7 +1168,7 @@ var rows = [];
 
 					data = JSON.parse(response.responseText).response;
 
-					var m_object = new Object();
+					var m_object = {};
 
 					m_object.title = title;
 

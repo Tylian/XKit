@@ -19,7 +19,7 @@ XKit.extensions.mute = new Object({
 		}
 	},
 
-	muted: new Array(),
+	muted: [],
 
 	frame_run: function() {
 
@@ -79,7 +79,7 @@ XKit.extensions.mute = new Object({
 						return;
 					}
 
-					var m_obj = new Object();
+					var m_obj = {};
 					m_obj.username = user_url;
 					m_obj.regular = true;
 					m_obj.photo = false;
@@ -269,7 +269,7 @@ XKit.extensions.mute = new Object({
 
 		var m_list = XKit.storage.get("mute", "muted_list", "");
 		if (m_list === "") {
-			XKit.extensions.mute.muted = new Array();
+			XKit.extensions.mute.muted = [];
 		} else {
 			try {
 				m_parsed = JSON.parse(m_list);
@@ -288,9 +288,9 @@ XKit.extensions.mute = new Object({
 				//console.log("::::::::MUTE LIST::::::::\n" + JSON.stringify(m_parsed));
 
 				if (m_convert) {
-					var new_array = new Array();
+					var new_array = [];
 					for (var i=0;i<m_parsed.length;i++) {
-						var m_obj = new Object();
+						var m_obj = {};
 						m_obj.username = m_parsed[i];
 						m_obj.regular = true;
 						m_obj.photo = false;
@@ -310,7 +310,7 @@ XKit.extensions.mute = new Object({
 				}
 
 			} catch(e) {
-				XKit.extensions.mute.muted = new Array();
+				XKit.extensions.mute.muted = [];
 				XKit.extensions.mute.save();
 			}
 		}
@@ -499,7 +499,7 @@ XKit.extensions.mute = new Object({
 				return;
 			}
 
-			var m_obj = new Object();
+			var m_obj = {};
 			m_obj.username = user_url;
 			m_obj.regular = true;
 			m_obj.photo = false;
@@ -519,7 +519,7 @@ XKit.extensions.mute = new Object({
 
 	save: function() {
 
-		var m_object = new Object();
+		var m_object = {};
 		m_object.version = "2";
 		m_object.list = XKit.extensions.mute.muted;
 		XKit.storage.set("mute", "muted_list", JSON.stringify(m_object));
@@ -647,7 +647,7 @@ XKit.extensions.mute = new Object({
 
 			if ( $(".xkit-mute-option.selected").length <= 0 && !$("#xkit-mute-hide-originals-checkbox").hasClass("selected") && !$("#xkit-mute-hide-reblogs-checkbox").hasClass("selected")) { alert("Please select the post types to block or check the Hide Reblogs checkbox."); return; }
 
-			var m_object = new Object();
+			var m_object = {};
 			m_object.username = ud;
 			m_object.regular = $(".xkit-mute-option.regular").hasClass("selected");
 			m_object.photo = $(".xkit-mute-option.photo").hasClass("selected");

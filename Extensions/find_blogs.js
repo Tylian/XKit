@@ -157,7 +157,7 @@ XKit.extensions.find_blogs = new Object({
 
 		$("body").append("<div id=\"xkit-find-blogs-background\">&nbsp;</div><div id=\"xkit-find-blogs-window\" class=\"xkit-find-blogs-loading\"><div id=\"xkit-find-blogs-inner\"><div id=\"xkit-find-blogs-text\">I'm thinking, please wait...</div>" + XKit.progress.add("find-blogs-progress") + "<div id=\"xkit-find-blogs-subtext\">I'm gathering information about this blog..</div></div></div>");
 
-		var people = new Array();
+		var people = [];
 
 		$("#xkit-find-blogs-background").click(function() {
 
@@ -214,7 +214,7 @@ XKit.extensions.find_blogs = new Object({
 
 		if (XKit.extensions.find_blogs.window_id !== m_window_id) {return; }
 
-		var container = new Array();
+		var container = [];
 
 		var people_backup = people;
 
@@ -229,7 +229,7 @@ XKit.extensions.find_blogs = new Object({
 			if (m_index !== -1) {
 				container[m_index].count++;
 			} else {
-				var m_object = new Object();
+				var m_object = {};
 				m_object.url = current;
 				m_object.count = 1;
 				container.push(m_object);
@@ -253,7 +253,7 @@ XKit.extensions.find_blogs = new Object({
 
 		try {
 
-			var compiled_array = new Array();
+			var compiled_array = [];
 
 			for (var obj in container) {
 				console.log(container[obj].url + ": " + container[obj].count);

@@ -145,9 +145,9 @@ XKit.extensions.one_click_postage = new Object({
 		}
 	},
 
-	already_reblogged: new Array(),
-	last_object: new Object(),
-	last_icon_object: new Object(),
+	already_reblogged: [],
+	last_object: {},
+	last_icon_object: {},
 	last_post_id: 0,
 	user_on_box: false,
 	menu_closer_int: 0,
@@ -245,7 +245,7 @@ XKit.extensions.one_click_postage = new Object({
 
 		var root_id = $(XKit.extensions.one_click_postage.last_object).attr('data-root-id');
 
-		var m_object = new Object();
+		var m_object = {};
 
 		/*
 			{"channel_id":"neoplethora",
@@ -869,7 +869,7 @@ XKit.extensions.one_click_postage = new Object({
 			try {
 				XKit.extensions.one_click_postage.already_reblogged = JSON.parse(m_data);
 			} catch(e) {
-				XKit.extensions.one_click_postage.already_reblogged = new Array();
+				XKit.extensions.one_click_postage.already_reblogged = [];
 			}
 
 			XKit.post_listener.add("already_reblogged", XKit.extensions.one_click_postage.check_if_alreadyreblogged);
@@ -1209,7 +1209,7 @@ XKit.extensions.one_click_postage = new Object({
 
 		var root_id = $(XKit.extensions.one_click_postage.last_object).attr('data-root-id');
 
-		var m_object = new Object();
+		var m_object = {};
 
 		/*
 			{"channel_id":"neoplethora",

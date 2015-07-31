@@ -46,16 +46,16 @@ XKit.extensions.find_inactives = new Object({
 
 	},
 
-	people_list: new Array(),
-	retired_people_list: new Array(),
+	people_list: [],
+	retired_people_list: [],
 	page: 0,
 	people_count: 0,
 	people_index: 0,
 
 	start: function() {
 
-		XKit.extensions.find_inactives.retired_people_list = new Array();
-		XKit.extensions.find_inactives.people_list = new Array();
+		XKit.extensions.find_inactives.retired_people_list = [];
+		XKit.extensions.find_inactives.people_list = [];
 		XKit.extensions.find_inactives.page = 0;
 		XKit.extensions.find_inactives.people_index = -1;
 

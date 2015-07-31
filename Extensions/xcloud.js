@@ -451,10 +451,10 @@ XKit.extensions.xcloud = new Object({
 
 	},
 
-	extensions_to_download: new Array(),
-	extensions_to_download_enabled: new Array(),
+	extensions_to_download: [],
+	extensions_to_download_enabled: [],
 	extensions_to_download_count: 0,
-	errors_list: new Array(),
+	errors_list: [],
 
 	process_restore: function(mdata) {
 
@@ -474,13 +474,13 @@ XKit.extensions.xcloud = new Object({
 
 		$("#xcloud-overlay-title").html("Restoring settings...");
 
-		XKit.extensions.xcloud.errors_list = new Array();
-		XKit.extensions.xcloud.extensions_to_download = new Array();
-		XKit.extensions.xcloud.extensions_to_download_enabled = new Array();
+		XKit.extensions.xcloud.errors_list = [];
+		XKit.extensions.xcloud.extensions_to_download = [];
+		XKit.extensions.xcloud.extensions_to_download_enabled = [];
 		XKit.extensions.xcloud.extensions_to_download_count = 0;
 
 		var m_installed = XKit.installed.list();
-		var full_list = new Array();
+		var full_list = [];
 
 		for (var ext in m_obj.settings) {
 
@@ -490,7 +490,7 @@ XKit.extensions.xcloud = new Object({
 
 			XKit.console.add("Restoring settings of " + extension_name);
 
-			var extension_settings = new Object();
+			var extension_settings = {};
 			try {
 				extension_settings = JSON.parse(XKit.extensions.xcloud.base64_decode(mext.preferences));
 			} catch(e) {
@@ -626,8 +626,8 @@ XKit.extensions.xcloud = new Object({
 		// Get list of installed extensions:
 		var installed = XKit.installed.list();
 
-		var to_send = new Object();
-		to_send.settings = new Array();
+		var to_send = {};
+		to_send.settings = [];
 
 		var skipping = [];
 		var skipping_size = [];
@@ -643,7 +643,7 @@ XKit.extensions.xcloud = new Object({
 
 			var m_extension = XKit.installed.get(installed[i]);
 
-			var m_to_add = new Object();
+			var m_to_add = {};
 			m_to_add.extension = installed[i];
 			m_to_add.preferences = m_data;
 			m_to_add.enabled = XKit.installed.enabled(installed[i]);

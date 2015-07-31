@@ -10,7 +10,7 @@
 XKit.extensions.bookmarker = new Object({
 
 	running: false,
-	bookmarks: new Array(),
+	bookmarks: [],
 	slow: true,
 
 	preferences: {
@@ -281,7 +281,7 @@ XKit.extensions.bookmarker = new Object({
 		var ts = Math.round((new Date()).getTime() / 1000);
    		var current_bookmark_date = (ts * 1000) - 2000;
 
-   		var m_obj = new Object();
+   		var m_obj = {};
    		m_obj.id = post_id;
    		m_obj.date = current_bookmark_date;
    		m_obj.caption = "";
@@ -381,7 +381,7 @@ XKit.extensions.bookmarker = new Object({
 		try {
 			XKit.extensions.bookmarker.bookmarks = JSON.parse(m_bookmarks);
 		} catch(e) {
-			XKit.extensions.bookmarker.bookmarks = new Array();
+			XKit.extensions.bookmarker.bookmarks = [];
 			XKit.extensions.bookmarker.save_bookmarks();
 		}
 
@@ -397,7 +397,7 @@ XKit.extensions.bookmarker = new Object({
 	do: function() {
 
 		// Create a temp array to look up so to not waste CPU.
-		var m_array = new Array();
+		var m_array = [];
 		for(var i=0;i<XKit.extensions.bookmarker.bookmarks.length;i++) {
 			m_array.push(XKit.extensions.bookmarker.bookmarks[i].id);
 		}

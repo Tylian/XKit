@@ -228,7 +228,7 @@ XKit.extensions.xkit_preferences = new Object({
 		
 		var clean_list = ["unreverse", "filter_by_type", "XIM", "yahoo"];
 		
-		var removed_list = new Array();
+		var removed_list = [];
 		
 		var m_list_html = "<ul id=\"xkit-spring-cleaning-list\">";
 		
@@ -380,7 +380,7 @@ XKit.extensions.xkit_preferences = new Object({
 				prev_objects = JSON.parse(prev_objects_str);
 			} catch(e) {
 				XKit.console.add("Unread_Count failed, unknown/corrupt JSON");
-				prev_objects = new Array();
+				prev_objects = [];
 				XKit.storage.set("xkit_preferences","news",JSON.stringify(prev_objects));
 				return 0;
 			}
@@ -411,7 +411,7 @@ XKit.extensions.xkit_preferences = new Object({
 			try {
 				prev_objects = JSON.parse(prev_objects_str);
 			} catch(e) {
-				prev_objects = new Array();
+				prev_objects = [];
 			}
 
 			for (i=0;i<prev_objects.length;i++) {
@@ -443,7 +443,7 @@ XKit.extensions.xkit_preferences = new Object({
 				var date = parseInt(unixtime_ms / 1000);
 			}
 
-			var news_object = new Object();
+			var news_object = {};
 			news_object.id = id;
 			news_object.title = title;
 			news_object.message = message;
@@ -456,7 +456,7 @@ XKit.extensions.xkit_preferences = new Object({
 			try {
 				prev_objects = JSON.parse(prev_objects_str);
 			} catch(e) {
-				prev_objects = new Array();
+				prev_objects = [];
 			}
 
 			prev_objects.push(news_object);
@@ -477,7 +477,7 @@ XKit.extensions.xkit_preferences = new Object({
 			try {
 				prev_objects = JSON.parse(prev_objects_str);
 			} catch(e) {
-				prev_objects = new Array();
+				prev_objects = [];
 			}
 
 			if (prev_objects.length === 0) {
@@ -506,7 +506,7 @@ XKit.extensions.xkit_preferences = new Object({
 			try {
 				prev_objects = JSON.parse(prev_objects_str);
 			} catch(e) {
-				prev_objects = new Array();
+				prev_objects = [];
 			}
 
 			var m_object;
@@ -527,7 +527,7 @@ XKit.extensions.xkit_preferences = new Object({
 			try {
 				prev_objects = JSON.parse(prev_objects_str);
 			} catch(e) {
-				prev_objects = new Array();
+				prev_objects = [];
 			}
 
 			var m_object;

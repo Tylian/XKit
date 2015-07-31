@@ -10,9 +10,9 @@ XKit.extensions.themes = new Object({
 
 	running: false,
 	current_theme: "",
-	gallery_themes_file: new Array(),
-	gallery_themes_contents: new Array(),
-	gallery_themes_version: new Array(),
+	gallery_themes_file: [],
+	gallery_themes_contents: [],
+	gallery_themes_version: [],
 	m_theme_count: 0,
 
 	run: function() {
@@ -132,7 +132,7 @@ XKit.extensions.themes = new Object({
 			$(obj).html("<div id=\"xkit-themes-theme-list\"></div>");
 
 			// Create default theme object:
-			var def_theme = new Object();
+			var def_theme = {};
 			def_theme.name = "Tumblr Default";
 			def_theme.version = "1";
 			def_theme.developer = "Tumblr, Inc.";

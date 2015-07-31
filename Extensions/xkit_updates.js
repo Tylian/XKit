@@ -66,7 +66,7 @@ XKit.extensions.xkit_updates = new Object({
 	update_packs: function() {
 
 		XKit.extensions.xkit_updates.pack_to_update_index = 0;
-		XKit.extensions.xkit_updates.pack_to_update = new Array();
+		XKit.extensions.xkit_updates.pack_to_update = [];
 
 		try {
 
@@ -147,9 +147,9 @@ XKit.extensions.xkit_updates = new Object({
 			}
 
 			XKit.extensions.xkit_updates.to_update_index = 0;
-			XKit.extensions.xkit_updates.to_update = new Array();
-			XKit.extensions.xkit_updates.updated_list = new Array();
-			XKit.extensions.xkit_updates.updated_list_versions = new Array();
+			XKit.extensions.xkit_updates.to_update = [];
+			XKit.extensions.xkit_updates.updated_list = [];
+			XKit.extensions.xkit_updates.updated_list_versions = [];
 
 			for(var extension in mdata.extensions) {
 
@@ -276,7 +276,7 @@ XKit.extensions.xkit_updates = new Object({
 
 	update_pack: function(extension_id, callback) {
 
-		var m_result = new Object();
+		var m_result = {};
 
 		GM_xmlhttpRequest({
 			method: "GET",
@@ -317,7 +317,7 @@ XKit.extensions.xkit_updates = new Object({
 							// We are done!
 							try {
 
-								var m_object = new Object();
+								var m_object = {};
 								m_object.script = atob(mdata.script);
 								m_object.id = mdata.id;
 								m_object.support_blog = mdata.support_blog;
@@ -419,7 +419,7 @@ XKit.extensions.xkit_updates = new Object({
 
 	update: function(extension_id, callback) {
 
-		var m_result = new Object();
+		var m_result = {};
 
 
 		XKit.install(extension_id, function(mdata) {

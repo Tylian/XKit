@@ -86,8 +86,8 @@ XKit.extensions.stats = new Object({
 
 		if (XKit.extensions.stats.window_id !== m_window_id) { return; }
 
-		var users = new Array();
-		var types = new Object();
+		var users = [];
+		var types = {};
 		types.reblogged = 0;
 		types.original = 0;
 		types.liked = 0;
@@ -141,7 +141,7 @@ XKit.extensions.stats = new Object({
 				if (in_list !== -1) {
 					users[in_list].count++;
 				} else {
-					var m_object = new Object();
+					var m_object = {};
 					m_object.url = current.owner;
 					m_object.count = 1;
 					users.push(m_object);
@@ -286,8 +286,8 @@ XKit.extensions.stats = new Object({
 
 		if (XKit.extensions.stats.window_id !== m_window_id) { return; }
 
-		var users = new Array();
-		var types = new Object();
+		var users = [];
+		var types = {};
 		types.reblogged = 0;
 		types.original = 0;
 		types.liked = 0;
@@ -329,7 +329,7 @@ XKit.extensions.stats = new Object({
 			if (in_list !== -1) {
 				users[in_list].count++;
 			} else {
-				var m_object = new Object();
+				var m_object = {};
 				m_object.url = current.owner;
 				m_object.count = 1;
 				users.push(m_object);
@@ -436,11 +436,11 @@ XKit.extensions.stats = new Object({
 
 		XKit.window.show("Please wait","Publishing the results...","info");
 
-		var arranged_types = new Array();
+		var arranged_types = [];
 
 		for (var obj in types) {
 			if (obj === "reblogged" ||obj === "liked" ||obj === "original" ||obj === "animated") { continue; }
-			var m_object = new Object();
+			var m_object = {};
 			m_object.type = obj;
 			m_object.count = types[obj];
 			arranged_types.push(m_object);
