@@ -983,6 +983,7 @@ XKit.tools.get_blogs = function() {
 					var html_or_markdown = $(".tab-label[data-js-srclabel]").text();
 					if (html_or_markdown === "HTML") {
 						XKit.tools.add_function(function(new_content){
+							var new_content = add_tag;
 							var editor_div = document.getElementsByClassName("ace_editor");
 							if (editor_div.length === 1) {
 								var editor = window.ace.edit(editor_div[0]);
@@ -991,7 +992,7 @@ XKit.tools.get_blogs = function() {
 									jQuery(".ace_marker-layer").empty();
 								}, 500);
 							}
-						}, true, "", new_content);
+						}, true, new_content);
 					} else if (html_or_markdown === "Markdown") {
 						// TODO
 					} else {

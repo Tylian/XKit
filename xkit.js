@@ -906,20 +906,11 @@ XKit = {
 		set_extension_setting: function(ext_id, setting_name, new_value) {
 			return GM_setValue(ext_id + "_____" + setting_name, new_value);
 		},
-		add_function: function(func, exec, addt, context) {
+		add_function: function(func, exec, addt) {
 			try { var script = document.createElement("script");
 			addt = addt.replace(/(\r\n|\n|\r)/gm,"");
 			script.textContent = "var add_tag = '" + addt + "';";
-			var prefix = exec ? "(" : "";
-			var suffix;
-			if (exec && context !== undefined) {
-				suffix = ")(" + JSON.stringify(context) + ");";
-			} else if (exec) {
-				suffix = ")();";
-			} else {
-				suffix = "";
-			}
-			script.textContent = script.textContent + prefix + func.toString() + suffix;
+			script.textContent = script.textContent + (exec ? "(" : "") + func.toString() + (exec ? ")();" : "");
 			document.body.appendChild(script); } catch(e) { alert(e.message); }
 		}
 	},
