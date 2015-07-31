@@ -1,5 +1,5 @@
 //* TITLE Post Limit Checker **//
-//* VERSION 0.2.0 **//
+//* VERSION 0.2.1 **//
 //* DESCRIPTION Are you close to the limit? **//
 //* DETAILS Shows you how many posts you can reblog today. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -183,7 +183,7 @@ XKit.extensions.post_limit_checker = new Object({
 
 					}
 
-					XKit.progress.value("post-limit-checker-progress", (posts.length / 2.5) - 10);
+					XKit.progress.value("post-limit-checker-progress", (posts[index].length / 2.5) - 10);
 
 					if (posts[index].length >= 250 || data.response.posts.length === 0) {
 						if (index < blogs.length - 1) {
