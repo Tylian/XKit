@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 3.1.2 **//
+//* VERSION 3.1.3 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER STUDIOXENIX **//
 
@@ -959,7 +959,7 @@ XKit.tools.get_blogs = function() {
 						XKit.console.add('ERROR: unable to set content html');
 						return '';
 					}
-          return content_editor.html();
+					return content_editor.html();
 				},
 
 				/**
@@ -967,15 +967,38 @@ XKit.tools.get_blogs = function() {
 				 * @param {String} new_content
 				 */
 				set_content_html: function(new_content) {
-					var content_editor = $('.post-form--form').find('.editor.editor-richtext');
-					if (content_editor.length === 0) {
-						XKit.console.add('ERROR: unable to set content html');
+					if ($(".html-field").css("display") === "none") {
+						var content_editor = $('.post-form--form').find('.editor.editor-richtext');
+						if (content_editor.length === 0) {
+							XKit.console.add('ERROR: unable to set content html');
+							return;
+						}
+						content_editor.focus();
+						content_editor.html(new_content);
+						content_editor.addClass("editor-richtext-has-text");
+						content_editor.blur();
 						return;
 					}
-					content_editor.focus();
-					content_editor.html(new_content);
-					content_editor.addClass("editor-richtext-has-text");
-					content_editor.blur();
+
+					var html_or_markdown = $(".tab-label[data-js-srclabel]").text();
+					if (html_or_markdown === "HTML") {
+						XKit.tools.add_function(function(new_content){
+							var new_content = add_tag;
+							var editor_div = document.getElementsByClassName("ace_editor");
+							if (editor_div.length === 1) {
+								var editor = window.ace.edit(editor_div[0]);
+								editor.setValue(new_content);
+								setTimeout(function(){
+									jQuery(".ace_marker-layer").empty();
+								}, 500);
+							}
+						}, true, new_content);
+					} else if (html_or_markdown === "Markdown") {
+						// TODO
+					} else {
+						XKit.console.add("XKit can't detect which text editor is being used.");
+					}
+					
 				},
 
 				/**
