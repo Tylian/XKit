@@ -179,7 +179,7 @@ XKit.extensions.post_limit_checker = new Object({
 					for (var i=0;i<data.response.posts.length;i++) {
 
 						// I would check the date here but I'm a lazy man.
-						posts.push(data.response.posts[i]);
+						posts[index].push(data.response.posts[i]);
 
 					}
 
