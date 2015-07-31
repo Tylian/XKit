@@ -40,9 +40,9 @@ XKit.extensions.xwidgets = new Object({
 	},
 
 	widgets_loaded: false,
-	user_widgets: new Array(),
+	user_widgets: [],
 
-	widget_data: new Array(),
+	widget_data: [],
 
 	widgets: {
 
@@ -480,7 +480,7 @@ XKit.extensions.xwidgets = new Object({
 				if (typeof data.interval !== "undefined") {
 					clearInterval(data.interval);
 				}
-				// data = new Object();
+				// data = {};
 
 				data.interval = setInterval(function() { XKit.extensions.xwidgets.widgets.world_clock_24.tick(obj, m_storage, is_dst, data); }, 1000);
 				XKit.extensions.xwidgets.widgets.world_clock_24.tick(obj, m_storage, is_dst);
@@ -1120,7 +1120,7 @@ XKit.extensions.xwidgets = new Object({
 			XKit.storage.set("xwidgets","widget-storage-" + box_id, "");
 
 			XKit.extensions.xwidgets.clear_box($("#xwidgets-box-" + box_id));
-			XKit.extensions.xwidgets.widget_data[box_id] = new Object();
+			XKit.extensions.xwidgets.widget_data[box_id] = {};
 			XKit.extensions.xwidgets.widgets[widget_id].init($("#xwidgets-box-" + box_id), XKit.extensions.xwidgets.widget_data[box_id]);
 
 			XKit.extensions.xwidgets.user_widgets[box_id] = widget_id;
@@ -1197,7 +1197,7 @@ XKit.extensions.xwidgets = new Object({
 				if (typeof XKit.extensions.xwidgets.widgets[XKit.extensions.xwidgets.user_widgets[i]].destroy === "function") {
 					XKit.extensions.xwidgets.widgets[XKit.extensions.xwidgets.user_widgets[i]].destroy($("#xwidgets-box-" + i), XKit.extensions.xwidgets.widget_data[i]);
 				}
-				XKit.extensions.xwidgets.widget_data[i] = new Object();
+				XKit.extensions.xwidgets.widget_data[i] = {};
 			}
 
 		}, 200);
@@ -1209,12 +1209,12 @@ XKit.extensions.xwidgets = new Object({
 		try {
 			var __user_widgets = XKit.storage.get("xwidgets","user_widgets", "");
 			if (__user_widgets === "" || typeof __user_widgets === "undefined") {
-				XKit.extensions.xwidgets.user_widgets = new Array();
+				XKit.extensions.xwidgets.user_widgets = [];
 			} else {
 				XKit.extensions.xwidgets.user_widgets = JSON.parse(__user_widgets);
 			}
 		} catch(e) {
-			XKit.extensions.xwidgets.user_widgets = new Array();
+			XKit.extensions.xwidgets.user_widgets = [];
 		}
 
 		console.log(XKit.extensions.xwidgets.user_widgets);
@@ -1248,7 +1248,7 @@ XKit.extensions.xwidgets = new Object({
 
 			XKit.extensions.xwidgets.clear_box($("#xwidgets-box-" + i));
 
-			XKit.extensions.xwidgets.widget_data[i] = new Object();
+			XKit.extensions.xwidgets.widget_data[i] = {};
 
 			if (XKit.extensions.xwidgets.user_widgets[i] !== "" || typeof XKit.extensions.xwidgets.user_widgets[i] !== "undefined") {
 
@@ -1311,7 +1311,7 @@ XKit.extensions.xwidgets = new Object({
 
 				XKit.extensions.xwidgets.user_widgets[slot_no] = "blank";
 
-				XKit.extensions.xwidgets.widget_data[i] = new Object();
+				XKit.extensions.xwidgets.widget_data[i] = {};
 				XKit.extensions.xwidgets.save_settings();
 
 				XKit.window.close();

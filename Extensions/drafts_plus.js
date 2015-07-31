@@ -169,7 +169,7 @@ XKit.extensions.drafts_plus = new Object({
 
 			var post_id = $(m_parent).attr('data-post-id');
 
-			var m_object = new Object();
+			var m_object = {};
 
 			m_object.post_id = post_id;
 			m_object.form_key = XKit.interface.form_key();
@@ -211,7 +211,7 @@ XKit.extensions.drafts_plus = new Object({
 
 			var post_id = $(m_parent).attr('data-post-id');
 
-			var m_object = new Object();
+			var m_object = {};
 
 			m_object.post_id = post_id;
 			m_object.form_key = XKit.interface.form_key();
@@ -243,7 +243,7 @@ XKit.extensions.drafts_plus = new Object({
 
 			var post_id = $(m_parent).attr('data-post-id');
 
-			var m_object = new Object();
+			var m_object = {};
 
 			var m_array = document.location.href.split("/");
 			var m_channel_id = m_array[4];

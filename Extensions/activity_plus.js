@@ -290,7 +290,7 @@ XKit.extensions.activity_plus = new Object({
 			XKit.extensions.activity_plus.do_timestamps();
 		}
 
-		if (XKit.extensions.activity_plus.in_type_filter == true && XKit.extensions.activity_plus.preferences.condensed_notes.value === true) {
+		if (XKit.extensions.activity_plus.in_type_filter === true && XKit.extensions.activity_plus.preferences.condensed_notes.value === true) {
 			XKit.extensions.activity_plus.undo_condense();
 		} else {
 			if (XKit.extensions.activity_plus.preferences.condensed_notes.value === true) {

@@ -181,7 +181,7 @@ function extension_editor_finish_run() {
 									"\n" +
 									"});";
 
-			var m_object = new Object();
+			var m_object = {};
 			m_object.id = new_filename;
 			m_object.title = "";
 			m_object.css = "";

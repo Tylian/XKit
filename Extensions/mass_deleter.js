@@ -84,7 +84,7 @@ XKit.extensions.mass_deleter = new Object({
 
 	delete_drafts_limit: 0,
 	delete_drafts_page: 1,
-	delete_drafts_array: new Array(),
+	delete_drafts_array: [],
 
 	delete_from_array_current: 0,
 	delete_from_array_max: 0,
@@ -99,7 +99,7 @@ XKit.extensions.mass_deleter = new Object({
 	delete_drafts: function(limit) {
 
 		XKit.extensions.mass_deleter.delete_drafts_limit = limit;
-		XKit.extensions.mass_deleter.delete_drafts_array = new Array();
+		XKit.extensions.mass_deleter.delete_drafts_array = [];
 		XKit.extensions.mass_deleter.delete_drafts_page = 1;
 
 		XKit.window.show("Mass Deleting Drafts","<b>This might take a long, long time...</b><div id=\"xkit-mass-deleter-status\">Initializing: Gathering post ids..</div>" + XKit.progress.add("mass-deleter-progress"),"info");
@@ -156,7 +156,7 @@ XKit.extensions.mass_deleter = new Object({
 
 		console.log("Deleting post, id = " + post_id + " | reblog_key = " + reblog_key);
 
-		var m_object = new Object();
+		var m_object = {};
 
 		var m_array = document.location.href.split("/");
 		var m_channel_id = m_array[4];
@@ -282,7 +282,7 @@ XKit.extensions.mass_deleter = new Object({
 
 	unlike_likes_limit: 0,
 	unlike_likes_page: 1,
-	unlike_likes_array: new Array(),
+	unlike_likes_array: [],
 
 	unlike_from_array_current: 0,
 	unlike_from_array_max: 0,
@@ -299,7 +299,7 @@ XKit.extensions.mass_deleter = new Object({
 		$("#xkit-mass-deleter-unlike-continue").click(function() {
 
 			XKit.extensions.mass_deleter.unlike_likes_limit = limit;
-			XKit.extensions.mass_deleter.unlike_likes_array = new Array();
+			XKit.extensions.mass_deleter.unlike_likes_array = [];
 			XKit.extensions.mass_deleter.unlike_likes_page = 1;
 
 			XKit.window.show("Mass Unliking Posts","<b>This might take a long, long time...</b><div id=\"xkit-mass-deleter-status\">Initializing: Gathering post ids..</div>" + XKit.progress.add("mass-deleter-progress"),"info");

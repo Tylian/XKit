@@ -74,13 +74,12 @@ module.exports = function(grunt) {
       gruntfile: {
         src: 'Gruntfile.js',
       },
-      // Hell Nope
-      // extensions: {
-      //   src: [
-      //     'Extensions/**/*.js',
-      //     '!Extensions/**/*.icon.js',
-      //   ],
-      // },
+      extensions: {
+        src: [
+          'Extensions/**/*.js',
+          '!Extensions/**/*.icon.js',
+        ],
+      },
       chrome: {
         src: [
           'Chrome/**/*.js',

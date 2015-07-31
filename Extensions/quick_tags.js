@@ -39,7 +39,7 @@ XKit.extensions.quick_tags = new Object({
 		}
 	},
 
-	tag_array: new Array(),
+	tag_array: [],
 
 	cancel_menu_close: function() {
 		clearTimeout(XKit.extensions.quick_tags.menu_closer_int);
@@ -224,7 +224,7 @@ XKit.extensions.quick_tags = new Object({
 		try {
 			var user_tag_array = JSON.parse(user_tags);
 		} catch(e) {
-			var user_tag_array = new Array();
+			var user_tag_array = [];
 		}
 
 		XKit.extensions.quick_tags.tag_array = user_tag_array;
@@ -447,7 +447,7 @@ XKit.extensions.quick_tags = new Object({
 
 		$(".xkit-quick-tags-cp-tag").each(function() {
 
-			var m_object = new Object();
+			var m_object = {};
 			m_object.title = $(this).find(".xkit-tag-title").text();
 			m_object.tags = $(this).find(".xkit-tag-tags").text();
 
@@ -530,7 +530,7 @@ XKit.extensions.quick_tags = new Object({
 					return;
 				}
 
-				var m_object = new Object();
+				var m_object = {};
 				m_object.title = title;
 				m_object.tags = tags;
 				XKit.extensions.quick_tags.tag_array.push(m_object);
@@ -582,7 +582,7 @@ XKit.extensions.quick_tags = new Object({
 					return;
 				}
 
-				var m_object = new Object();
+				var m_object = {};
 				XKit.extensions.quick_tags.tag_array[m_id].title = title;
 				XKit.extensions.quick_tags.tag_array[m_id].tags = tags;
 

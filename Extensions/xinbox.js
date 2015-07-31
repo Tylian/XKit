@@ -915,7 +915,7 @@ XKit.extensions.xinbox = new Object({
 	
 		var form_key = $('meta[name=tumblr-form-key]').attr("content");
 
-		var m_object = new Object();
+		var m_object = {};
 		
 		m_object.post_id = parseInt(post_id);
 		m_object.form_key = form_key;

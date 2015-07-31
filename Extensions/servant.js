@@ -12,7 +12,7 @@ XKit.extensions.servant = new Object({
 	running: false,
 	slow: true,
 
-	servants: new Array(),
+	servants: [],
 
 	preferences: {
 		"sep2": {
@@ -1204,7 +1204,7 @@ XKit.extensions.servant = new Object({
 
 		} catch(e) {
 
-			XKit.extensions.servant.servants = new Array();
+			XKit.extensions.servant.servants = [];
 			XKit.extensions.servant.save_servants();
 
 		}
@@ -1233,7 +1233,7 @@ XKit.extensions.servant = new Object({
 
 	},
 
-	runs_on_posts: new Array(),
+	runs_on_posts: [],
 
 	run_servants: function() {
 
@@ -1241,7 +1241,7 @@ XKit.extensions.servant = new Object({
 
 		if (m_servants.length == 0) { return; }
 
-		var runs_on_posts = new Array();
+		var runs_on_posts = [];
 
 		for (var i=0;i<m_servants.length;i++) {
 
@@ -1257,7 +1257,7 @@ XKit.extensions.servant = new Object({
 		console.log("- - --  -- - - - -RUNS ON POSTS - -- - - - - -- - - -");
 		console.log(runs_on_posts);
 
-		XKit.extensions.servant.runs_on_posts = new Array();
+		XKit.extensions.servant.runs_on_posts = [];
 
 		if (runs_on_posts.length > 0) {
 
@@ -1295,9 +1295,9 @@ XKit.extensions.servant = new Object({
 		var causes = obj.causes;
 		var actions = obj.actions;
 
-		var returns = new Array();
-		var to_pass = new Array();
-		var compatibility = new Array();
+		var returns = [];
+		var to_pass = [];
+		var compatibility = [];
 
 		var do_run = -1;
 		var has_runs_on = false;
@@ -1529,8 +1529,8 @@ XKit.extensions.servant = new Object({
 			return;
 		}
 
-		var when = new Array();
-		var action = new Array();
+		var when = [];
+		var action = [];
 
 		if (XKit.extensions.servant.check_if_empty_value() === true) {
 
@@ -1541,7 +1541,7 @@ XKit.extensions.servant = new Object({
 
 		$(".xkit-servant-option-line-cause").each(function() {
 
-			var m_object = new Object();
+			var m_object = {};
 
 			m_object.id = $(this).find(".xkit-servant-add-option").val();
 			m_object.value = XKit.extensions.servant.get_add_value($(this));
@@ -1552,7 +1552,7 @@ XKit.extensions.servant = new Object({
 
 		$(".xkit-servant-option-line-action").each(function() {
 
-			var m_object = new Object();
+			var m_object = {};
 
 			m_object.id = $(this).find(".xkit-servant-add-option").val();
 			m_object.value = XKit.extensions.servant.get_add_value($(this));
@@ -1561,7 +1561,7 @@ XKit.extensions.servant = new Object({
 
 		});
 
-		var m_servant = new Object();
+		var m_servant = {};
 
 		m_servant.id = XKit.tools.random_string() + Math.round(new Date().getTime() / 1000);
 		m_servant.causes = when;

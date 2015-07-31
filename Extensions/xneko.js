@@ -10,7 +10,7 @@
 XKit.extensions.xneko = new Object({
 
 	running: false,
-	neko: new Object(),
+	neko: {},
 	mouse_x: 0,
 	mouse_y: 0,
 	slow: true,
@@ -46,7 +46,7 @@ XKit.extensions.xneko = new Object({
 
 		XKit.tools.init_css("xneko");
 
-		XKit.extensions.xneko.neko = new Object();
+		XKit.extensions.xneko.neko = {};
 		XKit.extensions.xneko.neko.x = 0;
 		XKit.extensions.xneko.neko.y = 0;
 		XKit.extensions.xneko.neko.stopped = true;

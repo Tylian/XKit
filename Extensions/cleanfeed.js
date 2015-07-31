@@ -133,7 +133,7 @@ XKit.extensions.cleanfeed = new Object({
 
 		});
 
-		if (XKit.extensions.cleanfeed.preferences.full_block.value === true) {
+		if (XKit.extensions.cleanfeed.preferences.full_block.value) {
 			XKit.extensions.cleanfeed.added_full_block_css = true;
 			XKit.tools.add_css(" .post.is_video, .post.is_photo, .post.is_photoset, .post.is_audio { display: none !important; }", "cleanfeed_full_block");
 		}
@@ -167,7 +167,7 @@ XKit.extensions.cleanfeed = new Object({
 
 	key_down: function(e) {
 
-		if (e.altKey === true) {
+		if (e.altKey) {
 			if (e.which === 88) {
 				XKit.extensions.cleanfeed.toggle();
 			}
@@ -216,15 +216,15 @@ XKit.extensions.cleanfeed = new Object({
 
 		if (XKit.extensions.cleanfeed.status !== "true") { return; }
 
-		if (open_all_mode === true) {
+		if (open_all_mode) {
 			XKit.extensions.cleanfeed.show_photoset_picture(e);
 			return;
 		}
 
 		XKit.extensions.cleanfeed.show_photoset_picture(e.target);
 
-		if ($(e.target).parent().hasClass("photoset_photo") == true) {
-			if (XKit.extensions.cleanfeed.preferences.show_all_photoset_photos.value === true) {
+		if ($(e.target).parent().hasClass("photoset_photo")) {
+			if (XKit.extensions.cleanfeed.preferences.show_all_photoset_photos.value) {
 				var parent_post = $(e.target).parentsUntil('.post_content');
 				$(parent_post).find(".photoset_row img").each(function() {
 					XKit.extensions.cleanfeed.m_ps_enter($(this), true);
@@ -237,15 +237,15 @@ XKit.extensions.cleanfeed = new Object({
 
 		if (XKit.extensions.cleanfeed.status !== "true") { return; }
 
-		if (close_all_mode === true) {
+		if (close_all_mode) {
 			XKit.extensions.cleanfeed.hide_photoset_picture(e);
 			return;
 		}
 
 		XKit.extensions.cleanfeed.hide_photoset_picture(e.target);
 
-		if ($(e.target).parent().hasClass("photoset_photo") == true) {
-			if (XKit.extensions.cleanfeed.preferences.show_all_photoset_photos.value === true) {
+		if ($(e.target).parent().hasClass("photoset_photo")) {
+			if (XKit.extensions.cleanfeed.preferences.show_all_photoset_photos.value) {
 				var parent_post = $(e.target).parentsUntil('.post_content');
 				$(parent_post).find(".photoset_row img").each(function() {
 					XKit.extensions.cleanfeed.m_ps_leave($(this), true);
@@ -293,12 +293,12 @@ XKit.extensions.cleanfeed = new Object({
 		$(document).on("mouseenter",".xkit-cleanfeed-smart-checked-flagged .photoset_row img, .post.xkit-cleanfeed-smart-checked-flagged .image, .post.xkit-cleanfeed-smart-checked-flagged .panorama img", XKit.extensions.cleanfeed.m_ps_enter);
 		$(document).on("mouseleave",".xkit-cleanfeed-smart-checked-flagged .photoset_row img, .post.xkit-cleanfeed-smart-checked-flagged .image, .post.xkit-cleanfeed-smart-checked-flagged .panorama img", XKit.extensions.cleanfeed.m_ps_leave);
 
-		if (XKit.extensions.cleanfeed.added_full_block_css == false && XKit.extensions.cleanfeed.preferences.full_block.value === true) {
+		if (!XKit.extensions.cleanfeed.added_full_block_css && XKit.extensions.cleanfeed.preferences.full_block.value) {
 			XKit.tools.add_css(" .post.xkit-cleanfeed-smart-checked-flagged.video, .post.xkit-cleanfeed-smart-checked-flagged.photo, .post.xkit-cleanfeed-smart-checked-flagged.audio, .post.xkit-cleanfeed-smart-checked-flagged.is_video, .post.xkit-cleanfeed-smart-checked-flagged.is_photo, .post.xkit-cleanfeed-smart-checked-flagged.is_audio, .post.xkit-cleanfeed-smart-checked-flagged.is_photoset, { display: none !important; }", "cleanfeed_full_block");
 			XKit.extensions.cleanfeed.added_full_block_css = true;
 		}
 
-		if (XKit.extensions.cleanfeed.added_css == false) {
+		if (!XKit.extensions.cleanfeed.added_css) {
 			XKit.tools.add_css(" .xkit-cleanfeed-smart-checked-flagged.post .inline_image { opacity: 0.15; } .xkit-cleanfeed-smart-checked-flagged.post .inline_image:hover { opacity: 1; } .xkit-cleanfeed-smart-checked-flagged .image_thumbnail, .xkit-cleanfeed-smart-checked-flagged .photoset_row img, .xkit-cleanfeed-smart-checked-flagged.post .image, .xkit-cleanfeed-smart-checked-flagged.post .panorama { visibility: hidden; } .post.xkit-cleanfeed-smart-checked-flagged.video, .post.xkit-cleanfeed-smart-checked-flagged.is_video { display: none !important; }", "cleanfeed_on");
 			XKit.extensions.cleanfeed.added_css = true;
 		}
@@ -315,7 +315,7 @@ XKit.extensions.cleanfeed = new Object({
 
 			$(this).addClass("xkit-cleanfeed-smart-checked-flagged");
 
-			if (XKit.extensions.cleanfeed.preferences.hide_avatars.value === true) {
+			if (XKit.extensions.cleanfeed.preferences.hide_avatars.value) {
 				$(this).find(".post_avatar_link").not(".flat.lighter_blue").each(function() {
 					$(this).css("background-image", "url(" + XKit.extensions.cleanfeed.img_avatar + ")");
 				});
@@ -355,33 +355,33 @@ XKit.extensions.cleanfeed = new Object({
 
 		});
 
-		if (XKit.extensions.cleanfeed.mode === "smart" && hide === true) {
+		if (XKit.extensions.cleanfeed.mode === "smart" && hide) {
 
 			XKit.extensions.cleanfeed.smart_update_images();
 			return;
 
 		}
 
-		if (hide === false) {
+		if (!hide) {
 
 			$(".post").removeClass("xkit-cleanfeed-smart-checked").removeClass("xkit-cleanfeed-smart-checked-flagged");
 
 		}
 
-		if (hide === true) {
+		if (hide) {
 
-			if (XKit.extensions.cleanfeed.preferences.hide_avatars.value === true) {
+			if (XKit.extensions.cleanfeed.preferences.hide_avatars.value) {
 				$(".post_avatar_link").not(".flat.lighter_blue").each(function() {
 					$(this).css("background-image", "url(" + XKit.extensions.cleanfeed.img_avatar + ")");
 				});
 			}
 
-			if (XKit.extensions.cleanfeed.added_css == false) {
+			if (!XKit.extensions.cleanfeed.added_css) {
 				XKit.tools.add_css(" .post .inline_image { opacity: 0.15; } .post .inline_image:hover { opacity: 1; } .image_thumbnail, .photoset_row img, .post .image, .post .panorama { visibility: hidden; } .post.video, .post.is_video { display: none !important; }", "cleanfeed_on");
 				XKit.extensions.cleanfeed.added_css = true;
 			}
 
-			if (XKit.extensions.cleanfeed.added_full_block_css == false && XKit.extensions.cleanfeed.preferences.full_block.value === true) {
+			if (!XKit.extensions.cleanfeed.added_full_block_css && XKit.extensions.cleanfeed.preferences.full_block.value) {
 				XKit.tools.add_css(" .post.video, .post.photo, .post.audio, .post.is_video, .post.is_photo, .post.is_audio, .post.is_photoset, { display: none !important; }", "cleanfeed_full_block");
 				XKit.extensions.cleanfeed.added_full_block_css = true;
 			}
@@ -429,7 +429,7 @@ XKit.extensions.cleanfeed = new Object({
 
 		$(".image_thumbnail").each(function() {
 
-			if (hide === true) {
+			if (hide) {
 				XKit.extensions.cleanfeed.hide_thumbnail(this);
 			} else {
 				XKit.extensions.cleanfeed.show_thumbnail(this);
@@ -439,7 +439,7 @@ XKit.extensions.cleanfeed = new Object({
 
 		$(".photoset_row img, .post .image, .post .panorama img").each(function() {
 
-			if (hide === true) {
+			if (hide) {
 				XKit.extensions.cleanfeed.hide_photoset_picture(this);
 			} else {
 				XKit.extensions.cleanfeed.show_photoset_picture(this);

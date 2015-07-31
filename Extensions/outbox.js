@@ -64,13 +64,13 @@ XKit.extensions.outbox = new Object({
 					m_messages_array.pop();
 				}
 			} catch(e) {
-				m_messages_array = new Array();
+				m_messages_array = [];
 			}
 
 			m_username = document.location.href.substring(document.location.href.indexOf('/ask_form') + 10);
 			m_username = m_username.substring(0, m_username.indexOf("."));
 
-			var m_obj = new Object();
+			var m_obj = {};
 			m_obj.avatar = "ask";
 			m_obj.username = $("#tumblelog_name").find(".name").html();
 			m_obj.message = $("#question").val();
@@ -149,10 +149,10 @@ XKit.extensions.outbox = new Object({
 				m_messages_array.pop();
 			}
 		} catch(e) {
-			m_messages_array = new Array();
+			m_messages_array = [];
 		}
 
-		var m_obj = new Object();
+		var m_obj = {};
 		m_obj.avatar = "fan_mail";
 		m_obj.username = base_document.getElementById("select_tumblelog_from").value;
 		m_obj.message = m_msg;
@@ -192,13 +192,13 @@ XKit.extensions.outbox = new Object({
 					m_messages_array.pop();
 				}
 			} catch(e) {
-				m_messages_array = new Array();
+				m_messages_array = [];
 			}
 
 			m_username = document.location.href.substring(document.location.href.indexOf('/ask_form') + 10);
 			m_username = m_username.substring(0, m_username.indexOf("."));
 
-			var m_obj = new Object();
+			var m_obj = {};
 			m_obj.avatar = "ask";
 			m_obj.username = $("#from").find(".tumblelog_name").html();
 			m_obj.message = $("#question").val();
@@ -356,10 +356,10 @@ XKit.extensions.outbox = new Object({
 					m_messages_array.pop();
 				}
 			} catch(e) {
-				m_messages_array = new Array();
+				m_messages_array = [];
 			}
 
-			var m_obj = new Object();
+			var m_obj = {};
 			m_obj.avatar = m_avatar;
 			m_obj.username = m_username;
 			m_obj.message = m_message;
@@ -441,7 +441,7 @@ XKit.extensions.outbox = new Object({
 		try {
 			m_messages_array = JSON.parse(m_messages);
 		} catch(e) {
-			m_messages_array = new Array();
+			m_messages_array = [];
 		}
 
 		console.log(m_messages_array);
