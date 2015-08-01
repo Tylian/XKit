@@ -12,9 +12,9 @@ XKit.extensions.show_more = new Object({
 	running: false,
 	slow: true,
 
-	likes_available: new Object(),
-	submit_available: new Object(),
-	anon_available: new Object(),
+	likes_available: {},
+	submit_available: {},
+	anon_available: {},
 
 	preferences: {
 		"sep0": {
@@ -341,9 +341,9 @@ XKit.extensions.show_more = new Object({
 
 	},
 
-	custom_menu_extension: new Array(),
-	custom_menu_function: new Array(),
-	custom_menu_callback: new Array(),
+	custom_menu_extension: [],
+	custom_menu_function: [],
+	custom_menu_callback: [],
 
 	follow_person: function(user_url, m_parent) {
 
@@ -479,14 +479,14 @@ XKit.extensions.show_more = new Object({
 
 		XKit.extensions.show_more.popup_data.popup_data_req_id = XKit.tools.random_string() + XKit.tools.random_string();
 
-		XKit.extensions.show_more.popup_data = new Object();
+		XKit.extensions.show_more.popup_data = {};
 
 		if (typeof $(m_obj).attr('data-tumblelog-popover') !== "undefined") {
 
 			try {
 				XKit.extensions.show_more.popup_data = JSON.parse($(m_obj).attr('data-tumblelog-popover'));
 			} catch(e) {
-				XKit.extensions.show_more.popup_data = new Object();
+				XKit.extensions.show_more.popup_data = {};
 				XKit.extensions.show_more.popup_data.error = true;
 				XKit.console.add("show_more -> Can't parse popup_data:" + e.message);
 			}
@@ -507,7 +507,7 @@ XKit.extensions.show_more = new Object({
 				onerror: function(response) {
 					if (m_req_id !== XKit.extensions.show_more.popup_data.popup_data_req_id) { console.log("show_more: Could not fetch data, also ID mismatch."); return; }
 					console.log("show_more: Could not fetch data.");
-					XKit.extensions.show_more.popup_data = new Object();
+					XKit.extensions.show_more.popup_data = {};
 					XKit.extensions.show_more.popup_data.error = true;
 					XKit.console.add("show_more -> Can't parse popup_data - not defined.");
 				},
@@ -518,7 +518,7 @@ XKit.extensions.show_more = new Object({
 					try {
 						XKit.extensions.show_more.popup_data = JSON.parse(response.responseText);
 					} catch(e){
-						XKit.extensions.show_more.popup_data = new Object();
+						XKit.extensions.show_more.popup_data = {};
 						XKit.extensions.show_more.popup_data.error = true;
 					}
 
@@ -543,7 +543,7 @@ XKit.extensions.show_more = new Object({
 			XKit.extensions.show_more.popup_data = JSON.parse($(m_obj).attr('data-tumblelog-popover'));
 		} catch(e) {
 			XKit.console.add("show_more -> Can't parse popup_data");
-			XKit.extensions.show_more.popup_data = new Object();
+			XKit.extensions.show_more.popup_data = {};
 			XKit.extensions.show_more.popup_data.error = true;
 		}
 

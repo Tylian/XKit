@@ -1,5 +1,5 @@
 //* TITLE Mute! **//
-//* VERSION 2.3.0 **//
+//* VERSION 2.3.1 **//
 //* DESCRIPTION Better than 'shut up!' **//
 //* DETAILS This extension allows you to hide text and answer posts by an user while still seeing their other posts. Useful if a blogger has nice posts but a bad personality. Please note that you'll need to re-mute them if a user changes their URL. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -19,7 +19,7 @@ XKit.extensions.mute = new Object({
 		}
 	},
 
-	muted: new Array(),
+	muted: [],
 
 	frame_run: function() {
 
@@ -79,7 +79,7 @@ XKit.extensions.mute = new Object({
 						return;
 					}
 
-					var m_obj = new Object();
+					var m_obj = {};
 					m_obj.username = user_url;
 					m_obj.regular = true;
 					m_obj.photo = false;
@@ -114,15 +114,9 @@ XKit.extensions.mute = new Object({
 		XKit.post_listener.add("mute", XKit.extensions.mute.do_posts);
 		XKit.extensions.mute.do_posts();
 
-		// TODO: Refactor to use when_running with a failure listener
-		setTimeout(function() {
-			if (!XKit.installed.is_running('show_more')) {
-				$(document).on('click mouseover','.tumblelog_popover .info_popover_button', XKit.extensions.mute.add_links_wo_usermenus);
-				return;
-			}
-
-			if (XKit.extensions.show_more.preferences.use_classic_menu.value) {
-				XKit.extensions.show_more.add_custom_menu("mute", function(data) {
+		XKit.installed.when_running('show_more', function(show_more) {
+			if (show_more.preferences.use_classic_menu.value) {
+				show_more.add_custom_menu("mute", function(data) {
 					var user_url = data.name;
 					var m_class = "";
 					var m_sentence = "Mute";
@@ -137,7 +131,7 @@ XKit.extensions.mute = new Object({
 
 				});
 			} else {
-				XKit.extensions.show_more.add_custom_menu("mute", function(data) {
+				show_more.add_custom_menu("mute", function(data) {
 					var user_url = data.name;
 					var m_class = "";
 					var m_sentence = "Mute";
@@ -156,7 +150,9 @@ XKit.extensions.mute = new Object({
 					"</li>";
 				});
 			}
-		}, 2000);
+		}, function() {
+			$(document).on('click mouseover','.tumblelog_popover .info_popover_button', XKit.extensions.mute.add_links_wo_usermenus);
+		});
 	},
 
 	add_links_wo_usermenus: function(e) {
@@ -269,7 +265,7 @@ XKit.extensions.mute = new Object({
 
 		var m_list = XKit.storage.get("mute", "muted_list", "");
 		if (m_list === "") {
-			XKit.extensions.mute.muted = new Array();
+			XKit.extensions.mute.muted = [];
 		} else {
 			try {
 				m_parsed = JSON.parse(m_list);
@@ -288,9 +284,9 @@ XKit.extensions.mute = new Object({
 				//console.log("::::::::MUTE LIST::::::::\n" + JSON.stringify(m_parsed));
 
 				if (m_convert) {
-					var new_array = new Array();
+					var new_array = [];
 					for (var i=0;i<m_parsed.length;i++) {
-						var m_obj = new Object();
+						var m_obj = {};
 						m_obj.username = m_parsed[i];
 						m_obj.regular = true;
 						m_obj.photo = false;
@@ -310,7 +306,7 @@ XKit.extensions.mute = new Object({
 				}
 
 			} catch(e) {
-				XKit.extensions.mute.muted = new Array();
+				XKit.extensions.mute.muted = [];
 				XKit.extensions.mute.save();
 			}
 		}
@@ -432,7 +428,7 @@ XKit.extensions.mute = new Object({
 		if ($(menu_box).find(".xkit-mute-button").length > 0) {
 			// Remove first.
 			$(menu_box).find(".xkit-mute-button").parent().remove();
-		};
+		}
 
 		/*
 
@@ -499,7 +495,7 @@ XKit.extensions.mute = new Object({
 				return;
 			}
 
-			var m_obj = new Object();
+			var m_obj = {};
 			m_obj.username = user_url;
 			m_obj.regular = true;
 			m_obj.photo = false;
@@ -519,7 +515,7 @@ XKit.extensions.mute = new Object({
 
 	save: function() {
 
-		var m_object = new Object();
+		var m_object = {};
 		m_object.version = "2";
 		m_object.list = XKit.extensions.mute.muted;
 		XKit.storage.set("mute", "muted_list", JSON.stringify(m_object));
@@ -561,7 +557,6 @@ XKit.extensions.mute = new Object({
 		for (var i=0;i<XKit.extensions.mute.muted.length;i++) {
 			if (XKit.extensions.mute.muted[i].username === ud) {
 				return XKit.extensions.mute.muted[i];
-				break;
 			}
 		}
 
@@ -647,7 +642,7 @@ XKit.extensions.mute = new Object({
 
 			if ( $(".xkit-mute-option.selected").length <= 0 && !$("#xkit-mute-hide-originals-checkbox").hasClass("selected") && !$("#xkit-mute-hide-reblogs-checkbox").hasClass("selected")) { alert("Please select the post types to block or check the Hide Reblogs checkbox."); return; }
 
-			var m_object = new Object();
+			var m_object = {};
 			m_object.username = ud;
 			m_object.regular = $(".xkit-mute-option.regular").hasClass("selected");
 			m_object.photo = $(".xkit-mute-option.photo").hasClass("selected");
@@ -709,15 +704,15 @@ XKit.extensions.mute = new Object({
 		}
 
 		if (found_count <= 0) {
-			var m_html = "<div id=\"xkit-control-panel-mute\" class=\"no-muted-users\"><b>You have no muted users.</b><br/>You can add some using the menu on their avatars on your dashboard.<br/>Hover over their avatar, click on the user options icon, then Mute.</div>";
-			$(mdiv).append(m_html);
+			var no_muted_html = "<div id=\"xkit-control-panel-mute\" class=\"no-muted-users\"><b>You have no muted users.</b><br/>You can add some using the menu on their avatars on your dashboard.<br/>Hover over their avatar, click on the user options icon, then Mute.</div>";
+			$(mdiv).append(no_muted_html);
 			return;
 		}
 
 		var m_html = "";
-		for(var i=0;i<XKit.extensions.mute.muted.length;i++) {
-			m_html = m_html + XKit.extensions.mute.create_div(XKit.extensions.mute.muted[i]);
-		}
+		XKit.extensions.mute.muted.forEach(function(muted) {
+			m_html = m_html + XKit.extensions.mute.create_div(muted);
+		});
 
 		$(mdiv).append("<div id=\"xkit-control-panel-mute\">" + m_html + "</div>");
 

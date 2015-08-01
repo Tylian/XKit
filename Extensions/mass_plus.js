@@ -210,7 +210,7 @@ XKit.extensions.mass_plus = new Object({
 	search_url: "",
 	search_last_timestamp: 0,
 	search_found_count: 0,
-	search_found_posts: new Array(),
+	search_found_posts: [],
 
 	search: function(tag) {
 
@@ -238,7 +238,7 @@ XKit.extensions.mass_plus = new Object({
 		this.search_found_count = 0;
 		this.search_last_timestamp = last_timestamp;
 		this.search_page = 0;
-		this.search_found_posts = new Array();
+		this.search_found_posts = [];
 		this.search_next_page(tag.toLowerCase());
 
 	},

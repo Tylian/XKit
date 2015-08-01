@@ -111,8 +111,8 @@ XKit.extensions.blacklist = new Object({
 		}
 	},
 
-	blacklisted: new Array(),
-	whitelisted: new Array(),
+	blacklisted: [],
+	whitelisted: [],
 
 	run: function() {
 		this.running = true;
@@ -199,7 +199,7 @@ XKit.extensions.blacklist = new Object({
 
 	get_selection: function(e) {
 
-		if( e.altKey != true ) { return; }
+		if( e.altKey !== true ) { return; }
 
 		var text = "";
 
@@ -475,7 +475,7 @@ XKit.extensions.blacklist = new Object({
 				$(this).addClass("xblacklist-done");
 
 				// Collect the tags
-				var tag_array = new Array();
+				var tag_array = [];
 				if ($(this).find(".post_tag").length > 0) {
 					$(this).find(".post_tag").each(function() {
 						tag_array.push($(this).html().replace("#","").toLowerCase());
@@ -709,7 +709,7 @@ XKit.extensions.blacklist = new Object({
 		post_content = post_content.replace(new RegExp('\n','g'), ' ');
 		var p_words = post_content.split(" ");
 
-		var new_array = new Array();
+		var new_array = [];
 
 		for (var i=0;i<p_words.length;i++) {
 
@@ -719,7 +719,7 @@ XKit.extensions.blacklist = new Object({
 
 		}
 
-		/*var new_tags = new Array();
+		/*var new_tags = [];
 
 		for (var i=0;i<tags.length;i++) {
 
@@ -768,7 +768,7 @@ XKit.extensions.blacklist = new Object({
 				m_word_wildcard = true;
 			}
 
-			var m_p_words = new Array();
+			var m_p_words = [];
 			var tag_search_mode = false;
 
 			if (m_word.substring(0,1) === "#") {
@@ -1057,7 +1057,7 @@ XKit.extensions.blacklist = new Object({
 
 			$("#xkit-blacklist-delete-all-continue").click(function() {
 
-				var m_array = new Array();
+				var m_array = [];
 
 				XKit.extensions.blacklist.blacklisted = m_array;
 				XKit.extensions.blacklist.whitelisted = m_array;

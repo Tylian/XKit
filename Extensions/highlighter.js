@@ -38,7 +38,7 @@ XKit.extensions.highlighter = new Object({
 		}
 	},
 
-	highlightered: new Array(),
+	highlightered: [],
 
 	run: function() {
 		this.running = true;
@@ -367,7 +367,7 @@ XKit.extensions.highlighter = new Object({
 
 			$("#xkit-highlighter-delete-all-continue").click(function() {
 
-				var m_array = new Array();
+				var m_array = [];
 
 				XKit.extensions.highlighter.highlightered = m_array;
 				XKit.extensions.highlighter.save_highlighter();

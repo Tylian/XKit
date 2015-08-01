@@ -70,18 +70,18 @@ XKit.extensions.audio_downloader = new Object({
 					}
 
 					if (obj.posts[0].audio_type == "tumblr") {
-						m_url = obj.posts[0]['audio_url'];
-						if (m_url.indexOf('https://www.tumblr.com/audio_file/') == 0) {
+						m_url = obj.posts[0].audio_url;
+						if (m_url.indexOf('https://www.tumblr.com/audio_file/') === 0) {
 							m_url = 'http://a.tumblr.com/' + m_url.substr(m_url.lastIndexOf('/') + 1) + 'o1.mp3';
 						}
 					}
 
 					var m_id = "audio_" + XKit.extensions.audio_downloader.make_id();
 
-					var audio_name = obj.posts[0]['track_name'];
+					var audio_name = obj.posts[0].track_name;
 					var audio_author = obj.posts[0].artist;
 
-					if (typeof audio_author == "undefined" || audio_author == "") {
+					if (typeof audio_author == "undefined" || audio_author === "") {
 						audio_author = "unknown";
 					}
 

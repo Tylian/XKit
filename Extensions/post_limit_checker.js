@@ -1,5 +1,5 @@
 //* TITLE Post Limit Checker **//
-//* VERSION 0.1.6 **//
+//* VERSION 0.2.1 **//
 //* DESCRIPTION Are you close to the limit? **//
 //* DETAILS Shows you how many posts you can reblog today. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -38,7 +38,6 @@ XKit.extensions.post_limit_checker = new Object({
 
 		var m_html = 	"<div id=\"xkit-plc-list\" class=\"nano\"><div id=\"xkit-plc-list-content\" class=\"content\">" +
 					"<div class=\"xkit-warning-plc-text\"><b>Deleted posts</b><br/>Deleted posts are count by Tumblr, but this tool can't count them. For example, if you've made 250 posts since the last reset but then deleted 50 of them, this tool will tell you that you have 50 more posts to go, but in reality you've already hit your post limit.</div>" +
-					"<div class=\"xkit-warning-plc-text\"><b>Sideblogs</b><br/>Posts you've made on sideblogs also count, but this tool only checks posts made on the blog currently selected. So again, if you've made 200 posts on this blog, and 50 more on your sideblog, you've already hit the post limit, but this tool will tell you that you are allowed to make 50 more posts.</div>" +
 					"<div class=\"xkit-warning-plc-text\"><b>Original photo posts</b><br/>There is a separate, 75 uploads per day limit for photo posts. This extension does not check for that.</div>" +
 					"<div class=\"xkit-warning-plc-text\"><b>No Guarantee</b><br/>The XKit Guy is not making any guarantees about the reliability of this tool.</div>" +
 				"</div></div>";
@@ -53,8 +52,9 @@ XKit.extensions.post_limit_checker = new Object({
 			XKit.extensions.post_limit_checker.window_id = XKit.tools.random_string();
 
 			XKit.window.show("Please wait","Gathering the information I need..." + XKit.progress.add("post-limit-checker-progress"),"info");
-
-			XKit.extensions.post_limit_checker.next(0, [], XKit.extensions.post_limit_checker.window_id);
+			var posts = [];
+			for (i=0;i<XKit.tools.get_blogs().length;i++) {posts.push([]);}
+			XKit.extensions.post_limit_checker.next(0, posts, XKit.extensions.post_limit_checker.window_id, XKit.tools.get_blogs(), 0);
 
 		});
 
@@ -70,8 +70,8 @@ XKit.extensions.post_limit_checker = new Object({
 		var next_reset = new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1, 0, 0, 0);
 
 		var difference = (next_reset - date);
-		var hours = Math.round((difference % 86400000) / 3600000);
-		var minutes = Math.round(((difference % 86400000) % 3600000) / 60000);
+		var hours = Math.floor((difference % 86400000) / 3600000);
+		var minutes = Math.floor(((difference % 86400000) % 3600000) / 60000);
 
 		// Now get when the last reset was. Lazy coding.
 		var last_reset = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0, 0);
@@ -105,6 +105,12 @@ XKit.extensions.post_limit_checker = new Object({
 		}
 		if (hours >= 1 && minutes === 0) {
 			reset_str = hours + " hours";
+		}
+		if (hours == 1) {
+			reset_str = reset_str.replace("hours", "hour");
+		}
+		if (minutes == 1) {
+			reset_str = reset_str.replace("minutes", "minute");
 		}
 
 		var m_html = 	"<div class=\"xkit-plc-division\">" +
@@ -147,12 +153,12 @@ XKit.extensions.post_limit_checker = new Object({
 
 	},
 
-	next: function(page, posts, m_window_id) {
+	next: function(page, posts, m_window_id, blogs, index) {
 
 		if (m_window_id !== XKit.extensions.post_limit_checker.window_id) { console.log("wrong window id. 01"); return; }
 
 		var offset = page * 20;
-		var api_url = "https://api.tumblr.com/v2/blog/" + XKit.tools.get_blogs()[0] + ".tumblr.com/posts/?api_key=" + XKit.extensions.post_limit_checker.apiKey + "&offset=" + offset;
+		var api_url = "https://api.tumblr.com/v2/blog/" + blogs[index] + ".tumblr.com/posts/?api_key=" + XKit.extensions.post_limit_checker.apiKey + "&offset=" + offset;
 		GM_xmlhttpRequest({
 			method: "GET",
 			url: api_url,
@@ -173,16 +179,23 @@ XKit.extensions.post_limit_checker = new Object({
 					for (var i=0;i<data.response.posts.length;i++) {
 
 						// I would check the date here but I'm a lazy man.
-						posts.push(data.response.posts[i]);
+						posts[index].push(data.response.posts[i]);
 
 					}
 
-					XKit.progress.value("post-limit-checker-progress", (posts.length / 2.5) - 10);
+					XKit.progress.value("post-limit-checker-progress", (posts[index].length / 2.5) - 10);
 
-					if (posts.length >= 250 || data.response.posts.length === 0) {
-						XKit.extensions.post_limit_checker.get_time(m_window_id, posts);
+					if (posts[index].length >= 250 || data.response.posts.length === 0) {
+						if (index < blogs.length - 1) {
+							index++;
+							setTimeout(function() { XKit.extensions.post_limit_checker.next(0, posts, m_window_id, blogs, index);}, 400);
+						} else {
+							var all_posts = [];
+							all_posts = all_posts.concat.apply(all_posts, posts);
+							XKit.extensions.post_limit_checker.get_time(m_window_id, all_posts);
+						}
 					} else {
-						setTimeout(function() { XKit.extensions.post_limit_checker.next((page + 1), posts, m_window_id); }, 400);
+						setTimeout(function() { XKit.extensions.post_limit_checker.next((page + 1), posts, m_window_id, blogs, index); }, 400);
 					}
 
 				} catch(e) {

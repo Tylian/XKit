@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 3.1.2 **//
+//* VERSION 3.1.4 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER STUDIOXENIX **//
 
@@ -131,7 +131,7 @@ XKit.extensions.xkit_pack_launcher = new Object({
 												if ($(this).hasClass("disabled"))
 													return;
 										
-												var m_object = new Object();
+												var m_object = {};
 												m_object.script = atob(mdata.script);
 												m_object.id = mdata.id;
 												m_object.support_blog = mdata.support_blog;
@@ -212,11 +212,11 @@ XKit.extensions.xkit_pack_launcher = new Object({
 												if (m_result.errors === false) {
 									
 													var current_packs = XKit.tools.get_setting("installed_packs", "");
-													var current_packs_array = new Array();
+													var current_packs_array = [];
 													try {
 														current_packs_array = JSON.parse(current_packs);	
 													} catch(e) {
-														current_packs_array = new Array();
+														current_packs_array = [];
 													}
 										
 													if (current_packs_array.indexOf(mdata.id) == -1) {
@@ -428,7 +428,7 @@ XKit.tools.get_blogs = function() {
 
 	XKit.browser = function() {
 	
-		var to_return = new Object();
+		var to_return = {};
 		
 		to_return.name = "UNKNOWN";
 		to_return.spoofed = false;
@@ -669,8 +669,8 @@ XKit.tools.get_blogs = function() {
 			scroll_top: $(window).scrollTop(),
 			view_height: $(window).height(),
 			
-			list_id: new Array(),
-			list_avatar: new Array(),
+			list_id: [],
+			list_avatar: [],
 			
 			blank_image: "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==",
 			
@@ -829,12 +829,12 @@ XKit.tools.get_blogs = function() {
 			
 			revision: 2,
 			
-			added_icon: new Array(),
-			added_icon_icon: new Array(),
-			added_icon_text: new Array(),
+			added_icon: [],
+			added_icon_icon: [],
+			added_icon_text: [],
 			
-			post_window_listener_id: new Array(),
-			post_window_listener_func: new Array(),
+			post_window_listener_id: [],
+			post_window_listener_func: [],
 			post_window_listener_running: false,
 			post_window_listener_window_id: 0,
 			
@@ -903,9 +903,9 @@ XKit.tools.get_blogs = function() {
 			
 			post_window: {
 				
-				added_icon: new Array(),
-				added_icon_icon: new Array(),
-				added_icon_text: new Array(),
+				added_icon: [],
+				added_icon_icon: [],
+				added_icon_text: [],
 				
 				create_control_button: function(class_name, icon, text, func) {
 					
@@ -959,7 +959,7 @@ XKit.tools.get_blogs = function() {
 						XKit.console.add('ERROR: unable to set content html');
 						return '';
 					}
-          return content_editor.html();
+					return content_editor.html();
 				},
 
 				/**
@@ -967,15 +967,38 @@ XKit.tools.get_blogs = function() {
 				 * @param {String} new_content
 				 */
 				set_content_html: function(new_content) {
-					var content_editor = $('.post-form--form').find('.editor.editor-richtext');
-					if (content_editor.length === 0) {
-						XKit.console.add('ERROR: unable to set content html');
+					if ($(".html-field").css("display") === "none") {
+						var content_editor = $('.post-form--form').find('.editor.editor-richtext');
+						if (content_editor.length === 0) {
+							XKit.console.add('ERROR: unable to set content html');
+							return;
+						}
+						content_editor.focus();
+						content_editor.html(new_content);
+						content_editor.addClass("editor-richtext-has-text");
+						content_editor.blur();
 						return;
 					}
-					content_editor.focus();
-					content_editor.html(new_content);
-					content_editor.addClass("editor-richtext-has-text");
-					content_editor.blur();
+
+					var html_or_markdown = $(".tab-label[data-js-srclabel]").text();
+					if (html_or_markdown === "HTML") {
+						XKit.tools.add_function(function(new_content){
+							var new_content = add_tag;
+							var editor_div = document.getElementsByClassName("ace_editor");
+							if (editor_div.length === 1) {
+								var editor = window.ace.edit(editor_div[0]);
+								editor.setValue(new_content);
+								setTimeout(function(){
+									jQuery(".ace_marker-layer").empty();
+								}, 500);
+							}
+						}, true, new_content);
+					} else if (html_or_markdown === "Markdown") {
+						// TODO
+					} else {
+						XKit.console.add("XKit can't detect which text editor is being used.");
+					}
+					
 				},
 
 				/**
@@ -1044,7 +1067,7 @@ XKit.tools.get_blogs = function() {
 				
 				state: function() {
 					
-					var to_return = new Object();
+					var to_return = {};
 					
 					to_return.publish = $("#post_state").val() == "0";	
 					to_return.draft = $("#post_state").val() == "1";
@@ -1098,7 +1121,7 @@ XKit.tools.get_blogs = function() {
 				
 				origin: function() {
 					
-					var to_return = new Object();
+					var to_return = {};
 					
 					to_return.is_reblog = $(".post-header").find(".reblog_source").length > 0;
 					to_return.is_original = $(".post-header").find(".reblog_source").length <= 0;
@@ -1273,7 +1296,7 @@ XKit.tools.get_blogs = function() {
 				
 				if (typeof tumblr_object.post === "undefined") {
 					// Jump one object in.
-					tumblr_object = new Object();
+					tumblr_object = {};
 					tumblr_object.error = true;
 					tumblr_object.message = "Wrong/corrupt tumblr object, post object not found.";
 					// XKit.console.add(tumblr_object.message);
@@ -1305,7 +1328,7 @@ XKit.tools.get_blogs = function() {
 				// Used to edit a post.
 				// Takes a Tumblr Post Object (get it using Fetch.)
 				
-				var m_object = new Object();
+				var m_object = {};
 				
 				m_object.form_key = XKit.interface.form_key();
 				m_object.channel_id = tumblr_object.post_tumblelog.name_or_id;
@@ -1320,7 +1343,7 @@ XKit.tools.get_blogs = function() {
 				m_object.post_context_page = "dashboard";
 				m_object.editor_type = "rich";
 				
-				// m_object.post = new Object();
+				// m_object.post = {};
 				
 				/*
 				
@@ -1417,7 +1440,7 @@ XKit.tools.get_blogs = function() {
 				
 				m_object.edit = true;
 				
-				var to_return = new Object();
+				var to_return = {};
 				
 				to_return.error = false;
 				to_return.error_message = "";
@@ -1507,7 +1530,7 @@ XKit.tools.get_blogs = function() {
 				// Fetches internal Tumblr object for a post, then calls callback (func)
 				// You need to feed this an Interface Post Object.
 				
-				var m_object = new Object();
+				var m_object = {};
 				
 				m_object.form_key = XKit.interface.form_key();
 
@@ -1522,7 +1545,7 @@ XKit.tools.get_blogs = function() {
 					m_object.channel_id = post_object.owner;
 				}
 
-				var to_return = new Object();
+				var to_return = {};
 				
 				to_return.error = false;
 				to_return.error_message = "";
@@ -1733,7 +1756,7 @@ XKit.tools.get_blogs = function() {
 				if ($("body").find("#post_" + post_id).length > 0) {
 					return XKit.interface.post($("#post_" + post_id));
 				} else {
-					var m_error = new Object();
+					var m_error = {};
 					m_error.error = true;
 					m_error.error_message = "Object not found on page.";
 					return m_error;	
@@ -1743,7 +1766,7 @@ XKit.tools.get_blogs = function() {
 			
 			post: function(obj) {
 				
-				var m_return = new Object();
+				var m_return = {};
 				
 				if (typeof $(obj).attr('data-post-id') == "undefined") {
 					// Something is wrong.
@@ -1851,7 +1874,7 @@ XKit.tools.get_blogs = function() {
 			
 			user: function() {
 				
-				var m_return = new Object();
+				var m_return = {};
 				
 				// Init variables
 				m_return.posts = 0;
@@ -2161,32 +2184,38 @@ XKit.tools.get_blogs = function() {
  * @return {Boolean} Whether the extension is running
  */
 XKit.installed.is_running = function(extension) {
-  return XKit.installed.check(extension) &&
-         typeof(XKit.extensions[extension]) !== "undefined" &&
-         XKit.extensions[extension].running;
+	return XKit.installed.check(extension) &&
+	       typeof(XKit.extensions[extension]) !== "undefined" &&
+	       XKit.extensions[extension].running;
 };
 
 /**
  * Schedule a callback to be run only if `extension` is installed and running.
+ * Call an alternate if the extension is not running.
  * @param {String} extension
- * @param {Function} callback
+ * @param {Function} onRunning
+ * @param {Function} onFailure
  */
-XKit.installed.when_running = function(extension, callback) {
-  if (!XKit.installed.check(extension)) {
-    return;
-  }
-  var tries = 5;
-  function check() {
-    if (tries < 0) {
-      return;
-    }
-    if (!XKit.installed.is_running(extension)) {
-      tries--;
-      setTimeout(check, 250);
-      return;
-    }
-    // The extension exists and has been installed
-    callback(XKit.extensions[extension]);
-  }
-  setTimeout(check, 0);
+XKit.installed.when_running = function(extension, onRunning, onFailure) {
+	if (!XKit.installed.check(extension)) {
+		onFailure();
+		return;
+	}
+	// Wait up to 8 seconds for the extension to begin running
+	var tries = 20;
+	var timeout = 400;
+	function check() {
+		if (tries < 0) {
+			onFailure();
+			return;
+		}
+		if (!XKit.installed.is_running(extension)) {
+			tries--;
+			setTimeout(check, timeout);
+			return;
+		}
+		// The extension exists and has been installed
+		onRunning(XKit.extensions[extension]);
+	}
+	setTimeout(check, 0);
 };

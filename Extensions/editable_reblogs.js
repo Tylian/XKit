@@ -1,5 +1,5 @@
 //* TITLE Editable Reblogs **//
-//* VERSION 1.0.7 **//
+//* VERSION 1.0.8 **//
 //* DESCRIPTION	Restores ability to edit previous reblogs of a post **//
 //* DEVELOPER dlmarquis **//
 //* FRAME false **//

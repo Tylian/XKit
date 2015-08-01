@@ -135,7 +135,7 @@ XKit.extensions.shuffle_queue = new Object({
 
 		$("#xkit-clear-queue-confirm").click(function() {
 
-			XKit.extensions.shuffle_queue.posts_to_delete = new Array();
+			XKit.extensions.shuffle_queue.posts_to_delete = [];
 			XKit.extensions.shuffle_queue.delete_page = 0;
 
 			XKit.window.show("Please wait...","<span id=\"xkit-shuffle-queue-progress\">Please wait, gathering posts to delete...</span>" + XKit.progress.add("shuffle-queue-delete"),"info");

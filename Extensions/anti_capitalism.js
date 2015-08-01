@@ -41,8 +41,8 @@ XKit.extensions.anti_capitalism = new Object({
 
 	destroy: function() {
 		this.running = false;
-		XKit.tools.remove_css("anti_capitalism_vendor_buttons")
-        XKit.tools.remove_css("anti_capitalism_sponsored_ads")
+		XKit.tools.remove_css("anti_capitalism_vendor_buttons");
+        XKit.tools.remove_css("anti_capitalism_sponsored_ads");
 	}
 
 });

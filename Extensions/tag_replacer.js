@@ -83,7 +83,7 @@ XKit.extensions.tag_replacer = new Object({
 	url: "",
 	t_replace: "",
 	t_with: "",
-	p_array: new Array(),
+	p_array: [],
 	p_array_index: 0,
 	append_mode: false,
 	case_sensitive: false,
@@ -98,7 +98,7 @@ XKit.extensions.tag_replacer = new Object({
 		XKit.extensions.tag_replacer.url = url;
 		XKit.extensions.tag_replacer.t_replace = t_replace;
 		XKit.extensions.tag_replacer.t_with = t_with;
-		XKit.extensions.tag_replacer.p_array = new Array();
+		XKit.extensions.tag_replacer.p_array = [];
 		XKit.extensions.tag_replacer.p_array_index = 0;
 		XKit.extensions.tag_replacer.success_count = 0;
 		XKit.extensions.tag_replacer.fail_count = 0;

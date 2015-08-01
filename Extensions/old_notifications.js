@@ -9,7 +9,7 @@
 XKit.extensions.old_notifications = new Object({
 
 	running: false,
-	blacklisted: new Array(),
+	blacklisted: [],
 
 	preferences: {
 		"count": {

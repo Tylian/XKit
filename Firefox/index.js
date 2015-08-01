@@ -22,6 +22,7 @@ pageMod.PageMod({
   include: '*.tumblr.com',
   contentScriptFile: scripts,
   contentStyleFile: self.data.url('xkit/xkit.css'),
+  contentScriptWhen: 'ready',
   onAttach: onAttach
 });
 

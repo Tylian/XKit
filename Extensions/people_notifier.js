@@ -11,7 +11,7 @@ XKit.extensions.people_notifier = new Object({
 	running: false,
 	apiKey: "fuiKNFp9vQFvjLNvx4sUwti4Yb5yGutBN4Xh10LXZhhRKjWlV4",
 
-	blogs: new Array(),
+	blogs: [],
 
 	preferences: {
 
@@ -72,7 +72,7 @@ XKit.extensions.people_notifier = new Object({
 		try {
 			blogs_obj = JSON.parse(blogs_str);
 		} catch(e) {
-			blogs_obj = new Array();
+			blogs_obj = [];
 		}
 
 		this.blogs = blogs_obj;
@@ -129,7 +129,7 @@ XKit.extensions.people_notifier = new Object({
 
 				/*var highest_number = -1;
 				if (typeof XKit.extensions.people_notifier.blogs[i].last_20_posts === "undefined") {
-					XKit.extensions.people_notifier.blogs[i].last_20_posts = new Array();
+					XKit.extensions.people_notifier.blogs[i].last_20_posts = [];
 				} else {
 					highest_number = Math.max.apply(Math, XKit.extensions.people_notifier.blogs[i].last_20_posts);
 				}
@@ -230,7 +230,7 @@ XKit.extensions.people_notifier = new Object({
 							continue;
 
 						if (typeof obj.last_20_posts === "undefined") {
-							obj.last_20_posts = new Array();
+							obj.last_20_posts = [];
 						}
 
 						var add_this = true;
@@ -442,11 +442,11 @@ XKit.extensions.people_notifier = new Object({
 					return;
 				}
 
-				var m_object = new Object();
+				var m_object = {};
 				m_object.url = to_add;
 				m_object.last_check = new Date().getTime() - 60000;
 				m_object.count = 0;
-				m_object.last_20_posts = new Array();
+				m_object.last_20_posts = [];
 				m_object.last_post = 0;
 
 				XKit.extensions.people_notifier.blogs.push(m_object);

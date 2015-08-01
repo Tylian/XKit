@@ -175,33 +175,33 @@ var storage_used = -1;
 		
 			request: function(settings) {
 			
-				settings['url'] = settings['url'].replace("http://api.tumblr.com","https://api.tumblr.com");
+				settings.url = settings.url.replace("http://api.tumblr.com","https://api.tumblr.com");
 				
-				if (settings['url'] == "http://www.tumblr.com/dashboard" || settings['url'] == "http://www.tumblr.com/dashboard/") {
-					settings['url'] = settings['url'].replace("http://","https://");
+				if (settings.url == "http://www.tumblr.com/dashboard" || settings.url == "http://www.tumblr.com/dashboard/") {
+					settings.url = settings.url.replace("http://","https://");
 				} 
 		
-				if (settings['url'].indexOf("http://") != -1 && settings['url'].indexOf("tumblr.com/svc/") != -1) {
-					settings['url'] = settings['url'].replace("http://","https://");
+				if (settings.url.indexOf("http://") != -1 && settings.url.indexOf("tumblr.com/svc/") != -1) {
+					settings.url = settings.url.replace("http://","https://");
 				} 
 			
-				var toSend = new Object();
+				var toSend = {};
 				toSend.settings = settings;
 				toSend.request_id = XBridge.make_id();
 				
-				console.log("XBridge: Sending network request for " + settings["url"]);
+				console.log("XBridge: Sending network request for " + settings.url);
 				console.log("XBridge: Network request ID is " + toSend.request_id);
 				
-				var callbacks = new Object();
+				var callbacks = {};
 				callbacks.id = toSend.request_id;
-				callbacks.onload = settings['onload'];
-				callbacks.onerror = settings['onerror'];
+				callbacks.onload = settings.onload;
+				callbacks.onerror = settings.onerror;
 				XBridge.network.callbacks.push(callbacks);
 				
 				// Safari does not like us passing functions.
-				delete toSend.settings['onload'];
-				delete toSend.settings['onerror'];
-				toSend.settings['headers'] = JSON.stringify(toSend.settings['headers']);
+				delete toSend.settings.onload;
+				delete toSend.settings.onerror;
+				toSend.settings.headers = JSON.stringify(toSend.settings.headers);
 				
 				safari.self.tab.dispatchMessage("http_request", toSend);
 			
@@ -219,7 +219,7 @@ var storage_used = -1;
 				XBridge.storage_area[name] = toWrite;
 				
 				// Send data to background page so it would get saved.
-				var toSend = new Object();
+				var toSend = {};
 				toSend.name = name;
 				toSend.value = toWrite;
 				safari.self.tab.dispatchMessage("save_storage_value", toSend);
@@ -255,7 +255,7 @@ var storage_used = -1;
 			
 			erase_all: function(callback) {
 			
-				var callbackObject = new Object();
+				var callbackObject = {};
 				callbackObject.id = XBridge.make_id();
 				callbackObject.callback = callback;
 				XBridge.storage.callbacks.push(callbackObject);

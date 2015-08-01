@@ -72,10 +72,10 @@ XKit.extensions.post_crushes = new Object({
 		var blog_url = $("#search_form").find("[name='t']").val();
 		var send_url = "http://www.studioxenix.com/xkit/crushes/index.php";
 		var send_string = "?xkit=xkitnext";
-		var crush_img = new Array();
-		var crush_name = new Array();
-		var crush_url = new Array();
-		var crush_val = new Array();
+		var crush_img = [];
+		var crush_name = [];
+		var crush_url = [];
+		var crush_val = [];
 		var i = 0;
 
 		$("#xkit_post_crushes").removeClass("xkit_button_green");
