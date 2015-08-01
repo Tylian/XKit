@@ -4,6 +4,8 @@
     "devel"         : false,
     "jquery"        : true,
     "nonstandard"   : true,
+    "laxbreak"      : true,
+    "lastsemic"     : true,
     "globals": {
       "console"             : true,
       "document"            : true,
