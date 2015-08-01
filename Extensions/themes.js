@@ -1,5 +1,5 @@
 //* TITLE Themes **//
-//* VERSION 0.1 REV B **//
+//* VERSION 0.1.1 **//
 //* DESCRIPTION Themes for your dashboard **//
 //* DETAILS This extension allows you to install themes from the XKit Theme Gallery onto your dashboard. New themes are added regularly, and if you are good with CSS, send an ask to xkit-dev.tumblr.com to get your theme added here! **//
 //* DEVELOPER STUDIOXENIX **//
@@ -17,6 +17,14 @@ XKit.extensions.themes = new Object({
 
 	run: function() {
 		this.running = true;
+
+		var where = XKit.interface.where();
+		if (!(where.inbox || where.activity || where.queue || where.channel ||
+		      where.search || where.drafts || where.followers || where.dashboard ||
+		      where.likes)) {
+			return;
+		}
+
 
 		this.current_theme = XKit.storage.get("themes","my_theme","");
 		if (typeof this.current_theme === "undefined") {
