@@ -29,12 +29,6 @@ XKit = {
 		XKit.init_flags();
 		// If not in an iframe
 		if ((window.window === window.top) && document.location.href.indexOf("://www.tumblr.com/dashboard/iframe?") === -1) {
-			if (!document.location.href.match(/https?:\/\/(www.)?tumblr.com/)) {
-				// We are likely on a blog's page, like http://new-xkit-extension.tumblr.com
-				// For now it makes the most sense to just quit here because blogs
-				// should be moderately private and are hard to interface with
-				return;
-			}
 			XKit.page.standard = true;
 			XKit.init_extension();
 		} else {
