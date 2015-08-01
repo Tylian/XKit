@@ -1,5 +1,5 @@
 //* TITLE XInbox **//
-//* VERSION 1.9 REV D **//
+//* VERSION 1.9.1 **//
 //* DESCRIPTION Enhances your Inbox experience **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS XInbox allows you to tag posts before posting them, and see all your messages at once, and lets you delete multiple messages at once using the Mass Editor mode. To use this mode, go to your Inbox and click on the Mass Editor Mode button on your sidebar, click on the messages you want to delete then click the Delete Messages button.  **//
@@ -319,85 +319,82 @@ XKit.extensions.xinbox = new Object({
 		});
 		
 	},
-	
+
 	search_do_posts: function() {
-		
 		var m_value = XKit.extensions.xinbox.inbox_search_term;
-		
+
+		function get_post_body(post) {
+			return post.find(".post_body").not(".post_ask_answer_form_container");
+		}
+
+		var posts = $(".post");
+
 		if (m_value === "" ||m_value.length <= 1) {
 			// Show all
-			
-			/*$(".post").each(function() {
-				var m_html = XKit.extensions.xinbox.remove_wraps($(this).find(".post_body").html());
-				$(this).find(".post_body").html(m_html);	
-			});*/
-			$(".post").find(".post_body").find("mark").contents().unwrap();
-			
+
+			get_post_body(posts).find("mark").contents().unwrap();
+
 			if ($("#xinbox-search-bar").length > 0) {
 				$("#xinbox-search-bar").slideUp('slow', function() { $(this).remove(); });
 			}
-	
-			$(".post").parent().removeClass("xkit-inbox-found");
-			$(".post").parent().slideDown('fast');
+
+			posts.parent().removeClass("xkit-inbox-found");
+			posts.parent().slideDown('fast');
+
 			XKit.tools.add_function(function() {
 				Tumblr.Events.trigger("DOMEventor:updateRect");
 			}, true, "");
 			return;
 		}
-		
+
 		var i_html = "Searching for <b>\"" + m_value + "\"</b><br/><span id=\"xinbox-search-found-count\">0</span> results found so far, inspected <span id=\"xinbox-search-search-count\">0</span> posts.<br/><small>Scroll down to load more asks and results.</small>";
-		
+
 		if ($("#xinbox-search-bar").length > 0) {
 			$("#xinbox-search-bar").html(i_html);
 		} else {
 			$("#posts").before("<div id=\"xinbox-search-bar\">" + i_html + "</div>");
 		}
-		
-		$(".post").each(function() {
-				
-			var username = $(this).attr('data-tumblelog-name');
+
+		posts.each(function() {
+			var post = $(this);
+
+			var username = post.attr('data-tumblelog-name');
 			var hide_this = false;
-			
-			var to_search_in = $(this).find(".post_body").text().toLowerCase();
-			
-			console.log(to_search_in);
-				
+
+			var to_search_in = post.find(".post_body").text().toLowerCase();
+
 			if (typeof username !== "undefined") {
 				to_search_in = to_search_in + username;
 			}
-			
+
 			if (to_search_in.indexOf(m_value) === -1) {
 				hide_this = true;
 			}
-			
+
+			var post_body = get_post_body(post);
+
 			if (!hide_this) {
-					
-				$(this).parent().slideDown('fast');
-				$(this).parent().addClass("xkit-inbox-found");
-				
-				$(this).find(".post_body").find("mark").contents().unwrap();
-				var m_html = XKit.extensions.xinbox.return_highlighted_html($(this).find(".post_body").html(), m_value);
-				$(this).find(".post_body").html(m_html);
-					
+				post.parent().slideDown('fast');
+				post.parent().addClass("xkit-inbox-found");
+
+				post_body.find("mark").contents().unwrap();
+				var m_html = XKit.extensions.xinbox.return_highlighted_html(post_body.html(), m_value);
+				post_body.html(m_html);
+
 			} else {
-					
-				$(this).parent().slideUp('fast');
-				$(this).parent().removeClass("xkit-inbox-found");
-				$(this).find(".post_body").find("mark").contents().unwrap();
-				//var m_html = XKit.extensions.xinbox.remove_wraps($(this).find(".post_body").html());
-				//$(this).find(".post_body").html(m_html);
-					
-			}	
-				
+				post.parent().slideUp('fast');
+				post.parent().removeClass("xkit-inbox-found");
+				post_body.find("mark").contents().unwrap();
+			}
+
 		});
-		
+
 		$("#xinbox-search-found-count").html($(".xkit-inbox-found").length);
 		$("#xinbox-search-search-count").html($(".post").length);
 
 		XKit.tools.add_function(function() {
 			Tumblr.Events.trigger("DOMEventor:updateRect");
-		}, true, "");	
-		
+		}, true, "");
 	},
 	
 	remove_wraps: function(src_str) {
@@ -422,39 +419,43 @@ XKit.extensions.xinbox = new Object({
 		return src_str;
 		
 	},
-	
+
 	inbox_search_start: function() {
-		
+
 		$("#xinbox_search_button").toggleClass("xkit-xinbox-in-search");
-		
+		var right_column_children = $("#right_column").children().not("#xinbox_sidebar").not("#xinbox-search-box").not("script");
+
 		if ($("#xinbox_search_button").hasClass("xkit-xinbox-in-search")) {
-			
+
 			$("#xinbox_search_li").addClass("selected");
 			XKit.extensions.xinbox.inbox_search_term = "";
-			
+
 			$(".post").parent().addClass("xkit-inbox-found");
 			XKit.tools.add_css(".post_container { display: none; } .post_container.xkit-inbox-found { display: block; } ", "xkit-inbox-search");
 			XKit.post_listener.add("xinbox_search", XKit.extensions.xinbox.search_do_posts);
 
 			$("#xinbox_sidebar").addClass("xkit_others_hidden");
-			$("#right_column").children().not("#xinbox_sidebar").not("#xinbox-search-box").slideUp('slow', function() { $(this).addClass("xinbox-search-hidden-box"); });	
+			right_column_children.slideUp('slow', function() {
+				$(this).addClass("xinbox-search-hidden-box");
+			});
 			$("#xinbox-search-box").slideDown('slow');
-			
+
 		} else {
-			
+
 			$("#xinbox_search_li").removeClass("selected");
 			XKit.extensions.xinbox.inbox_search_term = "";
-			
+
 			XKit.extensions.xinbox.reset_search();
-			
+
 			$("#xinbox_sidebar").removeClass("xkit_others_hidden");
-			$("#right_column").children().not("#xinbox_sidebar").not("#xinbox-search-box").slideDown('slow', function() { $(this).removeClass("xinbox-search-hidden-box"); });	
-			$("#xinbox-search-box").slideUp('slow');	
-			
+			right_column_children.slideDown('slow', function() {
+				$(this).removeClass("xinbox-search-hidden-box");
+			});
+			$("#xinbox-search-box").slideUp('slow');
+
 		}
-		
 	},
-	
+
 	reset_search: function() {
 		
 		$(".post").parent().removeClass("xkit-inbox-found");
