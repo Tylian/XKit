@@ -1447,18 +1447,6 @@ XKit.extensions.one_click_postage = new Object({
 			m_object["post[tags]"] = "";
 		}
 
-
-
-		// Call Auto Tagger for tags if enabled
-		var additional_tags = this.get_auto_tagger_tags(data.post, state, false);
-		if (additional_tags !== "") {
-			if (m_object["post[tags]"] === "") {
-				m_object["post[tags]"] = additional_tags;
-			} else {
-				m_object["post[tags]"] = m_object["post[tags]"] + "," + additional_tags;
-			}
-		}
-
 		m_object["post[publish_on]"] ="";
 		if (state === 0) {
 			m_object["post[state]"] = "";
