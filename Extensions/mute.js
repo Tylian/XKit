@@ -1,5 +1,5 @@
 //* TITLE Mute! **//
-//* VERSION 2.3.0 **//
+//* VERSION 2.3.1 **//
 //* DESCRIPTION Better than 'shut up!' **//
 //* DETAILS This extension allows you to hide text and answer posts by an user while still seeing their other posts. Useful if a blogger has nice posts but a bad personality. Please note that you'll need to re-mute them if a user changes their URL. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -114,15 +114,9 @@ XKit.extensions.mute = new Object({
 		XKit.post_listener.add("mute", XKit.extensions.mute.do_posts);
 		XKit.extensions.mute.do_posts();
 
-		// TODO: Refactor to use when_running with a failure listener
-		setTimeout(function() {
-			if (!XKit.installed.is_running('show_more')) {
-				$(document).on('click mouseover','.tumblelog_popover .info_popover_button', XKit.extensions.mute.add_links_wo_usermenus);
-				return;
-			}
-
-			if (XKit.extensions.show_more.preferences.use_classic_menu.value) {
-				XKit.extensions.show_more.add_custom_menu("mute", function(data) {
+		XKit.installed.when_running('show_more', function(show_more) {
+			if (show_more.preferences.use_classic_menu.value) {
+				show_more.add_custom_menu("mute", function(data) {
 					var user_url = data.name;
 					var m_class = "";
 					var m_sentence = "Mute";
@@ -137,7 +131,7 @@ XKit.extensions.mute = new Object({
 
 				});
 			} else {
-				XKit.extensions.show_more.add_custom_menu("mute", function(data) {
+				show_more.add_custom_menu("mute", function(data) {
 					var user_url = data.name;
 					var m_class = "";
 					var m_sentence = "Mute";
@@ -156,7 +150,9 @@ XKit.extensions.mute = new Object({
 					"</li>";
 				});
 			}
-		}, 2000);
+		}, function() {
+			$(document).on('click mouseover','.tumblelog_popover .info_popover_button', XKit.extensions.mute.add_links_wo_usermenus);
+		});
 	},
 
 	add_links_wo_usermenus: function(e) {
@@ -432,7 +428,7 @@ XKit.extensions.mute = new Object({
 		if ($(menu_box).find(".xkit-mute-button").length > 0) {
 			// Remove first.
 			$(menu_box).find(".xkit-mute-button").parent().remove();
-		};
+		}
 
 		/*
 
@@ -561,7 +557,6 @@ XKit.extensions.mute = new Object({
 		for (var i=0;i<XKit.extensions.mute.muted.length;i++) {
 			if (XKit.extensions.mute.muted[i].username === ud) {
 				return XKit.extensions.mute.muted[i];
-				break;
 			}
 		}
 
@@ -709,15 +704,15 @@ XKit.extensions.mute = new Object({
 		}
 
 		if (found_count <= 0) {
-			var m_html = "<div id=\"xkit-control-panel-mute\" class=\"no-muted-users\"><b>You have no muted users.</b><br/>You can add some using the menu on their avatars on your dashboard.<br/>Hover over their avatar, click on the user options icon, then Mute.</div>";
-			$(mdiv).append(m_html);
+			var no_muted_html = "<div id=\"xkit-control-panel-mute\" class=\"no-muted-users\"><b>You have no muted users.</b><br/>You can add some using the menu on their avatars on your dashboard.<br/>Hover over their avatar, click on the user options icon, then Mute.</div>";
+			$(mdiv).append(no_muted_html);
 			return;
 		}
 
 		var m_html = "";
-		for(var i=0;i<XKit.extensions.mute.muted.length;i++) {
-			m_html = m_html + XKit.extensions.mute.create_div(XKit.extensions.mute.muted[i]);
-		}
+		XKit.extensions.mute.muted.forEach(function(muted) {
+			m_html = m_html + XKit.extensions.mute.create_div(muted);
+		});
 
 		$(mdiv).append("<div id=\"xkit-control-panel-mute\">" + m_html + "</div>");
 

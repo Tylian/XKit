@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 3.1.3 **//
+//* VERSION 3.1.4 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER STUDIOXENIX **//
 
@@ -2184,32 +2184,38 @@ XKit.tools.get_blogs = function() {
  * @return {Boolean} Whether the extension is running
  */
 XKit.installed.is_running = function(extension) {
-  return XKit.installed.check(extension) &&
-         typeof(XKit.extensions[extension]) !== "undefined" &&
-         XKit.extensions[extension].running;
+	return XKit.installed.check(extension) &&
+	       typeof(XKit.extensions[extension]) !== "undefined" &&
+	       XKit.extensions[extension].running;
 };
 
 /**
  * Schedule a callback to be run only if `extension` is installed and running.
+ * Call an alternate if the extension is not running.
  * @param {String} extension
- * @param {Function} callback
+ * @param {Function} onRunning
+ * @param {Function} onFailure
  */
-XKit.installed.when_running = function(extension, callback) {
-  if (!XKit.installed.check(extension)) {
-    return;
-  }
-  var tries = 5;
-  function check() {
-    if (tries < 0) {
-      return;
-    }
-    if (!XKit.installed.is_running(extension)) {
-      tries--;
-      setTimeout(check, 250);
-      return;
-    }
-    // The extension exists and has been installed
-    callback(XKit.extensions[extension]);
-  }
-  setTimeout(check, 0);
+XKit.installed.when_running = function(extension, onRunning, onFailure) {
+	if (!XKit.installed.check(extension)) {
+		onFailure();
+		return;
+	}
+	// Wait up to 8 seconds for the extension to begin running
+	var tries = 20;
+	var timeout = 400;
+	function check() {
+		if (tries < 0) {
+			onFailure();
+			return;
+		}
+		if (!XKit.installed.is_running(extension)) {
+			tries--;
+			setTimeout(check, timeout);
+			return;
+		}
+		// The extension exists and has been installed
+		onRunning(XKit.extensions[extension]);
+	}
+	setTimeout(check, 0);
 };
