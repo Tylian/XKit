@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 3.1.4 **//
+//* VERSION 3.1.5 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER STUDIOXENIX **//
 
@@ -2033,9 +2033,29 @@ XKit.tools.get_blogs = function() {
 				m_return.endless = $("body").hasClass("without_auto_paginate") === false;
 
 				return m_return;
+			},
+
+			/**
+			 * Tell Tumblr to reflow the page. Used to recalculate post dimensions
+			 * and j/k scrolling.
+			 */
+			trigger_reflow: function() {
+				if (this.where().search) {
+					// Found by logging calls to Tumblr.Events.trigger on the search page
+					// search:post:photo_expanded is where the magic happens
+					XKit.tools.add_function(function() {
+						Tumblr.Events.trigger("post:photo_expanded");
+						Tumblr.Events.trigger("search:post:photo_expanded");
+						Tumblr.Events.trigger("search:layout:updated");
+					}, true, "");
+				} else {
+					XKit.tools.add_function(function() {
+						Tumblr.Events.trigger("DOMEventor:updateRect");
+					}, true, "");
+				}
 			}
 		});
-		
+
 		XKit.init = function() {
 	
 			// Check page then return control to init_extension.
