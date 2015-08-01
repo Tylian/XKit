@@ -755,17 +755,17 @@ XKit = {
 
 				var conflicting_extension = false;
 
-				if ($("#dashboard_controls_open_blog").length === 0) {
+				/*if ($("#dashboard_controls_open_blog").length === 0) {
 					conflicting_extension = true;
-				}
+				}*/
 
 				if ($("#bt_NewPost").length > 0) {
 					conflicting_extension = true;
 				}
 
-				if ($(".likes").length === 0 || $(".following").length === 0 || $(".spotlight").length === 0) {
+				/*if ($(".likes").length === 0 || $(".following").length === 0 || $(".spotlight").length === 0) {
 					conflicting_extension = true;
-				}
+				}*/
 
 				if (conflicting_extension) {
 					m_return.html =	m_return.html + "<li>Unknown extension found (removal optional)</li>";
