@@ -1,5 +1,5 @@
 //* TITLE Read More Now **//
-//* VERSION 1.4.1 **//
+//* VERSION 1.4.3 **//
 //* DESCRIPTION Read Mores in your dash **//
 //* DETAILS This extension allows you to read 'Read More' posts without leaving your dash. Just click on the 'Read More Now!' button on posts and XKit will automatically load and display the post on your dashboard. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -78,11 +78,19 @@ XKit.extensions.read_more_now = new Object({
 						m_contents = m_object.posts[0].description;
 					}
 
-					if ($(m_cont).parent().parent().find(".post_title").length > 0) {
-						var post_title = $(m_cont).parent().parent().find(".post_title")[0].outerHTML;
-						$(m_cont).parent().parent().html(XKit.extensions.read_more_now.strip_scripts(post_title + m_contents));
+					var post_cont = $(m_cont).parent().parent();
+					if (post_cont.find(".post_title").length > 0) {
+						var post_title = post_cont.find(".post_title")[0].outerHTML;
+						post_cont.html(XKit.extensions.read_more_now.strip_scripts(post_title + m_contents));
 					} else {
-						$(m_cont).parent().parent().html(XKit.extensions.read_more_now.strip_scripts(m_contents));
+						post_cont.html(XKit.extensions.read_more_now.strip_scripts(m_contents));
+					}
+
+					if (XKit.interface.where().search) {
+						post_cont.find("img").load(function() {
+							XKit.interface.trigger_reflow();
+						});
+						XKit.interface.trigger_reflow();
 					}
 				} catch(e) {
 					$(m_cont).removeClass("disabled");
@@ -117,6 +125,7 @@ XKit.extensions.read_more_now = new Object({
 	},
 
 	do: function() {
+		var need_reflow = false;
 
 		$(".post").not(".xread-more-now-done").each(function() {
 			var post = $(this);
@@ -127,6 +136,7 @@ XKit.extensions.read_more_now = new Object({
 
 			if (post.hasClass("read_more_container")) {
 				XKit.extensions.read_more_now.handle_read_more_post(post);
+				need_reflow = true;
 				return;
 			}
 
@@ -136,6 +146,8 @@ XKit.extensions.read_more_now = new Object({
 					if (a.text().trim() !== "Keep reading") {
 						return;
 					}
+					need_reflow = true;
+
 					if (/https?:\/\/[^.]+\.tumblr\.com\/post\/\d+/.test(a.attr("href"))) {
 						XKit.extensions.read_more_now.append_button_with_link(a.parent(), a.attr("href"));
 					} else {
@@ -149,6 +161,9 @@ XKit.extensions.read_more_now = new Object({
 				});
 			}
 		});
+		if (need_reflow) {
+			XKit.interface.trigger_reflow();
+		}
 	},
 
 	handle_read_more_post: function(post) {
