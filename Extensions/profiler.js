@@ -1,5 +1,5 @@
 //* TITLE Profiler **//
-//* VERSION 1.2 REV C **//
+//* VERSION 1.2.1 **//
 //* DESCRIPTION The User Inspection Gadget **//
 //* DETAILS Select Profiler option from the User Menu to see information such as when they started blogging, how many posts they have, timezone, and more.<br><br>Requires User Menus+ to be installed. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -142,59 +142,33 @@ XKit.extensions.profiler = new Object({
 
 		}
 
-		if (typeof XKit.extensions.show_more === "undefined") {
+		XKit.installed.when_running("show_more", function() {
+			if (XKit.extensions.show_more.preferences.use_classic_menu.value === true) {
+				XKit.extensions.show_more.add_custom_menu("profiler", function(data) {
+					var user_url = data.name;
+
+					$(document).off("click", ".xkit-profiler-button-" + user_url, XKit.extensions.profiler.menu_clicked);
+					$(document).on("click", ".xkit-profiler-button-" + user_url, XKit.extensions.profiler.menu_clicked);
+
+					return "<div data-url=\"" + user_url + "\" class=\"xkit-profiler-button-" + user_url + " xkit-profiler\">Profiler</div>";
+				});
+			} else {
+				XKit.extensions.show_more.add_custom_menu("profiler", function(data) {
+					var user_url = data.name;
+
+					$(document).off("click", ".xkit-profiler-button-" + user_url, XKit.extensions.profiler.menu_clicked);
+					$(document).on("click", ".xkit-profiler-button-" + user_url, XKit.extensions.profiler.menu_clicked);
+
+					return "<li>" +
+						"<a data-url=\"" + user_url + "\" class=\"xkit-profiler-button-" + user_url + " xkit-profiler xkit-new-menu-fix\">" +
+							"<span class=\"hide_overflow\">Profiler</span>" +
+						"</a>" +
+			 		 "</li>";
+				});
+			}
+		}, function() {
 			XKit.extensions.profiler.show_ump_error();
-			return;
-		} else {
-
-			setTimeout(function() {
-
-				if (XKit.extensions.show_more.running !== true) {
-					XKit.extensions.profiler.show_ump_error();
-					return;
-				} else {
-
-                			if (XKit.extensions.show_more.preferences.use_classic_menu.value === true) {
-
-                				XKit.extensions.show_more.add_custom_menu("profiler", function(data) {
-
-                					console.log(data);
-                					var user_url = data.name;
-
-							$(document).off("click", ".xkit-profiler-button-" + user_url, XKit.extensions.profiler.menu_clicked);
-							$(document).on("click", ".xkit-profiler-button-" + user_url, XKit.extensions.profiler.menu_clicked);
-
-							return "<div data-url=\"" + user_url + "\" class=\"xkit-profiler-button-" + user_url + " xkit-profiler\">Profiler</div>";
-
-                				});
-
-                			} else {
-
-                				XKit.extensions.show_more.add_custom_menu("profiler", function(data) {
-
-                					console.log("******************************");
-                					console.log(data);
-                					console.log("******************************");
-                					var user_url = data.name;
-
-							$(document).off("click", ".xkit-profiler-button-" + user_url, XKit.extensions.profiler.menu_clicked);
-							$(document).on("click", ".xkit-profiler-button-" + user_url, XKit.extensions.profiler.menu_clicked);
-
-							return "<li>" +
-                						"<a data-url=\"" + user_url + "\" class=\"xkit-profiler-button-" + user_url + " xkit-profiler xkit-new-menu-fix\">" +
-                							"<span class=\"hide_overflow\">Profiler</span>" +
-                						"</a>" +
-                			 		 "</li>";
-
-                				});
-
-                			}
-
-				}
-
-			}, 2000);
-
-		}
+		});
 
 	},
 
