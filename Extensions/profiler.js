@@ -367,7 +367,7 @@ XKit.extensions.profiler = new Object({
 
 				if (XKit.extensions.profiler.window_id !== m_window_id) {return; }
 
-				var data = JSON.parse(response.responseText).response
+				var data = JSON.parse(response.responseText).response;
 				var dtx = new Date(data.blog.updated * 1000);
 				var dt = moment(dtx);
 
@@ -405,7 +405,7 @@ XKit.extensions.profiler = new Object({
 						return;
 					},
 					onload: function(response) {
-						var data = JSON.parse(response.responseText).response
+						var data = JSON.parse(response.responseText).response;
 						var date = new Date(data.posts[0].timestamp*1000);
 						$("#xkit-profiler-since").removeClass("loading-up").html(date.getFullYear());
 					}
@@ -476,15 +476,16 @@ XKit.extensions.profiler = new Object({
 
 				if (XKit.extensions.profiler.window_id !== m_window_id) {return; }
 
+				var data = null;
 				try {
-					var data = JSON.parse(response.responseText).response
+					data = JSON.parse(response.responseText).response;
 				} catch(e) {
 					console.log("Error parsing data.");
 					XKit.extensions.profiler.display_error(m_window_id);
 					return;
 				}
 
-				$("#xkit-profiler-" + to_get).removeClass("loading-up").html(data["total_posts"]);
+				$("#xkit-profiler-" + to_get).removeClass("loading-up").html(data.total_posts);
 
 				XKit.extensions.profiler.get_json_p2(user_url, m_window_id, (part + 1));
 
