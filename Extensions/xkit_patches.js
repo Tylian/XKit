@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 3.1.5 **//
+//* VERSION 3.1.6 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER STUDIOXENIX **//
 
@@ -2034,6 +2034,17 @@ XKit.tools.get_blogs = function() {
 
 				return m_return;
 			},
+
+			/**
+			 * Whether the page is an "official" tumblr page like the dashboard or
+			 * if it is a user-styled page like a blog.
+			 * @return {Boolean}
+			 */
+			is_tumblr_page: function() {
+				// Effectively if the href is of the form https://www.tumblr.com
+				return !!document.location.href.match(/^https?:\/\/(www\.)?tumblr\.com/);
+			},
+
 
 			/**
 			 * Tell Tumblr to reflow the page. Used to recalculate post dimensions
