@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 3.1.6 **//
+//* VERSION 3.1.7 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER STUDIOXENIX **//
 
@@ -288,26 +288,9 @@ XKit.extensions.xkit_patches = new Object({
 	},
 
 	do_support_links: function() {
-
-		var yes_do_it = false;
-                if (typeof XKit.extensions.show_more !== "undefined") {
-                	if (XKit.extensions.show_more.running === false) {
-				yes_do_it = true;
-			} else {
-				yes_do_it = false;
-			}
-		} else {
-			yes_do_it = true;
-		}
-
-		//// console.log("Doing support links? " + yes_do_it);
-
-		if (yes_do_it) {
-
+		XKit.installed.when_running("show_more", function() {
 			$(document).on('click','.tumblelog_menu_btn', XKit.extensions.xkit_patches.patch_ask);
-
-		}
-
+		});
 	},
 
 	patch_ask: function() {
