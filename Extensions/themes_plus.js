@@ -1,5 +1,5 @@
 //* TITLE Themes+ (preview) **//
-//* VERSION 0.2.5 **//
+//* VERSION 0.2.6 **//
 //* DESCRIPTION Customize More **//
 //* DETAILS Themes+ lets you customize your dashboard to your liking by letting you choose the colors, the images and options yourself. You can also export and import the themes you and others made. Please note that this is the preview edition, so it's lacking some functionality. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -582,7 +582,7 @@ XKit.extensions.themes_plus = new Object({
 			"text": "Half-Transparent Container<br/><small>(to use with Background Images)</small>",
 			"type": "checkbox",
 			"default": false,
-			"on_true": ".l-container.l-container--two-column .right_column, .l-container.l-container--two-column-dashboard .right_column, .l-container.l-container--two-column-dashboard .left_column { background: transparent !important; } .l-content, .search_form_row { background: rgba(0,0,0,0.43) !important; } .l-header .selection_nipple { border-bottom-color: rgba(0,0,0,0.43) !important; } .right_column:after { display: none; }",
+			"on_true": ".l-container.l-container--two-column .right_column, .l-container.l-container--two-column-dashboard .right_column, .l-container.l-container--two-column-dashboard .left_column { background: transparent !important; } .l-content, .search_form_row { background: rgba(0,0,0,0) !important; } .l-header .selection_nipple { border-bottom-color: rgba(0,0,0,0.43) !important; } .right_column:after { display: none; } .l-header-container--refresh { background: rgba(0,0,0,0.7); }"
 
 		},
 
@@ -748,8 +748,7 @@ XKit.extensions.themes_plus = new Object({
 		console.log("[Themes+] Rendering user defined theme.");
 
 		var m_css = "";
-		// Default m_css to make tumblr bits transparent
-		m_css += ".l-header-container--refresh { background: none; } ";
+		// Default m_css to make tumblr bits not appear
 		m_css += ".post_avatar { background: none; } ";
 		m_css += ".identity .controls_section.user_list li .follow_list_item_blog::before { display: none; } ";
 
