@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 3.1.7 **//
+//* VERSION 3.1.8 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER STUDIOXENIX **//
 
@@ -2208,11 +2208,13 @@ XKit.installed.is_running = function(extension) {
  * Call an alternate if the extension is not running.
  * @param {String} extension
  * @param {Function} onRunning
- * @param {Function} onFailure
+ * @param {Function?} onFailure
  */
 XKit.installed.when_running = function(extension, onRunning, onFailure) {
 	if (!XKit.installed.check(extension)) {
-		onFailure();
+		if (onFailure) {
+			onFailure();
+		}
 		return;
 	}
 	// Wait up to 8 seconds for the extension to begin running
@@ -2220,7 +2222,9 @@ XKit.installed.when_running = function(extension, onRunning, onFailure) {
 	var timeout = 400;
 	function check() {
 		if (tries < 0) {
-			onFailure();
+			if (onFailure) {
+				onFailure();
+			}
 			return;
 		}
 		if (!XKit.installed.is_running(extension)) {
