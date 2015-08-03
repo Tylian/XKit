@@ -1,5 +1,5 @@
 //* TITLE Tweaks **//
-//* VERSION 3.2.5 **//
+//* VERSION 3.2.6 **//
 //* DESCRIPTION Various little tweaks for your dashboard. **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS These are small little tweaks that allows you customize your dashboard. If you have used XKit 6, you will notice that some of the extensions have been moved here as options you can toggle. Keep in mind that some of the tweaks (the ones marked with a '*') can slow down your computer. **//
@@ -26,9 +26,9 @@ XKit.extensions.tweaks = new Object({
 			value: true
 		},
 		"grey_urls": {
-		    text: "Make URLs grey again",
-		    default: false,
-		    value: false
+			text: "Make URLs grey again",
+			default: false,
+			value: false
 		},
 		"fix_blockquotes": {
 			text: "Slim block quotes for easier reading",
@@ -150,9 +150,9 @@ XKit.extensions.tweaks = new Object({
 			value: false
 		},
 		"hide_explore": {
-		    text: "Hide explore button on trending posts",
-		    default: false,
-		    value: false
+			text: "Hide explore button on trending posts",
+			default: false,
+			value: false
 		},
 		"hide_notes": {
 			text: "Hide the notes on posts",
@@ -169,17 +169,22 @@ XKit.extensions.tweaks = new Object({
 			default: false,
 			value: false
 		},
+		"larger_top_arrow": {
+			text: "Make the scroll to top arrow larger",
+			default: false,
+			value: false
+		},
 		"hide_bubble": {
 			text: "Hide the new post bubble when you are not in dashboard",
 			default: false,
 			value: false,
 			slow: true
 		},
-                "no_animate_scroll": {
-                        text: "Don't animate scrolling when using J/K to move between posts",
-                        default: false,
-                        value: false
-                },
+		"no_animate_scroll": {
+			text: "Don't animate scrolling when using J/K to move between posts",
+			default: false,
+			value: false
+		},
 		"sep3": {
 			text: "Navigation and Search tweaks",
 			type: "separator",
@@ -414,18 +419,25 @@ XKit.extensions.tweaks = new Object({
 			}
 		}
 
-		if (XKit.extensions.tweaks.preferences.show_top_arrow.value === true) {
-			XKit.extensions.tweaks.add_css("#return_to_top { opacity: 1 !important; visibility: visible !important; }", "xkit_tweaks_scroll_top");
+		if (XKit.extensions.tweaks.preferences.show_top_arrow.value) {
+			XKit.extensions.tweaks.add_css(".elevator { opacity: 1 !important; visibility: visible !important; transform: translateY(0px) translateZ(0px) !important; }", "xkit_tweaks_show_top_arrow");
 			XKit.tools.add_function(function() {
 				Tumblr.KeyCommands.elevate = function(){jQuery("html, body").stop(true).animate({scrollTop:0},"slow");};
 			}, true, "");
 		}
 
-                if (XKit.extensions.tweaks.preferences.no_animate_scroll.value === true) {
-                        XKit.tools.add_function(function() {
-                                Tumblr.KeyCommands.animate_scroll = false;
-                        }, true, "");
-                }
+		if (XKit.extensions.tweaks.preferences.larger_top_arrow.value) {
+			XKit.extensions.tweaks.add_css(".elevator-wrapper { transform: scale(2.5) translateZ(0px); }", "xkit_tweaks_larger_top_arrow");
+			XKit.tools.add_function(function() {
+				Tumblr.KeyCommands.elevate = function(){jQuery("html, body").stop(true).animate({scrollTop:0},"slow");};
+			}, true, "");
+		}
+
+		if (XKit.extensions.tweaks.preferences.no_animate_scroll.value === true) {
+			XKit.tools.add_function(function() {
+				Tumblr.KeyCommands.animate_scroll = false;
+			}, true, "");
+		}
 
 		if (XKit.extensions.tweaks.preferences.slim_popups.value === true) {
 			XKit.extensions.tweaks.add_css(".tumblelog_menu_link { padding: 6px 10px 6px 34px !important; font-size: 13px !important; }" +
@@ -559,13 +571,12 @@ XKit.extensions.tweaks = new Object({
 				}
 			});
 			$("#new_post").click(function() {
-
 				$('html, body').animate({
-    					scrollTop: 30
- 				}, 500);
+					scrollTop: 30
+				}, 500);
 
- 				$("#new_post").removeClass("xkit-new-post-scrolls");
- 				$("body").removeClass("xkit-new-post-scrolls-page");
+				$("#new_post").removeClass("xkit-new-post-scrolls");
+				$("body").removeClass("xkit-new-post-scrolls-page");
 
 			});
 			XKit.extensions.tweaks.add_css(	".xkit-new-post-scrolls-page #posts { padding-top: 85px; }" +
@@ -757,8 +768,7 @@ XKit.extensions.tweaks = new Object({
 		$(".customize").parent().css("display","block");
 		$("xkit_post_tags_inner_add_back").addClass("post_tags_inner");
 		$("xkit_post_tags_inner_add_back").removeClass("xkit_post_tags_inner_add_back");
-		XKit.tools.remove_css("tweaks_grey_urls")
-
+		XKit.tools.remove_css("tweaks_grey_urls");
 	}
 
 });
