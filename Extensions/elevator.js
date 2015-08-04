@@ -1,5 +1,5 @@
 //* TITLE Elevator **//
-//* VERSION 0.0.2 **//
+//* VERSION 0.0.3 **//
 //* DESCRIPTION Scroll to top the old-fashioned way **//
 //* DETAILS Makes the scroll to top button scroll slowly and play elevator music. **//
 //* DEVELOPER hobinjk **//
@@ -45,8 +45,13 @@ XKit.extensions.elevator = {
 	},
 
 	destroy: function() {
+		if (!this.running) {
+			return;
+		}
 		this.running = false;
-		this.element.removeEventListener("click", this.elevate, true);
+		if (this.element) {
+			this.element.removeEventListener("click", this.elevate, true);
+		}
 	}
 };
 
