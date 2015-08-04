@@ -143,21 +143,22 @@ XKit.extensions.read_more_now = new Object({
 			if (XKit.extensions.read_more_now.preferences.process_keep_reading.value) {
 				post.find("a").each(function() {
 					var a = $(this);
-					if (a.text().trim() !== "Keep reading"
-                                           && (a.text().trim() !== "Weiterlesen")        //German
-                                           && (a.text().trim() !== "Afficher davantage") //French
-                                           && (a.text().trim() !== "Continua a leggere") //Italian
-                                           && (a.text().trim() !== "さらに読む")         //Japanese
-                                           && (a.text().trim() !== "Okumaya devam et")   //Turkish
-                                           && (a.text().trim() !== "Seguir leyendo")     //Spanish
-                                           && (a.text().trim() !== "Читать дальше")      //Russian
-                                           && (a.text().trim() !== "Czytaj dalej")       //Polish
-                                           && (a.text().trim() !== "Continuar a ler")    //Portuguese (Portugal)
-                                           && (a.text().trim() !== "Continuar lendo")    //Portuguese (Brazil)
-                                           && (a.text().trim() !== "Lees verder")        //Dutch
-                                           && (a.text().trim() !== "더 보기")  //Korean
-                                           && (a.text().trim() !== "继续阅读") //Simplified Chinese
-                                           && (a.text().trim() !== "繼續閱讀") /*Traditional Chinese (Hong Kong & Taiwan)*/) {
+					var link_text = a.text().trim();
+					if ((link_text !== "Keep reading")
+                                           && (link_text !== "Weiterlesen")        //German
+                                           && (link_text !== "Afficher davantage") //French
+                                           && (link_text !== "Continua a leggere") //Italian
+                                           && (link_text !== "さらに読む")         //Japanese
+                                           && (link_text !== "Okumaya devam et")   //Turkish
+                                           && (link_text !== "Seguir leyendo")     //Spanish
+                                           && (link_text !== "Читать дальше")      //Russian
+                                           && (link_text !== "Czytaj dalej")       //Polish
+                                           && (link_text !== "Continuar a ler")    //Portuguese (Portugal)
+                                           && (link_text !== "Continuar lendo")    //Portuguese (Brazil)
+                                           && (link_text !== "Lees verder")        //Dutch
+                                           && (link_text !== "더 보기")  //Korean
+                                           && (link_text !== "继续阅读") //Simplified Chinese
+                                           && (link_text !== "繼續閱讀") /*Traditional Chinese (Hong Kong & Taiwan)*/) {
 						return;
 					}
 					need_reflow = true;
