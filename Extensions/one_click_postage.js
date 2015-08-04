@@ -1,5 +1,5 @@
 //* TITLE One-Click Postage **//
-//* VERSION 4.0.1 **//
+//* VERSION 4.0.2 **//
 //* DESCRIPTION Lets you easily reblog, draft and queue posts **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//
@@ -533,6 +533,31 @@ XKit.extensions.one_click_postage = new Object({
 		return additional_tags;
 	},
 
+	/**
+	 * Return the addition of tags based on state from the auto_tagger. Only
+	 * queue is handled by this function because state is a horrible variable
+	 * @param {String} tags - current tags
+	 * @param {number} state - Post state: 0 is reblog, 1 is draft, 2 is queue
+	 * @return {String} new tags
+	 */
+	add_auto_tagger_state_tags: function(tags, state) {
+		if (!this.auto_tagger) {
+			return tags;
+		}
+
+		var auto_tagger = XKit.extensions.auto_tagger;
+		if (typeof(auto_tagger) == "undefined") {
+			return tags;
+		}
+
+		if (state !== 2) {
+			return tags;
+		}
+
+		var queue_tags = auto_tagger.return_tags_for_queue();
+		return auto_tagger.mreturn_add(tags, queue_tags);
+	},
+
 	cpanel: function(obj) {
 
 		$(obj).append("<div id=\"one_click_postage_warning_movage\">Tagging options are moved to a separate extension called \"Auto Tagger.\"</div>");
@@ -771,7 +796,7 @@ XKit.extensions.one_click_postage = new Object({
 		var menu_close = function() {
 			// Only close the menu if it doesn't have keyboard or mouse focus
 			if ($("#x1cpostage_box").find('input:focus, textarea:focus').length === 0 &&
-			        $('#x1cpostage_box:hover').length === 0) {
+			    $('#x1cpostage_box:hover').length === 0) {
 
 				XKit.extensions.one_click_postage.user_on_box = false;
 				//console.log("calling close_menu 3");
@@ -1191,6 +1216,14 @@ XKit.extensions.one_click_postage = new Object({
 			}
 		}, 700);
 	},
+
+	/**
+	 * Make a post
+	 * @param {number} state - State of post, 0 is reblog, 1 is draft, 2 is queue
+	 * @param {boolean} retry_mode - Whether the function is currently retrying
+	 * @param {boolean} quick_queue_mode - If this is from a Quick Queue button
+	 *                                     instead of the OCP ui (I think)
+	 */
 	post: function(state, retry_mode, quick_queue_mode) {
 
 		if (XKit.extensions.one_click_postage.preferences.show_reverse_ui.value === true) {
@@ -1265,8 +1298,10 @@ XKit.extensions.one_click_postage = new Object({
 		var tags = $("#x1cpostage_tags").val();
 
 		if (quick_queue_mode) {
-			tags = this.get_auto_tagger_tags(post, state, false);;
+			tags = this.get_auto_tagger_tags(post, state, false);
 			caption = "";
+		} else {
+			tags = this.add_auto_tagger_state_tags(tags, state);
 		}
 
 		var xkit_version = XKit.version.split(".");
