@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 3.1.8 **//
+//* VERSION 3.1.9 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER STUDIOXENIX **//
 
@@ -62,7 +62,7 @@ XKit.extensions.xkit_pack_launcher = new Object({
 								display_version = display_version.substring(0,19) + "..";	
 							}
 							
-							if (mdata.malicious == true || mdata.malicious == "true") {
+							if (mdata.malicious === true || mdata.malicious == "true") {
 								
 								XKit.window.show("Malicious extension","XKit prevented the installation of this extension since it is a known malicious extension.","error","<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
 								return;	
@@ -340,7 +340,7 @@ XKit.extensions.xkit_patches = new Object({
 		this.check_user_agent();
 		
 		XKit.extensions.xkit_pack_launcher.run();
-		
+
 XKit.tools.get_current_blog = function() {
 	var avatar = $("#post_controls_avatar");
 	if (avatar.length > 0) {
@@ -406,6 +406,17 @@ XKit.tools.get_blogs = function() {
 	m_blogs = XKit.tools.get_setting("xkit_cached_blogs","");
 	if (m_blogs !== "") {
 		return m_blogs.split(";");
+	}
+};
+
+XKit.tools.add_function = function(func, exec, addt) {
+	try {
+		var script = document.createElement("script");
+		script.textContent = "var add_tag = " + JSON.stringify(addt) + ";";
+		script.textContent = script.textContent + (exec ? "(" : "") + func.toString() + (exec ? ")();" : "");
+		document.body.appendChild(script);
+	} catch(e) {
+		alert(e.message);
 	}
 };
 
@@ -602,7 +613,7 @@ XKit.tools.get_blogs = function() {
 			
 			var additional_classes = "";
 			
-			if (wide == true) {
+			if (wide) {
 				additional_classes = "xkit-wide-window";	
 			}
 
@@ -621,7 +632,7 @@ XKit.tools.get_blogs = function() {
 				m_html = m_html + "<div class=\"xkit-window-buttons\">" + buttons + "</div>";
 			}
 	
-			if ($("#xkit-window-shadow").length == 0) {
+			if ($("#xkit-window-shadow").length === 0) {
 				m_html = m_html + "</div><div id=\"xkit-window-shadow\"></div>";
 			}
 	
@@ -877,7 +888,7 @@ XKit.tools.get_blogs = function() {
 							XKit.interface.kitty.stored = "";
 							callback(m_object);
 						}
-					})
+					});
 					
 				},
 				
@@ -964,24 +975,21 @@ XKit.tools.get_blogs = function() {
 					}
 
 					var html_or_markdown = $(".tab-label[data-js-srclabel]").text();
-					if (html_or_markdown === "HTML") {
-						XKit.tools.add_function(function(new_content){
-							var new_content = add_tag;
-							var editor_div = document.getElementsByClassName("ace_editor");
-							if (editor_div.length === 1) {
-								var editor = window.ace.edit(editor_div[0]);
-								editor.setValue(new_content);
-								setTimeout(function(){
-									jQuery(".ace_marker-layer").empty();
-								}, 500);
-							}
-						}, true, new_content);
-					} else if (html_or_markdown === "Markdown") {
-						// TODO
-					} else {
-						XKit.console.add("XKit can't detect which text editor is being used.");
-					}
-					
+					XKit.tools.add_function(function(){
+						var new_content = add_tag[0];
+						var html_or_markdown = add_tag[1];
+						var editor_div = document.getElementsByClassName("ace_editor");
+						if (html_or_markdown === "Markdown") {
+							new_content = require('to-markdown').toMarkdown(new_content);
+						}
+						if (editor_div.length === 1) {
+							var editor = window.ace.edit(editor_div[0]);
+							editor.setValue(new_content);
+							setTimeout(function(){
+								jQuery(".ace_marker-layer").empty();
+							}, 500);
+						}
+					}, true, [new_content, html_or_markdown]);
 				},
 
 				/**
@@ -1619,7 +1627,7 @@ XKit.tools.get_blogs = function() {
 				XKit.interface.added_icon_icon.push(icon);
 				XKit.interface.added_icon_text.push(text);
 				
-				if (typeof XKit.page.peepr != "undefined" && XKit.page.peepr == true) {
+				if (typeof XKit.page.peepr != "undefined" && XKit.page.peepr === true) {
 					
 					XKit.tools.add_css("." + class_name + "{" + 
 							" background-image: url('" + icon + "') !important;" +
@@ -1804,7 +1812,7 @@ XKit.tools.get_blogs = function() {
 				var n_count = 0;
 				
 				if ($(obj).find(".note_link_current").length > 0) {
-			  		if ($(obj).find(".note_link_current").html() == "") {
+					if ($(obj).find(".note_link_current").html() === "") {
 	  					n_count = 0;
 	  				} else {
 	  					n_count = $(obj).find(".note_link_current").html().replace(/\D/g,'');	
@@ -2006,7 +2014,7 @@ XKit.tools.get_blogs = function() {
 					m_return.search = true;
 				}
 
-				if ($("body").hasClass("dashboard_posts_likes") == true ||
+				if ($("body").hasClass("dashboard_posts_likes") ||
 						document.location.href.indexOf("tumblr.com/likes/") !== -1) {
 					m_return.likes = true;
 				}
@@ -2083,7 +2091,7 @@ XKit.tools.get_blogs = function() {
 		// New Post Listener for Posts_v2
 		XKit.post_listener.check = function(no_timeout) {
 			var post_count = -1;
-			if (typeof XKit.page.peepr != "undefined" && XKit.page.peepr == true) {
+			if (typeof XKit.page.peepr != "undefined" && XKit.page.peepr === true) {
 				post_count = $(".post").length;
 			} else {
 				if ($("#posts").length === 0) {
