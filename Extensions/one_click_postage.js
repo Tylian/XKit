@@ -1,5 +1,5 @@
 //* TITLE One-Click Postage **//
-//* VERSION 4.0.2 **//
+//* VERSION 4.0.3 **//
 //* DESCRIPTION Lets you easily reblog, draft and queue posts **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//
@@ -1000,21 +1000,38 @@ XKit.extensions.one_click_postage = new Object({
 
 	},
 
+	/**
+	 * @param {Event} e
+	 * @return {boolean} Whether e corresponds to an OCP key command
+	 */
+	is_key_command: function(e) {
+		if (e.metaKey || e.altKey || e.ctrlKey || e.shiftKey) {
+			return false;
+		}
+
+		// 68 = D, 81 = Q, 82 = R, 84 = T
+		if (e.which !== 68 && e.which !== 81 && e.which !== 82 && e.which !== 84) {
+			return false;
+		}
+		if ($(e.target).is('input,textarea') || $(e.target).attr('contenteditable')) {
+			return false;
+		}
+		return true;
+	},
+
 	suspend_tumblr_key_commands: function(e) {
-		// 82 = R
-		if (e.metaKey || e.altKey || e.ctrlKey || e.shiftKey || e.keyCode !== 82) {
+		if (!XKit.extensions.one_click_postage.is_key_command(e)) {
 			return;
 		}
+
 		XKit.tools.add_function(function(){Tumblr.KeyCommands.suspend()}, true, '');
 	},
 
 	process_keydown: function(e) {
-		// 68 = D, 81 = Q, 82 = R, 84 = T
-		if (e.metaKey || e.altKey || e.ctrlKey || e.shiftKey
-				|| (e.which !== 68 && e.which !== 81 && e.which !== 82 && e.which !== 84)
-				|| $(e.target).is('input,textarea')) {
+		if (!XKit.extensions.one_click_postage.is_key_command(e)) {
 			return;
 		}
+
 		// Tumblr puts 7-8px padding at the top of the screen when you use J/K to navigate
 		var screenPos = $(window).scrollTop() + 10;
 
