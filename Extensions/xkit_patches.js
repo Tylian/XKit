@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 3.1.9 **//
+//* VERSION 3.1.10 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER STUDIOXENIX **//
 
@@ -1004,7 +1004,7 @@ XKit.tools.add_function = function(func, exec, addt) {
 						tag_editor.addClass("editor-plaintext-has-text");
 						tag_editor.blur();
 					}
-					if (typeof tag !== "string") {
+					if (typeof tag_or_tags !== "string") {
 						tag_or_tags.forEach(function(tag) {
 							add_single_tag(tag.trim());
 						});
