@@ -1,5 +1,5 @@
 //* TITLE One-Click Postage **//
-//* VERSION 4.0.3 **//
+//* VERSION 4.0.4 **//
 //* DESCRIPTION Lets you easily reblog, draft and queue posts **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//
@@ -1032,15 +1032,16 @@ XKit.extensions.one_click_postage = new Object({
 			return;
 		}
 
-		// Tumblr puts 7-8px padding at the top of the screen when you use J/K to navigate
-		var screenPos = $(window).scrollTop() + 10;
+		var header_height = $(".l-header-container").height();
+		// Tumblr puts 20 px of padding between posts in addition to the height of the header
+		var screen_pos = $(window).scrollTop() + 20 + header_height;
 
 		// Find the post at the top of the screen, if there is one
 		$(".reblog_button,.post_control.reblog").filter(':visible').each(function() {
 			if ($(this).hasClass("radar_button")) {return; }
 			var parent_box = $(this).parentsUntil(".post").parent();
-			var boxPos = parent_box.offset().top;
-			if (boxPos <= screenPos && boxPos + parent_box.innerHeight() > screenPos) {
+			var box_pos = parent_box.offset().top;
+			if (box_pos <= screen_pos && box_pos + parent_box.innerHeight() > screen_pos) {
 				switch (e.which) {
 					case 68: // 68 = D
 						XKit.extensions.one_click_postage.open_menu($(this), true);
@@ -1062,7 +1063,7 @@ XKit.extensions.one_click_postage = new Object({
 				}
 				e.preventDefault();
 				return false;
-			} else if (boxPos > screenPos) {
+			} else if (box_pos > screen_pos) {
 				// Post is too far down the screen, stop looking
 				return false;
 			}
