@@ -1,5 +1,5 @@
 //* TITLE Blacklist **//
-//* VERSION 2.7.1 **//
+//* VERSION 2.7.2 **//
 //* DESCRIPTION Clean your dash **//
 //* DETAILS This extension allows you to block posts based on the words you specify. If a post has the text you've written in the post itself or it's tags, it will be replaced by a warning, or won't be shown on your dashboard, depending on your settings. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -496,12 +496,15 @@ XKit.extensions.blacklist = new Object({
 				}
 
 				// Collect the author info, if the option is toggled.
-				if (XKit.extensions.blacklist.preferences.check_authors.value == true) {
+				if (XKit.extensions.blacklist.preferences.check_authors.value) {
 					var m_author = "";
 					try {
-					if ($(this).find(".post_info_fence a").length > 0) {
-						m_author = $(this).find(".post_info_fence a").html();
-					}
+					var post_info_links = $(this).find(".post_info_link").map(function() {
+						return $(this).text();
+					});
+
+					// Join the text of the post info links with spaces
+					m_author += post_info_links.get().join(" ");
 
 					if ($(this).find(".reblog_source").length > 0) {
 						m_author = m_author + " " + $(this).find(".reblog_source a").html();
@@ -516,7 +519,7 @@ XKit.extensions.blacklist = new Object({
 						m_bTitle = $(this).find(".post_avatar_link").attr('title');
 					}
 					} catch(e) {
-						// console.log(" !! can't get author !!");
+						console.log(" !! can't get author !!");
 					}
 				}
 
