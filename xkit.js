@@ -230,7 +230,7 @@ XKit = {
 		max_try_count: 5,
 		// TODO: implement as module, lose most of this code
 		github_fetch: function(path, callback, fallback) {
-			var url = 'https://hobinjk.github.io/XKit/Extensions/dist/' + path;
+			var url = 'https://new-xkit.github.io/XKit/Extensions/dist/' + path;
 			GM_xmlhttpRequest({
 				method: "GET",
 				url: url,
