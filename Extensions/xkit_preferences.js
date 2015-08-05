@@ -1,5 +1,5 @@
 //* TITLE XKit Preferences **//
-//* VERSION 3.4.3 **//
+//* VERSION 3.4.4 **//
 //* DESCRIPTION Lets you customize XKit **//
 //* DEVELOPER STUDIOXENIX **//
 
@@ -1077,6 +1077,7 @@ XKit.extensions.xkit_preferences = new Object({
 		}
 
 		if (XKit.installed.check(obj.name) === true) { return ""; }
+		if (obj.name.startsWith("xkit_")) { return ""; }
 
 		var m_html = '<div class="xkit-gallery-extension" id="xkit-gallery-extension-' + obj.name + '" data-extension-id="' + obj.name + '">' +
 					 '<div class="overlay">downloading</div>' +
