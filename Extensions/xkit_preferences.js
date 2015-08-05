@@ -1,5 +1,5 @@
 //* TITLE XKit Preferences **//
-//* VERSION 3.4 REV B **//
+//* VERSION 3.4.3 **//
 //* DESCRIPTION Lets you customize XKit **//
 //* DEVELOPER STUDIOXENIX **//
 
