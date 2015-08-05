@@ -1,6 +1,6 @@
 //* TITLE       Retags **//
 //* DEVELOPER   alexhong **//
-//* VERSION     0.6.6 **//
+//* VERSION     0.6.7 **//
 //* DESCRIPTION Adds tags to reblog notes **//
 //* FRAME       false **//
 //* SLOW        false **//
@@ -16,7 +16,6 @@ var retags = {
 		});
 	}),
 	run: function(){
-		retags.css.appendTo('head');
 		try {
 			retags.blog_name = $('body').data('new-root').split('/').pop();
 		} catch(e) {
@@ -25,9 +24,6 @@ var retags = {
 		retags.add_toggle();
 		retags.observer.observe($('body')[0],{childList:true,subtree:true});
 		retags.tag(retags.selectors);
-		/*$('body').on('mouseover.retags','.post_tags_inner',function(){
-			$(this).attr('class','DISABLED_post_tags_inner');
-		});*/
 	},
 	destroy: function(){
 		retags.css.detach();
@@ -36,7 +32,6 @@ var retags = {
 		retags.observer.disconnect();
 		$('.retags').remove();
 		$('body').off('.retags');
-		// $('.DISABLED_post_tags_inner').attr('class','post_tags_inner');
 	},
 	add_toggle: function(){
 		var toggle = 'retags_toggle_'+retags.blog_name;
@@ -131,28 +126,6 @@ var retags = {
 			$c.append($retags);
 		}
 	},
-	css:
-	$('<style class="retags">\
-		.ui_notes .date_header .part_full_date.stuck { width: 165px; margin-left:400px; }\
-		label.retags { top: -1px; margin-left: 15px; }\
-		label.retags .binary_switch_label { position: absolute; top: 0; left: 24px; padding: 0 8px; line-height: 14px; white-space: nowrap; }\
-		div.retags { white-space: normal; margin-top: 10px; }\
-		div.retags.error { color: #c00000; }\
-		div.retags + div.retags:before { color: #c00000; content: "Warning: You are running multiple copies of Retags."; }\
-		div.retags + div.retags a { display: none; }\
-		div.retags a { color: #a7a7a7 !important; position: relative; margin-right: 11px; text-decoration: none; }\
-		div.retags a:hover { color: #969696 !important; }\
-		.note div.retags { font-size: 12px; line-height: 1.3; }\
-		.note div.retags a { margin-right: 9px; }\
-		.post_notes .notes_outer_container.popover .note.with_commentary span.action { min-height: 0; }\
-		.notification div.retags a { color: rgba(255,255,255,0.3) !important; }\
-		.notification div.retags a:hover { color: rgba(255,255,255,0.4) !important; }\
-		.ui_note div.retags { margin-top: 0; padding: 40px 50px 13px; }\
-		.ui_note div.retags + div.retags { margin-top: -5px; padding-top: 0; }\
-		.ui_note .part_response + div.retags { margin-top: -7px; padding-top: 0; }\
-		div.retags a:after { content: "\\00a0  "; font-size: 0; line-height: 0; }\
-	</style>')
-	,
 	css_toggle:
 	$('<style class="retags">\
 		.ui_note { display: none; }\
@@ -172,10 +145,12 @@ XKit.extensions.retags = {
  	running: false,
 	run: function(){
 		this.running = true;
+		XKit.tools.init_css("retags");
 		retags.run();
 	},
 	destroy: function(){
 		this.running = false;
+		XKit.tools.remove_css("retags");
 		retags.destroy();
 	}
 };
