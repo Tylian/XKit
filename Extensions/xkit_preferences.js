@@ -21,6 +21,7 @@ XKit.extensions.lang_english.xkit_preferences = new Object({
 		"notifications_title": "Notifications",
 		"language": "Language Settings",
 		"reset_xkit": "Reset XKit",
+		"config_data": "Export Configuation",
 		"news_notifications": "News Notifications",
 		"update_notifications": "Update Notifications",
 		"update_all": "Update All",
@@ -2052,7 +2053,8 @@ XKit.extensions.xkit_preferences = new Object({
 					'<div class="content" id="xkit-extensions-panel-left-inner">' +
 						'<div class="xkit-extension text-only separator">' + XKit.lang.get("xkit_preferences.other.configuration_title") + "</div>" +
 						'<div data-pname="update-all" class="xkit-extension text-only">' + XKit.lang.get("xkit_preferences.other.update_all") + "</div>" +
-						'<div data-pname="reset" class="xkit-extension text-only">"'+ XKit.lang.get("xkit_preferences.other.reset_xkit") + "</div>" +
+						'<div data-pname="reset" class="xkit-extension text-only">'+ XKit.lang.get("xkit_preferences.other.reset_xkit") + "</div>" +
+						'<div data-pname="config" class="xkit-extension text-only">'+ XKit.lang.get("xkit_preferences.other.config_data") + "</div>" +
 						'<div data-pname="storage" class="xkit-extension text-only">' + XKit.lang.get("xkit_preferences.other.storage") +  "</div>" +
 						'<div data-pname="language" style="display: none;" class="xkit-extension text-only">' + XKit.lang.get("xkit_preferences.other.language") + "</div>" +
 						'<div class="xkit-extension text-only separator">' + XKit.lang.get("xkit_preferences.other.notifications_title") + "</div>" +
@@ -2076,37 +2078,42 @@ XKit.extensions.xkit_preferences = new Object({
 
 		$("#xkit-extensions-panel-left-inner > .xkit-extension").not(".separator").click(function() {
 
-			$("#xkit-extensions-panel-left-inner > .xkit-extension").removeClass("selected");
-			$(this).addClass("selected");
+			var $this = $(this);
 
-			if ($(this).attr('data-pname') === "language") {
+			$("#xkit-extensions-panel-left-inner > .xkit-extension").removeClass("selected");
+			$this.addClass("selected");
+
+			if ($this.attr('data-pname') === "language") {
 				XKit.extensions.xkit_preferences.show_others_panel_language();
 			}
-			if ($(this).attr('data-pname') === "reset") {
+			if ($this.attr('data-pname') === "reset") {
 				XKit.extensions.xkit_preferences.show_others_panel_reset();
 			}
-			if ($(this).attr('data-pname') === "updates") {
+			if ($this.attr('data-pname') === "config") {
+				XKit.extensions.xkit_preferences.show_others_panel_config();
+			}
+			if ($this.attr('data-pname') === "updates") {
 				XKit.extensions.xkit_preferences.show_others_panel_updates();
 			}
-			if ($(this).attr('data-pname') === "update-all") {
+			if ($this.attr('data-pname') === "update-all") {
 				XKit.extensions.xkit_preferences.show_others_panel_update_all();
 			}
-			if ($(this).attr('data-pname') === "news") {
+			if ($this.attr('data-pname') === "news") {
 				XKit.extensions.xkit_preferences.show_others_panel_news();
 			}
-			if ($(this).attr('data-pname') === "console") {
+			if ($this.attr('data-pname') === "console") {
 				XKit.extensions.xkit_preferences.show_others_panel_console();
 			}
-			if ($(this).attr('data-pname') === "flags") {
+			if ($this.attr('data-pname') === "flags") {
 				XKit.extensions.xkit_preferences.show_others_panel_flags();
 			}
-			if ($(this).attr('data-pname') === "editor") {
+			if ($this.attr('data-pname') === "editor") {
 				XKit.extensions.xkit_preferences.show_others_panel_open_editor();
 			}
-			if ($(this).attr('data-pname') === "internal") {
+			if ($this.attr('data-pname') === "internal") {
 				XKit.extensions.xkit_preferences.show_others_panel_show_internals();
 			}
-			if ($(this).attr('data-pname') === "storage") {
+			if ($this.attr('data-pname') === "storage") {
 				XKit.extensions.xkit_preferences.show_others_panel_show_storage();
 			}
 
@@ -2310,6 +2317,58 @@ XKit.extensions.xkit_preferences = new Object({
 			XKit.extensions.xkit_preferences.close();
 		});
 
+	},
+
+	show_others_panel_config: function() {
+
+		var m_html =
+				'<div class="xkit-others-panel">' +
+				'<div class="title">Export Configuration</div>' +
+				'<div class="description">' +
+					"This panel lets you export parts of your XKit configuation for others to view. "+
+					"Including links to one of these when you submit a bug report will help us fix your problem sooner. "+
+				"</div>" +
+				'<div class="bottom-part">' +
+					'Information about what extensions you have installed, almost always required: ' +
+					'<div id="xkit-panel-extension-info" class="xkit-button block">Extension Info Export</div><br>' +
+					'This link will export your entire xkit configuation data: '+
+					'<div id="xkit-panel-full-config" class="xkit-button block">Full Configuation Export</div>' +
+					'This includes information that may be sensitive, including your tumblr urls, lists of blacklisted keywords, and more. '+
+					'Think carefully before sharing this information.'+
+				"</div>" +
+				"</div>";
+
+		$("#xkit-extensions-panel-right-inner").html(m_html);
+		$("#xkit-extensions-panel-right").nanoScroller();
+
+		function update_button(el, text) {
+			if(el.hasClass("disabled")){
+				return;
+			}
+			XKit.tools.make_gist(text).then(function (url) {
+				el.replaceWith('<input class="xkit-url-field" type="text" value="'+url+'">');
+				$('input.xkit-url-field[value="'+url+'"]')[0].setSelectionRange(0, url.length);
+			});
+			el.text("loading...");
+			el.addClass("disabled");
+		}
+
+		$("#xkit-panel-extension-info").click(function() {
+
+			var text = "XKit version "+XKit.version+"\n"+
+					"extensions:\n"+XKit.installed.list().map(function(i){
+						return "  "+i+": "+XKit.installed.version(i);
+					}).join("\n");
+
+			update_button($(this), text);
+		});
+
+		$("#xkit-panel-full-config").click(function() {
+
+			var text = JSON.stringify(XKit.tools.dump_config());
+
+			update_button($(this), text);
+		});
 	},
 
 	show_others_panel_console: function() {

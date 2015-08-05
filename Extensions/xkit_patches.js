@@ -409,6 +409,27 @@ XKit.tools.get_blogs = function() {
 	}
 };
 
+XKit.tools.make_gist = function(text, name) {
+
+	if(!name){
+		name = "xkit-gist";
+	}
+	var files = {};
+	files[name] = {content: text};
+	return $.ajax({
+		url: 'https://api.github.com/gists',
+		type: 'POST',
+		data: JSON.stringify({
+			description: "automatically created by xkit",
+			public: false,
+			files: files,
+		}),
+		// '{"description": "a gist for a user with token api call via ajax","public": false,"files": {"file1.txt": {"content": "testing 1 2 3"}}}'
+	}).then(function(resp){
+		return resp.html_url;
+	});
+};
+
 XKit.tools.add_function = function(func, exec, addt) {
 	try {
 		var script = document.createElement("script");
@@ -418,6 +439,17 @@ XKit.tools.add_function = function(func, exec, addt) {
 	} catch(e) {
 		alert(e.message);
 	}
+};
+
+XKit.tools.dump_config = function(){
+	var values = GM_listValues();
+	if(values.length === 0) { // chrome bridge.js#GM_listValues doesn't work.
+		values = Object.keys(window.xkit_storage);
+	}
+	return values.reduce(function(obj, x) {
+	    obj[x] = GM_getValue(x);
+	    return obj;
+	}, {});
 };
 
 	XKit.browser = function() {
