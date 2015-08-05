@@ -411,10 +411,7 @@ XKit.extensions.tweaks = new Object({
 		}
 		
 		if (XKit.extensions.tweaks.preferences.full_width_gifs.value === true) {
-			$("#new_post_label_text").on("click", XKit.extensions.tweaks.full_width_gifs_do_first);
-			if (document.URL.indexOf("/new/text") !== -1) {
-				XKit.extensions.tweaks.full_width_gifs_do_first();
-			}
+			XKit.interface.add_post_window_listener("tweaks-full-width-gifs", XKit.extensions.tweaks.full_width_gifs_do_first);
 		}
 	
 
