@@ -1,5 +1,5 @@
 //* TITLE Tweaks **//
-//* VERSION 3.2.6 **//
+//* VERSION 3.2.7 **//
 //* DESCRIPTION Various little tweaks for your dashboard. **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS These are small little tweaks that allows you customize your dashboard. If you have used XKit 6, you will notice that some of the extensions have been moved here as options you can toggle. Keep in mind that some of the tweaks (the ones marked with a '*') can slow down your computer. **//
@@ -77,6 +77,11 @@ XKit.extensions.tweaks = new Object({
 		},
 		"tag_slot_separator": {
 			text: "Add a separator line for Tag section on editor",
+			default: false,
+			value: false
+		},
+		"full_width_gifs": {
+			text: "Add a button in post editor options to toggle full-width GIFs",
 			default: false,
 			value: false
 		},
@@ -403,6 +408,13 @@ XKit.extensions.tweaks = new Object({
 
 		if (XKit.extensions.tweaks.preferences.tag_slot_separator.value === true) {
 			XKit.extensions.tweaks.add_css(".post-form--tag-editor { border-top: 1px solid rgb(240,240,240); padding-top: 15px; }", "ffff");
+		}
+		
+		if (XKit.extensions.tweaks.preferences.full_width_gifs.value === true) {
+			$("#new_post_label_text").on("click", XKit.extensions.tweaks.full_width_gifs_do_first);
+			if (document.URL.indexOf("/new/text") !== -1) {
+				XKit.extensions.tweaks.full_width_gifs_do_first();
+			}
 		}
 	
 
@@ -743,6 +755,26 @@ XKit.extensions.tweaks = new Object({
 
 		}
 
+	},
+	
+	full_width_gifs_do_first: function() {
+		$(document.body).on("click", ".post-settings", function() {
+			if (!$("#xkit-full-width-gifs").length) {
+				$(".form-horizontal").append("<div class=\"form-group\"><div class=\"group-label\"><label for=\"xkit-full-width-gifs\">Allow full-width GIFs?</label></div><div class=\"group-content\"><input id=\"xkit-full-width-gifs\" type=\"checkbox\" checked=\"checked\"></div></div>");
+				$("#xkit-full-width-gifs").on("click", function() {
+					XKit.extensions.tweaks.full_width_gifs_do($("#xkit-full-width-gifs").prop("checked"));
+				});
+			}
+		});
+	},
+	
+	full_width_gifs_do: function(is_checked) {
+		if (!is_checked) {
+			$(".editor-wrapper").find(".tmblr-full").addClass("tweaks-full-width-gifs");
+			$(".editor-wrapper").find(".tmblr-full").children().removeClass("tmblr-full");
+		} else {
+			$(".editor-wrapper").find(".tweaks-full-width-gifs").children().addClass("tmblr-full");
+		}
 	},
 
 	destroy: function() {
