@@ -665,7 +665,7 @@ XKit.extensions.xkit_preferences = new Object({
 
 		var festivus_on = "Festivus person?";
 		var festivus_off = "Presents!";
-		var festivus_test;
+		var festivus_text;
 		var festivus_display;
 
 		if (XKit.storage.get("xkit_preferences", "festivus", "") === "yes") {
@@ -915,7 +915,7 @@ XKit.extensions.xkit_preferences = new Object({
 		$("#xkit-extensions-panel-right").nanoScroller();
 
 		$("#xkit-extensions-panel-left .xkit-news-item").click(function() {
-			$this = $(this);
+			var $this = $(this);
 
 			$("#xkit-extensions-panel-left .xkit-news-item").not(this).removeClass("selected");
 			$this.addClass("selected");
