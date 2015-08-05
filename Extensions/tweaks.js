@@ -1,5 +1,5 @@
 //* TITLE Tweaks **//
-//* VERSION 3.2.9 **//
+//* VERSION 3.3.0 **//
 //* DESCRIPTION Various little tweaks for your dashboard. **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS These are small little tweaks that allows you customize your dashboard. If you have used XKit 6, you will notice that some of the extensions have been moved here as options you can toggle. Keep in mind that some of the tweaks (the ones marked with a '*') can slow down your computer. **//
@@ -778,10 +778,12 @@ XKit.extensions.tweaks = new Object({
 	full_width_gifs_do: function(is_checked) {
 		if (!is_checked) {
 			$(".editor-wrapper").find(".tmblr-full").addClass("tweaks-full-width-gifs");
-			$(".editor-wrapper").find(".tmblr-full").children().removeClass("tmblr-full");
+			$(".editor-wrapper").find(".tmblr-full").removeClass("tmblr-full");
+			return;
 		} else {
-			$(".editor-wrapper").find(".tweaks-full-width-gifs").children().addClass("tmblr-full");
-		}
+			$(".editor-wrapper").find(".tweaks-full-width-gifs").addClass("tmblr-full");
+			return;
+		} 
 	},
 
 	destroy: function() {
