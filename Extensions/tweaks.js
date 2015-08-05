@@ -1,5 +1,5 @@
 //* TITLE Tweaks **//
-//* VERSION 3.2.7 **//
+//* VERSION 3.2.8 **//
 //* DESCRIPTION Various little tweaks for your dashboard. **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS These are small little tweaks that allows you customize your dashboard. If you have used XKit 6, you will notice that some of the extensions have been moved here as options you can toggle. Keep in mind that some of the tweaks (the ones marked with a '*') can slow down your computer. **//
@@ -547,7 +547,8 @@ XKit.extensions.tweaks = new Object({
 			XKit.extensions.tweaks.add_css(".post_full.is_conversation .conversation_lines { border: 1px solid rgb(200,200,200); padding: 0px; font: normal 14px/1.4 \"Helvetica Neue\",\"HelveticaNeue\",Helvetica,Arial,sans-serif; } li.chat_line { padding: 10px 17px !important; border-bottom: 1px solid rgb(200,200,200); } li.chat_line:last-child { border-bottom: 0; }", "xkit_tweaks_fix_blockquotes");
 		}
 
-		if (XKit.extensions.tweaks.preferences.wrap_tags.value === true) {
+		if (XKit.extensions.tweaks.preferences.wrap_tags.value &&
+				XKit.interface.is_tumblr_page()) {
 			XKit.extensions.tweaks.add_css(".post .tags { width: 500px !important; display: block !important; }  .post .footer_links.with_tags { overflow:visible !important; display: block !important; }.post .footer_links.with_tags span, .footer_links.with_tags .source_url { display:block !important; overflow:visible !important; } .source_url_gradient { display: none !important; } span.tags { white-space:normal !important; } span.with_blingy_tag a.blingy { height:auto !important; display:inline-block !important; }  .source_url, .post_tags_wrapper { display: block !important; } ", "xkit_tweaks_wrap_tags");
 			XKit.extensions.tweaks.add_css("#posts .post.post_full .post_tags { white-space: normal; } .post .post_tags a { font-size: 12px; } .post_full .post_tags:after { background: none !important; }", "xkit_tweaks_wrap_tags_v2");
 			$(document).on('mouseup mousemove mouseover mousedown mouseout', '.post_tags_inner', function(e) {
