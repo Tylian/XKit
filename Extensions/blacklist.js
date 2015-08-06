@@ -1,5 +1,5 @@
 //* TITLE Blacklist **//
-//* VERSION 2.7.2 **//
+//* VERSION 2.7.3 **//
 //* DESCRIPTION Clean your dash **//
 //* DETAILS This extension allows you to block posts based on the words you specify. If a post has the text you've written in the post itself or it's tags, it will be replaced by a warning, or won't be shown on your dashboard, depending on your settings. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -146,23 +146,22 @@ XKit.extensions.blacklist = new Object({
 
 		if (this.preferences.mini_block.value === true) {
 
-			var mini_ui = 	" .xblacklist_blacklisted_post .post_avatar, .xblacklist_blacklisted_post .post_permalink { display: none !important; } " +
+			var mini_ui =
+					" .xblacklist_blacklisted_post .post_avatar, .xblacklist_blacklisted_post .post_permalink { display: none !important; } " +
 					" .xblacklist_blacklisted_post .xblacklist_excuse { " +
 						" position: absolute; top: 0; left: 0; width: 100%; " +
 						" color: rgba(255,255,255,.43); height: 27px !important; padding: 0px; !important; " +
 						" line-height: 27px !important; padding-left: 15px; !important; } " +
 					" .xblacklist_blacklisted_post .post_content { " +
 						" background: transparent; color: rgba(255,255,255,.43); } " +
-					" .xblacklist_blacklisted_post:hover .xblacklist_open_post { display: block; } " +
-					" .xblacklist_blacklisted_post .xblacklist_open_post { " +
-						" display: none; " +
-					" } " +
+					" .xblacklist_blacklisted_post:hover .xblacklist_open_post { "+
+					    "display: inline-block; height: unset; line-height: initial;} " +
+					" .xblacklist_blacklisted_post .xblacklist_open_post { display: none; } " +
 					" .xblacklist_blacklisted_post .post_tags { display: none; } " +
 					" .xblacklist_blacklisted_post { " +
 						" height: 40px !important; " +
 						" opacity: 1 !important; padding: 0px !important; " +
-						" box-shaddow: inset 0px 1px 0px rgba(255,255,255,0.10); " +
-						" border: 1px dashed rgba(255,255,255,0.25); background: transparent;" +
+						" border: 1px dashed rgba(255,255,255,0.25) !important; background: transparent !important;" +
 					" }";
 
 			XKit.tools.add_css(mini_ui, "xkit_blacklist_mini_ui");
@@ -682,6 +681,7 @@ XKit.extensions.blacklist = new Object({
 		$(obj).find(".post_content").html(old_content + block_excuse);
 		$(obj).find(".post_footer_links").css('display','none');
 		$(obj).find(".post_source").css('display','none');
+		$(obj).find(".post-source-footer").css('display','none');
 
 		if (XKit.extensions.blacklist.preferences.mini_block.value !== true) {
 			$(obj).addClass("xblacklist_blacklisted_post_full_ui");
