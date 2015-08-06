@@ -1,5 +1,5 @@
 //* TITLE View On Dash **//
-//* VERSION 0.7.2 **//
+//* VERSION 0.7.3 **//
 //* DESCRIPTION View blogs on your dash **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS This is a preview version of an extension, missing most features due to legal/technical reasons for now. It lets you view the last 20 posts a person has made on their blogs right on your dashboard. If you have User Menus+ installed, you can also access it from their user menu under their avatar. **//
