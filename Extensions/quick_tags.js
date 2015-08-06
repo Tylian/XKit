@@ -51,7 +51,7 @@ XKit.extensions.quick_tags = new Object({
 		if ($("#xkit-quick-tags-window").find('input:focus').length === 0 &&
 		    $('#xkit-quick-tags-window:hover').length === 0) {
 			XKit.extensions.quick_tags.user_on_box = false;
-		    XKit.extensions.quick_tags.menu_closer_int = setTimeout(function() { XKit.extensions.quick_tags.close_window(); }, 500);
+			XKit.extensions.quick_tags.menu_closer_int = setTimeout(function() { XKit.extensions.quick_tags.close_window(); }, 500);
 		}
 	},
 
@@ -218,7 +218,7 @@ XKit.extensions.quick_tags = new Object({
 
 	close_window: function() {
 		if (XKit.extensions.quick_tags.user_on_box === false) {
-		    $("#xkit-quick-tags-window").fadeOut('fast');
+			$("#xkit-quick-tags-window").fadeOut('fast');
 		}
 	},
 
