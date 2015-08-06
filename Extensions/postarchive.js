@@ -15,12 +15,12 @@ XKit.extensions.postarchive = new Object({
 
 	apiKey: "fuiKNFp9vQFvjLNvx4sUwti4Yb5yGutBN4Xh10LXZhhRKjWlV4",
 
-	archived_posts: new Array,
-	categories: new Array,
+	archived_posts: [],
+	categories: [],
 
 	frame_run: function() {
 
-		if ($(".btn.like").length == 0 && $(".btn.edit").length == 0) { return; }
+		if ($(".btn.like").length === 0 && $(".btn.edit").length === 0) { return; }
 
 		XKit.tools.init_css("postarchive");
 
@@ -115,7 +115,7 @@ XKit.extensions.postarchive = new Object({
 
 		for (var i=0;i<XKit.extensions.postarchive.archived_posts.length;i++) {
 
-			if (typeof XKit.extensions.postarchive.archived_posts[i].category === "undefined" || XKit.extensions.postarchive.archived_posts[i].category == "") {
+			if (!XKit.extensions.postarchive.archived_posts[i].category) {
 
 				var m_x_list_div = "<div data-category=\"\" data-post-id=\"" + XKit.extensions.postarchive.archived_posts[i].post_id + "\" class=\"xkit-postarchive-post\">" + XKit.extensions.postarchive.archived_posts[i].title + "</div>";
 				m_post_list_html = m_post_list_html + m_x_list_div;
@@ -367,7 +367,7 @@ XKit.extensions.postarchive = new Object({
 		
 		$("#xkit-postarchive-import").bind("click", function() { //Import Function
 
-	    	XKit.window.show("Import","<b>You can import settings from XKit.</b><br/>Click XKit''s Export button and paste the text below to import your archived posts.<input type=\"text\" placeholder=\"Paste preferences text here.\" class=\"xkit-textbox\" id=\"xkit-postarchive-import-words\">","question","<div class=\"xkit-button default\" id=\"xkit-postarchive-add-words\">Import!</div><div class=\"xkit-button\" id=\"xkit-close-message\">Cancel</div>")
+	    	XKit.window.show("Import","<b>You can import settings from XKit.</b><br/>Click XKit''s Export button and paste the text below to import your archived posts.<input type=\"text\" placeholder=\"Paste preferences text here.\" class=\"xkit-textbox\" id=\"xkit-postarchive-import-words\">","question","<div class=\"xkit-button default\" id=\"xkit-postarchive-add-words\">Import!</div><div class=\"xkit-button\" id=\"xkit-close-message\">Cancel</div>");
 
 	    	$("#xkit-postarchive-replace-on-import").click(function() {
 	    		$(this).toggleClass("selected");
@@ -383,9 +383,10 @@ XKit.extensions.postarchive = new Object({
 				    return;
 			    }
 
+					var m_obj = null;
 		    	try {
 
-	    			var m_obj = JSON.parse(m_to_add);
+	    			m_obj = JSON.parse(m_to_add);
 	    			//XKit.window.show("m_obj:", JSON.stringify(m_obj),"error","<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
 	    			//return;
 
@@ -456,9 +457,9 @@ XKit.extensions.postarchive = new Object({
 
 			});
 
-			if (found_count == 0){
+			if (found_count === 0){
 
-				if ($("#xkit-postarchive-not-found").length == 0) {
+				if ($("#xkit-postarchive-not-found").length === 0) {
 					$("#xkit-postarchive-sidebar-content").append("<div id=\"xkit-postarchive-not-found\">Not found.</div>");
 				}
 
@@ -532,11 +533,11 @@ XKit.extensions.postarchive = new Object({
 
 			post_class = "is_quote";
 
-			if (data["text"] !== "" && data["text"] !== null) {
-				post_contents = post_contents + '<div class="post_title medium"><span class="quote">"' + data["text"] + '"</span></div>';
+			if (data.text !== "" && data.text !== null) {
+				post_contents = post_contents + '<div class="post_title medium"><span class="quote">"' + data.text + '"</span></div>';
 			}
 
-			if (data["source"] !== "" && data["source"] !== null) {
+			if (data.source !== "" && data.source !== null) {
 				post_contents = post_contents + '<div class="post_body"><table class="quote_source_table"><tbody><tr><td valign="top" class="quote_source_mdash">&nbsp;</td><td valign="top" class="quote_source">- ' + data.source + '</td></tr></tbody></table></div>';
 			}
 
@@ -556,7 +557,7 @@ XKit.extensions.postarchive = new Object({
 
 				if (data.title !== "" && data.title !== null && typeof data.title !== "undefined") {
 
-					var link_title = data.title;
+					link_title = data.title;
 
 				}
 
@@ -584,21 +585,21 @@ XKit.extensions.postarchive = new Object({
 
 			post_class = "is_video";
 
-			var m_post_inner_html = ""; // data["player"][2].embed_code; // '<div class="view-on-dash-not-supported">' + data.type + ' posts are not currently supported.</div>';
+			var m_post_inner_html = ""; // data.player[2].embed_code; // '<div class="view-on-dash-not-supported">' + data.type + ' posts are not currently supported.</div>';
 
 			var last_width = 0;
-			for (var obj in data["player"]) {
-				if (data["player"][obj].width > last_width && data["player"][obj].width <= 500) {
-					m_post_inner_html = data["player"][obj].embed_code;
-					last_width = data["player"][obj].width;
+			for (var obj in data.player) {
+				if (data.player[obj].width > last_width && data.player[obj].width <= 500) {
+					m_post_inner_html = data.player[obj].embed_code;
+					last_width = data.player[obj].width;
 				}
 			}
 
 
 			post_contents = post_contents + "<div class=\"post_media\">" + m_post_inner_html + "</div>";
 
-			if (data["caption"] !== "" && data["caption"] !== null) {
-				post_contents = post_contents + "<div class=\"post_body\">" + data["caption"] + "</div>";
+			if (data.caption !== "" && data.caption !== null) {
+				post_contents = post_contents + "<div class=\"post_body\">" + data.caption + "</div>";
 			}
 
 		}
@@ -609,8 +610,8 @@ XKit.extensions.postarchive = new Object({
 
 			post_contents = post_contents + "<div class=\"post_media\">" + data.embed + "</div>";
 
-			if (data["caption"] !== "" && data["caption"] !== null) {
-				post_contents = post_contents + "<div class=\"post_body\">" + data["caption"] + "</div>";
+			if (data.caption !== "" && data.caption !== null) {
+				post_contents = post_contents + "<div class=\"post_body\">" + data.caption + "</div>";
 			}
 
 		}
@@ -619,15 +620,15 @@ XKit.extensions.postarchive = new Object({
 
 			post_class = "is_photo";
 
-			//var m_post_inner_html = '<img class="image" width="500" alt="" src="' + data["photo-url-500"] + '" data-thumbnail="' + data["photo-url-100"] + '">';
+			//var photo_post_inner_html = '<img class="image" width="500" alt="" src="' + data["photo-url-500"] + '" data-thumbnail="' + data["photo-url-100"] + '">';
 
 			if (data.photos.length === 1) { post_class = "is_photo"; }else {post_class = "is_photoset"; }
 
-			var m_post_inner_html = "";
+			var photo_post_inner_html = "";
 
 			if (data.photos.length === 1) {
 
-				m_post_inner_html = '<img class="image" width="500" alt="" src="' + XKit.extensions.postarchive.get_photo(data, 0, "500") + '" data-thumbnail="' + XKit.extensions.postarchive.get_photo(data, 0, "100") + '">';
+				photo_post_inner_html = '<img class="image" width="500" alt="" src="' + XKit.extensions.postarchive.get_photo(data, 0, "500") + '" data-thumbnail="' + XKit.extensions.postarchive.get_photo(data, 0, "100") + '">';
 
 			} else {
 
@@ -637,26 +638,25 @@ var rows = [];
 					rows.push(data.photoset_layout[i]);
 				}
 
-				m_post_inner_html = "<div class=\"photoset\" style=\"margin-bottom: 11px;\">";
+				photo_post_inner_html = "<div class=\"photoset\" style=\"margin-bottom: 11px;\">";
 
 				var current_photo = 0;
 
-				for (var i=0;i<rows.length;i++) {
-
+				rows.forEach(function(row) {
 					var shortest = 0;
-					var m_width = 500 / rows[i];
+					var m_width = 500 / row;
 
 					// Calculate the shortest!
 					var m_temp_photo = current_photo;
 
-					if (rows[i] >= 2) {
+					if (row >= 2) {
 
-						for (var m=1;m<rows[i];m++){
+						for (var m=1;m<row;m++){
 
-							var m_height = (m_width * XKit.extensions.postarchive.get_photo_height(data, m_temp_photo, "500")) / 500;
+							var scaled_height = (m_width * XKit.extensions.postarchive.get_photo_height(data, m_temp_photo, "500")) / 500;
 
-							if (m_height <= shortest ||shortest === 0) {
-								shortest = m_height;
+							if (scaled_height <= shortest ||shortest === 0) {
+								shortest = scaled_height;
 							}
 
 							m_temp_photo++;
@@ -671,7 +671,7 @@ var rows = [];
 
 					var in_row_html = "";
 
-					for (var x=0;x<rows[i];x++) {
+					for (var x=0;x<row;x++) {
 
 						var m_height = (m_width * XKit.extensions.postarchive.get_photo_height(data, current_photo, "500")) / 500;
 						var margin_top = 0;
@@ -690,34 +690,32 @@ var rows = [];
 
 					}
 
-					m_post_inner_html = m_post_inner_html + "<div class=\"photoset_row photoset_row_" + rows[i] + "\" style=\"height: " + shortest + "px;\">" + in_row_html + "</div>";
+					photo_post_inner_html = photo_post_inner_html + "<div class=\"photoset_row photoset_row_" + row + "\" style=\"height: " + shortest + "px;\">" + in_row_html + "</div>";
 
-				}
+				});
 
-				m_post_inner_html = m_post_inner_html + "</div>";
+				photo_post_inner_html = photo_post_inner_html + "</div>";
 
-				// m_post_inner_html = '<div class="view-on-dash-not-supported">Photosets are not currently supported.</div>';
+				// photo_post_inner_html = '<div class="view-on-dash-not-supported">Photosets are not currently supported.</div>';
 
 			}
 
-			post_contents = post_contents + "<div class=\"post_media\">" + m_post_inner_html + "</div>";
+			post_contents = post_contents + "<div class=\"post_media\">" + photo_post_inner_html + "</div>";
 
-			if (data["caption"] !== "" && data["caption"] !== null) {
-				post_contents = post_contents + "<div class=\"post_body\">" + data["caption"] + "</div>";
+			if (data.caption !== "" && data.caption !== null) {
+				post_contents = post_contents + "<div class=\"post_body\">" + data.caption + "</div>";
 			}
 
 		}
 
 		if (typeof data.tags !== "undefined") {
 
-			post_tags = "<div class=\"post_tags\"><div class=\"post_tags_inner\">"
+			post_tags = "<div class=\"post_tags\"><div class=\"post_tags_inner\">";
 
-			for (var i=0;i<data.tags.length;i++) {
-
-				var fixed_tag_url = XKit.tools.replace_all(data.tags[i], + " ", "-");
-				post_tags = post_tags + "<a class=\"post_tag\" href=\"http://tumblr.com/tagged/" + fixed_tag_url + "\">#" + data.tags[i] + "</a>";
-
-			}
+			data.tags.forEach(function(tag) {
+				var fixed_tag_url = XKit.tools.replace_all(tag, + " ", "-");
+				post_tags = post_tags + "<a class=\"post_tag\" href=\"http://tumblr.com/tagged/" + fixed_tag_url + "\">#" + tag + "</a>";
+			});
 
 			post_tags = post_tags + "</div></div>";
 
@@ -1148,7 +1146,7 @@ var rows = [];
 		var m_post = XKit.interface.find_post(post_id);
 		var blog_url = m_post.owner;
 		
-		if (blog_url == undefined) {
+		if (!blog_url) {
 		    blog_url = window.location.href.split('%2F')[2].split('.')[0];
 		}
 
@@ -1367,11 +1365,11 @@ var rows = [];
 
 					}
 
-					for (var i=0;i<XKit.extensions.postarchive.categories.length;i++) {
+					for (var j=0;j<XKit.extensions.postarchive.categories.length;j++) {
 
-						if (m_cat_obj.id === XKit.extensions.postarchive.categories[i].id) {
+						if (m_cat_obj.id === XKit.extensions.postarchive.categories[j].id) {
 
-							XKit.extensions.postarchive.categories.splice(i, 1);
+							XKit.extensions.postarchive.categories.splice(j, 1);
 
 						}
 

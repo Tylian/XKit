@@ -102,7 +102,7 @@ XKit.extensions.quick_tags = new Object({
 		var m_button = $(button);
 
 		// Fetch info about it!
-		if (m_post.error == false) {
+		if (!m_post.error) {
 			XKit.interface.fetch(m_post, function(data) {
 
 				// Use Interface to edit the post's tags:
@@ -125,8 +125,8 @@ XKit.extensions.quick_tags = new Object({
 
 					for (var i=0;i<split_tags.length;i++) {
 
-						if (split_tags[i] != "null" && typeof split_tags[i] != "undefined" && split_tags[i] != null) {
-							if (new_data == "") {
+						if (split_tags[i]) {
+							if (new_data === "") {
 								new_data = split_tags[i];
 							} else {
 								new_data = new_data + "," + split_tags[i];
@@ -226,10 +226,11 @@ XKit.extensions.quick_tags = new Object({
 
 		// Get the user tags.
 		var user_tags = XKit.storage.get("quick_tags","user_tags");
+    var user_tag_array = [];
+
 		try {
-			var user_tag_array = JSON.parse(user_tags);
+			user_tag_array = JSON.parse(user_tags);
 		} catch(e) {
-			var user_tag_array = [];
 		}
 
 		XKit.extensions.quick_tags.tag_array = user_tag_array;
@@ -472,7 +473,7 @@ XKit.extensions.quick_tags = new Object({
 
 		XKit.extensions.quick_tags.load_tag_prefs();
 
-		var m_html = "<div id=\"xkit-quick-tags-custom-panel\"><div id=\"quick-tags-toolbar\"><div id=\"quick-tags-add-button\" class=\"xkit-button\">Add new tag bundle</div></div>"
+		var m_html = "<div id=\"xkit-quick-tags-custom-panel\"><div id=\"quick-tags-toolbar\"><div id=\"quick-tags-add-button\" class=\"xkit-button\">Add new tag bundle</div></div>";
 
 		if (XKit.extensions.quick_tags.tag_array.length <= 0) {
 			m_html = m_html + "<div id=\"xkit-quick-tags-none\"><b>You have no tag bundles.</b><br/>Create some by clicking on the button above to quickly tag your posts.</div>";
@@ -515,7 +516,7 @@ XKit.extensions.quick_tags = new Object({
 				return;
 			}
 
-			XKit.window.show("Create new bundle","<b>Bundle Title</b><input type=\"text\" maxlength=\"40\" placeholder=\"eg: Doctor Who\" class=\"xkit-textbox\" id=\"xkit-quick-tags-add-title\"><b>Bundled Tags, comma separated</b><input type=\"text\" maxlength=\"250\" placeholder=\"eg: Doctor Who, Dr. Who, Non-Medical Tv Show Doctor\" class=\"xkit-textbox\" id=\"xkit-quick-tags-add-tags\">You have <b>" + remaining + "</b> bundle slots left.","question","<div class=\"xkit-button default\" id=\"xkit-quick-tags-create-bundle\">Create Bundle</div><div class=\"xkit-button\" id=\"xkit-close-message\">Cancel</div>")
+			XKit.window.show("Create new bundle","<b>Bundle Title</b><input type=\"text\" maxlength=\"40\" placeholder=\"eg: Doctor Who\" class=\"xkit-textbox\" id=\"xkit-quick-tags-add-title\"><b>Bundled Tags, comma separated</b><input type=\"text\" maxlength=\"250\" placeholder=\"eg: Doctor Who, Dr. Who, Non-Medical Tv Show Doctor\" class=\"xkit-textbox\" id=\"xkit-quick-tags-add-tags\">You have <b>" + remaining + "</b> bundle slots left.","question","<div class=\"xkit-button default\" id=\"xkit-quick-tags-create-bundle\">Create Bundle</div><div class=\"xkit-button\" id=\"xkit-close-message\">Cancel</div>");
 
 			$("#xkit-quick-tags-create-bundle").click(function() {
 
@@ -555,7 +556,7 @@ XKit.extensions.quick_tags = new Object({
 
 			var m_tags = XKit.extensions.quick_tags.tag_array[m_id].tags;
 			var m_title = XKit.extensions.quick_tags.tag_array[m_id].title;
-			XKit.window.show("Edit bundle","<b>Bundle Title</b><input type=\"text\" maxlength=\"40\" value=\"" + m_title + "\" placeholder=\"eg: Doctor Who\" class=\"xkit-textbox\" id=\"xkit-quick-tags-add-title\"><b>Bundled Tags, comma separated</b><input value=\"" + m_tags + "\" type=\"text\" maxlength=\"250\" placeholder=\"eg: Doctor Who, Dr. Who, Non-Medical Tv Show Doctor\" class=\"xkit-textbox\" id=\"xkit-quick-tags-add-tags\">","question","<div class=\"xkit-button default\" id=\"xkit-quick-tags-create-bundle\">Create Bundle</div><div class=\"xkit-button\" id=\"xkit-quick-tags-delete-bundle\">Delete This Bundle</div><div class=\"xkit-button\" id=\"xkit-close-message\">Cancel</div>")
+			XKit.window.show("Edit bundle","<b>Bundle Title</b><input type=\"text\" maxlength=\"40\" value=\"" + m_title + "\" placeholder=\"eg: Doctor Who\" class=\"xkit-textbox\" id=\"xkit-quick-tags-add-title\"><b>Bundled Tags, comma separated</b><input value=\"" + m_tags + "\" type=\"text\" maxlength=\"250\" placeholder=\"eg: Doctor Who, Dr. Who, Non-Medical Tv Show Doctor\" class=\"xkit-textbox\" id=\"xkit-quick-tags-add-tags\">","question","<div class=\"xkit-button default\" id=\"xkit-quick-tags-create-bundle\">Create Bundle</div><div class=\"xkit-button\" id=\"xkit-quick-tags-delete-bundle\">Delete This Bundle</div><div class=\"xkit-button\" id=\"xkit-close-message\">Cancel</div>");
 
 			$("#xkit-quick-tags-delete-bundle").click(function() {
 

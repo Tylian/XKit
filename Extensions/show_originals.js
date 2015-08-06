@@ -111,7 +111,8 @@ XKit.extensions.show_originals = new Object({
 			return;
 		}
 
-		if (XKit.extensions.show_originals != true) {
+		// This probably doesn't ever happen
+		if (!XKit.extensions.show_originals) {
 			XKit.extensions.show_originals.added_css = true;
 			XKit.tools.add_css(" .post.is_reblog { display: none; ", "show_originals_on");
 		}

@@ -6,7 +6,7 @@
 //* BETA false **//
 //* SLOW true **//
 
-XKit.extensions.reblog_yourself = new Object({
+XKit.extensions.reblog_yourself = {
 
 	running: false,
 	slow: true,
@@ -138,10 +138,10 @@ XKit.extensions.reblog_yourself = new Object({
 
 		if (!do_add) { return; }
 
+    var post_avatar = "";
 		try {
-			var post_avatar = m_blog_avatar;
+			post_avatar = m_blog_avatar;
 		} catch(e) {
-			var post_avatar = "";
 			XKit.console.add("reblog_yourself: " + e.message);
 		}
 
@@ -157,7 +157,7 @@ XKit.extensions.reblog_yourself = new Object({
 			return false;
 		}
 
-		if ($(".post").length == 0) { return; }
+		if ($(".post").length === 0) { return; }
 
 		/*
 			blog_id +
@@ -222,4 +222,4 @@ XKit.extensions.reblog_yourself = new Object({
 		this.running = false;
 	}
 
-});
+};

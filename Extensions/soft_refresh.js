@@ -42,14 +42,14 @@ XKit.extensions.soft_refresh = new Object({
 		}
 
 		$(".logo_anchor").attr('data-old-href', $(".logo_anchor").attr('href'));
-		if(this.preferences.use_logo.value == true){
+		if (this.preferences.use_logo.value) {
 			$(".logo_anchor").attr('onclick','return false');
 			$(".logo_anchor").attr('href', '#');
 			$(document).on("click", ".logo_anchor", XKit.extensions.soft_refresh.logo_clicked);
 		}
 
 		$("#home_button a").attr('data-old-href', $("#home_button a").attr('href'));
-		if(this.preferences.use_home_button.value == true){
+		if (this.preferences.use_home_button.value) {
 			$(document).on("click", "#home_button", XKit.extensions.soft_refresh.logo_clicked);
 			// Need to change all children to make sure the user doesn't click the new posts count number.
 			$("#home_button").children().attr('href','#');
@@ -141,7 +141,7 @@ XKit.extensions.soft_refresh = new Object({
 					exists = exists || $("[data-xkit-post-id='" + $(this).attr('data-post-id') + "']").length > 0;
 					console.log("exists  = " + exists);
 
-					if (exists == false) {
+					if (!exists) {
 
 						m_count++;
 						if ($(".new_post_buttons_container").length > 0) {
