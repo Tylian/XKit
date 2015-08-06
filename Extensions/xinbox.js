@@ -506,7 +506,7 @@ XKit.extensions.xinbox = new Object({
 
 		$("#xinbox_mass_edit_button").click(function() {
 
-			if ($(this).parent().hasClass("xkit-selected") == false) {
+			if (!$(this).parent().hasClass("xkit-selected")) {
 			
 				$(this).parent().addClass("xkit-selected");
 				$(this).parent().addClass("selected");
@@ -596,7 +596,7 @@ XKit.extensions.xinbox = new Object({
 			var m_key_end = m_html.indexOf("';", m_key_start);
 			var m_key = m_html.substring(m_key_start, m_key_end);
 		
-			XKit.extensions.xinbox.delete_key = m_key
+			XKit.extensions.xinbox.delete_key = m_key;
 			XKit.extensions.xinbox.mass_editor_delete();
 
 		});
@@ -686,9 +686,9 @@ XKit.extensions.xinbox = new Object({
 	
 	resize_text_area: function(post_id) {
 		
-		if ($("#ask_answer_field_" + + post_id + "_tbl").length > 0) {
+		if ($("#ask_answer_field_" + (+post_id) + "_tbl").length > 0) {
 
-			$("#ask_answer_field_" + + post_id + "_tbl, #ask_answer_field_" + post_id + "_ifr").css("height","220px");
+			$("#ask_answer_field_" + (+post_id) + "_tbl, #ask_answer_field_" + post_id + "_ifr").css("height","220px");
 					
 		} else {
 					
@@ -933,8 +933,9 @@ XKit.extensions.xinbox = new Object({
 			},
 			onload: function(response) {
 				// We are done!
+				var mdata = null;
 				try {
-					var mdata = $.parseJSON(response.responseText);
+					mdata = $.parseJSON(response.responseText);
 				} catch(e) {
 					XKit.extensions.xinbox.show_error("Server returned a non-JSON object. Maybe server overloaded, try again later. Error: " + e.message);
 					return;
@@ -951,7 +952,7 @@ XKit.extensions.xinbox = new Object({
 
 	send_publish_request: function(mdata, answer, tags, post_div, form_key, post_id, state, retry_mode) {
 		
-		var m_object = new Object;
+		var m_object = {};
 		
 		m_object.form_key = form_key;
 		m_object.channel_id = mdata.post_tumblelog.name_or_id;
@@ -1015,8 +1016,9 @@ XKit.extensions.xinbox = new Object({
 				onload: function(response) {
 					// We are done!
 					XKit.interface.kitty.set(response.getResponseHeader("X-tumblr-kittens"));
+					var mdata = null;
 					try {
-						var mdata = $.parseJSON(response.responseText);
+						mdata = $.parseJSON(response.responseText);
 					} catch(e) {
 						XKit.extensions.xinbox.show_error("Server returned a non-JSON object. Maybe server overloaded, try again later. Error: " + e.message);
 						return;
@@ -1053,7 +1055,7 @@ XKit.extensions.xinbox = new Object({
 				 " } ";
 	
 		if ('function' == typeof source) {
-				source = '(' + source + ')();'
+				source = '(' + source + ')();';
 		}
 	
 		var script = document.createElement('script');

@@ -78,6 +78,7 @@ XKit.extensions.xkit_installer = new Object({
 			try {
 				// Try evaling the script.
 				// If it's working, then move to the next one.
+				/* jshint evil: true */
 				eval(mdata.script);
 				XKit.extensions.xkit_installer.installed++;
 				XKit.extensions.xkit_installer.next();

@@ -15,7 +15,9 @@ XKit.extensions.tag_replacer = new Object({
 
 		this.running = true;
 
-		if (XKit.interface.where().channel == false) {return; }
+		if (!XKit.interface.where().channel) {
+			return;
+		}
 		if (typeof XKit.interface.where().user_url === "undefined" ||XKit.interface.where().user_url === "") {return; }
 
 		XKit.tools.init_css("tag_replacer");
@@ -203,11 +205,10 @@ XKit.extensions.tag_replacer = new Object({
 
 			XKit.interface.edit(m_post_object, function(data) {
 
+				var perc = Math.round((XKit.extensions.tag_replacer.p_array_index * 100) / XKit.extensions.tag_replacer.p_array.length);
+				XKit.progress.value("tag-replacer-pb", perc);
+
 				if (data.error === false && data.data.errors === false) {
-
-					var perc = Math.round((XKit.extensions.tag_replacer.p_array_index * 100) / XKit.extensions.tag_replacer.p_array.length);
-
-					XKit.progress.value("tag-replacer-pb", perc);
 
 					console.log("Post " + m_post + " updated successfully.");
 
@@ -217,9 +218,6 @@ XKit.extensions.tag_replacer = new Object({
 				} else {
 
 					XKit.extensions.tag_replacer.fail_count++;
-					var perc = Math.round((XKit.extensions.tag_replacer.p_array_index * 100) / XKit.extensions.tag_replacer.p_array.length);
-
-					XKit.progress.value("tag-replacer-pb", perc);
 
 					XKit.extensions.tag_replacer.p_array_index++;
 					setTimeout(function() { XKit.extensions.tag_replacer.replace_next(); }, 2000);

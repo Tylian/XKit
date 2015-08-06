@@ -106,6 +106,7 @@ XKit.extensions.xkit_main = new Object({
 		// Check if in Frame Mode.
 		if (XKit.frame_mode === true && extension_id !== "xkit_patches") {
 			// This is ugly: I don't want to eval script.
+			/* jshint evil: true */
 			eval(xkit_main.script);
 			var frame_script = "";
 			try {

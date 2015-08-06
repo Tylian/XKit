@@ -53,7 +53,7 @@ XKit.extensions.themes = new Object({
 		XKit.extensions.themes.gallery_themes_contents.push(obj.contents);
 		XKit.extensions.themes.gallery_themes_version.push(obj.version);
 
-		var m_html = 	"<div class=\"xkit-theme-obj " + m_class + "\" data-theme-id=\"" + obj.file + "\">" +
+		var m_html = "<div class=\"xkit-theme-obj " + m_class + "\" data-theme-id=\"" + obj.file + "\">" +
 					"<div class=\"xkit-theme-title\">" + obj.name + "</div>" +
 					"<div class=\"xkit-theme-description\">" + obj.description + "</div>" +
 					"<div class=\"xkit-theme-developer\">by " + obj.developer + "</div>" +
@@ -112,8 +112,8 @@ XKit.extensions.themes = new Object({
 
 		if (typeof XKit.extensions.yahoo !== "undefined") {
 			if (XKit.extensions.yahoo.running === true) {
-				var m_html = "<div id=\"xkit-themes-loading\"><b>Yoohoo is on</b><br/><small>Please disable the \"Yoohoo!\" before running this extension.</small></div>";
-				$(obj).html(m_html);
+				var yahoo_html = "<div id=\"xkit-themes-loading\"><b>Yoohoo is on</b><br/><small>Please disable the \"Yoohoo!\" before running this extension.</small></div>";
+				$(obj).html(yahoo_html);
 				return;
 			}
 		}

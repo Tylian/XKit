@@ -208,11 +208,11 @@ XKit.extensions.view_on_dash = new Object({
 
 			post_class = "is_quote";
 
-			if (data["text"] !== "" && data["text"] !== null) {
-				post_contents = post_contents + '<div class="post_title medium"><span class="quote">' + data["text"] + '</span></div>';
+			if (data.text !== "" && data.text !== null) {
+				post_contents = post_contents + '<div class="post_title medium"><span class="quote">' + data.text + '</span></div>';
 			}
 
-			if (data["source"] !== "" && data["source"] !== null) {
+			if (data.source !== "" && data.source !== null) {
 				post_contents = post_contents + '<div class="post_body"><table class="quote_source_table"><tbody><tr><td valign="top" class="quote_source_mdash">&nbsp;</td><td valign="top" class="quote_source">' + data.source + '</td></tr></tbody></table></div>';
 			}
 
@@ -247,18 +247,18 @@ XKit.extensions.view_on_dash = new Object({
 			var m_post_inner_html = ""; // data["player"][2].embed_code; // '<div class="view-on-dash-not-supported">' + data.type + ' posts are not currently supported.</div>';
 
 			var last_width = 0;
-			for (var obj in data["player"]) {
-				if (data["player"][obj].width > last_width && data["player"][obj].width <= 500) {
-					m_post_inner_html = data["player"][obj].embed_code;
-					last_width = data["player"][obj].width;
+			for (var obj in data.player) {
+				if (data.player[obj].width > last_width && data.player[obj].width <= 500) {
+					m_post_inner_html = data.player[obj].embed_code;
+					last_width = data.player[obj].width;
 				}
 			}
 
 
 			post_contents = post_contents + "<div class=\"post_media\">" + m_post_inner_html + "</div>";
 
-			if (data["caption"] !== "" && data["caption"] !== null) {
-				post_contents = post_contents + "<div class=\"post_body\">" + data["caption"] + "</div>";
+			if (data.caption !== "" && data.caption !== null) {
+				post_contents = post_contents + "<div class=\"post_body\">" + data.caption + "</div>";
 			}
 
 		}
@@ -269,8 +269,8 @@ XKit.extensions.view_on_dash = new Object({
 
 			post_contents = post_contents + "<div class=\"post_media\">" + data.embed + "</div>";
 
-			if (data["caption"] !== "" && data["caption"] !== null) {
-				post_contents = post_contents + "<div class=\"post_body\">" + data["caption"] + "</div>";
+			if (data.caption !== "" && data.caption !== null) {
+				post_contents = post_contents + "<div class=\"post_body\">" + data.caption + "</div>";
 			}
 
 		}
@@ -283,11 +283,11 @@ XKit.extensions.view_on_dash = new Object({
 
 			if (data.photos.length === 1) { post_class = "is_photo"; }else {post_class = "is_photoset"; }
 
-			var m_post_inner_html = "";
+			var photo_post_inner_html = "";
 
 			if (data.photos.length === 1) {
 
-				m_post_inner_html = '<img class="image" width="500" alt="" src="' + XKit.extensions.view_on_dash.get_photo(data, 0, "500") + '" data-thumbnail="' + XKit.extensions.view_on_dash.get_photo(data, 0, "100") + '">';
+				photo_post_inner_html = '<img class="image" width="500" alt="" src="' + XKit.extensions.view_on_dash.get_photo(data, 0, "500") + '" data-thumbnail="' + XKit.extensions.view_on_dash.get_photo(data, 0, "100") + '">';
 
 			} else {
 
@@ -297,26 +297,25 @@ XKit.extensions.view_on_dash = new Object({
 					rows.push(data.photoset_layout[i]);
 				}
 
-				m_post_inner_html = "<div class=\"photoset\" style=\"margin-bottom: 11px;\">";
+				photo_post_inner_html = "<div class=\"photoset\" style=\"margin-bottom: 11px;\">";
 
 				var current_photo = 0;
 
-				for (var i=0;i<rows.length;i++) {
-
+				rows.forEach(function(row_count) {
 					var shortest = 0;
-					var m_width = 500 / rows[i];
+					var m_width = 500 / row_count;
 
 					// Calculate the shortest!
 					var m_temp_photo = current_photo;
 
-					if (rows[i] >= 2) {
+					if (row >= 2) {
 
-						for (var m=1;m<rows[i];m++){
+						for (var m = 1; m < row_count; m++) {
 
-							var m_height = (m_width * XKit.extensions.view_on_dash.get_photo_height(data, m_temp_photo, "500")) / 500;
+							var photo_height = (m_width * XKit.extensions.view_on_dash.get_photo_height(data, m_temp_photo, "500")) / 500;
 
-							if (m_height <= shortest ||shortest === 0) {
-								shortest = m_height;
+							if (photo_height <= shortest ||shortest === 0) {
+								shortest = photo_height;
 							}
 
 							m_temp_photo++;
@@ -331,7 +330,7 @@ XKit.extensions.view_on_dash = new Object({
 
 					var in_row_html = "";
 
-					for (var x=0;x<rows[i];x++) {
+					for (var x=0;x < row_count;x++) {
 
 						var m_height = (m_width * XKit.extensions.view_on_dash.get_photo_height(data, current_photo, "500")) / 500;
 						var margin_top = 0;
@@ -350,34 +349,33 @@ XKit.extensions.view_on_dash = new Object({
 
 					}
 
-					m_post_inner_html = m_post_inner_html + "<div class=\"photoset_row photoset_row_" + rows[i] + "\" style=\"height: " + shortest + "px;\">" + in_row_html + "</div>";
+					photo_post_inner_html = photo_post_inner_html + "<div class=\"photoset_row photoset_row_" + rows[i] + "\" style=\"height: " + shortest + "px;\">" + in_row_html + "</div>";
 
-				}
+				});
 
-				m_post_inner_html = m_post_inner_html + "</div>";
+				photo_post_inner_html = photo_post_inner_html + "</div>";
 
-				// m_post_inner_html = '<div class="view-on-dash-not-supported">Photosets are not currently supported.</div>';
+				// photo_post_inner_html = '<div class="view-on-dash-not-supported">Photosets are not currently supported.</div>';
 
 			}
 
-			post_contents = post_contents + "<div class=\"post_media\">" + m_post_inner_html + "</div>";
+			post_contents = post_contents + "<div class=\"post_media\">" + photo_post_inner_html + "</div>";
 
-			if (data["caption"] !== "" && data["caption"] !== null) {
-				post_contents = post_contents + "<div class=\"post_body\">" + data["caption"] + "</div>";
+			if (data.caption !== "" && data.caption !== null) {
+				post_contents = post_contents + "<div class=\"post_body\">" + data.caption + "</div>";
 			}
 
 		}
 
 		if (typeof data.tags !== "undefined") {
 
-			post_tags = "<div class=\"post_tags\"><div class=\"post_tags_inner\">"
+			post_tags = "<div class=\"post_tags\"><div class=\"post_tags_inner\">";
 
-			for (var i=0;i<data.tags.length;i++) {
+			data.tags.forEach(function(tag) {
+				var fixed_tag_url = XKit.tools.replace_all(tag, + " ", "-");
+				post_tags = post_tags + "<a class=\"post_tag\" href=\"http://tumblr.com/tagged/" + fixed_tag_url + "\">#" + tag + "</a>";
 
-				var fixed_tag_url = XKit.tools.replace_all(data.tags[i], + " ", "-");
-				post_tags = post_tags + "<a class=\"post_tag\" href=\"http://tumblr.com/tagged/" + fixed_tag_url + "\">#" + data.tags[i] + "</a>";
-
-			}
+			});
 
 			post_tags = post_tags + "</div></div>";
 
@@ -466,7 +464,7 @@ XKit.extensions.view_on_dash = new Object({
 		var m_post_id = $(obj).attr('data-post-id');
 
 		var m_src = encodeURIComponent("http://" + m_username + ".tumblr.com/post/" + m_post_id);
-		var m_url = "http://www.tumblr.com/dashboard/iframe?src=" + m_src + "&pid=" + m_post_id + "&rk=" + m_rk + "&lang=en_US&name=" + m_username + "&brag=false"
+		var m_url = "http://www.tumblr.com/dashboard/iframe?src=" + m_src + "&pid=" + m_post_id + "&rk=" + m_rk + "&lang=en_US&name=" + m_username + "&brag=false";
 
 		GM_xmlhttpRequest({
 			method: "GET",
@@ -479,7 +477,7 @@ XKit.extensions.view_on_dash = new Object({
 
 				if (XKit.extensions.view_on_dash.get_rand_id !== get_id) { return; }
 
-				if ($(".btn.like", response.responseText).length == 0) { return; }
+				if ($(".btn.like", response.responseText).length === 0) { return; }
 
 				var post_like_class = "";
 				if ($(".btn.like", response.responseText).hasClass("hidden")) { post_like_class = "liked"; }
@@ -592,9 +590,11 @@ XKit.extensions.view_on_dash = new Object({
 
 					if ($("#view-on-dash-loader-box").length > 0) {$("#view-on-dash-loader-box").remove(); }
 
+					var m_header = "";
+
 					if ($("#view-on-dash-header").length === 0) {
 
-						var m_header = "<div id=\"view-on-dash-header\" data-username=\"" + username + "\" data-page=\"" + page + "\">" +
+						m_header = "<div id=\"view-on-dash-header\" data-username=\"" + username + "\" data-page=\"" + page + "\">" +
 									"<img id=\"view-on-dash-avatar\" src=\"https://api.tumblr.com/v2/blog/" + username + ".tumblr.com/avatar/64\">" +
 									"<div id=\"view-on-dash-title\">" + data.response.blog.title + "</div>" +
 									"<div id=\"view-on-dash-username\">" + data.response.blog.name + "</div>" +
@@ -613,10 +613,6 @@ XKit.extensions.view_on_dash = new Object({
 										"<div title=\"Audio Posts\"  data-type=\"audio\" class=\"view-on-dash-post-type view-on-dash-post-type-audio\">Audio Posts</div>" +
 									"</div>" +
 								"</div>";
-
-					} else {
-
-						var m_header = "";
 
 					}
 
