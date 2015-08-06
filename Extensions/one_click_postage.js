@@ -1,5 +1,5 @@
 //* TITLE One-Click Postage **//
-//* VERSION 4.0.4 **//
+//* VERSION 4.0.5 **//
 //* DESCRIPTION Lets you easily reblog, draft and queue posts **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//
@@ -1470,7 +1470,9 @@ XKit.extensions.one_click_postage = new Object({
 
 		if ($("#x1cpostage_caption").hasClass("x1cpostage_remove_caption_on") === true) {
 			// User wishes to remove caption.
-			m_object[variable_to_use] = "";
+			m_object["remove_reblog_tree"] = true;
+                        m_object["post[two]"] = "";
+                        m_object["post[three]"] = "";
 
 		} else {
 
@@ -1493,9 +1495,10 @@ XKit.extensions.one_click_postage = new Object({
 			}
 
 		}
-
-		m_object[variable_to_use] = XKit.tools.replace_all(m_object[variable_to_use], "&lt;br&gt;", "<br/>");
-		m_object[variable_to_use] = XKit.tools.replace_all(m_object[variable_to_use], "&lt;br/&gt;", "<br/>");
+                if (m_object[variable_to_use]) {
+		    m_object[variable_to_use] = XKit.tools.replace_all(m_object[variable_to_use], "&lt;br&gt;", "<br/>");
+		    m_object[variable_to_use] = XKit.tools.replace_all(m_object[variable_to_use], "&lt;br/&gt;", "<br/>");
+                }
 
 		if (tags !== "" && typeof tags !== "undefined") {
 			m_object["post[tags]"] = tags;
