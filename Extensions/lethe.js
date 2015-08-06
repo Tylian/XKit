@@ -1,5 +1,5 @@
 //* TITLE Lethe **//
-//* VERSION 1.1.0 **//
+//* VERSION 1.1.1 **//
 //* DESCRIPTION Forgets posts once they scroll off the screen. **//
 //* DEVELOPER hobinjk **//
 //* FRAME false **//
@@ -27,6 +27,9 @@ function Lethe() {
  * Run Lethe
  */
 Lethe.prototype.run = function() {
+  if (!XKit.interface.where().dashboard) {
+    return;
+  }
   this.running = true;
   this.handleScroll = this.handleScroll.bind(this);
   window.addEventListener('scroll', this.handleScroll, false);
