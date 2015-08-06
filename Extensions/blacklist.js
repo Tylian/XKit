@@ -681,6 +681,7 @@ XKit.extensions.blacklist = new Object({
 		$(obj).find(".post_content").html(old_content + block_excuse);
 		$(obj).find(".post_footer_links").css('display','none');
 		$(obj).find(".post_source").css('display','none');
+		$(obj).find(".post-source-footer").css('display','none');
 
 		if (XKit.extensions.blacklist.preferences.mini_block.value !== true) {
 			$(obj).addClass("xblacklist_blacklisted_post_full_ui");
