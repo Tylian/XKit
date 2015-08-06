@@ -1,5 +1,5 @@
 //* TITLE NotificationBlock **//
-//* VERSION 1.2 REV A **//
+//* VERSION 1.3.0 **//
 //* DESCRIPTION Blocks notifications from a post **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS One post got way too popular and now just annoying you? Click on the notification block icon on that post to hide the notifications from that post. If you have Go-To-Dash installed, you can click on a notification, then click View button on top-right corner to quickly go back to the post on your dashboard.  **//
@@ -38,32 +38,6 @@ XKit.extensions.notificationblock = new Object({
 		}
 
 		XKit.tools.init_css("notificationblock");
-
-		try {
-
-			if (XKit.interface.where().activity === true) {
-				if (XKit.installed.check("activity_plus") === true) {
-					if (typeof XKit.extensions.activity_plus !== "undefined") {
-						if (typeof XKit.extensions.activity_plus.preferences !== "undefined") {
-							if (XKit.extensions.activity_plus.preferences.condensed_notes.value !== false) {
-								if (XKit.storage.get("notificationblock","shown_warning_activity_plus","") !== "yes") {
-									XKit.notifications.add("NotificationBlock will not work: You have Activity+'s Group Notes feature on. Click here to learn more and disable this warning","warning", true, function() {
-										XKit.window.show("NotificationBlock will not work on this page.","<b>Activity+ extension's \"Group Notifications by Post\" feature disables NotificationBlock on Activity page.</b><br/><br/>If you would like to use NotificationBlock on your Activity page, please disable this feature from XKit Control Panel > Activity+ > \"Group Notifications by Post\".","error","<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
-										XKit.storage.set("notificationblock","shown_warning_activity_plus","yes");
-									});
-								}
-								return;
-							}
-						}
-					}
-				}
-			}
-
-		} catch(e) {
-
-			console.log("Init notificationblock error => " + e.message);
-
-		}
 
 		try {
 			var m_blacklist = XKit.storage.get("notificationblock","posts","").split(",");
@@ -339,6 +313,9 @@ XKit.extensions.notificationblock = new Object({
 				if (target_url.indexOf("/post/" + XKit.extensions.notificationblock.blacklisted[i]) !== -1) {
 					console.log("Blocking notification because of post " + XKit.extensions.notificationblock.blacklisted[i]);
 					//$(this).addClass("notificationblock-notification-blocked");
+					if ($(this).next().hasClass("xkit-activity-plus-condensed-opener")) {
+						$(this).next().remove();
+					}
 					$(this).remove();
 					//$(this).css("background","red");
 					return;
