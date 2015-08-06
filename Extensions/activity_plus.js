@@ -16,7 +16,7 @@ XKit.extensions.activity_plus = new Object({
 			type: "separator"
 		},
 		condensed_notes: {
-			text: "Group notifications by post (disables NotificationBlock on Activity page)",
+			text: "Group notifications by post",
 			default: true,
 			value: true,
 			experimental: true
