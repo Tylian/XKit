@@ -1,5 +1,5 @@
 //* TITLE Quick Tags **//
-//* VERSION 0.5.1 **//
+//* VERSION 0.5.2 **//
 //* DESCRIPTION Quickly add tags to posts **//
 //* DETAILS Allows you to create tag bundles and add tags to posts without leaving the dashboard. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -47,7 +47,12 @@ XKit.extensions.quick_tags = new Object({
 	},
 
 	menu_close: function() {
-		XKit.extensions.quick_tags.menu_closer_int = setTimeout(function() { XKit.extensions.quick_tags.close_window(); }, 500);
+		// Only close the menu if it doesn't have keyboard or mouse focus
+		if ($("#xkit-quick-tags-window").find('input:focus').length === 0 &&
+		    $('#xkit-quick-tags-window:hover').length === 0) {
+			XKit.extensions.quick_tags.user_on_box = false;
+		    XKit.extensions.quick_tags.menu_closer_int = setTimeout(function() { XKit.extensions.quick_tags.close_window(); }, 500);
+		}
 	},
 
 	run: function() {
@@ -212,9 +217,9 @@ XKit.extensions.quick_tags = new Object({
 	current_button: "",
 
 	close_window: function() {
-
-		$("#xkit-quick-tags-window").fadeOut('fast');
-
+		if (XKit.extensions.quick_tags.user_on_box === false) {
+		    $("#xkit-quick-tags-window").fadeOut('fast');
+		}
 	},
 
 	load_tag_prefs: function() {
@@ -296,9 +301,6 @@ XKit.extensions.quick_tags = new Object({
 
 		$("#xkit-quick-tags-window").remove();
 		$("body").append(m_html);
-
-		$("#xkit-tag-input").bind("focus", XKit.extensions.quick_tags.cancel_menu_close);
-		$("#xkit-tag-input").bind("blur", XKit.extensions.quick_tags.menu_close);
 
 		$("#xkit-tag-input").bind("keydown", function(event) {
 			if (event.which == 13) {
