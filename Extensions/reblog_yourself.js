@@ -138,7 +138,7 @@ XKit.extensions.reblog_yourself = {
 
 		if (!do_add) { return; }
 
-    var post_avatar = "";
+		var post_avatar = "";
 		try {
 			post_avatar = m_blog_avatar;
 		} catch(e) {

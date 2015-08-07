@@ -226,7 +226,7 @@ XKit.extensions.quick_tags = new Object({
 
 		// Get the user tags.
 		var user_tags = XKit.storage.get("quick_tags","user_tags");
-    var user_tag_array = [];
+		var user_tag_array = [];
 
 		try {
 			user_tag_array = JSON.parse(user_tags);

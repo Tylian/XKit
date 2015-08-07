@@ -367,59 +367,59 @@ XKit.extensions.postarchive = new Object({
 		
 		$("#xkit-postarchive-import").bind("click", function() { //Import Function
 
-	    	XKit.window.show("Import","<b>You can import settings from XKit.</b><br/>Click XKit''s Export button and paste the text below to import your archived posts.<input type=\"text\" placeholder=\"Paste preferences text here.\" class=\"xkit-textbox\" id=\"xkit-postarchive-import-words\">","question","<div class=\"xkit-button default\" id=\"xkit-postarchive-add-words\">Import!</div><div class=\"xkit-button\" id=\"xkit-close-message\">Cancel</div>");
+			XKit.window.show("Import","<b>You can import settings from XKit.</b><br/>Click XKit''s Export button and paste the text below to import your archived posts.<input type=\"text\" placeholder=\"Paste preferences text here.\" class=\"xkit-textbox\" id=\"xkit-postarchive-import-words\">","question","<div class=\"xkit-button default\" id=\"xkit-postarchive-add-words\">Import!</div><div class=\"xkit-button\" id=\"xkit-close-message\">Cancel</div>");
 
-	    	$("#xkit-postarchive-replace-on-import").click(function() {
-	    		$(this).toggleClass("selected");
-	    	});
+			$("#xkit-postarchive-replace-on-import").click(function() {
+				$(this).toggleClass("selected");
+			});
 
-	    	$("#xkit-postarchive-add-words").click(function() {
+			$("#xkit-postarchive-add-words").click(function() {
 
 			var m_to_add = $("#xkit-postarchive-import-words").val();
 
-			    if (m_to_add === "" ||$.trim(m_to_add) === "") {
-				    XKit.window.close();
-				    XKit.window.show("Noodlebops!", "m_to_add is being weird?? " + m_to_add,"error","<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
-				    return;
-			    }
+				if (m_to_add === "" ||$.trim(m_to_add) === "") {
+					XKit.window.close();
+					XKit.window.show("Noodlebops!", "m_to_add is being weird?? " + m_to_add,"error","<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
+					return;
+				}
 
-					var m_obj = null;
-		    	try {
+				var m_obj = null;
+				try {
 
-	    			m_obj = JSON.parse(m_to_add);
-	    			//XKit.window.show("m_obj:", JSON.stringify(m_obj),"error","<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
-	    			//return;
+					m_obj = JSON.parse(m_to_add);
+					//XKit.window.show("m_obj:", JSON.stringify(m_obj),"error","<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
+					//return;
 
-	    		} catch(e) {
-	    			alert("Invalid/Corrupt JSON object found.\nImport can not continue.");
-	    			return;
-	    		}
-	    		
-	    		m_posts = JSON.parse(m_obj.posts);
-	    		m_categories = JSON.parse(m_obj.categories);
-	    		
-	    		XKit.extensions.postarchive.load_posts();
-	    		
-	    		for (var n=0;n<m_categories.length;n++) {
-	    		    XKit.extensions.postarchive.categories.push(m_categories[n]);
+				} catch(e) {
+					alert("Invalid/Corrupt JSON object found.\nImport can not continue.");
+					return;
+				}
+
+				m_posts = JSON.parse(m_obj.posts);
+				m_categories = JSON.parse(m_obj.categories);
+
+				XKit.extensions.postarchive.load_posts();
+
+				for (var n=0;n<m_categories.length;n++) {
+					XKit.extensions.postarchive.categories.push(m_categories[n]);
 					console.log(XKit.extensions.postarchive.categories);
 					XKit.extensions.postarchive.save_posts();
-	    		}
-	    		
-	    		for (var i=0;i<m_posts.length;i++) {
-	    		    XKit.extensions.postarchive.archived_posts.push(m_posts[i]);
+				}
+
+				for (var i=0;i<m_posts.length;i++) {
+					XKit.extensions.postarchive.archived_posts.push(m_posts[i]);
 					console.log(XKit.extensions.postarchive.archived_posts);
 					XKit.extensions.postarchive.save_posts();
-	    		}
-	    		
-	    		XKit.extensions.postarchive.update_sidebar();
-	    		
-	    		XKit.window.show("Done!", "Your posts should exist!", "info","<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
-	    		return;
+				}
 
-	    	});
+				XKit.extensions.postarchive.update_sidebar();
 
-        });
+				XKit.window.show("Done!", "Your posts should exist!", "info","<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
+				return;
+
+			});
+
+		});
 
 		$("#xkit-postarchive-search").keyup(function() {
 
