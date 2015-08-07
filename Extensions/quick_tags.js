@@ -337,8 +337,6 @@ XKit.extensions.quick_tags = new Object({
 			$(".xkit-tag-other").css("display","block");
 		}
 
-		dooooooooooooooooooooooooooo
-
 		clearTimeout(XKit.extensions.quick_tags.menu_closer_int);
 
 		if (user_tag_array.length >= 4) {
