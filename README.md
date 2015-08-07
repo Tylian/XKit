@@ -20,12 +20,34 @@ finding something going wrong. There's a long list of known issues
 Check out [the wiki page](https://github.com/new-xkit/XKit/wiki/Writing-a-New-Extension)!
 
 ## Develop XKit
-Download [Node.js](https://nodejs.org/). In your clone of this repository run
-the following:
+Download [Node.js](https://nodejs.org/download/) for your platform.
+
+In your clone of this repository run:
+
+```sh
+npm install
 ```
-npm install --dev-dependencies
+
+and then:
+
+```sh
+gulp watch
 ```
-At this point, if you want to build the extensions run `./build.sh all`. They
-will appear in the `build` directory. If you want to run our automated tests,
-run `npm test`. To automatically run those tests whenever you edit files, run
-`grunt watch`.
+
+to automatically run the project tests whenever files are edited.
+
+To build XKit from source, run:
+
+```sh
+gulp build
+```
+
+or
+
+```sh
+gulp build:<platform>
+```
+
+where `<platform>` is one of: `chrome`, `firefox`.
+
+Builds can be found in the `build/` directory.
