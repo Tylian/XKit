@@ -308,7 +308,7 @@ XKit.extensions.view_on_dash = new Object({
 					// Calculate the shortest!
 					var m_temp_photo = current_photo;
 
-					if (row >= 2) {
+					if (row_count >= 2) {
 
 						for (var m = 1; m < row_count; m++) {
 
@@ -349,7 +349,7 @@ XKit.extensions.view_on_dash = new Object({
 
 					}
 
-					photo_post_inner_html = photo_post_inner_html + "<div class=\"photoset_row photoset_row_" + rows[i] + "\" style=\"height: " + shortest + "px;\">" + in_row_html + "</div>";
+					photo_post_inner_html = photo_post_inner_html + "<div class=\"photoset_row photoset_row_" + row_count + "\" style=\"height: " + shortest + "px;\">" + in_row_html + "</div>";
 
 				});
 
