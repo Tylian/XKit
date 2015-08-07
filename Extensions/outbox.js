@@ -51,7 +51,7 @@ XKit.extensions.outbox = new Object({
 		$(document).on("click", "#ask_button", function() {
 
 			var m_messages = XKit.storage.get("outbox", "messages_" + form_key, "");
-			if (XKit.extensions.outbox.preferences.use_shared.value == true) {
+			if (XKit.extensions.outbox.preferences.use_shared.value) {
 				m_messages = XKit.storage.get("outbox", "messages", "");
 			}
 
@@ -80,7 +80,7 @@ XKit.extensions.outbox = new Object({
 
 			m_messages_array.unshift(m_obj);
 			//XKit.storage.set("outbox", "messages_" + form_key, JSON.stringify(m_messages_array));
-			if (XKit.extensions.outbox.preferences.use_shared.value == true) {
+			if (XKit.extensions.outbox.preferences.use_shared.value) {
 				XKit.storage.set("outbox", "messages", JSON.stringify(m_messages_array));
 			} else {
 				XKit.storage.set("outbox", "messages_" + form_key, JSON.stringify(m_messages_array));
@@ -95,14 +95,14 @@ XKit.extensions.outbox = new Object({
 
 		function get_fanmail_send_button() {
 			var fanmail_iframe = document.getElementById("send_fan_mail_lightbox");
-			var send_button = fanmail_iframe != null
+			var send_button = fanmail_iframe
 				? fanmail_iframe.contentWindow.document.getElementsByClassName("send")
 				: document.getElementsByClassName("send");
 			return send_button.length > 0 ? send_button[0] : null;
 		}
 
 		if (wait === true) {
-			if (get_fanmail_send_button() == null) {
+			if (!get_fanmail_send_button()) {
 				XKit.console.add("Waiting for fan-mail window to pop up..");
 				setTimeout(function() { XKit.extensions.outbox.run_fan_mail(true); }, 200);
 				return;
@@ -117,8 +117,9 @@ XKit.extensions.outbox = new Object({
 
 	save_fan_mail: function(e) {
 
-		var base_document = document.getElementById("send_fan_mail_lightbox") != null
-			? document.getElementById("send_fan_mail_lightbox").contentWindow.document
+		var send_fan_mail_lightbox = document.getElementById("send_fan_mail_lightbox");
+		var base_document = send_fan_mail_lightbox
+			? send_fan_mail_lightbox.contentWindow.document
 			: document;
 		var message_textarea = base_document.getElementsByClassName("message")[0];
 		var m_msg = message_textarea.value;
@@ -131,12 +132,12 @@ XKit.extensions.outbox = new Object({
 			XKit.console.add("outbox: to field text box, might not make it.");
 		}
 
-		if ($.trim(m_msg) == "" || check_status !== true) {
+		if ($.trim(m_msg) === "" || !check_status) {
 			return;
 		}
 
 		var m_messages = XKit.storage.get("outbox", "messages_" + XKit.extensions.outbox.fan_mail_form_key, "");
-		if (XKit.extensions.outbox.preferences.use_shared.value == true) {
+		if (XKit.extensions.outbox.preferences.use_shared.value) {
 			m_messages = XKit.storage.get("outbox", "messages", "");
 		}
 
@@ -148,7 +149,7 @@ XKit.extensions.outbox = new Object({
 				// remove the last element.
 				m_messages_array.pop();
 			}
-		} catch(e) {
+		} catch(err) {
 			m_messages_array = [];
 		}
 
@@ -157,14 +158,14 @@ XKit.extensions.outbox = new Object({
 		m_obj.username = base_document.getElementById("select_tumblelog_from").value;
 		m_obj.message = m_msg;
 		m_obj.answer = "";
-		m_obj.to = base_document.getElementById("to_input").value
+		m_obj.to = base_document.getElementById("to_input").value;
 		m_obj.time = new Date().getTime();
 
 		var form_key = $('meta[name=tumblr-form-key]').attr("content");
 
 		m_messages_array.unshift(m_obj);
 		//XKit.storage.set("outbox", "messages_" + XKit.extensions.outbox.fan_mail_form_key, JSON.stringify(m_messages_array));
-		if (XKit.extensions.outbox.preferences.use_shared.value == true) {
+		if (XKit.extensions.outbox.preferences.use_shared.value) {
 			XKit.storage.set("outbox", "messages", JSON.stringify(m_messages_array));
 		} else {
 			XKit.storage.set("outbox", "messages_" + form_key, JSON.stringify(m_messages_array));
@@ -179,7 +180,7 @@ XKit.extensions.outbox = new Object({
 		$(document).on("click", "#ask_button", function() {
 
 			var m_messages = XKit.storage.get("outbox", "messages_" + form_key, "");
-			if (XKit.extensions.outbox.preferences.use_shared.value == true) {
+			if (XKit.extensions.outbox.preferences.use_shared.value) {
 				m_messages = XKit.storage.get("outbox", "messages", "");
 			}
 
@@ -208,7 +209,7 @@ XKit.extensions.outbox = new Object({
 
 			m_messages_array.unshift(m_obj);
 			//XKit.storage.set("outbox", "messages_" + form_key, JSON.stringify(m_messages_array));
-			if (XKit.extensions.outbox.preferences.use_shared.value == true) {
+			if (XKit.extensions.outbox.preferences.use_shared.value) {
 				XKit.storage.set("outbox", "messages", JSON.stringify(m_messages_array));
 			} else {
 				XKit.storage.set("outbox", "messages_" + form_key, JSON.stringify(m_messages_array));
@@ -247,7 +248,7 @@ XKit.extensions.outbox = new Object({
 
 		$("#xkit-outbox-button").click(function() {
 
-			if ($(this).parent().hasClass("xkit-selected") == false) {
+			if (!$(this).parent().hasClass("xkit-selected")) {
 
 				$(this).parent().addClass("xkit-selected");
 				$(this).parent().addClass("selected");
@@ -298,7 +299,7 @@ XKit.extensions.outbox = new Object({
 			return;
 		}
 
-		if (XKit.extensions.outbox.preferences.show_checkbox.value == true) {
+		if (XKit.extensions.outbox.preferences.show_checkbox.value) {
 			$(m_parent).find(".chrome.ask_cancel_button").before("<div style=\"padding-top: 5px; margin-bottom: 10px;\"><div class=\"xkit-checkbox xkit-outbox-save-checkbox selected\"><b>&nbsp</b>Save to outbox if answered privately</div></div>");
 		}
 
@@ -343,7 +344,7 @@ XKit.extensions.outbox = new Object({
 
 			var form_key = $('meta[name=tumblr-form-key]').attr("content");
 			var m_messages = XKit.storage.get("outbox", "messages_" + form_key, "");
-			if (XKit.extensions.outbox.preferences.use_shared.value == true) {
+			if (XKit.extensions.outbox.preferences.use_shared.value) {
 				m_messages = XKit.storage.get("outbox", "messages", "");
 			}
 
@@ -369,7 +370,7 @@ XKit.extensions.outbox = new Object({
 
 			m_messages_array.unshift(m_obj);
 
-			if (XKit.extensions.outbox.preferences.use_shared.value == true) {
+			if (XKit.extensions.outbox.preferences.use_shared.value) {
 				XKit.storage.set("outbox", "messages", JSON.stringify(m_messages_array));
 			} else {
 				XKit.storage.set("outbox", "messages_" + form_key, JSON.stringify(m_messages_array));
@@ -386,7 +387,7 @@ XKit.extensions.outbox = new Object({
 				 " } ";
 
 		if ('function' == typeof source) {
-				source = '(' + source + ')();'
+				source = '(' + source + ')();';
 		}
 
 		var script = document.createElement('script');
@@ -399,14 +400,14 @@ XKit.extensions.outbox = new Object({
 
 		XKit.tools.add_css(" .post { display: none; } .post.by-xkit-outbox { display: block !important; } #auto_pagination_loader, #next_page_link { display: none !important; } ", "outbox_additional");
 
-		var form_key = $('meta[name=tumblr-form-key]').attr("content");;
+		var form_key = $('meta[name=tumblr-form-key]').attr("content");
 		if (form_key === "" ||typeof form_key === "undefined") {
 			XKit.extensions.outbox.show_empty("Can't load messages,<br/>data-form-key not found.");
 			return;
 		}
 
 		var m_messages = XKit.storage.get("outbox", "messages_" + form_key, "");
-		if (XKit.extensions.outbox.preferences.use_shared.value == true) {
+		if (XKit.extensions.outbox.preferences.use_shared.value) {
 			m_messages = XKit.storage.get("outbox", "messages", "");
 		}
 
@@ -432,16 +433,15 @@ XKit.extensions.outbox = new Object({
 
 		var form_key = $('meta[name=tumblr-form-key]').attr("content");
 		var m_messages = XKit.storage.get("outbox", "messages_" + form_key, "");
-		if (XKit.extensions.outbox.preferences.use_shared.value == true) {
+		if (XKit.extensions.outbox.preferences.use_shared.value) {
 			m_messages = XKit.storage.get("outbox", "messages", "");
 		}
 
-		var m_messages_array = "";
+		var m_messages_array = [];
 
 		try {
 			m_messages_array = JSON.parse(m_messages);
-		} catch(e) {
-			m_messages_array = [];
+		} catch(err) {
 		}
 
 		console.log(m_messages_array);
@@ -449,7 +449,7 @@ XKit.extensions.outbox = new Object({
 
 		console.log(m_messages_array);
 
-		if (XKit.extensions.outbox.preferences.use_shared.value == true) {
+		if (XKit.extensions.outbox.preferences.use_shared.value) {
 			XKit.storage.set("outbox", "messages", JSON.stringify(m_messages_array));
 		} else {
 			XKit.storage.set("outbox", "messages_" + form_key, JSON.stringify(m_messages_array));

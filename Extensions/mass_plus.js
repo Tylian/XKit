@@ -79,10 +79,10 @@ XKit.extensions.mass_plus = new Object({
 
 			if (m_type === "month-deselect") {
 
-				var m_month = $(this).parent().parent();
-				var n_month = $(m_month).nextUntil(".heading");
+				var month_deselect = $(this).parent().parent();
+				var month_deselect_heading = $(month_deselect).nextUntil(".heading");
 
-				$(n_month).each(function() {
+				$(month_deselect_heading).each(function() {
 					if ($(this).hasClass("highlighted")) {
 						$(this).find(".overlay").trigger('click');
 					}

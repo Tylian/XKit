@@ -248,7 +248,7 @@ XKit.extensions.one_click_reply = new Object({
 
 			if (XKit.extensions.tweaks.running === true) {
 				if (XKit.extensions.tweaks.preferences.photo_replies.value === true) {
-					m_object["allow_photo_replies"] = "on";
+					m_object.allow_photo_replies = "on";
 				}
 			}
 
@@ -293,8 +293,9 @@ XKit.extensions.one_click_reply = new Object({
 				onload: function(response) {
 					// We are done!
 					XKit.interface.kitty.set(response.getResponseHeader("X-tumblr-kittens"));
+          var mdata = null;
 					try {
-						var mdata = jQuery.parseJSON(response.responseText);
+						mdata = jQuery.parseJSON(response.responseText);
 					} catch(e) {
 						XKit.extensions.one_click_reply.quick_reply_error("106");
 					}
@@ -318,8 +319,11 @@ XKit.extensions.one_click_reply = new Object({
 			return s;
 		  }
 		  var  X = function(x, a, b) {return x.replace(new RegExp(a, 'g'), b)};
-		  var  R = function(a, b) {return s = X(s, a, b)};
-		  var blocks = '(table|thead|tfoot|caption|colgroup|tbody|tr|td|th|div|dl|dd|dt|ul|ol|li|pre|select'
+		var R = function(a, b) {
+			s = X(s, a, b);
+			return s;
+		};
+		  var blocks = '(table|thead|tfoot|caption|colgroup|tbody|tr|td|th|div|dl|dd|dt|ul|ol|li|pre|select';
 		  blocks += '|form|blockquote|address|math|style|script|object|input|param|p|h[1-6])';
 		  s += '\n';
 		  R('<br />\\s*<br />', '\n\n');
@@ -508,8 +512,8 @@ XKit.extensions.one_click_reply = new Object({
 			if (new_style) {
 				m_html = "<div class=\"xkit-reply-button-pn xkit-notes-new-style-fix\">reply</div>";
 			}
+			var flush_to_right = false;
 			if (in_box) {
-				var flush_to_right = false;
 				if ($(n_box).find(".follow").length > 0) {
 					if ($(n_box).find("a.follow").css("display") !== "block") {
 						flush_to_right = true;
@@ -710,7 +714,7 @@ XKit.extensions.one_click_reply = new Object({
 		}
 
 		post_contents = post_contents.replace(/<(?:.|\n)*?>/gm, '');
-		if (post_contents.length > 40 && contains_html == false) {
+		if (post_contents.length > 40 && !contains_html) {
 			post_contents = post_contents.substring(0, 38) + "...";
 		}
 
@@ -872,12 +876,12 @@ XKit.extensions.one_click_reply = new Object({
 
 		if (XKit.extensions.one_click_reply.preferences.multi_reply.value === true && silent_mode !== true) {
 			if (event.altKey) {
-				var m_obj = $(obj);
+				var alt_obj = $(obj);
 				if (pn_mode === true) {
-					m_obj = $(obj).parent();
-					$(m_obj).toggleClass("xkit-reply-selected-pn");
+					alt_obj = alt_obj.parent();
+					alt_obj.toggleClass("xkit-reply-selected-pn");
 				} else {
-					$(m_obj).toggleClass("xkit-reply-selected");
+					alt_obj.toggleClass("xkit-reply-selected");
 				}
 				return;
 			} else {
@@ -902,14 +906,14 @@ XKit.extensions.one_click_reply = new Object({
 						// Cycle thru all the posts and gather information.
 
 						if ($(this).hasClass("xkit-reply-selected-pn") === true) {
-							var m_return = XKit.extensions.one_click_reply.make_post_pn($(this).find(".xkit-reply-button-pn"), true);
-							m_tags = m_tags + "," + m_return.tags;
-							m_text = m_text + m_return.sentence + "<p></p>";
+							var pn_post = XKit.extensions.one_click_reply.make_post_pn($(this).find(".xkit-reply-button-pn"), true);
+							m_tags = m_tags + "," + pn_post.tags;
+							m_text = m_text + pn_post.sentence + "<p></p>";
 							// m_text = m_text + XKit.extensions.one_click_reply.make_post_pn(this, true);
 						} else {
-							var m_return = XKit.extensions.one_click_reply.make_post(this, pn_mode, "", true);
-							m_tags = m_tags + "," + m_return.tags;
-							m_text = m_text + m_return.sentence + "<p></p>";
+							var standard_post = XKit.extensions.one_click_reply.make_post(this, pn_mode, "", true);
+							m_tags = m_tags + "," + standard_post.tags;
+							m_text = m_text + standard_post.sentence + "<p></p>";
 						}
 
 					});
@@ -992,7 +996,7 @@ XKit.extensions.one_click_reply = new Object({
 
 		if ( $(obj).find(".notification_sentence").find(".hide_overflow") > 0) {
 		 	m_sentence = "<p>" + $(obj).find(".notification_sentence").find(".hide_overflow").html() + "</p>";
-		 	if ($(obj).find(".notification_sentence").attr('data-xkit-text-version-html') != "" && typeof $(obj).find(".notification_sentence").attr('data-xkit-text-version-html') != "undefined") {
+		 	if ($(obj).find(".notification_sentence").attr('data-xkit-text-version-html')) {
 				var text_html = $(obj).find(".notification_sentence").attr('data-xkit-text-version-html');
 				m_sentence = "<p>" + $(text_html).find(".hide_overflow").html() + "</p>";
 		 	}
@@ -1003,7 +1007,7 @@ XKit.extensions.one_click_reply = new Object({
 			$(".xkit-notification-notification-block-button", tmp_div).remove();
 			var tmp_html = $(tmp_div).html();
 
-			if ($(tmp_div).attr('data-xkit-text-version-html') != "" && typeof $(tmp_div).attr('data-xkit-text-version-html') != "undefined") {
+			if ($(tmp_div).attr('data-xkit-text-version-html')) {
 				tmp_html = $(tmp_div).attr('data-xkit-text-version-html');
 				tmp_html = decodeURIComponent(escape(atob(tmp_html)));
 			}
@@ -1102,7 +1106,7 @@ XKit.extensions.one_click_reply = new Object({
 		var m_sentence = "";
 		if ( $(obj).find(".part_main").length > 0) {
 		 	m_sentence = "<p>" + $(obj).find(".part_main").html() + "</p>";
-			if ($(obj).find(".part_main").attr('data-xkit-text-version-html') != "" && typeof $(obj).find(".part_main").attr('data-xkit-text-version-html') != "undefined") {
+			if ($(obj).find(".part_main").attr('data-xkit-text-version-html')) {
 				m_sentence = $(obj).find(".part_main").attr('data-xkit-text-version-html');
 				m_sentence = decodeURIComponent(escape(atob(m_sentence)));
 			}
@@ -1111,7 +1115,7 @@ XKit.extensions.one_click_reply = new Object({
 			$(".xkit-reply-button", tmp_div).remove();
 			$(".xkit-notification-notification-block-button", tmp_div).remove();
 			var tmp_html = $(tmp_div).html();
-			if ($(tmp_div).attr('data-xkit-text-version-html') != "" && typeof $(tmp_div).attr('data-xkit-text-version-html') != "undefined") {
+			if ($(tmp_div).attr('data-xkit-text-version-html')) {
 				tmp_html = $(tmp_div).attr('data-xkit-text-version-html');
 				tmp_html = decodeURIComponent(escape(atob(tmp_html)));
 			}

@@ -291,7 +291,10 @@ XKit.extensions.notificationblock = new Object({
 			}
 
 			for (var i=0;i<XKit.extensions.notificationblock.blacklisted.length;i++) {
-				if (XKit.extensions.notificationblock.blacklisted[i] == "") { continue; }
+				if (XKit.extensions.notificationblock.blacklisted[i] === "" ||
+				    typeof(XKit.extensions.notificationblock.blacklisted[i]) === "undefined") {
+					continue;
+				}
 				if (target_url.indexOf("/post/" + XKit.extensions.notificationblock.blacklisted[i]) !== -1) {
 					console.log("Blocking notification because of post " + XKit.extensions.notificationblock.blacklisted[i]);
 					$(this).remove();
@@ -309,7 +312,10 @@ XKit.extensions.notificationblock = new Object({
 			//$(this).css("background","green");
 
 			for (var i=0;i<XKit.extensions.notificationblock.blacklisted.length;i++) {
-				if (XKit.extensions.notificationblock.blacklisted[i] == "") { continue; }
+				if (XKit.extensions.notificationblock.blacklisted[i] === "" ||
+				    typeof(XKit.extensions.notificationblock.blacklisted[i]) === "undefined") {
+					continue;
+				}
 				if (target_url.indexOf("/post/" + XKit.extensions.notificationblock.blacklisted[i]) !== -1) {
 					console.log("Blocking notification because of post " + XKit.extensions.notificationblock.blacklisted[i]);
 					//$(this).addClass("notificationblock-notification-blocked");

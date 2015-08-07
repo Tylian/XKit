@@ -30,7 +30,7 @@ XKit.extensions.old_notifications = new Object({
 
 		if (document.location.href.indexOf('/new/') !== -1) { return; }
 
-		if (XKit.interface.where().channel == true) {
+		if (XKit.interface.where().channel) {
 			XKit.extensions.old_notifications.fetch();
 			$(document).on('click','.notification.xkit-old-notifications', XKit.extensions.old_notifications.open_notification);
 		}
@@ -98,7 +98,10 @@ XKit.extensions.old_notifications = new Object({
 			if (typeof XKit.extensions.old_notifications !== "undefined") {
 
 				for (var i=0;i<XKit.extensions.old_notifications.blacklisted.length;i++) {
-					if (XKit.extensions.old_notifications.blacklisted[i] == "") { continue; }
+					if (XKit.extensions.old_notifications.blacklisted[i] === "" ||
+					    typeof(XKit.extensions.old_notifications.blacklisted[i]) === "undefined") {
+						continue;
+					}
 					if (original_url.indexOf("/post/" + XKit.extensions.old_notifications.blacklisted[i]) !== -1) {
 						// console.log("[Old Notifications]Blocking notification because of post " + XKit.extensions.old_notifications.blacklisted[i]);
 						return "";
@@ -297,7 +300,7 @@ XKit.extensions.old_notifications = new Object({
 				"</a>";
 
 			if (!no_preview_frame) {
-				var m_html = m_html + "<div class=\"notification_right\">" +
+				m_html = m_html + "<div class=\"notification_right\">" +
 					"<a target=\"_blank\" class=\"preview_frame " + preview_frame_class + "\" href=\"" + notification_url + "\">" + preview_img_html + "</a>" +
 				"</div>";
 			}

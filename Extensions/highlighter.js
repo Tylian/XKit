@@ -242,25 +242,25 @@ XKit.extensions.highlighter = new Object({
 
 					// Ugh. Even worse, we've found it,
 					// now we need to get into a loop.
-					for (var m=0;m<p_words.length;m++) {
+					for (var p_i = 0; p_i < p_words.length; p_i++) {
 
-						if (p_words[m] === "") { continue; }
-						if (p_words[m].indexOf(m_word) !== -1) {
+						if (p_words[p_i] === "") { continue; }
+						if (p_words[p_i].indexOf(m_word) !== -1) {
 							return m_word;
 						}
 
-						if (m < p_words.length) {
-							var tmp_word = p_words[m] + " " + p_words[m + 1];
+						if (p_i < p_words.length) {
+							var tmp_word = p_words[p_i] + " " + p_words[p_i + 1];
 
 							// This is a dirty fix but it should work for now.
-							if (p_words[m + 2] !== "" || typeof p_words[m + 2] !== "undefined") {
-								tmp_word = tmp_word + " " + p_words[m + 2];
+							if (p_words[p_i + 2] !== "" || typeof p_words[p_i + 2] !== "undefined") {
+								tmp_word = tmp_word + " " + p_words[p_i + 2];
 							}
-							if (p_words[m + 3] !== "" || typeof p_words[m + 3] !== "undefined") {
-								tmp_word = tmp_word + " " + p_words[m + 3];
+							if (p_words[p_i + 3] !== "" || typeof p_words[p_i + 3] !== "undefined") {
+								tmp_word = tmp_word + " " + p_words[p_i + 3];
 							}
-							if (p_words[m + 4] !== "" || typeof p_words[m + 4] !== "undefined") {
-								tmp_word = tmp_word + " " + p_words[m + 4];
+							if (p_words[p_i + 4] !== "" || typeof p_words[p_i + 4] !== "undefined") {
+								tmp_word = tmp_word + " " + p_words[p_i + 4];
 							}
 
 							if (tmp_word.indexOf(m_word) !== -1) {
@@ -381,7 +381,7 @@ XKit.extensions.highlighter = new Object({
 
 		$("#highlighter-add-button").click(function() {
 
-			XKit.window.show("Add word to highlighter","<b>Enter the word you want to add.</b><br/>Your words can not contain commas or backslashes.<input type=\"text\" maxlength=\"50\" placeholder=\"Enter a word here.\" class=\"xkit-textbox\" id=\"xkit-highlighter-word\"><br/>Before adding a word, please check \"Tips on Highlighting\" section.","question","<div class=\"xkit-button default\" id=\"xkit-highlighter-add-word\">Add word</div><div class=\"xkit-button\" id=\"xkit-close-message\">Cancel</div>")
+			XKit.window.show("Add word to highlighter","<b>Enter the word you want to add.</b><br/>Your words can not contain commas or backslashes.<input type=\"text\" maxlength=\"50\" placeholder=\"Enter a word here.\" class=\"xkit-textbox\" id=\"xkit-highlighter-word\"><br/>Before adding a word, please check \"Tips on Highlighting\" section.","question","<div class=\"xkit-button default\" id=\"xkit-highlighter-add-word\">Add word</div><div class=\"xkit-button\" id=\"xkit-close-message\">Cancel</div>");
 
 			$("#xkit-highlighter-add-word").click(function() {
 
