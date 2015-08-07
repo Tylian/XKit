@@ -279,7 +279,7 @@ XKit.extensions.xwidgets = new Object({
 						m_caption = "Pacific Time";
 						break;
 					default:
-							m_caption = "GMT " + m_storage;
+						m_caption = "GMT " + m_storage;
 				}
 
 				$(obj).find(".timezone").html(m_caption);
