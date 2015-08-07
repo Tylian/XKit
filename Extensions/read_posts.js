@@ -35,7 +35,7 @@ XKit.extensions.read_posts = new Object({
 
 	redim: function(e) {
 		// This is less broken and meh.
-		if (XKit.extensions.read_posts.undimmed_post == null || XKit.extensions.read_posts.currently_undimming) {
+		if (!XKit.extensions.read_posts.undimmed_post || XKit.extensions.read_posts.currently_undimming) {
 		   //we don't currently have a post that needs redimming
 		   XKit.extensions.read_posts.currently_undimming = false;
 		   return;
