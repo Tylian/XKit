@@ -73,19 +73,6 @@ XKit.extensions.show_more = new Object({
 		}
 
 		$("body").append(askbox_template);
-
-		return;
-
-		if ($("body").hasClass("dashboard_messages_inbox") === true || $("body").hasClass("dashboard_messages_submissions") === true) {
-			$.getScript("https://assets.tumblr.com/assets/scripts/dashboard_ask.js?_v=" + XKit.tools.random_string(), function(data, textStatus, jqxhr) {
-   				// console.log('Load of dashboard_ask.js complete.');
-
-   				XKit.tools.add_function(function() {
-   					Tumblr.DashboardAsk.initialize();
-   				}, true, "");
-			});
-		}
-
 	},
 
 	run: function() {
@@ -197,11 +184,11 @@ XKit.extensions.show_more = new Object({
 			}
 		}
 
-		if (XKit.extensions.show_more.popup_data.following == true || XKit.extensions.show_more.popup_data.is_following == true) {
+		if (XKit.extensions.show_more.popup_data.following || XKit.extensions.show_more.popup_data.is_following) {
 			m_html = m_html + "<a target=\"_blank\" href=\"/send/" + user_url + "\" data-tumblelog-name=\"" + user_url + "\" class=\"xkit-fan-mail fan_mail\">Fan Mail</a>";
 		}
 
-		if (XKit.extensions.show_more.popup_data.following == true || XKit.extensions.show_more.popup_data.is_following == true) {
+		if (XKit.extensions.show_more.popup_data.following || XKit.extensions.show_more.popup_data.is_following) {
 			m_html = m_html + "<a data-tumblelog-name=\"" + user_url + "\" class=\"xkit-unfollow xkit-unfollow-" + user_url + "\">Unfollow</a>";
 		} else {
 			m_html = m_html + "<a data-tumblelog-name=\"" + user_url + "\" class=\"xkit-follow xkit-follow-" + user_url + "\">Follow</a>";
@@ -225,9 +212,9 @@ XKit.extensions.show_more = new Object({
 
 		if (XKit.extensions.show_more.preferences.show_submits.value === true && XKit.extensions.show_more.submit_available[user_url] === true) {
 
-			var m_likes_url = "http://" + user_url + ".tumblr.com/submit";
+			var m_submit_url = "http://" + user_url + ".tumblr.com/submit";
 
-			m_html = m_html + "<a target=\"_blank\" href=\"" + m_likes_url + "\" class=\"xkit-submit\">Submit</a>";
+			m_html = m_html + "<a target=\"_blank\" href=\"" + m_submit_url + "\" class=\"xkit-submit\">Submit</a>";
 
 		}
 
@@ -250,7 +237,7 @@ XKit.extensions.show_more = new Object({
 
 				try {
 					returned_menu = XKit.extensions.show_more.custom_menu_function[i](m_data);
-				} catch(e) {
+				} catch(err) {
 					returned_menu = "";
 				}
 
@@ -296,8 +283,8 @@ XKit.extensions.show_more = new Object({
 					$(".tumblelog_popover_glass").trigger('click');
 					setTimeout(function() { $(".tumblelog_popover_glass").trigger('click'); }, 10);
 					$(".popover").hide();
-				} catch(e) {
-					alert(e.message);
+				} catch(err) {
+					alert(err.message);
 				}
 			});
 
@@ -485,7 +472,7 @@ XKit.extensions.show_more = new Object({
 
 			try {
 				XKit.extensions.show_more.popup_data = JSON.parse($(m_obj).attr('data-tumblelog-popover'));
-			} catch(e) {
+			} catch(err) {
 				XKit.extensions.show_more.popup_data = {};
 				XKit.extensions.show_more.popup_data.error = true;
 				XKit.console.add("show_more -> Can't parse popup_data:" + e.message);
@@ -541,7 +528,7 @@ XKit.extensions.show_more = new Object({
 
 		try {
 			XKit.extensions.show_more.popup_data = JSON.parse($(m_obj).attr('data-tumblelog-popover'));
-		} catch(e) {
+		} catch(err) {
 			XKit.console.add("show_more -> Can't parse popup_data");
 			XKit.extensions.show_more.popup_data = {};
 			XKit.extensions.show_more.popup_data.error = true;
@@ -650,7 +637,7 @@ XKit.extensions.show_more = new Object({
 
 		if (XKit.extensions.show_more.preferences.show_submits.value === true) {
 
-			var m_delay_count = 0;
+			var submit_delay_count = 0;
 
 			$(".post_avatar").not(".xkit-show-more-submits-done").each(function() {
 
@@ -681,9 +668,9 @@ XKit.extensions.show_more = new Object({
 						}
 					});
 
-				}, 100 + (m_delay_count * 100));
+				}, 100 + (submit_delay_count * 100));
 
-				m_delay_count++;
+				submit_delay_count++;
 
 			});
 
@@ -691,7 +678,7 @@ XKit.extensions.show_more = new Object({
 
 		if (XKit.extensions.show_more.preferences.enable_anon.value === true) {
 
-			var m_delay_count = 0;
+			var anon_delay_count = 0;
 
 			$(".post_avatar").not(".xkit-show-more-anons-done").each(function() {
 
@@ -724,9 +711,9 @@ XKit.extensions.show_more = new Object({
 							}
 						}
 					});
-				}, 100 + (m_delay_count * 100));
+				}, 100 + (anon_delay_count * 100));
 
-				m_delay_count++;
+				anon_delay_count++;
 
 			});
 
@@ -807,10 +794,10 @@ XKit.extensions.show_more = new Object({
 
 		if (XKit.extensions.show_more.preferences.show_submits.value === true && XKit.extensions.show_more.submit_available[user_url] === true) {
 
-			var m_likes_url = "http://" + user_url + ".tumblr.com/submit";
+			var m_submit_url = "http://" + user_url + ".tumblr.com/submit";
 
 			m_html = m_html + "<div class=\"popover_menu_item\">" +
-					"<a target=\"_new\" href=\"" + m_likes_url + "\" class=\"tumblelog_menu_link likes xkit-submit\">" +
+					"<a target=\"_new\" href=\"" + m_submit_url + "\" class=\"tumblelog_menu_link likes xkit-submit\">" +
 						"<span class=\"hide_overflow\">Submit</span>" +
 					"</a>" +
 				  "</div>";

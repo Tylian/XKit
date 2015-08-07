@@ -32,7 +32,7 @@ XKit.extensions.drafts_plus = new Object({
 
 		$("#drafts_plus_mass_edit_button").click(function() {
 
-			if ($(this).parent().hasClass("xkit-selected") == false) {
+			if (!$(this).parent().hasClass("xkit-selected")) {
 
 				$(this).parent().addClass("xkit-selected");
 				$(this).parent().addClass("selected");

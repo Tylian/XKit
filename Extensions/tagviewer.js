@@ -17,7 +17,7 @@ XKit.extensions.tagviewer = new Object({
 
 	frame_run: function() {
 
-		if (typeof XKit.page.peepr != "undefined" && XKit.page.peepr == true) {
+		if (typeof XKit.page.peepr != "undefined" && XKit.page.peepr) {
 			XKit.extensions.tagviewer.run();
 		}
 
@@ -182,7 +182,7 @@ XKit.extensions.tagviewer = new Object({
       					XKit.extensions.tagviewer.activate_endless_scroll();
       				}
       			} else {
-      				if (XKit.extensions.tagviewer.found_count == 0) {
+      				if (XKit.extensions.tagviewer.found_count === 0) {
       					$("#tagviewer-loading").html("No posts with tags found.");
       				}
       				XKit.extensions.tagviewer.last_page = true;
@@ -283,37 +283,6 @@ XKit.extensions.tagviewer = new Object({
 			XKit.interface.add_control_button(this, "xkit-tagviewer", "data-xkit-tagviewer-tumblelog-key=\"" + m_post.tumblelog_key + "\" data-xkit-tagviewer-tumblelog-name=\"" + m_post.owner + "\"");
 
 		});
-
-		return;
-
-		$(".post").not(".note").not(".xtagviewer_done").each(function() {
-
-			$(this).addClass("xtagviewer_done");
-
-			if ($(this).hasClass("fan_mail")) {return; }
-
-	  		var post_id = $(this).attr('data-post-id');
-	  		var tumblelog_key = $(this).attr('data-tumblelog-key');
-	  		var tumblelog_name = $(this).attr('data-tumblelog-name');
-
-	  		if ($(this).find(".note_link_current").length > 0) {
-	  			if ($(this).find(".note_link_current").html() == "") {
-	  				// This post has no notes, skip.
-	  				return;
-	  			}
-	  		}
-
-	  		var m_html = "<a class=\"post_control post_control_icon xtagviewer_post_icon xkit_tagviewer_button\" data-xkit-tagviewer-post-id=\"" + post_id + "\" data-xkit-tagviewer-tumblelog-key=\"" + tumblelog_key + "\" data-xkit-tagviewer-tumblelog-name=\"" + tumblelog_name + "\" onclick=\"return false\">t</a>";
-
-	  		if ($(this).find(".post_controls_inner").length > 0) {
-				m_html = "<a class=\"post_control post_control_icon xtagviewer_post_icon xkit_new_dashboard xkit_tagviewer_button\" data-xkit-tagviewer-post-id=\"" + post_id + "\" data-xkit-tagviewer-tumblelog-key=\"" + tumblelog_key + "\" data-xkit-tagviewer-tumblelog-name=\"" + tumblelog_name + "\" onclick=\"return false\"></a>";
-				$(this).find(".post_controls_inner").prepend(m_html);
-	  		} else {
-				$(this).find(".post_controls").prepend(m_html);
-	  		}
-
-		});
-
 	},
 
 	destroy: function() {

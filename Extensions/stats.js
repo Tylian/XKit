@@ -78,7 +78,7 @@ XKit.extensions.stats = new Object({
 			XKit.extensions.stats.close_window();
 		});
 
-		XKit.extensions.stats.blog_next_page(1, m_window_id, new Array(), url);
+		XKit.extensions.stats.blog_next_page(1, m_window_id, [], url);
 
 	},
 
@@ -194,7 +194,7 @@ XKit.extensions.stats = new Object({
 
 					XKit.progress.value("stats-progress", posts.length / 3);
 
-					if (posts.length >= 300 || data.posts.length == 0) {
+					if (posts.length >= 300 || data.posts.length === 0) {
 						XKit.extensions.stats.calculate_results_blog(m_window_id, posts, blog_url);
 					} else {
 						setTimeout(function() { XKit.extensions.stats.blog_next_page((page + 1), m_window_id, posts, blog_url); }, 400);
@@ -224,7 +224,7 @@ XKit.extensions.stats = new Object({
 			XKit.extensions.stats.close_window();
 		});
 
-		XKit.extensions.stats.dashboard_next_page(1, m_window_id, new Array());
+		XKit.extensions.stats.dashboard_next_page(1, m_window_id, []);
 
 	},
 
@@ -350,29 +350,32 @@ XKit.extensions.stats = new Object({
 
 		if (XKit.extensions.stats.window_id !== m_window_id) { return; }
 
+		var m_html = "";
 		if (blog_mode !== true) {
-			var m_html = "<div class=\"m_window_title\">Results for your dashboard</div>" +
+			m_html = "<div class=\"m_window_title\">Results for your dashboard</div>" +
 					"<div class=\"xkit-stats-separator\"><div>Top 4 blogs</div></div>" +
 					"<div class=\"xkit-stats-blog-list\">";
 		} else {
-			var m_html = "<div class=\"m_window_title\">Results for \"" + blog_url + "\"</div>" +
+			m_html = "<div class=\"m_window_title\">Results for \"" + blog_url + "\"</div>" +
 					"<div class=\"xkit-stats-separator\"><div>Top 4 blogs</div></div>" +
 					"<div class=\"xkit-stats-blog-list\">";
 		}
 
 		var m_count = 0;
 
-		for (var i=0;i<users.length;i++){
-			if (m_count == 4) {break; }
-			var perc = Math.round((users[i].count * 100) / posts.length);
-			var mx_html = 	"<a target=\"_BLANK\" href=\"http://" + users[i].url + ".tumblr.com/\"><div class=\"xkit-stats-blog\">" +
-						"<img src=\"https://api.tumblr.com/v2/blog/" + users[i].url + ".tumblr.com/avatar/32\" class=\"m_avatar\">" +
-						"<div class=\"m_title\">" + users[i].url + "</div>" +
+		users.forEach(function(user) {
+			if (m_count == 4) {
+				return;
+			}
+			var perc = Math.round((user.count * 100) / posts.length);
+			var mx_html = 	"<a target=\"_BLANK\" href=\"http://" + user.url + ".tumblr.com/\"><div class=\"xkit-stats-blog\">" +
+						"<img src=\"https://api.tumblr.com/v2/blog/" + user.url + ".tumblr.com/avatar/32\" class=\"m_avatar\">" +
+						"<div class=\"m_title\">" + user.url + "</div>" +
 						"<div class=\"m_percentage\">" + perc + "%</div>" +
 					"</div></a>";
 			m_html = m_html + mx_html;
 			m_count++;
-		}
+		});
 
 		if (m_count <= 3) {
 			for (var i=m_count;i<4;i++){
@@ -440,15 +443,15 @@ XKit.extensions.stats = new Object({
 
 		for (var obj in types) {
 			if (obj === "reblogged" ||obj === "liked" ||obj === "original" ||obj === "animated") { continue; }
-			var m_object = {};
-			m_object.type = obj;
-			m_object.count = types[obj];
-			arranged_types.push(m_object);
+			arranged_types.push({
+				type: obj,
+				count: types[obj]
+			});
 		}
 
 		arranged_types.sort(function(a,b) { return b.count-a.count; } );
 
-		var m_object = new Object;
+		var m_object = {};
 
 		m_object.channel_id = $("#search_form").find("[name='t']").val();
 
@@ -478,9 +481,9 @@ XKit.extensions.stats = new Object({
 
 		m_text = "<p><b>Top 4 blogs</b></p><ul>";
 
-		for (var i=0;i<4;i++){
-			var perc = Math.round((users[i].count * 100) / posts.length);
-			m_text = m_text + "<li><a href=\"" + users[i].url + ".tumblr.com\">" + users[i].url + "</a> <small>(" + perc + "%)</small></li>";
+		for (var user_i = 0; user_i < 4; user_i++){
+			var perc = Math.round((users[user_i].count * 100) / posts.length);
+			m_text = m_text + "<li><a href=\"" + users[user_i].url + ".tumblr.com\">" + users[user_i].url + "</a> <small>(" + perc + "%)</small></li>";
 		}
 
 		m_text = m_text + "</ul>";
@@ -489,26 +492,26 @@ XKit.extensions.stats = new Object({
 
 		for (var i=0;i<4;i++){
 			if (typeof arranged_types[i] === "undefined") { continue; }
-			var perc = Math.round((arranged_types[i].count * 100) / posts.length);
-			m_text = m_text + "<li>" + arranged_types[i].type + " <small>(" + perc + "%)</small></li>";
+			var post_type_perc = Math.round((arranged_types[i].count * 100) / posts.length);
+			m_text = m_text + "<li>" + arranged_types[i].type + " <small>(" + post_type_perc + "%)</small></li>";
 		}
 
 		m_text = m_text + "</ul>";
 
 		m_text = m_text + "<p><b>Other</b></p><ul>";
 
-		var m_perc = Math.round((types["original"] * 100) / posts.length);
+		var m_perc = Math.round((types.original * 100) / posts.length);
 		m_text = m_text + "<li>Original Posts: <small>" + m_perc + "%</small></li>";
 
-		var m_perc = Math.round((types["reblogged"] * 100) / posts.length);
+		m_perc = Math.round((types.reblogged * 100) / posts.length);
 		m_text = m_text + "<li>Reblogged Posts: <small>" + m_perc + "%</small></li>";
 
 		if (blog_mode !== true) {
 
-			var m_perc = Math.round((types["animated"] * 100) / posts.length);
+			m_perc = Math.round((types.animated * 100) / posts.length);
 			m_text = m_text + "<li>GIF Posts: <small>" + m_perc + "%</small></li>";
 
-			var m_perc = Math.round((types["liked"] * 100) / posts.length);
+			m_perc = Math.round((types.liked * 100) / posts.length);
 			m_text = m_text + "<li>Liked Posts: <small>" + m_perc + "%</small></li>";
 
 		}

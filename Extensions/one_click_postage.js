@@ -1470,7 +1470,7 @@ XKit.extensions.one_click_postage = new Object({
 
 		if ($("#x1cpostage_caption").hasClass("x1cpostage_remove_caption_on") === true) {
 			// User wishes to remove caption.
-			m_object["remove_reblog_tree"] = true;
+			m_object.remove_reblog_tree = true;
                         m_object["post[two]"] = "";
                         m_object["post[three]"] = "";
 

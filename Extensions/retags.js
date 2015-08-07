@@ -82,34 +82,20 @@ XKit.extensions.retags = {
 		});
 	},
 
-	request:
-		(typeof GM_xmlhttpRequest !== 'undefined')
-		// if userscript or XKit
-		? function($t,cls,$c,cache,url) {
-			GM_xmlhttpRequest({
-				method: 'GET',
-				url: url,
-				onload: function(data){
-					var tags = JSON.parse(data.responseText).response.posts[0].tags;
-					localStorage.setItem(cache,JSON.stringify(tags));
-					XKit.extensions.retags.append($t,cls,$c,tags);
-				},
-				onerror: function(data){
-					XKit.extensions.retags.append($t,cls,$c,'ERROR: '+data.status);
-				}
-			});
-		}
-		// if Chrome extension
-		: function($t,cls,$c,cache,url) {
-			$.getJSON(url,function(data){
-				var tags = data.response.posts[0].tags;
+	request: function($t,cls,$c,cache,url) {
+		GM_xmlhttpRequest({
+			method: 'GET',
+			url: url,
+			onload: function(data){
+				var tags = JSON.parse(data.responseText).response.posts[0].tags;
 				localStorage.setItem(cache,JSON.stringify(tags));
 				XKit.extensions.retags.append($t,cls,$c,tags);
-			}).fail(function(jqXHR,status,error){
-				XKit.extensions.retags.append($t,cls,$c,status.toUpperCase()+': '+(error||jqXHR.status));
-			});
-		}
-	,
+			},
+			onerror: function(data){
+				XKit.extensions.retags.append($t,cls,$c,'ERROR: '+data.status);
+			}
+		});
+	},
 
 	append: function($t,cls,$c,tags){
 		if (tags.length) {
@@ -127,19 +113,18 @@ XKit.extensions.retags = {
 	},
 
 	css_toggle:
-	$('<style class="retags">\
-		.ui_note { display: none; }\
-		.ui_note.is_retags, .ui_note.is_response, .ui_note.is_user_mention { display: block; }\
-	</style>')
-	,
+	$('<style class="retags"> ' +
+		'.ui_note { display: none; } ' +
+		'.ui_note.is_retags, .ui_note.is_response, .ui_note.is_user_mention { display: block; } ' +
+	'</style>'),
 
 	html_toggle:
-	$('<label class="retags binary_switch">\
-		<input id="retags-toggle" type="checkbox">\
-		<span class="binary_switch_track"></span>\
-		<span class="binary_switch_button"></span>\
-		<span class="binary_switch_label">Show only retags / responses</span>\
-	</label>'),
+	$('<label class="retags binary_switch">'+
+		'<input id="retags-toggle" type="checkbox">'+
+		'<span class="binary_switch_track"></span>'+
+		'<span class="binary_switch_button"></span>'+
+		'<span class="binary_switch_label">Show only retags / responses</span>'+
+	'</label>'),
 
 	destroy: function(){
 		this.running = false;

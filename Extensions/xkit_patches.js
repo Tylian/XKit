@@ -472,30 +472,31 @@ XKit.tools.dump_config = function(){
 			var is_chrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
 			to_return.chrome = is_chrome;
 		}
+
+		function get_ua_version(user_agent) {
+			var index = navigator.userAgent.toLowerCase().indexOf(user_agent);
+			var real_version = parseFloat(navigator.userAgent.toLowerCase().substring(index + (user_agent.length)));
+			return real_version;
+		}
+
 		if (to_return.chrome === true) {
 			// Get version.
 			to_return.name = "Google Chrome";
-			var index = navigator.userAgent.toLowerCase().indexOf("chrome/");
-			var real_version = parseFloat(navigator.userAgent.toLowerCase().substring(index + ("chrome/".length)));
-			to_return.version = real_version;
+			to_return.version = get_ua_version("chrome/");
 		}
-		
+
 		// Then, let's check if it's firefox.
 		if (navigator.userAgent.toLowerCase().indexOf('firefox') > -1) {
 			to_return.name = "Mozilla Firefox";
 			to_return.firefox = true;
-			var index = navigator.userAgent.toLowerCase().indexOf("firefox/");
-			var real_version = parseFloat(navigator.userAgent.toLowerCase().substring(index + ("Firefox/".length)));
-			to_return.version = real_version;
+			to_return.version = get_ua_version("firefox/");
 		}
 		
 		if (/Safari/.test(navigator.userAgent) && /Apple Computer/.test(navigator.vendor)) {
 			to_return.name = "Apple Safari";
 			to_return.safari = true;
 			to_return.firefox = false;
-			var index = navigator.userAgent.toLowerCase().indexOf("safari/");
-			var real_version = parseFloat(navigator.userAgent.toLowerCase().substring(index + ("Safari/".length)));
-			to_return.version = real_version;
+			to_return.version = get_ua_version("safari/");
 		}
 		
 		to_return.ug = navigator.userAgent.toLowerCase();
@@ -1987,58 +1988,54 @@ XKit.tools.dump_config = function(){
 					}
 				}
 
-				if ($("body").hasClass("notifications_index") === true) {
+				var href_parts = document.location.href.split("/");
+				if ($("body").hasClass("notifications_index")) {
 					m_return.activity = true;
 				} else {
 					if (document.location.href.indexOf("www.tumblr.com/blog/") !== -1) {
-						var m_array = document.location.href.split("/");
-						if (m_array[5] === "activity") {
+						if (href_parts[5] === "activity") {
 							m_return.activity = true;
-							m_return.user_url = m_array[4].replace("#","");
+							m_return.user_url = href_parts[4].replace("#","");
 						}
 					}
 				}
 
-				if ($("body").hasClass("dashboard_post_queue") == true) {
+				if ($("body").hasClass("dashboard_post_queue")) {
 					m_return.queue = true;
 				} else {
 					if (document.location.href.indexOf("www.tumblr.com/blog/") !== -1) {
-						var m_array = document.location.href.split("/");
-						if (m_array[5] === "queue") {
+						if (href_parts[5] === "queue") {
 							m_return.queue = true;
-							m_return.user_url = m_array[4].replace("#","");
+							m_return.user_url = href_parts[4].replace("#","");
 						}
 					}
 				}
 
-				if ($("body").hasClass("dashboard_drafts") == true) {
+				if ($("body").hasClass("dashboard_drafts")) {
 					m_return.drafts = true;
 				} else {
 					if (document.location.href.indexOf("www.tumblr.com/blog/") !== -1) {
-						var m_array = document.location.href.split("/");
-						if (m_array[5] === "drafts") {
+						if (href_parts[5] === "drafts") {
 							m_return.drafts = true;
-							m_return.user_url = m_array[4].replace("#","");
+							m_return.user_url = href_parts[4].replace("#","");
 						}
 					}
 				}
 
-				if ($("body").hasClass("dashboard_useraction_followers") == true) {
+				if ($("body").hasClass("dashboard_useraction_followers")) {
 					m_return.followers = true;
 				} else {
 					if (document.location.href.indexOf("www.tumblr.com/blog/") !== -1) {
-						var m_array = document.location.href.split("/");
-						if (m_array[5] === "followers") {
+						if (href_parts[5] === "followers") {
 							m_return.followers = true;
-							m_return.user_url = m_array[4].replace("#","");
+							m_return.user_url = href_parts[4].replace("#","");
 						}
 					}
 				}
 
 				if (document.location.href.indexOf("www.tumblr.com/blog/") !== -1) {
-					var m_array = document.location.href.split("/");
-					if (m_array[3] === "blog") {
-						m_return.user_url = m_array[4].replace("#","");
+					if (href_parts[3] === "blog") {
+						m_return.user_url = href_parts[4].replace("#","");
 					}
 				}
 

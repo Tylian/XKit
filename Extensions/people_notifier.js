@@ -241,11 +241,10 @@ XKit.extensions.people_notifier = new Object({
 								//obj.count = 0;
 								//do_continue_lads = false;
 								break;
-								add_this = false;
 							}
 						}
 
-						if (typeof data.posts[lad_count] !== "undefined" && add_this != false) {
+						if (data.posts[lad_count] && add_this) {
 							if ((data.posts[lad_count].timestamp * 1000) >= obj.last_check) {
 								console.log("\-- Found post = " + data.posts[lad_count].id);
 								//if (
@@ -260,7 +259,7 @@ XKit.extensions.people_notifier = new Object({
 					}
 
 					if (typeof data.posts[0].id != "undefined") {
-						if (data.posts[0].id != 0) {
+						if (data.posts[0].id !== 0) {
 							obj.last_post_id = data.posts[0].id;
 						}
 					}
@@ -379,9 +378,9 @@ XKit.extensions.people_notifier = new Object({
 			if ($(this).hasClass("people-notifier-changed")) {
 				XKit.window.show("URL Changed?", "<b>Blog Tracker found no or less than 2 posts in the blog \"" + $(this).attr('data-url') + "\".</b><div style=\"margin-top: 15px;\">It might be due to a recent Tumblr change or bug, or that the person changed their URL. Try refreshing the page or click on Open In New Tab to check if they have deleted their blog or changed their URL.</div>","error","<a href=\"http://"  + $(this).attr('data-url') +  ".tumblr.com/\" target=\"_BLANK\" class=\"xkit-button default\">Open in new tab</a><div class=\"xkit-button\" id=\"people-notifier-delete-this\">Remove from track list</div><div class=\"xkit-button\" id=\"xkit-close-message\">Cancel</div>");
 
-				var m_obj = $(this);
+				var $this = $(this);
 				$("#people-notifier-delete-this").click(function() {
-					XKit.extensions.people_notifier.remove_from_list($(m_obj).attr('data-url'));
+					XKit.extensions.people_notifier.remove_from_list($this.attr('data-url'));
 				});
 
 				return;

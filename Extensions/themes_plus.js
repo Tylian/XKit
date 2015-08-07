@@ -7,10 +7,10 @@
 //* BETA false **//
 
 jQuery.fn.selectText = function(){
-    var doc = document
-        , element = this[0]
-        , range, selection
-    ;
+    var doc = document;
+    var element = this[0];
+    var range, selection;
+
     if (doc.body.createTextRange) {
         range = document.body.createTextRange();
         range.moveToElementText(element);
@@ -241,7 +241,7 @@ jQuery.fn.selectText = function(){
 					left -= 356;
 				}
 				cal.css({left: left + 'px', top: top + 'px'});
-				if (cal.data('colorpicker').onShow.apply(this, [cal.get(0)]) != false) {
+				if (cal.data('colorpicker').onShow.apply(this, [cal.get(0)])) {
 					cal.show();
 				}
 				$(document).bind('mousedown', {cal: cal}, hide);
@@ -249,7 +249,7 @@ jQuery.fn.selectText = function(){
 			},
 			hide = function (ev) {
 				if (!isChildOf(ev.data.cal.get(0), ev.target, ev.data.cal.get(0))) {
-					if (ev.data.cal.data('colorpicker').onHide.apply(this, [ev.data.cal.get(0)]) != false) {
+					if (ev.data.cal.data('colorpicker').onHide.apply(this, [ev.data.cal.get(0)])) {
 						ev.data.cal.hide();
 					}
 					$(document).unbind('mousedown', hide);
@@ -309,7 +309,7 @@ jQuery.fn.selectText = function(){
 				return hex;
 			},
 			HexToRGB = function (hex) {
-				var hex = parseInt(((hex.indexOf('#') > -1) ? hex.substring(1) : hex), 16);
+				hex = parseInt(((hex.indexOf('#') > -1) ? hex.substring(1) : hex), 16);
 				return {r: hex >> 16, g: (hex & 0x00FF00) >> 8, b: (hex & 0x0000FF)};
 			},
 			HexToHSB = function (hex) {
@@ -325,11 +325,8 @@ jQuery.fn.selectText = function(){
 				var max = Math.max(rgb.r, rgb.g, rgb.b);
 				var delta = max - min;
 				hsb.b = max;
-				if (max != 0) {
-
-				}
-				hsb.s = max != 0 ? 255 * delta / max : 0;
-				if (hsb.s != 0) {
+				hsb.s = max !== 0 ? 255 * delta / max : 0;
+				if (hsb.s !== 0) {
 					if (rgb.r == max) {
 						hsb.h = (rgb.g - rgb.b) / delta;
 					} else if (rgb.g == max) {
@@ -353,7 +350,7 @@ jQuery.fn.selectText = function(){
 				var h = Math.round(hsb.h);
 				var s = Math.round(hsb.s*255/100);
 				var v = Math.round(hsb.b*255/100);
-				if(s == 0) {
+				if(s === 0) {
 					rgb.r = rgb.g = rgb.b = v;
 				} else {
 					var t1 = v;
@@ -402,9 +399,13 @@ jQuery.fn.selectText = function(){
 				opt = $.extend({}, defaults, opt||{});
 				if (typeof opt.color == 'string') {
 					opt.color = HexToHSB(opt.color);
-				} else if (opt.color.r != undefined && opt.color.g != undefined && opt.color.b != undefined) {
+				} else if (typeof(opt.color.r) === "number" &&
+				           typeof(opt.color.g) === "number" &&
+				           typeof(opt.color.b) === "number") {
 					opt.color = RGBToHSB(opt.color);
-				} else if (opt.color.h != undefined && opt.color.s != undefined && opt.color.b != undefined) {
+				} else if (typeof(opt.color.h) === "number" &&
+				           typeof(opt.color.s) === "number" &&
+				           typeof(opt.color.b) === "number") {
 					opt.color = fixHSB(opt.color);
 				} else {
 					return this;
@@ -477,9 +478,13 @@ jQuery.fn.selectText = function(){
 			setColor: function(col) {
 				if (typeof col == 'string') {
 					col = HexToHSB(col);
-				} else if (col.r != undefined && col.g != undefined && col.b != undefined) {
+				} else if (typeof(col.r) === "number" &&
+				           typeof(col.g) === "number" &&
+				           typeof(col.b) === "number") {
 					col = RGBToHSB(col);
-				} else if (col.h != undefined && col.s != undefined && col.b != undefined) {
+				} else if (typeof(col.h) === "number" &&
+				           typeof(col.s) === "number" &&
+				           typeof(col.b) === "number") {
 					col = fixHSB(col);
 				} else {
 					return this;
@@ -708,7 +713,7 @@ XKit.extensions.themes_plus = new Object({
 
 		if (m_storage !== "") {
 			try {
-				var m_storage = m_storage.substring(11, m_storage.length);
+				m_storage = m_storage.substring(11, m_storage.length);
 				XKit.extensions.themes_plus.current_theme = JSON.parse(decodeURIComponent(escape(window.atob(m_storage))));
 
 			} catch(e) {
@@ -816,7 +821,7 @@ XKit.extensions.themes_plus = new Object({
 
 			if (opt.type === "color") {
 
-				var m_css = "";
+				var color_css = "";
 
 				for (var i=0;i<opt.of.length;i++) {
 					var x_class = opt.attr[i];
@@ -826,17 +831,17 @@ XKit.extensions.themes_plus = new Object({
 						}
 					}
 					if (x_class === "background-color") { x_class = "background"; }
-					m_css = m_css + " " + opt.of[i] + " { " + x_class + ": " + obj + "; } ";
+					color_css = color_css + " " + opt.of[i] + " { " + x_class + ": " + obj + "; } ";
 				}
 
-				to_return = m_css;
+				to_return = color_css;
 
 			}
 
 			if (opt.type === "image") {
 
-				var m_css = opt.of + " { background-image: url('" + obj + "') !important; background-repeat: repeat; }";
-				to_return = m_css;
+				var image_css = opt.of + " { background-image: url('" + obj + "') !important; background-repeat: repeat; }";
+				to_return = image_css;
 
 			}
 
@@ -867,9 +872,9 @@ XKit.extensions.themes_plus = new Object({
 		if (XKit.extensions.themes_plus.current_theme.id === "") {
 
 			// Default tumblr theme!
-			m_theme["title"] = "Default";
-			m_theme["owner"] = "Tumblr, Inc.";
-			m_theme["description"] = "The Default Look.";
+			m_theme.title = "Default";
+			m_theme.owner = "Tumblr, Inc.";
+			m_theme.description = "The Default Look.";
 
 		}
 
@@ -878,7 +883,6 @@ XKit.extensions.themes_plus = new Object({
 						"<div id=\"xkit-themes-plus-current-description\">" + m_theme.description + "</div>" +
 						"<div id=\"xkit-themes-plus-current-owner\">" + m_theme.owner + "</div>" +
 					"</div>";
-					"<div id=\"xkit-themes-plus-options\">";
 
 		var first_separator = true;
 
@@ -920,76 +924,75 @@ XKit.extensions.themes_plus = new Object({
 			}
 
 			if (m_obj.type === "checkbox") {
-
-				var m_value = m_obj.default;
+				var checkbox_value = m_obj.default;
 
 				if (typeof m_theme[obj] !== "undefined") {
 					if (typeof m_theme[obj] !== "undefined" && m_theme[obj]!== "") {
-						m_value = m_theme[obj];
+						checkbox_value = m_theme[obj];
 					}
 				}
 
-				if (m_value === "true" || m_value === true){
-					m_value = "selected";
+				if (checkbox_value === "true" || checkbox_value === true){
+					checkbox_value = "selected";
 				} else {
-					m_value = "";
+					checkbox_value = "";
 				}
 
-				var m_html = "<div class=\"xkit-themes-plus-option-checkbox xkit-checkbox " + m_value + "\"><b>&nbsp;</b></div>";
+				var checkbox_html = "<div class=\"xkit-themes-plus-option-checkbox xkit-checkbox " + checkbox_value + "\"><b>&nbsp;</b></div>";
 
 				m_sidebar = m_sidebar + "<div class=\"xkit-themes-plus-option\" data-type=\"checkbox\" data-option=\"" + obj + "\">" +
 								"<div class=\"xkit-themes-plus-option-title\" style=\"margin-bottom: 0;\">" + m_obj.text + "</div>" +
-								"<div class=\"xkit-themes-plus-option-panel xkit-themes-plus-option-panel-flush-left\">" + m_html + "</div>" +
+								"<div class=\"xkit-themes-plus-option-panel xkit-themes-plus-option-panel-flush-left\">" + checkbox_html + "</div>" +
 							"</div>";
 
 			}
 
 			if (m_obj.type === "color") {
 
-				var m_value = m_obj.default;
+				var color_value = m_obj.default;
 
 				if (typeof m_theme[obj] !== "undefined") {
 					if (typeof m_theme[obj] !== "undefined" && m_theme[obj]!== "") {
-						m_value = m_theme[obj];
+						color_value = m_theme[obj];
 					}
 				}
 
-				if (m_value === "") {
+				if (color_value === "") {
 
-					m_value = $(m_obj.of[0]).css("background-color");
+					color_value = $(m_obj.of[0]).css("background-color");
 
 				}
 
-				var m_html = "<div class=\"xkit-themes-plus-option-color\" style=\"background-color: " + m_value + "\" data-value = \"" + m_value + "\"><b>&nbsp;</b></div>";
+				var color_html = "<div class=\"xkit-themes-plus-option-color\" style=\"background-color: " + color_value + "\" data-value = \"" + color_value + "\"><b>&nbsp;</b></div>";
 
 				m_sidebar = m_sidebar + "<div class=\"xkit-themes-plus-option\" data-type=\"color\" data-option=\"" + obj + "\">" +
 								"<div class=\"xkit-themes-plus-option-title\" style=\"margin-bottom: 0;\">" + m_obj.text + "</div>" +
-								"<div class=\"xkit-themes-plus-option-panel xkit-themes-plus-option-panel-flush-left\">" + m_html + "</div>" +
+								"<div class=\"xkit-themes-plus-option-panel xkit-themes-plus-option-panel-flush-left\">" + color_html + "</div>" +
 							"</div>";
 
 			}
 
 			if (m_obj.type === "image") {
 
-				var m_value = m_obj.default;
+				var image_value = m_obj.default;
 
 				if (typeof m_theme[obj] !== "undefined") {
 					if (typeof m_theme[obj] !== "undefined" && m_theme[obj]!== "") {
-						m_value = m_theme[obj];
+						image_value = m_theme[obj];
 					}
 				}
 
-				if (m_value.substring(0,7) !== "http://") {
-					m_value = "http://" + m_value;
+				if (image_value.substring(0,7) !== "http://") {
+					image_value = "http://" + image_value;
 				}
 
-				m_value = XKit.extensions.themes_plus.strip_html(m_value);
+				image_value = XKit.extensions.themes_plus.strip_html(image_value);
 
-				var m_html = "<input class=\"xkit-themes-plus-option-panel-text-url xkit-themes-plus-option-panel-text\" type=\"theme-image\" placeholder=\"" + m_obj.default + "\" value=\"" + m_value + "\">";
+				var image_html = "<input class=\"xkit-themes-plus-option-panel-text-url xkit-themes-plus-option-panel-text\" type=\"theme-image\" placeholder=\"" + m_obj.default + "\" value=\"" + image_value + "\">";
 
 				m_sidebar = m_sidebar + "<div class=\"xkit-themes-plus-option\" data-type=\"color\" data-option=\"" + obj + "\">" +
 								"<div class=\"xkit-themes-plus-option-title\">" + m_obj.text + "</div>" +
-								"<div class=\"xkit-themes-plus-option-panel\">" + m_html + "</div>" +
+								"<div class=\"xkit-themes-plus-option-panel\">" + image_html + "</div>" +
 							"</div>";
 
 			}
@@ -1004,7 +1007,7 @@ XKit.extensions.themes_plus = new Object({
 			$("body").animate({ paddingLeft: "250px" }, 600);
 		}
 
-		var m_html = 	"<div id=\"xkit-themes-plus-container\">" +
+		var container_html = 	"<div id=\"xkit-themes-plus-container\">" +
 					"<div id=\"xkit-themes-plus-titlebar\">" +
 						"<div id=\"xkit-themes-plus-import-export\" class=\"xkit-themes-plus-titlebar-button\">Import/Export</div>" +
 						"<div id=\"xkit-themes-plus-cancel\" class=\"xkit-themes-plus-titlebar-button xkit-themes-plus-titlebar-button-right\">Cancel</div>" +
@@ -1020,10 +1023,10 @@ XKit.extensions.themes_plus = new Object({
 				"</div>";
 
 		if (!refresh_mode) {
-			$("body").append(m_html);
+			$("body").append(container_html);
 		} else {
 			$("#xkit-themes-plus-container").remove();
-			$("body").append(m_html);
+			$("body").append(container_html);
 		}
 
 		$("#xkit-themes-plus-sidebar").nanoScroller();
@@ -1078,7 +1081,7 @@ XKit.extensions.themes_plus = new Object({
 			var m_of = XKit.extensions.themes_plus.options[m_option_id].of;
 			var m_attr = XKit.extensions.themes_plus.options[m_option_id].attr;
 
-			if (value == "") {
+			if (!value) {
 
 				value = $(m_of[0]).css("background-color");
 
@@ -1165,10 +1168,11 @@ XKit.extensions.themes_plus = new Object({
 						return;
 					}
 
-					var data = data.substring(14, data.length - 1);
+					data = data.substring(14, data.length - 1);
 
+					var data_obj = null;
 					try {
-						var data_obj = JSON.parse(decodeURIComponent(escape(window.atob(data))));
+						data_obj = JSON.parse(decodeURIComponent(escape(window.atob(data))));
 					} catch(e) {
 						alert("Theme file corrupt or not compatible.");
 						return;
@@ -1297,9 +1301,9 @@ XKit.extensions.themes_plus = new Object({
 
 		});
 
-		m_theme_obj["creator"] = "theme_plus";
-		m_theme_obj["creator_version"] = XKit.installed.version("themes_plus");
-		m_theme_obj["id"] = XKit.tools.random_string() + new Date().getTime();
+		m_theme_obj.creator = "theme_plus";
+		m_theme_obj.creator_version = XKit.installed.version("themes_plus");
+		m_theme_obj.id = XKit.tools.random_string() + new Date().getTime();
 
 		return m_theme_obj;
 

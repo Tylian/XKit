@@ -94,7 +94,7 @@ XKit.extensions.open_in_new_tabs = new Object({
 				window.open(m_url, "_blank");
 			}
 
-		} catch(e) {
+		} catch(err) {
 
 			//alert(e.message);
 

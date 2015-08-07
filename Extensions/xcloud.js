@@ -458,9 +458,10 @@ XKit.extensions.xcloud = new Object({
 
 	process_restore: function(mdata) {
 
+		var m_obj = null;
 		try {
 			mdata.data = mdata.data.substring(3, mdata.data.length - 3);
-			var m_obj = JSON.parse(XKit.extensions.xcloud.base64_decode(mdata.data));
+			m_obj = JSON.parse(XKit.extensions.xcloud.base64_decode(mdata.data));
 		} catch(e) {
 			XKit.extensions.xcloud.process_error("Unable to parse JSON");
 		}
@@ -556,7 +557,7 @@ XKit.extensions.xcloud = new Object({
 
 		XKit.install(m_name, function(mdata) {
 
-			if (mdata.server_down === true|| mdata.errors == true) {
+			if (mdata.server_down || mdata.errors) {
 				XKit.extensions.xcloud.errors_list.push("Unable to restore extension " + extension_name);
 				XKit.extensions.xcloud.process_download_extension_next();
 				return;
@@ -713,8 +714,9 @@ XKit.extensions.xcloud = new Object({
 			},
 			onload: function(response) {
 				// We are done!
+				var mdata = null;
 				try {
-					var mdata = jQuery.parseJSON(response.responseText);
+					mdata = jQuery.parseJSON(response.responseText);
 				} catch(e) {
 					XKit.extensions.xcloud.hide_overlay();
 					XKit.window.show("Can't connect to server","XKit was unable to contact XCloud servers.<br/>Error code: 1001<br/>Please try again or <a href=\"http://xkit-extension.tumblr.com/ask\">send a bug report</a>.","error","<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");

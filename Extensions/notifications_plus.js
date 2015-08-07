@@ -268,9 +268,9 @@ XKit.extensions.notifications_plus = new Object({
 				try {
 					var data = JSON.parse(response.responseText).response;
 					$("#xpreview-container").removeClass("loading");
-					$("#xpreview-notes").html("&hearts; " + data.posts[0]['note_count']);
+					$("#xpreview-notes").html("&hearts; " + data.posts[0].note_count);
 					XKit.extensions.notifications_plus.last_post = post_id;
-					XKit.extensions.notifications_plus.last_post_notes = data.posts[0]['note_count'];
+					XKit.extensions.notifications_plus.last_post_notes = data.posts[0].note_count;
 				} catch(e) {
 					XKit.console.add(e.message);
 				}

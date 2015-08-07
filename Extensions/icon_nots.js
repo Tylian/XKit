@@ -15,7 +15,7 @@ XKit.extensions.icon_nots = new Object({
 
 		XKit.tools.init_css("icon_nots");
 
-		if (XKit.interface.where().activity == true) {
+		if (XKit.interface.where().activity) {
 			setInterval(XKit.extensions.icon_nots.do_activity, 1000);
 			XKit.extensions.icon_nots.do_activity();
 		} else {
@@ -40,10 +40,8 @@ XKit.extensions.icon_nots = new Object({
 
 				if ($(this).parentsUntil("ol").hasClass("notification_follower")) {
 
-					var part1 = $(this).find(".username")[0].outerHTML;
-					$(this).html("<div class=\"xkit-notification-icon xkit-no-left-margin\">&nbsp;</div>" + part1);
-					var old_html = btoa(unescape(encodeURIComponent($(this)[0].outerHTML)));
-					return;
+					var username_part = $(this).find(".username")[0].outerHTML;
+					$(this).html("<div class=\"xkit-notification-icon xkit-no-left-margin\">&nbsp;</div>" + username_part);
 
 				}
 
@@ -73,18 +71,18 @@ XKit.extensions.icon_nots = new Object({
 
 			if ($(this).parentsUntil("ol").hasClass("notification_follower")) {
 
-				var part1 = $(this).find(".username")[0].outerHTML;
-				$(this).html("<div class=\"xkit-notification-icon xkit-no-left-margin\">&nbsp;</div>" + part1);
+				var username = $(this).find(".username")[0].outerHTML;
+				$(this).html("<div class=\"xkit-notification-icon xkit-no-left-margin\">&nbsp;</div>" + username);
 				return;
 
 			}
 
-			if ($(this).find("em").length == 0 && $(this).find(".notification_target").length == 0) { return; }
+			if ($(this).find("em").length === 0 && $(this).find(".notification_target").length === 0) { return; }
 
 			var part1 = $(this).find(".username")[0].outerHTML;
 			var part2 = $(this).find("em").html();
 
-			if ($(this).find("em").length == 0) {
+			if ($(this).find("em").length === 0) {
 				part2 = $(this).find(".notification_target").html();
 			}
 

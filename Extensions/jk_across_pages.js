@@ -87,7 +87,7 @@ XKit.extensions.jk_across_pages = new Object({
 
 				that.$posts = jQuery('.post_container').not('#new_post_buttons');
 
-				if (that.preferences.view_entire_posts.value == true && evt.which === 74 /* j */ &&
+				if (that.preferences.view_entire_posts.value && evt.which === 74 /* j */ &&
 					that.postAtY(that.scrollBufferJ+1)[0] == that.postAtY(window.innerHeight - that.scrollBufferJ)[0]){
 
 					evt.stopPropagation(); // Try to stop Tumblr's event listener

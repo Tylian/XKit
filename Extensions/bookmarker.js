@@ -75,7 +75,7 @@ XKit.extensions.bookmarker = new Object({
 		if (str[3] !== "dashboard") { return; }
 
 		var post_id = parseInt(str[5]);
-		if (isNaN(post_id) == true || post_id === 0) { return; }
+		if (isNaN(post_id) || post_id === 0) { return; }
 
 		post_id = post_id - 1;
 

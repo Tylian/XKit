@@ -31,7 +31,7 @@ XKit.extensions.replyviewer = new Object({
 
 	frame_run: function() {
 
-		if (typeof XKit.page.peepr != "undefined" && XKit.page.peepr == true) {
+		if (XKit.page.peepr) {
 			XKit.extensions.replyviewer.run();
 		}
 
@@ -168,7 +168,7 @@ XKit.extensions.replyviewer = new Object({
       					XKit.extensions.replyviewer.activate_endless_scroll();
       				}
       			} else {
-      				if (XKit.extensions.replyviewer.found_count == 0) {
+      				if (XKit.extensions.replyviewer.found_count === 0) {
       					$("#replyviewer-loading").html("No posts with replies found.");
       				}
       				XKit.extensions.replyviewer.last_page = true;
@@ -284,36 +284,6 @@ XKit.extensions.replyviewer = new Object({
 			if ($(this).hasClass("xkit_view_on_dash_post")) { return; }
 
 			XKit.interface.add_control_button(this, "xkit-replyviewer", "data-xkit-replyviewer-tumblelog-key=\"" + m_post.tumblelog_key + "\" data-xkit-replyviewer-tumblelog-name=\"" + m_post.owner + "\"");
-
-		});
-
-		return;
-
-		$(".post").not(".note").not(".xreplyviewer_done").each(function() {
-
-			$(this).addClass("xreplyviewer_done");
-
-			if ($(this).hasClass("fan_mail")) {return; }
-
-	  		var post_id = $(this).attr('data-post-id');
-	  		var tumblelog_key = $(this).attr('data-tumblelog-key');
-	  		var tumblelog_name = $(this).attr('data-tumblelog-name');
-
-	  		if ($(this).find(".note_link_current").length > 0) {
-	  			if ($(this).find(".note_link_current").html() == "") {
-	  				// This post has no notes, skip.
-	  				return;
-	  			}
-	  		}
-
-	  		var m_html = "<a class=\"post_control post_control_icon xreplyviewer_post_icon xkit_replyviewer_button\" data-xkit-replyviewer-post-id=\"" + post_id + "\" data-xkit-replyviewer-tumblelog-key=\"" + tumblelog_key + "\" data-xkit-replyviewer-tumblelog-name=\"" + tumblelog_name + "\" onclick=\"return false\">t</a>";
-
-	  		if ($(this).find(".post_controls_inner").length > 0) {
-				m_html = "<a class=\"post_control post_control_icon xreplyviewer_post_icon xkit_new_dashboard xkit_replyviewer_button\" data-xkit-replyviewer-post-id=\"" + post_id + "\" data-xkit-replyviewer-tumblelog-key=\"" + tumblelog_key + "\" data-xkit-replyviewer-tumblelog-name=\"" + tumblelog_name + "\" onclick=\"return false\"></a>";
-				$(this).find(".post_controls_inner").prepend(m_html);
-	  		} else {
-				$(this).find(".post_controls").prepend(m_html);
-	  		}
 
 		});
 
