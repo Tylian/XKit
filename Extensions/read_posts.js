@@ -1,5 +1,5 @@
 //* TITLE Read Posts **//
-//* VERSION 0.2 REV G **//
+//* VERSION 0.2.0 **//
 //* DESCRIPTION Dim old posts **//
 //* DETAILS Dims the posts on the dashboard that you've already seen on previous page loads. **//
 //* DEVELOPER bit-shift **//
@@ -21,7 +21,7 @@ XKit.extensions.read_posts = new Object({
 	dashboard_regex: new RegExp("^https?://www.tumblr.com/dashboard(?:$|/)\\#?"),
 
 	undimmed_post: null,
-        currently_undimming: false,
+    currently_undimming: false,
 
 	run: function() {
 		XKit.tools.init_css('read_posts');
@@ -35,27 +35,26 @@ XKit.extensions.read_posts = new Object({
 
 	redim: function(e) {
 		// This is less broken and meh.
-                if (XKit.extensions.read_posts.undimmed_post == null || XKit.extensions.read_posts.currently_undimming) {
-                   //we don't currently have a post that needs redimming
-                   XKit.extensions.read_posts.currently_undimming = false;
-                   return;
-                }
+        if (XKit.extensions.read_posts.undimmed_post == null || XKit.extensions.read_posts.currently_undimming) {
+           //we don't currently have a post that needs redimming
+           XKit.extensions.read_posts.currently_undimming = false;
+           return;
+        }
 		var m_obj = $(XKit.extensions.read_posts.undimmed_post)[0];
 		$(m_obj).addClass("read_posts_read");
 		if (XKit.extensions.read_posts.preferences.dim_avatars_only.value === true) {
 			$(m_obj).addClass('read_posts_avatar_only');
 		}
-                XKit.extensions.read_posts.undimmed_post = null;
-                XKit.extensions.read_posts.currently_undimming = false;
+        XKit.extensions.read_posts.undimmed_post = null;
+        XKit.extensions.read_posts.currently_undimming = false;
 	},
 
 	undim: function(e) {
-                XKit.extensions.read_posts.currently_undimming = true;
+        XKit.extensions.read_posts.currently_undimming = true;
 		var m_obj = $(e.target)[0];
 		if (!$(m_obj).hasClass("post")) {
 			m_obj = $(m_obj).parentsUntil('.post').parent();
 		}
-
 		if (!m_obj.hasClass("read_posts_read")) {
 			return;
 		} else {
@@ -63,8 +62,6 @@ XKit.extensions.read_posts = new Object({
 			$(m_obj).removeClass("read_posts_read");
 			$(m_obj).removeClass('read_posts_avatar_only');
 		}
-
-
 	},
 
 	mark_post_read: function(post_id) {
