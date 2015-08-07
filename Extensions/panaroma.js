@@ -48,7 +48,7 @@ XKit.extensions.panaroma = new Object({
 		var m_css = " .l-content { padding-bottom: 30px!important; border-radius: 20px!important; background: white!important; } .content_top, .content_bottom { display: none!important; } #tabs { background: #eaeaea!important; } #tabs.tabs_3 .tab { width: 33%!important; } #tabs.tabs_3 .tab:last-child { width: 32%!important; } ";
 
 		if (document.location.href.indexOf("://www.tumblr.com/spotlight") !== -1) {
-			m_css = m_css + " .chrome_nav { width: 24%; min-width: 230px; } #cards { width: 75%; min-width: 650px; } #cards .card{ width:30%; min-width:190px; }#content { padding-top: 30px;  } ";
+			m_css = m_css + " .chrome_nav { width: 24%!important; min-width: 230px!important; } #cards { width: 75%!important; min-width: 650px!important; } #cards .card{ width:30%!important; min-width:190px!important; }#content { padding-top: 30px!important;  } ";
 	}
 
 		XKit.tools.add_css(m_css, "panaroma_directory");
