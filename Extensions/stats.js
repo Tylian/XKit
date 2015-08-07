@@ -481,7 +481,7 @@ XKit.extensions.stats = new Object({
 
 		m_text = "<p><b>Top 4 blogs</b></p><ul>";
 
-		for (var user_i = 0; i < 4; i++){
+		for (var user_i = 0; user_i < 4; user_i++){
 			var perc = Math.round((users[user_i].count * 100) / posts.length);
 			m_text = m_text + "<li><a href=\"" + users[user_i].url + ".tumblr.com\">" + users[user_i].url + "</a> <small>(" + perc + "%)</small></li>";
 		}
