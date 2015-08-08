@@ -282,7 +282,7 @@ XKit.extensions.quick_tags = new Object({
 	render_add_bundle_button: function(for_one_click) {
 		var m_add_button = "";
 
-		if (user_tag_array.length >= 30 && 
+		if (user_tag_array.length < 30 && 
 			for_one_click === true &&
 			XKit.extensions.quick_tags.preferences.hide_new_bundle_button.value === false) {
 			m_add_button = "<div class=\"xkit-tag-add\"><div class=\"xkit-tag-name\">+ Add tag bundle</div>";
