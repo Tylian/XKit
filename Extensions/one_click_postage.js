@@ -242,19 +242,8 @@ XKit.extensions.one_click_postage = new Object({
 
 		var post_type = "";
 		var channel_id = $("#tumblelog_name").attr('data-tumblelog-name');
-
 		var root_id = $(XKit.extensions.one_click_postage.last_object).attr('data-root-id');
-
 		var m_object = {};
-
-		/*
-			{"channel_id":"neoplethora",
-			 "reblog_id":"53347650122",
-			 "reblog_key":"22Csj9mI",
-			 "post_type":false,
-			 "form_key":"FFR35OVIeHyFd2sr9EZasl2m8E"}:
-		*/
-
 		var m_blogs = XKit.tools.get_blogs();
 		var blog_id = "";
 
@@ -342,7 +331,6 @@ XKit.extensions.one_click_postage = new Object({
 						$(obj).addClass("xkit-button-error");
 					}
 				} catch(e) {
-					//xkit_error(XKit.language.one_click_postage.status_error_title, XKit.language.generic_errors.not_json);
 					alert("Unable to QuickReblog/Queue:\nError Code: INOCP11");
 					$(obj).removeClass("xkit-button-working");
 					$(obj).addClass("xkit-button-error");
@@ -361,8 +349,6 @@ XKit.extensions.one_click_postage = new Object({
 		m_object.channel_id = _m_object.channel_id;
 
 		m_object.detached = true;
-
-		// console.log(data.post);
 
 		m_object.reblog = true;
 		m_object.reblog_id = parseInt(_m_object.reblog_id);
@@ -384,7 +370,6 @@ XKit.extensions.one_click_postage = new Object({
 
 		m_object["post[slug]"] = "";
 		m_object["post[draft_status]"] = "";
-		//m_object["post[source_url]"] = data.post.reblog_source;
 		m_object["post[date]"] = "";
 
 		m_object["post[type]"] = data.post.type;
@@ -470,7 +455,6 @@ XKit.extensions.one_click_postage = new Object({
 							$(obj).addClass("xkit-button-error");
 						} else {
 							if (retry_mode !== true) {
-								//XKit.extensions.one_click_postage.process(data, state, form_key, "", post_id, caption, tags, reblog_key, m_button, true, root_id, quick_queue_mode);
 								XKit.extensions.one_click_postage.in_blog_process(data, state, obj, m_object, true);
 							} else {
 								alert("Unable to QuickReblog/Queue:\nError Code: INOCP109-" + response.status);
@@ -485,13 +469,10 @@ XKit.extensions.one_click_postage = new Object({
 					XKit.interface.kitty.set(response.getResponseHeader("X-tumblr-kittens"));
 					try {
 						var mdata = jQuery.parseJSON(response.responseText);
-						//console.log("---DONE!---");
-						//console.log(mdata);
 						if (mdata.errors === false) {
 							$(obj).removeClass("xkit-button-working");
 							$(obj).addClass("xkit-button-done");
 						} else {
-							// xkit_error(XKit.language.one_click_postage.status_error_title, XKit.language.generic_errors.server_error);
 							alert("Unable to QuickReblog/Queue:\nError Code: INOCP901");
 							$(obj).removeClass("xkit-button-working");
 							$(obj).addClass("xkit-button-error");
@@ -613,7 +594,6 @@ XKit.extensions.one_click_postage = new Object({
 
 	run: function() {
 
-		/*XKit.extensions.one_click_postage.previous_div_id = "";*/
 		XKit.tools.init_css("one_click_postage");
 
 		// Let's first check if we have auto_tagger installed and active.
@@ -777,13 +757,11 @@ XKit.extensions.one_click_postage = new Object({
 		$(document).on("mouseout mouseleave",".reblog_button,.post_control.reblog", function() {
 			if ($(this).hasClass("radar_button") === true) {return; }
 			XKit.extensions.one_click_postage.user_on_box = false;
-			//console.log("calling close_menu 1");
 			XKit.extensions.one_click_postage.close_menu($(this));
 		});
 
 		$(document).on("click",".reblog_button,.post_control.reblog", function() {
 			XKit.extensions.one_click_postage.user_on_box = false;
-			//console.log("calling close_menu 2");
 			XKit.extensions.one_click_postage.close_menu($(this), true);
 		});
 
@@ -804,10 +782,6 @@ XKit.extensions.one_click_postage = new Object({
 			}
 		};
 
-		/*$("#x1cpostage_caption, #x1cpostage_tags").bind("focus", cancel_menu_close);
-		$("#x1cpostage_caption, #x1cpostage_tags").bind("blur", function() { console.log("11"); menu_close() });
-		*/
-
 		$(document).on("mouseover","#x1cpostage_box", cancel_menu_close);
 		$(document).on("mouseout","#x1cpostage_box", function() { console.log("1221"); menu_close(); });
 
@@ -816,7 +790,6 @@ XKit.extensions.one_click_postage = new Object({
 					&& event.which === 27) { // 27 = Escape
 				$(this).blur();
 				XKit.extensions.one_click_postage.user_on_box = false;
-				//console.log("calling close_menu 4");
 				XKit.extensions.one_click_postage.close_menu($(this), true);
 				event.preventDefault();
 			}
@@ -1137,7 +1110,6 @@ XKit.extensions.one_click_postage = new Object({
 		$("#x1cpostage_blog option[value='" + this.preferences.default_blog.value + "']").prop("selected", true);
 
 		$(obj).attr('title','');
-		/*XKit.extensions.one_click_postage.previous_div_id = box_id;*/
 
 		// Call Auto Tagger for tags. Will be "" if auto_tagger is disabled
 		var post_obj = XKit.interface.post($(parent_box));
@@ -1211,7 +1183,6 @@ XKit.extensions.one_click_postage = new Object({
 	},
 	close_menu: function(obj, force) {
 
-		//console.log("Close menu called: XKit.extensions.one_click_postage.user_on_box = " + XKit.extensions.one_click_postage.user_on_box);
 		clearTimeout(XKit.extensions.one_click_postage.menu_closer_int);
 
 		if (force === true) {
@@ -1226,7 +1197,6 @@ XKit.extensions.one_click_postage = new Object({
 		}
 
 		XKit.extensions.one_click_postage.menu_closer_int = setTimeout(function() {
-			// console.log("CLOSING! XKit.extensions.one_click_postage.user_on_box = " + XKit.extensions.one_click_postage.user_on_box);
 			if (XKit.extensions.one_click_postage.user_on_box === false) {
 				last_object = null;
 				if (XKit.extensions.one_click_postage.preferences.show_reverse_ui.value === true) {
@@ -1267,15 +1237,6 @@ XKit.extensions.one_click_postage = new Object({
 		var root_id = post.root_id;
 
 		var m_object = {};
-
-		/*
-			{"channel_id":"neoplethora",
-			 "reblog_id":"53347650122",
-			 "reblog_key":"22Csj9mI",
-			 "post_type":false,
-			 "form_key":"FFR35OVIeHyFd2sr9EZasl2m8E"}:
-		*/
-
 		m_object.channel_id = channel_id;
 		m_object.reblog_id = parseInt(post.id);
 		m_object.reblog_key = reblog_key;
@@ -1372,7 +1333,6 @@ XKit.extensions.one_click_postage = new Object({
 						$(m_button).removeClass("xkit-one-click-reblog-working");
 					}
 				} catch(e) {
-					//xkit_error(XKit.language.one_click_postage.status_error_title, XKit.language.generic_errors.not_json);
 					XKit.extensions.one_click_postage.show_error("OCP04", state);
 					$(m_button).removeClass("xkit-one-click-reblog-working");
 					return;
@@ -1400,7 +1360,6 @@ XKit.extensions.one_click_postage = new Object({
 				if ($("#tab_switching").length > 0) {
 					var def_blog = $("#tab_switching").find(".tab_blog.item").not(".tab_dashboard").attr('id').replace("tab_blog_","");
 					blog_id = def_blog;
-					//alert("got id from def_blog");
 				} else {
 					XKit.window.show("Unable to process request","Unable to set Blog ID. Please return to the dashboard and try again, and send me an ask if this continues.<br/><br/>The error code to report is <b>OCP30</b>. Thank you.","error","<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div><a href=\"http://new-xkit-extension.tumblr.com/ask\" class=\"xkit-button\">Send an ask</a>");
 					return;
@@ -1433,7 +1392,6 @@ XKit.extensions.one_click_postage = new Object({
 
 		m_object["post[slug]"] = "";
 		m_object["post[draft_status]"] = "";
-		//m_object["post[source_url]"] =data.post.reblog_source;
 		m_object["post[date]"] = "";
 
 		m_object["post[type]"] = data.post.type;
@@ -1566,7 +1524,6 @@ XKit.extensions.one_click_postage = new Object({
 					try {
 						mdata = jQuery.parseJSON(response.responseText);
 					} catch(e) {
-						//xkit_error(XKit.language.one_click_postage.status_error_title, XKit.language.generic_errors.not_json);
 						XKit.extensions.one_click_postage.show_error("OCP09-J", state);
 						$(m_button).removeClass("xkit-one-click-reblog-working");
 						return;
@@ -1596,7 +1553,6 @@ XKit.extensions.one_click_postage = new Object({
 							}
 						}
 					} else {
-						// xkit_error(XKit.language.one_click_postage.status_error_title, XKit.language.generic_errors.server_error);
 						var m_error = "Unknown error at svc/post/update";
 						if (typeof mdata.error !== "undefined") {
 							m_error = mdata.error;
