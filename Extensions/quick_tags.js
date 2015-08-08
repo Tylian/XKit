@@ -537,7 +537,7 @@ XKit.extensions.quick_tags = new Object({
 
 			var m_tags = XKit.extensions.quick_tags.tag_array[m_id].tags;
 			var m_title = XKit.extensions.quick_tags.tag_array[m_id].title;
-			XKit.window.show("Edit bundle","<b>Bundle Title</b><input type=\"text\" maxlength=\"40\" value=\"" + m_title + "\" placeholder=\"eg: Doctor Who\" class=\"xkit-textbox\" id=\"xkit-quick-tags-add-title\"><b>Bundled Tags, comma separated</b><input value=\"" + m_tags + "\" type=\"text\" maxlength=\"250\" placeholder=\"eg: Doctor Who, Dr. Who, Non-Medical Tv Show Doctor\" class=\"xkit-textbox\" id=\"xkit-quick-tags-add-tags\">","question","<div class=\"xkit-button default\" id=\"xkit-quick-tags-create-bundle\">Create Bundle</div><div class=\"xkit-button\" id=\"xkit-quick-tags-delete-bundle\">Delete This Bundle</div><div class=\"xkit-button\" id=\"xkit-close-message\">Cancel</div>");
+			XKit.window.show("Edit bundle","<b>Bundle Title</b><input type=\"text\" maxlength=\"40\" value=\"" + m_title + "\" placeholder=\"eg: Doctor Who\" class=\"xkit-textbox\" id=\"xkit-quick-tags-add-title\"><b>Bundled Tags, comma separated</b><input value=\"" + m_tags + "\" type=\"text\" maxlength=\"250\" placeholder=\"eg: Doctor Who, Dr. Who, Non-Medical Tv Show Doctor\" class=\"xkit-textbox\" id=\"xkit-quick-tags-add-tags\">","question","<div class=\"xkit-button default\" id=\"xkit-quick-tags-create-bundle\">Save Bundle</div><div class=\"xkit-button\" id=\"xkit-quick-tags-delete-bundle\">Delete This Bundle</div><div class=\"xkit-button\" id=\"xkit-close-message\">Cancel</div>");
 
 			$("#xkit-quick-tags-delete-bundle").click(function() {
 
