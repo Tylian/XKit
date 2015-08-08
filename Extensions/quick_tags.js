@@ -34,7 +34,7 @@ XKit.extensions.quick_tags = new Object({
 			default: false
 		},
 		"hide_new_bundle_button": {
-			text: "Hides the new bundle button at the end of One-Click Postage"
+			text: "Hides the new bundle button at the end of One-Click Postage",
 			value: false,
 			default: false
 		},
