@@ -94,8 +94,8 @@ XKit.extensions.postblock = new Object({
 
 			$(this).addClass("xpostblocked");
 
-	  		var m_post = XKit.interface.post($(this));
-	  		if (m_post.is_mine === true) { return; }
+			var m_post = XKit.interface.post($(this));
+			if (m_post.is_mine === true) { return; }
 
 			if (XKit.extensions.postblock.blacklisted.indexOf(m_post.root_id) !== -1) {
 				$(this).parent().remove();

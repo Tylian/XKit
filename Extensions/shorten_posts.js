@@ -120,15 +120,15 @@ XKit.extensions.shorten_posts = new Object({
 			m_speed = 120;
 		}
 
-  		$(post_div).animate({
-    			height: m_height
-  		}, m_speed, function() {
-    			$(this).find(".xkit-shorten-posts-embiggen").slideUp('fast');
-    			$(this).removeClass("xkit-shorten-posts-shortened");
-    			$(this).removeClass("xkit-shorten-posts-shortened-show-tags");
-    			$(this).addClass("xkit-shorten-posts-embiggened");
-    			$(this).css('height','auto');
-  		});
+		$(post_div).animate({
+			height: m_height
+		}, m_speed, function() {
+			$(this).find(".xkit-shorten-posts-embiggen").slideUp('fast');
+			$(this).removeClass("xkit-shorten-posts-shortened");
+			$(this).removeClass("xkit-shorten-posts-shortened-show-tags");
+			$(this).addClass("xkit-shorten-posts-embiggened");
+			$(this).css('height','auto');
+		});
 
 	},
 

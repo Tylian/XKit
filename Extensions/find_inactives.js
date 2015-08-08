@@ -103,7 +103,7 @@ XKit.extensions.find_inactives = new Object({
 
 		for (var i=0;i<XKit.extensions.find_inactives.retired_people_list.length;i++) {
 
-			m_html = m_html + 	"<div data-url=\"http://" + XKit.extensions.find_inactives.retired_people_list[i].username + ".tumblr.com/\" class=\"find-inactives-blog\">" +
+			m_html = m_html + "<div data-url=\"http://" + XKit.extensions.find_inactives.retired_people_list[i].username + ".tumblr.com/\" class=\"find-inactives-blog\">" +
 							"<div class=\"name\">" + XKit.extensions.find_inactives.retired_people_list[i].username + "</div>" +
 							"<div class=\"days\">Inactive for " + XKit.extensions.find_inactives.retired_people_list[i].days + " days</div>" +
 							"<img src=\"http://api.tumblr.com/v2/blog/" + XKit.extensions.find_inactives.retired_people_list[i].username + ".tumblr.com/avatar/512\" class=\"avatar\">" +

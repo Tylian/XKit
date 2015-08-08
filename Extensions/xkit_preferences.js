@@ -207,8 +207,8 @@ XKit.extensions.xkit_preferences = new Object({
 					$("#xkit-follow-blog").html("Please wait...");
 
 					var m_data = {"form_key": form_key,
-								  "data[tumblelog]": "new-xkit-extension",
-								  "data[source]": "FOLLOW_SOURCE_IFRAME"};
+						"data[tumblelog]": "new-xkit-extension",
+						"data[source]": "FOLLOW_SOURCE_IFRAME"};
 
 					GM_xmlhttpRequest({
 						method: "POST",
@@ -253,7 +253,7 @@ XKit.extensions.xkit_preferences = new Object({
 
 		/*if (shown_notification_notification === "0") {
 			XKit.notifications.add("<b>Turn off notifications</b><br/>You can turn off \"Unread XKit News\" notifications from XKit Control Panel > Other > News. If you have unread mail, please read them first.<br/>Click here to close this notification. This message will be shown only once.","warning",true);
-		 	XKit.storage.set("xkit_preferences","shown_notification_notification","1");
+			XKit.storage.set("xkit_preferences","shown_notification_notification","1");
 		}*/
 	},
 
@@ -316,10 +316,10 @@ XKit.extensions.xkit_preferences = new Object({
 				check_for_update = true;
 			} else {
 				if (n_ms - lst_check > 22000000 || n_ms - lst_check < -2000000 || lst_check < 0) { // 648000
-			       		check_for_update = true;
-			   	} else {
-			       		check_for_update = false;
-			   	}
+					check_for_update = true;
+				} else {
+					check_for_update = false;
+				}
 			}
 
 			if (parseInt(lst_check) < 0) {
@@ -377,7 +377,7 @@ XKit.extensions.xkit_preferences = new Object({
 				var mb_object;
 				var new_version;
 
-				if (XKit.browser().firefox === true && 
+				if (XKit.browser().firefox === true &&
 					typeof XKit.extensions.xkit_preferences.news.return_browser_from_framework_data("firefox", mdata) !== "undefined") {
 
 					mb_object = XKit.extensions.xkit_preferences.news.return_browser_from_framework_data("firefox", mdata);
@@ -591,9 +591,9 @@ XKit.extensions.xkit_preferences = new Object({
 			}
 
 			var m_html = '<div class="xkit-message-info">' +
-						 "Received on " + XKit.extensions.xkit_preferences.convert_time(m_object.date) +
-						 "</div>" +
-						 '<div class="xkit-message-display">' + m_object.message + "</div>";
+				"Received on " + XKit.extensions.xkit_preferences.convert_time(m_object.date) +
+				"</div>" +
+				'<div class="xkit-message-display">' + m_object.message + "</div>";
 
 			$("#xkit-extensions-panel-right-inner").html(m_html);
 			$("#xkit-extensions-panel-right").removeClass("xkit-no-message");
@@ -618,19 +618,19 @@ XKit.extensions.xkit_preferences = new Object({
 
 	convert_time: function(UNIX_timestamp) {
 
- 		var a = new Date(UNIX_timestamp*1000);
- 		var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-     		var year = a.getFullYear();
-     		var month = months[a.getMonth()];
-     		var date = a.getDate();
-     		var hour = a.getHours();
-     		var min = a.getMinutes();
-     		var sec = a.getSeconds();
+		var a = new Date(UNIX_timestamp*1000);
+		var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+		var year = a.getFullYear();
+		var month = months[a.getMonth()];
+		var date = a.getDate();
+		var hour = a.getHours();
+		var min = a.getMinutes();
+		var sec = a.getSeconds();
 		if (hour <= 9) { hour = "0" + hour; }
 		if (min <= 9) { min = "0" + min; }
 		if (sec <= 9) { sec = "0" + sec; }
-     		var time = date+', '+month+' '+year+' '+hour+':'+min+':'+sec ;
-     		return time;
+		var time = date+', '+month+' '+year+' '+hour+':'+min+':'+sec ;
+		return time;
 
 	},
 
@@ -800,7 +800,7 @@ XKit.extensions.xkit_preferences = new Object({
 
 				$("#xkit-tour-continue-2").click(function() {
 
-					XKit.window.show("Welcome to the control panel!", 
+					XKit.window.show("Welcome to the control panel!",
 						"<strong>This is the Other panel.</strong><br>"+
 						"Here, you can Reset your XKit (deleting all its settings so it can re-install again), "+
 						"update all your extensions at once, or if you are feeling nerd-ish, play with some advanced settings.", "info",
@@ -811,7 +811,7 @@ XKit.extensions.xkit_preferences = new Object({
 
 					$("#xkit-tour-continue-3").click(function() {
 
-						XKit.window.show("Well, that's all.", 
+						XKit.window.show("Well, that's all.",
 							"<strong>This concludes our brief tour together.</strong><br><br>"+
 							"You can check out the About + Support tab on the control panel for some helpful links.<br><br>"+
 							"I hope you enjoy XKit!", "info", '<div class="xkit-button default xkit-tour-cancel">End Tour</div>');
@@ -890,7 +890,7 @@ XKit.extensions.xkit_preferences = new Object({
 		if (XKit.extensions.xkit_preferences.current_panel === "news") { return; }
 		XKit.extensions.xkit_preferences.current_panel = "news";
 
-		var m_html = 	
+		var m_html =
 				'<div class="nano long" id="xkit-extensions-panel-left">' +
 					'<div class="content" id="xkit-extensions-panel-left-inner"></div>' +
 				'</div>' +
@@ -921,7 +921,7 @@ XKit.extensions.xkit_preferences = new Object({
 			$this.addClass("selected");
 			$this.find(".xkit-mail-icon-unread").addClass("xkit-mail-icon-read");
 			$this.find(".xkit-mail-icon-unread").removeClass("xkit-mail-icon-unread");
-		        XKit.extensions.xkit_preferences.news.open($this.attr('data-news-id'));
+			XKit.extensions.xkit_preferences.news.open($this.attr('data-news-id'));
 
 		});
 
@@ -933,7 +933,7 @@ XKit.extensions.xkit_preferences = new Object({
 		if (XKit.extensions.xkit_preferences.current_panel === "get") { return; }
 		XKit.extensions.xkit_preferences.current_panel = "get";
 
-		var m_html = 
+		var m_html =
 				'<div class="nano xkit-wide-panel white" id="xkit-extensions-panel-right">' +
 					'<div class="content" id="xkit-extensions-panel-right-inner">'+
 					'<div id="xkit-gallery-loading">' + XKit.lang.get("xkit_preferences.gallery.loading") + "</div></div>" +
@@ -965,7 +965,7 @@ XKit.extensions.xkit_preferences = new Object({
 			}
 
 			m_html = '<div id="xkit-gallery-toolbar"><input type="text" id="xkit-gallery-search" '+
-			         'placeholder="'+ XKit.lang.get("xkit_preferences.gallery.search") + '"></div>' + m_html;
+				'placeholder="'+ XKit.lang.get("xkit_preferences.gallery.search") + '"></div>' + m_html;
 
 			$("#xkit-extensions-panel-right-inner").html(m_html + '<div class="xkit-gallery-clearer">&nbsp;</div>');
 			$("#xkit-extensions-panel-right").nanoScroller();
@@ -1023,7 +1023,7 @@ XKit.extensions.xkit_preferences = new Object({
 
 			$(".xkit-gallery-extension .more-info").click(function() {
 				XKit.window.show("More information", $(this).attr('data-more-info'), "info",
-				  '<div class="xkit-button default" id="xkit-close-message">OK</div>');
+												 '<div class="xkit-button default" id="xkit-close-message">OK</div>');
 			});
 
 			$(".xkit-gallery-extension .xkit-install-extension").click(function() {
@@ -1080,15 +1080,15 @@ XKit.extensions.xkit_preferences = new Object({
 		if (obj.name.startsWith("xkit_")) { return ""; }
 
 		var m_html = '<div class="xkit-gallery-extension" id="xkit-gallery-extension-' + obj.name + '" data-extension-id="' + obj.name + '">' +
-					 '<div class="overlay">downloading</div>' +
-					 '<div class="title">' + obj.title + '</div>' +
-					 '<div class="description">' + obj.description + '</div>';
+			'<div class="overlay">downloading</div>' +
+			'<div class="title">' + obj.title + '</div>' +
+			'<div class="description">' + obj.description + '</div>';
 
 		if (obj.details !== "" && typeof obj.details !== "undefined") {
 			m_html = m_html + '<div class="more-info" data-more-info="' + obj.details + '">more info</div>';
 		}
 
-		m_html = m_html + 
+		m_html = m_html +
 				'<div class="icon"><img src="' + obj.icon + '"></div>' +
 					'<div class="xkit-button xkit-install-extension" data-extension-id="' + obj.name + '">Install</div>' +
 				'</div>';
@@ -1119,7 +1119,7 @@ XKit.extensions.xkit_preferences = new Object({
 			m_list_class = "";
 		}
 
-		var m_html = 	
+		var m_html =
 				'<div class="nano" id="xkit-extensions-panel-left">' +
 					'<div class="content" id="xkit-extensions-panel-left-inner"></div>' +
 				'</div>' +
@@ -1333,7 +1333,7 @@ XKit.extensions.xkit_preferences = new Object({
 			m_extension.description = XKit.lang.get(m_extension.id + ".description");
 		}
 
-		var m_html = 	'<div id="xkit-extensions-panel-top">' +
+		var m_html = '<div id="xkit-extensions-panel-top">' +
 					'<div class="title">' + m_extension.title + '</div>' +
 					'<div class="version">' + m_extension.version + '</div>' +
 					'<div class="more-info" style="display: none;" id="xkit-extension-more-info">attributes</div>' +
@@ -1518,7 +1518,7 @@ XKit.extensions.xkit_preferences = new Object({
 						return;
 					}
 
-					XKit.window.show("Can't update", "Update manager returned the following message:<p>" + mdata.error + 
+					XKit.window.show("Can't update", "Update manager returned the following message:<p>" + mdata.error +
 					"</p>Please try again later or if the problem continues, reset XKit.", "error",
 					'<div id="xkit-close-message" class="xkit-button default">OK</div>'+
 					'<a href="http://www.tumblr.com/xkit_reset" class="xkit-button">Reset XKit</a>');
@@ -1693,7 +1693,7 @@ XKit.extensions.xkit_preferences = new Object({
 			}
 			var is_enabled = XKit.installed.enabled(XKit.extensions.xkit_preferences.current_open_extension_panel);
 
-			var m_html = 
+			var m_html =
 					"<b>Internal ID</b>: " + m_extension.id + "<br>" +
 					"<b>Developer</b>: " + m_extension.developer + "<br>" +
 					"<b>Enabled</b>: " + is_enabled + "<br>" +
@@ -1811,7 +1811,7 @@ XKit.extensions.xkit_preferences = new Object({
 				}
 
 				m_return = m_return + '<div class="xkit-extension-setting xkit-combo-preference ' + m_extra_classes +
-						   '" data-extension-id="' + extension_id + '" data-setting-id="' + pref + '">';
+					'" data-extension-id="' + extension_id + '" data-setting-id="' + pref + '">';
 
 				if (XKit.extensions[extension_id].preferences[pref].experimental === true) {
 					m_return = m_return + '<div class="xkit-extension-experimental-bong">&nbsp;</div>';
@@ -1919,7 +1919,7 @@ XKit.extensions.xkit_preferences = new Object({
 						extra_classes = 'selected="true"';
 					}
 
-					m_return = m_return + "<option " + extra_classes + 
+					m_return = m_return + "<option " + extra_classes +
 					' value="' + XKit.extensions[extension_id].preferences[pref].values[i + 1] + '">' + XKit.extensions[extension_id].preferences[pref].values[i] + "</option>";
 
 					i++;
@@ -2049,7 +2049,7 @@ XKit.extensions.xkit_preferences = new Object({
 		if (XKit.extensions.xkit_preferences.current_panel === "other") { return; }
 		XKit.extensions.xkit_preferences.current_panel = "other";
 
-		var m_html = 
+		var m_html =
 				'<div class="nano long" id="xkit-extensions-panel-left">' +
 					'<div class="content" id="xkit-extensions-panel-left-inner">' +
 						'<div class="xkit-extension text-only separator">' + XKit.lang.get("xkit_preferences.other.configuration_title") + "</div>" +
@@ -2127,7 +2127,7 @@ XKit.extensions.xkit_preferences = new Object({
 
 	show_others_panel_updates: function() {
 
-		var m_html = 	'<div class="xkit-others-panel">' +
+		var m_html = '<div class="xkit-others-panel">' +
 				'<div class="title">Update Notifications</div>' +
 				'<div class="description">' +
 					"XKit alerts you when it updates one of it's extensions. You can turn these off if you are not interested in update notifications." +
@@ -2159,7 +2159,7 @@ XKit.extensions.xkit_preferences = new Object({
 
 	show_others_panel_news: function() {
 
-		var m_html = 	'<div class="xkit-others-panel">' +
+		var m_html = '<div class="xkit-others-panel">' +
 				'<div class="title">News Notifications</div>' +
 				'<div class="description">' +
 					'News section keeps you up to date with the latest on "What\'s going on?". '+
@@ -2201,26 +2201,26 @@ XKit.extensions.xkit_preferences = new Object({
 	show_others_panel_show_storage: function() {
 
 		var m_html = '<div class="xkit-others-panel">' +
-					 '<div class="title">Storage</div>' +
-					 '<div class="description">' +
-						 "XKit has its own space on your browser, and gives most of this space away "+
-						 "to the extensions you install on it. Since this space is not unlimited, "+
-						 "you can check here how much space you have left." +
-					 '</div>' +
-					 '<div class="bottom-part">';
+			'<div class="title">Storage</div>' +
+			'<div class="description">' +
+				"XKit has its own space on your browser, and gives most of this space away "+
+				"to the extensions you install on it. Since this space is not unlimited, "+
+				"you can check here how much space you have left." +
+			'</div>' +
+			'<div class="bottom-part">';
 
 		var free_zone = storage_max - storage_used;
 		var percentage = Math.round((storage_used * 100) / storage_max);
 		m_html = m_html + XKit.progress.add("storage_usage") + "You have used <b>" + percentage + "%</b> of your storage.";
 		m_html = m_html + '</div><div class="bottom-part" style="margin-top: 20px; line-height: 24px;">';
 		m_html = m_html + "<b>What should I do if I am running out of space?</b><br/>"+
-						  "If you have used more than 80% of your storage, it is highly recommended that you uninstall "+
-						  "the extensions you don't use often. Resetting settings of extensions from the My XKit panel "+
-						  "also frees up space.";
+			"If you have used more than 80% of your storage, it is highly recommended that you uninstall "+
+			"the extensions you don't use often. Resetting settings of extensions from the My XKit panel "+
+			"also frees up space.";
 		m_html = m_html + '</div><div class="bottom-part" style="margin-top: 20px; line-height: 24px;">';
 		m_html = m_html + "<b>What happens if I use all my storage?</b><br/>If you fill up all the XKit storage area, "+
-						  "your browser might prevent XKit from saving additional data, and prevent it from booting up. "+
-						  "If that happens, you might need to reset XKit to get it to work properly again.";
+			"your browser might prevent XKit from saving additional data, and prevent it from booting up. "+
+			"If that happens, you might need to reset XKit to get it to work properly again.";
 		m_html = m_html + "</div>";
 
 		if (XKit.storage.unlimited_storage === true) {
@@ -2228,7 +2228,7 @@ XKit.extensions.xkit_preferences = new Object({
 			if (Math.floor(storage_used / 1024 / 1024) <= 0) {
 				m_storage_string = "<b>Your XKit is using " + Math.floor(storage_used / 1024) + " kilobytes of storage.</b><br/>";
 			}
-			m_html = 
+			m_html =
 					'<div class="xkit-others-panel">' +
 					'<div class="title">Storage</div>' +
 					'<div class="description">' +
@@ -2297,7 +2297,7 @@ XKit.extensions.xkit_preferences = new Object({
 
 	show_others_panel_reset: function() {
 
-		var m_html = 
+		var m_html =
 				'<div class="xkit-others-panel">' +
 				'<div class="title">Reset XKit</div>' +
 				'<div class="description">' +
@@ -2374,7 +2374,7 @@ XKit.extensions.xkit_preferences = new Object({
 
 	show_others_panel_console: function() {
 
-		var m_html = 
+		var m_html =
 				'<div class="xkit-others-panel">' +
 				'<div class="title">Console</div>' +
 				'<div class="description">' +
@@ -2413,7 +2413,7 @@ XKit.extensions.xkit_preferences = new Object({
 
 	show_others_panel_flags: function() {
 
-		var m_html = 
+		var m_html =
 				'<div class="xkit-others-panel">' +
 				'<div class="title">Flags</div>' +
 				'<div class="description">' +
@@ -2451,9 +2451,9 @@ XKit.extensions.xkit_preferences = new Object({
 			if (m_extensions[i].substring(0,5) === "lang_") {
 
 				m_languages = m_languages + '<div data-extension="' + m_extensions[i] +
-							  '" class="xkit-data-language-button xkit-lang-button-for-' +
-							   m_extensions[i] + ' xkit-checkbox"><b>&nbsp;</b>' +
-							   XKit.installed.title(m_extensions[i]) + "</div>";
+					'" class="xkit-data-language-button xkit-lang-button-for-' +
+					m_extensions[i] + ' xkit-checkbox"><b>&nbsp;</b>' +
+					XKit.installed.title(m_extensions[i]) + "</div>";
 
 			}
 
@@ -2489,7 +2489,7 @@ XKit.extensions.xkit_preferences = new Object({
 
 	show_others_panel_update_all: function() {
 
-		var m_html = 
+		var m_html =
 				'<div class="xkit-others-panel">' +
 				'<div class="title">Update All</div>' +
 				'<div class="description">' +
@@ -2534,7 +2534,7 @@ XKit.extensions.xkit_preferences = new Object({
 
 	flags: function() {
 
-		var m_html = 
+		var m_html =
 				'<div class="xkit-scary-warning">' +
 				"<b>This is for advanced users only.</b><br/>"+
 				"Please proceed with caution or leave if you are unsure of "+
@@ -2590,7 +2590,7 @@ XKit.extensions.xkit_preferences = new Object({
 
 		if (show_error) {
 
-			m_html = 
+			m_html =
 					'<div id="xcloud-not-found-container">' +
 					'<div id="xcloud-not-found">' +
 						'<b>XCloud is not installed/enabled.</b><br/>' +
@@ -2617,7 +2617,7 @@ XKit.extensions.xkit_preferences = new Object({
 		if (XKit.extensions.xkit_preferences.current_panel === "about") { return; }
 		XKit.extensions.xkit_preferences.current_panel = "about";
 
-		var m_html = 
+		var m_html =
 				'<div id="xkit-logo-big">&nbsp;</div>' +
 				'<div id="xkit-about-window-text">' +
 					'<div class="title">XKit Version ' + XKit.version + '</div>' +

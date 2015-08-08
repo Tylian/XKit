@@ -2093,14 +2093,14 @@ XKit.extensions.servant = new Object({
 
 			for (var i=0;i<XKit.extensions.servant.servants.length;i++) {
 
-				servant_html = servant_html + 	XKit.extensions.servant.create_cpanel_div(XKit.extensions.servant.servants[i]);
+				servant_html = servant_html + XKit.extensions.servant.create_cpanel_div(XKit.extensions.servant.servants[i]);
 				XKit.extensions.servant.servant_count_for_list++;
 
 			}
 
 		}
 
-		var m_html = 	"<div id=\"xkit-servant-cp\">" +
+		var m_html = "<div id=\"xkit-servant-cp\">" +
 					"<div id=\"servant-toolbar\">" +
 						"<div id=\"servant-add-button\" class=\"xkit-button\">Add new servant..</div>" +
 						"<div id=\"servant-refresh-warning\">You need to refresh the page for changes to take affect</div>" +

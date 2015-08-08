@@ -74,7 +74,7 @@ XKit.extensions.replyviewer = new Object({
 		var m_html = "<div class=\"nano\" id=\"replyviewer-window-outer\">" +
 				"<div class=\"content\" id=\"replyviewer-window\">" +
 					"<div id=\"replyviewer-loading\">Loading, please wait...</div>" +
-			     	"</div></div><div id=\"replyviewer-loader-icon\">&nbsp;</div>";
+				"</div></div><div id=\"replyviewer-loader-icon\">&nbsp;</div>";
 
 		$("#replyviewer-window").unbind('scroll');
 		XKit.window.show("", m_html, "", "<div id=\"xreplyviewer-close\" class=\"xkit-button\">Close</div>");
@@ -108,75 +108,75 @@ XKit.extensions.replyviewer = new Object({
 			m_url = m_url.replace("http://","https://");
 		}
 
-    		$.ajax({
-      			url: m_url,
-      			dataType: 'html'
-    		}).error(function() {
+		$.ajax({
+			url: m_url,
+			dataType: 'html'
+		}).error(function() {
 
-    			XKit.window.close();
-    			XKit.window.show("Unable to fetch required data", "ReplyViewer could not get the required data from Tumblr servers. Please try again later or <a href=\"http://new-xkit-extension.tumblr.com/ask/\">file a bug report</a> by going to the XKit Blog.","error","<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
+			XKit.window.close();
+			XKit.window.show("Unable to fetch required data", "ReplyViewer could not get the required data from Tumblr servers. Please try again later or <a href=\"http://new-xkit-extension.tumblr.com/ask/\">file a bug report</a> by going to the XKit Blog.","error","<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
 
-    		}).done(function(data, textStatus, jqXHR) {
+		}).done(function(data, textStatus, jqXHR) {
 
-    			if (m_post_id !== XKit.extensions.replyviewer.post_id || m_init_id !== XKit.extensions.replyviewer.init_id) {
-    				XKit.console.add("replyviewer -> quitting, wrong post_id or init_id");
-    				return;
-    			}
+			if (m_post_id !== XKit.extensions.replyviewer.post_id || m_init_id !== XKit.extensions.replyviewer.init_id) {
+				XKit.console.add("replyviewer -> quitting, wrong post_id or init_id");
+				return;
+			}
 
-      			var next_note = jqXHR.getResponseHeader('X-next-note');
+			var next_note = jqXHR.getResponseHeader('X-next-note');
 
-      			var notes = $($.parseHTML(data));
-      			var commentaries = notes.find("li.reblog.with_commentary, li.reply, li.answer");
+			var notes = $($.parseHTML(data));
+			var commentaries = notes.find("li.reblog.with_commentary, li.reply, li.answer");
 
-      			$(commentaries).each(function() {
+			$(commentaries).each(function() {
 
-      				console.log($(this));
-      				var blog_username = $(this).attr('data-tumblelog');
-      				var post_url = $(this).find(".action").attr('data-post-url');
-      				var blog_avatar = $(this).find("img.avatar").attr('src');
+				console.log($(this));
+				var blog_username = $(this).attr('data-tumblelog');
+				var post_url = $(this).find(".action").attr('data-post-url');
+				var blog_avatar = $(this).find("img.avatar").attr('src');
 
-      				var reply_container = $(this).find("blockquote");
-      				var content = "";
-      				var only_text = false;
+				var reply_container = $(this).find("blockquote");
+				var content = "";
+				var only_text = false;
 
-      				if ($(this).find(".answer_content").length > 0) {
-      					content = $(this).find(".answer_content").html();
-      					only_text = true;
-      					post_url = "http://" + blog_username + ".tumblr.com";
-      				} else {
-      					content = $(reply_container).find("a").html();
-      				}
+				if ($(this).find(".answer_content").length > 0) {
+					content = $(this).find(".answer_content").html();
+					only_text = true;
+					post_url = "http://" + blog_username + ".tumblr.com";
+				} else {
+					content = $(reply_container).find("a").html();
+				}
 
-      			      	XKit.extensions.replyviewer.add_tags(blog_username, content, post_url, blog_avatar, only_text);
-      				XKit.extensions.replyviewer.found_count++;
+				XKit.extensions.replyviewer.add_tags(blog_username, content, post_url, blog_avatar, only_text);
+				XKit.extensions.replyviewer.found_count++;
 
-      			});
+			});
 
-      			if (next_note > 0) {
-      				XKit.extensions.replyviewer.notes_url_from = next_note;
-      				XKit.console.add("Another page found.");
-      				if (XKit.extensions.replyviewer.found_count <= 7) {
-      					XKit.console.add(" -- Not enough posts loaded, auto-loading..");
-      					setTimeout(function() {
-      						XKit.extensions.replyviewer.load_tags();
-      					}, 1400);
-      					XKit.extensions.replyviewer.show_loader();
-      				} else {
-      					XKit.extensions.replyviewer.hide_loader();
-      					XKit.extensions.replyviewer.loading_more = false;
-      					XKit.console.add(" -- Enough loaded, waiting for user to scroll down.");
-      					XKit.extensions.replyviewer.activate_endless_scroll();
-      				}
-      			} else {
-      				if (XKit.extensions.replyviewer.found_count === 0) {
-      					$("#replyviewer-loading").html("No posts with replies found.");
-      				}
-      				XKit.extensions.replyviewer.last_page = true;
-      				XKit.console.add("Last page, quitting.");
-      				XKit.extensions.replyviewer.hide_loader();
-      			}
+			if (next_note > 0) {
+				XKit.extensions.replyviewer.notes_url_from = next_note;
+				XKit.console.add("Another page found.");
+				if (XKit.extensions.replyviewer.found_count <= 7) {
+					XKit.console.add(" -- Not enough posts loaded, auto-loading..");
+					setTimeout(function() {
+						XKit.extensions.replyviewer.load_tags();
+					}, 1400);
+					XKit.extensions.replyviewer.show_loader();
+				} else {
+					XKit.extensions.replyviewer.hide_loader();
+					XKit.extensions.replyviewer.loading_more = false;
+					XKit.console.add(" -- Enough loaded, waiting for user to scroll down.");
+					XKit.extensions.replyviewer.activate_endless_scroll();
+				}
+			} else {
+				if (XKit.extensions.replyviewer.found_count === 0) {
+					$("#replyviewer-loading").html("No posts with replies found.");
+				}
+				XKit.extensions.replyviewer.last_page = true;
+				XKit.console.add("Last page, quitting.");
+				XKit.extensions.replyviewer.hide_loader();
+			}
 
-      		});
+		});
 
 	},
 
@@ -201,7 +201,7 @@ XKit.extensions.replyviewer = new Object({
 
 			var c_height = 0;
 			$("#replyviewer-window").children().each(function(){
-    				c_height = c_height + $(this).outerHeight(true);
+				c_height = c_height + $(this).outerHeight(true);
 			});
 
 			if($("#replyviewer-window").scrollTop() >= c_height - 400) {
@@ -274,10 +274,10 @@ XKit.extensions.replyviewer = new Object({
 
 			$(this).addClass("xkit-replyviewer-done");
 
-	  		var m_post = XKit.interface.post($(this));
+			var m_post = XKit.interface.post($(this));
 
-	  		// Post has no notes, skip.
-	  		if (m_post.note_count === 0) { return; }
+			// Post has no notes, skip.
+			if (m_post.note_count === 0) { return; }
 
 			// Don't add button if we are in inbox.
 			if ($(this).hasClass("is_note") && XKit.interface.where().inbox === true) { return; }

@@ -146,7 +146,7 @@ XKit.extensions.drafts_plus = new Object({
 
 			$(this).addClass("drafts-plus-overlay-done");
 
-			var m_html = 	"<div class=\"xkit-drafts-plus-overlay\">" +
+			var m_html = "<div class=\"xkit-drafts-plus-overlay\">" +
 						"<div class=\"xkit-drafts-plus-overlay-inner\">" +
 							"<div class=\"xkit-drafts-plus-delete\">&nbsp;</div>" +
 							"<div class=\"xkit-drafts-plus-edit\">&nbsp;</div>" +

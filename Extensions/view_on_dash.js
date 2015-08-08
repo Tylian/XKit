@@ -554,20 +554,20 @@ XKit.extensions.view_on_dash = new Object({
 			XKit.extensions.view_on_dash.last_scroll_point = $("body").scrollTop();
 
 			$('html, body').animate({
-    				scrollTop: 0
- 			}, 500);
+				scrollTop: 0
+			}, 500);
 
- 		} else {
+		} else {
 
- 			html_append_mode = true;
+			html_append_mode = true;
 
- 			$("#view-on-dash-content").append("<div id=\"view-on-dash-loader-box\">&nbsp;</div>");
+			$("#view-on-dash-content").append("<div id=\"view-on-dash-loader-box\">&nbsp;</div>");
 
- 		}
+		}
 
- 		if (typeof offset === "undefined") { offset = 0; }
- 		if (typeof page === "undefined") { page = 0; }
- 		if (typeof type === "undefined") { type = ""; }
+		if (typeof offset === "undefined") { offset = 0; }
+		if (typeof page === "undefined") { page = 0; }
+		if (typeof type === "undefined") { type = ""; }
 
 		var api_url = "https://api.tumblr.com/v2/blog/" + username + ".tumblr.com/posts/" + type + "?api_key=" + XKit.extensions.view_on_dash.apiKey + "&reblog_info=true&offset=" + offset;
 
@@ -730,8 +730,8 @@ XKit.extensions.view_on_dash = new Object({
 							if (XKit.extensions.view_on_dash.last_scroll_point !== -1) {
 
 								$('html, body').animate({
- 									scrollTop: XKit.extensions.view_on_dash.last_scroll_point
- 								}, 500);
+									scrollTop: XKit.extensions.view_on_dash.last_scroll_point
+								}, 500);
 
 							}
 							} catch(e) {
@@ -748,7 +748,7 @@ XKit.extensions.view_on_dash = new Object({
 					$(".xkit-view-on-dash-photoset-photo").unbind("click");
 					$(".xkit-view-on-dash-photoset-photo").bind("click", function() {
 
-						var m_html = 	"<div id=\"view-on-dash-clean-background\">&nbsp;</div>" +
+						var m_html = "<div id=\"view-on-dash-clean-background\">&nbsp;</div>" +
 								"<div style=\"background-image:url('" + $(this).attr('href') + "')\" id=\"view-on-dash-clean-photo\">";
 
 						$("body").append(m_html);

@@ -89,19 +89,19 @@ XKit.extensions.limit_people = new Object({
 
 		$(posts).each(function(index) {
 
-	  		var m_post = XKit.interface.post($(this));
-	  		$(this).addClass("xkit-limit-people-checked");
+			var m_post = XKit.interface.post($(this));
+			$(this).addClass("xkit-limit-people-checked");
 
-	  		if (XKit.extensions.limit_people.preferences.dont_limit_me.value === true) {
+			if (XKit.extensions.limit_people.preferences.dont_limit_me.value === true) {
 
-	  			if (m_post.is_mine === true) { return; }
+				if (m_post.is_mine === true) { return; }
 
-	  		}
+			}
 
-	  		if ($(this).hasClass("xkit_view_on_dash_post")) { return; }
-	  		if ($(this).is(':hidden')) { return; }
+			if ($(this).hasClass("xkit_view_on_dash_post")) { return; }
+			if ($(this).is(':hidden')) { return; }
 
-	  		// // console.log("owner = " + m_post.owner + "\n last = " + XKit.extensions.limit_people.last_url);
+			// // console.log("owner = " + m_post.owner + "\n last = " + XKit.extensions.limit_people.last_url);
 
 			var force_group_this = false;
 

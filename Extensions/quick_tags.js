@@ -49,7 +49,7 @@ XKit.extensions.quick_tags = new Object({
 	menu_close: function() {
 		// Only close the menu if it doesn't have keyboard or mouse focus
 		if ($("#xkit-quick-tags-window").find('input:focus').length === 0 &&
-		    $('#xkit-quick-tags-window:hover').length === 0) {
+				$('#xkit-quick-tags-window:hover').length === 0) {
 			XKit.extensions.quick_tags.user_on_box = false;
 			XKit.extensions.quick_tags.menu_closer_int = setTimeout(function() { XKit.extensions.quick_tags.close_window(); }, 500);
 		}
@@ -292,7 +292,7 @@ XKit.extensions.quick_tags = new Object({
 		}
 
 		// Let's create our popup first.
-		var m_html = 	"<div id=\"xkit-quick-tags-window\">" +
+		var m_html = "<div id=\"xkit-quick-tags-window\">" +
 					"<div id=\"xkit-quick-tags-user-tags\" class=\"" + add_class + "\">" +
 						"<div class=\"" + add_class_2 + "\">" + m_user_tags + "</div>" +
 					"</div>" +
@@ -491,21 +491,21 @@ XKit.extensions.quick_tags = new Object({
 
 		$(".xkit-quick-tags-cp-down").click(function() {
 
-			 var box = $(this).parent();
-			 $(box).next().after($(box));
+			var box = $(this).parent();
+			$(box).next().after($(box));
 
-			 XKit.extensions.quick_tags.check_div_move_buttons();
-			 XKit.extensions.quick_tags.save_div_positions();
+			XKit.extensions.quick_tags.check_div_move_buttons();
+			XKit.extensions.quick_tags.save_div_positions();
 
 		});
 
 		$(".xkit-quick-tags-cp-up").click(function() {
 
-			 var box = $(this).parent();
-			  $(box).prev().before($(box));
+			var box = $(this).parent();
+			$(box).prev().before($(box));
 
-			 XKit.extensions.quick_tags.check_div_move_buttons();
-			 XKit.extensions.quick_tags.save_div_positions();
+			XKit.extensions.quick_tags.check_div_move_buttons();
+			XKit.extensions.quick_tags.save_div_positions();
 
 		});
 

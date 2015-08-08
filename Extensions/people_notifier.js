@@ -107,7 +107,7 @@ XKit.extensions.people_notifier = new Object({
 
 			$(this).addClass("xkit-people-notifier-checked");
 
-	  		var m_post = XKit.interface.post($(this));
+			var m_post = XKit.interface.post($(this));
 
 			if (XKit.extensions.people_notifier.check_if_in_list(m_post.owner) !== true) {
 				return;
@@ -304,7 +304,7 @@ XKit.extensions.people_notifier = new Object({
 
 		if (this.blogs.length === 0) {
 
-			m_html = 	"<div id=\"xkit-people-notifier-no-blogs\">" +
+			m_html = "<div id=\"xkit-people-notifier-no-blogs\">" +
 						"You have no tracked blogs.<br/>Add one below." +
 					"</div>";
 
@@ -314,7 +314,7 @@ XKit.extensions.people_notifier = new Object({
 
 			for (var i=0;i<this.blogs.length;i++) {
 
-				m_html = m_html + 	'<li style="padding-top: 2px; height: 24px;" id="xkit-people-notifier-for---' + this.blogs[i].url + '" data-url="' + this.blogs[i].url + '" class="no_push xkit-people-notifier-person">' +
+				m_html = m_html + '<li style="padding-top: 2px; height: 24px;" id="xkit-people-notifier-for---' + this.blogs[i].url + '" data-url="' + this.blogs[i].url + '" class="no_push xkit-people-notifier-person">' +
 								'<img src="https://api.tumblr.com/v2/blog/' + this.blogs[i].url + '.tumblr.com/avatar/16" class="people-notifier-avatar">' +
 								'<a>' +
 									'<div class="hide_overflow" style="color: rgba(255, 255, 255, 0.5) !important; padding-left: 36px;">' + this.blogs[i].url + '</div>';

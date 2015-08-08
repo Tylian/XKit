@@ -125,7 +125,7 @@ XKit.extensions.one_click_reply = new Object({
 			}
 
 			if (XKit.extensions.one_click_reply.preferences.enable_quick_reply.value === true) {
-				var m_html = 	"<div id=\"xkit-one-click-reply-quick-reply-window-shadow\"></div>" +
+				var m_html = "<div id=\"xkit-one-click-reply-quick-reply-window-shadow\"></div>" +
 						"<div id=\"xkit-one-click-reply-quick-reply-window\">" +
 							"<div id=\"xkit-one-click-reply-quick-reply-close\">&nbsp;</div>" +
 							"<div id=\"xkit-one-click-reply-quick-reply-title\">" +
@@ -147,7 +147,7 @@ XKit.extensions.one_click_reply = new Object({
 
 				$("#xkit-one-click-reply-quick-reply-text").bind('input propertychange', function(event) {
 
-					 if(!this.value.length){
+					if(!this.value.length){
 						$("#xkit-one-click-reply-quick-reply-ok").addClass("disabled");
 					} else {
 						$("#xkit-one-click-reply-quick-reply-ok").removeClass("disabled");
@@ -994,11 +994,11 @@ XKit.extensions.one_click_reply = new Object({
 		var m_sentence = "";
 
 		if ( $(obj).find(".notification_sentence").find(".hide_overflow") > 0) {
-		 	m_sentence = "<p>" + $(obj).find(".notification_sentence").find(".hide_overflow").html() + "</p>";
-		 	if ($(obj).find(".notification_sentence").attr('data-xkit-text-version-html')) {
+			m_sentence = "<p>" + $(obj).find(".notification_sentence").find(".hide_overflow").html() + "</p>";
+			if ($(obj).find(".notification_sentence").attr('data-xkit-text-version-html')) {
 				var text_html = $(obj).find(".notification_sentence").attr('data-xkit-text-version-html');
 				m_sentence = "<p>" + $(text_html).find(".hide_overflow").html() + "</p>";
-		 	}
+			}
 
 		} else {
 			var tmp_div = $(obj).find(".notification_sentence");
@@ -1104,7 +1104,7 @@ XKit.extensions.one_click_reply = new Object({
 
 		var m_sentence = "";
 		if ( $(obj).find(".part_main").length > 0) {
-		 	m_sentence = "<p>" + $(obj).find(".part_main").html() + "</p>";
+			m_sentence = "<p>" + $(obj).find(".part_main").html() + "</p>";
 			if ($(obj).find(".part_main").attr('data-xkit-text-version-html')) {
 				m_sentence = $(obj).find(".part_main").attr('data-xkit-text-version-html');
 				m_sentence = decodeURIComponent(escape(atob(m_sentence)));

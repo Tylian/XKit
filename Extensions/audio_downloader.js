@@ -153,13 +153,13 @@ XKit.extensions.audio_downloader = new Object({
 			// Check if hosted by Tumblr:
 			if ($(this).find(".audio_player").length === 0) { return; }
 
-	  		var m_post = XKit.interface.post($(this));
+			var m_post = XKit.interface.post($(this));
 
-	  		if (m_post.type !== "audio") { return; }
+			if (m_post.type !== "audio") { return; }
 
-	  		if (XKit.interface.where().queue === true || XKit.interface.where().drafts === true) {
-	  			if (m_post.reblogged === false) { return; }
-	  		}
+			if (XKit.interface.where().queue === true || XKit.interface.where().drafts === true) {
+				if (m_post.reblogged === false) { return; }
+			}
 
 			XKit.interface.add_control_button(this, "xkit-audio-downloader", "data-xkit-audio-downloader-tumblelog-key=\"" + m_post.tumblelog_key + "\" data-xkit-audio-downloader-tumblelog-name=\"" + m_post.owner + "\"");
 

@@ -32,7 +32,7 @@ XKit.extensions.shuffle_queue = new Object({
 		$("ul.controls_section:eq(1)").before(xf_html);*/
 
 
-		var xf_html = 	'<ul class="controls_section" id="queue_plus_ul">' +
+		var xf_html = '<ul class="controls_section" id="queue_plus_ul">' +
 					'<li class="section_header selected">Queue+</li>' +
 					'<li class="no_push" style="height: 36px;"><a href="#" onclick="return false;" id="xshufflequeue_button">' +
 						'<div class="hide_overflow" style="color: rgba(255, 255, 255, 0.5) !important; font-weight: bold; padding-left: 10px; padding-top: 8px;">Shuffle Queue <div class="count" style="padding-top: 8px;">&nbsp;</div> </div>' +
@@ -215,7 +215,7 @@ XKit.extensions.shuffle_queue = new Object({
 				sarcasm = "<br>But it's not like you had a lot of queued posts anyway.";
 			}
 
-			XKit.window.show("Cleared Queue.","Queue+ deleted " + 	XKit.extensions.shuffle_queue.posts_to_delete_count + " posts from your queue." + sarcasm,"info","<div class=\"xkit-button default\" id=\"xkit-queue-refresh\">Refresh the page</div>");
+			XKit.window.show("Cleared Queue.","Queue+ deleted " + XKit.extensions.shuffle_queue.posts_to_delete_count + " posts from your queue." + sarcasm,"info","<div class=\"xkit-button default\" id=\"xkit-queue-refresh\">Refresh the page</div>");
 
 			$("#xkit-queue-refresh").click(function() {
 

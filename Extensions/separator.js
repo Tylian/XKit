@@ -63,7 +63,7 @@ XKit.extensions.separator = new Object({
 				if ($("#xkit-post-separator").length > 0) {
 
 					$('html,body').animate({
-   						scrollTop: $("#xkit-post-separator").offset().top
+						scrollTop: $("#xkit-post-separator").offset().top
 					}, 1000);
 
 				} else {

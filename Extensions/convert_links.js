@@ -67,8 +67,8 @@ XKit.extensions.convert_links = new Object({
 
 			$(this).addClass("convert-links-done");
 
-	  		var m_post = XKit.interface.post($(this));
-	  		if (m_post.type !== "note") { return; }
+			var m_post = XKit.interface.post($(this));
+			if (m_post.type !== "note") { return; }
 
 			var this_id = m_post.id;
 			XKit.interface.add_control_button(this, "xkit-convert-links-button", "data-ask-id=\"" + this_id + "\"");

@@ -261,10 +261,10 @@ XKit.extensions.notifications_plus = new Object({
 			method: "GET",
 			url: api_url,
 			json: true,
-  			onerror: function() {
-  				XKit.console.add("Can not load page to load notes.");
-  			},
-  			onload: function(response) {
+			onerror: function() {
+				XKit.console.add("Can not load page to load notes.");
+			},
+			onload: function(response) {
 				try {
 					var data = JSON.parse(response.responseText).response;
 					$("#xpreview-container").removeClass("loading");

@@ -101,7 +101,7 @@ XKit.extensions.cleanfeed = new Object({
 				opt_2 = "selected";
 			}
 
-			var m_html = 	"<div data-mode=\"normal\" id=\"xkit-cleanfeed-mode-normal\" class=\"" + opt_1 + " xkit-checkbox xkit-cleanfeed-mode-toggle\" style=\"display: block; padding-left: 0px; margin-top: 10px; margin-bottom: 5px;\"><b>&nbsp;</b><span style=\"font-weight: bold; margin-right: 3px;\">Normal:</span>Hide everything from everyone.</div>" +
+			var m_html = "<div data-mode=\"normal\" id=\"xkit-cleanfeed-mode-normal\" class=\"" + opt_1 + " xkit-checkbox xkit-cleanfeed-mode-toggle\" style=\"display: block; padding-left: 0px; margin-top: 10px; margin-bottom: 5px;\"><b>&nbsp;</b><span style=\"font-weight: bold; margin-right: 3px;\">Normal:</span>Hide everything from everyone.</div>" +
 					"<div data-mode=\"smart\" id=\"xkit-cleanfeed-mode-smart\" class=\"" + opt_2 + " xkit-checkbox xkit-cleanfeed-mode-toggle\" style=\"display: block; padding-left: 0px;\"><b>&nbsp;</b><span style=\"font-weight: bold; margin-right: 3px;\">Smart:</span>Only hide stuff from NSFW/Adult blogs.</div>" +
 					"<div id=\"xkit-cleanfeed-mode-warning\">" +
 						"<b>Important:</b> Smart mode depends on the blog rating gathered from Tumblr servers. If you turn on Smart mode and a blog is not set as a NSFW/Adult blog, either by the blogger or Tumblr, then their posts will appear on your dashboard without any filtering. Turn on Normal mode for maximum protection against genitalia in public." +

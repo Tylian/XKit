@@ -168,14 +168,14 @@ XKit.extensions.mute = new Object({
 		//	m_parent = $(".tumblelog_popover").find(".tumblelog_menu_popover").find("ul");
 		}
 
-                if ($(".info_popover").length > 0) {
+		if ($(".info_popover").length > 0) {
 			m_parent = $(".info_popover").find("ul");
-                	user_url = m_parent.parent().parent().parent().find(".name").html();
-                }
-                if (m_parent.find(".xkit-mute").length > 0){ return; }
+			user_url = m_parent.parent().parent().parent().find(".name").html();
+		}
+		if (m_parent.find(".xkit-mute").length > 0){ return; }
 
-                var m_html = "";
-                console.log("===>" + user_url);
+		var m_html = "";
+		console.log("===>" + user_url);
 
 		var m_class = "";
 		var m_sentence = "Mute";
@@ -187,11 +187,11 @@ XKit.extensions.mute = new Object({
 		$(document).off("click", ".xkit-mute-button-" + user_url, XKit.extensions.mute.menu_clicked_new);
 		$(document).on("click", ".xkit-mute-button-" + user_url, XKit.extensions.mute.menu_clicked_new);
 
-                m_html =	"<li>" +
-					"<a style=\"background-image: none !important;\" data-url=\"" + user_url + "\" class=\"xkit-mute-button-" + user_url + " xkit-mute xkit-new-menu-fix\">" +
-						"<span class=\"hide_overflow\">" + m_sentence + "</span>" +
-					"</a>" +
-				 "</li>";
+		m_html = "<li>" +
+				"<a style=\"background-image: none !important;\" data-url=\"" + user_url + "\" class=\"xkit-mute-button-" + user_url + " xkit-mute xkit-new-menu-fix\">" +
+					"<span class=\"hide_overflow\">" + m_sentence + "</span>" +
+				"</a>" +
+			"</li>";
 
 		$(m_parent).append(m_html);
 
@@ -386,10 +386,10 @@ XKit.extensions.mute = new Object({
 
 			$(this).addClass("xmute-done");
 
-	  		var m_post = XKit.interface.post($(this));
-	  		if (m_post.is_mine === true) { return; }
+			var m_post = XKit.interface.post($(this));
+			if (m_post.is_mine === true) { return; }
 
-	  		if ($(this).hasClass("xkit_view_on_dash_post")) { return; }
+			if ($(this).hasClass("xkit_view_on_dash_post")) { return; }
 
 			if (XKit.extensions.mute.should_be_removed(m_post.type, m_post.owner, m_post.is_reblogged, !m_post.is_reblogged) === true) {
 				update_rects = true;
@@ -435,22 +435,22 @@ XKit.extensions.mute = new Object({
 		The new menu structure:
 
 		<div class="popover_menu_item">
-                    <a class="user_menu_toggle_follow tumblelog_menu_link unfollow">
-                        <span class="hide_overflow">
-                            <span class="follow">Follow</span>
-                            <span class="unfollow">Unfollow</span>
-                        </span>
-                    </a>
-                </div>
+			<a class="user_menu_toggle_follow tumblelog_menu_link unfollow">
+				<span class="hide_overflow">
+					<span class="follow">Follow</span>
+					<span class="unfollow">Unfollow</span>
+				</span>
+			</a>
+		</div>
 
-                */
+		*/
 
 
-                var m_html = 	"<div class=\"popover_menu_item\">" +
-                			"<a onclick=\"return false;\" class=\"tumblelog_menu_link xkit-mute-button " + m_class + " xkit-mute-button-" + user_url + "\" data-user-url=\"" + user_url + "\">" +
-                				"<span class=\"hide_overflow\">" + m_sentence + "</span>" +
-                			"</a>" +
-                		"</div>";
+		var m_html = "<div class=\"popover_menu_item\">" +
+				"<a onclick=\"return false;\" class=\"tumblelog_menu_link xkit-mute-button " + m_class + " xkit-mute-button-" + user_url + "\" data-user-url=\"" + user_url + "\">" +
+					"<span class=\"hide_overflow\">" + m_sentence + "</span>" +
+				"</a>" +
+			"</div>";
 
 		$(menu_box).find(".open_in_tab").parent().before(m_html);
 
@@ -537,11 +537,11 @@ XKit.extensions.mute = new Object({
 
 		$(document).off('click','.tumblelog_menu_btn', XKit.extensions.mute.add_links_wo_usermenus);
 
-              	try {
-              		XKit.extensions.show_more.remove_custom_menu("mute");
-              	} catch(e){
-              		XKit.console.add("Can't remove custom menu, " + e.message);
-              	}
+		try {
+			XKit.extensions.show_more.remove_custom_menu("mute");
+		} catch(e){
+			XKit.console.add("Can't remove custom menu, " + e.message);
+		}
 
 	},
 
