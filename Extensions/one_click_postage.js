@@ -1235,13 +1235,13 @@ XKit.extensions.one_click_postage = new Object({
 		}
 
 		var root_id = post.root_id;
-
-		var m_object = {};
-		m_object.channel_id = channel_id;
-		m_object.reblog_id = parseInt(post.id);
-		m_object.reblog_key = reblog_key;
-		m_object.form_key = form_key;
-		m_object.post_type = post.type;
+		var m_object = {
+			channel_id: channel_id,
+			reblog_id: parseInt(post.id),
+			reblog_key: reblog_key,
+			form_key: form_key,
+			post_type: post.type,
+		};
 
 		var blog_id = XKit.extensions.one_click_postage.default_blog_id;
 		if ($("#x1cpostage_blog").length > 0) {
