@@ -139,6 +139,11 @@ XKit.extensions.tweaks = new Object({
 			default: false,
 			value: false
 		},
+		"pin_avatars": {
+			text: "Stop avatars from scrolling along with the post",
+			default: false,
+			value: false
+		},
 		"no_footer_background": {
 			text: "Classic Post Footer look",
 			default: false,
@@ -466,6 +471,9 @@ XKit.extensions.tweaks = new Object({
 			XKit.extensions.tweaks.add_css(".post.sponsored_post { opacity: 0.33 !important } .post.sponsored_post:hover { opacity: 1 !important }", "xkit_tweaks_hide_sponsored");
 		}
 
+		if (XKit.extensions.tweaks.preferences.pin_avatars.value === true) {
+			XKit.extensions.tweaks.add_css(".post_avatar.post-avatar--fixed { position: absolute !important; top: 0 !important; left: -85px !important; }  .post_avatar.post-avatar--absolute { position: absolute; top: 0 !important; left: -85px !important; bottom: inherit !important; }  .post_avatar.post-avatar--sticky .avatar-wrapper { position: absolute !important; top: 0px !important; height: auto; width: auto; } .post_avatar.post-avatar--sticky { height: 64px !important; }", "xkit_pin_avatars");
+		}
 
 		if (XKit.extensions.tweaks.preferences.small_quotes.value === true) {
 			XKit.extensions.tweaks.add_css(".post.is_quote .post_title.large, .post.is_quote .post_title.extra_large { font-size: 20px; line-height: 22px; }", "xkit_tweaks_small_quotes");
