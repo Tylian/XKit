@@ -1106,8 +1106,10 @@ XKit.extensions.one_click_postage = new Object({
 		$("#x1cpostage_tags").css("border-top","0px");
 		$("#x1cpostage_caption").css("height", XKit.extensions.one_click_postage.caption_height + "px");
 
-		$("#x1cpostage_blog option:selected").prop("selected", false);
-		$("#x1cpostage_blog option[value='" + this.preferences.default_blog.value + "']").prop("selected", true);
+		if (this.preferences.default_blog.value !== "") {
+			$("#x1cpostage_blog option:selected").prop("selected", false);
+			$("#x1cpostage_blog option[value='" + this.preferences.default_blog.value + "']").prop("selected", true);
+		}
 
 		$(obj).attr('title','');
 
