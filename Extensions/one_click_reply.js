@@ -735,12 +735,12 @@ XKit.extensions.one_click_reply = new Object({
 
 		if (m_post_type === "reblog" ||m_post_type === "reblog_text") {
 			user_name = $(obj).data("tumblelog");
-			user_url = $(obj).find("a.avatar-frame").attr('href');
+			user_url = $(obj).find("a.avatar_frame").attr('href');
 		}
 
 		if (m_post_type === "like" || m_post_type === "reply" || m_post_type === "answer") {
 			user_name = $(obj).data("tumblelog");
-			user_url = $(obj).find("a.avatar-frame").attr('href');
+			user_url = $(obj).find("a.avatar_frame").attr('href');
 		}
 
 		if (XKit.extensions.one_click_reply.preferences.tag_person_replace_hyphens.value === true) {
