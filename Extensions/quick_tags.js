@@ -279,7 +279,7 @@ XKit.extensions.quick_tags = new Object({
 
 	},
 
-	render_add_bundle_button: function() {
+	render_add_bundle_button: function(user_tag_array) {
 		var m_add_button = "";
 
 		if (user_tag_array.length < 30 &&
@@ -298,7 +298,7 @@ XKit.extensions.quick_tags = new Object({
 
 		var user_tag_array = XKit.extensions.quick_tags.load_tag_prefs();
 		var m_user_tags = XKit.extensions.quick_tags.render_tags_from_array(user_tag_array);
-		var m_add_button = XKit.extensions.quick_tags.render_add_bundle_button();
+		var m_add_button = XKit.extensions.quick_tags.render_add_bundle_button(user_tag_array);
 
 		var add_class = "nano";
 		var add_class_2 = "content";
@@ -372,7 +372,7 @@ XKit.extensions.quick_tags = new Object({
 
 		var user_tag_array = XKit.extensions.quick_tags.load_tag_prefs();
 		var m_user_tags = XKit.extensions.quick_tags.render_tags_from_array(user_tag_array, true);
-		var m_add_button = XKit.extensions.quick_tags.render_add_bundle_button();
+		var m_add_button = XKit.extensions.quick_tags.render_add_bundle_button(user_tag_array);
 
 		return m_user_tags + m_add_button;
 
