@@ -279,11 +279,10 @@ XKit.extensions.quick_tags = new Object({
 
 	},
 
-	render_add_bundle_button: function(for_one_click) {
+	render_add_bundle_button: function() {
 		var m_add_button = "";
 
-		if (user_tag_array.length < 30 && 
-			for_one_click === true &&
+		if (user_tag_array.length < 30 &&
 			XKit.extensions.quick_tags.preferences.hide_new_bundle_button.value === false) {
 			m_add_button = "<div class=\"xkit-tag-add\"><div class=\"xkit-tag-name\">+ Add tag bundle</div>";
 		}
@@ -299,6 +298,7 @@ XKit.extensions.quick_tags = new Object({
 
 		var user_tag_array = XKit.extensions.quick_tags.load_tag_prefs();
 		var m_user_tags = XKit.extensions.quick_tags.render_tags_from_array(user_tag_array);
+		var m_add_button = XKit.extensions.quick_tags.render_add_bundle_button();
 
 		var add_class = "nano";
 		var add_class_2 = "content";
@@ -310,7 +310,7 @@ XKit.extensions.quick_tags = new Object({
 		// Let's create our popup first.
 		var m_html = 	"<div id=\"xkit-quick-tags-window\">" +
 					"<div id=\"xkit-quick-tags-user-tags\" class=\"" + add_class + "\">" +
-						"<div class=\"" + add_class_2 + "\">" + m_user_tags + "</div>" +
+						"<div class=\"" + add_class_2 + "\">" + m_user_tags + m_add_button + "</div>" +
 					"</div>" +
 					"<div class=\"xkit-tag-other\">" +
 						"<div class=\"xkit-tag-name\">Other: <span style=\"font-weight: normal\">type and press enter</span></div>" +
@@ -372,7 +372,7 @@ XKit.extensions.quick_tags = new Object({
 
 		var user_tag_array = XKit.extensions.quick_tags.load_tag_prefs();
 		var m_user_tags = XKit.extensions.quick_tags.render_tags_from_array(user_tag_array, true);
-		var m_add_button = XKit.extensions.quick_tags.render_add_bundle_button(true);
+		var m_add_button = XKit.extensions.quick_tags.render_add_bundle_button();
 
 		return m_user_tags + m_add_button;
 
