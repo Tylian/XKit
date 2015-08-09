@@ -2,10 +2,22 @@
 
 var fs = require('fs');
 
-const extensionPath = process.argv[2] || '..';
-const distributionPath = process.argv[3] || '.';
+// Slightly icky because global variables
+// These are set either through `main` or `build`.
+var extensionPath;
+var distributionPath;
 
-processExtensions();
+function main() {
+	extensionPath = process.argv[2] || '..';
+	distributionPath = process.argv[3] || '.';
+	processExtensions();
+}
+
+function build(_extensionPath, _distributionPath) {
+	extensionPath = _extensionPath;
+	distributionPath = _distributionPath;
+	processExtensions();
+}
 
 function processExtensions() {
   var extensionFiles = fs.readdirSync(extensionPath);
@@ -55,14 +67,12 @@ function getScriptAttribute(script, attribute) {
   var regex = new RegExp('/\\*\\s*' + attribute + '\\s*(.+?)\\s*\\*\\*?/');
   var match = script.match(regex);
   if (!match) {
-    console.log('Warning, could not find attribute ' + attribute);
     return null;
   }
   return match[1];
 }
 
 function processExtension(extensionId) {
-  console.log('BEGIN ' + extensionId);
   // Each extension has the following fields
   // {string}  script - source of the js file
   // {string}  id - file name sans .js
@@ -157,3 +167,11 @@ function writeListFile(extensions) {
   });
   writePageFile('list.json', JSON.stringify(list));
 }
+
+if (require.main === module) {
+	main();
+}
+
+module.exports = {
+	build: build
+};
