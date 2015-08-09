@@ -2,11 +2,16 @@
 /* jshint node:true */
 'use strict';
 
-var csslint = require('gulp-csslint'),
+var connect = require('connect'),
+	connectLogger = require('morgan'),
+	connectStatic = require('serve-static'),
+	csslint = require('gulp-csslint'),
 	del = require('del'),
 	exec = require('child_process').exec,
 	fs = require('fs'),
 	gulp = require('gulp'),
+	gutil = require('gulp-util'),
+	http = require('http'),
 	jshint = require('gulp-jshint'),
 	jscs = require('gulp-jscs'),
 	merge = require('merge-stream'),
@@ -135,11 +140,47 @@ gulp.task('build:chrome', ['compress:chrome']);
 
 gulp.task('build:firefox', ['compress:firefox']);
 
+gulp.task('build:extensions', [], function(callback) {
+	var extBuilder = require('./Extensions/dist/extensions.js');
+	extBuilder.build('./Extensions', './Extensions/dist');
+	callback();
+});
+
 gulp.task('build', ['build:chrome', 'build:firefox']);
 
 gulp.task('watch', function() {
 	gulp.watch('**/*.js', ['lint:scripts']);
 	gulp.watch('**/*.css', ['lint:css']);
+});
+
+// Server code from http://blog.overzealous.com/post/74121048393/why-you-shouldnt-create-a-gulp-plugin-or-how-to
+gulp.task('server', ['watch', 'build:extensions'], function(callback) {
+	var log = gutil.log;
+	var colors = gutil.colors;
+
+	var devApp = connect();
+	devApp.use(connectLogger('dev'));
+	devApp.use(connectStatic('.'));
+
+	// Automatically rebuild Extensions on script changes
+	gulp.watch('**/*.js', ['build:extensions']);
+	gulp.watch('**/*.csss', ['build:extensions']);
+
+	var devServer = http.createServer(devApp).listen(31337);
+
+	devServer.on('error', function(error) {
+		log(colors.underline(colors.red('ERROR'))+' Unable to start server!');
+		callback(error); // we couldn't start the server, so report it and quit gulp
+	});
+
+	devServer.on('listening', function() {
+		var devAddress = devServer.address();
+		var devHost = devAddress.address === '0.0.0.0' ? 'localhost' : devAddress.address;
+		var url = 'http://' + devHost + ':' + devAddress.port;
+
+		log('Started dev server at ' + colors.magenta(url));
+		callback(); // we're done with this task for now
+	});
 });
 
 gulp.task('default', ['lint']);
