@@ -1,5 +1,5 @@
 //* TITLE Reblog Yourself **//
-//* VERSION 1.3 REV C **//
+//* VERSION 1.3.1 **//
 //* DESCRIPTION Allows you to reblog posts back to your blog **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//
@@ -32,7 +32,7 @@ XKit.extensions.reblog_yourself = {
 
 		if ($("body").hasClass("is_private_channel")) {return; }
 
-		if ($(".post").length > 0) {
+		if ($(".posts .post").length > 0) {
 			$(document).on("click", ".post_control.reblog", function() {
 				if ($(this).parentsUntil(".post").parent().hasClass("is_mine") === true) {
 					XKit.extensions.reblog_yourself.fix_page();
@@ -157,7 +157,7 @@ XKit.extensions.reblog_yourself = {
 			return false;
 		}
 
-		if ($(".post").length === 0) { return; }
+		if ($(".posts .post").length === 0) { return; }
 
 		/*
 			blog_id +

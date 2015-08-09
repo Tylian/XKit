@@ -1,5 +1,5 @@
 //* TITLE Tweaks **//
-//* VERSION 3.3.2 **//
+//* VERSION 3.3.3 **//
 //* DESCRIPTION Various little tweaks for your dashboard. **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS These are small little tweaks that allows you customize your dashboard. If you have used XKit 6, you will notice that some of the extensions have been moved here as options you can toggle. Keep in mind that some of the tweaks (the ones marked with a '*') can slow down your computer. **//
@@ -672,7 +672,7 @@ XKit.extensions.tweaks = new Object({
 		}
 
 		var call_update_rect = false;
-		$(".post").not(".xkit-tweaks-checked-for-likes").each(function() {
+		$(".posts .post").not(".xkit-tweaks-checked-for-likes").each(function() {
 			$(this).addClass("xkit-tweaks-checked-for-likes");
 			if ($(this).find(".post_control.like").hasClass("liked")) {
 				$(this).addClass("is_liked");

@@ -1,5 +1,5 @@
 //* TITLE Bookmarker **//
-//* VERSION 2.3.2 **//
+//* VERSION 2.3.3 **//
 //* DESCRIPTION Dashboard Time Machine **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS The Bookmarker extension allows you to bookmark posts and get back to them whenever you want to. Just click on the Bookmark icon on posts and the post will be added to your Bookmark List on your sidebar. **//
@@ -402,7 +402,7 @@ XKit.extensions.bookmarker = new Object({
 			m_array.push(XKit.extensions.bookmarker.bookmarks[i].id);
 		}
 
-		$(".post").not(".note").not(".xbookmarker_done").each(function() {
+		$(".posts .post").not(".note").not(".xbookmarker_done").each(function() {
 
 			var post_id = $(this).attr('data-post-id');
 			$(this).addClass("xbookmarker_done");
