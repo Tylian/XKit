@@ -18,9 +18,9 @@ XKit.extensions.open_in_new_tabs = new Object({
 			type: "separator"
 		},
 		"button_tabs": {
-		    text: "Make buttons open in tabs",
-		    default: true,
-		    value: true
+			text: "Make buttons open in tabs",
+			default: true,
+			value: true
 		},
 		"no_sidebar": {
 			text: "Open in new tab instead of blog sidebar",
@@ -40,27 +40,27 @@ XKit.extensions.open_in_new_tabs = new Object({
 		if (document.location.pathname.indexOf('dashboard') < 0 && XKit.extensions.open_in_new_tabs.preferences.dash_only.value)
 			return;
 
-        if (XKit.extensions.open_in_new_tabs.preferences.button_tabs.value) {
-		    $("#content area").attr('target','_blank');
-		    $(document).on("click", XKit.extensions.open_in_new_tabs.do_open);
-        }
+		if (XKit.extensions.open_in_new_tabs.preferences.button_tabs.value) {
+			$("#content area").attr('target','_blank');
+			$(document).on("click", XKit.extensions.open_in_new_tabs.do_open);
+		}
 		
 		if (document.location.href.indexOf('/mega-editor/') != -1)
 			return;
 
-        if (XKit.extensions.open_in_new_tabs.preferences.no_sidebar.value === true) {
-		    XKit.post_listener.add("open_in_new_tabs", XKit.extensions.open_in_new_tabs.do);
-		    XKit.extensions.open_in_new_tabs.do();
-        }
+		if (XKit.extensions.open_in_new_tabs.preferences.no_sidebar.value === true) {
+			XKit.post_listener.add("open_in_new_tabs", XKit.extensions.open_in_new_tabs.do);
+			XKit.extensions.open_in_new_tabs.do();
+		}
 
 	},
 
 	do_open: function(e) {
-	    
-	    //XKit.window.show("do_open!", JSON.stringify(e.target), "info", "<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
-	    //return;
+		
+		//XKit.window.show("do_open!", JSON.stringify(e.target), "info", "<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
+		//return;
 
-        
+		
 		var m_box = e.target;
 
 		var m_url = $(m_box).attr('href');
@@ -82,20 +82,20 @@ XKit.extensions.open_in_new_tabs = new Object({
 			} else {
 				if($(m_box).attr('target').toLowerCase() !== "_blank") {
 					open_new_tab = true;
-				    
+					
 				}
 			}
 			if ($(m_box).attr('title').toLowerCase() == "dashboard" && XKit.interface.where().dashboard === true) {
-		        open_new_tab = false;
-		    }
-		    
-		    if ($(m_box).attr('title').toLowerCase() == "inbox" && XKit.interface.where().inbox === true) {
-		        open_new_tab = false;
-		    }
-		    
-		    if ($(m_box).attr('title').toLowerCase() == "activity" || $(m_box).attr('title').toLowerCase() == "edit" ) {
-		        open_new_tab = false;
-		    }
+				open_new_tab = false;
+			}
+			
+			if ($(m_box).attr('title').toLowerCase() == "inbox" && XKit.interface.where().inbox === true) {
+				open_new_tab = false;
+			}
+			
+			if ($(m_box).attr('title').toLowerCase() == "activity" || $(m_box).attr('title').toLowerCase() == "edit" ) {
+				open_new_tab = false;
+			}
 
 			if(open_new_tab === true) {
 				e.preventDefault();
@@ -166,7 +166,7 @@ XKit.extensions.open_in_new_tabs = new Object({
 	destroy: function() {
 		this.running = false;
 		$(document).off("click", "#right_column a", XKit.extensions.open_in_new_tabs.do_open);
-	    $(".note_link_current").off("click", XKit.extensions.open_in_new_tabs.click_notes);
+		$(".note_link_current").off("click", XKit.extensions.open_in_new_tabs.click_notes);
 		$("a").off("click", XKit.extensions.open_in_new_tabs.click);
 	}
 
