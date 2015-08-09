@@ -26,13 +26,21 @@ XKit.extensions.open_in_new_tabs = new Object({
 			text: "Open in new tab instead of blog sidebar",
 			default: false,
 			value: false
+		},
+		"dash_only": {
+			text: "Apply only to links on dashboard",
+			default: true,
+			value: true
 		}
 	},
 
 	run: function() {
 		this.running = true;
 
-        if (XKit.extensions.open_in_new_tabs.preferences.button_tabs.value === true) {
+        if (document.location.pathname.indexOf('dashboard') < 0 && XKit.extensions.open_in_new_tabs.preferences.dash_only.value)
+			return;
+
+        if (XKit.extensions.open_in_new_tabs.preferences.button_tabs.value) {
 		    $("#content area").attr('target','_blank');
 		    $(document).on("click", XKit.extensions.open_in_new_tabs.do_open);
         }
