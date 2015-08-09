@@ -37,7 +37,7 @@ XKit.extensions.open_in_new_tabs = new Object({
 	run: function() {
 		this.running = true;
 
-        if (document.location.pathname.indexOf('dashboard') < 0 && XKit.extensions.open_in_new_tabs.preferences.dash_only.value)
+		if (document.location.pathname.indexOf('dashboard') < 0 && XKit.extensions.open_in_new_tabs.preferences.dash_only.value)
 			return;
 
         if (XKit.extensions.open_in_new_tabs.preferences.button_tabs.value) {
