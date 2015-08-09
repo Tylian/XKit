@@ -29,16 +29,16 @@ XKit.extensions.autoloadimages = new Object({
 
 			$(this).addClass("xkit-autoloadimages-done");
 
-	  		if ($(this).find(".inline_external_image").length > 0) {
+			if ($(this).find(".inline_external_image").length > 0) {
 
-	  			$(this).find(".inline_external_image").each(function() {
+				$(this).find(".inline_external_image").each(function() {
 
-	  				$(this).attr('src', $(this).attr('external_src'));
-	  				$(this).addClass("enlarged");
+					$(this).attr('src', $(this).attr('external_src'));
+					$(this).addClass("enlarged");
 
-	  			});
+				});
 
-	  		}
+			}
 
 		});
 

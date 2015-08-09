@@ -37,7 +37,7 @@ XKit.extensions.xcloud = new Object({
 
 		if (XKit.extensions.xcloud.username === "") {
 
-			m_html =	"<div class=\"xcloud-panel logged_out " + m_class + "\" id=\"xcloud-welcome-panel\">" +
+			m_html = "<div class=\"xcloud-panel logged_out " + m_class + "\" id=\"xcloud-welcome-panel\">" +
 						"<div class=\"xcloud-title\" style=\"margin-top: 60px;\">Welcome to XCloud!</div>" +
 						"<div class=\"xcloud-information\">" +
 							"XCloud lets you synchronize your XKit data such as your blacklisted words " +
@@ -51,7 +51,7 @@ XKit.extensions.xcloud = new Object({
 
 		} else {
 
-			m_html =	"<div class=\"xcloud-panel logged_in " + m_class + "\" id=\"xcloud-welcome-panel\">" +
+			m_html = "<div class=\"xcloud-panel logged_in " + m_class + "\" id=\"xcloud-welcome-panel\">" +
 						"<div class=\"xcloud-title\" style=\"margin-top: 60px;\">Welcome, " + XKit.extensions.xcloud.username + "!</div>" +
 						"<div class=\"xcloud-information\">" +
 							"Click <b>Sync</b> to upload your XKit settings to your XCloud.<br/>" +
@@ -74,7 +74,7 @@ XKit.extensions.xcloud = new Object({
 
 		var m_html = "";
 
-		m_html =	"<div class=\"xcloud-title\" style=\"margin-top: 25px;\">Synchronize</div>" +
+		m_html = "<div class=\"xcloud-title\" style=\"margin-top: 25px;\">Synchronize</div>" +
 					"<div class=\"xcloud-information\">" +
 						"<b>Replace your XCloud data with your current XKit configuration.</b><br/> " +
 						"Depending on your internet connection and the amount of extensions you have installed, this might take several minutes. It is highly recommended that you close other Tumblr tabs and not navigate away from this page." +
@@ -91,7 +91,7 @@ XKit.extensions.xcloud = new Object({
 
 		var m_html = "";
 
-		m_html =	"<div class=\"xcloud-title\" style=\"margin-top: 25px;\">Restore</div>" +
+		m_html = "<div class=\"xcloud-title\" style=\"margin-top: 25px;\">Restore</div>" +
 					"<div class=\"xcloud-information\">" +
 						"<b>Replace your XKit configuration with the one on XCloud.</b><br/> " +
 						"Depending on your internet connection and the amount of extensions you have installed, this might take several minutes. It is highly recommended that you close other Tumblr tabs and not navigate away from this page." +
@@ -108,7 +108,7 @@ XKit.extensions.xcloud = new Object({
 
 		var m_html = "";
 
-		m_html =	"<div class=\"xcloud-title\" style=\"margin-top: 15px;\">Sign up</div>" +
+		m_html = "<div class=\"xcloud-title\" style=\"margin-top: 15px;\">Sign up</div>" +
 					"XCloud is free of charge and only needs a username and password." +
 					"<input type=\"text\" id=\"xcloud-login-username\" placeholder=\"Your username - doesn't need to be your URL\"></input>" +
 					"<input type=\"password\" id=\"xcloud-login-password\" placeholder=\"Your password - minimum 6 characters\"></input>" +
@@ -124,7 +124,7 @@ XKit.extensions.xcloud = new Object({
 
 		var m_html = "";
 
-		m_html =	"<div class=\"xcloud-title\" style=\"margin-top: 15px;\">Sign In</div>" +
+		m_html = "<div class=\"xcloud-title\" style=\"margin-top: 15px;\">Sign In</div>" +
 					"Sign in to XCloud to restore/upload your XKit configuration." +
 					"<input type=\"text\" id=\"xcloud-login-username\" placeholder=\"Username\"></input>" +
 					"<input type=\"password\" id=\"xcloud-login-password\" placeholder=\"Password\"></input>" +
@@ -138,7 +138,7 @@ XKit.extensions.xcloud = new Object({
 
 	panel: function() {
 
-		var m_html = 	"<div id=\"xcloud-panel\"><div id=\"xcloud-beta-tag\">&nbsp;</div>" +
+		var m_html = "<div id=\"xcloud-panel\"><div id=\"xcloud-beta-tag\">&nbsp;</div>" +
 					"<div id=\"xcloud-panel-right\">" +
 						XKit.extensions.xcloud.return_panel_welcome() +
 					"</div>" +
@@ -593,29 +593,29 @@ XKit.extensions.xcloud = new Object({
 	},
 
 	str2ab: function(str) {
- 		/*var buf = new ArrayBuffer(str.length*2); // 2 bytes for each char
-  		var bufView = new Uint16Array(buf);
-  		for (var i=0, strLen=str.length; i<strLen; i++) {
-    			bufView[i] = str.charCodeAt(i);
-  		}
-  		return buf;*/
+		/*var buf = new ArrayBuffer(str.length*2); // 2 bytes for each char
+			var bufView = new Uint16Array(buf);
+			for (var i=0, strLen=str.length; i<strLen; i++) {
+			bufView[i] = str.charCodeAt(i);
+			}
+			return buf;*/
 
-    		var strUtf8 = unescape(encodeURIComponent(str));
-    		var ab = new Uint8Array(strUtf8.length);
-    		for (var i = 0; i < strUtf8.length; i++) {
-        		ab[i] = strUtf8.charCodeAt(i);
-    		}
-    		return ab;
+		var strUtf8 = unescape(encodeURIComponent(str));
+		var ab = new Uint8Array(strUtf8.length);
+		for (var i = 0; i < strUtf8.length; i++) {
+			ab[i] = strUtf8.charCodeAt(i);
+		}
+		return ab;
 
 	},
 
 	strFromUtf8Ab: function(buf) {
-        	var bufView = new Uint16Array(buf);
-        	var unis = [];
-        	for (var i = 0; i < bufView.length; i++) {
-        		unis.push(bufView[i]);
-        	}
-        	return String.fromCharCode.apply(null, unis);
+		var bufView = new Uint16Array(buf);
+		var unis = [];
+		for (var i = 0; i < bufView.length; i++) {
+			unis.push(bufView[i]);
+		}
+		return String.fromCharCode.apply(null, unis);
 	},
 
 	start_upload: function() {
@@ -813,23 +813,23 @@ XKit.extensions.xcloud = new Object({
 
 	md5: function(str) {
 
-		  // http://kevin.vanzonneveld.net
-		  // +   original by: Webtoolkit.info (http://www.webtoolkit.info/)
-		  // + namespaced by: Michael White (http://getsprink.com)
-		  // +    tweaked by: Jack
-		  // +   improved by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
-		  // +      input by: Brett Zamir (http://brett-zamir.me)
-		  // +   bugfixed by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
-		  // -    depends on: utf8_encode
-		  // *     example 1: md5('Kevin van Zonneveld');
-		  // *     returns 1: '6e658d4bfcb59cc13f96c14450ac40b9'
-		  var xl;
+		// http://kevin.vanzonneveld.net
+		// +   original by: Webtoolkit.info (http://www.webtoolkit.info/)
+		// + namespaced by: Michael White (http://getsprink.com)
+		// +    tweaked by: Jack
+		// +   improved by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
+		// +      input by: Brett Zamir (http://brett-zamir.me)
+		// +   bugfixed by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
+		// -    depends on: utf8_encode
+		// *     example 1: md5('Kevin van Zonneveld');
+		// *     returns 1: '6e658d4bfcb59cc13f96c14450ac40b9'
+		var xl;
 
-		  var rotateLeft = function (lValue, iShiftBits) {
+		var rotateLeft = function (lValue, iShiftBits) {
 			return (lValue << iShiftBits) | (lValue >>> (32 - iShiftBits));
-		  };
+		};
 
-		  var addUnsigned = function (lX, lY) {
+		var addUnsigned = function (lX, lY) {
 			var lX4, lY4, lX8, lY8, lResult;
 			lX8 = (lX & 0x80000000);
 			lY8 = (lY & 0x80000000);
@@ -837,53 +837,53 @@ XKit.extensions.xcloud = new Object({
 			lY4 = (lY & 0x40000000);
 			lResult = (lX & 0x3FFFFFFF) + (lY & 0x3FFFFFFF);
 			if (lX4 & lY4) {
-			  return (lResult ^ 0x80000000 ^ lX8 ^ lY8);
+				return (lResult ^ 0x80000000 ^ lX8 ^ lY8);
 			}
 			if (lX4 | lY4) {
-			  if (lResult & 0x40000000) {
-				return (lResult ^ 0xC0000000 ^ lX8 ^ lY8);
-			  } else {
-				return (lResult ^ 0x40000000 ^ lX8 ^ lY8);
-			  }
+				if (lResult & 0x40000000) {
+					return (lResult ^ 0xC0000000 ^ lX8 ^ lY8);
+				} else {
+					return (lResult ^ 0x40000000 ^ lX8 ^ lY8);
+				}
 			} else {
-			  return (lResult ^ lX8 ^ lY8);
+				return (lResult ^ lX8 ^ lY8);
 			}
-		  };
+		};
 
-		  var _F = function (x, y, z) {
+		var _F = function (x, y, z) {
 			return (x & y) | ((~x) & z);
-		  };
-		  var _G = function (x, y, z) {
+		};
+		var _G = function (x, y, z) {
 			return (x & z) | (y & (~z));
-		  };
-		  var _H = function (x, y, z) {
+		};
+		var _H = function (x, y, z) {
 			return (x ^ y ^ z);
-		  };
-		  var _I = function (x, y, z) {
+		};
+		var _I = function (x, y, z) {
 			return (y ^ (x | (~z)));
-		  };
+		};
 
-		  var _FF = function (a, b, c, d, x, s, ac) {
+		var _FF = function (a, b, c, d, x, s, ac) {
 			a = addUnsigned(a, addUnsigned(addUnsigned(_F(b, c, d), x), ac));
 			return addUnsigned(rotateLeft(a, s), b);
-		  };
+		};
 
-		  var _GG = function (a, b, c, d, x, s, ac) {
+		var _GG = function (a, b, c, d, x, s, ac) {
 			a = addUnsigned(a, addUnsigned(addUnsigned(_G(b, c, d), x), ac));
 			return addUnsigned(rotateLeft(a, s), b);
-		  };
+		};
 
-		  var _HH = function (a, b, c, d, x, s, ac) {
+		var _HH = function (a, b, c, d, x, s, ac) {
 			a = addUnsigned(a, addUnsigned(addUnsigned(_H(b, c, d), x), ac));
 			return addUnsigned(rotateLeft(a, s), b);
-		  };
+		};
 
-		  var _II = function (a, b, c, d, x, s, ac) {
+		var _II = function (a, b, c, d, x, s, ac) {
 			a = addUnsigned(a, addUnsigned(addUnsigned(_I(b, c, d), x), ac));
 			return addUnsigned(rotateLeft(a, s), b);
-		  };
+		};
 
-		  var convertToWordArray = function (str) {
+		var convertToWordArray = function (str) {
 			var lWordCount;
 			var lMessageLength = str.length;
 			var lNumberOfWords_temp1 = lMessageLength + 8;
@@ -893,10 +893,10 @@ XKit.extensions.xcloud = new Object({
 			var lBytePosition = 0;
 			var lByteCount = 0;
 			while (lByteCount < lMessageLength) {
-			  lWordCount = (lByteCount - (lByteCount % 4)) / 4;
-			  lBytePosition = (lByteCount % 4) * 8;
-			  lWordArray[lWordCount] = (lWordArray[lWordCount] | (str.charCodeAt(lByteCount) << lBytePosition));
-			  lByteCount++;
+				lWordCount = (lByteCount - (lByteCount % 4)) / 4;
+				lBytePosition = (lByteCount % 4) * 8;
+				lWordArray[lWordCount] = (lWordArray[lWordCount] | (str.charCodeAt(lByteCount) << lBytePosition));
+				lByteCount++;
 			}
 			lWordCount = (lByteCount - (lByteCount % 4)) / 4;
 			lBytePosition = (lByteCount % 4) * 8;
@@ -904,21 +904,21 @@ XKit.extensions.xcloud = new Object({
 			lWordArray[lNumberOfWords - 2] = lMessageLength << 3;
 			lWordArray[lNumberOfWords - 1] = lMessageLength >>> 29;
 			return lWordArray;
-		  };
+		};
 
-		  var wordToHex = function (lValue) {
+		var wordToHex = function (lValue) {
 			var wordToHexValue = "",
-			  wordToHexValue_temp = "",
-			  lByte, lCount;
+				wordToHexValue_temp = "",
+				lByte, lCount;
 			for (lCount = 0; lCount <= 3; lCount++) {
-			  lByte = (lValue >>> (lCount * 8)) & 255;
-			  wordToHexValue_temp = "0" + lByte.toString(16);
-			  wordToHexValue = wordToHexValue + wordToHexValue_temp.substr(wordToHexValue_temp.length - 2, 2);
+				lByte = (lValue >>> (lCount * 8)) & 255;
+				wordToHexValue_temp = "0" + lByte.toString(16);
+				wordToHexValue = wordToHexValue + wordToHexValue_temp.substr(wordToHexValue_temp.length - 2, 2);
 			}
 			return wordToHexValue;
-		  };
+		};
 
-		  var x = [],
+		var x = [],
 			k, AA, BB, CC, DD, a, b, c, d, S11 = 7,
 			S12 = 12,
 			S13 = 17,
@@ -936,15 +936,15 @@ XKit.extensions.xcloud = new Object({
 			S43 = 15,
 			S44 = 21;
 
-		  str = XKit.extensions.xcloud.utf8_encode(str);
-		  x = convertToWordArray(str);
-		  a = 0x67452301;
-		  b = 0xEFCDAB89;
-		  c = 0x98BADCFE;
-		  d = 0x10325476;
+		str = XKit.extensions.xcloud.utf8_encode(str);
+		x = convertToWordArray(str);
+		a = 0x67452301;
+		b = 0xEFCDAB89;
+		c = 0x98BADCFE;
+		d = 0x10325476;
 
-		  xl = x.length;
-		  for (k = 0; k < xl; k += 16) {
+		xl = x.length;
+		for (k = 0; k < xl; k += 16) {
 			AA = a;
 			BB = b;
 			CC = c;
@@ -1017,188 +1017,188 @@ XKit.extensions.xcloud = new Object({
 			b = addUnsigned(b, BB);
 			c = addUnsigned(c, CC);
 			d = addUnsigned(d, DD);
-		  }
+		}
 
-		  var temp = wordToHex(a) + wordToHex(b) + wordToHex(c) + wordToHex(d);
+		var temp = wordToHex(a) + wordToHex(b) + wordToHex(c) + wordToHex(d);
 
-		  return temp.toLowerCase();
+		return temp.toLowerCase();
 	},
 
 	utf8_encode: function(argString) {
-		  // http://kevin.vanzonneveld.net
-		  // +   original by: Webtoolkit.info (http://www.webtoolkit.info/)
-		  // +   improved by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
-		  // +   improved by: sowberry
-		  // +    tweaked by: Jack
-		  // +   bugfixed by: Onno Marsman
-		  // +   improved by: Yves Sucaet
-		  // +   bugfixed by: Onno Marsman
-		  // +   bugfixed by: Ulrich
-		  // +   bugfixed by: Rafal Kukawski
-		  // +   improved by: kirilloid
-		  // +   bugfixed by: kirilloid
-		  // *     example 1: utf8_encode('Kevin van Zonneveld');
-		  // *     returns 1: 'Kevin van Zonneveld'
+		// http://kevin.vanzonneveld.net
+		// +   original by: Webtoolkit.info (http://www.webtoolkit.info/)
+		// +   improved by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
+		// +   improved by: sowberry
+		// +    tweaked by: Jack
+		// +   bugfixed by: Onno Marsman
+		// +   improved by: Yves Sucaet
+		// +   bugfixed by: Onno Marsman
+		// +   bugfixed by: Ulrich
+		// +   bugfixed by: Rafal Kukawski
+		// +   improved by: kirilloid
+		// +   bugfixed by: kirilloid
+		// *     example 1: utf8_encode('Kevin van Zonneveld');
+		// *     returns 1: 'Kevin van Zonneveld'
 
-		  if (argString === null || typeof argString === "undefined") {
+		if (argString === null || typeof argString === "undefined") {
 			return "";
-		  }
+		}
 
-		  var string = (argString + ''); // .replace(/\r\n/g, "\n").replace(/\r/g, "\n");
-		  var utftext = '',
+		var string = (argString + ''); // .replace(/\r\n/g, "\n").replace(/\r/g, "\n");
+		var utftext = '',
 			start, end, stringl = 0;
 
-		  start = end = 0;
-		  stringl = string.length;
-		  for (var n = 0; n < stringl; n++) {
+		start = end = 0;
+		stringl = string.length;
+		for (var n = 0; n < stringl; n++) {
 			var c1 = string.charCodeAt(n);
 			var enc = null;
 
 			if (c1 < 128) {
-			  end++;
+				end++;
 			} else if (c1 > 127 && c1 < 2048) {
-			  enc = String.fromCharCode(
-				 (c1 >> 6)        | 192,
-				( c1        & 63) | 128
-			  );
+				enc = String.fromCharCode(
+					(c1 >> 6)        | 192,
+					( c1        & 63) | 128
+				);
 			} else if (c1 & 0xF800 != 0xD800) {
-			  enc = String.fromCharCode(
-				 (c1 >> 12)       | 224,
-				((c1 >> 6)  & 63) | 128,
-				( c1        & 63) | 128
-			  );
+				enc = String.fromCharCode(
+					(c1 >> 12)       | 224,
+					((c1 >> 6)  & 63) | 128,
+					( c1        & 63) | 128
+				);
 			} else { // surrogate pairs
-			  if (c1 & 0xFC00 != 0xD800) { throw new RangeError("Unmatched trail surrogate at " + n); }
-			  var c2 = string.charCodeAt(++n);
-			  if (c2 & 0xFC00 != 0xDC00) { throw new RangeError("Unmatched lead surrogate at " + (n-1)); }
-			  c1 = ((c1 & 0x3FF) << 10) + (c2 & 0x3FF) + 0x10000;
-			  enc = String.fromCharCode(
-				 (c1 >> 18)       | 240,
-				((c1 >> 12) & 63) | 128,
-				((c1 >> 6)  & 63) | 128,
-				( c1        & 63) | 128
-			  );
+				if (c1 & 0xFC00 != 0xD800) { throw new RangeError("Unmatched trail surrogate at " + n); }
+				var c2 = string.charCodeAt(++n);
+				if (c2 & 0xFC00 != 0xDC00) { throw new RangeError("Unmatched lead surrogate at " + (n-1)); }
+				c1 = ((c1 & 0x3FF) << 10) + (c2 & 0x3FF) + 0x10000;
+				enc = String.fromCharCode(
+					(c1 >> 18)       | 240,
+					((c1 >> 12) & 63) | 128,
+					((c1 >> 6)  & 63) | 128,
+					( c1        & 63) | 128
+				);
 			}
 			if (enc !== null) {
-			  if (end > start) {
-				utftext += string.slice(start, end);
-			  }
-			  utftext += enc;
-			  start = end = n + 1;
+				if (end > start) {
+					utftext += string.slice(start, end);
+				}
+				utftext += enc;
+				start = end = n + 1;
 			}
-		  }
+		}
 
-		  if (end > start) {
+		if (end > start) {
 			utftext += string.slice(start, stringl);
-		  }
+		}
 
-		  return utftext;
+		return utftext;
 	},
 
 	base64_encode: function(data) {
-	  // http://kevin.vanzonneveld.net
-	  // +   original by: Tyler Akins (http://rumkin.com)
-	  // +   improved by: Bayron Guevara
-	  // +   improved by: Thunder.m
-	  // +   improved by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
-	  // +   bugfixed by: Pellentesque Malesuada
-	  // +   improved by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
-	  // +   improved by: Rafa Kukawski (http://kukawski.pl)
-	  // *     example 1: base64_encode('Kevin van Zonneveld');
-	  // *     returns 1: 'S2V2aW4gdmFuIFpvbm5ldmVsZA=='
-	  // mozilla has this native
-	  // - but breaks in 2.0.0.12!
-	  //if (typeof this.window['btoa'] == 'function') {
-	  //    return btoa(data);
-	  //}
-	  var b64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
-	  var o1, o2, o3, h1, h2, h3, h4, bits, i = 0,
-		ac = 0,
-		enc = "",
-		tmp_arr = [];
+		// http://kevin.vanzonneveld.net
+		// +   original by: Tyler Akins (http://rumkin.com)
+		// +   improved by: Bayron Guevara
+		// +   improved by: Thunder.m
+		// +   improved by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
+		// +   bugfixed by: Pellentesque Malesuada
+		// +   improved by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
+		// +   improved by: Rafa Kukawski (http://kukawski.pl)
+		// *     example 1: base64_encode('Kevin van Zonneveld');
+		// *     returns 1: 'S2V2aW4gdmFuIFpvbm5ldmVsZA=='
+		// mozilla has this native
+		// - but breaks in 2.0.0.12!
+		//if (typeof this.window['btoa'] == 'function') {
+		//    return btoa(data);
+		//}
+		var b64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
+		var o1, o2, o3, h1, h2, h3, h4, bits, i = 0,
+			ac = 0,
+			enc = "",
+			tmp_arr = [];
 
-	  if (!data) {
-		return data;
-	  }
+		if (!data) {
+			return data;
+		}
 
-	  do { // pack three octets into four hexets
-		o1 = data.charCodeAt(i++);
-		o2 = data.charCodeAt(i++);
-		o3 = data.charCodeAt(i++);
+		do { // pack three octets into four hexets
+			o1 = data.charCodeAt(i++);
+			o2 = data.charCodeAt(i++);
+			o3 = data.charCodeAt(i++);
 
-		bits = o1 << 16 | o2 << 8 | o3;
+			bits = o1 << 16 | o2 << 8 | o3;
 
-		h1 = bits >> 18 & 0x3f;
-		h2 = bits >> 12 & 0x3f;
-		h3 = bits >> 6 & 0x3f;
-		h4 = bits & 0x3f;
+			h1 = bits >> 18 & 0x3f;
+			h2 = bits >> 12 & 0x3f;
+			h3 = bits >> 6 & 0x3f;
+			h4 = bits & 0x3f;
 
-		// use hexets to index into b64, and append result to encoded string
-		tmp_arr[ac++] = b64.charAt(h1) + b64.charAt(h2) + b64.charAt(h3) + b64.charAt(h4);
-	  } while (i < data.length);
+			// use hexets to index into b64, and append result to encoded string
+			tmp_arr[ac++] = b64.charAt(h1) + b64.charAt(h2) + b64.charAt(h3) + b64.charAt(h4);
+		} while (i < data.length);
 
-	  enc = tmp_arr.join('');
+		enc = tmp_arr.join('');
 
-	  var r = data.length % 3;
+		var r = data.length % 3;
 
-	  return (r ? enc.slice(0, r - 3) : enc) + '==='.slice(r || 3);
+		return (r ? enc.slice(0, r - 3) : enc) + '==='.slice(r || 3);
 
 	},
 
 	base64_decode: function (data) {
-	  // http://kevin.vanzonneveld.net
-	  // +   original by: Tyler Akins (http://rumkin.com)
-	  // +   improved by: Thunder.m
-	  // +      input by: Aman Gupta
-	  // +   improved by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
-	  // +   bugfixed by: Onno Marsman
-	  // +   bugfixed by: Pellentesque Malesuada
-	  // +   improved by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
-	  // +      input by: Brett Zamir (http://brett-zamir.me)
-	  // +   bugfixed by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
-	  // *     example 1: base64_decode('S2V2aW4gdmFuIFpvbm5ldmVsZA==');
-	  // *     returns 1: 'Kevin van Zonneveld'
-	  // mozilla has this native
-	  // - but breaks in 2.0.0.12!
-	  //if (typeof this.window['atob'] == 'function') {
-	  //    return atob(data);
-	  //}
-	  var b64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
-	  var o1, o2, o3, h1, h2, h3, h4, bits, i = 0,
-		ac = 0,
-		dec = "",
-		tmp_arr = [];
+		// http://kevin.vanzonneveld.net
+		// +   original by: Tyler Akins (http://rumkin.com)
+		// +   improved by: Thunder.m
+		// +      input by: Aman Gupta
+		// +   improved by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
+		// +   bugfixed by: Onno Marsman
+		// +   bugfixed by: Pellentesque Malesuada
+		// +   improved by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
+		// +      input by: Brett Zamir (http://brett-zamir.me)
+		// +   bugfixed by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
+		// *     example 1: base64_decode('S2V2aW4gdmFuIFpvbm5ldmVsZA==');
+		// *     returns 1: 'Kevin van Zonneveld'
+		// mozilla has this native
+		// - but breaks in 2.0.0.12!
+		//if (typeof this.window['atob'] == 'function') {
+		//    return atob(data);
+		//}
+		var b64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
+		var o1, o2, o3, h1, h2, h3, h4, bits, i = 0,
+			ac = 0,
+			dec = "",
+			tmp_arr = [];
 
-	  if (!data) {
-		return data;
-	  }
-
-	  data += '';
-
-	  do { // unpack four hexets into three octets using index points in b64
-		h1 = b64.indexOf(data.charAt(i++));
-		h2 = b64.indexOf(data.charAt(i++));
-		h3 = b64.indexOf(data.charAt(i++));
-		h4 = b64.indexOf(data.charAt(i++));
-
-		bits = h1 << 18 | h2 << 12 | h3 << 6 | h4;
-
-		o1 = bits >> 16 & 0xff;
-		o2 = bits >> 8 & 0xff;
-		o3 = bits & 0xff;
-
-		if (h3 == 64) {
-		  tmp_arr[ac++] = String.fromCharCode(o1);
-		} else if (h4 == 64) {
-		  tmp_arr[ac++] = String.fromCharCode(o1, o2);
-		} else {
-		  tmp_arr[ac++] = String.fromCharCode(o1, o2, o3);
+		if (!data) {
+			return data;
 		}
-	  } while (i < data.length);
 
-	  dec = tmp_arr.join('');
+		data += '';
 
-	  return dec;
+		do { // unpack four hexets into three octets using index points in b64
+			h1 = b64.indexOf(data.charAt(i++));
+			h2 = b64.indexOf(data.charAt(i++));
+			h3 = b64.indexOf(data.charAt(i++));
+			h4 = b64.indexOf(data.charAt(i++));
+
+			bits = h1 << 18 | h2 << 12 | h3 << 6 | h4;
+
+			o1 = bits >> 16 & 0xff;
+			o2 = bits >> 8 & 0xff;
+			o3 = bits & 0xff;
+
+			if (h3 == 64) {
+				tmp_arr[ac++] = String.fromCharCode(o1);
+			} else if (h4 == 64) {
+				tmp_arr[ac++] = String.fromCharCode(o1, o2);
+			} else {
+				tmp_arr[ac++] = String.fromCharCode(o1, o2, o3);
+			}
+		} while (i < data.length);
+
+		dec = tmp_arr.join('');
+
+		return dec;
 	}
 
 });

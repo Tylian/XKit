@@ -504,9 +504,9 @@ XKit.extensions.outbox = new Object({
 		obj.message = $("<div>" + obj.message + "</div>").text();
 
 		to_return = to_return + "<div class=\"post_avatar\"><div class=\"queue\">" +
-        				"<div class=\"publish_info day publish_on_day\">" + m_day + "</div>" +
-       					"<div class=\"publish_info time publish_on_time\">" + m_date + "</div>" +
-				"</div></div>";
+				"<div class=\"publish_info day publish_on_day\">" + m_day + "</div>" +
+				"<div class=\"publish_info time publish_on_time\">" + m_date + "</div>" +
+			"</div></div>";
 
 		to_return = to_return + "<div class=\"post-wrapper\">" +
 				"<span class=\"xkit-outbox-fanmail-indicator\">sent ask</span>" +
@@ -523,7 +523,7 @@ XKit.extensions.outbox = new Object({
 						"<div class=\"post_control deny-xoutbox xkit-outbox-delete\" data-outbox-id=\"" + m_id + "\" title=\"Delete\"></div>" +
 					"</div></div>" +
 				"</div>" +
-			    "</div>";
+			"</div>";
 
 		to_return = to_return + "</div></li>";
 
@@ -555,9 +555,9 @@ XKit.extensions.outbox = new Object({
 		obj.message = $("<div>" + obj.message + "</div>").text();
 
 		to_return = to_return + "<div class=\"post_avatar\"><div class=\"queue\">" +
-        				"<div class=\"publish_info day publish_on_day\">" + m_day + "</div>" +
-       					"<div class=\"publish_info time publish_on_time\">" + m_date + "</div>" +
-				"</div></div>";
+				"<div class=\"publish_info day publish_on_day\">" + m_day + "</div>" +
+				"<div class=\"publish_info time publish_on_time\">" + m_date + "</div>" +
+			"</div></div>";
 
 		to_return = to_return + "<div class=\"post-wrapper\">" +
 				"<span class=\"xkit-outbox-fanmail-indicator\">fan mail</span>" +
@@ -574,7 +574,7 @@ XKit.extensions.outbox = new Object({
 						"<div class=\"post_control deny-xoutbox xkit-outbox-delete\" data-outbox-id=\"" + m_id + "\" title=\"Delete\"></div>" +
 					"</div></div>" +
 				"</div>" +
-			    "</div>";
+			"</div>";
 
 		to_return = to_return + "</div></li>";
 
@@ -612,12 +612,12 @@ XKit.extensions.outbox = new Object({
 		}
 
 		to_return = to_return + "<div class=\"post_avatar\"><div class=\"queue\">" +
-        				"<div class=\"publish_info day publish_on_day\">" + m_day + "</div>" +
-       					"<div class=\"publish_info time publish_on_time\">" + m_date + "</div>" +
-				"</div></div>";
+				"<div class=\"publish_info day publish_on_day\">" + m_day + "</div>" +
+				"<div class=\"publish_info time publish_on_time\">" + m_date + "</div>" +
+			"</div></div>";
 
 		if (obj.message.indexOf("<div") !== -1) {
-			obj.message = obj.message.substring(0, 	obj.message.indexOf("<div"));
+			obj.message = obj.message.substring(0, obj.message.indexOf("<div"));
 		}
 
 		to_return = to_return + "<div class=\"post-wrapper\">" +
@@ -639,7 +639,7 @@ XKit.extensions.outbox = new Object({
 						"<div class=\"post_control deny-xoutbox xkit-outbox-delete\" data-outbox-id=\"" + m_id + "\" title=\"Delete\"></div>" +
 					"</div></div>" +
 				"</div>" +
-			    "</div>";
+			"</div>";
 
 		to_return = to_return + "</div></li>";
 
@@ -655,10 +655,12 @@ XKit.extensions.outbox = new Object({
 		}
 
 		$(".no_posts_found").remove();
-		$("#posts").before("<div id=\"xkit-outbox-no-posts\" class=\"no_posts_found\" style=\"padding-top: 234px; padding-bottom: 234px;\">" +
-                  		  		"<i class=\"icon_mail\"></i>" +
-                				m_error  +
-                			"</div>");
+		$("#posts").before(
+			"<div id=\"xkit-outbox-no-posts\" class=\"no_posts_found\" style=\"padding-top: 234px; padding-bottom: 234px;\">" +
+				"<i class=\"icon_mail\"></i>" +
+				m_error  +
+			"</div>"
+		);
 
 	},
 

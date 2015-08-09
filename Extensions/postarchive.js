@@ -26,7 +26,7 @@ XKit.extensions.postarchive = new Object({
 
 		XKit.extensions.postarchive.load_posts();
 
-		var m_css = 	"#iframe_controls { width: auto !important; } " +
+		var m_css = "#iframe_controls { width: auto !important; } " +
 				"#xkit_postarchive_inblog_button:before {" +
 					" background-size: auto; " +
 					" background-position: 50% 50%; " +
@@ -37,7 +37,7 @@ XKit.extensions.postarchive = new Object({
 
 		XKit.tools.add_css(m_css, "post_archive_in_blog");
 
-		var m_html = 	"<a id=\"xkit_postarchive_inblog_button\" onclick=\"return false\" class=\"btn icon no_label\">Post Archiver</a>";
+		var m_html = "<a id=\"xkit_postarchive_inblog_button\" onclick=\"return false\" class=\"btn icon no_label\">Post Archiver</a>";
 
 		$(".btn.dashboard").before(m_html);
 
@@ -49,7 +49,7 @@ XKit.extensions.postarchive = new Object({
 			var postid_start = document.location.href.search("&pid=");
 			if (postid_start === -1) { return; }
 			var postid_end =  document.location.href.indexOf("&", postid_start + 2);
-		 	post_id = document.location.href.substring(postid_start + 5, postid_end);
+			post_id = document.location.href.substring(postid_start + 5, postid_end);
 		}
 
 		if (XKit.extensions.postarchive.is_post_in_archive(post_id) !== false) {
@@ -82,7 +82,7 @@ XKit.extensions.postarchive = new Object({
 		if (XKit.interface.where().inbox === true) { return; }
 
     if ($('#postarchive_ul').length === 0) {
-      var xf_html = 	'<ul class="controls_section" id="postarchive_ul">' +
+      var xf_html = '<ul class="controls_section" id="postarchive_ul">' +
             '<li class="section_header selected">Post Archive</li>' +
             '<li class="no_push" style="height: 36px;"><a href="#" onclick="return false;" id="postarchive_view">' +
               '<div class="hide_overflow" style="color: rgba(255, 255, 255, 0.5) !important; font-weight: bold; padding-left: 10px; padding-top: 8px;">My Archive <span class="count" id="postarchive_view_count" style="padding-top: 8px;">' + XKit.extensions.postarchive.archived_posts.length + '</span></div>' +
@@ -259,7 +259,7 @@ XKit.extensions.postarchive = new Object({
 
 		}
 
-		var m_html = 	"<div id=\"xkit-postarchive-background\">&nbsp;</div>" +
+		var m_html = "<div id=\"xkit-postarchive-background\">&nbsp;</div>" +
 				"<div id=\"xkit-postarchive-container\">" +
 					"<div id=\"xkit-postarchive-sidebar\" class=\"nano\">" +
 						"<div id=\"xkit-postarchive-sidebar-content\" class=\"content\">" +
@@ -333,28 +333,28 @@ XKit.extensions.postarchive = new Object({
 			});
 
 		}
-		
-		$("#xkit-postarchive-export").bind("click", function() {
-		    
-		    var m_data = {};
-		    
-            m_data.posts = XKit.storage.get("postarchive", "archived_posts","");
-            m_data.categories = XKit.storage.get("postarchive", "categories","");
 
-    		var m_html = 	"<div id=\"xkit-postarchive-share-code\" class=\"nano\">" +
-	    	    			"<div class=\"content\">" +
-		    				"<div id=\"xkit-postarchive-share-code-inner\">" +
-				    			JSON.stringify(m_data) +
-	    					"</div>" +
-		    			"</div>" +
-			    	"</div>";
+		$("#xkit-postarchive-export").bind("click", function() {
+
+			var m_data = {};
+
+			m_data.posts = XKit.storage.get("postarchive", "archived_posts","");
+			m_data.categories = XKit.storage.get("postarchive", "categories","");
+
+			var m_html = "<div id=\"xkit-postarchive-share-code\" class=\"nano\">" +
+					"<div class=\"content\">" +
+						"<div id=\"xkit-postarchive-share-code-inner\">" +
+							JSON.stringify(m_data) +
+						"</div>" +
+					"</div>" +
+				"</div>";
 
 			XKit.window.show("Export Archive","Copy and paste the following into a file:" + m_html,"info","<div class=\"xkit-button default\" id=\"xkit-postarchive-export-confirm\">OK</div>");
 
-            $("#xkit-postarchive-share-code").nanoScroller();
-		    $("#xkit-postarchive-share-code").nanoScroller({ scroll: 'top' });
+			$("#xkit-postarchive-share-code").nanoScroller();
+			$("#xkit-postarchive-share-code").nanoScroller({ scroll: 'top' });
 
-	    	$("#xkit-postarchive-share-code").click(function() { $(this).selectText();});
+			$("#xkit-postarchive-share-code").click(function() { $(this).selectText();});
 
 			$("#xkit-postarchive-export-confirm").click(function() {
 
@@ -364,7 +364,7 @@ XKit.extensions.postarchive = new Object({
 			});
 
 		});
-		
+
 		$("#xkit-postarchive-import").bind("click", function() { //Import Function
 
 			XKit.window.show("Import","<b>You can import settings from XKit.</b><br/>Click XKit''s Export button and paste the text below to import your archived posts.<input type=\"text\" placeholder=\"Paste preferences text here.\" class=\"xkit-textbox\" id=\"xkit-postarchive-import-words\">","question","<div class=\"xkit-button default\" id=\"xkit-postarchive-add-words\">Import!</div><div class=\"xkit-button\" id=\"xkit-close-message\">Cancel</div>");
@@ -1145,9 +1145,9 @@ var rows = [];
 
 		var m_post = XKit.interface.find_post(post_id);
 		var blog_url = m_post.owner;
-		
+
 		if (!blog_url) {
-		    blog_url = window.location.href.split('%2F')[2].split('.')[0];
+			blog_url = window.location.href.split('%2F')[2].split('.')[0];
 		}
 
 		var api_url = "http://api.tumblr.com/v2/blog/" + blog_url + ".tumblr.com/posts/?api_key=" + XKit.extensions.postarchive.apiKey + "&id=" + post_id;
@@ -1228,7 +1228,7 @@ var rows = [];
 
 			$(this).addClass("xkit-postarchive-done");
 
-	  		var m_post = XKit.interface.post($(this));
+			var m_post = XKit.interface.post($(this));
 
 			XKit.interface.add_control_button(this, "xkit-postarchive", "data-xkit-postarchive-tumblelog-key=\"" + m_post.tumblelog_key + "\" data-xkit-postarchive-tumblelog-name=\"" + m_post.owner + "\"");
 
@@ -1271,7 +1271,7 @@ var rows = [];
 			}
 		}
 
-		var m_html = 	"<div id=\"xkit-postarchive-custom-panel\">" +
+		var m_html = "<div id=\"xkit-postarchive-custom-panel\">" +
 					"<div id=\"xkit-postarchive-custom-panel-toolbar\">" +
 						"<div id=\"xkit-postarchive-add-category\" class=\"xkit-button\">Add new category</div>" +
 					"</div>" +

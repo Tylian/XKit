@@ -105,7 +105,7 @@ XKit.extensions.mass_plus = new Object({
 			m_extra = "<div data-type=\"search-tags\" class=\"xkit-mass-link xkit-selector\">search by tags</div>";
 		}
 
-		var m_html = 	"<div class=\"xkit-mass-plus-buttons-month\">" +
+		var m_html = "<div class=\"xkit-mass-plus-buttons-month\">" +
 					"<div id=\"xkit-mass-count\"><span>0</span> selected (<div data-type=\"help\" class=\"xkit-mass-link xkit-no-left\">help</div>)</div>" +
 					"<div data-type=\"select-all\" class=\"xkit-mass-link xkit-selector\">Select first 100</div>" +
 					"<div data-type=\"deselect-all\" class=\"xkit-mass-link xkit-selector\">Deselect all</div>" +

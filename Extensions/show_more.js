@@ -198,8 +198,8 @@ XKit.extensions.show_more = new Object({
 
 			if (avatar_url !== "" && typeof avatar_url !== "undefined") {
 				m_html = m_html + "<div data-avatar-url=\"" + avatar_url + "\" class=\"xkit-magnetizer xkit-show-more-item xkit-avatar-magnetizer-new xkit-avatar-magnetizer-button-" + user_url + "\" data-user-url=\"" + user_url + "\">" +
-							"Avatar Magnifier" +
-						  "</div>";
+						"Avatar Magnifier" +
+					"</div>";
 			}
 
 		}
@@ -345,8 +345,8 @@ XKit.extensions.show_more = new Object({
 			json: false,
 			onerror: function(response) {
 				alert("Unable to follow/unfollow person, error " +
-				      response.status + ": " + response.responseText +
-				      "\n\nPlease try again later or file a bug report by going to new-xkit-extension.tumblr.com/ask");
+					  response.status + ": " + response.responseText +
+					  "\n\nPlease try again later or file a bug report by going to new-xkit-extension.tumblr.com/ask");
 			},
 			onload: function(response) {
 				XKit.notifications.add("User " + user_url + " followed.");
@@ -379,8 +379,8 @@ XKit.extensions.show_more = new Object({
 			json: false,
 			onerror: function(response) {
 				alert("Unable to follow/unfollow person, error " +
-				      response.status + ": \"" + response.responseText +
-				      "\"\n\nPlease try again later or file a bug report by going to new-xkit-extension.tumblr.com/ask");
+					  response.status + ": \"" + response.responseText +
+					  "\"\n\nPlease try again later or file a bug report by going to new-xkit-extension.tumblr.com/ask");
 			},
 			onload: function(response) {
 				XKit.notifications.add("User " + user_url + " unfollowed.");
@@ -575,7 +575,7 @@ XKit.extensions.show_more = new Object({
 								"<a onclick=\"return false;\" data-avatar-url=\"" + avatar_url + "\" class=\" xkit-new-menu-fix xkit-show-more-item xkit-avatar-magnetizer-new xkit-avatar-magnetizer-button-" + user_url + "\" data-user-url=\"" + user_url + "\">" +
 									"Magnifier" +
 								"</a>" +
-							  "</li>";
+								"</li>";
 					}
 
 				}
@@ -589,11 +589,11 @@ XKit.extensions.show_more = new Object({
 							"<a target=\"_new\" href=\"" + m_likes_url + "\" class=\"likes xkit-submit xkit-new-menu-fix\">" +
 								"<span class=\"hide_overflow\">Submit</span>" +
 							"</a>" +
-						  "</li>";
+							"</li>";
 
 				}
 
-			   // console.log(XKit.extensions.show_more.custom_menu_extension);
+				// console.log(XKit.extensions.show_more.custom_menu_extension);
 				if (XKit.extensions.show_more.custom_menu_extension.length >= 0) {
 
 					var m_data = XKit.extensions.show_more.popup_data;
@@ -662,7 +662,7 @@ XKit.extensions.show_more = new Object({
 				setTimeout(function() {
 
 					GM_xmlhttpRequest({
- 						url: m_url,
+						url: m_url,
 						onload: function() {
 							XKit.extensions.show_more.submit_available[username] = true;
 						}
@@ -702,7 +702,7 @@ XKit.extensions.show_more = new Object({
 
 				setTimeout(function() {
 					GM_xmlhttpRequest({
- 						url: m_url,
+						url: m_url,
 						onload: function(data) {
 							if ($("#ask_anonymously", data).length > 0) {
 								XKit.extensions.show_more.anon_available[username] = true;
@@ -747,7 +747,7 @@ XKit.extensions.show_more = new Object({
 				setTimeout(function() {
 
 					GM_xmlhttpRequest({
- 						url: m_url,
+						url: m_url,
 						onload: function() {
 							XKit.extensions.show_more.likes_available[username] = true;
 						}
@@ -788,7 +788,7 @@ XKit.extensions.show_more = new Object({
 					"<a href=\"" + m_likes_url + "\" class=\"tumblelog_menu_link likes xkit-likes\">" +
 						"<span class=\"hide_overflow\">Likes</span>" +
 					"</a>" +
-				  "</div>";
+					"</div>";
 
 		}
 
@@ -800,7 +800,7 @@ XKit.extensions.show_more = new Object({
 					"<a target=\"_new\" href=\"" + m_submit_url + "\" class=\"tumblelog_menu_link likes xkit-submit\">" +
 						"<span class=\"hide_overflow\">Submit</span>" +
 					"</a>" +
-				  "</div>";
+					"</div>";
 
 		}
 
@@ -815,7 +815,7 @@ XKit.extensions.show_more = new Object({
 						"<a onclick=\"return false;\" data-avatar-url=\"" + avatar_url + "\" class=\"tumblelog_menu_link xkit-avatar-magnetizer xkit-avatar-magnetizer-button-" + user_url + "\" data-user-url=\"" + user_url + "\">" +
 							"<span class=\"hide_overflow\">Magnifier</span>" +
 						"</a>" +
-					  "</div>";
+						"</div>";
 			}
 
 		}
@@ -849,7 +849,7 @@ XKit.extensions.show_more = new Object({
 
 		avatar_url = "https://api.tumblr.com/v2/blog/" + user_url + ".tumblr.com/avatar/512";
 
-		var m_html = 	"<div id=\"xkit-avatar-magnetizer-shadow\">&nbsp;</div>" +
+		var m_html = "<div id=\"xkit-avatar-magnetizer-shadow\">&nbsp;</div>" +
 				"<div id=\"xkit-avatar-magnetizer-window\">" +
 					"<img src=\"" + avatar_url + "\">" +
 					"<p>Click on the picture or the page to close</p>" +

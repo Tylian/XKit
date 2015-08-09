@@ -279,12 +279,12 @@ XKit.extensions.bookmarker = new Object({
 		}
 
 		var ts = Math.round((new Date()).getTime() / 1000);
-   		var current_bookmark_date = (ts * 1000) - 2000;
+		var current_bookmark_date = (ts * 1000) - 2000;
 
-   		var m_obj = {};
-   		m_obj.id = post_id;
-   		m_obj.date = current_bookmark_date;
-   		m_obj.caption = "";
+		var m_obj = {};
+		m_obj.id = post_id;
+		m_obj.date = current_bookmark_date;
+		m_obj.caption = "";
 
 		XKit.extensions.bookmarker.bookmarks.push(m_obj);
 		XKit.extensions.bookmarker.save_bookmarks();
@@ -419,7 +419,7 @@ XKit.extensions.bookmarker = new Object({
 			} else {
 				$(this).find(".post_controls").prepend(m_html);
 			}
-			
+
 		});
 
 	},

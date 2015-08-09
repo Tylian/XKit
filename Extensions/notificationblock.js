@@ -292,8 +292,8 @@ XKit.extensions.notificationblock = new Object({
 
 			for (var i=0;i<XKit.extensions.notificationblock.blacklisted.length;i++) {
 				if (XKit.extensions.notificationblock.blacklisted[i] === "" ||
-				    typeof(XKit.extensions.notificationblock.blacklisted[i]) === "undefined") {
-					continue;
+					typeof(XKit.extensions.notificationblock.blacklisted[i]) === "undefined") {
+						continue;
 				}
 				if (target_url.indexOf("/post/" + XKit.extensions.notificationblock.blacklisted[i]) !== -1) {
 					console.log("Blocking notification because of post " + XKit.extensions.notificationblock.blacklisted[i]);
@@ -313,7 +313,7 @@ XKit.extensions.notificationblock = new Object({
 
 			for (var i=0;i<XKit.extensions.notificationblock.blacklisted.length;i++) {
 				if (XKit.extensions.notificationblock.blacklisted[i] === "" ||
-				    typeof(XKit.extensions.notificationblock.blacklisted[i]) === "undefined") {
+						typeof(XKit.extensions.notificationblock.blacklisted[i]) === "undefined") {
 					continue;
 				}
 				if (target_url.indexOf("/post/" + XKit.extensions.notificationblock.blacklisted[i]) !== -1) {
@@ -346,8 +346,8 @@ XKit.extensions.notificationblock = new Object({
 
 				$(this).addClass("xnotificationblockchecked");
 
-		  		var m_post = XKit.interface.post($(this));
-		  		if (m_post.is_mine !== true) { return; }
+				var m_post = XKit.interface.post($(this));
+				if (m_post.is_mine !== true) { return; }
 
 				var this_id = m_post.id;
 

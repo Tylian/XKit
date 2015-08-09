@@ -110,9 +110,9 @@ XKit.extensions.activity_plus = new Object({
 				if (m_type === "") {
 					if ($(".ui_note").length >= 350) {
 						$('html, body').animate({
-    							scrollTop: 30
- 						}, 600);
- 						$( ".ui_note:gt(200)" ).remove();
+							scrollTop: 30
+						}, 600);
+						$( ".ui_note:gt(200)" ).remove();
 					}
 					XKit.extensions.activity_plus.in_type_filter = false;
 					return;
@@ -257,7 +257,7 @@ XKit.extensions.activity_plus = new Object({
 
 		if ((XKit.extensions.activity_plus.condensed_count - 1) <= 1) { return; }
 
-		var m_html = 	"<div class=\"xkit-activity-plus-condensed-opener\" data-id=\"" + XKit.extensions.activity_plus.condensed_id + "\">" +
+		var m_html = "<div class=\"xkit-activity-plus-condensed-opener\" data-id=\"" + XKit.extensions.activity_plus.condensed_id + "\">" +
 					"<b>" + (XKit.extensions.activity_plus.condensed_count - 1) + "</b> more items" +
 				"</div>";
 		$(".xkit-activity-plus-condensed-item---" + XKit.extensions.activity_plus.condensed_id).last().after(m_html);

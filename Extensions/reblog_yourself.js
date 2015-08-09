@@ -57,34 +57,34 @@ XKit.extensions.reblog_yourself = {
 		$(".btn.icon.dashboard, .btn.icon.edit, .btn.icon.follow").html("");
 		$(".btn.icon.dashboard, .btn.icon.edit, .btn.icon.follow").addClass("no_label");
 
-    		var check_if_there = $("body").html().search("/reblog/");
-    		if (check_if_there !== -1) { return; }
+		var check_if_there = $("body").html().search("/reblog/");
+		if (check_if_there !== -1) { return; }
 
-    		var postid_start = document.location.href.search("&pid=");
-    		var postid_end =  document.location.href.indexOf("&", postid_start + 2);
-    		var post_id = document.location.href.substring(postid_start + 5, postid_end);
+		var postid_start = document.location.href.search("&pid=");
+		var postid_end =  document.location.href.indexOf("&", postid_start + 2);
+		var post_id = document.location.href.substring(postid_start + 5, postid_end);
 
-    		if (postid_start === -1) { return; }
+		if (postid_start === -1) { return; }
 
-    		var xd_start = document.location.href.search("&rk=");
-    		var xd_end =  document.location.href.indexOf("&", xd_start + 2);
-    		var xd = document.location.href.substring(xd_start + 4, xd_end);
+		var xd_start = document.location.href.search("&rk=");
+		var xd_end =  document.location.href.indexOf("&", xd_start + 2);
+		var xd = document.location.href.substring(xd_start + 4, xd_end);
 
-    		var rd_start = document.location.href.search("src=") + 4;
-    		var rd_end =  document.location.href.indexOf("&", rd_start + 2);
-    		var rd = document.location.href.substring(rd_start, rd_end);
+		var rd_start = document.location.href.search("src=") + 4;
+		var rd_end =  document.location.href.indexOf("&", rd_start + 2);
+		var rd = document.location.href.substring(rd_start, rd_end);
 
-    		var xu = "http://www.tumblr.com/reblog/" + post_id + "/" + xd;
+		var xu = "http://www.tumblr.com/reblog/" + post_id + "/" + xd;
 
 		var xu_html = '<a class="btn icon reblog no_label" id="xreblogyourselfiframebutton" style="display: none;" title="Reblog" href="/reblog/' + post_id + '/' + xd + '?redirect_to=' + rd + '" target="_top"></a>';
 
 
 		$.ajax({
- 			url: '/reblog/' + post_id + '/' + xd + '/',
-  			success: function(data, xhr) {
+			url: '/reblog/' + post_id + '/' + xd + '/',
+			success: function(data, xhr) {
 				$(".controls").prepend(xu_html);
 				$("#xreblogyourselfiframebutton").fadeIn('slow');
-  			}
+			}
 		});
 
 	},
@@ -174,20 +174,20 @@ XKit.extensions.reblog_yourself = {
 
 			if ($(this).hasClass("xreblogyourself_done") === true) { return; }
 
-	   		if ($(this).attr('id') === "new_post") { return; }
+			if ($(this).attr('id') === "new_post") { return; }
 			if ($(this).hasClass("note") === true) { return; }
 			if ($(this).hasClass("is_note") === true) { return; }
 			if ($(this).hasClass("is_mine") === false) { return; }
-	   		if ($(this).css('visibility') === "hidden") { return; } // tumblr savior hack.
-	   		if ($(this).css('display') === "none") { return; } // tumblr savior hack.
+			if ($(this).css('visibility') === "hidden") { return; } // tumblr savior hack.
+			if ($(this).css('display') === "none") { return; } // tumblr savior hack.
 
 			$(this).addClass("xreblogyourself_done");
 
-	   		if ($(this).find('.post_controls').html().search('href="/reblog/') !== -1) {
-	   		   	// this user can reblog themselves?!
+			if ($(this).find('.post_controls').html().search('href="/reblog/') !== -1) {
+				// this user can reblog themselves?!
 				XKit.console.add("This user can reblog themselves, quitting.");
-	   		   	return false;
-	   		}
+				return false;
+			}
 
 			var post_id = $(this).attr('data-post-id');
 			var reblog_key = $(this).attr('data-reblog-key');

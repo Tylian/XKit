@@ -36,7 +36,7 @@ XKit.extensions.post_limit_checker = new Object({
 
 		var shown_message = XKit.storage.get("post_limit_checker","shown_warning","");
 
-		var m_html = 	"<div id=\"xkit-plc-list\" class=\"nano\"><div id=\"xkit-plc-list-content\" class=\"content\">" +
+		var m_html = "<div id=\"xkit-plc-list\" class=\"nano\"><div id=\"xkit-plc-list-content\" class=\"content\">" +
 					"<div class=\"xkit-warning-plc-text\"><b>Deleted posts</b><br/>Deleted posts are count by Tumblr, but this tool can't count them. For example, if you've made 250 posts since the last reset but then deleted 50 of them, this tool will tell you that you have 50 more posts to go, but in reality you've already hit your post limit.</div>" +
 					"<div class=\"xkit-warning-plc-text\"><b>Original photo posts</b><br/>There is a separate, 75 uploads per day limit for photo posts. This extension does not check for that.</div>" +
 					"<div class=\"xkit-warning-plc-text\"><b>No Guarantee</b><br/>The XKit Guy is not making any guarantees about the reliability of this tool.</div>" +
@@ -113,7 +113,7 @@ XKit.extensions.post_limit_checker = new Object({
 			reset_str = reset_str.replace("minutes", "minute");
 		}
 
-		var m_html = 	"<div class=\"xkit-plc-division\">" +
+		var m_html = "<div class=\"xkit-plc-division\">" +
 					"<div class=\"xkit-plc-title\">Posts Made</div>" +
 					"<div class=\"xkit-plc-value\">" + posts_since_reset + "</div>" +
 				"</div>" +
