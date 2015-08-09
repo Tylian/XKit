@@ -8,11 +8,11 @@ trim_trailing_whitespace = true
 
 [*.{js,css}]
 indent_style = tab
-indent_side = 4
+indent_size = 4
 
 [{.*,package.json,.travis.yml}]
 indent_style = space
-indent_style = 2
+indent_size = 2
 
 [*.md]
 trim_trailing_whitespace = false
