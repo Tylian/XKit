@@ -1,5 +1,5 @@
 //* TITLE Tweaks **//
-//* VERSION 3.3.4 **//
+//* VERSION 3.3.5 **//
 //* DESCRIPTION Various little tweaks for your dashboard. **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS These are small little tweaks that allows you customize your dashboard. If you have used XKit 6, you will notice that some of the extensions have been moved here as options you can toggle. Keep in mind that some of the tweaks (the ones marked with a '*') can slow down your computer. **//
@@ -234,7 +234,7 @@ XKit.extensions.tweaks = new Object({
 			default: false,
 			value: false
 		},
-		"hide_customize": {
+		/*"hide_customize": {
 			text: "Hide Customize button on sidebar",
 			default: false,
 			value: false
@@ -263,7 +263,7 @@ XKit.extensions.tweaks = new Object({
 			text: "Hide my drafted posts count",
 			default: false,
 			value: false
-		},
+		}, */
 		"hide_radar": {
 			text: "Hide the Tumblr radar",
 			default: false,
