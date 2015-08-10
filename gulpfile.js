@@ -100,23 +100,21 @@ gulp.task('compress:chrome', ['copy:chrome'], function() {
 });
 
 gulp.task('copy:firefox', ['clean:firefox', 'lint'], function() {
-	var js = [].concat(
+	var src = [].concat(
 		paths.scripts.core,
+		paths.css.core,
 		paths.vendor
 	);
-	var css = paths.css.core;
+
 	var firefox = ['Firefox/**/*'];
 
 	var extension = gulp.src(firefox)
 		.pipe(gulp.dest(BUILD_DIR + '/firefox'));
 
-	var content = gulp.src(js)
-		.pipe(gulp.dest(BUILD_DIR + '/firefox/content'));
+	var content = gulp.src(src)
+		.pipe(gulp.dest(BUILD_DIR + '/firefox/data/xkit'));
 
-	var resources = gulp.src(css)
-		.pipe(gulp.dest(BUILD_DIR + '/firefox/content/resources'));
-
-	return merge(extension, content, resources);
+	return merge(extension, content);
 });
 
 gulp.task('compress:firefox', ['copy:firefox'], function(cb) {
