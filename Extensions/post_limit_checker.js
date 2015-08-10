@@ -1,5 +1,5 @@
 //* TITLE Post Limit Checker **//
-//* VERSION 0.2.2 **//
+//* VERSION 0.2.1 **//
 //* DESCRIPTION Are you close to the limit? **//
 //* DETAILS Shows you how many posts you can reblog today. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -9,7 +9,7 @@
 XKit.extensions.post_limit_checker = new Object({
 
 	running: false,
-	apiKey: XKit.api_key,
+	apiKey: "fuiKNFp9vQFvjLNvx4sUwti4Yb5yGutBN4Xh10LXZhhRKjWlV4",
 
 	run: function() {
 		this.running = true;

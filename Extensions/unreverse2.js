@@ -1,5 +1,5 @@
 //* TITLE Unreverse **//
-//* VERSION 1.0.2 **//
+//* VERSION 1.0 REV B **//
 //* DESCRIPTION Places the post buttons on top **//
 //* DETAILS This extension places the reblog/like/reply/etc buttons on the top of the post. It is unsupported, and might cause problems with your dashboard. Please use with caution. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -12,7 +12,7 @@ XKit.extensions.unreverse2 = new Object({
 
 	run: function() {
 
-		if (XKit.interface.where().inbox) { return; }
+		if (XKit.interface.where().inbox === true) { return; }
 
 		this.running = true;
 		XKit.tools.init_css("unreverse2");
