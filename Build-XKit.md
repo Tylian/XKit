@@ -16,13 +16,13 @@ See also: [`gulp lint`](#gulp-lint).
 
 Watches filesystem and lints files on change.
 
-See also: [`gulp lint:scripts`](gulp-lintscripts), [`gulp lint:css`](gulp-lintcss).
+See also: [`gulp lint:scripts`](#gulp-lintscripts), [`gulp lint:css`](#gulp-lintcss).
 
 #### `gulp clean`
 
 Top-level cleaning task.
 
-See also: [`gulp clean:build`](gulp-cleanbuild).
+See also: [`gulp clean:build`](#gulp-cleanbuild).
 
 #### `gulp clean:build`
 
@@ -44,7 +44,7 @@ Cleans the `build/firefox/` directory, deleting the previous build for Firefox.
 
 Top-level linting task.
 
-See also [`gulp lint:scripts`](gulp-lintscripts), [`gulp lint:css`](gulp-lintcss).
+See also [`gulp lint:scripts`](#gulp-lintscripts), [`gulp lint:css`](#gulp-lintcss).
 
 #### `gulp lint:scripts`
 
@@ -58,7 +58,7 @@ Lints CSS files using CSSLint and reports the output.
 
 Top-level build task.
 
-See also: [`gulp build:chrome`](gulp-buildchrome), [`gulp build:firefox`](gulp-buildfirefox).
+See also: [`gulp build:chrome`](#gulp-buildchrome), [`gulp build:firefox`](#gulp-buildfirefox).
 
 #### `gulp build:chrome`
 
@@ -68,28 +68,28 @@ Builds the Chrome browser extension from source and outputs it to `build/chrome/
 
 Builds the Chrome browser extension from source and outputs it to `build/chrome/`.
 
-See also: [`gulp build`](gulp-build), [`gulp build:chrome`](gulp-buildchrome), [`gulp compress:chrome`](gulp-compresschrome).
+See also: [`gulp build`](#gulp-build), [`gulp build:chrome`](#gulp-buildchrome), [`gulp compress:chrome`](#gulp-compresschrome).
 
 #### `gulp compress:chrome`
 
 Creates an archive, `new-xkit-x.x.x.zip`, from an existing Chrome source build and outputs it to `build/chrome/`.
 
-See also: [`gulp build`](gulp-build), [`gulp build:chrome`](gulp-buildchrome), [`gulp copy:chrome`](gulp-copychrome).
+See also: [`gulp build`](#gulp-build), [`gulp build:chrome`](#gulp-buildchrome), [`gulp copy:chrome`](#gulp-copychrome).
 
 #### `gulp build:firefox`
 
 Builds the Firefox browser extension from source and outputs it to `build/firefox/`.  Also creates a [Cross-platform Installer Module](https://developer.mozilla.org/en/docs/XPI), `@new-xkit-x.x.x.xpi`, and outputs it to `build/firefox/`.
 
-See also: [`gulp compress:firefox`](gulp-compressfirefox), [`gulp copy:firefox`](gulp-copyfirefox).
+See also: [`gulp compress:firefox`](#gulp-compressfirefox), [`gulp copy:firefox`](#gulp-copyfirefox).
 
 #### `gulp copy:firefox`
 
 Builds the Firefox browser extension from source and outputs it to `build/firefox/`.
 
-See also: [`gulp build`](gulp-build), [`gulp build:firefox`](gulp-buildfirefox), [`gulp compress:firefox`](gulp-compressfirefox).
+See also: [`gulp build`](#gulp-build), [`gulp build:firefox`](#gulp-buildfirefox), [`gulp compress:firefox`](#gulp-compressfirefox).
 
 #### `gulp compress:firefox`
 
 Creates a [Cross-platform Installer Module](https://developer.mozilla.org/en/docs/XPI), `@new-xkit-x.x.x.xpi`, from an existing Firefox source build and outputs it to `build/firefox/`.
 
-See also: [`gulp build`](gulp-build), [`gulp build:firefox`](gulp-buildfirefox), [`gulp copy:firefox`](gulp-copyfirefox).
+See also: [`gulp build`](#gulp-build), [`gulp build:firefox`](#gulp-buildfirefox), [`gulp copy:firefox`](#gulp-copyfirefox).
