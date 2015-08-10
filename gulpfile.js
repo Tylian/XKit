@@ -140,7 +140,7 @@ gulp.task('build:chrome', ['compress:chrome']);
 
 gulp.task('build:firefox', ['compress:firefox']);
 
-gulp.task('build:extensions', [], function(callback) {
+gulp.task('build:extensions', ['lint:scripts'], function(callback) {
 	var extBuilder = require('./Extensions/dist/extensions.js');
 	extBuilder.build('./Extensions', './Extensions/dist');
 	callback();
