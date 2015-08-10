@@ -55,6 +55,12 @@ gulp.task('clean:firefox', function(cb) {
 	del([BUILD_DIR + '/firefox'], cb);
 });
 
+gulp.task('clean:extensions', function(cb) {
+	del(['Extensions/dist/*.json',
+	     'Extensions/dist/page/gallery.json',
+	     'Extensions/dist/page/list.json'], cb);
+});
+
 gulp.task('lint:scripts', function() {
 	var src = [].concat(
 		paths.scripts.dev,
@@ -140,7 +146,7 @@ gulp.task('build:chrome', ['compress:chrome']);
 
 gulp.task('build:firefox', ['compress:firefox']);
 
-gulp.task('build:extensions', ['lint:scripts'], function(callback) {
+gulp.task('build:extensions', ['lint:scripts', 'clean:extensions'], function(callback) {
 	var extBuilder = require('./Extensions/dist/extensions.js');
 	extBuilder.build('./Extensions', './Extensions/dist');
 	callback();
