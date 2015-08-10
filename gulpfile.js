@@ -175,7 +175,11 @@ gulp.task('server', ['build:extensions'], function(callback) {
 
 	devServer.on('listening', function() {
 		var devAddress = devServer.address();
-		var devHost = devAddress.address === '0.0.0.0' ? 'localhost' : devAddress.address;
+		var devHost = devAddress.address;
+		if (devAddress.address === '0.0.0.0' ||
+		    devAddress.address === '::') {
+			devHost = 'localhost';
+		}
 		var url = 'http://' + devHost + ':' + devAddress.port;
 
 		log('Started dev server at ' + colors.magenta(url));
