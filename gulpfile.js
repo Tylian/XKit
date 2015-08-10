@@ -154,7 +154,7 @@ gulp.task('watch', function() {
 });
 
 // Server code from http://blog.overzealous.com/post/74121048393/why-you-shouldnt-create-a-gulp-plugin-or-how-to
-gulp.task('server', ['watch', 'build:extensions'], function(callback) {
+gulp.task('server', ['build:extensions'], function(callback) {
 	var log = gutil.log;
 	var colors = gutil.colors;
 
