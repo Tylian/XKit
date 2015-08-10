@@ -1,5 +1,5 @@
 //* TITLE Tweaks **//
-//* VERSION 3.3.3 **//
+//* VERSION 3.3.4 **//
 //* DESCRIPTION Various little tweaks for your dashboard. **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS These are small little tweaks that allows you customize your dashboard. If you have used XKit 6, you will notice that some of the extensions have been moved here as options you can toggle. Keep in mind that some of the tweaks (the ones marked with a '*') can slow down your computer. **//
@@ -220,12 +220,6 @@ XKit.extensions.tweaks = new Object({
 			default: false,
 			value: false
 		},
-		"show_old_new_bubble": {
-			text: "Remove the web search button and show a \"new\" bubble when tracked tags update",
-			default: false,
-			value: false,
-			experimental: true
-		},
 		"sep4": {
 			text: "Sidebar tweaks",
 			type: "separator",
@@ -427,20 +421,6 @@ XKit.extensions.tweaks = new Object({
 		
 		if (XKit.extensions.tweaks.preferences.full_width_gifs.value === true) {
 			XKit.interface.post_window_listener.add("tweaks-full-width-gifs", XKit.extensions.tweaks.full_width_gifs_do_first);
-		}
-	
-
-		if (XKit.extensions.tweaks.preferences.show_old_new_bubble.value === true) {
-			// only need to do this if the ( tumblr | web ) button is there
-			if ($(".search_query_btn_web").size() > 0) {
-				// hide the ( tumblr | web ) buttons
-				XKit.extensions.tweaks.add_css(".search_query_btn_tumblr, .search_query_btn_web { display: none !important }", "xkit_tweaks_show_old_new_bubble");
-				// "X new posts" in the tracked tags is always a <small> tag
-			}
-			if ($(".tracked_tags small").size() > 0) {
-				XKit.extensions.tweaks.add_css("div#new_post_in_tracked_tags_bubble { color: rgba(0,0,0,0.33) !important; background: rgba(255,255,255,0.18); display: inline-block; font-size: 11px; float: right; margin-top: 3px; margin-right: 3px; height: 22px; width: 36px; line-height: 22px; }", "blah");
-				$(".search_query_submit").after('<div id="new_post_in_tracked_tags_bubble" class="search_query_btn pill">new</div>');
-			}
 		}
 
 		if (XKit.extensions.tweaks.preferences.show_top_arrow.value) {
