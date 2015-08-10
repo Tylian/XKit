@@ -21,7 +21,7 @@ XKit.extensions.lang_english.xkit_preferences = new Object({
 		"notifications_title": "Notifications",
 		"language": "Language Settings",
 		"reset_xkit": "Reset XKit",
-		"config_data": "Export Configuation",
+		"config_data": "Export Configuration",
 		"news_notifications": "News Notifications",
 		"update_notifications": "Update Notifications",
 		"update_all": "Update All",
@@ -2326,14 +2326,14 @@ XKit.extensions.xkit_preferences = new Object({
 				'<div class="xkit-others-panel">' +
 				'<div class="title">Export Configuration</div>' +
 				'<div class="description">' +
-					"This panel lets you export parts of your XKit configuation for others to view. "+
+					"This panel lets you export parts of your XKit configuration for others to view. "+
 					"Including links to one of these when you submit a bug report will help us fix your problem sooner. "+
 				"</div>" +
 				'<div class="bottom-part">' +
 					'Information about what extensions you have installed, almost always required: ' +
 					'<div id="xkit-panel-extension-info" class="xkit-button block">Extension Info Export</div><br>' +
-					'This link will export your entire xkit configuation data: '+
-					'<div id="xkit-panel-full-config" class="xkit-button block">Full Configuation Export</div>' +
+					'This link will export your entire xkit configuration data: '+
+					'<div id="xkit-panel-full-config" class="xkit-button block">Full Configuration Export</div>' +
 					'This includes information that may be sensitive, including your tumblr urls, lists of blacklisted keywords, and more. '+
 					'Think carefully before sharing this information.'+
 				"</div>" +
