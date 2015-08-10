@@ -681,7 +681,7 @@ XKit.extensions.tweaks = new Object({
 		}
 
 		var call_update_rect = false;
-		$(".post").not(".xkit-tweaks-checked-for-likes").each(function() {
+		$(".posts .post").not(".xkit-tweaks-checked-for-likes").each(function() {
 			$(this).addClass("xkit-tweaks-checked-for-likes");
 			if ($(this).find(".post_control.like").hasClass("liked")) {
 				$(this).addClass("is_liked");

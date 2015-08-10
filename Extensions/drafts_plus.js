@@ -1,5 +1,5 @@
 //* TITLE Drafts+ **//
-//* VERSION 0.2 REV B **//
+//* VERSION 0.2.1 **//
 //* DESCRIPTION Enhancements for Drafts page **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//
@@ -142,7 +142,7 @@ XKit.extensions.drafts_plus = new Object({
 
 		console.log("drafts_plus -> Adding overlays...");
 
-		$(".post").not(".drafts-plus-overlay-done").not(".radar").each(function() {
+		$(".posts .post").not(".drafts-plus-overlay-done").not(".radar").each(function() {
 
 			$(this).addClass("drafts-plus-overlay-done");
 
@@ -353,7 +353,7 @@ XKit.extensions.drafts_plus = new Object({
 	stop_mass_editor: function() {
 
 		XKit.tools.remove_css("drafts_plus_mass_editor");
-		$(".post").removeClass("drafts-plus-overlay-done");
+		$(".posts .post").removeClass("drafts-plus-overlay-done");
 		$(".xkit-drafts-plus-overlay").remove();
 
 	},

@@ -1,5 +1,5 @@
 //* TITLE Separator **//
-//* VERSION 1.1.0 **//
+//* VERSION 1.1.1 **//
 //* DESCRIPTION Where were we again? **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS A simple extension that puts a divider showing where you left off on your dashboard. **//
@@ -78,7 +78,7 @@ XKit.extensions.separator = new Object({
 
 		var last_loaded_post = XKit.storage.get("separator","last_post","");
 
-		var current_last_post = $("body").find(".post").not("#tumblr_radar").not(".new_post_buttons").first();
+		var current_last_post = $("body").find(".posts .post").not("#tumblr_radar").not(".new_post_buttons").first();
 
 		//$(last_loaded_post).css("background","red");
 
@@ -106,7 +106,7 @@ XKit.extensions.separator = new Object({
 					if (find_closest) {
 						XKit.extensions.separator.find_closest(100);
 					} else {
-						var current_last = $(".post").first();
+						var current_last = $(".posts .post").first();
 						current_last_id = $(current_last).attr('data-post-id');
 						if (current_last_id < XKit.extensions.separator.check_for) {
 							XKit.extensions.separator.find_closest(100);
@@ -136,7 +136,7 @@ XKit.extensions.separator = new Object({
 
 		if (distance >= 5000000000) { return; }
 
-		$(".post").not("#new_post").each(function() {
+		$(".posts .post").not("#new_post").each(function() {
 
 			var m_id = $(this).attr('data-post-id');
 
@@ -167,7 +167,7 @@ XKit.extensions.separator = new Object({
 
 	check_if_passed: function() {
 
-		var current_last = $(".post").last();
+		var current_last = $(".posts .post").last();
 		current_last_id = $(current_last).attr('data-post-id');
 
 		// alert("checking for: " + XKit.extensions.separator.check_for + "\n\n" + "current last: " + current_last_id);

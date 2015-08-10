@@ -1,5 +1,5 @@
 //* TITLE TagViewer **//
-//* VERSION 0.3 REV a **//
+//* VERSION 0.4 REV a **//
 //* DESCRIPTION View post tags easily **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS This extension allows you to see what tags people added to a post while they reblogged it. It also provides access to the post, and to Tumblr search pages to find similar posts.<br><br>Based on the work of <a href='http://inklesspen.tumblr.com'>inklesspen</a> **//
@@ -27,7 +27,7 @@ XKit.extensions.tagviewer = new Object({
 
 		this.running = true;
 
-		if ($(".post").length > 0) {
+		if ($(".posts .post").length > 0) {
 			XKit.tools.init_css("tagviewer");
 			XKit.interface.create_control_button("xkit-tagviewer", this.button_icon, "TagViewer", "");
 			XKit.extensions.tagviewer.init();
