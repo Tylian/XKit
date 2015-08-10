@@ -1,6 +1,6 @@
 //* TITLE       Retags **//
 //* DEVELOPER   alexhong **//
-//* VERSION     0.6.8 **//
+//* VERSION     0.6.9 **//
 //* DESCRIPTION Adds tags to reblog notes **//
 //* FRAME       false **//
 //* SLOW        false **//
@@ -8,7 +8,7 @@
 
 XKit.extensions.retags = {
 	running: false,
-	api_key: '3DFxEZm0tGISOmdvWe9Fl1QsQMo1LFqEatnc8GQ68wgF1YTZ4w',
+	api_key: XKit.api_key,
 	selectors: '.reblog,.is_reblog,.notification_reblog',
 	blog_name: "",
 
