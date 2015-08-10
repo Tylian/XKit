@@ -2,17 +2,32 @@
 
 var fs = require('fs');
 
+/**
+ * Build the extensions in `extensionPath`, writing the distribution json files
+ * into `distributionPath`.
+ * @param {String} extensionPath
+ * @param {String} distributionPath
+ * @exported
+ */
 function build(extensionPath, distributionPath) {
 	var builder = new ExtensionBuilder(extensionPath, distributionPath);
 	builder.processExtensions();
 }
 exports.build = build;
 
+/**
+ * @constructor
+ * @param {String} extensionPath - Path from which to read extension files
+ * @param {String} distributionPath - Path in whichw to write extension distribution files
+ */
 function ExtensionBuilder(extensionPath, distributionPath) {
 	this.extensionPath = extensionPath;
 	this.distributionPath = distributionPath;
 }
 
+/**
+ * Process all extensions found in `extensionPath`
+ */
 ExtensionBuilder.prototype.processExtensions = function() {
 	var extensionFiles = fs.readdirSync(this.extensionPath);
 	var extensions = [];
@@ -37,24 +52,48 @@ ExtensionBuilder.prototype.processExtensions = function() {
 	this.writeListFile(extensions);
 };
 
+/**
+ * Read a file in the extensions directory
+ * @param {String} path - Relative path of file in directory
+ * @return {String} content in file
+ */
 ExtensionBuilder.prototype.readExtensionFile = function(path) {
 	return fs.readFileSync(this.extensionPath + '/' + path, {
 		encoding: 'utf8'
 	});
 };
 
+/**
+ * Write a file in the distribution directory
+ * @param {String} path - Relative path of file in directory
+ * @param {String} content - content in file
+ */
 ExtensionBuilder.prototype.writeDistributionFile = function(path, content) {
 	fs.writeFileSync(this.distributionPath + '/' + path, content);
 };
 
+/**
+ * Write a file in the page directory, a child of the distribution directory
+ * @param {String} path - Relative path of file in directory
+ * @param {String} content - content in file
+ */
 ExtensionBuilder.prototype.writePageFile = function(path, content) {
 	this.writeDistributionFile('page/' + path, content);
 };
 
+/**
+ * @param {String} path - Relative path of extension file in directory
+ * @return {Boolean} Whether the extension file exists
+ */
 ExtensionBuilder.prototype.existsExtensionFile = function(path) {
 	return fs.existsSync(this.extensionPath + '/' + path);
 };
 
+/**
+ * @param {String} script - contents of extension main script file (extension_id.js)
+ * @param {String} attribute - attribute to attempt to read from the script
+ * @return {String?} value of attribute
+ */
 function getScriptAttribute(script, attribute) {
 	attribute = attribute.toUpperCase();
 	// Match the attribute followed by its value wrapped in /*	**/
@@ -66,6 +105,10 @@ function getScriptAttribute(script, attribute) {
 	return match[1];
 }
 
+/**
+ * Process a single extension
+ * @param {String} extensionId - ID of the extension (`extension_id.js`)
+ */
 ExtensionBuilder.prototype.processExtension = function(extensionId) {
 	// Each extension has the following fields
 	// {string} script - source of the js file
@@ -115,6 +158,10 @@ ExtensionBuilder.prototype.processExtension = function(extensionId) {
 	return extension;
 };
 
+/**
+ * Generate and write the gallery.json file
+ * @param {Array<Object>} extensions - Extensions to include in the gallery
+ */
 ExtensionBuilder.prototype.writeGalleryFile = function(extensions) {
 	var gallery = {server: 'up', extensions: []};
 	extensions.forEach(function(extension) {
@@ -151,6 +198,10 @@ ExtensionBuilder.prototype.writeGalleryFile = function(extensions) {
 	this.writePageFile('gallery.json', JSON.stringify(gallery));
 };
 
+/**
+ * Generate and write the list.json file
+ * @param {Array<Object>} extensions - Extensions to include in the list
+ */
 ExtensionBuilder.prototype.writeListFile = function(extensions) {
 	var list = {server: 'up', extensions: []};
 	extensions.forEach(function(extension) {
