@@ -82,7 +82,7 @@ XKit.extensions.show_more = new Object({
 		if (document.location.href.indexOf('www.tumblr.com/follow/') != -1)
 			return;
 
-		if (XKit.interface.where().inbox === true) {
+		if (XKit.interface.where().inbox) {
 			XKit.extensions.show_more.init_inbox_asks();
 		} else {
 			if ($("#dashboard_ask_template").length > 0) {
@@ -90,7 +90,7 @@ XKit.extensions.show_more = new Object({
 			}
 		}
 
-		if (this.preferences.use_classic_menu.value === true) {
+		if (this.preferences.use_classic_menu.value) {
 
 			XKit.tools.add_css(".tumblelog_popover_v1, .tumblelog_popover_v2, .tumblelog_popover { display: none !important; }", "show_more_classic_menu");
 			$(document).on('mouseover', '.post_avatar_link', XKit.extensions.show_more.enable_classic_menu);
@@ -158,7 +158,7 @@ XKit.extensions.show_more = new Object({
 
 		if (XKit.extensions.show_more.popup_data.show_ask == 1 ||XKit.extensions.show_more.popup_data.asks == 1) {
 			var anon_status = "0";
-			if (XKit.extensions.show_more.popup_data.ask_allows_anonymous === true || XKit.extensions.show_more.popup_data.anonymous_asks === true ||XKit.extensions.show_more.popup_data.ask_allows_anonymous === 1 || XKit.extensions.show_more.popup_data.anonymous_asks === 1) {
+			if (XKit.extensions.show_more.popup_data.ask_allows_anonymous || XKit.extensions.show_more.popup_data.anonymous_asks || XKit.extensions.show_more.popup_data.ask_allows_anonymous === 1 || XKit.extensions.show_more.popup_data.anonymous_asks === 1) {
 				anon_status = "1";
 			}
 			if (user_url === "xkit-extension" || user_url === "new-xkit-extension") {
@@ -178,7 +178,7 @@ XKit.extensions.show_more = new Object({
 			m_html = m_html + "<a data-tumblelog-name=\"" + user_url + "\" class=\"xkit-follow xkit-follow-" + user_url + "\">Follow</a>";
 		}
 
-		if (XKit.extensions.show_more.preferences.show_magnetizer.value === true) {
+		if (XKit.extensions.show_more.preferences.show_magnetizer.value) {
 
 			if (avatar_url !== "" && typeof avatar_url !== "undefined") {
 				m_html = m_html + "<div data-avatar-url=\"" + avatar_url + "\" class=\"xkit-magnetizer xkit-show-more-item xkit-avatar-magnetizer-new xkit-avatar-magnetizer-button-" + user_url + "\" data-user-url=\"" + user_url + "\">" +
@@ -188,13 +188,13 @@ XKit.extensions.show_more = new Object({
 
 		}
 
-		if (XKit.extensions.show_more.preferences.show_archive.value === true) {
+		if (XKit.extensions.show_more.preferences.show_archive.value) {
 
 			m_html = m_html + "<a target=\"_blank\" href=\"http://" + user_url + ".tumblr.com/archive\" class=\"xkit-archive archive\">Archive</a>";
 
 		}
 
-		if (XKit.extensions.show_more.preferences.show_submits.value === true && XKit.extensions.show_more.submit_available[user_url] === true) {
+		if (XKit.extensions.show_more.preferences.show_submits.value && XKit.extensions.show_more.submit_available[user_url]) {
 
 			var m_submit_url = "http://" + user_url + ".tumblr.com/submit";
 
@@ -202,7 +202,7 @@ XKit.extensions.show_more = new Object({
 
 		}
 
-		if (XKit.extensions.show_more.preferences.show_likes.value === true && XKit.extensions.show_more.likes_available[user_url] === true) {
+		if (XKit.extensions.show_more.preferences.show_likes.value && XKit.extensions.show_more.likes_available[user_url]) {
 
 			var m_likes_url = "https://www.tumblr.com/liked/by/" + user_url;
 
@@ -404,8 +404,8 @@ XKit.extensions.show_more = new Object({
 
 		var m_obj = $(e.target);
 
-		if (m_obj.hasClass("post_avatar_link") !== true) {
-			while (m_obj.hasClass("post_avatar_link") !== true) {
+		if (!m_obj.hasClass("post_avatar_link")) {
+			while (!m_obj.hasClass("post_avatar_link")) {
 				m_obj = m_obj.parent();
 			}
 		}
@@ -497,8 +497,8 @@ XKit.extensions.show_more = new Object({
 
 		var m_obj = $(e.target);
 
-		if (m_obj.hasClass("post_avatar_link") !== true) {
-			while (m_obj.hasClass("post_avatar_link") !== true) {
+		if (!m_obj.hasClass("post_avatar_link")) {
+			while (!m_obj.hasClass("post_avatar_link")) {
 				m_obj = m_obj.parent();
 			}
 		}
@@ -545,7 +545,7 @@ XKit.extensions.show_more = new Object({
 
 		}
 
-		if (XKit.extensions.show_more.preferences.show_magnetizer.value === true) {
+		if (XKit.extensions.show_more.preferences.show_magnetizer.value) {
 
 			if (avatar_url !== "" && typeof avatar_url !== "undefined") {
 				m_html = m_html + "<li>" +
@@ -558,7 +558,7 @@ XKit.extensions.show_more = new Object({
 		}
 
 
-		if (XKit.extensions.show_more.preferences.show_submits.value === true && XKit.extensions.show_more.submit_available[user_url] === true) {
+		if (XKit.extensions.show_more.preferences.show_submits.value && XKit.extensions.show_more.submit_available[user_url]) {
 
 			var m_likes_url = "http://" + user_url + ".tumblr.com/submit";
 
@@ -608,7 +608,7 @@ XKit.extensions.show_more = new Object({
 		$('.tumblelog_menu_button').unbind('click', XKit.extensions.show_more.add_links);
 		$('.tumblelog_menu_button').bind('click', XKit.extensions.show_more.add_links);
 
-		if (XKit.extensions.show_more.preferences.show_submits.value === true) {
+		if (XKit.extensions.show_more.preferences.show_submits.value) {
 
 			var submit_delay_count = 0;
 
@@ -618,8 +618,8 @@ XKit.extensions.show_more = new Object({
 
 				var username = $(this).parent().attr('data-tumblelog-name');
 
-				if (XKit.extensions.show_more.submit_available[username] === true ||
-					XKit.extensions.show_more.submit_available[username] === false) {
+				if (XKit.extensions.show_more.submit_available[username] ||
+					!XKit.extensions.show_more.submit_available[username]) {
 					return;
 				}
 
@@ -649,7 +649,7 @@ XKit.extensions.show_more = new Object({
 
 		}
 
-		if (XKit.extensions.show_more.preferences.enable_anon.value === true) {
+		if (XKit.extensions.show_more.preferences.enable_anon.value) {
 
 			var anon_delay_count = 0;
 
@@ -659,8 +659,8 @@ XKit.extensions.show_more = new Object({
 
 				var username = $(this).parent().attr('data-tumblelog-name');
 
-				if (XKit.extensions.show_more.anon_available[username] === true ||
-					XKit.extensions.show_more.anon_available[username] === false) {
+				if (XKit.extensions.show_more.anon_available[username] ||
+					!XKit.extensions.show_more.anon_available[username]) {
 					return;
 				}
 
@@ -692,7 +692,7 @@ XKit.extensions.show_more = new Object({
 
 		}
 
-		if (XKit.extensions.show_more.preferences.show_likes.value === true) {
+		if (XKit.extensions.show_more.preferences.show_likes.value) {
 
 			var m_delay_count = 0;
 
@@ -703,8 +703,8 @@ XKit.extensions.show_more = new Object({
 
 				var username = $(this).parent().attr('data-tumblelog-name');
 
-				if (XKit.extensions.show_more.likes_available[username] === true ||
-					XKit.extensions.show_more.likes_available[username] === false) {
+				if (XKit.extensions.show_more.likes_available[username] ||
+					!XKit.extensions.show_more.likes_available[username]) {
 					return;
 				}
 
@@ -747,13 +747,13 @@ XKit.extensions.show_more = new Object({
 		$(menu_box).find(".xkit-submit").parent().remove();
 		$(menu_box).find(".xkit-likes").parent().remove();
 
-		if (XKit.extensions.show_more.anon_available[user_url] === true) {
+		if (XKit.extensions.show_more.anon_available[user_url]) {
 
 			$(menu_box).find(".tumblelog_menu_link.ask").attr('data-anonymous-ask','1');
 
 		}
 
-		if (XKit.extensions.show_more.preferences.show_likes.value === true && XKit.extensions.show_more.likes_available[user_url] === true) {
+		if (XKit.extensions.show_more.preferences.show_likes.value && XKit.extensions.show_more.likes_available[user_url]) {
 
 			var m_likes_url = "https://www.tumblr.com/liked/by/" + user_url;
 
@@ -765,7 +765,7 @@ XKit.extensions.show_more = new Object({
 
 		}
 
-		if (XKit.extensions.show_more.preferences.show_submits.value === true && XKit.extensions.show_more.submit_available[user_url] === true) {
+		if (XKit.extensions.show_more.preferences.show_submits.value && XKit.extensions.show_more.submit_available[user_url]) {
 
 			var m_submit_url = "http://" + user_url + ".tumblr.com/submit";
 
@@ -779,7 +779,7 @@ XKit.extensions.show_more = new Object({
 
 		$(menu_box).find(".xkit-avatar-magnetizer").parent().remove();
 
-		if (XKit.extensions.show_more.preferences.show_magnetizer.value === true) {
+		if (XKit.extensions.show_more.preferences.show_magnetizer.value) {
 
 			var avatar_url = $(menu_box).parentsUntil(".post_avatar").parent().find(".post_avatar_image").attr('src');
 
