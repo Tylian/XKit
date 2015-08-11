@@ -21,7 +21,7 @@ finding something going wrong. There's a long list of known issues
 Check out [the wiki page](https://github.com/new-xkit/XKit/wiki/Writing-a-New-Extension)!
 
 ## Develop XKit
-Review the project prerequisites and learn how to build XKit from source [over on the wiki](/wiki/Build-XKit).
+Review the project prerequisites and learn how to build XKit from source [over on the wiki](https://github.com/new-xkit/XKit/wiki/Build-XKit).
 
 ### Quickstart
 In your clone of this repository run:
@@ -37,3 +37,5 @@ gulp build
 ```
 
 Builds can be found in the `build/` directory.
+
+For a list of available build tasks, see [the documentation](https://github.com/new-xkit/XKit/wiki).
