@@ -476,10 +476,8 @@ XKit.extensions.outbox = new Object({
 
 		}
 		if ($('.no_posts_found').length > 0) {
-			//There's no #posts element if inbox is empty; need to manually create receptacle
-			var receptacle = $('.no_posts_found');
-			receptacle.html("");
-			receptacle.attr("id", "posts").removeClass("no_posts_found").addClass("posts");
+			$('.no_posts_found').after("<div id='posts' class='posts'></div>");
+			$('.no_posts_found').hide();
 		}
 		$("#posts").prepend(m_html);
 
@@ -673,6 +671,9 @@ XKit.extensions.outbox = new Object({
 
 		$(".by-xkit-outbox").parent().remove();
 		$("#xkit-outbox-no-posts").remove();
+		if ($('.no_posts_found').length > 0) {
+			$('.no_posts_found').show();
+		}
 		XKit.tools.remove_css("outbox_additional");
 		$(document).off('click','.xkit-outbox-delete', XKit.extensions.outbox.delete);
 
