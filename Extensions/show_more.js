@@ -65,10 +65,7 @@ XKit.extensions.show_more = new Object({
 	init_inbox_asks: function() {
 
 		var askbox_template = XKit.storage.get("show_more","inbox_ask_template","");
-		if (askbox_template !== "") {
-			// console.log("Found Inbox Ask Template!");
-		} else {
-			// console.log("Template not found, quitting init_inbox_asks.");
+		if (askbox_template === "") {
 			return;
 		}
 
@@ -92,18 +89,6 @@ XKit.extensions.show_more = new Object({
 				XKit.storage.set("show_more","inbox_ask_template", $("#dashboard_ask_template")[0].outerHTML);
 			}
 		}
-
-		/*if (this.preferences.hide_previews.value === true) {
-
-			XKit.tools.add_css(".popover .recent_posts { display: none; } .popover .tumblelog_info { border-radius: 6px; border-top: 0px; }", "show_more_hide_previews");
-
-		}
-
-		if (this.preferences.hide_follow.value === true) {
-
-			XKit.tools.add_css(".popover .follow_nav { display: none; }", "show_more_hide_follows");
-
-		}*/
 
 		if (this.preferences.use_classic_menu.value === true) {
 
@@ -153,8 +138,6 @@ XKit.extensions.show_more = new Object({
 		e.stopPropagation();
 
 		var m_obj = $(e.target);
-
-		// console.log(XKit.extensions.show_more.popup_data);
 
 		if (typeof XKit.extensions.show_more.popup_data.avatar_url === "undefined") {
 			return;
@@ -227,7 +210,6 @@ XKit.extensions.show_more = new Object({
 
 		}
 
-		//// console.log("EH? " + XKit.extensions.show_more.custom_menu_extension);
 		if (XKit.extensions.show_more.custom_menu_extension.length >= 0) {
 
 			var m_data = XKit.extensions.show_more.popup_data;
@@ -260,8 +242,6 @@ XKit.extensions.show_more = new Object({
 		$("#xkit-classic-user-menu").css("top", m_top + "px");
 		$("#xkit-classic-user-menu").css("left", m_left + "px");
 
-
-			// console.log("Attaching bindings...");
 
 		setTimeout(function() {
 
@@ -323,7 +303,6 @@ XKit.extensions.show_more = new Object({
 				$(".tumblelog_popover_glass").trigger('click');
 				setTimeout(function() { $(".tumblelog_popover_glass").trigger('click'); }, 10);
 				$(".popover").hide();
-				//$("#glass_overlay").removeClass("show");
 
 			});
 
@@ -368,7 +347,6 @@ XKit.extensions.show_more = new Object({
 
 	unfollow_person: function(user_url, m_parent) {
 
-		// console.log("Unfollowing " + user_url);
 		var m_data = "form_key=" + XKit.interface.form_key() + "&data%5Btumblelog%5D=" + user_url + "&data%5Bsource%5D=FOLLOW_SOURCE_IFRAME";
 		GM_xmlhttpRequest({
 			method: "POST",
@@ -425,8 +403,6 @@ XKit.extensions.show_more = new Object({
 	enable_classic_menu: function(e) {
 
 		var m_obj = $(e.target);
-
-		//// console.log("Trying to add: " + XKit.extensions.show_more.popup_data);
 
 		if (m_obj.hasClass("post_avatar_link") !== true) {
 			while (m_obj.hasClass("post_avatar_link") !== true) {
@@ -594,7 +570,6 @@ XKit.extensions.show_more = new Object({
 
 				}
 
-				// console.log(XKit.extensions.show_more.custom_menu_extension);
 				if (XKit.extensions.show_more.custom_menu_extension.length >= 0) {
 
 					var m_data = XKit.extensions.show_more.popup_data;
@@ -616,8 +591,6 @@ XKit.extensions.show_more = new Object({
 
 		$(m_parent).append(m_html);
 
-		// console.log(m_html);
-
 		$(".xkit-avatar-magnetizer-button-" + user_url).unbind('click');
 		$(".xkit-avatar-magnetizer-button-" + user_url).bind('click', function() {
 
@@ -625,7 +598,6 @@ XKit.extensions.show_more = new Object({
 			$(".tumblelog_popover_glass").trigger('click');
 			setTimeout(function() { $(".tumblelog_popover_glass").trigger('click'); }, 10);
 			$(".popover").hide();
-			//$("#glass_overlay").removeClass("show");
 
 		});
 
@@ -822,8 +794,6 @@ XKit.extensions.show_more = new Object({
 		}
 
 
-		//$(menu_box).find(".open_in_tab").parent().before(m_html);
-
 		$(menu_box).find(".tumblelog_menu_popover").append(m_html);
 
 		var m_target = e.target;
@@ -835,7 +805,6 @@ XKit.extensions.show_more = new Object({
 			setTimeout(function() { $("#glass_overlay").trigger('click'); }, 10);
 
 			$(m_target).trigger('click');
-			//$("#glass_overlay").removeClass("show");
 
 		});
 
