@@ -169,8 +169,8 @@ gulp.task('server', ['build:extensions'], function(callback) {
 	devApp.use(connectStatic('.'));
 
 	// Automatically rebuild Extensions on script changes
-	gulp.watch('**/*.js', ['build:extensions']);
-	gulp.watch('**/*.css', ['build:extensions']);
+	gulp.watch('Extensions/**/*.js', ['build:extensions']);
+	gulp.watch('Extensions/**/*.css', ['build:extensions']);
 
 	var devServer = http.createServer(devApp).listen(31337);
 
