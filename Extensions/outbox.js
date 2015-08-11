@@ -673,6 +673,7 @@ XKit.extensions.outbox = new Object({
 		$("#xkit-outbox-no-posts").remove();
 		if ($('.no_posts_found').length > 0) {
 			$('.no_posts_found').show();
+			$('#posts').remove();
 		}
 		XKit.tools.remove_css("outbox_additional");
 		$(document).off('click','.xkit-outbox-delete', XKit.extensions.outbox.delete);
