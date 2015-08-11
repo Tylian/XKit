@@ -1,6 +1,7 @@
 /* jshint esnext: true */
 
 var fs = require('fs');
+var path = require('path');
 
 /**
  * Build the extensions in `extensionPath`, writing the distribution json files
@@ -57,36 +58,36 @@ ExtensionBuilder.prototype.processExtensions = function() {
  * @param {String} path - Relative path of file in directory
  * @return {String} content in file
  */
-ExtensionBuilder.prototype.readExtensionFile = function(path) {
-	return fs.readFileSync(this.extensionPath + '/' + path, {
+ExtensionBuilder.prototype.readExtensionFile = function(relPath) {
+	return fs.readFileSync(path.join(this.extensionPath, relPath), {
 		encoding: 'utf8'
 	});
 };
 
 /**
  * Write a file in the distribution directory
- * @param {String} path - Relative path of file in directory
+ * @param {String} relPath - Relative path of file in directory
  * @param {String} content - content in file
  */
-ExtensionBuilder.prototype.writeDistributionFile = function(path, content) {
-	fs.writeFileSync(this.distributionPath + '/' + path, content);
+ExtensionBuilder.prototype.writeDistributionFile = function(relPath, content) {
+	fs.writeFileSync(path.join(this.distributionPath, relPath), content);
 };
 
 /**
  * Write a file in the page directory, a child of the distribution directory
- * @param {String} path - Relative path of file in directory
+ * @param {String} relPath - Relative path of file in directory
  * @param {String} content - content in file
  */
-ExtensionBuilder.prototype.writePageFile = function(path, content) {
-	this.writeDistributionFile('page/' + path, content);
+ExtensionBuilder.prototype.writePageFile = function(relPath, content) {
+	this.writeDistributionFile(path.join('page', relPath), content);
 };
 
 /**
- * @param {String} path - Relative path of extension file in directory
+ * @param {String} relPath - Relative path of extension file in directory
  * @return {Boolean} Whether the extension file exists
  */
-ExtensionBuilder.prototype.existsExtensionFile = function(path) {
-	return fs.existsSync(this.extensionPath + '/' + path);
+ExtensionBuilder.prototype.existsExtensionFile = function(relPath) {
+	return fs.existsSync(path.join(this.extensionPath,  relPath));
 };
 
 /**
