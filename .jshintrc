@@ -4,6 +4,9 @@
     "devel"         : false,
     "jquery"        : true,
     "nonstandard"   : true,
+    "laxbreak"      : true,
+    "lastsemic"     : true,
+    "indent"        : 1,
     "globals": {
       "console"             : true,
       "document"            : true,

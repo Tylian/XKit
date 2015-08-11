@@ -29,12 +29,6 @@ XKit = {
 		XKit.init_flags();
 		// If not in an iframe
 		if ((window.window === window.top) && document.location.href.indexOf("://www.tumblr.com/dashboard/iframe?") === -1) {
-			if (!document.location.href.match(/https?:\/\/(www.)?tumblr.com/)) {
-				// We are likely on a blog's page, like http://new-xkit-extension.tumblr.com
-				// For now it makes the most sense to just quit here because blogs
-				// should be moderately private and are hard to interface with
-				return;
-			}
 			XKit.page.standard = true;
 			XKit.init_extension();
 		} else {
@@ -43,7 +37,7 @@ XKit = {
 				XKit.page.blog_frame = true;
 			}
 			if (document.location.href.indexOf("://www.tumblr.com/dashboard/iframe?") !== -1 ||
-			    document.location.href.indexOf("://secure.assets.tumblr.com/assets/html/iframe/") !== -1) {
+					document.location.href.indexOf("://secure.assets.tumblr.com/assets/html/iframe/") !== -1) {
 				XKit.page.blog_frame = true;
 			}
 			if ((document.location.href.indexOf("://www.tumblr.com/") !== -1 && document.location.href.indexOf("/peepr") !== -1) || document.location.href.indexOf("://www.tumblr.com/indash_blog/") !== -1) {
@@ -236,7 +230,7 @@ XKit = {
 		max_try_count: 5,
 		// TODO: implement as module, lose most of this code
 		github_fetch: function(path, callback, fallback) {
-			var url = 'https://hobinjk.github.io/XKit/Extensions/dist/' + path;
+			var url = 'https://new-xkit.github.io/XKit/Extensions/dist/' + path;
 			GM_xmlhttpRequest({
 				method: "GET",
 				url: url,
@@ -252,7 +246,7 @@ XKit = {
 					} catch(e) {
 						// Server returned bad thingy.
 						XKit.console.add("Unable to download '" + path +
-						                 "', server returned non-json object." + e.message);
+										 "', server returned non-json object." + e.message);
 						return fallback();
 					}
 					callback(mdata);
@@ -284,6 +278,14 @@ XKit = {
 				}
 				if (page === 'themes/index.php') {
 					XKit.download.github_fetch('page/themes.json', callback, fallback);
+					return;
+				}
+				if (page === 'paperboy/index.php') {
+					XKit.download.github_fetch('page/paperboy.json', callback, fallback);
+					return;
+				}
+				if (page === 'framework_version.php') {
+					XKit.download.github_fetch('page/framework_version.json', callback, fallback);
 					return;
 				}
 			}
@@ -698,7 +700,7 @@ XKit = {
 				m_class = m_class + " sticky";
 			}
 
-			var m_html = 	"<div class=\"xkit-notification " + m_class + "\" id=\"xkit_notification_" + XKit.notifications.count + "\">" +
+			var m_html = "<div class=\"xkit-notification " + m_class + "\" id=\"xkit_notification_" + XKit.notifications.count + "\">" +
 								message +
 							"</div>";
 
@@ -735,15 +737,15 @@ XKit = {
 			};
 
 			if ($("#xkit-control-panel-icon").length > 0) {
-				 m_return.html = m_return.html + "<li>XKit Next found</li>";
-				 m_return.fatal = true;
-				 m_return.count++;
+				m_return.html = m_return.html + "<li>XKit Next found</li>";
+				m_return.fatal = true;
+				m_return.count++;
 			}
 
 			if ($("#xkit_top_button").length > 0) {
-				 m_return.html =	m_return.html + "<li>XKit 5.x/6.x found</li>";
-				 m_return.fatal = true;
-				 m_return.count++;
+				m_return.html =	m_return.html + "<li>XKit 5.x/6.x found</li>";
+				m_return.fatal = true;
+				m_return.count++;
 			}
 
 			if ($("#missinge_button").length > 0) {
@@ -752,26 +754,16 @@ XKit = {
 			}
 
 			if ($("body").hasClass("dashboard_index") === true) {
-
 				var conflicting_extension = false;
-
-				/*if ($("#dashboard_controls_open_blog").length === 0) {
-					conflicting_extension = true;
-				}*/
 
 				if ($("#bt_NewPost").length > 0) {
 					conflicting_extension = true;
 				}
 
-				/*if ($(".likes").length === 0 || $(".following").length === 0 || $(".spotlight").length === 0) {
-					conflicting_extension = true;
-				}*/
-
 				if (conflicting_extension) {
 					m_return.html =	m_return.html + "<li>Unknown extension found (removal optional)</li>";
 					m_return.count++;
 				}
-
 			}
 
 			if (m_return.fatal === true) {
@@ -844,7 +836,7 @@ XKit = {
 					var channels = obj.Context.userinfo.channels;
 
 					for (var item in channels) {
-						 m_blogs.push(channels[item].name);
+						m_blogs.push(channels[item].name);
 					}
 
 					XKit.tools.set_setting('xkit_cached_blogs', m_blogs.join(';'));
@@ -865,7 +857,7 @@ XKit = {
 			} else {
 				var cachedBlogs = XKit.tools.get_setting('xkit_cached_blogs', '');
 				if (cachedBlogs !== '') {
-					 return cachedBlogs.split(';');
+					return cachedBlogs.split(';');
 				}
 			}
 		},
@@ -1034,7 +1026,7 @@ function show_message(title, msg, icon, buttons) {
 		});
 	}
 
-	var m_html = 	"<div id=\"xkit-window\" class=\"" + icon + "\" style=\"display: none;\">" +
+	var m_html = "<div id=\"xkit-window\" class=\"" + icon + "\" style=\"display: none;\">" +
 						"<div class=\"xkit-window-title\">" + title + "</div>" +
 						"<div class=\"xkit-window-msg\">" + msg + "</div>";
 

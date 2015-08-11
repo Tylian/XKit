@@ -1,5 +1,5 @@
 //* TITLE Auto Tagger **//
-//* VERSION 0.6.4 **//
+//* VERSION 0.6.6 **//
 //* DESCRIPTION Tags posts automatically. **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS This extension allows you to automatically add tags to posts based on state (reblogged, original, queued) or post type (audio, video, etc) and keeping original tags while reblogging a post. **//
@@ -141,6 +141,12 @@ XKit.extensions.auto_tagger = new Object({
 		new_post_check_interval = setInterval(function() { XKit.extensions.auto_tagger.new_post_check(); }, 1000);
 	},
 
+	frame_run: function() {
+		if (typeof XKit.page.peepr != "undefined" && XKit.page.peepr === true) {
+			XKit.extensions.auto_tagger.run();
+		}
+	},
+
 	reblog_do: function() {
 
 		if ($(".post-header").length <= 0) { setTimeout(function() { XKit.extensions.auto_tagger.reblog_do(); }, 100); return; }
@@ -269,7 +275,12 @@ XKit.extensions.auto_tagger = new Object({
 
 		if (XKit.extensions.auto_tagger.preferences.tag_person.value && obj.owner !== "") {
 			if (XKit.extensions.auto_tagger.preferences.tag_person_replace_hyphens.value) {
-				to_return = this.mreturn_add(to_return, obj.owner.replace(/-/g, ' '));
+				if (obj.owner !== undefined) {
+					to_return = this.mreturn_add(to_return, obj.owner.replace(/-/g, ' '));
+				}
+				if (obj.reblog_name !== undefined) {
+					to_return = this.mreturn_add(to_return, obj.reblog_name.replace(/-/g, ' '));
+				}
 			} else {
 				to_return = this.mreturn_add(to_return, obj.owner);
 			}

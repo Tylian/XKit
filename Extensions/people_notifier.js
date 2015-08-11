@@ -1,5 +1,5 @@
 //* TITLE Blog Tracker **//
-//* VERSION 0.3.3 **//
+//* VERSION 0.3.4 **//
 //* DESCRIPTION Track people like tags **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS Blog Tracker lets you track blogs like you can track tags. Add them on your dashboard, and it will let you know how many new posts they've made the last time you've checked their blogs, or if they've changed their URLs. **//
@@ -88,7 +88,7 @@ XKit.extensions.people_notifier = new Object({
 
 		this.load_blogs();
 
-		if ($(".post").length > 0) {
+		if ($(".posts .post").length > 0) {
 
 			XKit.post_listener.add("people_notifier", XKit.extensions.people_notifier.do_posts);
 			this.do_posts();
@@ -107,7 +107,7 @@ XKit.extensions.people_notifier = new Object({
 
 			$(this).addClass("xkit-people-notifier-checked");
 
-	  		var m_post = XKit.interface.post($(this));
+			var m_post = XKit.interface.post($(this));
 
 			if (XKit.extensions.people_notifier.check_if_in_list(m_post.owner) !== true) {
 				return;
@@ -241,11 +241,10 @@ XKit.extensions.people_notifier = new Object({
 								//obj.count = 0;
 								//do_continue_lads = false;
 								break;
-								add_this = false;
 							}
 						}
 
-						if (typeof data.posts[lad_count] !== "undefined" && add_this != false) {
+						if (data.posts[lad_count] && add_this) {
 							if ((data.posts[lad_count].timestamp * 1000) >= obj.last_check) {
 								console.log("\-- Found post = " + data.posts[lad_count].id);
 								//if (
@@ -260,7 +259,7 @@ XKit.extensions.people_notifier = new Object({
 					}
 
 					if (typeof data.posts[0].id != "undefined") {
-						if (data.posts[0].id != 0) {
+						if (data.posts[0].id !== 0) {
 							obj.last_post_id = data.posts[0].id;
 						}
 					}
@@ -305,7 +304,7 @@ XKit.extensions.people_notifier = new Object({
 
 		if (this.blogs.length === 0) {
 
-			m_html = 	"<div id=\"xkit-people-notifier-no-blogs\">" +
+			m_html = "<div id=\"xkit-people-notifier-no-blogs\">" +
 						"You have no tracked blogs.<br/>Add one below." +
 					"</div>";
 
@@ -315,7 +314,7 @@ XKit.extensions.people_notifier = new Object({
 
 			for (var i=0;i<this.blogs.length;i++) {
 
-				m_html = m_html + 	'<li style="padding-top: 2px; height: 24px;" id="xkit-people-notifier-for---' + this.blogs[i].url + '" data-url="' + this.blogs[i].url + '" class="no_push xkit-people-notifier-person">' +
+				m_html = m_html + '<li style="padding-top: 2px; height: 24px;" id="xkit-people-notifier-for---' + this.blogs[i].url + '" data-url="' + this.blogs[i].url + '" class="no_push xkit-people-notifier-person">' +
 								'<img src="https://api.tumblr.com/v2/blog/' + this.blogs[i].url + '.tumblr.com/avatar/16" class="people-notifier-avatar">' +
 								'<a>' +
 									'<div class="hide_overflow" style="color: rgba(255, 255, 255, 0.5) !important; padding-left: 36px;">' + this.blogs[i].url + '</div>';
@@ -379,9 +378,9 @@ XKit.extensions.people_notifier = new Object({
 			if ($(this).hasClass("people-notifier-changed")) {
 				XKit.window.show("URL Changed?", "<b>Blog Tracker found no or less than 2 posts in the blog \"" + $(this).attr('data-url') + "\".</b><div style=\"margin-top: 15px;\">It might be due to a recent Tumblr change or bug, or that the person changed their URL. Try refreshing the page or click on Open In New Tab to check if they have deleted their blog or changed their URL.</div>","error","<a href=\"http://"  + $(this).attr('data-url') +  ".tumblr.com/\" target=\"_BLANK\" class=\"xkit-button default\">Open in new tab</a><div class=\"xkit-button\" id=\"people-notifier-delete-this\">Remove from track list</div><div class=\"xkit-button\" id=\"xkit-close-message\">Cancel</div>");
 
-				var m_obj = $(this);
+				var $this = $(this);
 				$("#people-notifier-delete-this").click(function() {
-					XKit.extensions.people_notifier.remove_from_list($(m_obj).attr('data-url'));
+					XKit.extensions.people_notifier.remove_from_list($this.attr('data-url'));
 				});
 
 				return;

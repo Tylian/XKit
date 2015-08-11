@@ -1,5 +1,5 @@
 //* TITLE Read Posts **//
-//* VERSION 0.1 REV G **//
+//* VERSION 0.2.0 **//
 //* DESCRIPTION Dim old posts **//
 //* DETAILS Dims the posts on the dashboard that you've already seen on previous page loads. **//
 //* DEVELOPER bit-shift **//
@@ -20,51 +20,48 @@ XKit.extensions.read_posts = new Object({
 
 	dashboard_regex: new RegExp("^https?://www.tumblr.com/dashboard(?:$|/)\\#?"),
 
-	last_undimmed: "",
+	undimmed_post: null,
+	currently_undimming: false,
 
 	run: function() {
 		XKit.tools.init_css('read_posts');
 		XKit.post_listener.add('read_posts_process', this.process_posts);
 		this.process_posts();
- 		$(document).on("click",".post_notes_inner *, .post_control.reply, .tumblelog_menu_button, .share_social_button, .post_control_menu", XKit.extensions.read_posts.undim);
- 		// $(document).on("click",".popover_inner *, #glass_overlay", XKit.extensions.read_posts.redim);
+		$(document).on("click",".post_notes_inner *, .post_control.reply, .tumblelog_menu_button, .share_social_button, .post_control_menu", XKit.extensions.read_posts.undim);
+		$(document).on("click", XKit.extensions.read_posts.redim);
 
 		this.running = true;
 	},
 
 	redim: function(e) {
-
-		// This is broken and meh.
-		var m_obj = $(XKit.extensions.read_posts.last_dimmed).find(".post");
-		if (!$(XKit.extensions.read_posts.last_dimmed).hasClass("post")) {
-			var m_obj = $(m_obj).parentsUntil('.post').parent();
+		// This is less broken and meh.
+		if (!XKit.extensions.read_posts.undimmed_post || XKit.extensions.read_posts.currently_undimming) {
+		   //we don't currently have a post that needs redimming
+		   XKit.extensions.read_posts.currently_undimming = false;
+		   return;
 		}
-		if (!$(m_obj).hasClass("post")) {
-			// STILL?!
-			return;
-		}
+		var m_obj = $(XKit.extensions.read_posts.undimmed_post)[0];
 		$(m_obj).addClass("read_posts_read");
 		if (XKit.extensions.read_posts.preferences.dim_avatars_only.value === true) {
 			$(m_obj).addClass('read_posts_avatar_only');
 		}
+		XKit.extensions.read_posts.undimmed_post = null;
+		XKit.extensions.read_posts.currently_undimming = false;
 	},
 
 	undim: function(e) {
-
+		XKit.extensions.read_posts.currently_undimming = true;
 		var m_obj = $(e.target)[0];
 		if (!$(m_obj).hasClass("post")) {
 			m_obj = $(m_obj).parentsUntil('.post').parent();
 		}
-
 		if (!m_obj.hasClass("read_posts_read")) {
 			return;
 		} else {
-			XKit.extensions.read_posts.last_dimmed = m_obj;
+			XKit.extensions.read_posts.undimmed_post = m_obj;
 			$(m_obj).removeClass("read_posts_read");
 			$(m_obj).removeClass('read_posts_avatar_only');
 		}
-
-
 	},
 
 	mark_post_read: function(post_id) {
@@ -119,7 +116,7 @@ XKit.extensions.read_posts = new Object({
 		this.remove_classes();
 		XKit.tools.remove_css('read_posts');
 		XKit.post_listener.remove('read_posts_process');
- 		$("document").off("click",".post.read_posts_read .post_control.reply", XKit.extensions.read_posts.undim);
+		$("document").off("click",".post.read_posts_read .post_control.reply", XKit.extensions.read_posts.undim);
 		this.running = false;
 	}
 

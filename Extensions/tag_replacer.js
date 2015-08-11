@@ -15,19 +15,21 @@ XKit.extensions.tag_replacer = new Object({
 
 		this.running = true;
 
-		if (XKit.interface.where().channel == false) {return; }
+		if (!XKit.interface.where().channel) {
+			return;
+		}
 		if (typeof XKit.interface.where().user_url === "undefined" ||XKit.interface.where().user_url === "") {return; }
 
 		XKit.tools.init_css("tag_replacer");
 
-        if ($("#tag_replacer.ul").length === 0) {
-	    	xf_html = '<ul class="controls_section" id="tag_replacer_ul">' +
-	    		'<li class="section_header selected">Tag Replacer</li>' +
-	    		'<li class="no_push" style="height: 36px;"><a data-url="' + XKit.interface.where().user_url + '" href="#" onclick="return false;" id="tag_replacer_button">' +
-	    			'<div class="hide_overflow" style="color: rgba(255, 255, 255, 0.5) !important; font-weight: bold; padding-left: 10px; padding-top: 8px;">Replace a tag<span class="sub_control link_arrow icon_right icon_arrow_carrot_right"></span></div>' +
-	    		'</a></li></ul>';
-	    	$("ul.controls_section:first").before(xf_html);
-        }
+		if ($("#tag_replacer.ul").length === 0) {
+			xf_html = '<ul class="controls_section" id="tag_replacer_ul">' +
+				'<li class="section_header selected">Tag Replacer</li>' +
+				'<li class="no_push" style="height: 36px;"><a data-url="' + XKit.interface.where().user_url + '" href="#" onclick="return false;" id="tag_replacer_button">' +
+				'<div class="hide_overflow" style="color: rgba(255, 255, 255, 0.5) !important; font-weight: bold; padding-left: 10px; padding-top: 8px;">Replace a tag<span class="sub_control link_arrow icon_right icon_arrow_carrot_right"></span></div>' +
+				'</a></li></ul>';
+			$("ul.controls_section:first").before(xf_html);
+		}
 
 		$("#tag_replacer_button").click(function() {
 			var m_url = $("#open_blog_link").attr('href').replace("http://","");
@@ -203,11 +205,10 @@ XKit.extensions.tag_replacer = new Object({
 
 			XKit.interface.edit(m_post_object, function(data) {
 
+				var perc = Math.round((XKit.extensions.tag_replacer.p_array_index * 100) / XKit.extensions.tag_replacer.p_array.length);
+				XKit.progress.value("tag-replacer-pb", perc);
+
 				if (data.error === false && data.data.errors === false) {
-
-					var perc = Math.round((XKit.extensions.tag_replacer.p_array_index * 100) / XKit.extensions.tag_replacer.p_array.length);
-
-					XKit.progress.value("tag-replacer-pb", perc);
 
 					console.log("Post " + m_post + " updated successfully.");
 
@@ -217,9 +218,6 @@ XKit.extensions.tag_replacer = new Object({
 				} else {
 
 					XKit.extensions.tag_replacer.fail_count++;
-					var perc = Math.round((XKit.extensions.tag_replacer.p_array_index * 100) / XKit.extensions.tag_replacer.p_array.length);
-
-					XKit.progress.value("tag-replacer-pb", perc);
 
 					XKit.extensions.tag_replacer.p_array_index++;
 					setTimeout(function() { XKit.extensions.tag_replacer.replace_next(); }, 2000);

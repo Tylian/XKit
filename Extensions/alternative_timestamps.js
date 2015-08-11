@@ -66,6 +66,7 @@ XKit.extensions.alternative_timestamps = new Object({
 		if(permalink_title.indexOf('-') < 0) { return null; }
 
 		var permalink_time = permalink_title.slice(permalink_title.indexOf('-') + 2);
+		var permalink_time_without_ordinals = this.strip_ordinals(permalink_time);
 
 		var moment_post_time = moment(); // wrong, but next it's refined
 
@@ -73,11 +74,11 @@ XKit.extensions.alternative_timestamps = new Object({
 			// "{day of week}, {time}"
 
 			var day_name = permalink_time.match(this.days_regex)[1];
-			var _permalink_time = permalink_time.replace(this.days_regex, "");
-			var moment_permalink_time = moment(_permalink_time, 'h:mma');
+			var permalink_time_without_days = permalink_time.replace(this.days_regex, "");
+			var moment_permalink_time_without_days = moment(permalink_time_without_days, 'h:mma');
 
-			moment_post_time.hours(moment_permalink_time.hours());
-			moment_post_time.minutes(moment_permalink_time.minutes());
+			moment_post_time.hours(moment_permalink_time_without_days.hours());
+			moment_post_time.minutes(moment_permalink_time_without_days.minutes());
 
 			while(moment_post_time.format("dddd") !== day_name) {
 				moment_post_time.subtract(moment.duration(1, 'days'));
@@ -85,31 +86,29 @@ XKit.extensions.alternative_timestamps = new Object({
 		} else if(permalink_time.match(',') === null) {
 			// "{time}"
 
-			var moment_permalink_time = moment(permalink_time, 'h:mma');
+			var moment_permalink_time_hmma = moment(permalink_time, 'h:mma');
 
-			moment_post_time.hours(moment_permalink_time.hours());
-			moment_post_time.minutes(moment_permalink_time.minutes());
+			moment_post_time.hours(moment_permalink_time_hmma.hours());
+			moment_post_time.minutes(moment_permalink_time_hmma.minutes());
 		} else if(permalink_time.match(this.year_regex) === null) {
 			// "{month} {day}{ordinal}, {time}"
 
-			var _permalink_time = this.strip_ordinals(permalink_time);
-			var moment_permalink_time = moment(_permalink_time, 'MMM D, h:mma');
+			var moment_permalink_time_without_ordinals = moment(permalink_time_without_ordinals, 'MMM D, h:mma');
 
-			moment_post_time.month(moment_permalink_time.month());
-			moment_post_time.date(moment_permalink_time.date());
-			moment_post_time.hours(moment_permalink_time.hours());
-			moment_post_time.minutes(moment_permalink_time.minutes());
+			moment_post_time.month(moment_permalink_time_without_ordinals.month());
+			moment_post_time.date(moment_permalink_time_without_ordinals.date());
+			moment_post_time.hours(moment_permalink_time_without_ordinals.hours());
+			moment_post_time.minutes(moment_permalink_time_without_ordinals.minutes());
 		} else {
 			// "{month} {day}{ordinal} {year}, {time}"
 
-			var _permalink_time = this.strip_ordinals(permalink_time);
-			var moment_permalink_time = moment(_permalink_time, 'MMM D YYYY, h:mma');
+			var moment_permalink_time_with_year = moment(permalink_time_without_ordinals, 'MMM D YYYY, h:mma');
 
-			moment_post_time.year(moment_permalink_time.year());
-			moment_post_time.month(moment_permalink_time.month());
-			moment_post_time.date(moment_permalink_time.date());
-			moment_post_time.hours(moment_permalink_time.hours());
-			moment_post_time.minutes(moment_permalink_time.minutes());
+			moment_post_time.year(moment_permalink_time_with_year.year());
+			moment_post_time.month(moment_permalink_time_with_year.month());
+			moment_post_time.date(moment_permalink_time_with_year.date());
+			moment_post_time.hours(moment_permalink_time_with_year.hours());
+			moment_post_time.minutes(moment_permalink_time_with_year.minutes());
 		}
 
 		return moment_post_time;

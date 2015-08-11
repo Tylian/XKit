@@ -69,7 +69,7 @@ XKit.extensions.theme_editor = new Object({
 
 		var m_theme = XKit.storage.get("theme_editor","my_theme",XKit.extensions.theme_editor.testing_theme);
 
-		var m_html = 	"<div id=\"xkit-theme-editor-shadow\">&nbsp;</div>" +
+		var m_html = "<div id=\"xkit-theme-editor-shadow\">&nbsp;</div>" +
 				"<div id=\"xkit-theme-editor-window\">" +
 					"<textarea id=\"xkit-theme-editor-textarea\">" + m_theme + "</textarea>" +
 					"<div id=\"xkit-theme-editor-buttons\">" +

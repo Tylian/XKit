@@ -1,5 +1,5 @@
 //* TITLE Shorten Posts **//
-//* VERSION 0.2.0 **//
+//* VERSION 0.2.1 **//
 //* DESCRIPTION Makes scrolling easier **//
 //* DETAILS This extension shortens long posts, so if you are interested, you can just click on Show Full Post button to see it all, or scroll down if you are not interested. Useful for screens where long posts take a lot of space, and making it hard to scroll down.<br><br>By default, this extension only shortens text posts. You can toggle the setting to let it shorten the photo posts too. (This will 'cut off' long, vertical posts.) **//
 //* DEVELOPER STUDIOXENIX **//
@@ -53,7 +53,7 @@ XKit.extensions.shorten_posts = new Object({
 		this.running = true;
 		XKit.extensions.shorten_posts.cpanel_check_height();
 
-		if ($(".post").length > 0) {
+		if ($(".posts .post").length > 0) {
 			XKit.tools.init_css("shorten_posts");
 			$(document).on("click", ".xkit-shorten-posts-embiggen", XKit.extensions.shorten_posts.embiggen);
 			XKit.post_listener.add("shorten_posts", XKit.extensions.shorten_posts.check);
@@ -66,7 +66,7 @@ XKit.extensions.shorten_posts = new Object({
 
 		var shortened_count = 0;
 
-		$(".post").not(".xkit-shorten-posts-done").not(".xkit-shorten-posts-embiggened").each(function() {
+		$(".posts .post").not(".xkit-shorten-posts-done").not(".xkit-shorten-posts-embiggened").each(function() {
 
 			var m_height = $(this).height();
 			$(this).addClass("xkit-shorten-posts-done");
@@ -120,15 +120,15 @@ XKit.extensions.shorten_posts = new Object({
 			m_speed = 120;
 		}
 
-  		$(post_div).animate({
-    			height: m_height
-  		}, m_speed, function() {
-    			$(this).find(".xkit-shorten-posts-embiggen").slideUp('fast');
-    			$(this).removeClass("xkit-shorten-posts-shortened");
-    			$(this).removeClass("xkit-shorten-posts-shortened-show-tags");
-    			$(this).addClass("xkit-shorten-posts-embiggened");
-    			$(this).css('height','auto');
-  		});
+		$(post_div).animate({
+			height: m_height
+		}, m_speed, function() {
+			$(this).find(".xkit-shorten-posts-embiggen").slideUp('fast');
+			$(this).removeClass("xkit-shorten-posts-shortened");
+			$(this).removeClass("xkit-shorten-posts-shortened-show-tags");
+			$(this).addClass("xkit-shorten-posts-embiggened");
+			$(this).css('height','auto');
+		});
 
 	},
 

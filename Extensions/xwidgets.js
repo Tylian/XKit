@@ -50,7 +50,7 @@ XKit.extensions.xwidgets = new Object({
 
 			title: "Blank Widget",
 			icon: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBNYWNpbnRvc2giIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6MUYxMkREMkMxMUI0MTFFMzgwNUJGM0E4Q0FBOUE5QkIiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6MUYxMkREMkQxMUI0MTFFMzgwNUJGM0E4Q0FBOUE5QkIiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDoxRjEyREQyQTExQjQxMUUzODA1QkYzQThDQUE5QTlCQiIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDoxRjEyREQyQjExQjQxMUUzODA1QkYzQThDQUE5QTlCQiIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/Pr0AdbEAAAHZSURBVHjabFJLq0FhFL3nQUIU5RlKXolkZmAiJmSgjPwiZSg/wFyJDJWRMhTlncLAwCthgBzuunefTqfb3YPv7O98e629196bqVQqXzL7fD6SQ/Z+v+kk4/8N/QOQGy+nZ1nW4/G43W69Xi8IwuFwmEwm6/WaQoVf4yVWrVabTCYdDoeEt1gsoVCo3++32+3X60UYngpQKpWZTMZkMt3v9+FwCFZk83q94XA4Go0yDNNoNCgDhzhg8DcQCNxut3q9Pp1OwXe5XMbj8X6/9/l8NpsNFPABYEmZ3+9Hnl6vt9vtkLpQKKTTaTij0WgwGOApEolQBhGg0+nAOp/PrVZrNptVq9VmszmXy0EYAVAtokEhAjiOw+X5fKpUKujGFY7L5YLzeDwAgAwSzVLLUD102+322WxWLpcRtN1uS6USKkSjATidThQpApbLJf7G43Ge51Fbq9XqdDpwjEZjLBbDE1pHJXGpVAofzCgYDBoMBqfTeT6fF4vF9XrFEPL5POStVqtms0kAplgs0vxRMakEH0rCHBQKBfzNZlOtVsEoZkgkErReqBKNR5xGo4FihCKo2+3WajXMRFpBXtoq3I/HI1JLV/nOUTPB8iORPHqQtlUOk/YX57cAAwAjJcTsc1qu6QAAAABJRU5ErkJggg==",
-			css: 	" .xkit-widgets-blank { background: rgba(255,255,255,0.22) !important; color: white; line-height: 120px; text-align: center; }",
+			css: " .xkit-widgets-blank { background: rgba(255,255,255,0.22) !important; color: white; line-height: 120px; text-align: center; }",
 
 			init: function(obj) {
 
@@ -72,13 +72,13 @@ XKit.extensions.xwidgets = new Object({
 
 			title: "Getting Started Widget",
 			icon: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBNYWNpbnRvc2giIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6MDk3N0U3MjgxMUI3MTFFMzgwNUJGM0E4Q0FBOUE5QkIiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6MDk3N0U3MjkxMUI3MTFFMzgwNUJGM0E4Q0FBOUE5QkIiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDowOTc3RTcyNjExQjcxMUUzODA1QkYzQThDQUE5QTlCQiIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDowOTc3RTcyNzExQjcxMUUzODA1QkYzQThDQUE5QTlCQiIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/Pv3D1lwAAAIvSURBVHjaVNG7dtNAEAbg1e5qdVlJMfINxzlgF1wKDiUFJS9AxXvwALwODTU1NQUlcEKROE4CiZNYN0uWVtqVGFmGA1up+Gb0z4z24+2nal1ouoZNCh/GhJfXGfF0JDW5KdiYi/MN7VsqEU2pSG+H9vouNw6dVjv/a9+UYY5kQ3pGsYgoNrCmk7Z3pz2GJAI9f/cSYW314Xj7ff1XsxHf6eBPEnevh68fOc8HzrM+qptGQBIjPwlB52EGkXZJrjLqMXJgeC8m/IkPGnWvRthjbe8x34ZpKQRt9c+M9lgtFbP18ZvH6J+HORXniT7iRZi1+pBT0MSjoNWmahp0/f4Yhiau7r96AAXw5zZJkHY6WtxQ0I1CMi7ZxNl8uRaXsQwFfzroCnTfir+tQOtTHpyuqG/jnRagi0XM7lugYSeaTbtIIsmlqPSpEy9uQVeqxK0e2cVppA9g36KpanLAqlW2n7lSZGrHixvsm6qWeZhiNrSKZaIP4ZZle0vYyVkMSboCOjSzs4D6llQyCxJ75uN8EesDS0aiBu0a8Cs2diBJV5D+irBvqLougtSdD5LlHYYlyKiAJNSF3hGburATVcquAC5TKZkHGz7vx6BN2h4ONU3bexmTQ14EWTvlyN7PUNeg7dm9CLRBoB52Cr2NdLk2jw7KcFuJEnZy+fHr1ecTJRXcy5n3o+UtMeEALL5YY8RJehGAht6wb+PIhSnZgHfamvWSM+hNWc8G7T3s/xZgAPtMcRnEFTOJAAAAAElFTkSuQmCC",
-			css: 	" .xkit-widgets-blank { background: rgba(255,255,255,0.22) !important; color: white; line-height: 120px; text-align: center; }",
+			css: " .xkit-widgets-blank { background: rgba(255,255,255,0.22) !important; color: white; line-height: 120px; text-align: center; }",
 
 			init: function(obj) {
 
 				$(obj).addClass("xkit-widgets-getting-started");
 
-				var m_html =	"<div data-id=\"1\" class=\"slide opened slide-1\">" +
+				var m_html = "<div data-id=\"1\" class=\"slide opened slide-1\">" +
 							"<b>Welcome to XWidgets!</b> Please read me first." +
 							"<div class=\"widget-slide-controls\">" +
 								"<div data-id=\"2\" class=\"slide-next-arrow\">&rarr;</div>" +
@@ -146,7 +146,7 @@ XKit.extensions.xwidgets = new Object({
 
 			title: "World Clock",
 			icon: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBNYWNpbnRvc2giIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6N0RCRjJCODcxMUI2MTFFMzgwNUJGM0E4Q0FBOUE5QkIiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6N0RCRjJCODgxMUI2MTFFMzgwNUJGM0E4Q0FBOUE5QkIiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDoxRjEyREQzMjExQjQxMUUzODA1QkYzQThDQUE5QTlCQiIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDo3REJGMkI4NjExQjYxMUUzODA1QkYzQThDQUE5QTlCQiIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/Pr5zfHEAAAInSURBVHjabJJNSFRRFMdnpjc5OaNZOjOhI/gRY2UmlJAS2MIJ2kQUIS7ErRG0MVobtOkL2oaL2kVQi9opGlFZLayFkPY1jpHQC0dwGmemyXfvuf7PPSYuejzuO/fd3zn3f/73+i+OTfu2PcaYzcDnI+KJJoMvYgTaGOe/qO8fjUETaUvbeFuCPD3JWHdbvDZSUVnh/Fgpvp53X336JbSnjNpKQPldO52RMx2NtWFMS+sKGx2o3433VGfi2uMPuaLHaVo5W0qE/vLz96M3me/ZNShJ7I0M9u4/lKgZvXD08v13pDxDXkBEdydjQt98Ngv6waVe1Mks51H749Jqc6yqr30faFIqIG70JOPIfDi9YPsjxFAgusemPmN6PBkFTdpzxA2UL/1VqA2FSrNIpUkRu7Tg5gplrzVeDRruBsQ77tJuJYYgfnIl9fRqSmttiJfCoSBotOEIkc2XDzbUoMtMNo9Nzt2egoM4AKN1U104EgrOLi7DI7wBSEXhl3MuygyebNWaxG9Lsy3DpzuwNDGTZpcMIcGgvxfz7mK20J7YM9p/rLEuDL9RuzkauTF0orMpmnZXx2e+sp9E/v67z40981Bwx/WBrpZYFRaKZQ99QAli0CP3JgqlP1LFf/7OJGzcvGSkU4fr+440tMSri+X1tJt7O7c0/v4bOKZZpPKfvTUpKF8PdEMKHxA8cpc8inr+SdrxFK6Nsfq4hgi1o6UlTQDD/zcEGACMeNv7QLOLXgAAAABJRU5ErkJggg==",
-			css: 	" .xkit-widgets-blank { background: rgba(255,255,255,0.22) !important; color: white; line-height: 120px; text-align: center; }",
+			css: " .xkit-widgets-blank { background: rgba(255,255,255,0.22) !important; color: white; line-height: 120px; text-align: center; }",
 
 			init: function(obj, data) {
 
@@ -156,11 +156,11 @@ XKit.extensions.xwidgets = new Object({
 					var jan = new Date(this.getFullYear(), 0, 1);
 					var jul = new Date(this.getFullYear(), 6, 1);
 					return Math.max(jan.getTimezoneOffset(), jul.getTimezoneOffset());
-				}
+				};
 
 				Date.prototype.dst = function() {
-    					return this.getTimezoneOffset() < this.stdTimezoneOffset();
-				}
+					return this.getTimezoneOffset() < this.stdTimezoneOffset();
+				};
 
 				$(obj).addClass("world_clock");
 
@@ -252,34 +252,34 @@ XKit.extensions.xwidgets = new Object({
 
 				switch(m_storage) {
 					case 4:
-  						m_caption = "Baku";
-  						break;
+						m_caption = "Baku";
+					break;
 					case 3:
-  						m_caption = "Kuwait";
-  						break;
+						m_caption = "Kuwait";
+					break;
 					case 2:
-  						m_caption = "Istanbul";
-  						break;
+						m_caption = "Istanbul";
+					break;
 					case 1:
-  						m_caption = "Vienna";
-  						break;
+						m_caption = "Vienna";
+					break;
 					case 0:
-  						m_caption = "London";
-  						break;
-     					case -2:
-  						m_caption = "Buenos Aires";
-  						break;
-   					case -5:
-  						m_caption = "Eastern Time";
-  						break;
- 					case -6:
-  						m_caption = "Central Time";
-  						break;
+						m_caption = "London";
+					break;
+					case -2:
+						m_caption = "Buenos Aires";
+					break;
+					case -5:
+						m_caption = "Eastern Time";
+					break;
+					case -6:
+						m_caption = "Central Time";
+					break;
 					case -8:
-  						m_caption = "Pacific Time";
-  						break;
+						m_caption = "Pacific Time";
+					break;
 					default:
-  						m_caption = "GMT " + m_storage
+						m_caption = "GMT " + m_storage;
 				}
 
 				$(obj).find(".timezone").html(m_caption);
@@ -317,9 +317,15 @@ XKit.extensions.xwidgets = new Object({
 				statusampm = ampm;
 
 				hr2 = hr;
-				if (hr2 == 0) hr2=12;
-				(hr2 < 13)?hr2:hr2 %= 12;
-				if (hr2<10) hr2="0"+hr2
+				if (hr2 === 0) {
+					hr2 = 12;
+				}
+				if (hr2 > 12) {
+					hr2 %= 12;
+				}
+				if (hr2 < 10) {
+					hr2 = "0" + hr2;
+				}
 
 				var finaltime=hr2+':'+((mins < 10)?"0"+mins:mins)+':'+((secs < 10)?"0"+secs:secs)+' '+statusampm;
 
@@ -339,7 +345,7 @@ XKit.extensions.xwidgets = new Object({
 
 			title: "World Clock (24 Hours)",
 			icon: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBNYWNpbnRvc2giIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6N0RCRjJCODcxMUI2MTFFMzgwNUJGM0E4Q0FBOUE5QkIiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6N0RCRjJCODgxMUI2MTFFMzgwNUJGM0E4Q0FBOUE5QkIiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDoxRjEyREQzMjExQjQxMUUzODA1QkYzQThDQUE5QTlCQiIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDo3REJGMkI4NjExQjYxMUUzODA1QkYzQThDQUE5QTlCQiIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/Pr5zfHEAAAInSURBVHjabJJNSFRRFMdnpjc5OaNZOjOhI/gRY2UmlJAS2MIJ2kQUIS7ErRG0MVobtOkL2oaL2kVQi9opGlFZLayFkPY1jpHQC0dwGmemyXfvuf7PPSYuejzuO/fd3zn3f/73+i+OTfu2PcaYzcDnI+KJJoMvYgTaGOe/qO8fjUETaUvbeFuCPD3JWHdbvDZSUVnh/Fgpvp53X336JbSnjNpKQPldO52RMx2NtWFMS+sKGx2o3433VGfi2uMPuaLHaVo5W0qE/vLz96M3me/ZNShJ7I0M9u4/lKgZvXD08v13pDxDXkBEdydjQt98Ngv6waVe1Mks51H749Jqc6yqr30faFIqIG70JOPIfDi9YPsjxFAgusemPmN6PBkFTdpzxA2UL/1VqA2FSrNIpUkRu7Tg5gplrzVeDRruBsQ77tJuJYYgfnIl9fRqSmttiJfCoSBotOEIkc2XDzbUoMtMNo9Nzt2egoM4AKN1U104EgrOLi7DI7wBSEXhl3MuygyebNWaxG9Lsy3DpzuwNDGTZpcMIcGgvxfz7mK20J7YM9p/rLEuDL9RuzkauTF0orMpmnZXx2e+sp9E/v67z40981Bwx/WBrpZYFRaKZQ99QAli0CP3JgqlP1LFf/7OJGzcvGSkU4fr+440tMSri+X1tJt7O7c0/v4bOKZZpPKfvTUpKF8PdEMKHxA8cpc8inr+SdrxFK6Nsfq4hgi1o6UlTQDD/zcEGACMeNv7QLOLXgAAAABJRU5ErkJggg==",
-			css: 	" .xkit-widgets-blank { background: rgba(255,255,255,0.22) !important; color: white; line-height: 120px; text-align: center; }",
+			css: " .xkit-widgets-blank { background: rgba(255,255,255,0.22) !important; color: white; line-height: 120px; text-align: center; }",
 
 			init: function(obj, data) {
 
@@ -349,11 +355,11 @@ XKit.extensions.xwidgets = new Object({
 					var jan = new Date(this.getFullYear(), 0, 1);
 					var jul = new Date(this.getFullYear(), 6, 1);
 					return Math.max(jan.getTimezoneOffset(), jul.getTimezoneOffset());
-				}
+				};
 
 				Date.prototype.dst = function() {
-    					return this.getTimezoneOffset() < this.stdTimezoneOffset();
-				}
+					return this.getTimezoneOffset() < this.stdTimezoneOffset();
+				};
 
 				$(obj).addClass("world_clock");
 
@@ -445,34 +451,34 @@ XKit.extensions.xwidgets = new Object({
 
 				switch(m_storage) {
 					case 4:
-  						m_caption = "Baku";
-  						break;
+						m_caption = "Baku";
+					break;
 					case 3:
-  						m_caption = "Kuwait";
-  						break;
+						m_caption = "Kuwait";
+					break;
 					case 2:
-  						m_caption = "Istanbul";
-  						break;
+						m_caption = "Istanbul";
+					break;
 					case 1:
-  						m_caption = "Vienna";
-  						break;
+						m_caption = "Vienna";
+					break;
 					case 0:
-  						m_caption = "London";
-  						break;
-     					case -2:
-  						m_caption = "Buenos Aires";
-  						break;
-   					case -5:
-  						m_caption = "Eastern Time";
-  						break;
- 					case -6:
-  						m_caption = "Central Time";
-  						break;
+						m_caption = "London";
+					break;
+					case -2:
+						m_caption = "Buenos Aires";
+					break;
+					case -5:
+						m_caption = "Eastern Time";
+					break;
+					case -6:
+						m_caption = "Central Time";
+					break;
 					case -8:
-  						m_caption = "Pacific Time";
-  						break;
+						m_caption = "Pacific Time";
+					break;
 					default:
-  						m_caption = "GMT " + m_storage
+						m_caption = "GMT " + m_storage;
 				}
 
 				$(obj).find(".timezone").html(m_caption);
@@ -514,9 +520,13 @@ XKit.extensions.xwidgets = new Object({
 				}
 
 				hr2 = hr;
-				if (hr2 == 0) hr2=24;
+				if (hr2 === 0) {
+					hr2 = 24;
+				}
 				//(hr2 < 13)?hr2:hr2 %= 12;
-				if (hr2<10) hr2="0"+hr2
+				if (hr2<10) {
+					hr2 = "0" + hr2;
+				}
 
 
 
@@ -537,7 +547,7 @@ XKit.extensions.xwidgets = new Object({
 
 			title: "Blog Information",
 			icon: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBNYWNpbnRvc2giIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6N0RCRjJCOEYxMUI2MTFFMzgwNUJGM0E4Q0FBOUE5QkIiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6N0RCRjJCOTAxMUI2MTFFMzgwNUJGM0E4Q0FBOUE5QkIiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDo3REJGMkI4RDExQjYxMUUzODA1QkYzQThDQUE5QTlCQiIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDo3REJGMkI4RTExQjYxMUUzODA1QkYzQThDQUE5QTlCQiIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PueR6WoAAAG/SURBVHjabFJLK4VBGB5fH3IOjiKXQ47rzkriIIWcEzsLxU7JVjbKb5CVP6CsUC4LysllYcFaSSSXKLcSB8fC+Wbe1zPf6OtzmKbpnXmfed9nnmeyJvbHhW8w808giPSGFUtiHSJQ7Nj/QrEaNLFSpEhDyV2lLX6P08TFaeL84/HjK+UUNxQ1xmsb4jUGLcmRXgeU+/p01ic3ny9evMsPR0+Yx6tnsdkOkUeamySL3YF0Btobr5fJ7akDlFdpRWmyDGnQ8KPHdkcwvW3y6u1m554lK8m2UQPU/VXn+5Yy+twdPldES8kh26jhLz+6MwQdwWGxf8M7fL9OAQ3VLKNdbn62l1uIrUidlP4O6U8JHI4t1w4VLAv401pEdvwnoUgQzrESFnwBqfp4xMsNbw0ADbsG17u9w3AnHsDwwzYu1sbCJ2uh5OUbcssDWxkvLqjOD0dLUJ5JWLqY62LPTGuorvCvD0C3TTdpa7Wcwpa6kxbKCnDvXMvt3sPN7mPyOpUTsAsiwbLm4nA7akM1XMBPFKDkeq6w03pVdZVXgq7uTi4HNm8VP/9B2I5MCzdipRE6ILN10foCGShKCGF9CzAATOx1RUWMeL4AAAAASUVORK5CYII=",
-			css: 	" .xkit-widgets-blank { background: rgba(255,255,255,0.22) !important; color: white; line-height: 120px; text-align: center; }",
+			css: " .xkit-widgets-blank { background: rgba(255,255,255,0.22) !important; color: white; line-height: 120px; text-align: center; }",
 
 			init: function(obj, data) {
 
@@ -590,7 +600,7 @@ XKit.extensions.xwidgets = new Object({
 
 				} else {
 
-					var m_html = 	"<div class=\"loaded\">" +
+					var m_html = "<div class=\"loaded\">" +
 								"<div class=\"line title\">" + blog_url + "</div>" +
 								"<div class=\"line followers loading\">" +
 									"Followers" +
@@ -631,15 +641,15 @@ XKit.extensions.xwidgets = new Object({
 							var queue_count = $(".queue .count", data).html();
 							var drafts_count = $(".drafts .count", data).html();
 
-							if ($(".followers .count", data).length == 0) {
+							if ($(".followers .count", data).length === 0) {
 								follower_count = "0";
 							}
 
-							if ($(".queue .count", data).length == 0) {
+							if ($(".queue .count", data).length === 0) {
 								queue_count = "0";
 							}
 
-							if ($(".drafts .count", data).length == 0) {
+							if ($(".drafts .count", data).length === 0) {
 								drafts_count = "0";
 							}
 
@@ -662,7 +672,7 @@ XKit.extensions.xwidgets = new Object({
 
 			title: "Nano Notepad",
 			icon: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBNYWNpbnRvc2giIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6N0IxNUI1NkYxM0RDMTFFMzlFMUI4QkQzOUFDODkyNkUiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6N0IxNUI1NzAxM0RDMTFFMzlFMUI4QkQzOUFDODkyNkUiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDo3QjE1QjU2RDEzREMxMUUzOUUxQjhCRDM5QUM4OTI2RSIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDo3QjE1QjU2RTEzREMxMUUzOUUxQjhCRDM5QUM4OTI2RSIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PpkKLgYAAAHBSURBVHjalFHNihQxEK5KKr2KeFgQUQR9FC/6jD6ICKIn2RUWL4MPIIiIKyrswZn+SSpVfpUW7wZmqE7X99t8/ekF/c8Rd26aYhJL7Bi6kRlL9mXNOXsR005FqCmlxHKzPJpPc85pXVYsA5BwzXT39naaS5lyqxtobp35utn5+R2++XWlrRF5zqzasE3WcTBLTmcAqLo7HkuhUjL39SP4mL21CgemKlOp6wYKJuVhMot03VIyIFmXA0hBiQ1JCTARcesgzSVju21YZTPQMR7ZtgMUrj+/hHF3SxDpHRQDE/QpJ9yD7t7DpxGvnj4UEYoraq2VSQglacW7YV1BzKzxg1sR9npAyu9fXuHKzShMO4Gb47hDjcM60f3Hz5CQ2/EKOELAugjaJkdBvJ/wohAEwMwiW3y13+9h5ue31yNDmAZ3+LHOkcR2KQAePHmutQLwDlC0hE4p7I/uwt3GO3LQY8B/FkDnS+z9+PoG5PGFR3PI0PF6UIzGCTNaApb76SL8FWmQYwwwg2xaSunRbxqCodXasUwT+3IButG07RlAhlXe1cZBUVDXNketenz7z30wYbu1v+kHOD6FhNQu+EeAAQBPlUks3wVu1QAAAABJRU5ErkJggg==",
-			css: 	" .xkit-widgets-blank { background: rgba(255,255,255,0.22) !important; color: white; line-height: 120px; text-align: center; }",
+			css: " .xkit-widgets-blank { background: rgba(255,255,255,0.22) !important; color: white; line-height: 120px; text-align: center; }",
 
 			init: function(obj) {
 
@@ -706,7 +716,7 @@ XKit.extensions.xwidgets = new Object({
 
 			title: "XCloud Sync Shortcut",
 			icon: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBNYWNpbnRvc2giIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6OTJDRjA5NjAxM0UxMTFFMzlFMUI4QkQzOUFDODkyNkUiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6OTJDRjA5NjExM0UxMTFFMzlFMUI4QkQzOUFDODkyNkUiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDo3QjE1QjU3NTEzREMxMUUzOUUxQjhCRDM5QUM4OTI2RSIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDo3QjE1QjU3NjEzREMxMUUzOUUxQjhCRDM5QUM4OTI2RSIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/Pu/Sd+gAAAHxSURBVHjadFJNa1NBFD0zb8wjbdIqtrE2xfrRUIILW100G1GKCAUXunLj/xNB14pYENLWTQyCW20FQUuoNMaXl/c1M947k2dXDvcNw7nnfrx7rlg7KmAB/xlYDRhrLQOWHowI56AHcyS807FBJmwJuNtCQE+9YK6Cdzk2ZXFeTJ0etwL/DgX4UGYb1waEkNyYdS0J6o+KsmtaWTHV98AI1Tfrr17+GUULlxa+3nswqlS5hPBN81FMK/u7kExu9w4ePdkugvBXlLzefXN09+Fi/8OPlatRbd7OXQQH6PL/pLy2321dX569vPRzDDmDm5sb1V63tb7W73+eTOLDznZ6flExlUoKbA2OTwYnaN84niDKkRnUl1bvNJZlvdZutgdfvum9d4c7TynArmSJfP4im689e7zzO5g9TZEUSDQyFaY6HJ0i1hhX5mRFuZbipPn+7eb9rXqjOZRhlNpkHKUGZLmxsTa5Rg4Zf9od3uroihKrvUlr8N1097Isx3/OuZnqcKMzaDRpQuLKx0RIabWbPE1de0G8im4PjBNH0XgKpwMhhYFhs9qYooAunJoUoSAMyQcbyLCCQBKu/EqROJxPCBEEVoYS5f65KkyQwsul/EbQaNnokhzKoDAeYNwhnql8PCe05cqdrevZzpZ58VeAAQACLkV6R14RIwAAAABJRU5ErkJggg==",
-			css: 	" .xkit-widgets-blank { background: rgba(255,255,255,0.22) !important; color: white; line-height: 120px; text-align: center; }",
+			css: " .xkit-widgets-blank { background: rgba(255,255,255,0.22) !important; color: white; line-height: 120px; text-align: center; }",
 
 			init: function(obj) {
 
@@ -734,7 +744,7 @@ XKit.extensions.xwidgets = new Object({
 				}
 
 				$(obj).addClass("loaded");
-				var m_html = 	"<div class=\"title\">" +
+				var m_html = "<div class=\"title\">" +
 							"Signed as" +
 							"<div class=\"username\">" +
 								XKit.storage.get("xcloud","username","") +
@@ -760,7 +770,7 @@ XKit.extensions.xwidgets = new Object({
 
 			title: "CNN Top Stories",
 			icon: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBNYWNpbnRvc2giIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6RTA1NzUzQkYxM0YzMTFFMzlFMUI4QkQzOUFDODkyNkUiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6RTA1NzUzQzAxM0YzMTFFMzlFMUI4QkQzOUFDODkyNkUiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDpFMDU3NTNCRDEzRjMxMUUzOUUxQjhCRDM5QUM4OTI2RSIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDpFMDU3NTNCRTEzRjMxMUUzOUUxQjhCRDM5QUM4OTI2RSIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PiwECb8AAAGqSURBVHjaYjxnJ8/AwPDj0UMOOaIYTAwkAsZjCih8Eb8YYc8gLm1DIPvb1fNvt697s2kJiga4k7g19VQmLmfi4Pp6+dzPF08+Hd4l5BkiFpbw9er5u6UJf79+hDiJBa4VqJpLVetqiPWv109VJqxk+PNHwNYVKM6tbQiUupniheIkoEtUJy7++/HDWWvBv18Z2MVFgYLMfCLqc7dxyIJU3M6PhbiNCWgLEAHdDeR8vnQaqBrIZWTnAnJ11p2AqAYC0ZA4IIkIJYgvmXn4EL4PzUDmcqloQRgsQK/ARXkNzYGOEfaLEwtL+vvpPXLg/PvzGxI2UCcBQxAiobX6FIugyMvF07jBdsLBjwe3IU6ChhIwvIU8AkFCsgpSSXl/v3x61Fv3dtMiZm5+TlU9YHh8PLwbPeL0tpxDNhUeLOrT17HLKlzyMYKIM2frybPwC/z5+PHL+eO8ZvaswqIQCW4do//ff6j0LWLm4QVGHDMXB1AN0EnM6fICQGkgByj0dtPSLxfOAlUwsXH8//ePVVT83fZ1d0rigVIQNUCj0dMSQQANJUgIEMMACDAArFqywzYe1SwAAAAASUVORK5CYII=",
-			css: 	" .xkit-widgets-blank { background: rgba(255,255,255,0.22) !important; color: white; line-height: 120px; text-align: center; }",
+			css: " .xkit-widgets-blank { background: rgba(255,255,255,0.22) !important; color: white; line-height: 120px; text-align: center; }",
 
 			init: function(obj) {
 
@@ -808,7 +818,7 @@ XKit.extensions.xwidgets = new Object({
 
 			title: "CNN US Edition",
 			icon: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBNYWNpbnRvc2giIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6RTA1NzUzQzMxM0YzMTFFMzlFMUI4QkQzOUFDODkyNkUiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6RTA1NzUzQzQxM0YzMTFFMzlFMUI4QkQzOUFDODkyNkUiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDpFMDU3NTNDMTEzRjMxMUUzOUUxQjhCRDM5QUM4OTI2RSIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDpFMDU3NTNDMjEzRjMxMUUzOUUxQjhCRDM5QUM4OTI2RSIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PjDPoFIAAAK4SURBVHjaTJJNTBNBFMdnZndnS7eFFihQi+wuqRVKgCIYP4jGiIQEgx/Ek17UGC9GwsmjetIYDcZEEw8e1BA0UWOMHIyIHESjiZCAhiKWj25bCBYKFCvsbrf11UbCHCaT9/7vvd/8Z/DwfhEhtK4ETWViGjO/lSkqepOYiSvjvLQjibhYaMYke5OIjYZmBdnDov8rhVkDMUmMCIad07CZQZxOWA3zLGJ1wsOBEg5/kjJqAyMDIVAXHT3vaDmSW1UDwUW/P9jX73/dqxOqYpNOoAvPXKgRia1QXVnK8e6q635fsO/gWvRX7NvoeE+PuUz0dVwsazo0OxbAVvvKyrpVdpMNEu/tx5ZtnqFLHaO3bth89Y7djc69jTDHUbm95fpVHXEqw+sMZVeVSeMfCaj1eHzxx1gioQ50dgLG6Ks3rXe7cl3OgnKx2Fc9HfkYURYIFauo6ANuaAYkoM6RK1O8Rce0vfsBqLOW1Bxu0ghvk0TWwGAFl70lY7FqxMRmzKGe9lYqCBseFskuFYwiPLscmkgiPo0wRAtra3mXJLW1VR5rW1tNoE0raaRUYgqGl4lJquGl6pjfn020PXpI7fnDz3qLK9ybC+bDixqhBXIpqyOaJNz0u4Gtzc2QsLqcdSdPqIk//fefDvV9xkKuwy2dvnx25GsAkHTMkZiiLChheJ2of2KjHy+Yo3OxcGgxMDFXfaAh+HP2+ZNBQJqK/GZO7dzD2Iri8bXI2GRpvc9sz8vWbKmQ1g1y5so53pxz7+ZLVrAsrBrFkpM57vaCJ1CABdvI28HQ+AxrFhjKpdJpa77ty4fvXddeMEIuaKKrRo4tD9/xNsAsLWMZ1TAFW+FFNcRrDAXozBnzaiZOVQZklBXKPRTTudB8nixDDrjtYhnUK+GlAqkUPulkOF4ilkCvwGzCJTr+CjAADX8U/pM8nUcAAAAASUVORK5CYII=",
-			css: 	" .xkit-widgets-blank { background: rgba(255,255,255,0.22) !important; color: white; line-height: 120px; text-align: center; }",
+			css: " .xkit-widgets-blank { background: rgba(255,255,255,0.22) !important; color: white; line-height: 120px; text-align: center; }",
 
 			init: function(obj) {
 
@@ -857,7 +867,7 @@ XKit.extensions.xwidgets = new Object({
 
 			title: "Audio+ Controls",
 			icon: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBNYWNpbnRvc2giIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6RjlBRUVDQzgyMTNGMTFFM0IyMThFNEQ0NkQ3REQ0QzMiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6RjlBRUVDQzkyMTNGMTFFM0IyMThFNEQ0NkQ3REQ0QzMiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDpGOUFFRUNDNjIxM0YxMUUzQjIxOEU0RDQ2RDdERDRDMyIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDpGOUFFRUNDNzIxM0YxMUUzQjIxOEU0RDQ2RDdERDRDMyIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PmgAT+UAAAHXSURBVHjaVFI7L0RBFD67rrXrrot4s5t47Sq8QiQ6WhoUKlEQiWh02pWsRMcPkK1FRdRKhUchRBRCISESjQIrG8mcGeexFrNz5+7MfOd833fODeVmM+CcRUeLDnmjNRaNQcs/OaAX0t6jPRAGGAaE5gvHkxbK5OThrQOgCZ7gGE1X1qADJcLyaEX7YHeS5lBPczq5MbLAl0AMxnAsJSYs2I7RvsRAV2Iw1djdBn+HM7KyJIU61TGVXYL/4/M97wdxYzkrIT2DyOKQbbDsn3FzdnV+dHx9evF0e3/wcEJi9F5Mk1lkPg3IzK3enF9WebEg4sfD0f7aTk5AEJHOkhipZbBcB3P3OlKXQikQSr3pEJmAtXhIAVJEMcK5KsMRFgtsToop7KAmgAIM47RvEiENsOwSbHMqGYn7JUl05TmD2iCpmrJrl3AmuzI8Pa41sL+ShD09NjyxNl/T2iAMRhWU0Pm3D/4YtNNOKKazy7Eqv5jMgfb9MLfX2ZvKv+V3t3Z8zkCsahrg5fG5ozdNf3bWt612xsH+Zq6AhTCEmqI1UBYhE6SVAhyEYG1ysYBfhEvE6uorAvbnoCVaDRAUaY021bIkcKGeoEWrSjiWCMVvs+RY0HzyLcAADVWXkwI9WIEAAAAASUVORK5CYII=",
-			css: 	" .xkit-widgets-blank { background: rgba(255,255,255,0.22) !important; color: white; line-height: 120px; text-align: center; }",
+			css: " .xkit-widgets-blank { background: rgba(255,255,255,0.22) !important; color: white; line-height: 120px; text-align: center; }",
 
 			init: function(obj, data) {
 
@@ -949,7 +959,7 @@ XKit.extensions.xwidgets = new Object({
 
 				} else {
 
-					var m_html =	"<div class=\"xkit-audio-plus-artist\">" + m_player.artist + "</div>"  +
+					var m_html = "<div class=\"xkit-audio-plus-artist\">" + m_player.artist + "</div>"  +
 							"<div class=\"xkit-audio-plus-title\">" + m_player.title + "</div>" +
 							"<div class=\"xkit-audio-plus-button\">&nbsp;</div>";
 
@@ -982,7 +992,7 @@ XKit.extensions.xwidgets = new Object({
 
 			title: "Lights Out",
 			icon: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBNYWNpbnRvc2giIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6QUM3NjEzNkUxNDExMTFFMzlFMUI4QkQzOUFDODkyNkUiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6QUM3NjEzNkYxNDExMTFFMzlFMUI4QkQzOUFDODkyNkUiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDpBQzc2MTM2QzE0MTExMUUzOUUxQjhCRDM5QUM4OTI2RSIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDpBQzc2MTM2RDE0MTExMUUzOUUxQjhCRDM5QUM4OTI2RSIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PvVmJSIAAAFASURBVHjajJJdSsUwEEabNk1LxaV0Nb2FvqjPoojgWtRn8SKCy2kfSl+6jP63nnZAAkbwg5v7JTOZnkyiiqLYtm2eZ62153kYYwxmHMcoipRSwzCw4vt+3/dhGGp+QRB0XfcTjuN4XVeqECIPLzkYdmr+qLcewizLgmH0XKKinqaJMgAwssQUL3uoSgaQ8h1CTH1zCB7Guq7btsUnj5+XT1+cqizLpmm0JR9WCssosr2DKs9z6QCFmXPoJEmWQ392iQmgGHN/vqCzL9fxw8fegNeb4PbNHIacPRskFBySQyO8E0ZQ1el0kvuigHRJjBNpP7WgUxVfVRU+TdPw7n3f/HxFl2RFQHYk+1K8f0hlWWYj2WxuJAkT+G3IY+SsskEelZbm+IckT9icV4nRvFMyAABGkOTlQUJJGwnDF74FGAAdz94A4QSWuwAAAABJRU5ErkJggg==",
-			css: 	" .xkit-widgets-blank { background: rgba(255,255,255,0.22) !important; color: white; line-height: 120px; text-align: center; }",
+			css: " .xkit-widgets-blank { background: rgba(255,255,255,0.22) !important; color: white; line-height: 120px; text-align: center; }",
 
 			init: function(obj, data) {
 
@@ -1014,7 +1024,7 @@ XKit.extensions.xwidgets = new Object({
 						"#   # ##       #  ### # #",
 						"####  ### #   ## #   # ##",
 						"   # #       ###   #    #",
-					      ];
+				];
 
 				var m_puzzle = Math.floor(Math.random() * puzzles.length);
 				var m_count = 0;
@@ -1031,7 +1041,7 @@ XKit.extensions.xwidgets = new Object({
 					m_boxes = m_boxes + "</div>";
 				}
 
-				var m_html = 	"<div class=\"lights-out-grid\">" +
+				var m_html = "<div class=\"lights-out-grid\">" +
 							m_boxes +
 						"</div>";
 
@@ -1086,7 +1096,7 @@ XKit.extensions.xwidgets = new Object({
 
 		}
 
-		m_list = 	"<div id=\"xkit-xwidgets-add-list\" class=\"nano\">" +
+		m_list = "<div id=\"xkit-xwidgets-add-list\" class=\"nano\">" +
 					"<div id=\"xkit-xwidgets-add-list-content\" class=\"content\">" +
 						m_list +
 					"</div>" +
@@ -1154,7 +1164,7 @@ XKit.extensions.xwidgets = new Object({
 			$(document).on('keydown', XKit.extensions.xwidgets.key_down);
 		}
 
-		var m_html = 	"<div id=\"xwidgets-drawer\">" +
+		var m_html = "<div id=\"xwidgets-drawer\">" +
 					"<div id=\"xwidgets-drawer-inner\">" +
 						"<div class=\"xwidgets-box\" id=\"xwidgets-box-1\" data-id=\"1\">&nbsp;</div>" +
 						"<div class=\"xwidgets-box\" id=\"xwidgets-box-2\" data-id=\"2\">&nbsp;</div>" +

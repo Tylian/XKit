@@ -94,8 +94,8 @@ XKit.extensions.postblock = new Object({
 
 			$(this).addClass("xpostblocked");
 
-	  		var m_post = XKit.interface.post($(this));
-	  		if (m_post.is_mine === true) { return; }
+			var m_post = XKit.interface.post($(this));
+			if (m_post.is_mine === true) { return; }
 
 			if (XKit.extensions.postblock.blacklisted.indexOf(m_post.root_id) !== -1) {
 				$(this).parent().remove();
@@ -113,37 +113,6 @@ XKit.extensions.postblock = new Object({
 			XKit.extensions.postblock.call_tumblr_resize();
 
 		}
-
-		return;
-
-		$(".post").not(".xpostblocked").not(".is_mine").each(function() {
-
-			$(this).addClass("xpostblocked");
-
-			this_id = $(this).attr('data-root-id');
-
-			if (XKit.extensions.postblock.blacklisted.indexOf(this_id) !== -1) {
-				$(this).parent().remove();
-				size_changed = true;
-				return;
-			}
-
-			add_html = '<div class="xpostblockbutton post_control" data-root-id="' + this_id + '"></div>';
-
-			if ($(this).find('.post_controls').find('.like_button').length > 0) {
-				$(this).find('.post_controls').prepend(add_html);
-			} else {
-				$(this).find('.post_controls_inner').prepend(add_html);
-			}
-
-		});
-
-		if (size_changed) {
-
-			XKit.extensions.postblock.call_tumblr_resize();
-
-		}
-
 	},
 
 	cpanel: function(m_div) {
@@ -151,7 +120,7 @@ XKit.extensions.postblock = new Object({
 		$(m_div).html("<div class=\"postblock-cp\">You have <b id=\"xkit-postblock-cp-count\">" + (XKit.extensions.postblock.blacklisted.length - 1) + "</b> blocked posts.<div style=\"padding-top: 5px; padding-bottom: 5px;\">" +
 					"<div class=\"xkit-button\" id=\"postblock-undo-last\">Unblock last blocked post</div></div><small>You need to refresh the page in order for previously blocked posts to appear again.</small></div>");
 
-		if ((XKit.extensions.postblock.blacklisted.length - 1) == 0) {
+		if ((XKit.extensions.postblock.blacklisted.length - 1) === 0) {
 			$("#postblock-undo-last").addClass("disabled");
 		}
 
@@ -164,7 +133,7 @@ XKit.extensions.postblock = new Object({
 
 			$("#xkit-postblock-cp-count").html((XKit.extensions.postblock.blacklisted.length - 1));
 
-			if ((XKit.extensions.postblock.blacklisted.length - 1) == 0) {
+			if ((XKit.extensions.postblock.blacklisted.length - 1) === 0) {
 				$("#postblock-undo-last").addClass("disabled");
 			}
 

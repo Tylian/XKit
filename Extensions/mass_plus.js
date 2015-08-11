@@ -79,10 +79,10 @@ XKit.extensions.mass_plus = new Object({
 
 			if (m_type === "month-deselect") {
 
-				var m_month = $(this).parent().parent();
-				var n_month = $(m_month).nextUntil(".heading");
+				var month_deselect = $(this).parent().parent();
+				var month_deselect_heading = $(month_deselect).nextUntil(".heading");
 
-				$(n_month).each(function() {
+				$(month_deselect_heading).each(function() {
 					if ($(this).hasClass("highlighted")) {
 						$(this).find(".overlay").trigger('click');
 					}
@@ -105,7 +105,7 @@ XKit.extensions.mass_plus = new Object({
 			m_extra = "<div data-type=\"search-tags\" class=\"xkit-mass-link xkit-selector\">search by tags</div>";
 		}
 
-		var m_html = 	"<div class=\"xkit-mass-plus-buttons-month\">" +
+		var m_html = "<div class=\"xkit-mass-plus-buttons-month\">" +
 					"<div id=\"xkit-mass-count\"><span>0</span> selected (<div data-type=\"help\" class=\"xkit-mass-link xkit-no-left\">help</div>)</div>" +
 					"<div data-type=\"select-all\" class=\"xkit-mass-link xkit-selector\">Select first 100</div>" +
 					"<div data-type=\"deselect-all\" class=\"xkit-mass-link xkit-selector\">Deselect all</div>" +

@@ -1,5 +1,5 @@
 //* TITLE Servant **//
-//* VERSION 0.4 REV E **//
+//* VERSION 0.5 REV F **//
 //* DESCRIPTION XKit Personal Assistant **//
 //* DETAILS Automator for XKit: lets you create little Servants that does tasks for you when the conditions you've set are met. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -600,34 +600,6 @@ XKit.extensions.servant = new Object({
 
 		},
 
-		time_day: {
-
-			text: "It's day",
-			type: "time",
-			compatibility: "",
-			returns: "the hour, in 24-hour format",
-			description: "Runs each time you refresh the page,<br/>if the time is between 6 am and 6 pm",
-
-			run: function() {
-
-				var m_object = {};
-
-				var m_hour = new Date().getHours();
-
-				if (m_hour >= 6 && m_hour < 18) {
-					m_object.run = true;
-				} else {
-					m_object.run = false;
-				}
-
-				m_object.return = m_hour;
-
-				return m_object;
-
-			},
-
-		},
-
 		time_night: {
 
 			text: "It's night",
@@ -669,7 +641,7 @@ XKit.extensions.servant = new Object({
 
 				var m_today = new Date();
 
-				if(m_today.getDay() == 6 || m_today.getDay() == 0) {
+				if(m_today.getDay() === 6 || m_today.getDay() === 0) {
 					m_object.run = true;
 				} else {
 					m_object.run = false;
@@ -696,7 +668,7 @@ XKit.extensions.servant = new Object({
 
 				var m_today = new Date();
 
-				if (m_today.getDay() != 6 && m_today.getDay() != 0) {
+				if (m_today.getDay() !== 6 && m_today.getDay() !== 0) {
 					m_object.run = true;
 				} else {
 					m_object.run = false;
@@ -759,7 +731,8 @@ XKit.extensions.servant = new Object({
 				var m_return = false;
 
 				try {
-					m_return = new Function(parameter)();
+					/* jshint evil: true */
+					m_return = eval(parameter);
 				} catch(e) {
 					m_return = false;
 					console.log("Unable to run Servant! ---> " + e.message);
@@ -912,16 +885,18 @@ XKit.extensions.servant = new Object({
 				// To_Pass 	 -> passed objects, such as a post
 				// Compatibility -> "post", "time", etc.
 
+				var on_click = function() {
+					if ($(this).hasClass("active")) {
+						$(this).closest(".post.post_full").removeClass("xkit-servant-dimmed-but-active");
+						return;
+					}
+					$(this).closest(".post.post_full").addClass("xkit-servant-dimmed-but-active");
+				};
+
 				for (var i=0;i<to_pass.length;i++) {
 					if (compatibility[i] === "post") {
 						$(to_pass[i]).addClass("xkit-servant-dimmed");
-						$(to_pass[i]).find(".post_control_menu.creator").click(function() {
-							if ($(this).hasClass("active")) {
-								$(this).closest(".post.post_full").removeClass("xkit-servant-dimmed-but-active");
-								return;
-							}
-							$(this).closest(".post.post_full").addClass("xkit-servant-dimmed-but-active");
-						});
+						$(to_pass[i]).find(".post_control_menu.creator").click(on_click);
 					}
 				}
 
@@ -1156,19 +1131,24 @@ XKit.extensions.servant = new Object({
 
 				var m_post = "";
 
-				for (var i=0;i<to_pass.length;i++) {
-					if (compatibility[i] === "post") {
-						m_post = $(to_pass[i]);
+				for (var j=0;j<to_pass.length;j++) {
+					if (compatibility[j] === "post") {
+						m_post = $(to_pass[j]);
 					}
 				}
 
 				if (m_post !== "") {
 
-					var to_run = function() { post = m_post; eval(parameter_fixed); };
+					var to_run = function() {
+						post = m_post;
+						/* jshint evil: true */
+						eval(parameter_fixed);
+					};
 					to_run();
 
 				} else {
 
+					/* jshint evil: true */
 					eval(parameter_fixed);
 
 				}
@@ -1239,7 +1219,7 @@ XKit.extensions.servant = new Object({
 
 		m_servants = XKit.extensions.servant.servants;
 
-		if (m_servants.length == 0) { return; }
+		if (m_servants.length === 0) { return; }
 
 		var runs_on_posts = [];
 
@@ -1324,26 +1304,25 @@ XKit.extensions.servant = new Object({
 
 			} else {
 
-				m_object = $(".post").not(".xkit-servant-" + obj.id).not("#new_post").first();
+				m_object = $(".posts .post").not(".xkit-servant-" + obj.id).not("#new_post").first();
 				if (m_object.length === 0) { return false; }
 
 			}
 
 		}
 
-		for (var i=0;i<causes.length;i++) {
-
-			var to_run = XKit.extensions.servant.causes[causes[i].id].run;
+		causes.forEach(function(cause) {
+			var to_run = XKit.extensions.servant.causes[cause.id].run;
 
 			var m_result = false;
 
-			if (XKit.extensions.servant.causes[causes[i].id].runs_on === "post") {
+			if (XKit.extensions.servant.causes[cause.id].runs_on === "post") {
 
-				m_result = to_run(causes[i].value, $(m_object));
+				m_result = to_run(cause.value, $(m_object));
 
 			} else {
 
-				m_result = to_run(causes[i].value);
+				m_result = to_run(cause.value);
 
 			}
 
@@ -1355,30 +1334,28 @@ XKit.extensions.servant = new Object({
 
 			// We should save this too, so we wouldn't, for example,
 			// push a post object to a function that doesn't take post objects.
-			compatibility.push(XKit.extensions.servant.causes[causes[i].id].compatibility);
+			compatibility.push(XKit.extensions.servant.causes[cause.id].compatibility);
 
-			// alert("on " + obj.id + ":\n" + "returned " + m_result.run + " on causer " + i + " --- parameter = " + causes[i].value + "\ntype = " + causes[i].id);
+			// alert("on " + obj.id + ":\n" + "returned " + m_result.run + " on causer " + i + " --- parameter = " + cause.value + "\ntype = " + cause.id);
 
 			if (m_result.run === false) {
 				do_run = 0;
-				break;
 			} else {
 				do_run = 1;
 			}
-
-		}
+		});
 
 		$(m_object).addClass("xkit-servant-" + obj.id);
 
 		if (do_run !== 1) { return; }
 
-		for (var i=0;i<actions.length;i++) {
+		actions.forEach(function(action) {
 
-			var to_run = XKit.extensions.servant.actions[actions[i].id].run;
+			var to_run = XKit.extensions.servant.actions[action.id].run;
 
-			var m_result = XKit.extensions.servant.actions[actions[i].id].run(actions[i].value, returns, to_pass, compatibility, obj);
+			var m_result = XKit.extensions.servant.actions[action.id].run(action.value, returns, to_pass, compatibility, obj);
 
-			if (XKit.extensions.servant.actions[actions[i].id].stop === true) {
+			if (XKit.extensions.servant.actions[action.id].stop === true) {
 
 				// This is a flow thingy, where we must wait for it to return a value
 				// so we can go on.
@@ -1390,7 +1367,7 @@ XKit.extensions.servant = new Object({
 
 			}
 
-		}
+		});
 
 		return "";
 
@@ -1638,29 +1615,6 @@ XKit.extensions.servant = new Object({
 			event.stopImmediatePropagation();
 
 		});
-
-	},
-
-	settings_box_extension: function(obj, parent, real_val) {
-
-		var m_array = XKit.installed.list();
-
-		var m_html = "<select class=\"xkit-servant-option-listbox\">";
-
-		for (var i=0;i<m_array.length;i++) {
-
-			var extension_name = XKit.installed.title(m_array[i]);
-			var extension_id = m_array[i];
-
-			if (m_array[i].substring(0,5) === "xkit_") { continue; }
-
-			m_html = m_html + "<option value=\"" + extension_id + "\">" + extension_name + "</option>";
-
-		}
-
-		m_html = m_html + "</select>";
-
-		$(obj).html(m_html);
 
 	},
 
@@ -2070,7 +2024,7 @@ XKit.extensions.servant = new Object({
 
 		var m_title = obj.title;
 
-		if (typeof obj.title == "undefined" || obj.title == "") {
+		if (!obj.title) {
 			m_title = "Servant #" + XKit.extensions.servant.servant_count_for_list;
 		}
 
@@ -2090,13 +2044,14 @@ XKit.extensions.servant = new Object({
 		}
 
 		if (obj.causes.length > 1) {
-			for (var i=0;i<obj.causes.length;i++) {
+			for (var cause_i = 0; cause_i < obj.causes.length; cause_i++) {
+				var cause = obj.causes[cause_i];
 				m_val = "";
-				if (typeof obj.causes[i].value !== "undefined" &&obj.causes[i].value !== "") {
-					m_val = " " + obj.causes[i].value;
+				if (typeof cause.value !== "undefined" &&cause.value !== "") {
+					m_val = " " + cause.value;
 				}
-				m_description = m_description + XKit.extensions.servant.causes[obj.causes[i].id].text + m_val;
-				if (i < obj.causes.length - 1) {
+				m_description = m_description + XKit.extensions.servant.causes[cause.id].text + m_val;
+				if (cause_i < obj.causes.length - 1) {
 					m_description = m_description + " and ";
 				}
 			}
@@ -2138,14 +2093,14 @@ XKit.extensions.servant = new Object({
 
 			for (var i=0;i<XKit.extensions.servant.servants.length;i++) {
 
-				servant_html = servant_html + 	XKit.extensions.servant.create_cpanel_div(XKit.extensions.servant.servants[i]);
+				servant_html = servant_html + XKit.extensions.servant.create_cpanel_div(XKit.extensions.servant.servants[i]);
 				XKit.extensions.servant.servant_count_for_list++;
 
 			}
 
 		}
 
-		var m_html = 	"<div id=\"xkit-servant-cp\">" +
+		var m_html = "<div id=\"xkit-servant-cp\">" +
 					"<div id=\"servant-toolbar\">" +
 						"<div id=\"servant-add-button\" class=\"xkit-button\">Add new servant..</div>" +
 						"<div id=\"servant-refresh-warning\">You need to refresh the page for changes to take affect</div>" +

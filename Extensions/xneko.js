@@ -88,17 +88,17 @@ XKit.extensions.xneko = new Object({
 		// Center the cat.
 		XKit.extensions.xneko.neko.place($(window).width() / 2 - 16, $(window).height() / 2 - 16);
 
-   		$(document).mousemove(function(e){
-   			if (XKit.extensions.xneko.preferences.stay_away.value === true) {
+		$(document).mousemove(function(e){
+			if (XKit.extensions.xneko.preferences.stay_away.value === true) {
 				XKit.extensions.xneko.mouse_x = e.pageX - 15;
 				XKit.extensions.xneko.mouse_y = e.pageY - 15;
-   			} else {
+			} else {
 				XKit.extensions.xneko.mouse_x = e.pageX;
 				XKit.extensions.xneko.mouse_y = e.pageY;
 			}
-   		});
+		});
 
-   		$("#xneko").addClass(XKit.extensions.xneko.preferences.appearance.value);
+		$("#xneko").addClass(XKit.extensions.xneko.preferences.appearance.value);
 
 	},
 

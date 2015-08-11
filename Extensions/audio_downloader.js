@@ -1,5 +1,5 @@
 //* TITLE Audio Downloader **//
-//* VERSION 2.0 REV F **//
+//* VERSION 2.0.1 **//
 //* DESCRIPTION Lets you download audio posts hosted on Tumblr **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//
@@ -24,7 +24,7 @@ XKit.extensions.audio_downloader = new Object({
 			XKit.storage.set("audio_downloader","shown_welcome","true");
 		}
 
-		if ($(".post").length > 0) {
+		if ($(".posts .post").length > 0) {
 
 			XKit.interface.create_control_button("xkit-audio-downloader", this.button_icon, "Audio Downloader", "");
 			XKit.extensions.audio_downloader.init();
@@ -153,13 +153,13 @@ XKit.extensions.audio_downloader = new Object({
 			// Check if hosted by Tumblr:
 			if ($(this).find(".audio_player").length === 0) { return; }
 
-	  		var m_post = XKit.interface.post($(this));
+			var m_post = XKit.interface.post($(this));
 
-	  		if (m_post.type !== "audio") { return; }
+			if (m_post.type !== "audio") { return; }
 
-	  		if (XKit.interface.where().queue === true || XKit.interface.where().drafts === true) {
-	  			if (m_post.reblogged === false) { return; }
-	  		}
+			if (XKit.interface.where().queue === true || XKit.interface.where().drafts === true) {
+				if (m_post.reblogged === false) { return; }
+			}
 
 			XKit.interface.add_control_button(this, "xkit-audio-downloader", "data-xkit-audio-downloader-tumblelog-key=\"" + m_post.tumblelog_key + "\" data-xkit-audio-downloader-tumblelog-name=\"" + m_post.owner + "\"");
 

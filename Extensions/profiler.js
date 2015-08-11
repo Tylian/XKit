@@ -1,5 +1,5 @@
 //* TITLE Profiler **//
-//* VERSION 1.2 REV C **//
+//* VERSION 1.2.1 **//
 //* DESCRIPTION The User Inspection Gadget **//
 //* DETAILS Select Profiler option from the User Menu to see information such as when they started blogging, how many posts they have, timezone, and more.<br><br>Requires User Menus+ to be installed. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -26,7 +26,7 @@ XKit.extensions.profiler = new Object({
 
 		XKit.tools.init_css("profiler");
 
-		var m_css = 	"#iframe_controls { width: auto !important; } " +
+		var m_css = "#iframe_controls { width: auto !important; } " +
 				"#xkit_profiler_inblog_button:before {" +
 					" background-size: auto; " +
 					" background-position: 50% 50%; " +
@@ -36,7 +36,7 @@ XKit.extensions.profiler = new Object({
 
 		XKit.tools.add_css(m_css, "profiler_in_blog");
 
-		var m_html = 	"<a id=\"xkit_profiler_inblog_button\" onclick=\"return false\" class=\"btn icon reblog no_label\">Profiler</a>";
+		var m_html = "<a id=\"xkit_profiler_inblog_button\" onclick=\"return false\" class=\"btn icon reblog no_label\">Profiler</a>";
 
 		$(".btn.dashboard").before(m_html);
 
@@ -75,46 +75,46 @@ XKit.extensions.profiler = new Object({
 
 			$(this).addClass("profiler-nicknamed");
 
-	  		var m_post = XKit.interface.post($(this));
+			var m_post = XKit.interface.post($(this));
 
-	  		if (XKit.interface.where().inbox !== true) {
-	  			if (m_post.is_mine === true) { return; }
-	  		}
+			if (XKit.interface.where().inbox !== true) {
+				if (m_post.is_mine === true) { return; }
+			}
 
-	  		// console.log(m_post);
+			// console.log(m_post);
 
-	  		var post_owner = m_post.owner;
+			var post_owner = m_post.owner;
 
-	  		if (m_post.type === "note" && XKit.interface.where().inbox === true) {
-	  			var m_json_info = $(this).find(".post_avatar_link").attr('data-tumblelog-popover');
-	  			try {
-	  				var m_json_obj = JSON.parse(m_json_info);
-	  				post_owner = m_json_obj.name;
-	  			} catch(e) {
-	  				return;
-	  			}
-	  		}
+			if (m_post.type === "note" && XKit.interface.where().inbox === true) {
+				var m_json_info = $(this).find(".post_avatar_link").attr('data-tumblelog-popover');
+				try {
+					var m_json_obj = JSON.parse(m_json_info);
+					post_owner = m_json_obj.name;
+				} catch(e) {
+					return;
+				}
+			}
 
-	  		var m_storage = XKit.storage.get("profiler","nick-for--" + post_owner, "");
+			var m_storage = XKit.storage.get("profiler","nick-for--" + post_owner, "");
 
-	  		if (m_storage === "") { return; }
+			if (m_storage === "") { return; }
 
-	  		var name_div_container;
-	  		var name_div;
+			var name_div_container;
+			var name_div;
 
-	  		if ($(this).find(".post_info_fence").length > 0) {
-	  			name_div_container = $(this).find(".post_info_fence");
-	  		} else {
-	  			name_div_container = $(this).find(".post_info");
-	  		}
+			if ($(this).find(".post_info_fence").length > 0) {
+				name_div_container = $(this).find(".post_info_fence");
+			} else {
+				name_div_container = $(this).find(".post_info");
+			}
 
-	  		if (name_div_container.find("a").length > 0) {
-	  			name_div = name_div_container.find("a").first();
-	  			$(name_div).after("<span class=\"xkit-profiler-nickname\">(" + m_storage + ")</div>");
-	  		} else {
-	  			name_div = name_div_container;
-	  			$(name_div).append("<span class=\"xkit-profiler-nickname\">(" + m_storage + ")</div>");
-	  		}
+			if (name_div_container.find("a").length > 0) {
+				name_div = name_div_container.find("a").first();
+				$(name_div).after("<span class=\"xkit-profiler-nickname\">(" + m_storage + ")</div>");
+			} else {
+				name_div = name_div_container;
+				$(name_div).append("<span class=\"xkit-profiler-nickname\">(" + m_storage + ")</div>");
+			}
 
 		});
 
@@ -142,59 +142,33 @@ XKit.extensions.profiler = new Object({
 
 		}
 
-		if (typeof XKit.extensions.show_more === "undefined") {
+		XKit.installed.when_running("show_more", function() {
+			if (XKit.extensions.show_more.preferences.use_classic_menu.value === true) {
+				XKit.extensions.show_more.add_custom_menu("profiler", function(data) {
+					var user_url = data.name;
+
+					$(document).off("click", ".xkit-profiler-button-" + user_url, XKit.extensions.profiler.menu_clicked);
+					$(document).on("click", ".xkit-profiler-button-" + user_url, XKit.extensions.profiler.menu_clicked);
+
+					return "<div data-url=\"" + user_url + "\" class=\"xkit-profiler-button-" + user_url + " xkit-profiler\">Profiler</div>";
+				});
+			} else {
+				XKit.extensions.show_more.add_custom_menu("profiler", function(data) {
+					var user_url = data.name;
+
+					$(document).off("click", ".xkit-profiler-button-" + user_url, XKit.extensions.profiler.menu_clicked);
+					$(document).on("click", ".xkit-profiler-button-" + user_url, XKit.extensions.profiler.menu_clicked);
+
+					return "<li>" +
+						"<a data-url=\"" + user_url + "\" class=\"xkit-profiler-button-" + user_url + " xkit-profiler xkit-new-menu-fix\">" +
+							"<span class=\"hide_overflow\">Profiler</span>" +
+						"</a>" +
+						"</li>";
+				});
+			}
+		}, function() {
 			XKit.extensions.profiler.show_ump_error();
-			return;
-		} else {
-
-			setTimeout(function() {
-
-				if (XKit.extensions.show_more.running !== true) {
-					XKit.extensions.profiler.show_ump_error();
-					return;
-				} else {
-
-                			if (XKit.extensions.show_more.preferences.use_classic_menu.value === true) {
-
-                				XKit.extensions.show_more.add_custom_menu("profiler", function(data) {
-
-                					console.log(data);
-                					var user_url = data.name;
-
-							$(document).off("click", ".xkit-profiler-button-" + user_url, XKit.extensions.profiler.menu_clicked);
-							$(document).on("click", ".xkit-profiler-button-" + user_url, XKit.extensions.profiler.menu_clicked);
-
-							return "<div data-url=\"" + user_url + "\" class=\"xkit-profiler-button-" + user_url + " xkit-profiler\">Profiler</div>";
-
-                				});
-
-                			} else {
-
-                				XKit.extensions.show_more.add_custom_menu("profiler", function(data) {
-
-                					console.log("******************************");
-                					console.log(data);
-                					console.log("******************************");
-                					var user_url = data.name;
-
-							$(document).off("click", ".xkit-profiler-button-" + user_url, XKit.extensions.profiler.menu_clicked);
-							$(document).on("click", ".xkit-profiler-button-" + user_url, XKit.extensions.profiler.menu_clicked);
-
-							return "<li>" +
-                						"<a data-url=\"" + user_url + "\" class=\"xkit-profiler-button-" + user_url + " xkit-profiler xkit-new-menu-fix\">" +
-                							"<span class=\"hide_overflow\">Profiler</span>" +
-                						"</a>" +
-                			 		 "</li>";
-
-                				});
-
-                			}
-
-				}
-
-			}, 2000);
-
-		}
+		});
 
 	},
 
@@ -232,7 +206,7 @@ XKit.extensions.profiler = new Object({
 		var m_window_id = XKit.tools.random_string();
 		XKit.extensions.profiler.window_id = m_window_id;
 
-		var m_html = 	"<div id=\"xkit-profiler-contents\" class=\"nano\">" +
+		var m_html = "<div id=\"xkit-profiler-contents\" class=\"nano\">" +
 					"<div id=\"xkit-profiler-main\" class=\"content\">" +
 						"<div class=\"xkit-profiler-line separator\">" +
 							"Blog Information" +
@@ -393,7 +367,7 @@ XKit.extensions.profiler = new Object({
 
 				if (XKit.extensions.profiler.window_id !== m_window_id) {return; }
 
-				var data = JSON.parse(response.responseText).response
+				var data = JSON.parse(response.responseText).response;
 				var dtx = new Date(data.blog.updated * 1000);
 				var dt = moment(dtx);
 
@@ -431,7 +405,7 @@ XKit.extensions.profiler = new Object({
 						return;
 					},
 					onload: function(response) {
-						var data = JSON.parse(response.responseText).response
+						var data = JSON.parse(response.responseText).response;
 						var date = new Date(data.posts[0].timestamp*1000);
 						$("#xkit-profiler-since").removeClass("loading-up").html(date.getFullYear());
 					}
@@ -502,15 +476,16 @@ XKit.extensions.profiler = new Object({
 
 				if (XKit.extensions.profiler.window_id !== m_window_id) {return; }
 
+				var data = null;
 				try {
-					var data = JSON.parse(response.responseText).response
+					data = JSON.parse(response.responseText).response;
 				} catch(e) {
 					console.log("Error parsing data.");
 					XKit.extensions.profiler.display_error(m_window_id);
 					return;
 				}
 
-				$("#xkit-profiler-" + to_get).removeClass("loading-up").html(data["total_posts"]);
+				$("#xkit-profiler-" + to_get).removeClass("loading-up").html(data.total_posts);
 
 				XKit.extensions.profiler.get_json_p2(user_url, m_window_id, (part + 1));
 
@@ -541,11 +516,11 @@ XKit.extensions.profiler = new Object({
 
 	destroy: function() {
 		this.running = false;
-              	try {
-              		XKit.extensions.show_more.remove_custom_menu("profiler");
-              	} catch(e){
-              		XKit.console.add("Can't remove custom menu, " + e.message);
-              	}
+		try {
+			XKit.extensions.show_more.remove_custom_menu("profiler");
+		} catch(e){
+			XKit.console.add("Can't remove custom menu, " + e.message);
+		}
 	}
 
 });

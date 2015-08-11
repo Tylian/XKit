@@ -1,5 +1,5 @@
 //* TITLE Themes **//
-//* VERSION 0.1 REV B **//
+//* VERSION 0.1.2 **//
 //* DESCRIPTION Themes for your dashboard **//
 //* DETAILS This extension allows you to install themes from the XKit Theme Gallery onto your dashboard. New themes are added regularly, and if you are good with CSS, send an ask to xkit-dev.tumblr.com to get your theme added here! **//
 //* DEVELOPER STUDIOXENIX **//
@@ -17,6 +17,11 @@ XKit.extensions.themes = new Object({
 
 	run: function() {
 		this.running = true;
+
+		if (!XKit.interface.is_tumblr_page()) {
+			return;
+		}
+
 
 		this.current_theme = XKit.storage.get("themes","my_theme","");
 		if (typeof this.current_theme === "undefined") {
@@ -48,7 +53,7 @@ XKit.extensions.themes = new Object({
 		XKit.extensions.themes.gallery_themes_contents.push(obj.contents);
 		XKit.extensions.themes.gallery_themes_version.push(obj.version);
 
-		var m_html = 	"<div class=\"xkit-theme-obj " + m_class + "\" data-theme-id=\"" + obj.file + "\">" +
+		var m_html = "<div class=\"xkit-theme-obj " + m_class + "\" data-theme-id=\"" + obj.file + "\">" +
 					"<div class=\"xkit-theme-title\">" + obj.name + "</div>" +
 					"<div class=\"xkit-theme-description\">" + obj.description + "</div>" +
 					"<div class=\"xkit-theme-developer\">by " + obj.developer + "</div>" +
@@ -107,8 +112,8 @@ XKit.extensions.themes = new Object({
 
 		if (typeof XKit.extensions.yahoo !== "undefined") {
 			if (XKit.extensions.yahoo.running === true) {
-				var m_html = "<div id=\"xkit-themes-loading\"><b>Yoohoo is on</b><br/><small>Please disable the \"Yoohoo!\" before running this extension.</small></div>";
-				$(obj).html(m_html);
+				var yahoo_html = "<div id=\"xkit-themes-loading\"><b>Yoohoo is on</b><br/><small>Please disable the \"Yoohoo!\" before running this extension.</small></div>";
+				$(obj).html(yahoo_html);
 				return;
 			}
 		}

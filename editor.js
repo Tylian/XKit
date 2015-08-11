@@ -161,25 +161,25 @@ function extension_editor_finish_run() {
 				return;
 			}
 
-			var default_script = 	"//* TITLE " + new_filename + " **//\n" +
-									"//* VERSION 1.0 REV A **//\n" +
-									"//* DESCRIPTION	**//\n" +
-									"//* DEVELOPER STUDIOXENIX **//\n" +
-									"//* FRAME false **//\n" +
-									"//* BETA false **//\n" +
-									"\nXKit.extensions." + new_filename + " = new Object({\n" +
-									"\n" +
-									"\trunning: false,\n" +
-									"\n" +
-									"\trun: function() {\n" +
-									"\t\tthis.running = true;\n" +
-									"\t},\n" +
-									"\n" +
-									"\tdestroy: function() {\n" +
-									"\t\tthis.running = false;\n" +
-									"\t}\n" +
-									"\n" +
-									"});";
+			var default_script = "//* TITLE " + new_filename + " **//\n" +
+								 "//* VERSION 1.0 REV A **//\n" +
+								 "//* DESCRIPTION	**//\n" +
+								 "//* DEVELOPER STUDIOXENIX **//\n" +
+								 "//* FRAME false **//\n" +
+								 "//* BETA false **//\n" +
+								 "\nXKit.extensions." + new_filename + " = new Object({\n" +
+								 "\n" +
+								 "\trunning: false,\n" +
+								 "\n" +
+								 "\trun: function() {\n" +
+								 "\t\tthis.running = true;\n" +
+								 "\t},\n" +
+								 "\n" +
+								 "\tdestroy: function() {\n" +
+								 "\t\tthis.running = false;\n" +
+								 "\t}\n" +
+								 "\n" +
+								 "});";
 
 			var m_object = {};
 			m_object.id = new_filename;

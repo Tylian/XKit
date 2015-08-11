@@ -1,5 +1,5 @@
 //* TITLE Auto Load Images **//
-//* VERSION 0.1 REV A **//
+//* VERSION 0.1.1 **//
 //* DESCRIPTION Load inline photos automatically **//
 //* DETAILS This extension removes the &quot;gray box&quot; that appears on the photos attached to non-photo posts, allowing the photos to load automatically without you having to click on them. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -14,7 +14,7 @@ XKit.extensions.autoloadimages = new Object({
 
 		this.running = true;
 
-		if ($(".post").length === 0) {return; }
+		if ($(".posts .post").length === 0) {return; }
 
 		XKit.post_listener.add("autoloadimages", XKit.extensions.autoloadimages.do);
 		XKit.extensions.autoloadimages.do();
@@ -29,16 +29,16 @@ XKit.extensions.autoloadimages = new Object({
 
 			$(this).addClass("xkit-autoloadimages-done");
 
-	  		if ($(this).find(".inline_external_image").length > 0) {
+			if ($(this).find(".inline_external_image").length > 0) {
 
-	  			$(this).find(".inline_external_image").each(function() {
+				$(this).find(".inline_external_image").each(function() {
 
-	  				$(this).attr('src', $(this).attr('external_src'));
-	  				$(this).addClass("enlarged");
+					$(this).attr('src', $(this).attr('external_src'));
+					$(this).addClass("enlarged");
 
-	  			});
+				});
 
-	  		}
+			}
 
 		});
 

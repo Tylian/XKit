@@ -18,13 +18,13 @@ XKit.extensions.search_likes = new Object({
 
 		XKit.tools.init_css("search_likes");
 
-		var m_html = 	'<li id="xkit-search-likes-li">' +
+		var m_html = '<li id="xkit-search-likes-li">' +
 				'<a href="#" class="customize" id="xkit-search-likes-button">' +
 					'<div class="hide_overflow" style="color: rgba(255, 255, 255, 0.5) !important; font-weight: bold; padding-left: 10px; padding-top: 8px;">Search liked posts</div>' +
 				'</a>' +
 				'</li>';
 
-		var x_html = 	"<div id=\"xkit-search-likes-box\">" +
+		var x_html = "<div id=\"xkit-search-likes-box\">" +
 					"<input type=\"text\" placeholder=\"Enter URL/text...\" id=\"xkit-search-likes-input\">" +
 				"</div>";
 

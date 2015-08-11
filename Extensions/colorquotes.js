@@ -97,13 +97,13 @@ XKit.extensions.colorquotes = new Object({
 
 			$(this).addClass("xkit-color-quoted");
 
-	  		var m_post = XKit.interface.post($(this));
+			var m_post = XKit.interface.post($(this));
 
-	  		var count = 0;
+			var count = 0;
 
-	  		if (XKit.extensions.colorquotes.preferences.dont_fade_if_less_than_two.value === true) {
-	  			if ($(this).find("blockquote").length === 1) { return; }
-	  		}
+			if (XKit.extensions.colorquotes.preferences.dont_fade_if_less_than_two.value === true) {
+				if ($(this).find("blockquote").length === 1) { return; }
+			}
 
 			$(this).find("blockquote").each(function() {
 
@@ -134,10 +134,10 @@ XKit.extensions.colorquotes = new Object({
 
 		var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
 		return result ? {
-        		r: parseInt(result[1], 16),
-        		g: parseInt(result[2], 16),
-        		b: parseInt(result[3], 16)
-    		} : null;
+			r: parseInt(result[1], 16),
+			g: parseInt(result[2], 16),
+			b: parseInt(result[3], 16)
+		} : null;
 
 	},
 

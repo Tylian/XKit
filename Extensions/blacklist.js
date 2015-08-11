@@ -1,5 +1,5 @@
 //* TITLE Blacklist **//
-//* VERSION 2.7.1 **//
+//* VERSION 2.7.4 **//
 //* DESCRIPTION Clean your dash **//
 //* DETAILS This extension allows you to block posts based on the words you specify. If a post has the text you've written in the post itself or it's tags, it will be replaced by a warning, or won't be shown on your dashboard, depending on your settings. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -8,21 +8,21 @@
 //* SLOW true **//
 
 jQuery.fn.selectText = function(){
-    var doc = document
-        , element = this[0]
-        , range, selection
-    ;
-    if (doc.body.createTextRange) {
-        range = document.body.createTextRange();
-        range.moveToElementText(element);
-        range.select();
-    } else if (window.getSelection) {
-        selection = window.getSelection();
-        range = document.createRange();
-        range.selectNodeContents(element);
-        selection.removeAllRanges();
-        selection.addRange(range);
-    }
+	var doc = document;
+	var element = this[0];
+	var range, selection;
+
+	if (doc.body.createTextRange) {
+		range = document.body.createTextRange();
+		range.moveToElementText(element);
+		range.select();
+	} else if (window.getSelection) {
+		selection = window.getSelection();
+		range = document.createRange();
+		range.selectNodeContents(element);
+		selection.removeAllRanges();
+		selection.addRange(range);
+	}
 };
 
 XKit.extensions.blacklist = new Object({
@@ -96,7 +96,7 @@ XKit.extensions.blacklist = new Object({
 			default: true,
 			value: true
 		},
-		"sep1": {
+		"sep2": {
 			text: "Appearance options",
 			type: "separator"
 		},
@@ -105,7 +105,7 @@ XKit.extensions.blacklist = new Object({
 			default: false,
 			value: false
 		},
-		"sep2": {
+		"sep3": {
 			text: "Blacklisted Words",
 			type: "separator"
 		}
@@ -118,7 +118,7 @@ XKit.extensions.blacklist = new Object({
 		this.running = true;
 
 		if ($("body").hasClass("dashboard_messages_inbox") === true || $("body").hasClass("dashboard_messages_submissions") === true) {
-			if (this.preferences.dont_on_inbox.value == true) {
+			if (this.preferences.dont_on_inbox.value) {
 				return;
 			}
 		}
@@ -146,30 +146,29 @@ XKit.extensions.blacklist = new Object({
 
 		if (this.preferences.mini_block.value === true) {
 
-			var mini_ui = 	" .xblacklist_blacklisted_post .post_avatar, .xblacklist_blacklisted_post .post_permalink { display: none !important; } " +
+			var mini_ui =
+					" .xblacklist_blacklisted_post .post_avatar, .xblacklist_blacklisted_post .post_permalink { display: none !important; } " +
 					" .xblacklist_blacklisted_post .xblacklist_excuse { " +
 						" position: absolute; top: 0; left: 0; width: 100%; " +
 						" color: rgba(255,255,255,.43); height: 27px !important; padding: 0px; !important; " +
 						" line-height: 27px !important; padding-left: 15px; !important; } " +
 					" .xblacklist_blacklisted_post .post_content { " +
 						" background: transparent; color: rgba(255,255,255,.43); } " +
-					" .xblacklist_blacklisted_post:hover .xblacklist_open_post { display: block; } " +
-					" .xblacklist_blacklisted_post .xblacklist_open_post { " +
-						" display: none; " +
-					" } " +
+					" .xblacklist_blacklisted_post:hover .xblacklist_open_post { "+
+						"display: inline-block; height: unset; line-height: initial;} " +
+					" .xblacklist_blacklisted_post .xblacklist_open_post { display: none; } " +
 					" .xblacklist_blacklisted_post .post_tags { display: none; } " +
 					" .xblacklist_blacklisted_post { " +
 						" height: 40px !important; " +
 						" opacity: 1 !important; padding: 0px !important; " +
-						" box-shaddow: inset 0px 1px 0px rgba(255,255,255,0.10); " +
-						" border: 1px dashed rgba(255,255,255,0.25); background: transparent;" +
+						" border: 1px dashed rgba(255,255,255,0.25) !important; background: transparent !important;" +
 					" }";
 
 			XKit.tools.add_css(mini_ui, "xkit_blacklist_mini_ui");
 
 		}
 
-		if ($(".post").length > 0) {
+		if ($(".posts .post").length > 0) {
 			XKit.post_listener.add("blacklist", XKit.extensions.blacklist.check);
 			XKit.extensions.blacklist.check();
 
@@ -206,22 +205,22 @@ XKit.extensions.blacklist = new Object({
 		try {
 
 		if (top.getSelection) {
-        		text = top.getSelection().toString();
-        	} else if (document.selection && document.selection.type != "Control") {
-        		text = document.selection.createRange().text;
-   		}
+			text = top.getSelection().toString();
+		} else if (document.selection && document.selection.type != "Control") {
+			text = document.selection.createRange().text;
+		}
 
-   		} catch(e) {
-   			// console.log("ho");
-   		}
+		} catch(err) {
+			// console.log("ho");
+		}
 
-        	if (text === "" ||typeof text === "undefined"){
-        		return;
-        	}
+		if (text === "" ||typeof text === "undefined"){
+			return;
+		}
 
-        	text = $.trim(text);
+		text = $.trim(text);
 
-        	XKit.extensions.blacklist.show_add(text, "");
+		XKit.extensions.blacklist.show_add(text, "");
 
 	},
 
@@ -234,7 +233,7 @@ XKit.extensions.blacklist = new Object({
 		m_data.blacklist = XKit.extensions.blacklist.blacklisted;
 		m_data.whitelist = XKit.extensions.blacklist.whitelisted;
 
-		var m_html = 	"<div id=\"xkit-blacklist-share-code\" class=\"nano\">" +
+		var m_html = "<div id=\"xkit-blacklist-share-code\" class=\"nano\">" +
 					"<div class=\"content\">" +
 						"<div id=\"xkit-blacklist-share-code-inner\">" +
 							JSON.stringify(m_data) +
@@ -253,7 +252,7 @@ XKit.extensions.blacklist = new Object({
 
 	import: function(m_div) {
 
-		XKit.window.show("Import","<b>You can import settings from Tumblr Savior/XKit.</b><br/>Go to your Tumblr Savior's Save/Load panel and paste the text below to import your blacklisted/whitelisted words.<input type=\"text\" placeholder=\"Paste preferences text here.\" class=\"xkit-textbox\" id=\"xkit-blacklist-import-words\">","question","<div class=\"xkit-button default\" id=\"xkit-blacklist-add-words\">Import!</div><div class=\"xkit-button\" id=\"xkit-close-message\">Cancel</div>")
+		XKit.window.show("Import","<b>You can import settings from Tumblr Savior/XKit.</b><br/>Go to your Tumblr Savior's Save/Load panel and paste the text below to import your blacklisted/whitelisted words.<input type=\"text\" placeholder=\"Paste preferences text here.\" class=\"xkit-textbox\" id=\"xkit-blacklist-import-words\">","question","<div class=\"xkit-button default\" id=\"xkit-blacklist-add-words\">Import!</div><div class=\"xkit-button\" id=\"xkit-close-message\">Cancel</div>");
 
 		$("#xkit-blacklist-replace-on-import").click(function() {
 			$(this).toggleClass("selected");
@@ -268,9 +267,10 @@ XKit.extensions.blacklist = new Object({
 				return;
 			}
 
+			var m_obj = null;
 			try {
 
-				var m_obj = JSON.parse(m_to_add);
+				m_obj = JSON.parse(m_to_add);
 
 			} catch(e) {
 				alert("Invalid/Corrupt JSON object found.\nImport can not continue.");
@@ -280,14 +280,14 @@ XKit.extensions.blacklist = new Object({
 			var to_check_blacklist = "listBlack";
 			var to_check_whitelist = "listWhite";
 
+			var supported_ver = "0.4.9";
+
 			if (m_obj.creator === "XKIT") {
 
 				to_check_blacklist = "blacklist";
 				to_check_whitelist = "whitelist";
 
 			} else {
-
-				var supported_ver = "0.4.9";
 
 				if (m_obj.version !== supported_ver) {
 					alert("XKit Blacklist can only import words from version " + supported_ver + " of Tumblr Savior.");
@@ -320,10 +320,9 @@ XKit.extensions.blacklist = new Object({
 
 			var whitelist_count = 0;
 			if (typeof m_obj[to_check_whitelist] === "object") {
-				for (var i=0;i<m_obj[to_check_whitelist].length;i++) {
-					var m_word = m_obj[to_check_whitelist][i];
+				m_obj[to_check_whitelist].forEach(function(m_word) {
 					m_word = $.trim(m_word);
-					if (m_word === "") { continue; }
+					if (m_word === "") { return; }
 					if (m_word.indexOf(",") !== -1) {
 						m_word = XKit.tools.replace_all(m_word, ",", "");
 					}
@@ -337,7 +336,7 @@ XKit.extensions.blacklist = new Object({
 						XKit.extensions.blacklist.whitelisted.push(m_word);
 						whitelist_count++;
 					}
-				}
+				});
 			}
 
 			XKit.window.close();
@@ -348,14 +347,14 @@ XKit.extensions.blacklist = new Object({
 
 					XKit.window.show("Results",	"<b>Imported from XKit Blacklist.</b><br/>" +
 									"Added <b>" + blacklist_count + "</b> new words to the blacklist.<br/>" +
-						 			"Added <b>" + whitelist_count + "</b> new words to the whitelist.<br/><br/>Words that already exist in your list are not added. Your settings are not carried from Tumblr Savior, so you might want to check the settings to configure Blacklist to your liking.","info","<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
+									"Added <b>" + whitelist_count + "</b> new words to the whitelist.<br/><br/>Words that already exist in your list are not added. Your settings are not carried from Tumblr Savior, so you might want to check the settings to configure Blacklist to your liking.","info","<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
 
 
 				} else {
 
 					XKit.window.show("Results",	"<b>Imported from version " +  supported_ver + " of Tumblr Savior.</b><br/>" +
 									"Added <b>" + blacklist_count + "</b> new words to the blacklist.<br/>" +
-						 			"Added <b>" + whitelist_count + "</b> new words to the whitelist.<br/><br/>Words that already exist in your list are not added. Your settings are not carried from Tumblr Savior, so you might want to check the settings to configure Blacklist to your liking.","info","<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
+									"Added <b>" + whitelist_count + "</b> new words to the whitelist.<br/><br/>Words that already exist in your list are not added. Your settings are not carried from Tumblr Savior, so you might want to check the settings to configure Blacklist to your liking.","info","<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
 
 				}
 
@@ -384,7 +383,7 @@ XKit.extensions.blacklist = new Object({
 
 	show_add: function(m_text, m_div, from_shortcut) {
 
-		XKit.window.show("Add word to blacklist/whitelist","<b>Enter the word you want to add.</b><br/>Your words can not contain commas or backslashes.<input type=\"text\" maxlength=\"50\" placeholder=\"Enter a word here.\" class=\"xkit-textbox\" id=\"xkit-blacklist-word\"><div class=\"xkit-checkbox\" id=\"xkit-blacklist-add-to-whitelist\"><b>&nbsp;</b>Add to whitelist</div><br/>Before adding a word, please check \"Tips\" section.","question","<div class=\"xkit-button default\" id=\"xkit-blacklist-add-word\">Add word</div><div class=\"xkit-button\" id=\"xkit-close-message\">Cancel</div>")
+		XKit.window.show("Add word to blacklist/whitelist","<b>Enter the word you want to add.</b><br/>Your words can not contain commas or backslashes.<input type=\"text\" maxlength=\"50\" placeholder=\"Enter a word here.\" class=\"xkit-textbox\" id=\"xkit-blacklist-word\"><div class=\"xkit-checkbox\" id=\"xkit-blacklist-add-to-whitelist\"><b>&nbsp;</b>Add to whitelist</div><br/>Before adding a word, please check \"Tips\" section.","question","<div class=\"xkit-button default\" id=\"xkit-blacklist-add-word\">Add word</div><div class=\"xkit-button\" id=\"xkit-close-message\">Cancel</div>");
 
 		if (typeof m_text !== "undefined" && m_text !== "") {
 			$("#xkit-blacklist-word").val(m_text);
@@ -458,7 +457,7 @@ XKit.extensions.blacklist = new Object({
 
 		if (XKit.extensions.blacklist.running !== true) {return; }
 
-		$(".post").not(".xblacklist-done").each(function() {
+		$(".posts .post").not(".xblacklist-done").each(function() {
 
 			try {
 
@@ -496,12 +495,15 @@ XKit.extensions.blacklist = new Object({
 				}
 
 				// Collect the author info, if the option is toggled.
-				if (XKit.extensions.blacklist.preferences.check_authors.value == true) {
-					var m_author = "";
+				var m_author = "";
+				if (XKit.extensions.blacklist.preferences.check_authors.value) {
 					try {
-					if ($(this).find(".post_info_fence a").length > 0) {
-						m_author = $(this).find(".post_info_fence a").html();
-					}
+					var post_info_links = $(this).find(".post_info_link").map(function() {
+						return $(this).text();
+					});
+
+					// Join the text of the post info links with spaces
+					m_author += post_info_links.get().join(" ");
 
 					if ($(this).find(".reblog_source").length > 0) {
 						m_author = m_author + " " + $(this).find(".reblog_source a").html();
@@ -516,7 +518,7 @@ XKit.extensions.blacklist = new Object({
 						m_bTitle = $(this).find(".post_avatar_link").attr('title');
 					}
 					} catch(e) {
-						// console.log(" !! can't get author !!");
+						console.log(" !! can't get author !!");
 					}
 				}
 
@@ -537,7 +539,7 @@ XKit.extensions.blacklist = new Object({
 
 				m_content = m_content + " " + m_title;
 
-				if (XKit.extensions.blacklist.preferences.check_authors.value == true) {
+				if (XKit.extensions.blacklist.preferences.check_authors.value) {
 					m_content = m_content + " " + m_author;
 				}
 
@@ -626,7 +628,7 @@ XKit.extensions.blacklist = new Object({
 		if ($(m_div).hasClass("disable-gifs-checked")) {
 			try {
 				XKit.extensions.disable_gifs.redraw_canvases($(m_div));
-			} catch(e) {
+			} catch(err) {
 				// console.log("Unable to redraw canvases for Disable Gifs: " + e.message);
 			}
 		}
@@ -679,6 +681,7 @@ XKit.extensions.blacklist = new Object({
 		$(obj).find(".post_content").html(old_content + block_excuse);
 		$(obj).find(".post_footer_links").css('display','none');
 		$(obj).find(".post_source").css('display','none');
+		$(obj).find(".post-source-footer").css('display','none');
 
 		if (XKit.extensions.blacklist.preferences.mini_block.value !== true) {
 			$(obj).addClass("xblacklist_blacklisted_post_full_ui");
@@ -841,10 +844,10 @@ XKit.extensions.blacklist = new Object({
 
 					// Ugh. Even worse, we've found it,
 					// now we need to get into a loop.
-					for (var m=0;m<m_p_words.length;m++) {
+					for (var m_i = 0; m_i < m_p_words.length; m_i++) {
 
-						if (m_p_words[m] === "") { continue; }
-						if (m_p_words[m].indexOf(m_word) !== -1) {
+						if (m_p_words[m_i] === "") { continue; }
+						if (m_p_words[m_i].indexOf(m_word) !== -1) {
 							if (tag_search_mode) {
 								return "#" + m_word;
 							} else {
@@ -852,24 +855,24 @@ XKit.extensions.blacklist = new Object({
 							}
 						}
 
-						if (m < m_p_words.length) {
-							var tmp_word = m_p_words[m] + " " + m_p_words[m + 1];
+						if (m_i < m_p_words.length) {
+							var tmp_word = m_p_words[m_i] + " " + m_p_words[m_i + 1];
 
 							// This is a dirty fix but it should work for now.
-							if (m_p_words[m + 2] !== "" || typeof m_p_words[m + 2] !== "undefined") {
-								tmp_word = tmp_word + " " + m_p_words[m + 2];
+							if (m_p_words[m_i + 2] !== "" || typeof m_p_words[m_i + 2] !== "undefined") {
+								tmp_word = tmp_word + " " + m_p_words[m_i + 2];
 							}
-							if (m_p_words[m + 3] !== "" || typeof m_p_words[m + 3] !== "undefined") {
-								tmp_word = tmp_word + " " + m_p_words[m + 3];
+							if (m_p_words[m_i + 3] !== "" || typeof m_p_words[m_i + 3] !== "undefined") {
+								tmp_word = tmp_word + " " + m_p_words[m_i + 3];
 							}
-							if (m_p_words[m + 4] !== "" || typeof m_p_words[m + 4] !== "undefined") {
-								tmp_word = tmp_word + " " + m_p_words[m + 4];
+							if (m_p_words[m_i + 4] !== "" || typeof m_p_words[m_i + 4] !== "undefined") {
+								tmp_word = tmp_word + " " + m_p_words[m_i + 4];
 							}
-							if (m_p_words[m + 5] !== "" || typeof m_p_words[m + 5] !== "undefined") {
-								tmp_word = tmp_word + " " + m_p_words[m + 5];
+							if (m_p_words[m_i + 5] !== "" || typeof m_p_words[m_i + 5] !== "undefined") {
+								tmp_word = tmp_word + " " + m_p_words[m_i + 5];
 							}
-							if (m_p_words[m + 6] !== "" || typeof m_p_words[m + 6] !== "undefined") {
-								tmp_word = tmp_word + " " + m_p_words[m + 6];
+							if (m_p_words[m_i + 6] !== "" || typeof m_p_words[m_i + 6] !== "undefined") {
+								tmp_word = tmp_word + " " + m_p_words[m_i + 6];
 							}
 
 							tmp_word = tmp_word.replace(/\,/g, '').replace(/\u2026/g, '');
@@ -928,7 +931,7 @@ XKit.extensions.blacklist = new Object({
 				$(this).find(".xkit-shorten-posts-embiggen").css("display","block");
 				XKit.extensions.blacklist.unhide_post($(this));
 			});
-			 $(".xblacklist-done").removeClass("xblacklist-done");
+			$(".xblacklist-done").removeClass("xblacklist-done");
 			$(".xblacklist_hidden_post").removeClass("xblacklist_hidden_post");
 			$(".xblacklist_blacklisted_post").removeClass("xblacklist_blacklisted_post");
 		}, 500);
@@ -975,7 +978,7 @@ XKit.extensions.blacklist = new Object({
 			$("#xkit-blacklist-custom-panel").remove();
 		}
 
-		var m_html = "<div id=\"xkit-blacklist-custom-panel\"><div id=\"blacklist-toolbar\"><div id=\"blacklist-add-button\" class=\"xkit-button\">Add new</div><div id=\"blacklist-populate-common\" class=\"xkit-button\">Auto-Populate</div><div id=\"blacklist-tips\" class=\"xkit-button\">Tips</div><div id=\"blacklist-import\" class=\"xkit-button\">Import</div><div id=\"blacklist-export\" class=\"xkit-button\">Export</div><div id=\"blacklist-delete-all\" class=\"xkit-button\">Delete All</div></div>"
+		var m_html = "<div id=\"xkit-blacklist-custom-panel\"><div id=\"blacklist-toolbar\"><div id=\"blacklist-add-button\" class=\"xkit-button\">Add new</div><div id=\"blacklist-populate-common\" class=\"xkit-button\">Auto-Populate</div><div id=\"blacklist-tips\" class=\"xkit-button\">Tips</div><div id=\"blacklist-import\" class=\"xkit-button\">Import</div><div id=\"blacklist-export\" class=\"xkit-button\">Export</div><div id=\"blacklist-delete-all\" class=\"xkit-button\">Delete All</div></div>";
 
 		m_html = m_html + "<div id=\"blacklist-word-container\"><div id=\"blacklist-words\"><div class=\"blacklist-words-title\">Blacklisted Words</div>";
 		if (XKit.extensions.blacklist.blacklisted.length <= 1) {
@@ -1024,16 +1027,16 @@ XKit.extensions.blacklist = new Object({
 
 			} else {
 
-				var m_index = XKit.extensions.blacklist.blacklisted.indexOf($(this).attr('data-word'));
-				if (m_index === -1) { return; }
+				var word_index = XKit.extensions.blacklist.blacklisted.indexOf($(this).attr('data-word'));
+				if (word_index === -1) { return; }
 
-				XKit.extensions.blacklist.blacklisted.splice(m_index, 1);
+				XKit.extensions.blacklist.blacklisted.splice(word_index, 1);
 				XKit.extensions.blacklist.save_blacklist();
 				XKit.extensions.xkit_preferences.restart_extension("blacklist");
 
-				var m_box = $(this).parent();
+				var parent_box = $(this).parent();
 				$(this).parent().slideUp('slow', function() {
-					$(m_box).remove();
+					$(parent_box).remove();
 				});
 
 			}

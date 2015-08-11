@@ -1,5 +1,5 @@
 //* TITLE TagViewer **//
-//* VERSION 0.3 REV a **//
+//* VERSION 0.4 REV a **//
 //* DESCRIPTION View post tags easily **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS This extension allows you to see what tags people added to a post while they reblogged it. It also provides access to the post, and to Tumblr search pages to find similar posts.<br><br>Based on the work of <a href='http://inklesspen.tumblr.com'>inklesspen</a> **//
@@ -17,7 +17,7 @@ XKit.extensions.tagviewer = new Object({
 
 	frame_run: function() {
 
-		if (typeof XKit.page.peepr != "undefined" && XKit.page.peepr == true) {
+		if (typeof XKit.page.peepr != "undefined" && XKit.page.peepr) {
 			XKit.extensions.tagviewer.run();
 		}
 
@@ -27,7 +27,7 @@ XKit.extensions.tagviewer = new Object({
 
 		this.running = true;
 
-		if ($(".post").length > 0) {
+		if ($(".posts .post").length > 0) {
 			XKit.tools.init_css("tagviewer");
 			XKit.interface.create_control_button("xkit-tagviewer", this.button_icon, "TagViewer", "");
 			XKit.extensions.tagviewer.init();
@@ -74,7 +74,7 @@ XKit.extensions.tagviewer = new Object({
 		var m_html = "<div class=\"nano\" id=\"tagviewer-window-outer\">" +
 				"<div class=\"content\" id=\"tagviewer-window\">" +
 					"<div id=\"tagviewer-loading\">Loading, please wait...</div>" +
-			     	"</div></div><div id=\"tagviewer-loader-icon\">&nbsp;</div>";
+					"</div></div><div id=\"tagviewer-loader-icon\">&nbsp;</div>";
 
 		$("#tagviewer-window").unbind('scroll');
 		XKit.window.show("", m_html, "", "<div id=\"xkit-close-message\" class=\"xkit-button\">Close</div>");
@@ -100,38 +100,38 @@ XKit.extensions.tagviewer = new Object({
 			m_url = m_url.replace("http://","https://");
 		}
 
-    		$.ajax({
-      			url: m_url,
-      			dataType: 'html'
-    		}).error(function() {
+		$.ajax({
+			url: m_url,
+			dataType: 'html'
+		}).error(function() {
 
-    			XKit.window.close();
-    			XKit.window.show("Unable to fetch required data", "TagViewer could not get the required data from Tumblr servers. Please try again later or <a href=\"http://new-xkit-extension.tumblr.com/ask/\">file a bug report</a> by going to the XKit Blog.","error","<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
+			XKit.window.close();
+			XKit.window.show("Unable to fetch required data", "TagViewer could not get the required data from Tumblr servers. Please try again later or <a href=\"http://new-xkit-extension.tumblr.com/ask/\">file a bug report</a> by going to the XKit Blog.","error","<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
 
-    		}).done(function(data, textStatus, jqXHR) {
+		}).done(function(data, textStatus, jqXHR) {
 
-    			if (m_post_id !== XKit.extensions.tagviewer.post_id || m_init_id !== XKit.extensions.tagviewer.init_id) {
-    				XKit.console.add("tagviewer -> quitting, wrong post_id or init_id");
-    				return;
-    			}
+			if (m_post_id !== XKit.extensions.tagviewer.post_id || m_init_id !== XKit.extensions.tagviewer.init_id) {
+				XKit.console.add("tagviewer -> quitting, wrong post_id or init_id");
+				return;
+			}
 
-      			var next_note = jqXHR.getResponseHeader('X-next-note');
+			var next_note = jqXHR.getResponseHeader('X-next-note');
 
-      			var notes = $($.parseHTML(data));
-      			var reblogs = notes.find("li.reblog");
+			var notes = $($.parseHTML(data));
+			var reblogs = notes.find("li.reblog");
 
-      			$(reblogs).each(function() {
+			$(reblogs).each(function() {
 
-      				var post_url = $(this).find(".action").attr('data-post-url');
+				var post_url = $(this).find(".action").attr('data-post-url');
 
-      				var blog_username = $(this).attr('data-tumblelog');
-      				var blog_name = post_url.split("/")[2];
-      				var post_id = post_url.split("/")[4];
-      				var blog_avatar = $(this).find("img.avatar").attr('src');
+				var blog_username = $(this).attr('data-tumblelog');
+				var blog_name = post_url.split("/")[2];
+				var post_id = post_url.split("/")[4];
+				var blog_avatar = $(this).find("img.avatar").attr('src');
 
-      				var api_url = "https://api.tumblr.com/v2/blog/" + blog_name + "/posts" + "?api_key=" + XKit.extensions.tagviewer.apiKey + "&id=" + post_id;
+				var api_url = "https://api.tumblr.com/v2/blog/" + blog_name + "/posts" + "?api_key=" + XKit.extensions.tagviewer.apiKey + "&id=" + post_id;
 
-      				GM_xmlhttpRequest({
+				GM_xmlhttpRequest({
 					method: "GET",
 					url: api_url,
 					json: true,
@@ -140,10 +140,10 @@ XKit.extensions.tagviewer = new Object({
 					},
 					onload: function(response) {
 
-    						if (m_post_id !== XKit.extensions.tagviewer.post_id || m_init_id !== XKit.extensions.tagviewer.init_id) {
-    							XKit.console.add("tagviewer -> quitting, wrong post_id or init_id");
-    							return;
-    						}
+						if (m_post_id !== XKit.extensions.tagviewer.post_id || m_init_id !== XKit.extensions.tagviewer.init_id) {
+							XKit.console.add("tagviewer -> quitting, wrong post_id or init_id");
+							return;
+						}
 
 						try {
 
@@ -151,11 +151,11 @@ XKit.extensions.tagviewer = new Object({
 							var post = data.response.posts[0];
 
 							if (typeof post.tags !== "undefined") {
-  								if (post.tags.length > 0) {
-      									XKit.extensions.tagviewer.add_tags(blog_username, post.tags, post_url, blog_avatar);
-      									XKit.extensions.tagviewer.found_count++;
-      								}
-      							}
+								if (post.tags.length > 0) {
+									XKit.extensions.tagviewer.add_tags(blog_username, post.tags, post_url, blog_avatar);
+									XKit.extensions.tagviewer.found_count++;
+								}
+							}
 
 						} catch(e) {
 							XKit.console.add("tagviewer -> Can't parse JSON at " + api_url + " -> " + e.message);
@@ -164,33 +164,33 @@ XKit.extensions.tagviewer = new Object({
 					}
 				});
 
-      			});
+			});
 
-      			if (next_note > 0) {
-      				XKit.extensions.tagviewer.notes_url_from = next_note;
-      				XKit.console.add("Another page found.");
-      				if (XKit.extensions.tagviewer.found_count <= 7) {
-      					XKit.console.add(" -- Not enough posts loaded, auto-loading..");
-      					setTimeout(function() {
-      						XKit.extensions.tagviewer.load_tags();
-      					}, 1400);
-      					XKit.extensions.tagviewer.show_loader();
-      				} else {
-      					XKit.extensions.tagviewer.hide_loader();
-      					XKit.extensions.tagviewer.loading_more = false;
-      					XKit.console.add(" -- Enough loaded, waiting for user to scroll down.");
-      					XKit.extensions.tagviewer.activate_endless_scroll();
-      				}
-      			} else {
-      				if (XKit.extensions.tagviewer.found_count == 0) {
-      					$("#tagviewer-loading").html("No posts with tags found.");
-      				}
-      				XKit.extensions.tagviewer.last_page = true;
-      				XKit.console.add("Last page, quitting.");
-      				XKit.extensions.tagviewer.hide_loader();
-      			}
+			if (next_note > 0) {
+				XKit.extensions.tagviewer.notes_url_from = next_note;
+				XKit.console.add("Another page found.");
+				if (XKit.extensions.tagviewer.found_count <= 7) {
+					XKit.console.add(" -- Not enough posts loaded, auto-loading..");
+					setTimeout(function() {
+						XKit.extensions.tagviewer.load_tags();
+					}, 1400);
+					XKit.extensions.tagviewer.show_loader();
+				} else {
+					XKit.extensions.tagviewer.hide_loader();
+					XKit.extensions.tagviewer.loading_more = false;
+					XKit.console.add(" -- Enough loaded, waiting for user to scroll down.");
+					XKit.extensions.tagviewer.activate_endless_scroll();
+				}
+			} else {
+				if (XKit.extensions.tagviewer.found_count === 0) {
+					$("#tagviewer-loading").html("No posts with tags found.");
+				}
+				XKit.extensions.tagviewer.last_page = true;
+				XKit.console.add("Last page, quitting.");
+				XKit.extensions.tagviewer.hide_loader();
+			}
 
-      		});
+		});
 
 	},
 
@@ -201,7 +201,7 @@ XKit.extensions.tagviewer = new Object({
 
 			var c_height = 0;
 			$("#tagviewer-window").children().each(function(){
-    				c_height = c_height + $(this).outerHeight(true);
+				c_height = c_height + $(this).outerHeight(true);
 			});
 
 			if($("#tagviewer-window").scrollTop() >= c_height - 400) {
@@ -271,10 +271,10 @@ XKit.extensions.tagviewer = new Object({
 
 			$(this).addClass("xkit-tagviewer-done");
 
-	  		var m_post = XKit.interface.post($(this));
+			var m_post = XKit.interface.post($(this));
 
-	  		// Post has no notes, skip.
-	  		if (m_post.note_count === 0) { return; }
+			// Post has no notes, skip.
+			if (m_post.note_count === 0) { return; }
 
 			// Don't add button if we are in inbox.
 			if ($(this).hasClass("is_note") && XKit.interface.where().inbox === true) { return; }
@@ -283,37 +283,6 @@ XKit.extensions.tagviewer = new Object({
 			XKit.interface.add_control_button(this, "xkit-tagviewer", "data-xkit-tagviewer-tumblelog-key=\"" + m_post.tumblelog_key + "\" data-xkit-tagviewer-tumblelog-name=\"" + m_post.owner + "\"");
 
 		});
-
-		return;
-
-		$(".post").not(".note").not(".xtagviewer_done").each(function() {
-
-			$(this).addClass("xtagviewer_done");
-
-			if ($(this).hasClass("fan_mail")) {return; }
-
-	  		var post_id = $(this).attr('data-post-id');
-	  		var tumblelog_key = $(this).attr('data-tumblelog-key');
-	  		var tumblelog_name = $(this).attr('data-tumblelog-name');
-
-	  		if ($(this).find(".note_link_current").length > 0) {
-	  			if ($(this).find(".note_link_current").html() == "") {
-	  				// This post has no notes, skip.
-	  				return;
-	  			}
-	  		}
-
-	  		var m_html = "<a class=\"post_control post_control_icon xtagviewer_post_icon xkit_tagviewer_button\" data-xkit-tagviewer-post-id=\"" + post_id + "\" data-xkit-tagviewer-tumblelog-key=\"" + tumblelog_key + "\" data-xkit-tagviewer-tumblelog-name=\"" + tumblelog_name + "\" onclick=\"return false\">t</a>";
-
-	  		if ($(this).find(".post_controls_inner").length > 0) {
-				m_html = "<a class=\"post_control post_control_icon xtagviewer_post_icon xkit_new_dashboard xkit_tagviewer_button\" data-xkit-tagviewer-post-id=\"" + post_id + "\" data-xkit-tagviewer-tumblelog-key=\"" + tumblelog_key + "\" data-xkit-tagviewer-tumblelog-name=\"" + tumblelog_name + "\" onclick=\"return false\"></a>";
-				$(this).find(".post_controls_inner").prepend(m_html);
-	  		} else {
-				$(this).find(".post_controls").prepend(m_html);
-	  		}
-
-		});
-
 	},
 
 	destroy: function() {

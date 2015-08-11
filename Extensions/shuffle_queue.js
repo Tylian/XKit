@@ -1,5 +1,5 @@
 //* TITLE Enhanced Queue **//
-//* VERSION 2.0 REV F **//
+//* VERSION 2.0.1 **//
 //* DESCRIPTION Additions to the Queue page. **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS Go to your queue and click on the Shuffle button on the sidebar to shuffle the posts. Note that only the posts you see will be shuffled. If you have more than 15 posts on your queue, scroll down and load more posts in order to shuffle them too. Or click on Shrink Posts button to quickly rearrange them. **//
@@ -32,7 +32,7 @@ XKit.extensions.shuffle_queue = new Object({
 		$("ul.controls_section:eq(1)").before(xf_html);*/
 
 
-		var xf_html = 	'<ul class="controls_section" id="queue_plus_ul">' +
+		var xf_html = '<ul class="controls_section" id="queue_plus_ul">' +
 					'<li class="section_header selected">Queue+</li>' +
 					'<li class="no_push" style="height: 36px;"><a href="#" onclick="return false;" id="xshufflequeue_button">' +
 						'<div class="hide_overflow" style="color: rgba(255, 255, 255, 0.5) !important; font-weight: bold; padding-left: 10px; padding-top: 8px;">Shuffle Queue <div class="count" style="padding-top: 8px;">&nbsp;</div> </div>' +
@@ -215,7 +215,7 @@ XKit.extensions.shuffle_queue = new Object({
 				sarcasm = "<br>But it's not like you had a lot of queued posts anyway.";
 			}
 
-			XKit.window.show("Cleared Queue.","Queue+ deleted " + 	XKit.extensions.shuffle_queue.posts_to_delete_count + " posts from your queue." + sarcasm,"info","<div class=\"xkit-button default\" id=\"xkit-queue-refresh\">Refresh the page</div>");
+			XKit.window.show("Cleared Queue.","Queue+ deleted " + XKit.extensions.shuffle_queue.posts_to_delete_count + " posts from your queue." + sarcasm,"info","<div class=\"xkit-button default\" id=\"xkit-queue-refresh\">Refresh the page</div>");
 
 			$("#xkit-queue-refresh").click(function() {
 
@@ -243,15 +243,15 @@ XKit.extensions.shuffle_queue = new Object({
 		var m_object = {};
 		m_object.post_id = post_id;
 		m_object.channel_id = m_url;
-		m_object.form_key = XKit.interface.form_key();
+		var form_key = XKit.interface.form_key();
 
 		GM_xmlhttpRequest({
 			method: "POST",
 			url: "http://www.tumblr.com/svc/post/delete",
-			json: true,
-			data: JSON.stringify(m_object),
+			data: $.param(m_object),
 			headers: {
-				"X-Requested-With": "XMLHttpRequest"
+				"X-Requested-With": "XMLHttpRequest",
+				"x-tumblr-form-key": form_key,
 			},
 			onerror: function(response) {
 				XKit.window.show("Unable to clear queue","I was unable to clear your queue.<br/>Please try again later. (Error Code: SQD-150)","error","<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
@@ -328,12 +328,12 @@ XKit.extensions.shuffle_queue = new Object({
 
 		if (multi_mode !== true) {
 
-			var to_send = encodeURIComponent(IDs.join(","));
+			var to_send_single = encodeURIComponent(IDs.join(","));
 
 			GM_xmlhttpRequest({
 				method: "POST",
 				url: "http://www.tumblr.com/blog/" + m_url + "/order_post_queue/",
-				data: "post_ids=" + to_send + "&form_key=" + form_key,
+				data: "post_ids=" + to_send_single + "&form_key=" + form_key,
 				json: false,
 				onerror: function(response) {
 					XKit.window.show("Unable to save queue","I was unable to save the current order of the queue.<br/>Please try again later.","error","<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
@@ -363,14 +363,14 @@ XKit.extensions.shuffle_queue = new Object({
 				temp_ids.push(IDs.shift());
 			}
 
-			var to_send = encodeURIComponent(temp_ids.join(","));
+			var to_send_multi = encodeURIComponent(temp_ids.join(","));
 
 			console.log(" -- " + IDs.length + " items left...");
 
 			GM_xmlhttpRequest({
 				method: "POST",
 				url: "http://www.tumblr.com/blog/" + m_url + "/order_post_queue/",
-				data: "post_ids=" + to_send + "&form_key=" + form_key,
+				data: "post_ids=" + to_send_multi + "&form_key=" + form_key,
 				json: false,
 				onerror: function(response) {
 					XKit.window.show("Unable to save queue","I was unable to save the current order of the queue.<br/>Please try again later.","error","<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");

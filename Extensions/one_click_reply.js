@@ -1,5 +1,5 @@
 //* TITLE One-Click Reply **//
-//* VERSION 2.0.4 **//
+//* VERSION 2.0.5 **//
 //* DESCRIPTION Lets you reply to notifications **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS To use this extension, hover over a notification and click on the Reply button. If Multi-Reply is on, hold down the ALT key while clicking on the Reply button to select/deselect posts and reply to all of them at once. **//
@@ -125,7 +125,7 @@ XKit.extensions.one_click_reply = new Object({
 			}
 
 			if (XKit.extensions.one_click_reply.preferences.enable_quick_reply.value === true) {
-				var m_html = 	"<div id=\"xkit-one-click-reply-quick-reply-window-shadow\"></div>" +
+				var m_html = "<div id=\"xkit-one-click-reply-quick-reply-window-shadow\"></div>" +
 						"<div id=\"xkit-one-click-reply-quick-reply-window\">" +
 							"<div id=\"xkit-one-click-reply-quick-reply-close\">&nbsp;</div>" +
 							"<div id=\"xkit-one-click-reply-quick-reply-title\">" +
@@ -147,7 +147,7 @@ XKit.extensions.one_click_reply = new Object({
 
 				$("#xkit-one-click-reply-quick-reply-text").bind('input propertychange', function(event) {
 
-					 if(!this.value.length){
+					if(!this.value.length){
 						$("#xkit-one-click-reply-quick-reply-ok").addClass("disabled");
 					} else {
 						$("#xkit-one-click-reply-quick-reply-ok").removeClass("disabled");
@@ -248,7 +248,7 @@ XKit.extensions.one_click_reply = new Object({
 
 			if (XKit.extensions.tweaks.running === true) {
 				if (XKit.extensions.tweaks.preferences.photo_replies.value === true) {
-					m_object["allow_photo_replies"] = "on";
+					m_object.allow_photo_replies = "on";
 				}
 			}
 
@@ -293,8 +293,9 @@ XKit.extensions.one_click_reply = new Object({
 				onload: function(response) {
 					// We are done!
 					XKit.interface.kitty.set(response.getResponseHeader("X-tumblr-kittens"));
+					var mdata = null;
 					try {
-						var mdata = jQuery.parseJSON(response.responseText);
+						mdata = jQuery.parseJSON(response.responseText);
 					} catch(e) {
 						XKit.extensions.one_click_reply.quick_reply_error("106");
 					}
@@ -314,41 +315,44 @@ XKit.extensions.one_click_reply = new Object({
 
 		// From: http://ufku.com/personal/autop
 
-		  if (!s || s.search(/\n|\r/) == -1) {
+		if (!s || s.search(/\n|\r/) == -1) {
 			return s;
-		  }
-		  var  X = function(x, a, b) {return x.replace(new RegExp(a, 'g'), b)};
-		  var  R = function(a, b) {return s = X(s, a, b)};
-		  var blocks = '(table|thead|tfoot|caption|colgroup|tbody|tr|td|th|div|dl|dd|dt|ul|ol|li|pre|select'
-		  blocks += '|form|blockquote|address|math|style|script|object|input|param|p|h[1-6])';
-		  s += '\n';
-		  R('<br />\\s*<br />', '\n\n');
-		  R('(<' + blocks + '[^>]*>)', '\n$1');
-		  R('(</' + blocks + '>)', '$1\n\n');
-		  R('\r\n|\r', '\n'); // cross-platform newlines
-		  R('\n\n+', '\n\n');// take care of duplicates
-		  R('\n?((.|\n)+?)\n\\s*\n', '<p>$1</p>\n');// make paragraphs
-		  R('\n?((.|\n)+?)$', '<p>$1</p>\n');//including one at the end
-		  R('<p>\\s*?</p>', '');// under certain strange conditions it could create a P of entirely whitespace
-		  R('<p>(<div[^>]*>\\s*)', '$1<p>');
-		  R('<p>([^<]+)\\s*?(</(div|address|form)[^>]*>)', '<p>$1</p>$2');
-		  R('<p>\\s*(</?' + blocks + '[^>]*>)\\s*</p>', '$1');
-		  R('<p>(<li.+?)</p>', '$1');// problem with nested lists
-		  R('<p><blockquote([^>]*)>', '<blockquote$1><p>');
-		  R('</blockquote></p>', '</p></blockquote>');
-		  R('<p>\\s*(</?' + blocks + '[^>]*>)', '$1');
-		  R('(</?' + blocks + '[^>]*>)\\s*</p>', '$1');
-		  R('<(script|style)(.|\n)*?</\\1>', function(m0) {return X(m0, '\n', '<PNL>')});
-		  R('(<br />)?\\s*\n', '<br />\n');
-		  R('<PNL>', '\n');
-		  R('(</?' + blocks + '[^>]*>)\\s*<br />', '$1');
-		  R('<br />(\\s*</?(p|li|div|dl|dd|dt|th|pre|td|ul|ol)[^>]*>)', '$1');
-		  if (s.indexOf('<pre') != -1) {
+		}
+		var X = function(x, a, b) {return x.replace(new RegExp(a, 'g'), b)};
+		var R = function(a, b) {
+			s = X(s, a, b);
+			return s;
+		};
+		var blocks = '(table|thead|tfoot|caption|colgroup|tbody|tr|td|th|div|dl|dd|dt|ul|ol|li|pre|select';
+		blocks += '|form|blockquote|address|math|style|script|object|input|param|p|h[1-6])';
+		s += '\n';
+		R('<br />\\s*<br />', '\n\n');
+		R('(<' + blocks + '[^>]*>)', '\n$1');
+		R('(</' + blocks + '>)', '$1\n\n');
+		R('\r\n|\r', '\n'); // cross-platform newlines
+		R('\n\n+', '\n\n');// take care of duplicates
+		R('\n?((.|\n)+?)\n\\s*\n', '<p>$1</p>\n');// make paragraphs
+		R('\n?((.|\n)+?)$', '<p>$1</p>\n');//including one at the end
+		R('<p>\\s*?</p>', '');// under certain strange conditions it could create a P of entirely whitespace
+		R('<p>(<div[^>]*>\\s*)', '$1<p>');
+		R('<p>([^<]+)\\s*?(</(div|address|form)[^>]*>)', '<p>$1</p>$2');
+		R('<p>\\s*(</?' + blocks + '[^>]*>)\\s*</p>', '$1');
+		R('<p>(<li.+?)</p>', '$1');// problem with nested lists
+		R('<p><blockquote([^>]*)>', '<blockquote$1><p>');
+		R('</blockquote></p>', '</p></blockquote>');
+		R('<p>\\s*(</?' + blocks + '[^>]*>)', '$1');
+		R('(</?' + blocks + '[^>]*>)\\s*</p>', '$1');
+		R('<(script|style)(.|\n)*?</\\1>', function(m0) {return X(m0, '\n', '<PNL>')});
+		R('(<br />)?\\s*\n', '<br />\n');
+		R('<PNL>', '\n');
+		R('(</?' + blocks + '[^>]*>)\\s*<br />', '$1');
+		R('<br />(\\s*</?(p|li|div|dl|dd|dt|th|pre|td|ul|ol)[^>]*>)', '$1');
+		if (s.indexOf('<pre') != -1) {
 			R('(<pre(.|\n)*?>)((.|\n)*?)</pre>', function(m0, m1, m2, m3) {
-			  return X(m1, '\\\\([\'\"\\\\])', '$1') + X(X(X(m3, '<p>', '\n'), '</p>|<br />', ''), '\\\\([\'\"\\\\])', '$1') + '</pre>';
+				return X(m1, '\\\\([\'\"\\\\])', '$1') + X(X(X(m3, '<p>', '\n'), '</p>|<br />', ''), '\\\\([\'\"\\\\])', '$1') + '</pre>';
 			});
-		  }
-		  return R('\n</p>$', '</p>');
+		}
+		return R('\n</p>$', '</p>');
 	},
 
 	quick_reply_open: function(sentence, default_tags, avatar, username) {
@@ -508,8 +512,8 @@ XKit.extensions.one_click_reply = new Object({
 			if (new_style) {
 				m_html = "<div class=\"xkit-reply-button-pn xkit-notes-new-style-fix\">reply</div>";
 			}
+			var flush_to_right = false;
 			if (in_box) {
-				var flush_to_right = false;
 				if ($(n_box).find(".follow").length > 0) {
 					if ($(n_box).find("a.follow").css("display") !== "block") {
 						flush_to_right = true;
@@ -633,7 +637,6 @@ XKit.extensions.one_click_reply = new Object({
 				XKit.interface.post_window.add_tag(tags.split(","));
 			}
 			XKit.interface.post_window.set_content_html(m_sentence + "<br/>");
-
 			XKit.interface.post_window_listener.remove("one_click_reply_fill_post");
 			XKit.tools.set_setting("xkit_one_click_reply_data", "{}");
 		} catch(e) {
@@ -710,7 +713,7 @@ XKit.extensions.one_click_reply = new Object({
 		}
 
 		post_contents = post_contents.replace(/<(?:.|\n)*?>/gm, '');
-		if (post_contents.length > 40 && contains_html == false) {
+		if (post_contents.length > 40 && !contains_html) {
 			post_contents = post_contents.substring(0, 38) + "...";
 		}
 
@@ -735,13 +738,13 @@ XKit.extensions.one_click_reply = new Object({
 		}
 
 		if (m_post_type === "reblog" ||m_post_type === "reblog_text") {
-			user_name = $(obj).find("a.tumblelog:first-child").html();
-			user_url = $(obj).find("a.tumblelog:first-child").attr('href');
+			user_name = $(obj).data("tumblelog");
+			user_url = $(obj).find("a.avatar_frame").attr('href');
 		}
 
 		if (m_post_type === "like" || m_post_type === "reply" || m_post_type === "answer") {
-			user_name = $(obj).find("a.tumblelog").html();
-			user_url = $(obj).find("a.tumblelog").attr('href');
+			user_name = $(obj).data("tumblelog");
+			user_url = $(obj).find("a.avatar_frame").attr('href');
 		}
 
 		if (XKit.extensions.one_click_reply.preferences.tag_person_replace_hyphens.value === true) {
@@ -872,12 +875,12 @@ XKit.extensions.one_click_reply = new Object({
 
 		if (XKit.extensions.one_click_reply.preferences.multi_reply.value === true && silent_mode !== true) {
 			if (event.altKey) {
-				var m_obj = $(obj);
+				var alt_obj = $(obj);
 				if (pn_mode === true) {
-					m_obj = $(obj).parent();
-					$(m_obj).toggleClass("xkit-reply-selected-pn");
+					alt_obj = alt_obj.parent();
+					alt_obj.toggleClass("xkit-reply-selected-pn");
 				} else {
-					$(m_obj).toggleClass("xkit-reply-selected");
+					alt_obj.toggleClass("xkit-reply-selected");
 				}
 				return;
 			} else {
@@ -902,14 +905,14 @@ XKit.extensions.one_click_reply = new Object({
 						// Cycle thru all the posts and gather information.
 
 						if ($(this).hasClass("xkit-reply-selected-pn") === true) {
-							var m_return = XKit.extensions.one_click_reply.make_post_pn($(this).find(".xkit-reply-button-pn"), true);
-							m_tags = m_tags + "," + m_return.tags;
-							m_text = m_text + m_return.sentence + "<p></p>";
+							var pn_post = XKit.extensions.one_click_reply.make_post_pn($(this).find(".xkit-reply-button-pn"), true);
+							m_tags = m_tags + "," + pn_post.tags;
+							m_text = m_text + pn_post.sentence + "<p></p>";
 							// m_text = m_text + XKit.extensions.one_click_reply.make_post_pn(this, true);
 						} else {
-							var m_return = XKit.extensions.one_click_reply.make_post(this, pn_mode, "", true);
-							m_tags = m_tags + "," + m_return.tags;
-							m_text = m_text + m_return.sentence + "<p></p>";
+							var standard_post = XKit.extensions.one_click_reply.make_post(this, pn_mode, "", true);
+							m_tags = m_tags + "," + standard_post.tags;
+							m_text = m_text + standard_post.sentence + "<p></p>";
 						}
 
 					});
@@ -991,11 +994,11 @@ XKit.extensions.one_click_reply = new Object({
 		var m_sentence = "";
 
 		if ( $(obj).find(".notification_sentence").find(".hide_overflow") > 0) {
-		 	m_sentence = "<p>" + $(obj).find(".notification_sentence").find(".hide_overflow").html() + "</p>";
-		 	if ($(obj).find(".notification_sentence").attr('data-xkit-text-version-html') != "" && typeof $(obj).find(".notification_sentence").attr('data-xkit-text-version-html') != "undefined") {
+			m_sentence = "<p>" + $(obj).find(".notification_sentence").find(".hide_overflow").html() + "</p>";
+			if ($(obj).find(".notification_sentence").attr('data-xkit-text-version-html')) {
 				var text_html = $(obj).find(".notification_sentence").attr('data-xkit-text-version-html');
 				m_sentence = "<p>" + $(text_html).find(".hide_overflow").html() + "</p>";
-		 	}
+			}
 
 		} else {
 			var tmp_div = $(obj).find(".notification_sentence");
@@ -1003,7 +1006,7 @@ XKit.extensions.one_click_reply = new Object({
 			$(".xkit-notification-notification-block-button", tmp_div).remove();
 			var tmp_html = $(tmp_div).html();
 
-			if ($(tmp_div).attr('data-xkit-text-version-html') != "" && typeof $(tmp_div).attr('data-xkit-text-version-html') != "undefined") {
+			if ($(tmp_div).attr('data-xkit-text-version-html')) {
 				tmp_html = $(tmp_div).attr('data-xkit-text-version-html');
 				tmp_html = decodeURIComponent(escape(atob(tmp_html)));
 			}
@@ -1101,8 +1104,8 @@ XKit.extensions.one_click_reply = new Object({
 
 		var m_sentence = "";
 		if ( $(obj).find(".part_main").length > 0) {
-		 	m_sentence = "<p>" + $(obj).find(".part_main").html() + "</p>";
-			if ($(obj).find(".part_main").attr('data-xkit-text-version-html') != "" && typeof $(obj).find(".part_main").attr('data-xkit-text-version-html') != "undefined") {
+			m_sentence = "<p>" + $(obj).find(".part_main").html() + "</p>";
+			if ($(obj).find(".part_main").attr('data-xkit-text-version-html')) {
 				m_sentence = $(obj).find(".part_main").attr('data-xkit-text-version-html');
 				m_sentence = decodeURIComponent(escape(atob(m_sentence)));
 			}
@@ -1111,7 +1114,7 @@ XKit.extensions.one_click_reply = new Object({
 			$(".xkit-reply-button", tmp_div).remove();
 			$(".xkit-notification-notification-block-button", tmp_div).remove();
 			var tmp_html = $(tmp_div).html();
-			if ($(tmp_div).attr('data-xkit-text-version-html') != "" && typeof $(tmp_div).attr('data-xkit-text-version-html') != "undefined") {
+			if ($(tmp_div).attr('data-xkit-text-version-html')) {
 				tmp_html = $(tmp_div).attr('data-xkit-text-version-html');
 				tmp_html = decodeURIComponent(escape(atob(tmp_html)));
 			}

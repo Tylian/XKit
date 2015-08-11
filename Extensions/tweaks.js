@@ -1,5 +1,5 @@
 //* TITLE Tweaks **//
-//* VERSION 3.2.5 **//
+//* VERSION 3.3.5 **//
 //* DESCRIPTION Various little tweaks for your dashboard. **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS These are small little tweaks that allows you customize your dashboard. If you have used XKit 6, you will notice that some of the extensions have been moved here as options you can toggle. Keep in mind that some of the tweaks (the ones marked with a '*') can slow down your computer. **//
@@ -26,9 +26,9 @@ XKit.extensions.tweaks = new Object({
 			value: true
 		},
 		"grey_urls": {
-		    text: "Make URLs grey again",
-		    default: false,
-		    value: false
+			text: "Make URLs grey again",
+			default: false,
+			value: false
 		},
 		"fix_blockquotes": {
 			text: "Slim block quotes for easier reading",
@@ -77,6 +77,11 @@ XKit.extensions.tweaks = new Object({
 		},
 		"tag_slot_separator": {
 			text: "Add a separator line for Tag section on editor",
+			default: false,
+			value: false
+		},
+		"full_width_gifs": {
+			text: "Add a button in post editor options to toggle full-width GIFs",
 			default: false,
 			value: false
 		},
@@ -134,6 +139,16 @@ XKit.extensions.tweaks = new Object({
 			default: false,
 			value: false
 		},
+		"hide_trending": {
+			text: "Hides \"Trending\" badges at the bottom of posts",
+			default: false,
+			value: false
+		},
+		"pin_avatars": {
+			text: "Stop avatars from scrolling along with the post",
+			default: false,
+			value: false
+		},
 		"no_footer_background": {
 			text: "Classic Post Footer look",
 			default: false,
@@ -149,10 +164,15 @@ XKit.extensions.tweaks = new Object({
 			default: false,
 			value: false
 		},
-		"hide_explore": {
-		    text: "Hide explore button on trending posts",
-		    default: false,
-		    value: false
+		"hide_asktime": {
+			text: "Hide the asktime banner at the top of the dash",
+			default: false,
+			value: false
+		},
+        "hide_explore": {
+			text: "Hide explore button on trending posts",
+			default: false,
+			value: false
 		},
 		"hide_notes": {
 			text: "Hide the notes on posts",
@@ -169,17 +189,22 @@ XKit.extensions.tweaks = new Object({
 			default: false,
 			value: false
 		},
+		"larger_top_arrow": {
+			text: "Make the scroll to top arrow larger",
+			default: false,
+			value: false
+		},
 		"hide_bubble": {
 			text: "Hide the new post bubble when you are not in dashboard",
 			default: false,
 			value: false,
 			slow: true
 		},
-                "no_animate_scroll": {
-                        text: "Don't animate scrolling when using J/K to move between posts",
-                        default: false,
-                        value: false
-                },
+		"no_animate_scroll": {
+			text: "Don't animate scrolling when using J/K to move between posts",
+			default: false,
+			value: false
+		},
 		"sep3": {
 			text: "Navigation and Search tweaks",
 			type: "separator",
@@ -195,12 +220,6 @@ XKit.extensions.tweaks = new Object({
 			default: false,
 			value: false
 		},
-		"show_old_new_bubble": {
-			text: "Remove the web search button and show a \"new\" bubble when tracked tags update",
-			default: false,
-			value: false,
-			experimental: true
-		},
 		"sep4": {
 			text: "Sidebar tweaks",
 			type: "separator",
@@ -215,7 +234,7 @@ XKit.extensions.tweaks = new Object({
 			default: false,
 			value: false
 		},
-		"hide_customize": {
+		/*"hide_customize": {
 			text: "Hide Customize button on sidebar",
 			default: false,
 			value: false
@@ -244,7 +263,7 @@ XKit.extensions.tweaks = new Object({
 			text: "Hide my drafted posts count",
 			default: false,
 			value: false
-		},
+		}, */
 		"hide_radar": {
 			text: "Hide the Tumblr radar",
 			default: false,
@@ -399,33 +418,30 @@ XKit.extensions.tweaks = new Object({
 		if (XKit.extensions.tweaks.preferences.tag_slot_separator.value === true) {
 			XKit.extensions.tweaks.add_css(".post-form--tag-editor { border-top: 1px solid rgb(240,240,240); padding-top: 15px; }", "ffff");
 		}
-	
-
-		if (XKit.extensions.tweaks.preferences.show_old_new_bubble.value === true) {
-			// only need to do this if the ( tumblr | web ) button is there
-			if ($(".search_query_btn_web").size() > 0) {
-				// hide the ( tumblr | web ) buttons
-				XKit.extensions.tweaks.add_css(".search_query_btn_tumblr, .search_query_btn_web { display: none !important }", "xkit_tweaks_show_old_new_bubble");
-				// "X new posts" in the tracked tags is always a <small> tag
-			}
-			if ($(".tracked_tags small").size() > 0) {
-				XKit.extensions.tweaks.add_css("div#new_post_in_tracked_tags_bubble { color: rgba(0,0,0,0.33) !important; background: rgba(255,255,255,0.18); display: inline-block; font-size: 11px; float: right; margin-top: 3px; margin-right: 3px; height: 22px; width: 36px; line-height: 22px; }", "blah");
-				$(".search_query_submit").after('<div id="new_post_in_tracked_tags_bubble" class="search_query_btn pill">new</div>');
-			}
+		
+		if (XKit.extensions.tweaks.preferences.full_width_gifs.value === true) {
+			XKit.interface.post_window_listener.add("tweaks-full-width-gifs", XKit.extensions.tweaks.full_width_gifs_do_first);
 		}
 
-		if (XKit.extensions.tweaks.preferences.show_top_arrow.value === true) {
-			XKit.extensions.tweaks.add_css("#return_to_top { opacity: 1 !important; visibility: visible !important; }", "xkit_tweaks_scroll_top");
+		if (XKit.extensions.tweaks.preferences.show_top_arrow.value) {
+			XKit.extensions.tweaks.add_css(".elevator { opacity: 1 !important; visibility: visible !important; transform: translateY(0px) translateZ(0px) !important; }", "xkit_tweaks_show_top_arrow");
 			XKit.tools.add_function(function() {
 				Tumblr.KeyCommands.elevate = function(){jQuery("html, body").stop(true).animate({scrollTop:0},"slow");};
 			}, true, "");
 		}
 
-                if (XKit.extensions.tweaks.preferences.no_animate_scroll.value === true) {
-                        XKit.tools.add_function(function() {
-                                Tumblr.KeyCommands.animate_scroll = false;
-                        }, true, "");
-                }
+		if (XKit.extensions.tweaks.preferences.larger_top_arrow.value) {
+			XKit.extensions.tweaks.add_css(".elevator-wrapper { transform: scale(2.5) translateZ(0px); }", "xkit_tweaks_larger_top_arrow");
+			XKit.tools.add_function(function() {
+				Tumblr.KeyCommands.elevate = function(){jQuery("html, body").stop(true).animate({scrollTop:0},"slow");};
+			}, true, "");
+		}
+
+		if (XKit.extensions.tweaks.preferences.no_animate_scroll.value === true) {
+			XKit.tools.add_function(function() {
+				Tumblr.KeyCommands.animate_scroll = false;
+			}, true, "");
+		}
 
 		if (XKit.extensions.tweaks.preferences.slim_popups.value === true) {
 			XKit.extensions.tweaks.add_css(".tumblelog_menu_link { padding: 6px 10px 6px 34px !important; font-size: 13px !important; }" +
@@ -440,6 +456,13 @@ XKit.extensions.tweaks = new Object({
 			XKit.extensions.tweaks.add_css(".post.sponsored_post { opacity: 0.33 !important } .post.sponsored_post:hover { opacity: 1 !important }", "xkit_tweaks_hide_sponsored");
 		}
 
+		if (XKit.extensions.tweaks.preferences.hide_trending.value === true) {
+			XKit.extensions.tweaks.add_css(".explore-trending-badge-footer { display:none !important; }", "xkit_tweaks_hide_trending");
+		}
+
+		if (XKit.extensions.tweaks.preferences.pin_avatars.value === true) {
+			XKit.extensions.tweaks.add_css(".post_avatar.post-avatar--fixed { position: absolute !important; top: 0 !important; left: -85px !important; }  .post_avatar.post-avatar--absolute { position: absolute; top: 0 !important; left: -85px !important; bottom: inherit !important; }  .post_avatar.post-avatar--sticky .avatar-wrapper { position: absolute !important; top: 0px !important; height: auto; width: auto; } .post_avatar.post-avatar--sticky { height: 64px !important; }", "xkit_pin_avatars");
+		}
 
 		if (XKit.extensions.tweaks.preferences.small_quotes.value === true) {
 			XKit.extensions.tweaks.add_css(".post.is_quote .post_title.large, .post.is_quote .post_title.extra_large { font-size: 20px; line-height: 22px; }", "xkit_tweaks_small_quotes");
@@ -455,7 +478,11 @@ XKit.extensions.tweaks = new Object({
 			XKit.extensions.tweaks.check_for_share_on_private_posts();
 		}
 
-		if (XKit.extensions.tweaks.preferences.hide_explore.value === true) {
+		if (XKit.extensions.tweaks.preferences.hide_asktime.value === true) {
+			XKit.extensions.tweaks.add_css(".notification.single_notification.alt.takeover-container { display: none; } ", "xkit_tweaks_hide_asktime");
+		}
+
+        if (XKit.extensions.tweaks.preferences.hide_explore.value === true) {
 			XKit.extensions.tweaks.add_css(".post .explore-trending-badge-footer { display: none; } ", "xkit_tweaks_hide_explore");
 		}
 
@@ -526,7 +553,8 @@ XKit.extensions.tweaks = new Object({
 			XKit.extensions.tweaks.add_css(".post_full.is_conversation .conversation_lines { border: 1px solid rgb(200,200,200); padding: 0px; font: normal 14px/1.4 \"Helvetica Neue\",\"HelveticaNeue\",Helvetica,Arial,sans-serif; } li.chat_line { padding: 10px 17px !important; border-bottom: 1px solid rgb(200,200,200); } li.chat_line:last-child { border-bottom: 0; }", "xkit_tweaks_fix_blockquotes");
 		}
 
-		if (XKit.extensions.tweaks.preferences.wrap_tags.value === true) {
+		if (XKit.extensions.tweaks.preferences.wrap_tags.value &&
+				XKit.interface.is_tumblr_page()) {
 			XKit.extensions.tweaks.add_css(".post .tags { width: 500px !important; display: block !important; }  .post .footer_links.with_tags { overflow:visible !important; display: block !important; }.post .footer_links.with_tags span, .footer_links.with_tags .source_url { display:block !important; overflow:visible !important; } .source_url_gradient { display: none !important; } span.tags { white-space:normal !important; } span.with_blingy_tag a.blingy { height:auto !important; display:inline-block !important; }  .source_url, .post_tags_wrapper { display: block !important; } ", "xkit_tweaks_wrap_tags");
 			XKit.extensions.tweaks.add_css("#posts .post.post_full .post_tags { white-space: normal; } .post .post_tags a { font-size: 12px; } .post_full .post_tags:after { background: none !important; }", "xkit_tweaks_wrap_tags_v2");
 			$(document).on('mouseup mousemove mouseover mousedown mouseout', '.post_tags_inner', function(e) {
@@ -559,13 +587,12 @@ XKit.extensions.tweaks = new Object({
 				}
 			});
 			$("#new_post").click(function() {
-
 				$('html, body').animate({
-    					scrollTop: 30
- 				}, 500);
+					scrollTop: 30
+				}, 500);
 
- 				$("#new_post").removeClass("xkit-new-post-scrolls");
- 				$("body").removeClass("xkit-new-post-scrolls-page");
+				$("#new_post").removeClass("xkit-new-post-scrolls");
+				$("body").removeClass("xkit-new-post-scrolls-page");
 
 			});
 			XKit.extensions.tweaks.add_css(	".xkit-new-post-scrolls-page #posts { padding-top: 85px; }" +
@@ -634,7 +661,7 @@ XKit.extensions.tweaks = new Object({
 		}
 
 		var call_update_rect = false;
-		$(".post").not(".xkit-tweaks-checked-for-likes").each(function() {
+		$(".posts .post").not(".xkit-tweaks-checked-for-likes").each(function() {
 			$(this).addClass("xkit-tweaks-checked-for-likes");
 			if ($(this).find(".post_control.like").hasClass("liked")) {
 				$(this).addClass("is_liked");
@@ -733,6 +760,30 @@ XKit.extensions.tweaks = new Object({
 		}
 
 	},
+	
+	full_width_gifs_do_first: function() {
+		$(document.body).on("click", ".post-settings", function() {
+			if (!$("#xkit-full-width-gifs").length) {
+				$(".form-horizontal").append("<div class=\"form-group\"><div class=\"group-label\"><label for=\"xkit-full-width-gifs\">Allow full-width GIFs?</label></div><div class=\"group-content\"><input id=\"xkit-full-width-gifs\" type=\"checkbox\" checked=\"checked\"></div></div>");
+				$("#xkit-full-width-gifs").on("click", function() {
+					XKit.extensions.tweaks.full_width_gifs_do($("#xkit-full-width-gifs").prop("checked"));
+				});
+			}
+		});
+	},
+	
+	full_width_gifs_do: function(is_checked) {
+		if (!is_checked) {
+			$(".editor-wrapper").find(".tmblr-full").addClass("tweaks-full-width-gifs");
+			$(".editor-wrapper").find(".tmblr-full").removeClass("tmblr-full");
+			$(".editor").focus();
+			return;
+		} else {
+			$(".editor-wrapper").find(".tweaks-full-width-gifs").addClass("tmblr-full");
+			$(".editor").focus();
+			return;
+		} 
+	},
 
 	destroy: function() {
 
@@ -757,8 +808,7 @@ XKit.extensions.tweaks = new Object({
 		$(".customize").parent().css("display","block");
 		$("xkit_post_tags_inner_add_back").addClass("post_tags_inner");
 		$("xkit_post_tags_inner_add_back").removeClass("xkit_post_tags_inner_add_back");
-		XKit.tools.remove_css("tweaks_grey_urls")
-
+		XKit.tools.remove_css("tweaks_grey_urls");
 	}
 
 });

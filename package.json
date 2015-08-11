@@ -5,16 +5,16 @@
   "main": "xkit.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/atesh/XKit.git"
+    "url": "https://github.com/new-xkit/XKit.git"
   },
   "author": {
     "name": "STUDIOENIX",
     "email": "xkit@studioxenix.com",
     "url": "http://www.studioxenix.com/"
   },
-  "license": "GPL v3",
+  "license": "GPL-3.0",
   "bugs": {
-    "url": "https://github.com/atesh/XKit/issues"
+    "url": "https://github.com/new-xkit/XKit/issues"
   },
   "homepage": "http://www.xkit.info/seven/",
   "engines": {
@@ -29,15 +29,20 @@
     "tweaks"
   ],
   "scripts": {
-    "test": "grunt jshint"
+    "test": "gulp lint:scripts"
   },
   "devDependencies": {
-    "grunt": "~0.4.5",
-    "grunt-contrib-clean": "^0.6.0",
-    "grunt-contrib-compress": "^0.12.0",
-    "grunt-contrib-copy": "^0.6.0",
-    "grunt-contrib-jshint": "~0.10.0",
-    "grunt-contrib-watch": "~0.6.1",
-    "underscore": "^1.7.0"
+    "del": "^1.2.0",
+    "gulp": "^3.9.0",
+    "gulp-csslint": "^0.1.5",
+    "gulp-jscs": "^2.0.0",
+    "gulp-jshint": "^1.11.2",
+    "gulp-zip": "^3.0.2",
+    "jpm": "^1.0.1",
+    "jshint-stylish": "^2.0.1",
+    "merge-stream": "^0.1.8"
+  },
+  "dependencies": {
+    "bluebird": "^2.9.34"
   }
 }

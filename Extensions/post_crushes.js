@@ -109,7 +109,7 @@ XKit.extensions.post_crushes = new Object({
 
 		send_txt = send_txt + '</ol><p> </p>';
 
-		var m_object = new Object;
+		var m_object = {};
 
 		m_object.channel_id = blog_url;
 
@@ -124,7 +124,7 @@ XKit.extensions.post_crushes = new Object({
 		m_object["is_rich_text[two]"] = "1";
 		m_object["is_rich_text[three]"] = "0";
 
-		m_object["MAX_FILE_SIZE"] = "10485760";
+		m_object.MAX_FILE_SIZE = "10485760";
 
 		m_object["post[slug]"] = "";
 		m_object["post[draft_status]"] = "";

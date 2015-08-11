@@ -8,27 +8,27 @@
 XKit.extensions.old_stats = new Object({
 
 	running: false,
-	
+
 	/*
 	old_stats_draw: function() {
         var canvas = document.getElementById('xkit-activity-canvas');
         if (canvas.getContext){
             var ctx = canvas.getContext('2d');
-            
-            
+
+
             var activity_sparkline = XKit.interface.user().activity.slice(1,-1).split(",");
             // Convert each string to int in array
             for (var i=0; i<activity_sparkline.length; i++) {
                 activity_sparkline[i] = parseInt(activity_sparkline[i], 10);
             }
-        
+
             var activity_max = getMaxOfArray(activity_sparkline);
             var activity_min = getMinOfArray(activity_sparkline);
-            
+
             var path=new Path2D();
-            
+
             path.moveTo(0, Math.round(15 - (activity_sparkline[0]-activity_min)/(activity_max-activity_min)*15));
-            
+
             for (var n=1; n<activity_sparkline.length; n++) {
                 activity_sparkline[n] = Math.round(15 - (activity_sparkline[n]-activity_min)/(activity_max-activity_min)*15);
                 path.lineTo(n*3, activity_sparkline[n]);
@@ -74,7 +74,7 @@ XKit.extensions.old_stats = new Object({
 		if (m_user.queue === 0) {
 			queue_show = " count_0 ";
 		}
-		
+
 		/*var m_account = $("#account_button");
 		m_account.click();
 		var activity_graph = document.getElementsByClassName("popover--account-popover")[0];
@@ -83,7 +83,7 @@ XKit.extensions.old_stats = new Object({
 		}, 1000); */
 
 
-		var xf_html = 	'<ul data-blog-name="' + m_user.name + '" id="dashboard_controls_open_blog" class="controls_section">' +
+		var xf_html = '<ul data-blog-name="' + m_user.name + '" id="dashboard_controls_open_blog" class="controls_section">' +
 					'<li class="no_push selected_blog">' +
 						'<div class="open_blog with_subtitle">' +
 							'<a class="currently_selected_blog hide_overflow blog_title">' + m_user.name + '</a>' +
@@ -108,10 +108,10 @@ XKit.extensions.old_stats = new Object({
 					'</li>' +
 					'<li class="controls_section_item popover_menu_item_blog_details">' +
 						'<a class="control-item control-anchor activity" href="/blog/' + m_user.name + '/activity">' +
-							'<div class="hide_overflow" id="old_stats_activity">Activity</div>' + 
+							'<div class="hide_overflow" id="old_stats_activity">Activity</div>' +
 							'<span data-sparkline="' + m_user.activity + '" class="count sparkline">' +
 								'<canvas style="display: inline-block; vertical-align: top; height: 15px; width: 36px;" width="72" height="30"></canvas>' +
-							'</span>' + 
+							'</span>' +
 						'</a>' +
 					'</li>' +
 					'<li class="controls_section_item' + drafts_show + '" data-blog-controls-count="draft_count">' +
@@ -143,28 +143,28 @@ XKit.extensions.old_stats = new Object({
 				'<ul id="xkit-dashboard-account" class="controls_section"></ul>';
 
 		$(".recommended_tumblelogs").before(xf_html);
-		
+
 	//	$("#old_stats_activity").after(activity_graph.childNodes[0].childNodes[0].childNodes[0].childNodes[1].childNodes[1].childNodes[0].childNodes[0].childNodes[0].childNodes[1]);
-		
+
 		/*
 		var canvas = $('#xkit-activity-canvas');
         if (canvas.getContext){
             var ctx = canvas.getContext('2d');
-            
-            
+
+
             var activity_sparkline = XKit.interface.user().activity.slice(1,-1).split(",");
             // Convert each string to int in array
             for (var i=0; i<activity_sparkline.length; i++) {
                 activity_sparkline[i] = parseInt(activity_sparkline[i], 10);
             }
-        
+
             var activity_max = getMaxOfArray(activity_sparkline);
             var activity_min = getMinOfArray(activity_sparkline);
-            
+
             var path=new Path2D();
-            
+
             path.moveTo(0, Math.round(15 - (activity_sparkline[0]-activity_min)/(activity_max-activity_min)*15));
-            
+
             for (var n=1; n<activity_sparkline.length; n++) {
                 activity_sparkline[n] = Math.round(15 - (activity_sparkline[n]-activity_min)/(activity_max-activity_min)*15);
                 path.lineTo(n*3, activity_sparkline[n]);
