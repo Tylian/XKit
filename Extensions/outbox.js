@@ -1,5 +1,5 @@
 //* TITLE Outbox **//
-//* VERSION 0.9.6 **//
+//* VERSION 0.9.7 **//
 //* DESCRIPTION Saves your sent replies, fan mail and asks. **//
 //* DETAILS This extension stores and lets you view the last 50 asks you've answered privately. Please keep in mind that this is a highly experimental extension, so if you hit a bug, please send the XKit blog an ask with the problem you've found. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -475,7 +475,10 @@ XKit.extensions.outbox = new Object({
 			m_html = m_html + XKit.extensions.outbox.render(m_obj, m_message);
 
 		}
-
+		if ($('.no_posts_found').length > 0) {
+			$('.no_posts_found').after("<ol id='posts' class='posts post-avatar--static'></ol>");
+			$('.no_posts_found').hide();
+		}
 		$("#posts").prepend(m_html);
 
 	},
@@ -668,6 +671,10 @@ XKit.extensions.outbox = new Object({
 
 		$(".by-xkit-outbox").parent().remove();
 		$("#xkit-outbox-no-posts").remove();
+		if ($('.no_posts_found').length > 0) {
+			$('.no_posts_found').show();
+			$('#posts').remove();
+		}
 		XKit.tools.remove_css("outbox_additional");
 		$(document).off('click','.xkit-outbox-delete', XKit.extensions.outbox.delete);
 
