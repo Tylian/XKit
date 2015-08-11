@@ -476,7 +476,7 @@ XKit.extensions.outbox = new Object({
 
 		}
 		if ($('.no_posts_found').length > 0) {
-			$('.no_posts_found').after("<div id='posts' class='posts'></div>");
+			$('.no_posts_found').after("<ol id='posts' class='posts post-avatar--static'></ol>");
 			$('.no_posts_found').hide();
 		}
 		$("#posts").prepend(m_html);
