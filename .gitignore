@@ -7,4 +7,8 @@ node_modules/
 
 Firefox/data/xkit/
 Extensions/dist/*.json
+
+Extensions/dist/page/gallery.json
+Extensions/dist/page/list.json
+
 *.swp
