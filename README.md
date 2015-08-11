@@ -38,4 +38,4 @@ gulp build
 
 Builds can be found in the `build/` directory.
 
-For a list of available build tasks, see [the documentation](https://github.com/new-xkit/XKit/wiki).
+For a list of available build tasks, see [the documentation](https://github.com/new-xkit/XKit/wiki/Build-XKit#gulp-tasks).
