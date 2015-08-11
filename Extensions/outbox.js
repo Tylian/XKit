@@ -475,7 +475,12 @@ XKit.extensions.outbox = new Object({
 			m_html = m_html + XKit.extensions.outbox.render(m_obj, m_message);
 
 		}
-
+		if ($('.no_posts_found').length > 0) {
+			//There's no #posts element if inbox is empty; need to manually create receptacle
+			var receptacle = $('.no_posts_found');
+			receptacle.html("");
+			receptacle.attr("id", "posts").removeClass("no_posts_found").addClass("posts");
+		}
 		$("#posts").prepend(m_html);
 
 	},
