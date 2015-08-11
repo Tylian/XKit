@@ -1,5 +1,5 @@
 //* TITLE User Menus+ **//
-//* VERSION 2.5.2 **//
+//* VERSION 2.5.3 **//
 //* DESCRIPTION More options on the user menu **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS This extension adds additional options to the user menu (the one that appears under user avatars on your dashboard), such as Avatar Magnifier, links to their Liked Posts page if they have them enabled. Note that this extension, especially the Show Likes and Show Submit options use a lot of network and might slow your computer down. **//
@@ -131,6 +131,7 @@ XKit.extensions.show_more = new Object({
 		$(document).on('mouseover', '.post_info_fence a, .post_info a, a.username', XKit.extensions.show_more.store_data_username);
 		$(document).on('mouseover', '.post_avatar_link', XKit.extensions.show_more.store_data_avatar);
 		$(document).on('click mouseover','.tumblelog_popover .info_popover_button', XKit.extensions.show_more.add_links_new);
+		$(document).on('click', '#xkit-classic-user-menu .xkit-ask', XKit.extensions.show_more.intercept_classic_menu_ask);
 
 	},
 
@@ -869,6 +870,20 @@ XKit.extensions.show_more = new Object({
 
 	},
 
+	intercept_classic_menu_ask: function(event) {
+		event.preventDefault();
+
+		XKit.tools.add_function(function(){
+			var args = JSON.parse(add_tag);
+			var config = jQuery("<div data-tumblelog-name='" + args.recipient + "' />");
+			config.data("anonymous_ask", args.anonymous_asks);
+			Tumblr.DashboardAsk.open_ask(config);
+		}, true, JSON.stringify({
+			recipient: this.getAttribute("data-tumblelog-name"),
+			anonymous_asks: this.getAttribute("data-anonymous-ask")
+		}));
+	},
+
 	destroy: function() {
 		$(".xkit-likes").parent().remove();
 		$(".xkit-submit").parent().remove();
@@ -878,6 +893,7 @@ XKit.extensions.show_more = new Object({
 		$(document).off('mouseover', '.post_info_fence a, .post_info a, a.username', XKit.extensions.show_more.store_data_username);
 		$(document).off('mouseover', '.post_avatar_link', XKit.extensions.show_more.store_data_avatar);
 		$(document).off('click','.tumblelog_menu_btn', XKit.extensions.show_more.add_links_new);
+		$(document).off('click', '#xkit-classic-user-menu .xkit-ask', XKit.extensions.show_more.intercept_classic_menu_ask);
 		this.running = false;
 	}
 
