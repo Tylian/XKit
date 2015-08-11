@@ -272,39 +272,39 @@ XKit.extensions.show_more = new Object({
 		}, 300);
 
 
-			$("#xkit-classic-user-menu-glass").unbind("click");
-			$("#xkit-classic-user-menu-glass").bind("click", function() {
-				XKit.extensions.show_more.hide_classic_menu();
-			});
+		$("#xkit-classic-user-menu-glass").unbind("click");
+		$("#xkit-classic-user-menu-glass").bind("click", function() {
+			XKit.extensions.show_more.hide_classic_menu();
+		});
 
-			$("#xkit-classic-user-menu a, #xkit-classic-user-menu div").unbind("click");
-			$("#xkit-classic-user-menu a, #xkit-classic-user-menu div").bind("click", function() {
-				XKit.extensions.show_more.hide_classic_menu();
-			});
+		$("#xkit-classic-user-menu a, #xkit-classic-user-menu div").unbind("click");
+		$("#xkit-classic-user-menu a, #xkit-classic-user-menu div").bind("click", function() {
+			XKit.extensions.show_more.hide_classic_menu();
+		});
 
-			$("#xkit-classic-user-menu a.xkit-fan-mail").unbind("click");
-			$("#xkit-classic-user-menu a.xkit-fan-mail").bind("click", function(e) {
-				e.preventDefault();
-				XKit.extensions.show_more.hide_classic_menu();
-				XKit.tools.add_function(function() {
-							var f = {
-									href: "/send/" + jQuery(".xkit-fan-mail").attr('data-tumblelog-name')
-							};
-					Tumblr.FanMail.show(f);
-				}, true, "");
+		$("#xkit-classic-user-menu a.xkit-fan-mail").unbind("click");
+		$("#xkit-classic-user-menu a.xkit-fan-mail").bind("click", function(e) {
+			e.preventDefault();
+			XKit.extensions.show_more.hide_classic_menu();
+			XKit.tools.add_function(function() {
+				var f = {
+						href: "/send/" + jQuery(".xkit-fan-mail").attr('data-tumblelog-name')
+				};
+				Tumblr.FanMail.show(f);
+			}, true, "");
 
-			});
+		});
 
-			$(".xkit-avatar-magnetizer-button-" + user_url).unbind('click');
-			$(".xkit-avatar-magnetizer-button-" + user_url).bind('click', function() {
+		$(".xkit-avatar-magnetizer-button-" + user_url).unbind('click');
+		$(".xkit-avatar-magnetizer-button-" + user_url).bind('click', function() {
 
-				XKit.extensions.show_more.hide_classic_menu();
-				XKit.extensions.show_more.show_avatar(user_url);
-				$(".tumblelog_popover_glass").trigger('click');
-				setTimeout(function() { $(".tumblelog_popover_glass").trigger('click'); }, 10);
-				$(".popover").hide();
+			XKit.extensions.show_more.hide_classic_menu();
+			XKit.extensions.show_more.show_avatar(user_url);
+			$(".tumblelog_popover_glass").trigger('click');
+			setTimeout(function() { $(".tumblelog_popover_glass").trigger('click'); }, 10);
+			$(".popover").hide();
 
-			});
+		});
 
 	},
 
@@ -547,47 +547,47 @@ XKit.extensions.show_more = new Object({
 
 		if (XKit.extensions.show_more.preferences.show_magnetizer.value === true) {
 
-					if (avatar_url !== "" && typeof avatar_url !== "undefined") {
-						m_html = m_html + "<li>" +
-								"<a onclick=\"return false;\" data-avatar-url=\"" + avatar_url + "\" class=\" xkit-new-menu-fix xkit-show-more-item xkit-avatar-magnetizer-new xkit-avatar-magnetizer-button-" + user_url + "\" data-user-url=\"" + user_url + "\">" +
-									"Magnifier" +
-								"</a>" +
-								"</li>";
-					}
+			if (avatar_url !== "" && typeof avatar_url !== "undefined") {
+				m_html = m_html + "<li>" +
+						"<a onclick=\"return false;\" data-avatar-url=\"" + avatar_url + "\" class=\" xkit-new-menu-fix xkit-show-more-item xkit-avatar-magnetizer-new xkit-avatar-magnetizer-button-" + user_url + "\" data-user-url=\"" + user_url + "\">" +
+							"Magnifier" +
+						"</a>" +
+						"</li>";
+			}
 
+		}
+
+
+		if (XKit.extensions.show_more.preferences.show_submits.value === true && XKit.extensions.show_more.submit_available[user_url] === true) {
+
+			var m_likes_url = "http://" + user_url + ".tumblr.com/submit";
+
+			m_html = m_html + "<li>" +
+					"<a target=\"_new\" href=\"" + m_likes_url + "\" class=\"likes xkit-submit xkit-new-menu-fix\">" +
+						"<span class=\"hide_overflow\">Submit</span>" +
+					"</a>" +
+					"</li>";
+
+		}
+
+		if (XKit.extensions.show_more.custom_menu_extension.length >= 0) {
+
+			var m_data = XKit.extensions.show_more.popup_data;
+
+			for (var i=0;i<XKit.extensions.show_more.custom_menu_extension.length;i++) {
+
+				var returned_menu = "";
+
+				try {
+					returned_menu = XKit.extensions.show_more.custom_menu_function[i](m_data);
+				} catch(e) {
+					returned_menu = "";
 				}
 
+				m_html = m_html + returned_menu;
+			}
 
-				if (XKit.extensions.show_more.preferences.show_submits.value === true && XKit.extensions.show_more.submit_available[user_url] === true) {
-
-					var m_likes_url = "http://" + user_url + ".tumblr.com/submit";
-
-					m_html = m_html + "<li>" +
-							"<a target=\"_new\" href=\"" + m_likes_url + "\" class=\"likes xkit-submit xkit-new-menu-fix\">" +
-								"<span class=\"hide_overflow\">Submit</span>" +
-							"</a>" +
-							"</li>";
-
-				}
-
-				if (XKit.extensions.show_more.custom_menu_extension.length >= 0) {
-
-					var m_data = XKit.extensions.show_more.popup_data;
-
-					for (var i=0;i<XKit.extensions.show_more.custom_menu_extension.length;i++) {
-
-						var returned_menu = "";
-
-						try {
-							returned_menu = XKit.extensions.show_more.custom_menu_function[i](m_data);
-						} catch(e) {
-							returned_menu = "";
-						}
-
-						m_html = m_html + returned_menu;
-					}
-
-				}
+		}
 
 		$(m_parent).append(m_html);
 
