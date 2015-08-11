@@ -21,6 +21,14 @@ XKit.extensions.hideavatars = new Object({
 		
 	},
 	
+	frame_run: function() {
+
+		XKit.tools.init_css("hideavatars");
+
+		XKit.extensions.hideavatars.load_blogs();
+		
+	},
+	
 	load_blogs: function() {
 
 		m_storage = XKit.storage.get("hideavatars", "blognames","");
