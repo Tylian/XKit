@@ -847,6 +847,24 @@ XKit.extensions.show_more = new Object({
 			var config = jQuery("<div data-tumblelog-name='" + args.recipient + "' />");
 			config.data("anonymous_ask", args.anonymous_asks);
 			Tumblr.DashboardAsk.open_ask(config);
+
+			// For some reason, option to send anonymous ask isn't available
+			// so we have to add it ourselves
+			if (args.anonymous_asks === "1") {
+				setTimeout(function(){
+					var ask_button_div = jQuery("#ask_button").parent();
+					var ask_anonymously_html = "" +
+						"<div class='control right'>" +
+							"<div class='post-forms--ask-anonymous'>" +
+								"<label class='binary_switch'>" +
+									"<input type='checkbox' name='anonymous' value='1' id='ask_anonymously'>" +
+									"<span class='binary_switch_track'></span> <span class='binary_switch_button'></span>" +
+								"</label><label id='ask_anonymously_label' for='ask_anonymously'>Ask anonymously</label>" +
+							"</div>" +
+						"</div>";
+					ask_button_div.before(ask_anonymously_html);
+				}, 500);
+			}
 		}, true, JSON.stringify({
 			recipient: this.getAttribute("data-tumblelog-name"),
 			anonymous_asks: this.getAttribute("data-anonymous-ask")
