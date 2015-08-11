@@ -2,8 +2,8 @@
 
 Before you submit a pull request, please look over the following:
 
-- The version of an extension has been incremented
-- If a pull request is associated with an issue, it should reference that issue
+- The version of an extension has been incremented following the [Semantic Versioning pattern](http://semver.org/)
+- If a pull request is associated with an issue, it should reference that issue.  See [Writing on GitHub#References](https://help.github.com/articles/writing-on-github/#references) on how to do this.
 - Commented out code has been removed
 - `XKit.extensions.blah.preferences.whatever.value === true` should be `XKit.extensions.blah.preferences.whatever.value`
 - The code is clear enough for others to understand only from the pull request diff
