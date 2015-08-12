@@ -21,13 +21,13 @@ XKit.extensions.hideavatars = new Object({
 		
 	},
 	
-	frame_run: function() {
+	/*frame_run: function() {
 
 		XKit.tools.init_css("hideavatars");
 
 		XKit.extensions.hideavatars.load_blogs();
 		
-	},
+	},*/
 	
 	load_blogs: function() {
 
@@ -160,7 +160,7 @@ XKit.extensions.hideavatars = new Object({
 				$("#xkit-hideavatars-delete-blogname-confirm").click(function() {
 
 					XKit.extensions.hideavatars.load_blogs();
-De
+
 					for (var j=0;j<XKit.extensions.hideavatars.blognames.length;j++) {
 
 						if (m_cat_obj.id === XKit.extensions.hideavatars.blognames[j].id) {
