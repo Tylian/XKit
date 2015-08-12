@@ -130,7 +130,7 @@ XKit.extensions.hideavatars = new Object({
 
 			if (m_cat_obj === false) { alert("Unknown error HAV-124"); return; }
 
-			XKit.window.show("Edit blog name","<b>Blog Name:</b><input type=\"text\" maxlength=\"40\" placeholder=\"\" class=\"xkit-textbox\" id=\"xkit-hideavatars-blogname-add-title\" value=\"" + m_cat_obj.title + "\"><br/>If you delete this blog, its avatar will show again \"Uncategorized.\"","question","<div class=\"xkit-button default\" id=\"xkit-hideavatars-save-blogname\">Save blogname</div><div class=\"xkit-button\" id=\"xkit-hideavatars-delete-blogname\">Delete</div><div class=\"xkit-button\" id=\"xkit-close-message\">Cancel</div>");
+			XKit.window.show("Edit blog name","<b>Blog Name:</b><input type=\"text\" maxlength=\"40\" placeholder=\"\" class=\"xkit-textbox\" id=\"xkit-hideavatars-blogname-add-title\" value=\"" + m_cat_obj.title + "\"><br/>If you delete this blog, its avatar will show again","question","<div class=\"xkit-button default\" id=\"xkit-hideavatars-save-blogname\">Save blogname</div><div class=\"xkit-button\" id=\"xkit-hideavatars-delete-blogname\">Delete</div><div class=\"xkit-button\" id=\"xkit-close-message\">Cancel</div>");
 
 			$("#xkit-hideavatars-save-blogname").click(function() {
 
@@ -160,7 +160,7 @@ XKit.extensions.hideavatars = new Object({
 				$("#xkit-hideavatars-delete-blogname-confirm").click(function() {
 
 					XKit.extensions.hideavatars.load_blogs();
-
+De
 					for (var j=0;j<XKit.extensions.hideavatars.blognames.length;j++) {
 
 						if (m_cat_obj.id === XKit.extensions.hideavatars.blognames[j].id) {
@@ -182,3 +182,45 @@ XKit.extensions.hideavatars = new Object({
 		});
 
 	},
+	
+	get_blogname: function(id) {
+
+		for (var i=0;i<XKit.extensions.hideavatars.blognames.length;i++) {
+
+			if (id === XKit.extensions.hideavatars.blognames[i].id) {
+
+				return XKit.extensions.hideavatars.blognames[i];
+
+			}
+
+		}
+
+		return false;
+
+	},
+	
+	blogname_exists: function(title) {
+
+		title = title.toLowerCase();
+
+		for (var i=0;i<XKit.extensions.hideavatars.blognames.length;i++) {
+
+			if (title === XKit.extensions.hideavatars.blognames[i].title.toLowerCase()) {
+
+				return true;
+
+			}
+
+		}
+
+		return false;
+
+	},
+	
+	
+	
+	
+	destroy: function() {
+	    
+	}
+});
