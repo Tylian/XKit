@@ -618,8 +618,7 @@ XKit.extensions.show_more = new Object({
 
 				var username = $(this).parent().attr('data-tumblelog-name');
 
-				if (XKit.extensions.show_more.submit_available[username] ||
-					!XKit.extensions.show_more.submit_available[username]) {
+				if (typeof XKit.extensions.show_more.submit_available[username] === "boolean") {
 					return;
 				}
 
@@ -659,8 +658,7 @@ XKit.extensions.show_more = new Object({
 
 				var username = $(this).parent().attr('data-tumblelog-name');
 
-				if (XKit.extensions.show_more.anon_available[username] ||
-					!XKit.extensions.show_more.anon_available[username]) {
+				if (typeof XKit.extensions.show_more.anon_available[username] === "boolean") {
 					return;
 				}
 
@@ -703,8 +701,7 @@ XKit.extensions.show_more = new Object({
 
 				var username = $(this).parent().attr('data-tumblelog-name');
 
-				if (XKit.extensions.show_more.likes_available[username] ||
-					!XKit.extensions.show_more.likes_available[username]) {
+				if (typeof XKit.extensions.show_more.likes_available[username] === "boolean") {
 					return;
 				}
 
