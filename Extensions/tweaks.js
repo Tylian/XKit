@@ -746,8 +746,6 @@ XKit.extensions.tweaks = new Object({
 		$("#new_post_in_tracked_tags_bubble").remove();
 		$("#tumblr_radar").css("display","block");
 		$("#xkit_customize_button").remove();
-		$("#discover_button").css("display", "block");
-		$("a[href='/explore']").css("display", "block");
 		$("a.spotlight").parent().css("display","block");
 		$("#recommended_tumblelogs, .recommended_tumblelogs, .trending_tumblelogs").css("display","block");
 		$("a.activity").parent().css("display","block");
