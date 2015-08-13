@@ -444,7 +444,7 @@ XKit.extensions.tweaks = new Object({
 		}
 
 		if (XKit.extensions.tweaks.preferences.hide_explore_buttons.value) {
-			XKit.extensions.tweaks.add_css("#discover_button, a[href=\"/explore\"] { display: none; } ", "xkit_tweaks_hide_explore_buttons")
+			XKit.extensions.tweaks.add_css("#discover_button, a[href=\"/explore\"] { display: none; } ", "xkit_tweaks_hide_explore_buttons");
 		}
 
 		if (XKit.extensions.tweaks.preferences.hide_notes.value) {
