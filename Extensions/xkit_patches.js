@@ -2048,6 +2048,10 @@ XKit.tools.dump_config = function(){
 					m_return.likes = true;
 				}
 
+				if ($('meta[name="twitter:title"]').length) {
+					m_return.user_url = $('meta[name="twitter:title"]').attr("content");
+				}
+
 				m_return.dashboard = $("body").hasClass("is_dashboard") === true;
 				m_return.channel = $("body").hasClass("is_channel") === true;
 				m_return.endless = $("body").hasClass("without_auto_paginate") === false;
