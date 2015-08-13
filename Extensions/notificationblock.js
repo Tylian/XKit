@@ -309,7 +309,6 @@ XKit.extensions.notificationblock = new Object({
 			$(this).addClass("xnotificationblockchecked");
 
 			var target_url = $(this).find(".part_glass").attr('href') + "  " + $(this).find(".ui_post_badge").attr('href');
-			//$(this).css("background","green");
 
 			for (var i=0;i<XKit.extensions.notificationblock.blacklisted.length;i++) {
 				if (XKit.extensions.notificationblock.blacklisted[i] === "" ||
@@ -318,12 +317,10 @@ XKit.extensions.notificationblock = new Object({
 				}
 				if (target_url.indexOf("/post/" + XKit.extensions.notificationblock.blacklisted[i]) !== -1) {
 					console.log("Blocking notification because of post " + XKit.extensions.notificationblock.blacklisted[i]);
-					//$(this).addClass("notificationblock-notification-blocked");
 					if ($(this).next().hasClass("xkit-activity-plus-condensed-opener")) {
 						$(this).next().remove();
 					}
 					$(this).remove();
-					//$(this).css("background","red");
 					return;
 				}
 			}
