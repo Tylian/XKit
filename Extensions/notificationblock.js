@@ -1,5 +1,5 @@
 //* TITLE NotificationBlock **//
-//* VERSION 1.3.1 **//
+//* VERSION 1.3.2 **//
 //* DESCRIPTION Blocks notifications from a post **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS One post got way too popular and now just annoying you? Click on the notification block icon on that post to hide the notifications from that post. If you have Go-To-Dash installed, you can click on a notification, then click View button on top-right corner to quickly go back to the post on your dashboard.  **//
@@ -106,7 +106,7 @@ XKit.extensions.notificationblock = new Object({
 
 		}
 
-		XKit.window.show("Block notifications from this post?","Notifications originating from this post will be blocked on the dashboard, Old Notifications and Activity page, without any indication that is was blocked.","question","<div class=\"xkit-button default\" id=\"xkit-notification-block-ok\">Block Notifications</div><div class=\"xkit-button\" id=\"xkit-close-message\">Cancel</div>");
+		XKit.window.show("Block notifications from this post?","Notifications originating from this post will be blocked on the dashboard, Old Notifications and Activity page, without any indication that it was blocked.","question","<div class=\"xkit-button default\" id=\"xkit-notification-block-ok\">Block Notifications</div><div class=\"xkit-button\" id=\"xkit-close-message\">Cancel</div>");
 
 		$("#xkit-notification-block-ok").click(function() {
 
@@ -260,7 +260,7 @@ XKit.extensions.notificationblock = new Object({
 
 		} else {
 
-			XKit.window.show("Block notifications from this post?","Notifications originating from this post will be blocked on the dashboard, Old Notifications and Activity page, without any indication that is was blocked.","question","<div class=\"xkit-button default\" id=\"xkit-notification-block-ok\">Block Notifications</div><div class=\"xkit-button\" id=\"xkit-close-message\">Cancel</div>");
+			XKit.window.show("Block notifications from this post?","Notifications originating from this post will be blocked on the dashboard, Old Notifications and Activity page, without any indication that it was blocked.","question","<div class=\"xkit-button default\" id=\"xkit-notification-block-ok\">Block Notifications</div><div class=\"xkit-button\" id=\"xkit-close-message\">Cancel</div>");
 
 			$("#xkit-notification-block-ok").click(function() {
 
@@ -309,7 +309,6 @@ XKit.extensions.notificationblock = new Object({
 			$(this).addClass("xnotificationblockchecked");
 
 			var target_url = $(this).find(".part_glass").attr('href') + "  " + $(this).find(".ui_post_badge").attr('href');
-			//$(this).css("background","green");
 
 			for (var i=0;i<XKit.extensions.notificationblock.blacklisted.length;i++) {
 				if (XKit.extensions.notificationblock.blacklisted[i] === "" ||
@@ -318,12 +317,10 @@ XKit.extensions.notificationblock = new Object({
 				}
 				if (target_url.indexOf("/post/" + XKit.extensions.notificationblock.blacklisted[i]) !== -1) {
 					console.log("Blocking notification because of post " + XKit.extensions.notificationblock.blacklisted[i]);
-					//$(this).addClass("notificationblock-notification-blocked");
 					if ($(this).next().hasClass("xkit-activity-plus-condensed-opener")) {
 						$(this).next().remove();
 					}
 					$(this).remove();
-					//$(this).css("background","red");
 					return;
 				}
 			}
