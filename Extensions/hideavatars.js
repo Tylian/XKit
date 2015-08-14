@@ -234,6 +234,6 @@ XKit.extensions.hideavatars = new Object({
 	
 	
 	destroy: function() {
-	    
+	    XKit.tools.remove_css("hideavatars");
 	}
 });
