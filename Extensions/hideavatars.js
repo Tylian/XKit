@@ -23,9 +23,9 @@ XKit.extensions.hideavatars = new Object({
 		XKit.extensions.hideavatars.hide_avatars();
 		
 	},
-	
+
 	hide_avatars: function() {
-	    
+
 	    XKit.extensions.hideavatars.blognames.forEach(function(blogname) {
 	        $(".post_avatar_link").filter(function( index ) {
 	            return $(this).attr("href").slice(7).split(".")[0] == XKit.extensions.hideavatars.blogname.title;
@@ -33,7 +33,7 @@ XKit.extensions.hideavatars = new Object({
 	    });
 	    
 	},
-	
+
 	load_blogs: function() {
 
 		m_storage = XKit.storage.get("hideavatars", "blognames","");
@@ -116,8 +116,8 @@ XKit.extensions.hideavatars = new Object({
 				XKit.extensions.hideavatars.load_blogs();
 
 				XKit.extensions.hideavatars.blognames.push({
-    				id: XKit.tools.random_string() + new Date().getTime(),
-    				title: m_title
+					id: XKit.tools.random_string() + new Date().getTime(),
+					title: m_title
 				});
 
 				XKit.extensions.hideavatars.save_blogs();
