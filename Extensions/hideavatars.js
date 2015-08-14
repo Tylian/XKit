@@ -133,7 +133,7 @@ XKit.extensions.hideavatars = new Object({
 
 			var m_cat_obj = XKit.extensions.hideavatars.get_blogname($(this).attr('data-id'));
 
-			if (m_cat_obj === false) { alert("Unknown error HAV-124"); return; }
+			if (m_cat_obj === false) { alert("Error HAV-136: Could not find blog name with data-id " + $(this).attr('data-id') ); return; }
 
 			XKit.window.show("Edit blog name","<b>Blog Name:</b><input type=\"text\" maxlength=\"40\" placeholder=\"\" class=\"xkit-textbox\" id=\"xkit-hideavatars-blogname-add-title\" value=\"" + m_cat_obj.title + "\"><br/>If you delete this blog, its avatar will show again","question","<div class=\"xkit-button default\" id=\"xkit-hideavatars-save-blogname\">Save blogname</div><div class=\"xkit-button\" id=\"xkit-hideavatars-delete-blogname\">Delete</div><div class=\"xkit-button\" id=\"xkit-close-message\">Cancel</div>");
 
