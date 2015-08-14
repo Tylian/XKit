@@ -1,7 +1,7 @@
 //* TITLE satsukimous **//
-//* VERSION 1.0.1 **//
+//* VERSION 1.0.2 **//
 //* DESCRIPTION SATSUKI **//
-//* DEVELOPER SATSUKI **//
+//* DEVELOPER new-xkit **//
 //* FRAME false **//
 //* BETA false **//
 
@@ -17,10 +17,10 @@ XKit.extensions.satsukimous = new Object({
 			return $( this ).attr( "style" ).indexOf( "anonymous_avatar" ) !== -1;
 		}).attr( "style", "background-image: url('https://31.media.tumblr.com/avatar_0bc380bccba7_64.png');" );
 	},
-	
+
 	run: function() {
 		this.running = true;
-		
+
 		XKit.post_listener.add( "SATSUKI", XKit.extensions.satsukimous.satsuki );
 		XKit.extensions.satsukimous.satsuki();
 	},
