@@ -24,14 +24,6 @@ XKit.extensions.hideavatars = new Object({
 		
 	},
 	
-	/*frame_run: function() {
-
-		XKit.tools.init_css("hideavatars");
-
-		XKit.extensions.hideavatars.load_blogs();
-		
-	},*/
-	
 	hide_avatars: function() {
 	    
 	    XKit.extensions.hideavatars.blognames.forEach(function(blogname) {
@@ -121,13 +113,12 @@ XKit.extensions.hideavatars = new Object({
 					return;
 				}
 
-				var m_obj = {};
-				m_obj.id = XKit.tools.random_string() + new Date().getTime();
-				m_obj.title = m_title;
-
 				XKit.extensions.hideavatars.load_blogs();
 
-				XKit.extensions.hideavatars.blognames.push(m_obj);
+				XKit.extensions.hideavatars.blognames.push({
+    				id: XKit.tools.random_string() + new Date().getTime(),
+    				title: m_title
+				});
 
 				XKit.extensions.hideavatars.save_blogs();
 				XKit.extensions.hideavatars.cpanel(m_div);
