@@ -1,5 +1,5 @@
 //* TITLE Satsukimous **//
-//* VERSION 1.0.3 **//
+//* VERSION 1.0.4 **//
 //* DESCRIPTION Turns anon icons into Satsuki **//
 //* DEVELOPER new-xkit **//
 //* DETAILS This extension is a prime example of what happens when you let JavaScript developers stay up past midnight.**//
