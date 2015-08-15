@@ -1,5 +1,5 @@
 //* TITLE XKit Preferences **//
-//* VERSION 3.4.4 **//
+//* VERSION 3.4.5 **//
 //* DESCRIPTION Lets you customize XKit **//
 //* DEVELOPER STUDIOXENIX **//
 
@@ -1056,7 +1056,7 @@ XKit.extensions.xkit_preferences = new Object({
 
 					try {
 						/* jshint evil: true */
-						eval(mdata.script);
+						eval(mdata.script + "\n//# sourceURL=xkit/"+extension_id+".js");
 						XKit.extensions[m_extension_id].run();
 					} catch(e) {
 
