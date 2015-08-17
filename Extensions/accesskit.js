@@ -1,5 +1,5 @@
 //* TITLE AccessKit **//
-//* VERSION 1.1 REV D **//
+//* VERSION 1.1.5 **//
 //* DESCRIPTION Accessibility tools for Tumblr **//
 //* DETAILS Provides accessibility tools for XKit and your dashboard, such as increased font sizes, more contrast on icons and more. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -107,7 +107,7 @@ XKit.extensions.accesskit = new Object({
 
 		if (this.preferences.font.value === "sans-serif") {
 
-			m_css = m_css + " .post.post_full { font-family: \"Palatino Linotype\", \"Book Antiqua\", Palatino, serif; } ";
+			m_css = m_css + " .post.post_full, .post .post_body, .post .post_content { font-family: \"Palatino Linotype\", \"Book Antiqua\", Palatino, serif; } ";
 
 		}
 
