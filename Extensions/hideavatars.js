@@ -1,5 +1,5 @@
 //* TITLE Hide Avatars **//
-//* VERSION 0.1.1 **//
+//* VERSION 0.1.2 **//
 //* DESCRIPTION Hides avatars on a per-url basis **//
 //* DEVELOPER dlmarquis **//
 //* FRAME false **//
@@ -8,9 +8,9 @@
 XKit.extensions.hideavatars = new Object({
 
 	running: false,
-	
+
 	blognames: [],
-	
+
 	run: function() {
 
 		this.running = true;
@@ -18,15 +18,15 @@ XKit.extensions.hideavatars = new Object({
 		XKit.tools.init_css("hideavatars");
 
 		XKit.extensions.hideavatars.load_blogs();
-		
+
 		XKit.post_listener.add("hide_avatars", XKit.extensions.hideavatars.hide_avatars);
 		XKit.extensions.hideavatars.hide_avatars();
-		
+
 	},
 
 	hide_avatars: function() {
 
-		if (XKit.interface.where().dashboard) {
+		if (XKit.interface.where().dashboard || XKit.interface.where().inbox) {
 			XKit.extensions.hideavatars.blognames.forEach(function (blogname) {
 				$(".post_avatar_link").filter(function() {
 					return $(this).attr("href").slice(7).split(".")[0] === blogname.title;
@@ -63,9 +63,9 @@ XKit.extensions.hideavatars = new Object({
 		} else {
 			XKit.extensions.hideavatars.blognames = [];
 		}
-		
+
 	},
-	
+
 	save_blogs: function() {
 
 		try {
@@ -76,9 +76,9 @@ XKit.extensions.hideavatars = new Object({
 			XKit.window.show("Unable to save data","Hide Avatars could not save data<br/><br/>Error:<br/>" + e.message, "error", "<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
 			alert("Can't save data:\n" + e.message);
 		}
-		
+
 	},
-	
+
 	cpanel: function(m_div) {
 
 		XKit.extensions.hideavatars.load_blogs();
@@ -202,7 +202,7 @@ XKit.extensions.hideavatars = new Object({
 		});
 
 	},
-	
+
 	get_blogname: function(id) {
 
 		for (var i=0;i<XKit.extensions.hideavatars.blognames.length;i++) {
@@ -218,7 +218,7 @@ XKit.extensions.hideavatars = new Object({
 		return false;
 
 	},
-	
+
 	blogname_exists: function(title) {
 
 		title = title.toLowerCase();
@@ -236,10 +236,10 @@ XKit.extensions.hideavatars = new Object({
 		return false;
 
 	},
-	
-	
-	
-	
+
+
+
+
 	destroy: function() {
 		XKit.tools.remove_css("hideavatars");
 	}
