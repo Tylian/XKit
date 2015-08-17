@@ -92,6 +92,22 @@ XKit.extensions.xinbox = new Object({
 			default: true,
 			value: true
 		},
+		"color_code_asks": {
+			text: "color code asks and submissions based on what blog they're for",
+			default: true,
+			value: true,
+		},
+		"color_code_pallet": {
+			type: "text",
+			text: "customize the color coding pallet. <br>"+
+				  'credit for default to <a style="text-decoration: underline;" href="http://colorbrewer2.org/">colorbrewer, by Cynthia Brewer</a>',
+			// colorbrewer is distributed under the terms of the apache license
+			// https://github.com/axismaps/colorbrewer/blob/master/export/LICENSE.txt
+			default: "#e41a1c;#377eb8;#4daf4a;#984ea3;#ff7f00;#ffff33;#a65628;"+
+					 "#f781bf;#66c2a5;#fc8d62;#8da0cb;#e78ac3;#a6d854;#ffd92f;#e5c494",
+			value:   "#e41a1c;#377eb8;#4daf4a;#984ea3;#ff7f00;#ffff33;#a65628;"+
+					 "#f781bf;#66c2a5;#fc8d62;#8da0cb;#e78ac3;#a6d854;#ffd92f;#e5c494"
+		},
 		"sep2": {
 			text: "Fan Mail options",
 			type: "separator"
@@ -169,7 +185,7 @@ XKit.extensions.xinbox = new Object({
 
 		XKit.extensions.xinbox.slimify_outgoing();
 
-		if(XKit.extensions.xinbox.preferences.show_new_notification.value === true) {
+		if(XKit.extensions.xinbox.preferences.show_new_notification.value) {
 			XKit.extensions.xinbox.notification_check_interval = setInterval(function() { XKit.extensions.xinbox.check_for_new(); }, 2000);
 			XKit.extensions.xinbox.check_for_new(true);
 		}
@@ -179,23 +195,31 @@ XKit.extensions.xinbox = new Object({
 		}
 
 
-		if (XKit.extensions.xinbox.preferences.show_reply_button.value === true) {
+		if (XKit.extensions.xinbox.preferences.show_reply_button.value) {
 			$(document).on('click','.xkit-xinbox-pa-reply', XKit.extensions.xinbox.on_click_to_pa_reply);
 			XKit.interface.create_control_button("xkit-xinbox-pa-reply", this.reply_button_icon, "Reply to Answer", "");
 			XKit.post_listener.add("xinbox_show_reply_buttons", XKit.extensions.xinbox.show_reply_button);
 			XKit.extensions.xinbox.show_reply_button();
 		}
 
-		if(XKit.extensions.xinbox.preferences.show_tag_box.value === true || XKit.extensions.xinbox.preferences.tag_usernames.value === true || XKit.extensions.xinbox.preferences.tag_custom.value === true) {
+		if(XKit.extensions.xinbox.preferences.show_tag_box.value ||
+			XKit.extensions.xinbox.preferences.tag_usernames.value ||
+			XKit.extensions.xinbox.preferences.tag_custom.value) {
+
 			XKit.post_listener.add("xinbox_init_tags", XKit.extensions.xinbox.init_tags);
 			XKit.extensions.xinbox.init_tags();
 		}
 
-		if(XKit.extensions.xinbox.preferences.hide_fan_mail_button.value === true && $("#right_column > .send_fan_mail").length > 0) {
+		if(XKit.extensions.xinbox.preferences.hide_fan_mail_button.value && $("#right_column > .send_fan_mail").length > 0) {
 			XKit.tools.add_css("#right_column > .send_fan_mail { display: none; } #right_column .controls_section { margin-top: 0 !important; margin-bottom: 18px; } ", "xkit_inbox_hide_fan_mail_button");
 		}
 
-		if(XKit.extensions.xinbox.preferences.slim_fan_mail.value === true) {
+		if(XKit.extensions.xinbox.preferences.color_code_asks.value) {
+			XKit.post_listener.add("xinbox_color_code_asks", XKit.extensions.xinbox.do_post_colors);
+			XKit.extensions.xinbox.do_post_colors();
+		}
+
+		if(XKit.extensions.xinbox.preferences.slim_fan_mail.value) {
 			var m_css = " .fan_mail .message { " +
 						" background: white !important; " +
 						" padding-left: 20px !important; padding-right: 20px !important; " +
@@ -217,16 +241,16 @@ XKit.extensions.xinbox = new Object({
 			XKit.tools.add_css(m_css, "xkit_inbox_slim_fan_mail");
 		}
 
-		if(XKit.extensions.xinbox.preferences.mass_editor.value === true) {
+		if(XKit.extensions.xinbox.preferences.mass_editor.value) {
 			XKit.extensions.xinbox.init_mass_editor();
 		}
 
-		if(XKit.extensions.xinbox.preferences.auto_expand_fan_mail.value === true) {
+		if(XKit.extensions.xinbox.preferences.auto_expand_fan_mail.value) {
 			var au_ex_css = ".post.fan_mail .read_more, .post.fan_mail .message_body_truncated { display: none; } .post.fan_mail .message_body { display: block !important; }";
 			XKit.tools.add_css(au_ex_css, "xkit_inbox_auto_expand");
 		}
 
-		if(XKit.extensions.xinbox.preferences.inbox_search.value === true) {
+		if(XKit.extensions.xinbox.preferences.inbox_search.value) {
 			XKit.extensions.xinbox.init_inbox_search();
 		}
 
@@ -1062,6 +1086,44 @@ XKit.extensions.xinbox = new Object({
 		script.setAttribute("type", "application/javascript");
 		script.textContent = source;
 		document.body.appendChild(script);
+	},
+
+	do_post_colors: function(){
+		colors = XKit.extensions.xinbox.get_blog_colors();
+		$(".posts .post[data-tumblelog]").not(":has(.xinbox-color-strip)").each(function(j,i){
+			blog = i.dataset.tumblelog;
+
+			n = '<div class="xinbox-color-strip" ' +
+				 'style="position: absolute; right: 0; top: 0; '+
+				 'border-top: 30px solid '+colors[blog]+'; border-left: 30px solid transparent;"'+
+				 'title="Submitted to '+blog+'"></div>';
+
+			$(i).append(n);
+		});
+	},
+
+	get_blog_colors: function() {
+		var current = XKit.storage.get("xinbox", "stable_blogs");
+		var new_blogs = XKit.tools.get_blogs();
+		if (!current) {
+			current = new_blogs;
+		} else {
+			current = current.split(";");
+			var set = new Set(current);
+			new_blogs.forEach(function(i) {
+				if (!set.has(i)) {
+					current.push(i);
+				}
+			});
+		}
+
+		XKit.storage.set("xinbox", "stable_blogs", current.join(";"));
+		var colors = this.preferences.color_code_pallet.value.split(";");
+		var map = {};
+		for (var i = 0; i < current.length; i++) {
+			map[current[i]] = colors[i % colors.length];
+		}
+		return map;
 	},
 
 	destroy: function() {
