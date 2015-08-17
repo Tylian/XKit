@@ -23,7 +23,7 @@ XKit.extensions.accesskit = new Object({
 			values: [
 				"Default Font", "default",
 				"OpenDyslexic (might take a while to load)", "opendyslexic",
-				"Serif", "serif"
+				"Serif", "sans-serif"
 			],
 		},
 		"sep-2": {
@@ -105,7 +105,7 @@ XKit.extensions.accesskit = new Object({
 
 		var m_filters = "";
 
-		if (this.preferences.font.value === "serif") {
+		if (this.preferences.font.value === "sans-serif") {
 
 			m_css = m_css + " .post.post_full, .post .post_body, .post .post_content { font-family: \"Palatino Linotype\", \"Book Antiqua\", Palatino, serif; } ";
 
