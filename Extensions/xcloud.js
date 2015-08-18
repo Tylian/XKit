@@ -782,7 +782,7 @@ XKit.extensions.xcloud = new Object({
 
 		var uploadRequest = {
 			method: "POST",
-			url: xcloud_url + "/upload/",
+			url: xcloud_url + "/xcloud/upload/",
 			data: "data=" + to_send,
 			json: false,
 			onerror: function() {
