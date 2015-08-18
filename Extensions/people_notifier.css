@@ -21,12 +21,13 @@
 
 .xkit-people-notifier-person a:after {
 	background: none !important;
+	display: block;
+	height: 100%;
 }
 
 .xkit-people-notifier-person .count {
 	float: right;
-	position: relative !important;
-	top: -16px !important;
+	margin-right: 15px !important;
 }
 
 .xkit-people-notifier-person .close {
