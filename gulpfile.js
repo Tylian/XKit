@@ -2,7 +2,8 @@
 /* jshint node:true */
 'use strict';
 
-var connect = require('connect'),
+var cache = require('gulp-cached'),
+	connect = require('connect'),
 	connectLogger = require('morgan'),
 	connectStatic = require('serve-static'),
 	csslint = require('gulp-csslint'),
@@ -72,6 +73,7 @@ gulp.task('lint:scripts', function() {
 	);
 
 	return gulp.src(src)
+		.pipe(cache('lint:scripts'))
 		.pipe(jshint())
 		.pipe(jshint.reporter(stylish))
 		.pipe(jshint.reporter('fail'))
@@ -85,6 +87,7 @@ gulp.task('lint:css', function() {
 	);
 
 	return gulp.src(src)
+		.pipe(cache('lint:css'))
 		.pipe(csslint())
 		.pipe(csslint.reporter());
 });
