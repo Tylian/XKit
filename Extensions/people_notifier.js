@@ -27,7 +27,6 @@ XKit.extensions.people_notifier = new Object({
 	},
 
 	max_tracks: 10,
-	/*check_interval: 600000,*/
 	check_interval: 600000,
 
 	frame_run: function() {
@@ -127,17 +126,6 @@ XKit.extensions.people_notifier = new Object({
 
 			if (XKit.extensions.people_notifier.blogs[i].url === url) {
 
-				/*var highest_number = -1;
-				if (typeof XKit.extensions.people_notifier.blogs[i].last_20_posts === "undefined") {
-					XKit.extensions.people_notifier.blogs[i].last_20_posts = [];
-				} else {
-					highest_number = Math.max.apply(Math, XKit.extensions.people_notifier.blogs[i].last_20_posts);
-				}
-
-				if (highest_number !== -1 && XKit.extensions.people_notifier.blogs[i].last_20_posts.length >= 20) {
-					if (post_id <= highest_number) { console.log("Not adding " + parseInt(post_id) + " to 20 list, older post! [ max = " + highest_number + "]"); return; }
-				}*/
-
 				if (XKit.extensions.people_notifier.blogs[i].last_20_posts.length >= 20) {
 					XKit.extensions.people_notifier.blogs[i].last_20_posts.pop();
 				}
@@ -157,7 +145,6 @@ XKit.extensions.people_notifier = new Object({
 
 		for (var i=0;i<XKit.extensions.people_notifier.blogs.length;i++) {
 
-			//console.log(XKit.extensions.people_notifier.blogs[i].url + " --- " + url);
 			if (XKit.extensions.people_notifier.blogs[i].url === url) { return true; }
 
 		}
@@ -208,7 +195,6 @@ XKit.extensions.people_notifier = new Object({
 				try {
 
 					var data = JSON.parse(response.responseText).response;
-					//console.log("people-notifier -> got data for " + url);
 					console.log(" |-- last post timestamp = " + (data.posts[0].timestamp * 1000) + " vs last-check = " + obj.last_check);
 
 					if (data.blog.posts === 0 || data.blog.posts <= 2) {
@@ -238,8 +224,6 @@ XKit.extensions.people_notifier = new Object({
 						if (typeof obj.last_post_id != "undefined" && typeof data.posts[lad_count].id != "undefined") {
 							if (obj.last_post_id == data.posts[lad_count].id && obj.last_post_id !== 0) {
 								console.log("people-notifier ----> Skipping, the last post seen. [" + obj.last_post_id + "]");
-								//obj.count = 0;
-								//do_continue_lads = false;
 								break;
 							}
 						}
@@ -247,7 +231,6 @@ XKit.extensions.people_notifier = new Object({
 						if (data.posts[lad_count] && add_this) {
 							if ((data.posts[lad_count].timestamp * 1000) >= obj.last_check) {
 								console.log("\-- Found post = " + data.posts[lad_count].id);
-								//if (
 								found_count++;
 							} else {
 								console.log("\-- Older posts already checked.");
@@ -326,7 +309,6 @@ XKit.extensions.people_notifier = new Object({
 				var difference = current_ms - this.blogs[i].last_check;
 
 				if (difference <= -1 ||difference >= XKit.extensions.people_notifier.check_interval) {
-					//console.log("Going to check for " + this.blogs[i].url);
 					m_html = m_html + "<div class=\"count\">loading</div>";
 					this.check_blog(this.blogs[i].url, this.blogs[i]);
 				} else {
@@ -348,9 +330,7 @@ XKit.extensions.people_notifier = new Object({
 		if ($("ul.controls_section:first").length > 0) {
 			if ($("#xim_small_links").length > 0) {
 				$("#xim_small_links").after(m_html);
-				//$("ul.controls_section:first").after(m_html);
 			} else {
-				//$("ul.controls_section:first").after(m_html);
 				$(".controls_section_radar").before(m_html);
 			}
 		} else {
