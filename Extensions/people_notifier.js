@@ -1,5 +1,5 @@
 //* TITLE Blog Tracker **//
-//* VERSION 0.3.5 **//
+//* VERSION 0.3.6 **//
 //* DESCRIPTION Track people like tags **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS Blog Tracker lets you track blogs like you can track tags. Add them on your dashboard, and it will let you know how many new posts they've made the last time you've checked their blogs, or if they've changed their URLs. **//
@@ -299,7 +299,10 @@ XKit.extensions.people_notifier = new Object({
 	list_blogs: function() {
 
 		var m_html = "";
-
+		var text_color = "rgba(255, 255, 255, 0.5)";
+		if (XKit.interface.where().following) {
+			text_color = "#444";
+		}
 		$("#xpeoplenotifier").remove();
 
 		if (this.blogs.length === 0) {
@@ -311,13 +314,12 @@ XKit.extensions.people_notifier = new Object({
 		} else {
 
 			var current_ms = new Date().getTime();
-
 			for (var i=0;i<this.blogs.length;i++) {
 
 				m_html = m_html + '<li style="padding-top: 2px; height: 24px;" id="xkit-people-notifier-for---' + this.blogs[i].url + '" data-url="' + this.blogs[i].url + '" class="no_push xkit-people-notifier-person">' +
 								'<img src="https://api.tumblr.com/v2/blog/' + this.blogs[i].url + '.tumblr.com/avatar/16" class="people-notifier-avatar">' +
 								'<a>' +
-									'<div class="hide_overflow" style="color: rgba(255, 255, 255, 0.5) !important; padding-left: 36px;">' + this.blogs[i].url + '</div>';
+									'<div class="hide_overflow" style="color: ' + text_color + ' !important; padding-left: 36px;">' + this.blogs[i].url + '</div>';
 
 
 				var difference = current_ms - this.blogs[i].last_check;
@@ -335,13 +337,10 @@ XKit.extensions.people_notifier = new Object({
 				}
 
 				m_html = m_html + "</a></li>";
-
 			}
-
 		}
 
-
-		m_html = m_html + '<li id="xkit-people-notifier-new-btn" class="no_push xkit-people-notifier-new" style="height: 36px;"><a class="members"><div class="" style="color: rgba(255, 255, 255, 0.5) !important; font-weight: bold; padding-left: 10px; padding-top: 8px;">Add a new person</div></a></li>';
+		m_html = m_html + '<li id="xkit-people-notifier-new-btn" class="no_push xkit-people-notifier-new" style="height: 36px;"><a class="members"><div class="" style="color: ' + text_color + ' !important; font-weight: bold; padding-left: 10px; padding-top: 8px;">Add a new person</div></a></li>';
 
 		m_html = '<ul class="controls_section" id="xpeoplenotifier"><li class=\"section_header selected\">TRACKED BLOGS</li>' + m_html + '</ul>';
 

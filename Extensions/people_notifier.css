@@ -22,3 +22,12 @@
 .xkit-people-notifier-person a:after {
 	background: none !important;
 }
+
+.dashboard_useraction_following .xkit-people-notifier-person:hover,
+.dashboard_useraction_following .xkit-people-notifier-new:hover {
+        background: rgba(0,0,0,0.025) !important;
+}
+
+.dashboard_useraction_following.identity .controls_section a .count {
+    color: #444 !important;
+}
