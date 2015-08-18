@@ -687,6 +687,7 @@ XKit.tools.dump_config = function(){
 
 		};
 
+/*
 		XKit.dashboardGL = new Object({
 
 			last_point: 0,
@@ -795,6 +796,7 @@ XKit.tools.dump_config = function(){
 		});
 
 		XKit.dashboardGL.init();
+		*/
 
 		XKit.lang = new Object({
 
