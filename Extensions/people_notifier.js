@@ -299,7 +299,10 @@ XKit.extensions.people_notifier = new Object({
 	list_blogs: function() {
 
 		var m_html = "";
-
+		var text_color = "rgba(255, 255, 255, 0.5)";
+		if ($('body').hasClass('dashboard_useraction_following')) {
+			text_color = "#444";
+		}
 		$("#xpeoplenotifier").remove();
 
 		if (this.blogs.length === 0) {
@@ -311,10 +314,6 @@ XKit.extensions.people_notifier = new Object({
 		} else {
 
 			var current_ms = new Date().getTime();
-			var text_color = "rgba(255, 255, 255, 0.5)";
-			if ($('body').hasClass('dashboard_useraction_following')) {
-				text_color = "#444";
-			}
 			for (var i=0;i<this.blogs.length;i++) {
 
 				m_html = m_html + '<li style="padding-top: 2px; height: 24px;" id="xkit-people-notifier-for---' + this.blogs[i].url + '" data-url="' + this.blogs[i].url + '" class="no_push xkit-people-notifier-person">' +
@@ -338,11 +337,8 @@ XKit.extensions.people_notifier = new Object({
 				}
 
 				m_html = m_html + "</a></li>";
-
 			}
-
 		}
-
 
 		m_html = m_html + '<li id="xkit-people-notifier-new-btn" class="no_push xkit-people-notifier-new" style="height: 36px;"><a class="members"><div class="" style="color: ' + text_color + ' !important; font-weight: bold; padding-left: 10px; padding-top: 8px;">Add a new person</div></a></li>';
 
