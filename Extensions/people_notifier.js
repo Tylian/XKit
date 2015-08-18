@@ -300,7 +300,7 @@ XKit.extensions.people_notifier = new Object({
 
 		var m_html = "";
 		var text_color = "rgba(255, 255, 255, 0.5)";
-		if ($('body').hasClass('dashboard_useraction_following')) {
+		if (XKit.interface.where().following) {
 			text_color = "#444";
 		}
 		$("#xpeoplenotifier").remove();

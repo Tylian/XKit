@@ -1970,7 +1970,8 @@ XKit.tools.dump_config = function(){
 					followers: false,
 					endless: false,
 					dashboard: false,
-					likes: false
+					likes: false,
+					following: false
 				};
 
 				if ($("body").hasClass("dashboard_messages_inbox") === true || $("body").hasClass("dashboard_messages_submissions") === true) {
@@ -2031,6 +2032,10 @@ XKit.tools.dump_config = function(){
 							m_return.user_url = href_parts[4].replace("#","");
 						}
 					}
+				}
+
+				if ($("body").hasClass("dashboard_useraction_following")) {
+					m_return.following = true;
 				}
 
 				if (document.location.href.indexOf("www.tumblr.com/blog/") !== -1) {
