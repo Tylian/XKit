@@ -302,7 +302,7 @@ XKit.extensions.people_notifier = new Object({
 								'<img src="https://api.tumblr.com/v2/blog/' + this.blogs[i].url + '.tumblr.com/avatar/16" class="people-notifier-avatar">' +
 								'<a>' +
 									'<div class="hide_overflow" style="color: ' + text_color + ' !important; padding-left: 36px;">' + this.blogs[i].url + '</div>' +
-									'<div class="xkit-people-notifier close" style="display: none;">✖</div>';
+									'<div class="xkit-people-notifier close" style="display: none; color: ' + text_color + '">✖</div>';
 
 
 				var difference = current_ms - this.blogs[i].last_check;
