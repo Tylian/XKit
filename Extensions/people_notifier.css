@@ -23,11 +23,11 @@
 	background: none !important;
 	display: block;
 	height: 100%;
+	position: relative;
 }
 
 .xkit-people-notifier-person .count {
 	float: right;
-	margin-right: 15px !important;
 }
 
 .xkit-people-notifier-person .close {

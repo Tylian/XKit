@@ -338,9 +338,11 @@ XKit.extensions.people_notifier = new Object({
 
 		$(document).on("mouseenter", ".xkit-people-notifier-person", function(){
 			$(this).find(".xkit-people-notifier.close").css("display", "");
+			$(this).find('.count').css('marginRight', '15px');
 		});
 		$(document).on("mouseleave", ".xkit-people-notifier-person", function(){
 			$(this).find(".xkit-people-notifier.close").css("display", "none");
+			$(this).find('.count').css('marginRight', '0');
 		});
 
 		$(".xkit-people-notifier-person").bind("click", function(event) {
