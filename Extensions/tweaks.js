@@ -515,7 +515,6 @@ XKit.extensions.tweaks = new Object({
 
 			if (XKit.extensions.tweaks.preferences.dont_show_mine_on_dashboard.value) {
 				XKit.extensions.tweaks.add_css("#posts .post.is_mine { display: none !important; } #posts .post.new_post_buttons { display: block !important; }", "xkit_tweaks_dont_show_mine_on_dashboard");
-				//XKit.post_listener.add("tweaks_fix_hidden_post_height", XKit.extensions.tweaks.fix_hidden_post_height);
 				XKit.extensions.tweaks.fix_hidden_post_height();
 			}
 
