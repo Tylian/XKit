@@ -23,7 +23,6 @@ XKit.extensions.people_notifier = new Object({
 
 		}
 
-
 	},
 
 	max_tracks: 10,
@@ -476,6 +475,8 @@ XKit.extensions.people_notifier = new Object({
 	},
 
 	destroy: function() {
+		XKit.tools.remove_css("people_notifier");
+
 		$(document).off("mouseenter", ".xkit-people-notifier-person");
 		$(document).off("mouseleave", ".xkit-people-notifier-person");
 
