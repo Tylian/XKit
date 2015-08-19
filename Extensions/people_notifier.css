@@ -6,9 +6,9 @@
 }
 
 .xkit-people-notifier-person a { 
-        position: relative;
-        height: 100%;
-        display: block;
+	position: relative;
+	height: 100%;
+	display: block;
 }
 
 .xkit-people-notifier-person .hide_overflow {
@@ -32,15 +32,15 @@
 	position: relative;
 }
 
-.identity .xkit-people-notifier-person .controls_section a .count,
+.identity .controls_section .xkit-people-notifier-person  a .count,
 .xkit-people-notifier-person .close {
 	float: right;
-        top: 50% !important;
-        display: block;
-        height: 13px;
-        margin-top: -13px;
-        font-size: 13px;
-        position: absolute;
+	top: 50% !important;
+	display: block;
+	height: 13px;
+	margin-top: -13px;
+	font-size: 13px;
+	position: absolute;
 }
 
 .xkit-people-notifier-person .close {
