@@ -5,6 +5,12 @@
 	color: rgba(255,255,255,0.55);
 }
 
+.xkit-people-notifier-person a { 
+        position: relative;
+        height: 100%;
+        display: block;
+}
+
 .xkit-people-notifier-person .hide_overflow {
 	width: 125px;
 }
@@ -26,16 +32,19 @@
 	position: relative;
 }
 
-.xkit-people-notifier-person .count {
+.identity .xkit-people-notifier-person .controls_section a .count,
+.xkit-people-notifier-person .close {
 	float: right;
+        top: 50% !important;
+        display: block;
+        height: 13px;
+        margin-top: -13px;
+        font-size: 13px;
+        position: absolute;
 }
 
 .xkit-people-notifier-person .close {
 	cursor: pointer;
-	font-size: 13px;
-	float: right;
-	position: absolute;
-	top: 0;
 	right: 10px;
 }
 
