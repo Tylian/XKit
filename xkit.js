@@ -736,6 +736,12 @@ XKit = {
 				html: "<ol>"
 			};
 
+			if ($("#xkit-control").length > 0) {
+				m_return.html = m_return.html + "<li>Old XKit found</li>";
+				m_return.fatal = true;
+				m_return.count++;
+			}
+
 			if ($("#xkit-control-panel-icon").length > 0) {
 				m_return.html = m_return.html + "<li>XKit Next found</li>";
 				m_return.fatal = true;

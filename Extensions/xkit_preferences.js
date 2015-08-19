@@ -1,5 +1,5 @@
 //* TITLE XKit Preferences **//
-//* VERSION 3.4.4 **//
+//* VERSION 3.4.5 **//
 //* DESCRIPTION Lets you customize XKit **//
 //* DEVELOPER STUDIOXENIX **//
 
@@ -93,14 +93,14 @@ XKit.extensions.xkit_preferences = new Object({
 		XKit.tools.init_css("xkit_preferences");
 		// $("#help_button, .tab_help").css("display","none");
 
-		var m_html = '<div class="tab iconic" id="xkit-control">' +
+		var m_html = '<div class="tab iconic" id="new-xkit-control">' +
 			'<a style="width: 26px; margin-left: -6px; margin-right: -6px;" class="tab_anchor" href="#" onclick="return false">XKit Control Panel</a>' +
 			'</div>';
 
 		$(".l-header").find("#logout_button").parent().before(m_html);
 		$(".l-header").find("#account_button").before(m_html);
 
-		//$("#xkit-control").tipTip({maxWidth: "auto", edgeOffset: 0, delay: 10 });
+		//$("#new-xkit-control").tipTip({maxWidth: "auto", edgeOffset: 0, delay: 10 });
 
 		if(XKit.storage.get("xkit_preferences", "shown_welcome_bubble") !== "true") {
 			XKit.extensions.xkit_preferences.show_welcome_bubble();
@@ -112,7 +112,7 @@ XKit.extensions.xkit_preferences = new Object({
 
 				if (XKit.extensions.xkit_preferences.showing_help_button !== true) {
 
-					$("#xkit-control").addClass("xkit-help-forwarder");
+					$("#new-xkit-control").addClass("xkit-help-forwarder");
 					XKit.extensions.xkit_preferences.showing_help_button = true;
 
 				}
@@ -121,7 +121,7 @@ XKit.extensions.xkit_preferences = new Object({
 
 				if (XKit.extensions.xkit_preferences.showing_help_button === true) {
 
-					$("#xkit-control").removeClass("xkit-help-forwarder");
+					$("#new-xkit-control").removeClass("xkit-help-forwarder");
 					XKit.extensions.xkit_preferences.showing_help_button = false;
 
 				}
@@ -130,7 +130,7 @@ XKit.extensions.xkit_preferences = new Object({
 
 		});
 
-		$("#xkit-control").click(function(event) {
+		$("#new-xkit-control").click(function(event) {
 			if(!event.altKey) {
 				XKit.extensions.xkit_preferences.open();
 			} else {
@@ -644,12 +644,12 @@ XKit.extensions.xkit_preferences = new Object({
 		$("body").append('<div id="xkit-welcoming-bubble-shadow" class="arrow-top">&nbsp;</div>'+
 			'<div id="xkit-welcoming-bubble"><strong>Welcome to XKit! Let\'s get started.</strong><br>'+
 			'Click me to customize your XKit and get more extensions.</div>');
-		var position = $("#xkit-control").offset();
+		var position = $("#new-xkit-control").offset();
 
 		$("#xkit-welcoming-bubble").css("top", position.top + 50 + "px");
 		$("#xkit-welcoming-bubble").css("left", (position.left - ($("#xkit-welcoming-bubble").width() / 2)) + 10 + "px");
 
-		$("#xkit-control").css('z-index','3000');
+		$("#new-xkit-control").css('z-index','3000');
 
 	},
 
@@ -2654,7 +2654,7 @@ XKit.extensions.xkit_preferences = new Object({
 	},
 
 	destroy: function() {
-		$("#xkit-control").remove();
+		$("#new-xkit-control").remove();
 		this.running = false;
 	}
 });
