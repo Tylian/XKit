@@ -429,7 +429,7 @@ XKit.extensions.tweaks = new Object({
 		if (XKit.extensions.tweaks.preferences.pin_avatars.value) {
 			if (!$(".is_mobile").length) { // mobile stuff
 				XKit.extensions.tweaks.add_css(".post_avatar.post-avatar--fixed { position: absolute !important; top: 0 !important; left: -85px !important; }  .post_avatar.post-avatar--absolute { position: absolute; top: 0 !important; left: -85px !important; bottom: inherit !important; }  .post_avatar.post-avatar--sticky .avatar-wrapper { position: absolute !important; top: 0px !important; height: auto; width: auto; } .post_avatar.post-avatar--sticky { height: 64px !important; }", "xkit_pin_avatars");
-				}
+			}
 		}
 
 		if (XKit.extensions.tweaks.preferences.small_quotes.value) {
