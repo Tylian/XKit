@@ -5,6 +5,12 @@
 	color: rgba(255,255,255,0.55);
 }
 
+.xkit-people-notifier-person a { 
+	position: relative;
+	height: 100%;
+	display: block;
+}
+
 .xkit-people-notifier-person .hide_overflow {
 	width: 125px;
 }
@@ -21,20 +27,25 @@
 
 .xkit-people-notifier-person a:after {
 	background: none !important;
+	display: block;
+	height: 100%;
+	position: relative;
 }
 
-.xkit-people-notifier-person .count {
+.identity .controls_section .xkit-people-notifier-person a .count,
+.xkit-people-notifier-person .close {
 	float: right;
-	position: relative !important;
-	top: -16px !important;
+	top: 50% !important;
+	display: block;
+	height: 13px;
+	margin-top: -11px;
+	font-size: 13px;
+	position: absolute;
 }
 
 .xkit-people-notifier-person .close {
 	cursor: pointer;
-	font-size: 13px;
-	float: right;
-	margin-top: -16px;
-	margin-right: 10px;
+	right: 10px;
 }
 
 .dashboard_useraction_following .xkit-people-notifier-person:hover,
