@@ -1,5 +1,5 @@
 //* TITLE XKit Preferences **//
-//* VERSION 3.4.6 **//
+//* VERSION 4.0.0 **//
 //* DESCRIPTION Lets you customize XKit **//
 //* DEVELOPER STUDIOXENIX **//
 
@@ -93,12 +93,19 @@ XKit.extensions.xkit_preferences = new Object({
 		XKit.tools.init_css("xkit_preferences");
 		// $("#help_button, .tab_help").css("display","none");
 
-		var m_html = '<div class="tab iconic" id="new-xkit-control">' +
+		var m_html = '<div class="tab iconic" id="xkit-control">' +
 			'<a style="width: 26px; margin-left: -6px; margin-right: -6px;" class="tab_anchor" href="#" onclick="return false">XKit Control Panel</a>' +
+			'</div>';
+
+		// mobile stuff
+		var mobile_html = '<div class="tab iconic" id="xkit-control" style="position: relative; top: 50%; height: 26px; transform: translateY(-50%);">' +
+			'<a style="color:transparent;" class="tab_anchor" href="#" onclick="return false">XKit</a>' +
 			'</div>';
 
 		$(".l-header").find("#logout_button").parent().before(m_html);
 		$(".l-header").find("#account_button").before(m_html);
+		$(".no-js").removeClass("no-js"); //possibly unnecessary // mobile stuff
+		$(".mobile-logo").html(mobile_html); // mobile stuff
 
 		//$("#new-xkit-control").tipTip({maxWidth: "auto", edgeOffset: 0, delay: 10 });
 
