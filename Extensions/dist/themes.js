@@ -1,7 +1,11 @@
-/* jshint esnext: true */
+/* jshint node:true */
+'use strict';
 
-var fs = require('fs');
-var path = require('path');
+var fs = require('fs'),
+	glob = require('glob'),
+	path = require('path');
+
+var resourceBuilder = require('./resources');
 
 /**
  * Build the themes in `themePath`, writing the distribution json file
@@ -11,138 +15,80 @@ var path = require('path');
  * @exported
  */
 function build(themePath, distributionPath) {
-	var builder = new ThemeBuilder(themePath, distributionPath);
-	builder.processThemes();
+	themeBuilder
+		.create(themePath, distributionPath)
+		.processThemes();
 }
 exports.build = build;
 
 /**
  * @constructor
- * @param {String} themePath - Path from which to read theme files
- * @param {String} distributionPath - Path in which to write theme file
+ * @param {String} themePath Path from which to read theme files
+ * @param {String} distributionPath Path in which to write theme file
  */
-function ThemeBuilder(themePath, distributionPath) {
-	this.themePath = themePath;
-	this.distributionPath = distributionPath;
-}
+var themeBuilder = Object.create(resourceBuilder);
+themeBuilder.create = function(resourcePath, distributionPath) {
+	return resourceBuilder.create.call(this, resourcePath, distributionPath);
+};
 
 /**
  * Process all themes found in `themePath`
  */
-ThemeBuilder.prototype.processThemes = function() {
-	var themeFiles = fs.readdirSync(this.themePath);
+themeBuilder.processThemes = function() {
+	var themeFiles = glob.sync(
+		'**/*.css',
+		{
+			cwd: this.resourcePath,
+			nodir: true
+		}
+	);
 	var themes = [];
 
-	themeFiles.forEach(function(fileName) {
-		// Look only for css files
-		var fileNameParts = fileName.split('.');
-		if (fileNameParts.length !== 2) {
-			return;
-		}
-		var fileType = fileNameParts[1];
-		if (fileType !== 'css') {
-			return;
-		}
-		var themeId = fileNameParts[0];
-
-		themes.push(this.processTheme(themeId));
+	themeFiles.forEach(function(themePath) {
+		themes.push(this.processTheme(themePath));
 	}.bind(this));
 
 	this.writeThemesFile(themes);
 };
 
 /**
- * Read a file in the themes directory
- * @param {String} path - Relative path of file in directory
- * @return {String} content in file
- */
-ThemeBuilder.prototype.readThemeFile = function(relPath) {
-	return fs.readFileSync(path.join(this.themePath, relPath), {
-		encoding: 'utf8'
-	});
-};
-
-/**
- * Write a file in the distribution directory
- * @param {String} relPath - Relative path of file in directory
- * @param {String} content - content in file
- */
-ThemeBuilder.prototype.writeDistributionFile = function(relPath, content) {
-	fs.writeFileSync(path.join(this.distributionPath, relPath), content);
-};
-
-/**
- * Write a file in the page directory, a child of the distribution directory
- * @param {String} relPath - Relative path of file in directory
- * @param {String} content - content in file
- */
-ThemeBuilder.prototype.writePageFile = function(relPath, content) {
-	this.writeDistributionFile(path.join('page', relPath), content);
-};
-
-/**
- * @param {String} content - contents of theme file
- * @param {String} attribute - attribute to attempt to read from the script
- * @return {String?} value of attribute
- */
-function getAttribute(content, attribute) {
-	attribute = attribute.toUpperCase();
-	// Match the attribute followed by its value wrapped in /*	**/
-	var regex = new RegExp('/\\*\\s*' + attribute + '\\s*(.+?)\\s*\\*\\*?/');
-	var match = content.match(regex);
-	if (!match) {
-		return null;
-	}
-	return match[1];
-}
-
-/**
  * Process a single theme
- * @param {String} themeId - ID of the theme
+ * @param {String} themePath Path to the theme relative to resourcePath
  */
-ThemeBuilder.prototype.processTheme = function(themeId) {
-	// Each theme has the following fields
-	// {string} title - value of the TITLE field in `script`
-	// {string} version - value of the VERSION field in `script`
-	// {string} description - value of the DESCRIPTION field in `script`
-	// {string} developer - value of the DEVELOPER field in `script`
-	var theme = {
-		file: themeId + '.css'
-	};
-	theme.contents = this.readThemeFile(theme.file);
+themeBuilder.processTheme = function(themePath) {
+	// Each theme has the following fields:
+	// {String} file Contents of the css file
+	// {String} name Value of the NAME field in `file`
+	// {String} version Value of the VERSION field in `file`
+	// {String} description Value of the DESCRIPTION field in `file`
+	// {String} developer Value of the DEVELOPER field in `file`
+	var theme = {};
+	theme.file = path.basename(themePath);
+	theme.contents = this.readResourceFile(themePath);
 
 	var attributes = ['name', 'version', 'description', 'developer'];
 	attributes.forEach(function(attribute) {
-		var value = getAttribute(theme.contents, attribute);
+		var value = this.getAttribute(theme.contents, attribute);
 		if (value !== null) {
 			theme[attribute] = value;
 		}
-	});
+	}.bind(this));
 
 	return theme;
 };
 
 /**
- * Generate and write the theme.json file
+ * Generate and write the themes.json file
  * @param {Array<Object>} themes - Themes to include
  */
-ThemeBuilder.prototype.writeThemesFile = function(themes) {
+themeBuilder.writeThemesFile = function(themes) {
 	var themeFile = {
 		server: 'up',
 		themes: themes
 	};
 
-	// The themes should display in sorted order because otherwise it is
-	// bothersome
-	themeFile.themes.sort(function(exA, exB) {
-		if (exA.title > exB.title) {
-			return 1;
-		}
-		if (exA.title < exB.title) {
-			return -1;
-		}
-		return 0;
-	});
+	// The themes should display in sorted order.
+	themeFile.themes = this.alphaSort(themeFile.themes, 'name');
 
 	this.writePageFile('themes.json', JSON.stringify(themeFile));
 };
