@@ -32,13 +32,13 @@
 	position: relative;
 }
 
-.identity .controls_section .xkit-people-notifier-person  a .count,
+.identity .controls_section .xkit-people-notifier-person a .count,
 .xkit-people-notifier-person .close {
 	float: right;
 	top: 50% !important;
 	display: block;
 	height: 13px;
-	margin-top: -13px;
+	margin-top: -11px;
 	font-size: 13px;
 	position: absolute;
 }
