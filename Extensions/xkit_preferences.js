@@ -1350,8 +1350,9 @@ XKit.extensions.xkit_preferences = new Object({
 			m_html = m_html + '<div class="developer" style="display: block">by ' + m_extension.developer + '</div>';
 		}
 
+		var xkit_developers = ["studioenix","dlmarquis","hobinjk","thepsionic","nightpool","blackjackkent","wolvan","bvtsang","0xazure"];
 		var third_party_extension = false;
-		if (m_extension.developer.toLowerCase() !== "studioxenix" && !this_is_language && !m_extension.pack) {
+		if (xkit_developers.indexOf(m_extension.developer.toLowerCase()) === -1 && !this_is_language && !m_extension.pack) {
 			third_party_extension = true;
 			m_html = m_html + '<div class="xkit-third-party-warning">third party extension</div>';
 		}
@@ -1817,7 +1818,15 @@ XKit.extensions.xkit_preferences = new Object({
 					m_extra_classes = "xkit-experimental-option";
 				}
 
+				var m_extra_style = "";
+				if (XKit.extensions[extension_id].preferences[pref].mobile_only === true && XKit.browser.mobile === false) {
+					m_extra_style = "display: none;";
+				} else if (XKit.extensions[extension_id].preferences[pref].desktop_only === true && XKit.browser.mobile === true) {
+					m_extra_style = "display: none;";
+				}
+
 				m_return = m_return + '<div class="xkit-extension-setting xkit-combo-preference ' + m_extra_classes +
+					'" style="' + m_extra_style +
 					'" data-extension-id="' + extension_id + '" data-setting-id="' + pref + '">';
 
 				if (XKit.extensions[extension_id].preferences[pref].experimental === true) {

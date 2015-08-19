@@ -21,6 +21,12 @@ XKit.extensions.tweaks = new Object({
 			text: "Popular tweaks",
 			type: "separator",
 		},
+		"no_mobile_banner": {
+			text: "Remove mobile app banner",
+			default: true,
+			value: true,
+			mobile_only: true
+		},
 		"wrap_tags": {
 			text: "Wrap tags for easier reading",
 			default: true,
@@ -29,7 +35,8 @@ XKit.extensions.tweaks = new Object({
 		"grey_urls": {
 			text: "Make URLs grey again",
 			default: false,
-			value: false
+			value: false,
+			desktop_only: true
 		},
 		"fix_blockquotes": {
 			text: "Slim block quotes for easier reading",
@@ -44,12 +51,14 @@ XKit.extensions.tweaks = new Object({
 		"hide_share": {
 			text: "Hide the share button on posts",
 			default: false,
-			value: false
+			value: false,
+			desktop_only: true
 		},
 		"hide_follows": {
 			text: "Hide the mini-follow buttons on posts and notifications",
 			default: false,
-			value: false
+			value: false,
+			desktop_only: true
 		},
 		"photo_replies": {
 			text: "Auto-enable photo replies on all posts I create",
@@ -83,8 +92,8 @@ XKit.extensions.tweaks = new Object({
 		},
 		"full_width_gifs": {
 			text: "Add a button in post editor options to toggle full-width GIFs",
-			default: false,
-			value: false
+			default: true,
+			value: true
 		},
 		"sep1": {
 			text: "User Interface tweaks",
@@ -113,7 +122,8 @@ XKit.extensions.tweaks = new Object({
 		"slim_popups": {
 			text: "Slim down the popup menus such as the user menu",
 			default: false,
-			value: false
+			value: false,
+			desktop_only: true
 		},
 		"always_show_move_to_top": {
 			text: "Always show 'Move to top' button on the queued posts page",
@@ -124,7 +134,8 @@ XKit.extensions.tweaks = new Object({
 			text: "Move the edit/remove buttons out of the gear menu",
 			default: false,
 			value: false,
-			experimental: true
+			experimental: true,
+			desktop_only: true
 		},
 		"sep2": {
 			text: "Dashboard tweaks",
@@ -143,7 +154,8 @@ XKit.extensions.tweaks = new Object({
 		"pin_avatars": {
 			text: "Stop avatars from scrolling along with the post",
 			default: false,
-			value: false
+			value: false,
+			desktop_only: true
 		},
 		"no_footer_background": {
 			text: "Classic Post Footer look",
@@ -163,17 +175,20 @@ XKit.extensions.tweaks = new Object({
 		"hide_asktime": {
 			text: "Hide the asktime banner at the top of the dash",
 			default: false,
-			value: false
+			value: false,
+			desktop_only: true
 		},
 		"hide_explore": {
 			text: "Hide explore button on trending posts",
 			default: false,
-			value: false
+			value: false,
+			desktop_only: true
 		},
 		"hide_explore_buttons": {
 			text: "Hide the explore link at the top of the page and in the sidebar",
 			default: false,
-			value: false
+			value: false,
+			desktop_only: true
 		},
 		"hide_notes": {
 			text: "Hide the notes on posts",
@@ -224,36 +239,43 @@ XKit.extensions.tweaks = new Object({
 		"sep4": {
 			text: "Sidebar tweaks",
 			type: "separator",
+			desktop_only: true,
 		},
 		"slim_sidebar": {
 			text: "Slim sidebar buttons",
 			default: false,
-			value: false
+			value: false,
+			desktop_only: true
 		},
 		"hide_section_headers": {
 			text: "Hide section headers on sidebar",
 			default: false,
-			value: false
+			value: false,
+			desktop_only: true
 		},
 		"hide_radar": {
 			text: "Hide the Tumblr radar",
 			default: false,
-			value: false
+			value: false,
+			desktop_only: true
 		},
 		"hide_find_blogs": {
 			text: "Hide \"Find Blogs\" button",
 			default: false,
-			value: false
+			value: false,
+			desktop_only: true
 		},
 		"hide_recommended": {
 			text: "Hide Recommended blogs",
 			default: false,
-			value: false
+			value: false,
+			desktop_only: true
 		},
 		"show_customize": {
 			text: "Show Mass Post Editor and Blog Settings buttons",
 			default: true,
-			value: true
+			value: true,
+			desktop_only: true
 		}
 	},
 
@@ -263,7 +285,7 @@ XKit.extensions.tweaks = new Object({
 	run: function() {
 		this.running = true;
 
-		if ($(".is_mobile").length > 0) { //mobile stuff
+		if (XKit.extensions.tweaks.preferences.no_mobile_banner.value) { //mobile stuff
 			XKit.tools.add_css(".mobile_app_banner {display: none}", "tweaks_no_mobile_banner");
 			$(".mobile_banner_active").removeClass("mobile_banner_active");
 			$(".mobile-app-banner-visible").removeClass("mobile-app-banner-visible");
@@ -314,7 +336,7 @@ XKit.extensions.tweaks = new Object({
 
 			if (document.location.href.indexOf('/dashboard') !== -1) {
 
-				if (!$(".is_mobile").length) { // mobile stuff
+				if (XKit.browser.mobile) { // mobile stuff
 					if ($("#new_post_buttons").length > 0) {
 
 						// Save this.
@@ -427,7 +449,7 @@ XKit.extensions.tweaks = new Object({
 		}
 
 		if (XKit.extensions.tweaks.preferences.pin_avatars.value) {
-			if (!$(".is_mobile").length) { // mobile stuff
+			if (!XKit.browser.mobile) { // mobile stuff
 				XKit.extensions.tweaks.add_css(".post_avatar.post-avatar--fixed { position: absolute !important; top: 0 !important; left: -85px !important; }  .post_avatar.post-avatar--absolute { position: absolute; top: 0 !important; left: -85px !important; bottom: inherit !important; }  .post_avatar.post-avatar--sticky .avatar-wrapper { position: absolute !important; top: 0px !important; height: auto; width: auto; } .post_avatar.post-avatar--sticky { height: 64px !important; }", "xkit_pin_avatars");
 			}
 		}
@@ -523,7 +545,7 @@ XKit.extensions.tweaks = new Object({
 		if (document.location.href.indexOf('/dashboard') !== -1) {
 
 			if (XKit.extensions.tweaks.preferences.dont_show_mine_on_dashboard.value) {
-				if (!$(".is_mobile").length) { //mobile stuff
+				if (!XKit.browser.mobile) { //mobile stuff
 					XKit.extensions.tweaks.add_css("#posts .post.is_mine { display: none !important; } #posts .post.new_post_buttons { display: block !important; }", "xkit_tweaks_dont_show_mine_on_dashboard");
 					//XKit.post_listener.add("tweaks_fix_hidden_post_height", XKit.extensions.tweaks.fix_hidden_post_height);
 					XKit.extensions.tweaks.fix_hidden_post_height();
@@ -533,7 +555,7 @@ XKit.extensions.tweaks = new Object({
 		}
 
 		if (XKit.extensions.tweaks.preferences.scroll_new_posts.value) {
-			if (!$(".is_mobile").length) { // mobile stuff
+			if (!XKit.browser.mobile) { // mobile stuff
 				$(window).scroll(function () {
 					if ($("#new_post").length > 0) {
 						if ($(window).scrollTop() >= 200) {
@@ -653,7 +675,7 @@ XKit.extensions.tweaks = new Object({
 
 	split_gear: function() {
 
-		if (!$(".is_mobile").length) { // mobile stuff
+		if (!XKit.browser.mobile) { // mobile stuff
 			$(".post.is_mine").not(".xkit-tweaks-split-gear-done").each(function() {
 				$(this).addClass("xkit-tweaks-split-gear-done");
 
@@ -676,7 +698,7 @@ XKit.extensions.tweaks = new Object({
 
 	check_for_share_on_private_posts: function() {
 
-		if (!$(".is_mobile").length) { // mobile stuff
+		if (!XKit.browser.mobile) { // mobile stuff
 			$(".post.is_mine").not(".xtweaks-checked-share").each(function() {
 
 				if ($(this).find(".private_label").length > 0) {

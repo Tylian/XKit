@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 3.1.13 **//
+//* VERSION 4.0.0 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER STUDIOXENIX **//
 
@@ -463,6 +463,7 @@ XKit.tools.dump_config = function(){
 		to_return.safari = false;
 		to_return.opera = false;
 		to_return.version = 0;
+		to_return.mobile = false;
 
 		// First, let's check if it's chrome.
 		if (window.chrome) {
@@ -492,6 +493,7 @@ XKit.tools.dump_config = function(){
 			to_return.version = get_ua_version("firefox/");
 		}
 
+		// Blahblah Safari blah.
 		if (/Safari/.test(navigator.userAgent) && /Apple Computer/.test(navigator.vendor)) {
 			to_return.name = "Apple Safari";
 			to_return.safari = true;
@@ -505,6 +507,11 @@ XKit.tools.dump_config = function(){
 		// A lot of people now switch to IE.
 		if (navigator.userAgent.indexOf('MSIE') > -1) {
 			to_return.spoofed = true;
+		}
+
+		// Check if you're viewing the mobile version
+		if ($('.is_mobile').length > 0) {
+			to_return.mobile = true;
 		}
 
 		return to_return;
