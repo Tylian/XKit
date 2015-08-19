@@ -93,12 +93,12 @@ XKit.extensions.xkit_preferences = new Object({
 		XKit.tools.init_css("xkit_preferences");
 		// $("#help_button, .tab_help").css("display","none");
 
-		var m_html = '<div class="tab iconic" id="xkit-control">' +
+		var m_html = '<div class="tab iconic" id="new-xkit-control">' +
 			'<a style="width: 26px; margin-left: -6px; margin-right: -6px;" class="tab_anchor" href="#" onclick="return false">XKit Control Panel</a>' +
 			'</div>';
 
 		// mobile stuff
-		var mobile_html = '<div class="tab iconic" id="xkit-control" style="position: relative; top: 50%; height: 26px; transform: translateY(-50%);">' +
+		var mobile_html = '<div class="tab iconic" id="new-xkit-control" style="position: relative; top: 50%; height: 26px; transform: translateY(-50%);">' +
 			'<a style="color:transparent;" class="tab_anchor" href="#" onclick="return false">XKit</a>' +
 			'</div>';
 
