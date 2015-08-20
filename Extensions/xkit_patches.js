@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 4.0.0 **//
+//* VERSION 4.0.4 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER STUDIOXENIX **//
 
@@ -1625,6 +1625,8 @@ XKit.tools.dump_config = function(){
 
 				if ($(obj).find(".post_controls_inner").length > 0) {
 					$(obj).find(".post_controls_inner").prepend(m_html);
+				} else if (XKit.browser().mobile) {
+					$(obj).find(".mh_post_foot_control.show_notes").after(m_html);
 				} else {
 					$(obj).find(".post_controls").prepend(m_html);
 				}
@@ -1663,11 +1665,10 @@ XKit.tools.dump_config = function(){
 					// If can_edit is requested and we don't have an edit post control,
 					// don't push the post
 					if (can_edit && $(this).find(".post_control.edit").length === 0) {
-						return;
+						//return;
 					}
 					posts.push($(this));
 				});
-
 				return posts;
 			},
 
@@ -1678,10 +1679,11 @@ XKit.tools.dump_config = function(){
 				if ($("body").find("#post_" + post_id).length > 0) {
 					return XKit.interface.post($("#post_" + post_id));
 				} else {
-					var m_error = {};
-					m_error.error = true;
-					m_error.error_message = "Object not found on page.";
-					return m_error;
+
+					///var m_error = {};
+					//m_rror.error = true;
+					//m_error.error_message = "Object not found on page.";
+					return XKit.interface.post($(".mh_post"));
 				}
 
 			},
@@ -1692,8 +1694,29 @@ XKit.tools.dump_config = function(){
 
 				if (typeof $(obj).attr('data-post-id') == "undefined") {
 					// Something is wrong.
-					m_return.error = true;
-					return;
+					//m_return.error = true;
+
+					m_return.id = $(obj).find(".mh_post_head_link").attr('href').split('/')[4];
+
+					m_return.permalink = $(obj).find(".mh_post_head_link").attr('href');
+
+					if ($(obj).hasClass("post_type_regular")) {
+						m_return.type = 'regular';
+					} else if ($(obj).hasClass("post_type_audio")) {
+						m_return.type = 'audio';
+					} else if ($(obj).hasClass("post_type_quote")) {
+						m_return.type = 'quote';
+					} else if ($(obj).hasClass("post_type_photo")) {
+						m_return.type = 'photo';
+					} else if ($(obj).hasClass("post_type_photoset")) {
+						m_return.type = 'photoset';
+					} else if ($(obj).hasClass("post_type_video")) {
+						m_return.type = 'video';
+					} else if ($(obj).hasClass("post_type_panorama")) {
+						m_return.type = 'panorama';
+					}
+
+					return m_return;
 				}
 
 				m_return.error = false;
