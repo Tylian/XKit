@@ -1,6 +1,6 @@
 
 //* TITLE Tweaks **//
-//* VERSION 4.0.0 **//
+//* VERSION 4.0.2 **//
 //* DESCRIPTION Various little tweaks for your dashboard. **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS These are small little tweaks that allows you customize your dashboard. If you have used XKit 6, you will notice that some of the extensions have been moved here as options you can toggle. Keep in mind that some of the tweaks (the ones marked with a '*') can slow down your computer. **//
@@ -336,7 +336,7 @@ XKit.extensions.tweaks = new Object({
 
 			if (document.location.href.indexOf('/dashboard') !== -1) {
 
-				if (XKit.browser.mobile) { // mobile stuff
+				if (!XKit.browser().mobile) { // mobile stuff
 					if ($("#new_post_buttons").length > 0) {
 
 						// Save this.
@@ -449,7 +449,7 @@ XKit.extensions.tweaks = new Object({
 		}
 
 		if (XKit.extensions.tweaks.preferences.pin_avatars.value) {
-			if (!XKit.browser.mobile) { // mobile stuff
+			if (!XKit.browser().mobile) { // mobile stuff
 				XKit.extensions.tweaks.add_css(".post_avatar.post-avatar--fixed { position: absolute !important; top: 0 !important; left: -85px !important; }  .post_avatar.post-avatar--absolute { position: absolute; top: 0 !important; left: -85px !important; bottom: inherit !important; }  .post_avatar.post-avatar--sticky .avatar-wrapper { position: absolute !important; top: 0px !important; height: auto; width: auto; } .post_avatar.post-avatar--sticky { height: 64px !important; }", "xkit_pin_avatars");
 			}
 		}
@@ -545,7 +545,7 @@ XKit.extensions.tweaks = new Object({
 		if (document.location.href.indexOf('/dashboard') !== -1) {
 
 			if (XKit.extensions.tweaks.preferences.dont_show_mine_on_dashboard.value) {
-				if (!XKit.browser.mobile) { //mobile stuff
+				if (!XKit.browser().mobile) { //mobile stuff
 					XKit.extensions.tweaks.add_css("#posts .post.is_mine { display: none !important; } #posts .post.new_post_buttons { display: block !important; }", "xkit_tweaks_dont_show_mine_on_dashboard");
 					//XKit.post_listener.add("tweaks_fix_hidden_post_height", XKit.extensions.tweaks.fix_hidden_post_height);
 					XKit.extensions.tweaks.fix_hidden_post_height();
@@ -555,7 +555,7 @@ XKit.extensions.tweaks = new Object({
 		}
 
 		if (XKit.extensions.tweaks.preferences.scroll_new_posts.value) {
-			if (!XKit.browser.mobile) { // mobile stuff
+			if (!XKit.browser().mobile) { // mobile stuff
 				$(window).scroll(function () {
 					if ($("#new_post").length > 0) {
 						if ($(window).scrollTop() >= 200) {
@@ -675,7 +675,7 @@ XKit.extensions.tweaks = new Object({
 
 	split_gear: function() {
 
-		if (!XKit.browser.mobile) { // mobile stuff
+		if (!XKit.browser().mobile) { // mobile stuff
 			$(".post.is_mine").not(".xkit-tweaks-split-gear-done").each(function() {
 				$(this).addClass("xkit-tweaks-split-gear-done");
 
@@ -698,7 +698,7 @@ XKit.extensions.tweaks = new Object({
 
 	check_for_share_on_private_posts: function() {
 
-		if (!XKit.browser.mobile) { // mobile stuff
+		if (!XKit.browser().mobile) { // mobile stuff
 			$(".post.is_mine").not(".xtweaks-checked-share").each(function() {
 
 				if ($(this).find(".private_label").length > 0) {

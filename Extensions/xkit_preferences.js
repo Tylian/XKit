@@ -1,5 +1,5 @@
 //* TITLE XKit Preferences **//
-//* VERSION 4.0.0 **//
+//* VERSION 4.0.6 **//
 //* DESCRIPTION Lets you customize XKit **//
 //* DEVELOPER STUDIOXENIX **//
 
@@ -86,9 +86,6 @@ XKit.extensions.xkit_preferences = new Object({
 		// $('<img />').attr('src', XKit.extensions.xkit_preferences.festivus_lights).appendTo('body').css('display','none');
 
 		this.running = true;
-
-		// Only load if header is somewhere to be found.
-		if (!$(".l-header").length) { return; }
 
 		XKit.tools.init_css("xkit_preferences");
 		// $("#help_button, .tab_help").css("display","none");
@@ -1464,7 +1461,7 @@ XKit.extensions.xkit_preferences = new Object({
 		$(".xkit-third-party-warning").click(function() {
 
 			XKit.window.show("Third Party Extension",
-				"This extension was not created by STUDIOXENIX. Since it is not developed by me, I can not make any guarantees about it, "+
+				"This extension was not created by the New XKit Team. Since it is not developed by me, I can not make any guarantees about it, "+
 				"nor provide support for this extension, accept bug reports or feature requests."+
 				'<div style="border: 1px solid rgb(200,200,200); background: rgb(235,235,235); margin: 15px 0px; padding: 10px; '+
 				'color: rgb(100,100,100); text-align: center; border-radius: 4px; box-shadow: inset 0px 1px 0px white, 0px 1px 2px rgba(0,0,0,0.22); ">'+
@@ -1819,9 +1816,9 @@ XKit.extensions.xkit_preferences = new Object({
 				}
 
 				var m_extra_style = "";
-				if (XKit.extensions[extension_id].preferences[pref].mobile_only === true && XKit.browser.mobile === false) {
+				if (XKit.extensions[extension_id].preferences[pref].mobile_only === true && XKit.browser().mobile === false) {
 					m_extra_style = "display: none;";
-				} else if (XKit.extensions[extension_id].preferences[pref].desktop_only === true && XKit.browser.mobile === true) {
+				} else if (XKit.extensions[extension_id].preferences[pref].desktop_only === true && XKit.browser().mobile === true) {
 					m_extra_style = "display: none;";
 				}
 
@@ -1893,7 +1890,16 @@ XKit.extensions.xkit_preferences = new Object({
 					m_extra_classes = "xkit-experimental-option";
 				}
 
-				m_return = m_return + '<div class="xkit-extension-setting xkit-combo-preference ' + m_extra_classes + '" data-extension-id="' + extension_id + '" data-setting-id="' + pref + '">';
+				var m_extra_style = "";
+				if (XKit.extensions[extension_id].preferences[pref].mobile_only === true && XKit.browser().mobile === false) {
+					m_extra_style = "display: none;";
+				} else if (XKit.extensions[extension_id].preferences[pref].desktop_only === true && XKit.browser().mobile === true) {
+					m_extra_style = "display: none;";
+				}
+
+				m_return = m_return + '<div class="xkit-extension-setting xkit-combo-preference ' + m_extra_classes +
+						'" style="' + m_extra_style +
+						'" data-extension-id="' + extension_id + '" data-setting-id="' + pref + '">';
 
 				if (XKit.extensions[extension_id].preferences[pref].experimental === true) {
 					m_return = m_return + '<div class="xkit-extension-experimental-bong">&nbsp;</div>';
@@ -1954,7 +1960,16 @@ XKit.extensions.xkit_preferences = new Object({
 					m_extra_classes = "xkit-experimental-option";
 				}
 
-				m_return = m_return + '<div class="xkit-extension-setting ' + m_extra_classes + '" data-extension-id="' + extension_id + '" data-setting-id="' + pref + '">';
+				var m_extra_style = "";
+				if (XKit.extensions[extension_id].preferences[pref].mobile_only === true && XKit.browser().mobile === false) {
+					m_extra_style = "display: none;";
+				} else if (XKit.extensions[extension_id].preferences[pref].desktop_only === true && XKit.browser().mobile === true) {
+					m_extra_style = "display: none;";
+				}
+
+				m_return = m_return + '<div class="xkit-extension-setting ' + m_extra_classes +
+						'" style="' + m_extra_style +
+						'" data-extension-id="' + extension_id + '" data-setting-id="' + pref + '">';
 
 				if (XKit.extensions[extension_id].preferences[pref].experimental === true) {
 					m_return = m_return + '<div class="xkit-extension-experimental-bong">&nbsp;</div>';
@@ -2002,7 +2017,14 @@ XKit.extensions.xkit_preferences = new Object({
 
 				}
 
-				m_return = m_return + '<div class="xkit-extension-setting-separator">' + pref_title + "</div>";
+				var m_extra_style = "";
+				if (XKit.extensions[extension_id].preferences[pref].mobile_only === true && XKit.browser().mobile === false) {
+					m_extra_style = "display: none;";
+				} else if (XKit.extensions[extension_id].preferences[pref].desktop_only === true && XKit.browser().mobile === true) {
+					m_extra_style = "display: none;";
+				}
+
+				m_return = m_return + '<div class="xkit-extension-setting-separator" style="' + m_extra_style +'">' + pref_title + "</div>";
 
 			}
 
@@ -2014,7 +2036,16 @@ XKit.extensions.xkit_preferences = new Object({
 					m_extra_classes = "xkit-experimental-option";
 				}
 
-				m_return = m_return + '<div class="xkit-extension-setting ' + m_extra_classes + ' checkbox" data-extension-id="' + extension_id + '" data-setting-id="' + pref + '">';
+				var m_extra_style = "";
+				if (XKit.extensions[extension_id].preferences[pref].mobile_only === true && XKit.browser().mobile === false) {
+					m_extra_style = "display: none;";
+				} else if (XKit.extensions[extension_id].preferences[pref].desktop_only === true && XKit.browser().mobile === true) {
+					m_extra_style = "display: none;";
+				}
+
+				m_return = m_return + '<div class="xkit-extension-setting ' + m_extra_classes +
+						' checkbox" style="' + m_extra_style +
+						'" data-extension-id="' + extension_id + '" data-setting-id="' + pref + '">';
 
 				if (XKit.extensions[extension_id].preferences[pref].experimental === true) {
 					m_return = m_return + '<div class="xkit-extension-experimental-bong">&nbsp;</div>';
