@@ -211,8 +211,6 @@ XKit.extensions.xcloud = new Object({
 
 			var registerRequest = {
 				url: xcloud_url + "/xcloud/register",
-				headers: {"Authorization": "Basic " + btoa(m_username + ":" + m_password) },
-				json: false,
 				onerror: function() {
 
 					XKit.extensions.xcloud.hide_overlay();
@@ -268,9 +266,11 @@ XKit.extensions.xcloud = new Object({
 			if(XKit.extensions.xcloud.useoldserver){
 				registerRequest.method = "GET";
 				registerRequest += "?username=" + m_username + "&password=" + m_password;
+				registerRequest.json = false;
 			} else {
 				registerRequest.method = "POST";
-				registerRequest.data = "username=" + m_username + "&password=" + m_password;
+				registerRequest.json = true;
+				registerRequest.data = JSON.stringify({"username":  m_username, "password": m_password});
 			}
 
 			GM_xmlhttpRequest(registerRequest);
@@ -783,8 +783,6 @@ XKit.extensions.xcloud = new Object({
 		var uploadRequest = {
 			method: "POST",
 			url: xcloud_url + "/xcloud/upload/",
-			data: "data=" + to_send,
-			json: false,
 			onerror: function() {
 
 				XKit.extensions.xcloud.hide_overlay();
@@ -832,9 +830,12 @@ XKit.extensions.xcloud = new Object({
 
 		if(XKit.extensions.xcloud.useoldserver){
 			uploadRequest.url = "http://xcloud.puaga.com/upload/?ftch_id=" + XKit.tools.random_string();
-			uploadRequest.data = "username=" + m_username + "&password=" + m_password + "&" + uploadRequest.data;
+			uploadRequest.data = "username=" + m_username + "&password=" + m_password + "&" + "data=" + to_send;
+			uploadRequest.json = false;
 		} else {
-			uploadRequest.headers = {"Authorization": "Basic " + btoa(m_username + ":" + m_password) };
+			uploadRequest.headers = {"Authorization": "Basic " + btoa(m_username + ":" + m_password)};
+			uploadRequest.data = JSON.stringify({"data": to_send });
+			uploadRequest.json = true;
 		}
 
 		GM_xmlhttpRequest(uploadRequest);
