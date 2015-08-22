@@ -428,7 +428,7 @@ XKit.extensions.tweaks = new Object({
 		}
 
 		if (XKit.extensions.tweaks.preferences.hide_recommended.value) {
-			$("#recommended_tumblelogs, .recommended_tumblelogs, .trending_tumblelogs").css("display","none");
+			$("#recommended_tumblelogs, .recommended_tumblelogs, .trending_tumblelogs, .is_recommended").css("display","none");
 		}
 
 		if (XKit.extensions.tweaks.preferences.hide_share.value) {
@@ -748,7 +748,7 @@ XKit.extensions.tweaks = new Object({
 		$("#tumblr_radar").css("display","block");
 		$("#xkit_customize_button").remove();
 		$("a.spotlight").parent().css("display","block");
-		$("#recommended_tumblelogs, .recommended_tumblelogs, .trending_tumblelogs").css("display","block");
+		$("#recommended_tumblelogs, .recommended_tumblelogs, .trending_tumblelogs, .is_recommended").css("display","block");
 		$("a.activity").parent().css("display","block");
 		$(".radar_header").parent().css("display","block");
 		$(".customize").parent().css("display","block");
