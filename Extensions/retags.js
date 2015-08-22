@@ -9,7 +9,7 @@
 XKit.extensions.retags = {
 	running: false,
 	api_key: '3DFxEZm0tGISOmdvWe9Fl1QsQMo1LFqEatnc8GQ68wgF1YTZ4w',
-	selectors: '.reblog,.is_reblog,.notification_reblog,.is_reply',
+	selectors: '.reblog,.is_reblog,.notification_reblog,.is_reply,.is_answer',
 	blog_name: "",
 
 	run: function(){
