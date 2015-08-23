@@ -71,7 +71,7 @@ XKit.extensions.retags = {
 				url = $c.find('.notification_target').attr('href');
 			}
 			//we don't need to put tags on a reply, but we also don't need to hide it
-			if ($t.hasClass('is_reply')) {
+			if ($t.hasClass('is_reply') || $t.hasClass('is_answer')) {
 				return;
 			}
 			if (url) {
