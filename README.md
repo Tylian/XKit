@@ -1,6 +1,6 @@
 # XKit
 
-[![Build Status](https://travis-ci.org/new-xkit/XKit.svg?branch=master)](https://travis-ci.org/new-xkit/XKit) 
+[![Stories In Progress](https://badge.waffle.io/new-xkit/XKit.svg?label=in%20progress&title=In Progress)](http://waffle.io/new-xkit/XKit) [![Build Status](https://travis-ci.org/new-xkit/XKit.svg?branch=master)](https://travis-ci.org/new-xkit/XKit)
 
 XKit is a small extension framework that powers tweaks for Tumblr.
 
