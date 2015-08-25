@@ -10,7 +10,7 @@ We support Opera unofficially using the same file as the Chrome extension, [whic
 
 ## Support [![Join the chat at https://gitter.im/new-xkit/support](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/new-xkit/support?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-First, [check the list of issues](https://github.com/new-xkit/XKit/issues), and see if there's something there that looks like the problem you're having. Otherwise, [file a new issue](https://github.com/new-xkit/XKit/issues) or come join [our support chat](http://new-xkit-support.tumblr.com/support). We don't bite!
+First, [check the list of issues](https://github.com/new-xkit/XKit/issues), and see if there's something there that looks like the problem you're having. Otherwise, [file a new issue](https://github.com/new-xkit/XKit/issues) or come join our support chat: Have a GitHub Account? [Click here](https://gitter.im/new-xkit/support). If not, [click here](http://new-xkit-support.tumblr.com/support). We don't bite!
 
 ## Contribute
 XKit needs all the help it can get! If you want to help out, the first step is
