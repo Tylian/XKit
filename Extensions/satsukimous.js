@@ -1,6 +1,6 @@
 //* TITLE Satsukimous **//
 //* VERSION 1.1.0 **//
-//* DESCRIPTION Turns anon icons into Satsuki, Matoi or Mako **//
+//* DESCRIPTION Turns anon icons into Satsuki, Ryuko or Mako or a custom image **//
 //* DEVELOPER new-xkit **//
 //* DETAILS This extension is a prime example of what happens when you let JavaScript developers stay up past midnight.**//
 //* FRAME false **//
@@ -11,6 +11,10 @@ XKit.extensions.satsukimous = new Object({
 	running: false,
 
 	preferences: {
+		"sep-0": {
+			text: "Icon Replacement",
+			type: "separator"
+		},
 		replacement: {
 			text: "Replacement Avatar",
 			default: "https://31.media.tumblr.com/avatar_0bc380bccba7_128.png",
@@ -18,19 +22,34 @@ XKit.extensions.satsukimous = new Object({
 			type: "combo",
 			values: [
 				"Satsuki Kiryūin", "https://31.media.tumblr.com/avatar_0bc380bccba7_128.png",
-				"Matoi Ryūko", "http://38.media.tumblr.com/avatar_2e71003ae267_128.png",
+				"Ryūko Matoi", "http://38.media.tumblr.com/avatar_2e71003ae267_128.png",
 				"Mako Mankanshoku", "https://33.media.tumblr.com/avatar_759f9349bfc2_128.png",
 				"Anyonymous", "https://secure.assets.tumblr.com/images/anonymous_avatar_128.gif",
+				"Custom Image", "custom",
 			],
 		},
+		"custom_replacement": {
+			text: "Custom Replacement",
+			type: "text",
+			default: "",
+			value: ""
+		},
+		"sep-1": {
+			text: "Other Options",
+			type: "separator"
+		},
 		"play_scream": {
-			text: "matoi RYūKOOOOoO",
+			text: "matoi RYUKOOOOOO",
 			default: true,
 			value: true
 		}
 	},
 
 	satsuki: function() {
+		var replacement = XKit.extensions.satsukimous.preferences.replacement.value;
+		if (replacement === "custom") {
+			replacement = XKit.extensions.satsukimous.preferences.custom_replacement.value;
+		}
 		$( "img" ).filter(function( index ) {
 			return $( this ).attr( "src" ).indexOf( "anonymous_avatar" ) !== -1;
 		}).attr( "src", XKit.extensions.satsukimous.preferences.replacement.value ).addClass("matoiRYUKOOOOoO");
