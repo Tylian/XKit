@@ -52,10 +52,10 @@ XKit.extensions.satsukimous = new Object({
 		}
 		$( "img" ).filter(function( index ) {
 			return $( this ).attr( "src" ).indexOf( "anonymous_avatar" ) !== -1;
-		}).attr( "src", XKit.extensions.satsukimous.preferences.replacement.value ).addClass("matoiRYUKOOOOoO");
+		}).attr( "src", replacement ).addClass("satsukimous_src matoiRYUKOOOOoO");
 		$( "div.post_avatar_link" ).filter(function( index ) {
 			return $( this ).attr( "style" ).indexOf( "anonymous_avatar" ) !== -1;
-		}).attr( "style", "background-image: url('" + XKit.extensions.satsukimous.preferences.replacement.value + "');" ).addClass("matoiRYUKOOOOoO");
+		}).attr( "style", "background-image: url('" + replacement + "');" ).addClass("satsukimous_style matoiRYUKOOOOoO");
 		if (XKit.extensions.satsukimous.preferences.play_scream.value) {
 			$(".matoiRYUKOOOOoO").click(function() {
 				document.getElementById("matoi-sound").play();
@@ -74,6 +74,9 @@ XKit.extensions.satsukimous = new Object({
 
 	destroy: function() {
 		this.running = false;
+		$("#matoi-sound").remove();
+		$(".satsukimous_src").attr("src", "https://secure.assets.tumblr.com/images/anonymous_avatar_128.gif").removeClass("satsukimous_src matoiRYUKOOOOoO");
+		$(".satsukimous_style").attr("style", "background-image: url('https://secure.assets.tumblr.com/images/anonymous_avatar_128.gif');").removeClass("satsukimous_style matoiRYUKOOOOoO");
 		XKit.post_listener.remove( "SATSUKI" );
 	}
 
