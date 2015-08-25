@@ -748,7 +748,6 @@ XKit.extensions.tweaks = new Object({
 		$("#tumblr_radar").css("display","block");
 		$("#xkit_customize_button").remove();
 		$("a.spotlight").parent().css("display","block");
-		$("#recommended_tumblelogs, .recommended_tumblelogs, .trending_tumblelogs, .is_recommended").css("display","block");
 		$("a.activity").parent().css("display","block");
 		$(".radar_header").parent().css("display","block");
 		$(".customize").parent().css("display","block");
