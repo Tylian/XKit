@@ -1,7 +1,7 @@
 //* TITLE Shorten Posts **//
 //* VERSION 0.2.2 **//
 //* DESCRIPTION Makes scrolling easier **//
-//* DETAILS This extension shortens long posts, so if you are interested, you can just click on Show Full Post button to see it all, or scroll down if you are not interested. Useful for screens where long posts take a lot of space, and making it hard to scroll down.<br><br>By default, this extension only shortens text posts. You can toggle settings to let it shorten other types of posts too. (This will 'cut off' long, vertical posts.) **//
+//* DETAILS This extension shortens long posts, so if you are interested, you can just click on Show Full Post button to see it all, or scroll down if you are not interested. Useful for screens where long posts take a lot of space, and making it hard to scroll down.<br><br>By default, this extension shortens text posts. You can toggle settings to let it shorten other types of posts, as well as not shorten text posts. (This will 'cut off' long, vertical posts.) **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//
 //* BETA false **//
@@ -20,6 +20,11 @@ XKit.extensions.shorten_posts = new Object({
 		sep0: {
 			text: "When to shorten posts",
 			type: "separator"
+		},
+		text_too: {
+			text: "Check and shorten text posts",
+			default: true,
+			value: true
 		},
 		photos_too: {
 			text: "Check and shorten photo posts and photosets",
@@ -104,47 +109,36 @@ XKit.extensions.shorten_posts = new Object({
 			if ($(this).hasClass("xblacklist_blacklisted_post")) { return; }
 
 			var dont_return = false;
-			if (!(XKit.extensions.shorten_posts.preferences.photos_too.value ||
-				XKit.extensions.shorten_posts.preferences.audio_too.value ||
-				XKit.extensions.shorten_posts.preferences.links_too.value ||
-				XKit.extensions.shorten_posts.preferences.chat_too.value ||
-				XKit.extensions.shorten_posts.preferences.quotes_too.value ||
-				XKit.extensions.shorten_posts.preferences.asks_too.value ||
-				XKit.extensions.shorten_posts.preferences.videos_too.value)) {
-				if (!$(this).hasClass("is_regular")) {
-					return;
-				}
-			} else {
-				if (XKit.extensions.shorten_posts.preferences.photos_too.value
-					&& ($(this).hasClass("is_photo") || $(this).hasClass("is_photoset"))) {
-					dont_return = true;
-				}
-				if (XKit.extensions.shorten_posts.preferences.audio_too.value
-					&& $(this).hasClass("is_audio")) {
-						dont_return = true;
-					}
-				if (XKit.extensions.shorten_posts.preferences.links_too.value
-					&& $(this).hasClass("is_link")) {
-					dont_return = true;
-				}
-				if (XKit.extensions.shorten_posts.preferences.chat_too.value
-					&& $(this).hasClass("is_conversation")) {
-					dont_return = true;
-				}
-				if (XKit.extensions.shorten_posts.preferences.quotes_too.value
-					&& $(this).hasClass("is_quote")) {
-					dont_return = true;
-				}
-				if (XKit.extensions.shorten_posts.preferences.asks_too.value
-					&& $(this).hasClass("is_note")) {
-					dont_return = true;
-				}
-				if (XKit.extensions.shorten_posts.preferences.videos_too.value
-					&& $(this).hasClass("is_video")) {
-					dont_return = true;
-				}
+			if (XKit.extensions.shorten_posts.preferences.text_too.value
+				&& $(this).hasClass("is_regular")) {
+				dont_return = true;
 			}
-			if ($(this).hasClass("is_regular")) {
+			if (XKit.extensions.shorten_posts.preferences.photos_too.value
+				&& ($(this).hasClass("is_photo") || $(this).hasClass("is_photoset"))) {
+				dont_return = true;
+			}
+			if (XKit.extensions.shorten_posts.preferences.audio_too.value
+				&& $(this).hasClass("is_audio")) {
+				dont_return = true;
+				}
+			if (XKit.extensions.shorten_posts.preferences.links_too.value
+				&& $(this).hasClass("is_link")) {
+				dont_return = true;
+			}
+			if (XKit.extensions.shorten_posts.preferences.chat_too.value
+				&& $(this).hasClass("is_conversation")) {
+				dont_return = true;
+			}
+			if (XKit.extensions.shorten_posts.preferences.quotes_too.value
+				&& $(this).hasClass("is_quote")) {
+				dont_return = true;
+			}
+			if (XKit.extensions.shorten_posts.preferences.asks_too.value
+				&& $(this).hasClass("is_note")) {
+				dont_return = true;
+			}
+			if (XKit.extensions.shorten_posts.preferences.videos_too.value
+				&& $(this).hasClass("is_video")) {
 				dont_return = true;
 			}
 
