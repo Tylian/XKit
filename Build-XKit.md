@@ -5,6 +5,7 @@
 * Install `gulp` globally: `npm install -g gulp`.
 * Install the [EditorConfig](http://editorconfig.org/#download) plugin for your favourite editor.  We use this to enforce some style rules not covered by code linting.
 * Make a clone of the project, or update an existing copy.
+* Install project dependencies with `npm install`.
 
 ## Gulp Tasks:
 
