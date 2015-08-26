@@ -1682,7 +1682,7 @@ XKit.tools.dump_config = function(){
 					return XKit.interface.post($(".mh_post"));
 				} else {
 					var m_error = {};
-					m_rror.error = true;
+					m_error.error = true;
 					m_error.error_message = "Object not found on page.";
 				}
 
@@ -1695,6 +1695,10 @@ XKit.tools.dump_config = function(){
 				if (typeof $(obj).attr('data-post-id') == "undefined" && $(".mh_post_head_link").length === 0) {
 					// Something is wrong.
 					m_return.error = true;
+
+				} else if ($(".mh_post_head_link").length > 0) {
+
+					m_return.error = false;
 
 					m_return.id = $(obj).find(".mh_post_head_link").attr('href').split('/')[4];
 
