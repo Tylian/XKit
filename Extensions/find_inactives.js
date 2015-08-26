@@ -9,7 +9,6 @@
 XKit.extensions.find_inactives = new Object({
 
 	running: false,
-	apiKey: "fuiKNFp9vQFvjLNvx4sUwti4Yb5yGutBN4Xh10LXZhhRKjWlV4",
 
 	timeout_time: 300,
 
@@ -51,6 +50,8 @@ XKit.extensions.find_inactives = new Object({
 	page: 0,
 	people_count: 0,
 	people_index: 0,
+	people_per_page: 25,
+	concurrent_requests: 8, //Arbitrary number.  This just seemed to go fast.  ~7.50 for 1000 Tumblrs
 
 	start: function() {
 
@@ -59,7 +60,7 @@ XKit.extensions.find_inactives = new Object({
 		XKit.extensions.find_inactives.page = 0;
 		XKit.extensions.find_inactives.people_index = -1;
 
-		XKit.window.show("Please wait..","I'm trying to find the inactive blogs, this might take a while." + XKit.progress.add("find-inactives") + "<div id=\"xkit-find-inactives-status\">Initializing...</div>","info");
+		XKit.window.show("Please wait..","I'm trying to find the inactive blogs, this might take a while." + XKit.progress.add("find-inactives") + "<div id=\"xkit-find-inactives-status\">Crunching the numbers...</div>","info");
 
 		XKit.extensions.find_inactives.get_count();
 
@@ -68,8 +69,16 @@ XKit.extensions.find_inactives = new Object({
 	get_count: function() {
 		var count_text = $("#tabs").html().match(/Following.*Tumblr/gm)[0];
 		count_text = count_text.replace(/[^0-9\.]/g, '');
-		XKit.extensions.find_inactives.people_count = parseInt(count_text);
-		XKit.extensions.find_inactives.next_page();
+		var people_count = parseInt(count_text);
+		XKit.extensions.find_inactives.people_count = people_count;
+
+		XKit.extensions.find_inactives.page_tracker.reset();
+		XKit.extensions.find_inactives.page_tracker.set_page_count(people_count / this.people_per_page);
+
+		//Start our concurrent requests.
+		for(var i = 0; i < XKit.extensions.find_inactives.concurrent_requests; i++) {
+			XKit.extensions.find_inactives.next_page();
+		}
 	},
 
 	show_error: function(message) {
@@ -80,10 +89,20 @@ XKit.extensions.find_inactives = new Object({
 	},
 
 	next_page: function() {
+		var self = this;
+		var next_page = this.page_tracker.get_next_page();
+		if(next_page < 0){
+			if(this.page_tracker.has_completed()){
+				$("#xkit-find-inactives-status").html("Fetching information about the people I've just learned about...");
+				XKit.extensions.find_inactives.list_people();
+			}
+			return;
+		}
 
+		this.page_tracker.start_processing_page(next_page);
 		GM_xmlhttpRequest({
 			method: "GET",
-			url: "http://www.tumblr.com/following/" + (XKit.extensions.find_inactives.page * 25),
+			url: "http://www.tumblr.com/following/" + (next_page * 25),
 			json: false,
 			onerror: function(response) {
 				XKit.extensions.find_inactives.show_error("<b>Unable to get the blog information.</b><br/>Please try again later.<br/><br/>Error Code: FIA-330");
@@ -94,7 +113,7 @@ XKit.extensions.find_inactives = new Object({
 				try {
 
 					var total = XKit.extensions.find_inactives.people_count;
-					var perc = (XKit.extensions.find_inactives.page * 25) * 100 / total;
+					var perc = self.page_tracker.get_progress();
 
 					console.log(perc + " | " + total);
 
@@ -123,17 +142,8 @@ XKit.extensions.find_inactives = new Object({
 
 					});
 
-					if ($(".next", response.responseText).length > 0) {
-
-						XKit.extensions.find_inactives.page++;
-						setTimeout(function() { XKit.extensions.find_inactives.next_page(); }, XKit.extensions.find_inactives.timeout_time);
-
-					} else {
-
-						$("#xkit-find-inactives-status").html("Fetching information about the people I've just learned about...");
-						XKit.extensions.find_inactives.list_people();
-
-					}
+					self.page_tracker.finished_processing_page(next_page);
+					setTimeout(function() { XKit.extensions.find_inactives.next_page(); }, XKit.extensions.find_inactives.timeout_time);
 
 				} catch(e) {
 					XKit.extensions.find_inactives.show_error("<b>Unable to get the blog information.</b><br/>Please try again later.<br/><br/>Error Code: FIA-230<br/>" + e.message);
@@ -154,15 +164,6 @@ XKit.extensions.find_inactives = new Object({
 		var time_value = updated_time.replace(/[^0-9\.]/g, '');
 		time_value = parseInt(time_value, 10);
 
-		if(updated_time.indexOf("sec") > -1){
-			return 0;
-		}
-		if(updated_time.indexOf("min") > -1){
-			return 0;
-		}
-		if(updated_time.indexOf("hour") > -1){
-			return 0;
-		}
 		if(updated_time.indexOf("day") > -1){
 			return time_value;
 		}
@@ -176,7 +177,74 @@ XKit.extensions.find_inactives = new Object({
 			return time_value * 365;
 		}
 
-		return -1;
+		return 0;
+	},
+
+	//Keeps track of what pages are currently being processed, finished processing, and need to process.
+	page_tracker: {
+
+		page_count: 0,
+		current_page: 0,
+		page_processed: {}, //page_processed will either be undefined, false, or true.  Undefined: page not started.  false: page started to process.  true: page finished processing.
+
+		//Resets this object to its base state.  Always set it before starting to find inactive followers.
+		reset: function(){
+			this.page_count = 0;
+			this.current_page = 0;
+			this.page_processed = {};
+		},
+
+		set_page_count: function(count){
+			this.page_count = count;
+		},
+
+		//Returns the next page that needs to be processed, -1 of there are no pages to be processed.
+		get_next_page: function(){
+			for(var i = 0; i < this.page_count; i++){
+				if(this.page_processed[i] === undefined){
+					console.log("Processing page " + i + " | " + this.page_count);
+					return i;
+				}
+			}
+			return -1;
+		},
+
+		start_processing_page: function(page){
+			this.page_processed[page] = false;
+			if(this.current_page < page){
+				this.current_page = page;
+			}
+		},
+
+		finished_processing_page: function(page){
+			this.page_processed[page] = true;
+		},
+
+		has_completed: function(){
+			for(var i = 0; i < this.page_count; i++){
+				if(! this.page_processed[i]){
+					return false;
+				}
+			}
+			return true;
+		},
+
+		//returns the progress of finding inactives.  Value are between 0 and 100.
+		get_progress: function(){
+			var progress_points = 0; // Weighted progress points.
+			for(var i = 0; i < this.page_count; i++){
+
+				if(this.page_processed[i] === false){
+					progress_points += 1;
+				}
+				if(this.page_processed[i] === true){
+					progress_points += 2;
+				}
+			}
+
+			var total_points = this.page_count * 2;
+			return (progress_points / total_points) * 100;
+		}
 	},
 
 	list_people: function() {
