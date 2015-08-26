@@ -19,7 +19,7 @@ XKit.extensions.find_inactives = new Object({
 			value: "30",
 			type: "combo",
 			values: [
-				"2 weeks", "15",
+				"2 weeks", "14",
 				"A month", "30",
 				"Two months", "60",
 				"4 months", "120",
