@@ -1347,7 +1347,7 @@ XKit.extensions.xkit_preferences = new Object({
 			m_html = m_html + '<div class="developer" style="display: block">by ' + m_extension.developer + '</div>';
 		}
 
-		var xkit_developers = ["studioxenix","new xkit team","dlmarquis","hobinjk","thepsionic","nightpool","blackjackkent","wolvan","bvtsang","0xazure"];
+		var xkit_developers = ["studioxenix","new-xkit","dlmarquis","hobinjk","thepsionic","nightpool","blackjackkent","wolvan","bvtsang","0xazure"];
 		var third_party_extension = false;
 		if (xkit_developers.indexOf(m_extension.developer.toLowerCase()) === -1 && !this_is_language && !m_extension.pack) {
 			third_party_extension = true;
