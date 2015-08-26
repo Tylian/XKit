@@ -1,5 +1,5 @@
 //* TITLE XKit Preferences **//
-//* VERSION 3.4.5 **//
+//* VERSION 3.4.6 **//
 //* DESCRIPTION Lets you customize XKit **//
 //* DEVELOPER STUDIOXENIX **//
 
@@ -2631,7 +2631,8 @@ XKit.extensions.xkit_preferences = new Object({
 					'<a href="http://new-xkit-extension.tumblr.com">New XKit Blog</a>' +
 					'<a href="http://www.xkit.info/seven/donate">Donate to XKit</a>' +
 					'<a href="http://www.xkit.info/seven/spread">Spread XKit</a>' +
-					'<a href="http://www.xkit.info/seven/support">Support & Documentation</a>' +
+					'<a href="http://new-xkit-support.tumblr.com/support">Support</a>' +
+					'<a href="https://github.com/new-xkit/XKit/wiki">Documentation</a>' +
 					'<a href="http://www.xkit.info/eula">Legal</a>' +
 				'</div>';
 		$("#xkit-control-panel-inner").html(m_html);
