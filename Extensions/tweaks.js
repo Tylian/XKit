@@ -22,7 +22,7 @@ XKit.extensions.tweaks = new Object({
 			type: "separator",
 		},
 		"no_mobile_banner": {
-			text: "Remove mobile app banner",
+			text: "Remove the mobile app banner",
 			default: true,
 			value: true,
 			mobile_only: true

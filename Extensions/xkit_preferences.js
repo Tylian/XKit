@@ -101,7 +101,7 @@ XKit.extensions.xkit_preferences = new Object({
 
 		$(".l-header").find("#logout_button").parent().before(m_html);
 		$(".l-header").find("#account_button").before(m_html);
-		$(".no-js").removeClass("no-js"); //possibly unnecessary // mobile stuff
+		$(".no-js").removeClass("no-js"); // possibly unnecessary // mobile stuff
 		$(".mobile-logo").html(mobile_html); // mobile stuff
 
 		//$("#new-xkit-control").tipTip({maxWidth: "auto", edgeOffset: 0, delay: 10 });
