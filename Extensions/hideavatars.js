@@ -39,13 +39,7 @@ XKit.extensions.hideavatars = new Object({
 			XKit.extensions.hideavatars.blognames.forEach(function (blogname) {
 				$(".notification a").filter(function() {
 					return $(this).attr("href").slice(7).split(".")[0] === blogname.title;
-				}).find(".avatar").attr("src", hidden_avatar);
-			});
-
-			XKit.extensions.hideavatars.blognames.forEach(function (blogname) {
-				$(".notification a").filter(function() {
-					return $(this).attr("href").slice(7).split(".")[0] === blogname.title;
-				}).find(".avatar").attr("style", "opacity: 0.5");
+				}).find(".avatar").attr("src", hidden_avatar).attr("style", "opacity: 0.5");
 			});
 		}
 
