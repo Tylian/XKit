@@ -1684,6 +1684,7 @@ XKit.tools.dump_config = function(){
 					var m_error = {};
 					m_error.error = true;
 					m_error.error_message = "Object not found on page.";
+					return m_error;
 				}
 
 			},
