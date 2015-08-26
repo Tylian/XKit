@@ -1,5 +1,5 @@
 //* TITLE XKit Main **//
-//* VERSION 1.3 REV B **//
+//* VERSION 1.3.3 **//
 //* DESCRIPTION Boots XKit up **//
 //* DEVELOPER STUDIOXENIX **//
 (function(){
@@ -107,7 +107,7 @@ XKit.extensions.xkit_main = new Object({
 		if (XKit.frame_mode === true && extension_id !== "xkit_patches") {
 			// This is ugly: I don't want to eval script.
 			/* jshint evil: true */
-			eval(xkit_main.script);
+			eval(xkit_main.script + "\n//# sourceURL=xkit/"+extension_id+".js");
 			var frame_script = "";
 			try {
 				frame_script = XKit.extensions[extension_id].frame_run;
@@ -149,7 +149,7 @@ XKit.extensions.xkit_main = new Object({
 			if (xkit_main.frame === true) {
 				// is a frame extension, quit.
 				try {
-					eval(xkit_main.script);
+					eval(xkit_main.script + "\n//# sourceURL=xkit/"+extension_id+".js");
 				} catch(e) {
 					XKit.console.add("Can't eval " + extension_id);
 				}
@@ -166,7 +166,7 @@ XKit.extensions.xkit_main = new Object({
 		}
 
 		try {
-			eval(xkit_main.script);
+			eval(xkit_main.script + "\n//# sourceURL=xkit/"+extension_id+".js");
 			if (XKit.installed.enabled(extension_id) === true) {
 				if (XKit.extensions.xkit_main.enabled_extensions === "") {
 					XKit.extensions.xkit_main.enabled_extensions = extension_id;

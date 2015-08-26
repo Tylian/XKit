@@ -128,7 +128,7 @@ XKit = {
 				XKit.console.add("Trying to run xkit_main.");
 				try {
 					/* jshint evil: true */
-					eval(xkit_main.script);
+					eval(xkit_main.script + "\n//# sourceURL=xkit/xkit_main.js");
 					XKit.extensions.xkit_main.run();
 				} catch(e) {
 					show_error_reset("Can't run xkit_main:" + e.message);
@@ -168,7 +168,7 @@ XKit = {
 			XKit.console.add("Trying to run xkit_main.");
 			try {
 				/* jshint evil: true */
-				eval(xkit_main.script);
+				eval(xkit_main.script + "\n//# sourceURL=xkit/xkit_main.js");
 				XKit.frame_mode = true;
 				XKit.extensions.xkit_main.run();
 			} catch(e) {
@@ -1097,7 +1097,7 @@ function xkit_init_special() {
 			xhr.send(null);
 			try {
 				/* jshint evil: true */
-				eval(xhr.responseText);
+				eval(xhr.responseText + "\n//# sourceURL=xkit/editor.js");
 				XKit.extensions.xkit_editor.run();
 			} catch(e) {
 				XKit.window.show("Can't launch XKit Editor","<p>" + e.message + "</p>","error","<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
@@ -1291,7 +1291,7 @@ function xkit_install() {
 
 		try {
 			/* jshint evil: true */
-			eval(mdata.script);
+			eval(mdata.script + "\n//# sourceURL=xkit/xkit_installer.js");
 			XKit.extensions.xkit_installer.run();
 		} catch(e) {
 			show_error_installation("[Code: 102]" + e.message);

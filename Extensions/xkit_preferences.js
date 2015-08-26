@@ -1056,7 +1056,7 @@ XKit.extensions.xkit_preferences = new Object({
 
 					try {
 						/* jshint evil: true */
-						eval(mdata.script);
+						eval(mdata.script + "\n//# sourceURL=xkit/"+extension_id+".js");
 						XKit.extensions[m_extension_id].run();
 					} catch(e) {
 
