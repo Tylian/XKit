@@ -1664,8 +1664,8 @@ XKit.tools.dump_config = function(){
 				selection.each(function() {
 					// If can_edit is requested and we don't have an edit post control,
 					// don't push the post
-					if (can_edit && $(this).find(".post_control.edit").length === 0) {
-						//return;
+					if (can_edit && ($(this).find(".icon-trash").length === 0 || $(this).find(".post_control.edit").length === 0)) {
+						return;
 					}
 					posts.push($(this));
 				});
@@ -1678,12 +1678,12 @@ XKit.tools.dump_config = function(){
 
 				if ($("body").find("#post_" + post_id).length > 0) {
 					return XKit.interface.post($("#post_" + post_id));
-				} else {
-
-					///var m_error = {};
-					//m_rror.error = true;
-					//m_error.error_message = "Object not found on page.";
+				} else if ($(".mh_post").length > 0) {
 					return XKit.interface.post($(".mh_post"));
+				} else {
+					var m_error = {};
+					m_rror.error = true;
+					m_error.error_message = "Object not found on page.";
 				}
 
 			},
@@ -1692,9 +1692,9 @@ XKit.tools.dump_config = function(){
 
 				var m_return = {};
 
-				if (typeof $(obj).attr('data-post-id') == "undefined") {
+				if (typeof $(obj).attr('data-post-id') == "undefined" && $(".mh_post_head_link").length === 0) {
 					// Something is wrong.
-					//m_return.error = true;
+					m_return.error = true;
 
 					m_return.id = $(obj).find(".mh_post_head_link").attr('href').split('/')[4];
 
