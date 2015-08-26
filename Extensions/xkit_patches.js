@@ -1696,6 +1696,8 @@ XKit.tools.dump_config = function(){
 					// Something is wrong.
 					m_return.error = true;
 
+					return;
+
 				} else if ($(".mh_post_head_link").length > 0) {
 
 					m_return.error = false;
