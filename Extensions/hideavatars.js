@@ -1,5 +1,5 @@
 //* TITLE Hide Avatars **//
-//* VERSION 0.1.2 **//
+//* VERSION 0.1.3 **//
 //* DESCRIPTION Hides avatars on a per-url basis **//
 //* DEVELOPER dlmarquis **//
 //* FRAME false **//
