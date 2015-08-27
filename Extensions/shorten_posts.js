@@ -120,7 +120,7 @@ XKit.extensions.shorten_posts = new Object({
 			if (XKit.extensions.shorten_posts.preferences.audio_too.value
 				&& $(this).hasClass("is_audio")) {
 				dont_return = true;
-				}
+			}
 			if (XKit.extensions.shorten_posts.preferences.links_too.value
 				&& $(this).hasClass("is_link")) {
 				dont_return = true;
