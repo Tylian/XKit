@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 4.0.4 **//
+//* VERSION 4.0.5 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER STUDIOXENIX **//
 
@@ -1664,7 +1664,7 @@ XKit.tools.dump_config = function(){
 				selection.each(function() {
 					// If can_edit is requested and we don't have an edit post control,
 					// don't push the post
-					if (can_edit && ($(this).find(".icon-trash").length === 0 || $(this).find(".post_control.edit").length === 0)) {
+					if (can_edit && $(this).find(".delete").length === 0) {
 						return;
 					}
 					posts.push($(this));
