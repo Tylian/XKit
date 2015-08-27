@@ -1,7 +1,7 @@
 //* TITLE Shorten Posts **//
-//* VERSION 0.2.1 **//
+//* VERSION 0.2.2 **//
 //* DESCRIPTION Makes scrolling easier **//
-//* DETAILS This extension shortens long posts, so if you are interested, you can just click on Show Full Post button to see it all, or scroll down if you are not interested. Useful for screens where long posts take a lot of space, and making it hard to scroll down.<br><br>By default, this extension only shortens text posts. You can toggle the setting to let it shorten the photo posts too. (This will 'cut off' long, vertical posts.) **//
+//* DETAILS This extension shortens long posts, so if you are interested, you can just click on Show Full Post button to see it all, or scroll down if you are not interested. Useful for screens where long posts take a lot of space, and making it hard to scroll down.<br><br>By default, this extension shortens text posts. You can toggle settings to choose which types of posts to shorten. (This will 'cut off' long, vertical posts.) **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//
 //* BETA false **//
@@ -21,10 +21,45 @@ XKit.extensions.shorten_posts = new Object({
 			text: "When to shorten posts",
 			type: "separator"
 		},
-		only_text: {
-			text: "Only check and shorten text posts. (Turn off if you want to shorten photos too)",
+		text_too: {
+			text: "Check and shorten text posts",
 			default: true,
 			value: true
+		},
+		photos_too: {
+			text: "Check and shorten photo posts and photosets",
+			default: false,
+			value: false
+		},
+		audio_too: {
+			text: "Check and shorten audio posts",
+			default: false,
+			value: false
+		},
+		asks_too: {
+			text: "Check and shorten replies to asks",
+			default: false,
+			value: false
+		},
+		videos_too: {
+			text: "Check and shorten video posts",
+			default: false,
+			value: false
+		},
+		chat_too: {
+			text: "Check and shorten chat posts",
+			default: false,
+			value: false
+		},
+		links_too: {
+			text: "Check and shorten link posts",
+			default: false,
+			value: false
+		},
+		quotes_too: {
+			text: "Check and shorten quote posts",
+			default: false,
+			value: false
 		},
 		height: {
 			text: "Maximum post height (<a id=\"xkit-shorten-posts-height-help\" href=\"#\" onclick=\"return false\">what is this?</a>)",
@@ -73,16 +108,42 @@ XKit.extensions.shorten_posts = new Object({
 
 			if ($(this).hasClass("xblacklist_blacklisted_post")) { return; }
 
-			if (XKit.extensions.shorten_posts.preferences.only_text.value === true) {
-				if ($(this).hasClass("is_regular") === false) {
-					return;
-				}
-			} else {
-				if ($(this).hasClass("is_regular") === false && $(this).hasClass("is_photo") === false
-					&& $(this).hasClass("is_photoset") === false && $(this).hasClass("is_link") === false
-					&& $(this).hasClass("is_quote") === false && $(this).hasClass("is_conversation") === false) {
-					return;
-				}
+			var dont_return = false;
+			if (XKit.extensions.shorten_posts.preferences.text_too.value
+				&& $(this).hasClass("is_regular")) {
+				dont_return = true;
+			}
+			if (XKit.extensions.shorten_posts.preferences.photos_too.value
+				&& ($(this).hasClass("is_photo") || $(this).hasClass("is_photoset"))) {
+				dont_return = true;
+			}
+			if (XKit.extensions.shorten_posts.preferences.audio_too.value
+				&& $(this).hasClass("is_audio")) {
+				dont_return = true;
+			}
+			if (XKit.extensions.shorten_posts.preferences.links_too.value
+				&& $(this).hasClass("is_link")) {
+				dont_return = true;
+			}
+			if (XKit.extensions.shorten_posts.preferences.chat_too.value
+				&& $(this).hasClass("is_conversation")) {
+				dont_return = true;
+			}
+			if (XKit.extensions.shorten_posts.preferences.quotes_too.value
+				&& $(this).hasClass("is_quote")) {
+				dont_return = true;
+			}
+			if (XKit.extensions.shorten_posts.preferences.asks_too.value
+				&& $(this).hasClass("is_note")) {
+				dont_return = true;
+			}
+			if (XKit.extensions.shorten_posts.preferences.videos_too.value
+				&& $(this).hasClass("is_video")) {
+				dont_return = true;
+			}
+
+			if (!dont_return) {
+				return;
 			}
 
 			if (m_height >= XKit.extensions.shorten_posts.preferences.height.value) {
