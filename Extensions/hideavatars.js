@@ -1,5 +1,5 @@
 //* TITLE Hide Avatars **//
-//* VERSION 0.1.3 **//
+//* VERSION 0.1.4 **//
 //* DESCRIPTION Hides avatars on a per-url basis **//
 //* DEVELOPER dlmarquis **//
 //* FRAME false **//
@@ -33,10 +33,8 @@ XKit.extensions.hideavatars = new Object({
 				$(".post_avatar_link").filter(function() {
 					return $(this).attr("href").slice(7).split(".")[0] === blogname.title;
 				}).attr("style", "opacity: 0.5; background-image: url('"+hidden_avatar+"');");
-			});
 
 			//Avatars in notifications
-			XKit.extensions.hideavatars.blognames.forEach(function (blogname) {
 				$(".notification a").filter(function() {
 					return $(this).attr("href").slice(7).split(".")[0] === blogname.title;
 				}).find(".avatar").attr("src", hidden_avatar).attr("style", "opacity: 0.5");
@@ -48,9 +46,7 @@ XKit.extensions.hideavatars = new Object({
 				$(".post_avatar_link").filter(function() {
 					return $(this).attr("href").slice(7).split(".")[0] === blogname.title;
 				}).find(".post_avatar_image").attr("src", hidden_avatar);
-			});
 
-			XKit.extensions.hideavatars.blognames.forEach(function (blogname) {
 				$(".post_avatar_link").filter(function() {
 					return $(this).attr("href").slice(7).split(".")[0] === blogname.title;
 				}).attr("style", "opacity: 0.5; background-image: url('"+hidden_avatar+"');");
@@ -63,10 +59,8 @@ XKit.extensions.hideavatars = new Object({
 				$(".ui_jumbo_avatar").filter(function() {
 					return $(this).attr("title") === blogname.title;
 				}).attr("style", "opacity: 0.5; background-image: url('"+hidden_avatar+"');");
-			});
 
 			//Avatars in activity lines
-			XKit.extensions.hideavatars.blognames.forEach(function (blogname) {
 				$(".ui_avatar_link").filter(function() {
 					return $(this).attr("title") === blogname.title;
 				}).find(".avatar").attr("style", "opacity: 0.5; background-image: url('"+hidden_avatar+"');");
