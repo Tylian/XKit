@@ -1,5 +1,5 @@
 //* TITLE Mass+ **//
-//* VERSION 0.4 REV A **//
+//* VERSION 0.4.2 **//
 //* DESCRIPTION Enhancements for the Mass Editor **//
 //* DETAILS This extension allows you to select multiple posts by once, by type or month. It also comes with visual enhancements for the mass post editor, such as selected post count and more! **//
 //* DEVELOPER STUDIOXENIX **//
@@ -228,59 +228,44 @@ XKit.extensions.mass_plus = new Object({
 			last_timestamp = last_timestamp.substring(0, last_timestamp.indexOf(" "));
 		}
 
-		var m_search_url = document.location.href.substring(document.location.href.indexOf('mega-editor/') + 12);
-		if (m_search_url.indexOf("/") !== -1) { m_search_url = m_search_url.substring(0, m_search_url.indexOf("/")); }
-		if (m_search_url.indexOf("?") !== -1) { m_search_url = m_search_url.substring(0, m_search_url.indexOf("?")); }
-		if (m_search_url.indexOf("#") !== -1) { m_search_url = m_search_url.substring(0, m_search_url.indexOf("#")); }
-
-		this.search_url = "http://" + m_search_url + ".tumblr.com/archive";
+		var blog_shortname = document.location.href.substring(document.location.href.indexOf('mega-editor/') + 12);
+		if (blog_shortname .indexOf("/") !== -1) { blog_shortname = blog_shortname.substring(0, blog_shortname.indexOf("/")); }
+		if (blog_shortname .indexOf("?") !== -1) { blog_shortname = blog_shortname.substring(0, blog_shortname.indexOf("?")); }
+		if (blog_shortname .indexOf("#") !== -1) { blog_shortname = blog_shortname.substring(0, blog_shortname.indexOf("#")); }
 
 		this.search_found_count = 0;
 		this.search_last_timestamp = last_timestamp;
 		this.search_page = 0;
 		this.search_found_posts = [];
+		this.search_url = "http://api.tumblr.com/v2/blog/" + blog_shortname + ".tumblr.com/posts?api_key=" + XKit.api_key + "&tag=" + tag.toLowerCase();
 		this.search_next_page(tag.toLowerCase());
 
 	},
-
 	search_next_page: function(tag) {
-
-		var m_url = this.search_url + "?before_time=" + this.search_last_timestamp;
-		XKit.console.add("Fetching " + m_url);
+		var search_url = this.search_url + "&offset=" + (this.search_page * 20);
+		XKit.console.add("Fetching " + search_url);
 		GM_xmlhttpRequest({
 			method: "GET",
-			url: m_url,
+			url: search_url,
 			onerror: function(response) {
 				XKit.window.show("Can't fetch archive.","Could not fetch required pages to complete your request. Please try again later.","error","<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
 			},
 			onload: function(response) {
-				$(".post", response.responseText).each(function() {
-					var m_tags = $(this).find(".tags").html();
-					if (typeof m_tags !== "undefined") {
-						m_tags = $.trim(m_tags);
-						var r_tags = m_tags.split("#");
-
-						for (var i=0;i<r_tags.length;i++) {
-
-							if (r_tags[i] === "") { continue; }
-
-							var mr_tag = r_tags[i].substring(0, r_tags[i].length - 1);
-							if (mr_tag.toLowerCase() === tag || r_tags[i].toLowerCase() === tag.toLowerCase()) {
-								var m_id = $(this).attr('data-post-id');
-								XKit.extensions.mass_plus.search_found_posts.push(m_id);
-								XKit.extensions.mass_plus.search_found_count++;
-							}
-						}
-					}
-				});
+								var response_object = JSON.parse(response.response);
+								var posts_array = response_object.response.posts;
+								if (!posts_array || posts_array.length == 0) {
+					XKit.extensions.mass_plus.search_results(tag);
+										return;
+								}
+								posts_array.forEach(function(post) {
+								 XKit.extensions.mass_plus.search_found_posts.push(post.id);
+					 XKit.extensions.mass_plus.search_found_count++;
+								});
 				if (XKit.extensions.mass_plus.search_found_count < 100 && XKit.extensions.mass_plus.search_page <= 5) {
-					var next_link = $("#next_page_link", response.responseText).attr('href');
-					if (typeof next_link === "undefined") {
+					if (posts_array.length < 20) {
 						XKit.extensions.mass_plus.search_results(tag);
 						return;
 					}
-					next_link = next_link.substring(next_link.indexOf('?before_time=') + 13);
-					XKit.extensions.mass_plus.search_last_timestamp = next_link;
 					XKit.extensions.mass_plus.search_page++;
 					XKit.extensions.mass_plus.search_next_page(tag);
 				} else {
@@ -288,9 +273,7 @@ XKit.extensions.mass_plus = new Object({
 				}
 			}
 		});
-
 	},
-
 	search_results: function(tag) {
 
 		if (this.search_found_count === 0) {
