@@ -17,3 +17,9 @@ First Travis-CI testing immediately begins running once the PR is born. This run
 The next step is for one of the project admins to review the code. If necessary, the reviewer will ask you to make changes to your code.
 
 Finally, the reviewer will comment "@homu r+", triggering the merge of your code. Thank you for contributing to XKit!
+
+## Useful resources
+
+* [Writing on GitHub](https://help.github.com/articles/writing-on-github/)
+* [GitHub Flavoured Markdown](https://help.github.com/articles/github-flavored-markdown/)
+* [Closing Issues via Commit Messages](https://help.github.com/articles/closing-issues-via-commit-messages/)
