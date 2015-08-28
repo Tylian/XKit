@@ -12,3 +12,6 @@ Extensions/dist/page/gallery.json
 Extensions/dist/page/list.json
 
 *.swp
+
+*.iml
+.idea/
