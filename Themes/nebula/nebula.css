@@ -7,7 +7,7 @@ body,
 .send_fan_mail,
 .chrome.blue,
 .chrome.clear {
-    background: url('http://farm8.staticflickr.com/7390/8718908101_4cd0e29183_o.jpg') no-repeat top left fixed;
+    background: url('https://new-xkit.github.io/XKit/Themes/nebula/body-background.jpg') no-repeat top left fixed;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
@@ -52,7 +52,7 @@ body,
 .split .chrome.blue[disabled]:active,
 .split .chrome.blue.ui_disabled,
 .split .chrome.blue.ui_disabled:active {
-    background: url('http://farm8.staticflickr.com/7390/8718908101_4cd0e29183_o.jpg') no-repeat top left fixed;
+    background: url('https://new-xkit.github.io/XKit/Themes/nebula/body-background.jpg') no-repeat top left fixed;
     border: 1px rgba(255, 255, 255, 0.4);
 }
 
@@ -88,7 +88,7 @@ body,
 }
 
 .xim_message_title {
-    background: url('http://farm8.staticflickr.com/7390/8718908101_4cd0e29183_o.jpg') no-repeat top left fixed;
+    background: url('https://new-xkit.github.io/XKit/Themes/nebula/body-background.jpg') no-repeat top left fixed;
     -webkit-border-radius: 0;
     -moz-border-radius: 0;
     border-radius: 0;
