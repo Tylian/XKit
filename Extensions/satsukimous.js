@@ -24,12 +24,12 @@ XKit.extensions.satsukimous = new Object({
 				"Satsuki Kiryūin", "https://31.media.tumblr.com/avatar_0bc380bccba7_128.png",
 				"Ryūko Matoi", "http://38.media.tumblr.com/avatar_2e71003ae267_128.png",
 				"Mako Mankanshoku", "https://33.media.tumblr.com/avatar_759f9349bfc2_128.png",
-				"Anyonymous", "https://secure.assets.tumblr.com/images/anonymous_avatar_128.gif",
+				"Anonymous", "https://secure.assets.tumblr.com/images/anonymous_avatar_128.gif",
 				"Custom Image", "custom",
 			],
 		},
 		"custom_replacement": {
-			text: "Custom Replacement",
+			text: "Custom Image URL",
 			type: "text",
 			default: "",
 			value: ""
