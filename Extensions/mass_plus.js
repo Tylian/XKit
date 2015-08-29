@@ -189,7 +189,7 @@ XKit.extensions.mass_plus = new Object({
 			onload: function(response) {
 				var response_object = JSON.parse(response.response);
 				var posts_array = response_object.response.posts;
-				if (!posts_array || posts_array.length == 0) {
+				if (!posts_array || posts_array.length === 0) {
 					XKit.extensions.mass_plus.search_results(tag);
 					return;
 				}
