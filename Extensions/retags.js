@@ -1,6 +1,6 @@
 //* TITLE       Retags **//
-//* DEVELOPER   alexhong **//
-//* VERSION     0.7.0 **//
+//* DEVELOPER   new-xkit **//
+//* VERSION     1.0.0 **//
 //* DESCRIPTION Adds tags to reblog notes **//
 //* FRAME       false **//
 //* SLOW        false **//
