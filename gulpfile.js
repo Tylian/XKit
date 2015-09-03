@@ -1,5 +1,4 @@
-/* global require */
-/* jshint node:true */
+/* jshint node: true, strict: global */
 'use strict';
 
 var cache = require('gulp-cached'),
