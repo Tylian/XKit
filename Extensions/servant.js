@@ -1,8 +1,8 @@
 //* TITLE Servant **//
-//* VERSION 0.5.7 **//
+//* VERSION 0.5.8 **//
 //* DESCRIPTION XKit Personal Assistant **//
 //* DETAILS Automator for XKit: lets you create little Servants that does tasks for you when the conditions you've set are met. **//
-//* DEVELOPER STUDIOXENIX **//
+//* DEVELOPER new-xkit **//
 //* FRAME false **//
 //* SLOW true **//
 //* BETA false **//
