@@ -1675,6 +1675,7 @@ XKit.extensions.servant = new Object({
 		m_html = m_html + "<option value=\"photo\">Photo / Photoset</option>";
 		m_html = m_html + "<option value=\"quote\">Quote</option>";
 		m_html = m_html + "<option value=\"link\">Link</option>";
+		m_html = m_html + "<option value=\"chat\">Chat</option>";
 		m_html = m_html + "<option value=\"audio\">Audio</option>";
 		m_html = m_html + "<option value=\"video\">Video</option>";
 
