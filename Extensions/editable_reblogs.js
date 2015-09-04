@@ -49,7 +49,7 @@ XKit.extensions.editable_reblogs = new Object({
 		all_quotes.forEach(function(data, index, all) {
 			var reblog_content = data.reblog_content.replace("tmblr-truncated read_more_container", "");
 			//don't wrap if the previous user didn't add a comment
-			if (reblog_content.indexOf("</blockquote>", reblog_content.length - 13) !== -1 || reblog_content.length == 0) {
+			if (reblog_content.indexOf("</blockquote>", reblog_content.length - 13) !== -1 || reblog_content.length === 0) {
 				all_quotes_text = reblog_content;
 			} else {
 				all_quotes_text = "<p><a class='tumblr_blog' href='" + data.reblog_url + "'>" + data.reblog_author + "</a>:</p><blockquote>" + all_quotes_text + reblog_content + "</blockquote>";
