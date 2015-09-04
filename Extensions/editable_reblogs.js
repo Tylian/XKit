@@ -13,7 +13,7 @@ XKit.extensions.editable_reblogs = new Object({
 		this.running = true;
 
 		XKit.interface.post_window_listener.add("editable_reblogs", XKit.extensions.editable_reblogs.post_window);
-		XKit.tools.add_css(".control-reblog-tree {display: none; } .post-form--header .reblog-title {margin: 10px;} .", "editable_reblogs_remove_content_tree");
+		XKit.tools.add_css(".control-reblog-tree {display: none; } .post-form--header .reblog-title {margin: 10px; color: #444} ", "editable_reblogs_remove_content_tree");
 	},
 
 	post_window: function() {
