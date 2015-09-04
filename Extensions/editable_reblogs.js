@@ -1,5 +1,5 @@
 //* TITLE Editable Reblogs **//
-//* VERSION 2.0.1 **//
+//* VERSION 2.0.2 **//
 //* DESCRIPTION	Restores ability to edit previous reblogs of a post **//
 //* DEVELOPER new-xkit **//
 //* FRAME false **//
@@ -13,7 +13,7 @@ XKit.extensions.editable_reblogs = new Object({
 		this.running = true;
 
 		XKit.interface.post_window_listener.add("editable_reblogs", XKit.extensions.editable_reblogs.post_window);
-		XKit.tools.add_css(".control-reblog-tree {display: none; }", "editable_reblogs_remove_content_tree");
+		XKit.tools.add_css(".control-reblog-tree {display: none; } .post-form--header .reblog-title {margin: 10px; color: #444} ", "editable_reblogs_remove_content_tree");
 	},
 
 	post_window: function() {
@@ -35,21 +35,24 @@ XKit.extensions.editable_reblogs = new Object({
 		}
 		reblog_tree.addClass(processed_class);
 
+		var title = reblog_tree.find('.reblog-title');
+		$('.post-form--header').append(title);
 		reblog_tree.find( ".reblog-list-item" ).each(function( index ) {
 			var reblog_data = {
-				reblog_content: $(this).find('.reblog-content').html(),
-				reblog_author: $(this).find('.reblog-tumblelog-name').text(),
-				reblog_url: $(this).find('.reblog-tumblelog-name').attr('href')
+				reblog_content: $(this).find('.reblog-content').html() ? $(this).find('.reblog-content').html() : '',
+				reblog_author: $(this).find('.reblog-tumblelog-name').text() ? $(this).find('.reblog-tumblelog-name').text() : '',
+				reblog_url: $(this).find('.reblog-tumblelog-name').attr('href') ? $(this).find('.reblog-tumblelog-name').attr('href') : ''
 			};
 			all_quotes.push(reblog_data);
 		});
 		var all_quotes_text = "";
 		all_quotes.forEach(function(data, index, all) {
+			var reblog_content = data.reblog_content.replace("tmblr-truncated read_more_container", "");
 			//don't wrap if the previous user didn't add a comment
-			if (data.reblog_content.indexOf("</blockquote>", data.reblog_content.length - 13) !== -1) {
-				all_quotes_text = data.reblog_content;
+			if (reblog_content.indexOf("</blockquote>", reblog_content.length - 13) !== -1 || reblog_content.length === 0) {
+				all_quotes_text = reblog_content;
 			} else {
-				all_quotes_text = "<p><a class='tumblr_blog' href='" + data.reblog_url + "'>" + data.reblog_author + "</a>:</p><blockquote>" + all_quotes_text + data.reblog_content + "</blockquote>";
+				all_quotes_text = "<p><a class='tumblr_blog' href='" + data.reblog_url + "'>" + data.reblog_author + "</a>:</p><blockquote>" + all_quotes_text + reblog_content + "</blockquote>";
 			}		
 		});
 		var old_content = XKit.interface.post_window.get_content_html();
