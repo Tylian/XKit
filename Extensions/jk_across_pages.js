@@ -50,7 +50,6 @@ XKit.extensions.jk_across_pages = new Object({
 	},
 
 	run: function() {
-		//this.registerJQueryPlugins();
 		this.$posts = jQuery('.post_container').not('#new_post_buttons');
 
 		XKit.tools.init_css("jk_across_pages");
@@ -101,12 +100,6 @@ XKit.extensions.jk_across_pages = new Object({
 					return; // Don't try to go to the next page
 				}
 
-				/* console.log('key code', evt.which,
-					'bottom scroll', that.$posts.last().offset().top - window.scrollY,
-					'(threshold', that.scrollBufferJ, ')',
-					'top scroll', that.$posts.first().offset().top + that.$posts.first().height() - window.scrollY,
-					'(threshold', that.scrollBufferK, ')'); */
-
 				if (evt.which === 74 /* j */ && jQuery(window).scrollTop() + jQuery(window).height() === jQuery(document).height()) {
 					if (jQuery('#next_page_link').length > 0) {
 						if (that.preferences.show_notifications.value === true) XKit.notifications.add("Moving to next page", "ok");
@@ -129,9 +122,6 @@ XKit.extensions.jk_across_pages = new Object({
 
 	postAtY: function(y) {
 		var x = jQuery('#posts').offset().left + 1;
-
-		/* console.log("postAtY parameter:", y, "element", document.elementFromPoint(x, y)); */
-
 		return jQuery(document.elementFromPoint(x, y)).closest('.post_container');
 	},
 
