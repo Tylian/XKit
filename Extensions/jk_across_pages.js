@@ -75,7 +75,7 @@ XKit.extensions.jk_across_pages = new Object({
 		jQuery(document.body).bind('keydown.xkit_jk_across_pages', function(evt) {
 			if (!evt.shiftKey && !evt.ctrlKey && !evt.altKey && !evt.metaKey) {
 				// If the key wasn't J or K, we have nothing to do here.
-				if (evt.which === 74 /* j */ && evt.which === 75 /* k */) return;
+				if (evt.which !== 74 /* j */ && evt.which !== 75 /* k */) return;
 
 				// If the new post field has focus, do nothing.
 				if (jQuery('.scrollverlay.active').length !== 0) return;
