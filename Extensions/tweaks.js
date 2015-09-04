@@ -395,7 +395,7 @@ XKit.extensions.tweaks = new Object({
 		}
 
 		if (XKit.extensions.tweaks.preferences.classic_post_titles.value) {
-			XKit.extensions.tweaks.add_css(".post-typography-update .post.is_conversation .post_content .post_title, .post-typography-update .post.is_regular .post_content .post_title, .post-typography-update .post .post-content .title-field * { font-family: \"Helvetica Neue\", Helvetica, sans-serif !important; font-size: 22px !important; font-weight: bold !important; line-height: normal !important; min-height: 25px !important; } .post_title { font-size: 22px !important; line-height: normal !important; font-weight: bold !important; font-family: \"Helvetica Neue\", Helvetica, sans-serif !important; }", "xkit_tweaks_classic_post_titles");
+			XKit.extensions.tweaks.add_css(".post-typography-update .post.is_conversation .post_content .post_title, .post-typography-update .post.is_regular .post_content .post_title, .post-typography-update .post .post-content .title-field *, .reblog-title { font-family: \"Helvetica Neue\", Helvetica, sans-serif !important; font-size: 22px !important; font-weight: bold !important; line-height: normal !important; min-height: 25px !important; } .post_title { font-size: 22px !important; line-height: normal !important; font-weight: bold !important; font-family: \"Helvetica Neue\", Helvetica, sans-serif !important; }", "xkit_tweaks_classic_post_titles");
 			XKit.extensions.tweaks.add_css(".post .post_content h2 { font-size: 15px !important; line-height: normal !important; font-weight: bold !important; font-family: \"Helvetica Neue\", Helvetica, sans-serif !important; }", "xkit_tweaks_classic_post_titles");
 		}
 
@@ -798,4 +798,3 @@ XKit.extensions.tweaks = new Object({
 	}
 
 });
-
