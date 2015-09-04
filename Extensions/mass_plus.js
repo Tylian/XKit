@@ -7,6 +7,7 @@
 //* BETA false **//
 
 XKit.extensions.mass_plus = new Object({
+	api_page_length: 20,
 	running: false,
 	preferences: {
 		sep0: {
@@ -178,7 +179,7 @@ XKit.extensions.mass_plus = new Object({
 		this.search_next_page(tag.toLowerCase());
 	},
 	search_next_page: function(tag) {
-		var search_url = this.search_url + "&offset=" + (this.search_page * 20);
+		var search_url = this.search_url + "&offset=" + (this.search_page * this.api_page_length);
 		XKit.console.add("Fetching " + search_url);
 		GM_xmlhttpRequest({
 			method: "GET",
@@ -198,7 +199,7 @@ XKit.extensions.mass_plus = new Object({
 					XKit.extensions.mass_plus.search_found_count++;
 				});
 				if (XKit.extensions.mass_plus.search_found_count < 100 && XKit.extensions.mass_plus.search_page <= 5) {
-					if (posts_array.length < 20) {
+					if (posts_array.length < XKit.extensions.mass_plus.api_page_length) {
 						XKit.extensions.mass_plus.search_results(tag);
 						return;
 					}
