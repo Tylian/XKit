@@ -1,5 +1,5 @@
 //* TITLE J/K Across Pages **//
-//* VERSION 1.1.2 **//
+//* VERSION 1.1.3 **//
 //* DESCRIPTION Allow Tumblr's J/K navigation to move between pages **//
 //* DEVELOPER beiju **//
 //* FRAME false **//
@@ -107,7 +107,7 @@ XKit.extensions.jk_across_pages = new Object({
 					'top scroll', that.$posts.first().offset().top + that.$posts.first().height() - window.scrollY,
 					'(threshold', that.scrollBufferK, ')'); */
 
-				if (evt.which === 74 /* j */ && that.$posts.last().offset().top - window.scrollY <= that.scrollBufferJ) {
+				if (evt.which === 74 /* j */ && jQuery(window).scrollTop() + jQuery(window).height() === jQuery(document).height()) {
 					if (jQuery('#next_page_link').length > 0) {
 						if (that.preferences.show_notifications.value === true) XKit.notifications.add("Moving to next page", "ok");
 						window.location = jQuery('#next_page_link').attr('href') + '#jk_across_pages_first';
