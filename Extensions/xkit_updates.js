@@ -1,7 +1,7 @@
 //* TITLE XKit Updates **//
-//* VERSION 1.2 REV B **//
+//* VERSION 1.3.0 **//
 //* DESCRIPTION Provides automatic updating of extensions **//
-//* DEVELOPER STUDIOXENIX **//
+//* DEVELOPER new-xkit **//
 XKit.extensions.xkit_updates = new Object({
 
 	running: false,
@@ -158,7 +158,7 @@ XKit.extensions.xkit_updates = new Object({
 					var check_this = false;
 					if (XKit.installed.check(mdata.extensions[extension].name) === true) {
 
-						if (mdata.extensions[extension].version !== XKit.installed.get(mdata.extensions[extension].name).version) {
+						if (XKit.extensions.xkit_updates.shouldUpdate(XKit.extensions.xkit_updates.parseVersion(XKit.installed.get(mdata.extensions[extension].name).version), XKit.extensions.xkit_updates.parseVersion(mdata.extensions[extension].version))) {
 							check_this = true;
 						}
 
@@ -468,6 +468,39 @@ XKit.extensions.xkit_updates = new Object({
 
 	},
 
+	shouldUpdate(versionCurrent, versionRemote) {
+		if (versionRemote.major > versionCurrent.major) {
+			return true;
+		}
+		if ((versionRemote.minor > versionCurrent.minor) && (versionRemote.major <= versionCurrent.major)) {
+			return true;
+		}
+		if ((versionRemote.patch > versionCurrent.patch) && (versionRemote.major <= versionCurrent.major) && (versionRemote.minor <= versionCurrent.minor)) {
+			return true;
+		}
+		return false;
+	},
+	
+	parseVersion(versionString) {
+		var version = {};
+		var versionSplit = versionString.split(".");
+		if (versionSplit.length < 3) {
+			var versionSplit2 = versionSplit[1].toLowerCase().split("rev");
+			version.major = parseInt(versionSplit[0]);
+			version.minor = parseInt(versionSplit2[0].trim());
+			if (typeof(versionSplit2[1]) === "undefined") {
+				version.patch = 0;
+			} else {
+				version.patch = versionSplit2[1].trim().charCodeAt(0) - "a".charCodeAt(0);
+			}
+		} else {
+			version.major = parseInt(versionSplit[0]);
+			version.minor = parseInt(versionSplit[1]);
+			version.patch = parseInt(versionSplit[2]);
+		}
+		return version;
+	},
+	
 	destroy: function() {
 		this.running = false;
 	}
