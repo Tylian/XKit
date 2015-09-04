@@ -468,7 +468,7 @@ XKit.extensions.xkit_updates = new Object({
 
 	},
 
-	shouldUpdate(versionCurrent, versionRemote) {
+	shouldUpdate: function(versionCurrent, versionRemote) {
 		if (versionRemote.major > versionCurrent.major) {
 			return true;
 		}
@@ -481,7 +481,7 @@ XKit.extensions.xkit_updates = new Object({
 		return false;
 	},
 	
-	parseVersion(versionString) {
+	parseVersion: function(versionString) {
 		var version = {};
 		var versionSplit = versionString.split(".");
 		if (versionSplit.length < 3) {
