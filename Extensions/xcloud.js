@@ -530,7 +530,6 @@ XKit.extensions.xcloud = new Object({
 
 					XKit.extensions.xcloud.change_panel_back();
 					XKit.window.show("Unable to restore", "<b>" + data.error_str + "</b> (code: " + data.error_code + ")" + err_desc, "error", "<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
-					return;
 
 				}
 			}
@@ -589,7 +588,12 @@ XKit.extensions.xcloud = new Object({
 
 			var extension_settings = {};
 			try {
-				extension_settings = JSON.parse(XKit.extensions.xcloud.base64_decode(mext.preferences));
+				//Check if the payloads is using utf8.
+				if(m_obj.use_utf8) {
+					extension_settings = JSON.parse(XKit.extensions.xcloud.b64_to_utf8(mext.preferences));
+				} else {
+					extension_settings = JSON.parse(XKit.extensions.xcloud.base64_decode(mext.preferences));
+				}
 			} catch(e) {
 				XKit.extensions.xcloud.errors_list.push("Unable to restore settings of " + extension_name);
 			}
@@ -717,12 +721,10 @@ XKit.extensions.xcloud = new Object({
 			var m_data;
 			//XCloud data was being pushed up with user's md5 hash which is kind of a security issue.  Let's not do that.
 			if (installed[i] === "xcloud"){
-				m_data = XKit.extensions.xcloud.base64_encode(JSON.stringify({}));
+				m_data = this.utf8_to_b64(JSON.stringify({}));
 			} else {
-				m_data = XKit.extensions.xcloud.base64_encode(JSON.stringify(XKit.storage.get_all(installed[i])));
+				m_data = this.utf8_to_b64(JSON.stringify(XKit.storage.get_all(installed[i])));
 			}
-
-			var m_extension = XKit.installed.get(installed[i]);
 
 			var m_to_add = {};
 			m_to_add.extension = installed[i];
@@ -743,10 +745,15 @@ XKit.extensions.xcloud = new Object({
 
 		to_send.identifier = "XCLOUD";
 
+		//Add this flag to the payload so we know we can unescape the payload.
+		to_send.use_utf8 = true;
+
 		console.log("Encoding upload object.");
 
 		to_send = JSON.stringify(to_send);
 		console.log("Original size = " + (to_send.length / 1024 / 1024) + " megabytes");
+
+		//We need to base64 encode it without utf8 support so it's compatible with the old payload.
 		to_send = "XCS" + XKit.extensions.xcloud.base64_encode(to_send) + "XCE";
 
 		if ((to_send.length / 1024 / 1024) >= 5) {
@@ -847,6 +854,7 @@ XKit.extensions.xcloud = new Object({
 
 		$(".xcloud-panel.current").animate({ left: "100%" }, 450 );
 
+
 		if ($("#xcloud-welcome-panel").hasClass("forced")) {
 			$("#xcloud-welcome-panel").css("left","-100%");
 			$("#xcloud-welcome-panel").removeClass("forced");
@@ -904,6 +912,15 @@ XKit.extensions.xcloud = new Object({
 	destroy: function() {
 		this.running = false;
 	},
+
+	utf8_to_b64: function(str) {
+		return this.base64_encode(encodeURI(str));
+	},
+
+	b64_to_utf8: function(str) {
+		return decodeURI(this.base64_decode(str));
+	},
+
 
 	md5: function(str) {
 
