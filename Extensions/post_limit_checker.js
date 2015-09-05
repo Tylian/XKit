@@ -2,7 +2,7 @@
 //* VERSION 0.3.0 **//
 //* DESCRIPTION Are you close to the limit? **//
 //* DETAILS Shows you how many posts you can reblog today. **//
-//* DEVELOPER STUDIOXENIX **//
+//* DEVELOPER new-xkit **//
 //* FRAME false **//
 //* BETA false **//
 
