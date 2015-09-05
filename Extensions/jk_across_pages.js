@@ -85,9 +85,11 @@ XKit.extensions.jk_across_pages = new Object({
 				if (jQuery('input:focus').length !== 0) return;
 
 				that.$posts = jQuery('.post_container').not('#new_post_buttons');
+				var at_bottom_of_screen = jQuery(window).scrollTop() + jQuery(window).height() === jQuery(document).height();
 
 				if (that.preferences.view_entire_posts.value && evt.which === 74 /* j */ &&
-					that.postAtY(that.scrollBufferJ+1)[0] == that.postAtY(window.innerHeight - that.scrollBufferJ)[0]){
+					that.postAtY(that.scrollBufferJ+1)[0] == that.postAtY(window.innerHeight - that.scrollBufferJ)[0] &&
+					!at_bottom_of_screen){
 
 					evt.stopPropagation(); // Try to stop Tumblr's event listener
 
@@ -100,7 +102,7 @@ XKit.extensions.jk_across_pages = new Object({
 					return; // Don't try to go to the next page
 				}
 
-				if (evt.which === 74 /* j */ && jQuery(window).scrollTop() + jQuery(window).height() === jQuery(document).height()) {
+				if (evt.which === 74 /* j */ && at_bottom_of_screen) {
 					if (jQuery('#next_page_link').length > 0) {
 						if (that.preferences.show_notifications.value === true) XKit.notifications.add("Moving to next page", "ok");
 						window.location = jQuery('#next_page_link').attr('href') + '#jk_across_pages_first';
