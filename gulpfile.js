@@ -153,16 +153,23 @@ gulp.task('build:chrome', ['compress:chrome']);
 
 gulp.task('build:firefox', ['compress:firefox']);
 
-gulp.task('build:extensions', ['lint:scripts', 'clean:extensions'], function(callback) {
-	var extBuilder = require('./Extensions/dist/extensions.js');
-	extBuilder.build('./Extensions', './Extensions/dist');
-	callback();
+gulp.task('build:extensions', ['lint:scripts', 'clean:extensions'], function() {
+	var extensionBuilder = require('./dev/builders/extension');
+	return gulp.src(paths.scripts.extensions)
+		.pipe(extensionBuilder())
+		.pipe(gulp.dest('Extensions/dist'))
+		.pipe(extensionBuilder.galleryBuilder('gallery.json'))
+		.pipe(gulp.dest('Extensions/dist/page'))
+		.pipe(extensionBuilder.listBuilder('list.json'))
+		.pipe(gulp.dest('Extensions/dist/page'));
 });
 
 gulp.task('build:themes', ['clean:themes'], function(cb) {
-	var themeBuilder = require('./Extensions/dist/themes.js');
-	themeBuilder.build('./Themes', './Extensions/dist');
-	cb();
+	var themeBuilder = require('./dev/builders/theme');
+	return gulp.src(paths.css.themes)
+		.pipe(themeBuilder())
+		.pipe(themeBuilder.galleryBuilder('themes.json'))
+		.pipe(gulp.dest('Extensions/dist/page'));
 });
 
 gulp.task('build', ['build:chrome', 'build:firefox']);
