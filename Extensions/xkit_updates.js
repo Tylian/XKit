@@ -472,10 +472,10 @@ XKit.extensions.xkit_updates = new Object({
 		if (versionRemote.major > versionCurrent.major) {
 			return true;
 		}
-		if ((versionRemote.minor > versionCurrent.minor) && (versionRemote.major <= versionCurrent.major)) {
+		if ((versionRemote.minor > versionCurrent.minor) && (versionRemote.major >= versionCurrent.major)) {
 			return true;
 		}
-		if ((versionRemote.patch > versionCurrent.patch) && (versionRemote.major <= versionCurrent.major) && (versionRemote.minor <= versionCurrent.minor)) {
+		if ((versionRemote.patch > versionCurrent.patch) && (versionRemote.major >= versionCurrent.major) && (versionRemote.minor >= versionCurrent.minor)) {
 			return true;
 		}
 		return false;
