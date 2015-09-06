@@ -12,6 +12,7 @@ XKit.extensions.people_notifier = new Object({
 	apiKey: "fuiKNFp9vQFvjLNvx4sUwti4Yb5yGutBN4Xh10LXZhhRKjWlV4",
 
 	blogs: [],
+	searchable_blogs: {},
 
 	preferences: {
 
@@ -74,6 +75,11 @@ XKit.extensions.people_notifier = new Object({
 		}
 
 		this.blogs = blogs_obj;
+
+		this.searchable_blogs = {};
+		for (var i = 0; i<blogs_obj.length; i++) {
+			this.searchable_blogs[blogs_obj[i].url] = blogs_obj[i];
+		}
 
 		console.log(this.blogs);
 
@@ -366,7 +372,6 @@ XKit.extensions.people_notifier = new Object({
 		$(document).on("dragstart", ".xkit-people-notifier-person", function(e){
 			dragging = $(this);
 			e.originalEvent.dataTransfer.dropEffect = "move";
-			console.log("dragstart");
 		});
 		$(document).on("drag", ".xkit-people-notifier-person", function(e){
 			mouseY = e.originalEvent.pageY;
@@ -380,14 +385,19 @@ XKit.extensions.people_notifier = new Object({
 		});
 		$(document).on("drop", ".xkit-people-notifier-person", function(e){
 			if (dragtarget[0] !== dragging[0]) {
+				var target_index = XKit.extensions.people_notifier.blogs.indexOf(XKit.extensions.people_notifier.searchable_blogs[$(dragtarget).attr('data-url')]);
+				var dragging_obj = XKit.extensions.people_notifier.searchable_blogs[$(dragging).attr('data-url')];
+				var dragging_index = XKit.extensions.people_notifier.blogs.indexOf(dragging_obj);
 				dragging.detach();
 				if ((mouseY - dragtarget.offset().top) >= 12) {
 					dragtarget.after(dragging);
 				} else {
 					dragtarget.before(dragging);
+					target_index--;
 				}
-			} else {
-
+				XKit.extensions.people_notifier.blogs.splice(dragging_index, 1);
+				XKit.extensions.people_notifier.blogs.splice(target_index, 0, dragging_obj);
+				XKit.extensions.people_notifier.save();
 			}
 			dragtarget = null;
 			dragging = null;
