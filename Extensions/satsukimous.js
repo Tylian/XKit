@@ -1,5 +1,5 @@
 //* TITLE Satsukimous **//
-//* VERSION 1.1.0 **//
+//* VERSION 1.1.1 **//
 //* DESCRIPTION Turns anon icons into Satsuki, Ryuko, Mako or a custom image **//
 //* DEVELOPER new-xkit **//
 //* DETAILS This extension is a prime example of what happens when you let JavaScript developers stay up past midnight.**//
@@ -15,7 +15,7 @@ XKit.extensions.satsukimous = new Object({
 			text: "Icon Replacement",
 			type: "separator"
 		},
-		replacement: {
+		"replacement": {
 			text: "Replacement Avatar",
 			default: "https://31.media.tumblr.com/avatar_0bc380bccba7_128.png",
 			value: "https://31.media.tumblr.com/avatar_0bc380bccba7_128.png",
@@ -35,6 +35,21 @@ XKit.extensions.satsukimous = new Object({
 			value: ""
 		},
 		"sep-1": {
+			text: "Name Replacement",
+			type: "separator"
+		},
+		"replace_name": {
+			text: "Replace Name",
+			default: true,
+			value: true
+		},
+		"name_replacement": {
+			text: "Replacement Name",
+			type: "text",
+			default: "satsuki",
+			value: "satsuki"
+		},
+		"sep-2": {
 			text: "Other Options",
 			type: "separator"
 		},
@@ -52,7 +67,7 @@ XKit.extensions.satsukimous = new Object({
 		}
 		$( "img" ).filter(function( index ) {
 			return $( this ).attr( "src" ).indexOf( "anonymous_avatar" ) !== -1;
-		}).attr( "src", replacement ).addClass("satsukimous_src matoiRYUKOOOOoO");
+		}).attr( "src", replacement ).addClass("satsukimous_src matoiRYUKOOOOoO").parent().parent().find(".asker > .name").text(XKit.extensions.satsukimous.preferences.replace_name.value ? XKit.extensions.satsukimous.preferences.name_replacement.value : "anonymous");
 		$( "div.post_avatar_link" ).filter(function( index ) {
 			return $( this ).attr( "style" ).indexOf( "anonymous_avatar" ) !== -1;
 		}).attr( "style", "background-image: url('" + replacement + "');" ).addClass("satsukimous_style matoiRYUKOOOOoO");
@@ -75,7 +90,7 @@ XKit.extensions.satsukimous = new Object({
 	destroy: function() {
 		this.running = false;
 		$("#matoi-sound").remove();
-		$(".satsukimous_src").attr("src", "https://secure.assets.tumblr.com/images/anonymous_avatar_128.gif").removeClass("satsukimous_src matoiRYUKOOOOoO");
+		$(".satsukimous_src").attr("src", "https://secure.assets.tumblr.com/images/anonymous_avatar_128.gif").removeClass("satsukimous_src matoiRYUKOOOOoO").parent().parent().find(".asker > .name").text("anonymous");
 		$(".satsukimous_style").attr("style", "background-image: url('https://secure.assets.tumblr.com/images/anonymous_avatar_128.gif');").removeClass("satsukimous_style matoiRYUKOOOOoO");
 		XKit.post_listener.remove( "SATSUKI" );
 	}
