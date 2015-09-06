@@ -364,7 +364,8 @@ XKit.extensions.xcloud = new Object({
 			if(XKit.extensions.xcloud.useoldserver){
 				authorizationRequest.url += "?username=" + m_username + "&password=" + m_password;
 			} else {
-				authorizationRequest.headers = {"Authorization": "Basic " + btoa(m_username + ":" + m_password) };
+				authorizationRequest.headers = {"Authorization": "Basic " + btoa(m_username + ":" + m_password), "Content-Type": "application/json" };
+				authorizationRequest.json = true;
 			}
 
 			GM_xmlhttpRequest(authorizationRequest);
@@ -538,7 +539,8 @@ XKit.extensions.xcloud = new Object({
 		if(XKit.extensions.xcloud.useoldserver){
 			fetchRequest.url += "?username=" + m_username + "&password=" + m_password;
 		} else {
-			fetchRequest.headers = {"Authorization": "Basic " + btoa(m_username + ":" + m_password) };
+			fetchRequest.headers = {"Authorization": "Basic " + btoa(m_username + ":" + m_password), "Content-Type": "application/json" };
+			fetchRequest.json = true;
 		}
 
 
