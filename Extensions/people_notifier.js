@@ -369,6 +369,7 @@ XKit.extensions.people_notifier = new Object({
 		var dragging;
 		var dragtarget;
 		var mouseY;
+		var half_div_height = 13;
 		$(document).on("dragstart", ".xkit-people-notifier-person", function(e){
 			dragging = $(this);
 			e.originalEvent.dataTransfer.dropEffect = "move";
@@ -388,8 +389,9 @@ XKit.extensions.people_notifier = new Object({
 				var target_index = XKit.extensions.people_notifier.blogs.indexOf(XKit.extensions.people_notifier.searchable_blogs[$(dragtarget).attr('data-url')]);
 				var dragging_obj = XKit.extensions.people_notifier.searchable_blogs[$(dragging).attr('data-url')];
 				var dragging_index = XKit.extensions.people_notifier.blogs.indexOf(dragging_obj);
+				var top_of_target = dragtarget.offset().top;
 				dragging.detach();
-				if ((mouseY - dragtarget.offset().top) >= 12) {
+				if ((mouseY - top_of_target) > half_div_height) {
 					dragtarget.after(dragging);
 				} else {
 					dragtarget.before(dragging);
