@@ -540,6 +540,11 @@ XKit.extensions.people_notifier = new Object({
 
 		$(document).off("mouseenter", ".xkit-people-notifier-person");
 		$(document).off("mouseleave", ".xkit-people-notifier-person");
+		$(document).off("dragstart", ".xkit-people-notifier-person");
+		$(document).off("drag", ".xkit-people-notifier-person");
+		$(document).off("dragenter", ".xkit-people-notifier-person");
+		$(document).off("dragover", ".xkit-people-notifier-person");
+		$(document).off("drop", ".xkit-people-notifier-person");
 
 		this.running = false;
 	}
