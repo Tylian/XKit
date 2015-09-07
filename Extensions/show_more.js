@@ -1,5 +1,5 @@
 //* TITLE User Menus+ **//
-//* VERSION 2.5.3 **//
+//* VERSION 2.5.4 **//
 //* DESCRIPTION More options on the user menu **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS This extension adds additional options to the user menu (the one that appears under user avatars on your dashboard), such as Avatar Magnifier, links to their Liked Posts page if they have them enabled. Note that this extension, especially the Show Likes and Show Submit options use a lot of network and might slow your computer down. **//
@@ -93,7 +93,7 @@ XKit.extensions.show_more = new Object({
 		if (this.preferences.use_classic_menu.value) {
 
 			XKit.tools.add_css(".tumblelog_popover_v1, .tumblelog_popover_v2, .tumblelog_popover { display: none !important; }", "show_more_classic_menu");
-			$(document).on('mouseover', '.post_avatar_link', XKit.extensions.show_more.enable_classic_menu);
+			$(document).on('mouseover', '.post_avatar .post_avatar_link', XKit.extensions.show_more.enable_classic_menu);
 
 			$(document).scroll(function() {
 
