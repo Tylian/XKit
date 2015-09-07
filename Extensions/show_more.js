@@ -875,7 +875,8 @@ XKit.extensions.show_more = new Object({
 		XKit.tools.remove_css("show_more_hide_follows");
 		XKit.tools.remove_css("show_more_hide_previews");
 		$(document).off('mouseover', '.post_info_fence a, .post_info a, a.username', XKit.extensions.show_more.store_data_username);
-		$(document).off('mouseover', '.post_avatar .post_avatar_link', XKit.extensions.show_more.store_data_avatar);
+		$(document).off('mouseover', '.post_avatar_link', XKit.extensions.show_more.store_data_avatar);
+		$(document).off('mouseover', '.post_avatar .post_avatar_link', XKit.extensions.show_more.enable_classic_menu);
 		$(document).off('click','.tumblelog_menu_btn', XKit.extensions.show_more.add_links_new);
 		$(document).off('click', '#xkit-classic-user-menu .xkit-ask', XKit.extensions.show_more.intercept_classic_menu_ask);
 		this.running = false;
