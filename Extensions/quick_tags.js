@@ -527,7 +527,9 @@ XKit.extensions.quick_tags = new Object({
 
 		});
 
-		$("#quick-tags-add-button").click(XKit.extensions.quick_tags.add_bundle_ui());
+		$("#quick-tags-add-button").click(function() {
+			XKit.extensions.quick_tags.add_bundle_ui();
+		});
 
 		$(".xkit-quick-tags-cp-tag").click(function(event) {
 
