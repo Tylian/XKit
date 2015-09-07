@@ -2382,9 +2382,9 @@
           "resolved": "https://registry.npmjs.org/dateformat/-/dateformat-1.0.11.tgz",
           "dependencies": {
             "get-stdin": {
-              "version": "5.0.0",
-              "from": "get-stdin@*",
-              "resolved": "https://registry.npmjs.org/get-stdin/-/get-stdin-5.0.0.tgz"
+              "version": "4.0.1",
+              "from": "https://registry.npmjs.org/get-stdin/-/get-stdin-4.0.1.tgz",
+              "resolved": "https://registry.npmjs.org/get-stdin/-/get-stdin-4.0.1.tgz"
             },
             "meow": {
               "version": "3.3.0",
