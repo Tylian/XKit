@@ -1,5 +1,6 @@
+
 //* TITLE Tweaks **//
-//* VERSION 3.3.1 **//
+//* VERSION 4.0.4 **//
 //* DESCRIPTION Various little tweaks for your dashboard. **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS These are small little tweaks that allows you customize your dashboard. If you have used XKit 6, you will notice that some of the extensions have been moved here as options you can toggle. Keep in mind that some of the tweaks (the ones marked with a '*') can slow down your computer. **//
@@ -20,6 +21,12 @@ XKit.extensions.tweaks = new Object({
 			text: "Popular tweaks",
 			type: "separator",
 		},
+		"no_mobile_banner": {
+			text: "Remove the mobile app banner",
+			default: true,
+			value: true,
+			mobile_only: true
+		},
 		"wrap_tags": {
 			text: "Wrap tags for easier reading",
 			default: true,
@@ -28,7 +35,8 @@ XKit.extensions.tweaks = new Object({
 		"grey_urls": {
 			text: "Make URLs grey again",
 			default: false,
-			value: false
+			value: false,
+			desktop_only: true
 		},
 		"fix_blockquotes": {
 			text: "Slim block quotes for easier reading",
@@ -43,12 +51,14 @@ XKit.extensions.tweaks = new Object({
 		"hide_share": {
 			text: "Hide the share button on posts",
 			default: false,
-			value: false
+			value: false,
+			desktop_only: true
 		},
 		"hide_follows": {
 			text: "Hide the mini-follow buttons on posts and notifications",
 			default: false,
-			value: false
+			value: false,
+			desktop_only: true
 		},
 		"photo_replies": {
 			text: "Auto-enable photo replies on all posts I create",
@@ -82,8 +92,8 @@ XKit.extensions.tweaks = new Object({
 		},
 		"full_width_gifs": {
 			text: "Add a button in post editor options to toggle full-width GIFs",
-			default: false,
-			value: false
+			default: true,
+			value: true
 		},
 		"sep1": {
 			text: "User Interface tweaks",
@@ -112,7 +122,8 @@ XKit.extensions.tweaks = new Object({
 		"slim_popups": {
 			text: "Slim down the popup menus such as the user menu",
 			default: false,
-			value: false
+			value: false,
+			desktop_only: true
 		},
 		"always_show_move_to_top": {
 			text: "Always show 'Move to top' button on the queued posts page",
@@ -123,7 +134,8 @@ XKit.extensions.tweaks = new Object({
 			text: "Move the edit/remove buttons out of the gear menu",
 			default: false,
 			value: false,
-			experimental: true
+			experimental: true,
+			desktop_only: true
 		},
 		"sep2": {
 			text: "Dashboard tweaks",
@@ -138,6 +150,12 @@ XKit.extensions.tweaks = new Object({
 			text: "Dim sponsored posts on dashboard (not recommended)",
 			default: false,
 			value: false
+		},
+		"pin_avatars": {
+			text: "Stop avatars from scrolling along with the post",
+			default: false,
+			value: false,
+			desktop_only: true
 		},
 		"no_footer_background": {
 			text: "Classic Post Footer look",
@@ -157,12 +175,20 @@ XKit.extensions.tweaks = new Object({
 		"hide_asktime": {
 			text: "Hide the asktime banner at the top of the dash",
 			default: false,
-			value: false
+			value: false,
+			desktop_only: true
 		},
-        "hide_explore": {
+		"hide_explore": {
 			text: "Hide explore button on trending posts",
 			default: false,
-			value: false
+			value: false,
+			desktop_only: true
+		},
+		"hide_explore_buttons": {
+			text: "Hide the explore link at the top of the page and in the sidebar",
+			default: false,
+			value: false,
+			desktop_only: true
 		},
 		"hide_notes": {
 			text: "Hide the notes on posts",
@@ -210,75 +236,46 @@ XKit.extensions.tweaks = new Object({
 			default: false,
 			value: false
 		},
-		"show_old_new_bubble": {
-			text: "Remove the web search button and show a \"new\" bubble when tracked tags update",
-			default: false,
-			value: false,
-			experimental: true
-		},
 		"sep4": {
 			text: "Sidebar tweaks",
 			type: "separator",
+			desktop_only: true,
 		},
 		"slim_sidebar": {
 			text: "Slim sidebar buttons",
 			default: false,
-			value: false
+			value: false,
+			desktop_only: true
 		},
 		"hide_section_headers": {
 			text: "Hide section headers on sidebar",
 			default: false,
-			value: false
-		},
-		"hide_customize": {
-			text: "Hide Customize button on sidebar",
-			default: false,
-			value: false
-		},
-		"hide_activity": {
-			text: "Hide the Activity button on sidebar",
-			default: false,
-			value: false
-		},
-		"hide_url": {
-			text: "Hide my URL",
-			default: false,
-			value: false
-		},
-		"hide_follower_count": {
-			text: "Hide my follower count",
-			default: false,
-			value: false
-		},
-		"hide_post_count": {
-			text: "Hide my post count",
-			default: false,
-			value: false
-		},
-		"hide_draft_count": {
-			text: "Hide my drafted posts count",
-			default: false,
-			value: false
+			value: false,
+			desktop_only: true
 		},
 		"hide_radar": {
 			text: "Hide the Tumblr radar",
 			default: false,
-			value: false
+			value: false,
+			desktop_only: true
 		},
 		"hide_find_blogs": {
 			text: "Hide \"Find Blogs\" button",
 			default: false,
-			value: false
+			value: false,
+			desktop_only: true
 		},
 		"hide_recommended": {
 			text: "Hide Recommended blogs",
 			default: false,
-			value: false
+			value: false,
+			desktop_only: true
 		},
 		"show_customize": {
 			text: "Show Mass Post Editor and Blog Settings buttons",
 			default: true,
-			value: true
+			value: true,
+			desktop_only: true
 		}
 	},
 
@@ -287,12 +284,18 @@ XKit.extensions.tweaks = new Object({
 
 	run: function() {
 		this.running = true;
-		
-		if (XKit.extensions.tweaks.preferences.grey_urls.value === true) {
-		    XKit.tools.add_css(".xkit-outbox-link {color: #A1A1A1 !important; } .post_full .post_header .post_info .post_info_link:first-child {color: #A1A1A1 !important; } .post-form--header .tumblelog-select .caption {color: #A1A1A1 !important; } .post_brick .post_header .post_info_tumblelog {color: #A1A1A1 !important; }", "tweaks_grey_urls");
+
+		if (XKit.extensions.tweaks.preferences.no_mobile_banner.value) { //mobile stuff
+			XKit.tools.add_css(".mobile_app_banner {display: none}", "tweaks_no_mobile_banner");
+			$(".mobile_banner_active").removeClass("mobile_banner_active");
+			$(".mobile-app-banner-visible").removeClass("mobile-app-banner-visible");
 		}
 
-		if (XKit.extensions.tweaks.preferences.hide_bubble.value === true && XKit.interface.where().dashboard === false) {
+		if (XKit.extensions.tweaks.preferences.grey_urls.value) {
+			XKit.tools.add_css(".xkit-outbox-link {color: #A1A1A1 !important; } .post_full .post_header .post_info .post_info_link:first-child {color: #A1A1A1 !important; } .post-form--header .tumblelog-select .caption {color: #A1A1A1 !important; } .post_brick .post_header .post_info_tumblelog {color: #A1A1A1 !important; }", "tweaks_grey_urls");
+		}
+
+		if (XKit.extensions.tweaks.preferences.hide_bubble.value && !XKit.interface.where().dashboard) {
 
 			XKit.extensions.tweaks.default_page_title = document.title;
 			$("#new_post_notice_container").remove();
@@ -302,7 +305,7 @@ XKit.extensions.tweaks = new Object({
 
 		}
 
-		if (XKit.extensions.tweaks.preferences.redirect_to_everything.value === true) {
+		if (XKit.extensions.tweaks.preferences.redirect_to_everything.value) {
 			if (document.location.href.indexOf("://www.tumblr.com/tagged/") !== -1 && $(".tag_editors").length > 0) {
 				var m_tag = document.location.href.replace("www.tumblr.com/tagged/","");
 				m_tag = m_tag.replace("tumblr.com/tagged/","");
@@ -327,26 +330,28 @@ XKit.extensions.tweaks = new Object({
 		}
 
 
-		if (XKit.extensions.tweaks.preferences.show_new_on_secondary.value === true) {
+		if (XKit.extensions.tweaks.preferences.show_new_on_secondary.value) {
 
 			try {
 
 			if (document.location.href.indexOf('/dashboard') !== -1) {
 
-				if ($("#new_post_buttons").length > 0) {
+				if (!XKit.browser().mobile) { // mobile stuff
+					if ($("#new_post_buttons").length > 0) {
 
-					// Save this.
-					var m_to_save = $("#new_post_buttons")[0].outerHTML;
-					m_to_save = "!" + btoa(m_to_save);
-					XKit.storage.set("tweaks","new_post_buttons_html", m_to_save);
+						// Save this.
+						var m_to_save = $("#new_post_buttons")[0].outerHTML;
+						m_to_save = "!" + btoa(m_to_save);
+						XKit.storage.set("tweaks","new_post_buttons_html", m_to_save);
 
-				} else {
+					} else {
 
-					var m_btn_html = XKit.storage.get("tweaks","new_post_buttons_html","");
-					if (m_btn_html !== "" ||typeof m_btn_html !== "undefined") {
-						if (m_btn_html.substring(0,1) === "!") {
-							m_btn_html = atob(m_btn_html.substring(1));
-							$("#posts").prepend(m_btn_html);
+						var m_btn_html = XKit.storage.get("tweaks","new_post_buttons_html","");
+						if (m_btn_html !== "" ||typeof m_btn_html !== "undefined") {
+							if (m_btn_html.substring(0,1) === "!") {
+								m_btn_html = atob(m_btn_html.substring(1));
+								$("#posts").prepend(m_btn_html);
+							}
 						}
 					}
 				}
@@ -361,76 +366,53 @@ XKit.extensions.tweaks = new Object({
 
 		}
 
-
-		if (XKit.extensions.tweaks.preferences.hide_customize.value === true) {
-			$("#right_column").find(".customize").parent().css("display","none");
-		}
-
-		if (XKit.extensions.tweaks.preferences.hide_activity.value === true) {
-			$("a.activity").parent().css("display","none");
-		}
-
-		if (XKit.extensions.tweaks.preferences.split_gear.value === true) {
+		if (XKit.extensions.tweaks.preferences.split_gear.value) {
 			XKit.post_listener.add("tweaks_split_gear", XKit.extensions.tweaks.split_gear);
 			XKit.extensions.tweaks.split_gear();
 		}
 
-		if (XKit.extensions.tweaks.preferences.hide_radar.value === true) {
+		if (XKit.extensions.tweaks.preferences.hide_radar.value) {
 			$("#tumblr_radar").css("display","none");
 			$(".radar_header").parent().css("display","none");
 		}
 
-		if (XKit.extensions.tweaks.preferences.photo_replies.value === true) {
+		if (XKit.extensions.tweaks.preferences.photo_replies.value) {
 			this.run_interval = setInterval(function() {
 				$("#allow_photo_replies").attr('checked', true);
 			}, 3000);
 		}
 
-		if (XKit.extensions.tweaks.preferences.real_red.value === true) {
+		if (XKit.extensions.tweaks.preferences.real_red.value) {
 			XKit.extensions.tweaks.add_css(" .like.liked.post_control:after { background-position: 4px 3px !important; background-size: auto auto !important; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAARCAYAAAA/mJfHAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBNYWNpbnRvc2giIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6RDQzQ0MxODI5Qzc4MTFFMzg1NkE5NjNCNTgyRjU3NjEiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6RDQzQ0MxODM5Qzc4MTFFMzg1NkE5NjNCNTgyRjU3NjEiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDpENDNDQzE4MDlDNzgxMUUzODU2QTk2M0I1ODJGNTc2MSIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDpENDNDQzE4MTlDNzgxMUUzODU2QTk2M0I1ODJGNTc2MSIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/Poem3hoAAAEdSURBVHjaYtypzQADjEBsDcQGQPweiLcD8TsGTCAExF5ALADEF4D4KBD/B0mwQBVoAPEKINZH0vQFiMuAeDqSWCYQdwExD5LYRSCOAOIbTEBCEIh3oxnEANUwDaoZBHqhfB40dfpQ/YIglxUCsQwDblAKxJZAbINHDUh/PshlPgyEgQ0RanxBhikyUAcoMjFQDzCCDHtEJcMeMUFjghpgF8iwuUD8h0KDQPrnggy7DsRTKDRsCizRgkA5EB8n06DjUP0MMMN+AbEfEJ8j0aBzUH2/kA0DgTdA7ADEa4g0aDVU/RuYAHo6+wzEoUCcBWVjA5+h8mHoanAlWlBJoQXE69DE10LFp2PThC8HPAHiYGgmXwSlQ6DiWAFAgAEALHgzuY5LA00AAAAASUVORK5CYII=);  } #tab_switching .tab_notice, #header .tab .tab_notice, .popover_blogs .tab_notice, .blog_menu .selected_blog .tab_notice { background-color: #bb2502; }", "xkit_tweaks_real_red");
 		}
 
-		if (XKit.extensions.tweaks.preferences.no_footer_background.value === true) {
+		if (XKit.extensions.tweaks.preferences.no_footer_background.value) {
 			XKit.extensions.tweaks.add_css(".post_full .post_footer { margin-top: 13px; background: transparent !important; border-top: 1px solid #e3e3e3; }", "xkit_tweaks_no_footer_background");
 		}
 
-		if (XKit.extensions.tweaks.preferences.hide_blog_search.value === true) {
+		if (XKit.extensions.tweaks.preferences.hide_blog_search.value) {
 			XKit.extensions.tweaks.add_css(".blog.search_results_section { display: none !important }", "xkit_tweaks_hide_blog_search");
 		}
 
-		if (XKit.extensions.tweaks.preferences.classic_post_titles.value === true) {
-			XKit.extensions.tweaks.add_css(".post-typography-update .post.is_conversation .post_content .post_title, .post-typography-update .post.is_regular .post_content .post_title, .post-typography-update .post .post-content .title-field * { font-family: \"Helvetica Neue\", Helvetica, sans-serif !important; font-size: 22px !important; font-weight: bold !important; line-height: normal !important; min-height: 25px !important; } .post_title { font-size: 22px !important; line-height: normal !important; font-weight: bold !important; font-family: \"Helvetica Neue\", Helvetica, sans-serif !important; }", "xkit_tweaks_classic_post_titles");
+		if (XKit.extensions.tweaks.preferences.classic_post_titles.value) {
+			XKit.extensions.tweaks.add_css(".post-typography-update .post.is_conversation .post_content .post_title, .post-typography-update .post.is_regular .post_content .post_title, .post-typography-update .post .post-content .title-field *, .reblog-title { font-family: \"Helvetica Neue\", Helvetica, sans-serif !important; font-size: 22px !important; font-weight: bold !important; line-height: normal !important; min-height: 25px !important; } .post_title { font-size: 22px !important; line-height: normal !important; font-weight: bold !important; font-family: \"Helvetica Neue\", Helvetica, sans-serif !important; }", "xkit_tweaks_classic_post_titles");
 			XKit.extensions.tweaks.add_css(".post .post_content h2 { font-size: 15px !important; line-height: normal !important; font-weight: bold !important; font-family: \"Helvetica Neue\", Helvetica, sans-serif !important; }", "xkit_tweaks_classic_post_titles");
 		}
 
-		if (XKit.extensions.tweaks.preferences.bold_links.value === true) {
+		if (XKit.extensions.tweaks.preferences.bold_links.value) {
 			XKit.extensions.tweaks.add_css(".post-typography-update .post .post-content a, .post-typography-update .post .post_content a { font-weight: bold !important; }", "xkit_tweaks_bold_links");
 		}
 
-		if (XKit.extensions.tweaks.preferences.swap_buttons.value === true) {
+		if (XKit.extensions.tweaks.preferences.swap_buttons.value) {
 			XKit.extensions.tweaks.add_css(".post_ask_answer_buttons_flipped .chrome.blue { margin-left: 0; } .post_ask_answer_buttons_flipped .chrome { margin-left: 0; margin-right: 5px; float: left; } .post_ask_answer_buttons_flipped .ask_cancel_button { float: right; margin-right: 0; } .post-form--controls .control.left { text-align: right; display: inline-block; width: auto; float: right; } .post-form--controls .control.right { text-align: left; display: inline-block; width: auto; float: left; } .post-forms--social-buttons .social-buttons { position: absolute; left: 50% }", "xkit_tweaks_bold_links");
 		}
 
-		if (XKit.extensions.tweaks.preferences.tag_slot_separator.value === true) {
+		if (XKit.extensions.tweaks.preferences.tag_slot_separator.value) {
 			XKit.extensions.tweaks.add_css(".post-form--tag-editor { border-top: 1px solid rgb(240,240,240); padding-top: 15px; }", "ffff");
 		}
-		
-		if (XKit.extensions.tweaks.preferences.full_width_gifs.value === true) {
-			XKit.interface.post_window_listener.add("tweaks-full-width-gifs", XKit.extensions.tweaks.full_width_gifs_do_first);
-		}
-	
 
-		if (XKit.extensions.tweaks.preferences.show_old_new_bubble.value === true) {
-			// only need to do this if the ( tumblr | web ) button is there
-			if ($(".search_query_btn_web").size() > 0) {
-				// hide the ( tumblr | web ) buttons
-				XKit.extensions.tweaks.add_css(".search_query_btn_tumblr, .search_query_btn_web { display: none !important }", "xkit_tweaks_show_old_new_bubble");
-				// "X new posts" in the tracked tags is always a <small> tag
-			}
-			if ($(".tracked_tags small").size() > 0) {
-				XKit.extensions.tweaks.add_css("div#new_post_in_tracked_tags_bubble { color: rgba(0,0,0,0.33) !important; background: rgba(255,255,255,0.18); display: inline-block; font-size: 11px; float: right; margin-top: 3px; margin-right: 3px; height: 22px; width: 36px; line-height: 22px; }", "blah");
-				$(".search_query_submit").after('<div id="new_post_in_tracked_tags_bubble" class="search_query_btn pill">new</div>');
-			}
+		if (XKit.extensions.tweaks.preferences.full_width_gifs.value) {
+			XKit.interface.post_window_listener.add("tweaks-full-width-gifs", XKit.extensions.tweaks.full_width_gifs_do_first);
 		}
 
 		if (XKit.extensions.tweaks.preferences.show_top_arrow.value) {
@@ -447,87 +429,80 @@ XKit.extensions.tweaks = new Object({
 			}, true, "");
 		}
 
-		if (XKit.extensions.tweaks.preferences.no_animate_scroll.value === true) {
+		if (XKit.extensions.tweaks.preferences.no_animate_scroll.value) {
 			XKit.tools.add_function(function() {
 				Tumblr.KeyCommands.animate_scroll = false;
 			}, true, "");
 		}
 
-		if (XKit.extensions.tweaks.preferences.slim_popups.value === true) {
+		if (XKit.extensions.tweaks.preferences.slim_popups.value) {
 			XKit.extensions.tweaks.add_css(".tumblelog_menu_link { padding: 6px 10px 6px 34px !important; font-size: 13px !important; }" +
 						".tumblelog_menu .tumblelog_menu_link:before { left: 7px !important; top: 5px !important; } ", "xkit_tweaks_slim_popups");
 		}
 
-		if (XKit.extensions.tweaks.preferences.hide_like_animation.value === true) {
+		if (XKit.extensions.tweaks.preferences.hide_like_animation.value) {
 			XKit.extensions.tweaks.add_css(" .post .post_animated_heart { display: none !important; width: 0 !important; }", "xkit_tweaks_hide_like_animation");
 		}
 
-		if (XKit.extensions.tweaks.preferences.hide_sponsored.value === true) {
+		if (XKit.extensions.tweaks.preferences.hide_sponsored.value) {
 			XKit.extensions.tweaks.add_css(".post.sponsored_post { opacity: 0.33 !important } .post.sponsored_post:hover { opacity: 1 !important }", "xkit_tweaks_hide_sponsored");
 		}
 
+		if (XKit.extensions.tweaks.preferences.pin_avatars.value) {
+			if (!XKit.browser().mobile) { // mobile stuff
+				XKit.extensions.tweaks.add_css(".post_avatar.post-avatar--fixed { position: absolute !important; top: 0 !important; left: -85px !important; }  .post_avatar.post-avatar--absolute { position: absolute; top: 0 !important; left: -85px !important; bottom: inherit !important; }  .post_avatar.post-avatar--sticky .avatar-wrapper { position: absolute !important; top: 0px !important; height: auto; width: auto; } .post_avatar.post-avatar--sticky { height: 64px !important; }", "xkit_pin_avatars");
+			}
+		}
 
-		if (XKit.extensions.tweaks.preferences.small_quotes.value === true) {
+		if (XKit.extensions.tweaks.preferences.small_quotes.value) {
 			XKit.extensions.tweaks.add_css(".post.is_quote .post_title.large, .post.is_quote .post_title.extra_large { font-size: 20px; line-height: 22px; }", "xkit_tweaks_small_quotes");
 		}
 
-		if (XKit.extensions.tweaks.preferences.hide_recommended.value === true) {
-			$("#recommended_tumblelogs, .recommended_tumblelogs, .trending_tumblelogs").css("display","none");
+		if (XKit.extensions.tweaks.preferences.hide_recommended.value) {
+			XKit.extensions.tweaks.add_css("#recommended_tumblelogs, .recommended_tumblelogs, .trending_tumblelogs, .is_recommended, .recommended-unit-container { display: none !important; }", "xkit_tweaks_hide_recommended");
 		}
 
-		if (XKit.extensions.tweaks.preferences.hide_share.value === true) {
+		if (XKit.extensions.tweaks.preferences.hide_share.value) {
 			XKit.extensions.tweaks.add_css(".post .post_controls .share_social_button { display: none; } ", "xkit_tweaks_hide_share");
 			XKit.post_listener.add("tweaks_check_for_share_on_private_posts", XKit.extensions.tweaks.check_for_share_on_private_posts);
 			XKit.extensions.tweaks.check_for_share_on_private_posts();
 		}
 
-		if (XKit.extensions.tweaks.preferences.hide_asktime.value === true) {
+		if (XKit.extensions.tweaks.preferences.hide_asktime.value) {
 			XKit.extensions.tweaks.add_css(".notification.single_notification.alt.takeover-container { display: none; } ", "xkit_tweaks_hide_asktime");
 		}
 
-        if (XKit.extensions.tweaks.preferences.hide_explore.value === true) {
+		if (XKit.extensions.tweaks.preferences.hide_explore.value) {
 			XKit.extensions.tweaks.add_css(".post .explore-trending-badge-footer { display: none; } ", "xkit_tweaks_hide_explore");
 		}
 
-		if (XKit.extensions.tweaks.preferences.hide_notes.value === true) {
+		if (XKit.extensions.tweaks.preferences.hide_explore_buttons.value) {
+			XKit.extensions.tweaks.add_css("#discover_button, a[href=\"/explore\"] { display: none; } ", "xkit_tweaks_hide_explore_buttons");
+		}
+
+		if (XKit.extensions.tweaks.preferences.hide_notes.value) {
 			XKit.extensions.tweaks.add_css(".post .post_notes { visibility: hidden; } ", "xkit_tweaks_hide_notes");
 		}
 
-		if (XKit.extensions.tweaks.preferences.hide_tags.value === true) {
+		if (XKit.extensions.tweaks.preferences.hide_tags.value) {
 			XKit.extensions.tweaks.add_css(".post .post_tags { display: none; } ", "xkit_tweaks_hide_tags");
 		}
 
-		if (XKit.extensions.tweaks.preferences.hide_section_headers.value === true) {
+		if (XKit.extensions.tweaks.preferences.hide_section_headers.value) {
 			XKit.extensions.tweaks.add_css(".controls_section li.section_header { display: none; } ", "xkit_tweaks_hide_section_headers");
 		}
 
-		if (XKit.extensions.tweaks.preferences.hide_find_blogs.value === true) {
+		if (XKit.extensions.tweaks.preferences.hide_find_blogs.value) {
 			$("a.spotlight").parent().css("display","none");
 		}
 
-		if (XKit.extensions.tweaks.preferences.always_show_move_to_top.value === true) {
+		if (XKit.extensions.tweaks.preferences.always_show_move_to_top.value) {
 			XKit.extensions.tweaks.add_css("#posts .post .post_control.move_to_top { display: inline-block !important; } ", "always_show_move_to_top");
 		}
 
-		if (XKit.extensions.tweaks.preferences.hide_url.value === true) {
-			XKit.extensions.tweaks.add_css(".currently_selected_blog.blog_title { display: none !important; } .open_blog.with_subtitle { height: 39px; } .open_blog.with_subtitle small .hide_overflow { line-height: 37px !important; }", "xtweaks-hide_url_count");
-		}
-
-		if (XKit.extensions.tweaks.preferences.hide_follower_count.value === true) {
-			XKit.extensions.tweaks.add_css(".right_column .followers .count { display: none !important; } ", "xtweaks-hide_follower_count");
-		}
-
-		if (XKit.extensions.tweaks.preferences.hide_post_count.value === true) {
-			XKit.extensions.tweaks.add_css(".right_column .posts .count { display: none !important; } ", "xtweaks-hide_post_count");
-		}
-
-		if (XKit.extensions.tweaks.preferences.hide_draft_count.value === true) {
-			XKit.extensions.tweaks.add_css(".right_column .drafts .count { display: none !important; } ", "xtweaks-hide_drafts_count");
-		}
-
-		if (XKit.extensions.tweaks.preferences.slim_sidebar.value === true) {
+		if (XKit.extensions.tweaks.preferences.slim_sidebar.value) {
 			var moz_fix = "";
-			if (XKit.browser().firefox === true) {
+			if (XKit.browser().firefox) {
 				moz_fix = " top: -5px !important; ";
 			}
 			var m_css = "li.section_header { height: 22px !important; line-height: 20px !important; font-size: 11px !important; } .activity canvas { zoom: 0.6; -moz-transform: scale(0.6); } .controls_section li { height: 25px; line-height: 19px; } .controls_section li a, .controls_section li .hide_overflow { line-height: 23px; font-size: 12px; } .controls_section li a { padding: 3px 13px 10px 40px; font-size: 13px; } .controls_section li>a:after { zoom: 0.80; -moz-transform: scale(0.77); left: 14px; top: -2px; " + moz_fix + " } .controls_section a .count { top: 3px !important; } .controls_section .sub_control.link_arrow { margin-top: -6px; } #popover_button_blogs { height: auto; } #fan_mail_controls, #fan_mail_controls li, #recommended_tumblelogs li, #tag_editors li, #tag_contributors li { height: auto; } .controls_section a .count { line-height: 19px; } .controls_section li .icon_left { top: 2px !important; position: absolute; left: 12px !important; font-size: 18px !important; line-height: 21px !important; }" +
@@ -538,27 +513,27 @@ XKit.extensions.tweaks = new Object({
 			}
 		}
 
-		if (XKit.extensions.tweaks.preferences.hide_follows.value === true) {
+		if (XKit.extensions.tweaks.preferences.hide_follows.value) {
 			XKit.extensions.tweaks.add_css(".note a.follow {display: none !important; } .notification_follow, .reblog_follow_button { display: none !important; } #posts .notes_outer_container.popover .note a.follow { display: none !important; } #posts .notes_outer_container.popover .note.like a.block { right: 16px; }", "xkit_tweaks_hide_follows");
 		}
 
-		if (XKit.extensions.tweaks.preferences.fix_blockquotes.value === true) {
-			XKit.extensions.tweaks.add_css("#posts .post_content blockquote { border-left: solid 3px #dcdcdc; padding-left: 8px; margin-left: 6px; }", "xkit_tweaks_fix_blockquotes");
+		if (XKit.extensions.tweaks.preferences.fix_blockquotes.value) {
+			XKit.extensions.tweaks.add_css("#posts .post_content blockquote { border-left: solid 2px #e7e7e7; padding-left: 8px; margin-left: 0px; }", "xkit_tweaks_fix_blockquotes");
 		}
 
-		if (XKit.extensions.tweaks.preferences.dont_show_liked_on_dashboard.value === true) {
+		if (XKit.extensions.tweaks.preferences.dont_show_liked_on_dashboard.value) {
 			XKit.extensions.tweaks.add_css("#posts .post.is_liked { display: none !important; }", "xkit_tweaks_dont_show_liked");
 			XKit.post_listener.add("tweaks_dont_show_liked", XKit.extensions.tweaks.check_for_liked_posts);
 			XKit.extensions.tweaks.check_for_liked_posts();
 		}
 
-		if (XKit.extensions.tweaks.preferences.old_chat_posts.value === true) {
+		if (XKit.extensions.tweaks.preferences.old_chat_posts.value) {
 			XKit.extensions.tweaks.add_css(".post_full.is_conversation .conversation_lines { border: 1px solid rgb(200,200,200); padding: 0px; font: normal 14px/1.4 \"Helvetica Neue\",\"HelveticaNeue\",Helvetica,Arial,sans-serif; } li.chat_line { padding: 10px 17px !important; border-bottom: 1px solid rgb(200,200,200); } li.chat_line:last-child { border-bottom: 0; }", "xkit_tweaks_fix_blockquotes");
 		}
 
 		if (XKit.extensions.tweaks.preferences.wrap_tags.value &&
 				XKit.interface.is_tumblr_page()) {
-			XKit.extensions.tweaks.add_css(".post .tags { width: 500px !important; display: block !important; }  .post .footer_links.with_tags { overflow:visible !important; display: block !important; }.post .footer_links.with_tags span, .footer_links.with_tags .source_url { display:block !important; overflow:visible !important; } .source_url_gradient { display: none !important; } span.tags { white-space:normal !important; } span.with_blingy_tag a.blingy { height:auto !important; display:inline-block !important; }  .source_url, .post_tags_wrapper { display: block !important; } ", "xkit_tweaks_wrap_tags");
+			XKit.extensions.tweaks.add_css(".post .tags { width: 100% !important; display: block !important; overflow:visible; height:auto; white-space: normal; }  .post .footer_links.with_tags { overflow:visible !important; display: block !important; }.post .footer_links.with_tags span, .footer_links.with_tags .source_url { display:block !important; overflow:visible !important; } .source_url_gradient { display: none !important; } span.tags { white-space:normal !important; } span.with_blingy_tag a.blingy { height:auto !important; display:inline-block !important; }  .source_url, .post_tags_wrapper { display: block !important; } ", "xkit_tweaks_wrap_tags");
 			XKit.extensions.tweaks.add_css("#posts .post.post_full .post_tags { white-space: normal; } .post .post_tags a { font-size: 12px; } .post_full .post_tags:after { background: none !important; }", "xkit_tweaks_wrap_tags_v2");
 			$(document).on('mouseup mousemove mouseover mousedown mouseout', '.post_tags_inner', function(e) {
 				$(this).parent().removeClass("draggable");
@@ -569,43 +544,47 @@ XKit.extensions.tweaks = new Object({
 
 		if (document.location.href.indexOf('/dashboard') !== -1) {
 
-			if (XKit.extensions.tweaks.preferences.dont_show_mine_on_dashboard.value === true) {
-				XKit.extensions.tweaks.add_css("#posts .post.is_mine { display: none !important; } #posts .post.new_post_buttons { display: block !important; }", "xkit_tweaks_dont_show_mine_on_dashboard");
-				//XKit.post_listener.add("tweaks_fix_hidden_post_height", XKit.extensions.tweaks.fix_hidden_post_height);
-				XKit.extensions.tweaks.fix_hidden_post_height();
+			if (XKit.extensions.tweaks.preferences.dont_show_mine_on_dashboard.value) {
+				if (!XKit.browser().mobile) { //mobile stuff
+					XKit.extensions.tweaks.add_css("#posts .post.is_mine { display: none !important; } #posts .post.new_post_buttons { display: block !important; }", "xkit_tweaks_dont_show_mine_on_dashboard");
+					//XKit.post_listener.add("tweaks_fix_hidden_post_height", XKit.extensions.tweaks.fix_hidden_post_height);
+					XKit.extensions.tweaks.fix_hidden_post_height();
+				}
 			}
 
 		}
 
-		if (XKit.extensions.tweaks.preferences.scroll_new_posts.value === true) {
-			$(window).scroll(function () {
-				if ($("#new_post").length > 0) {
-					if ($(window).scrollTop() >= 200) {
-						$("body").addClass("xkit-new-post-scrolls-page");
-						$("#new_post").addClass("xkit-new-post-scrolls");
-					} else {
-						$("#new_post").removeClass("xkit-new-post-scrolls");
-						$("body").removeClass("xkit-new-post-scrolls-page");
+		if (XKit.extensions.tweaks.preferences.scroll_new_posts.value) {
+			if (!XKit.browser().mobile) { // mobile stuff
+				$(window).scroll(function () {
+					if ($("#new_post").length > 0) {
+						if ($(window).scrollTop() >= 200) {
+							$("body").addClass("xkit-new-post-scrolls-page");
+							$("#new_post").addClass("xkit-new-post-scrolls");
+						} else {
+							$("#new_post").removeClass("xkit-new-post-scrolls");
+							$("body").removeClass("xkit-new-post-scrolls-page");
+						}
 					}
-				}
-			});
-			$("#new_post").click(function() {
-				$('html, body').animate({
-					scrollTop: 30
-				}, 500);
+				});
+				$("#new_post").click(function() {
+					$('html, body').animate({
+						scrollTop: 30
+					}, 500);
 
-				$("#new_post").removeClass("xkit-new-post-scrolls");
-				$("body").removeClass("xkit-new-post-scrolls-page");
+					$("#new_post").removeClass("xkit-new-post-scrolls");
+					$("body").removeClass("xkit-new-post-scrolls-page");
 
-			});
-			XKit.extensions.tweaks.add_css(	".xkit-new-post-scrolls-page #posts { padding-top: 85px; }" +
+				});
+				XKit.extensions.tweaks.add_css(	".xkit-new-post-scrolls-page #posts { padding-top: 85px; }" +
 						"#new_post.xkit-new-post-scrolls { min-width: 540px; position: fixed; top: -5px; z-index: 100; opacity: 0.75; min-height: 88px !important; }" +
 						"#new_post.xkit-new-post-scrolls:hover { opacity: 1; }" +
 						"#new_post.xkit-new-post-scrolls #post_buttons { top: -5px !important; }" +
 						"#new_post.xkit-new-post-scrolls .post_avatar { display: none; }", "xkit_tweaks_scroll_new_posts");
+			}
 		}
 
-		if (XKit.extensions.tweaks.preferences.show_customize.value === true) {
+		if (XKit.extensions.tweaks.preferences.show_customize.value) {
 			var user_url = XKit.tools.get_current_blog();
 
 			if (typeof user_url === "undefined") {
@@ -664,7 +643,7 @@ XKit.extensions.tweaks = new Object({
 		}
 
 		var call_update_rect = false;
-		$(".post").not(".xkit-tweaks-checked-for-likes").each(function() {
+		$(".posts .post").not(".xkit-tweaks-checked-for-likes").each(function() {
 			$(this).addClass("xkit-tweaks-checked-for-likes");
 			if ($(this).find(".post_control.like").hasClass("liked")) {
 				$(this).addClass("is_liked");
@@ -696,37 +675,41 @@ XKit.extensions.tweaks = new Object({
 
 	split_gear: function() {
 
-		$(".post.is_mine").not(".xkit-tweaks-split-gear-done").each(function() {
-			$(this).addClass("xkit-tweaks-split-gear-done");
+		if (!XKit.browser().mobile) { // mobile stuff
+			$(".post.is_mine").not(".xkit-tweaks-split-gear-done").each(function() {
+				$(this).addClass("xkit-tweaks-split-gear-done");
 
-			// Remove captions
-			$(this).find(".post_control.edit").html("<span class=\"offscreen\">Edit</span>");
-			$(this).find(".post_control.delete").html("<span class=\"offscreen\">Delete</span>");
-			$(this).find(".post_control.queue").html("<span class=\"offscreen\">Queue</span>");
+				// Remove captions
+				$(this).find(".post_control.edit").html("<span class=\"offscreen\">Edit</span>");
+				$(this).find(".post_control.delete").html("<span class=\"offscreen\">Delete</span>");
+				$(this).find(".post_control.queue").html("<span class=\"offscreen\">Queue</span>");
 
-			// Remove their menu-specific classes
-			$(this).find(".post_control.edit, .post_control.queue, .post_control.delete").removeClass("show_label");
+				// Remove their menu-specific classes
+				$(this).find(".post_control.edit, .post_control.queue, .post_control.delete").removeClass("show_label");
 
-			$(this).find(".post_control.edit").appendTo($(this).find(".post_controls_inner"));
-			$(this).find(".post_control.delete").appendTo($(this).find(".post_controls_inner"));
-			$(this).find(".post_control.queue").appendTo($(this).find(".post_controls_inner"));
-			$(this).find(".post_control.post_control_menu.creator").css("display","none");
-		});
+				$(this).find(".post_control.edit").appendTo($(this).find(".post_controls_inner"));
+				$(this).find(".post_control.delete").appendTo($(this).find(".post_controls_inner"));
+				$(this).find(".post_control.queue").appendTo($(this).find(".post_controls_inner"));
+				$(this).find(".post_control.post_control_menu.creator").css("display","none");
+			});
+		}
 
 	},
 
 	check_for_share_on_private_posts: function() {
 
-		$(".post.is_mine").not(".xtweaks-checked-share").each(function() {
+		if (!XKit.browser().mobile) { // mobile stuff
+			$(".post.is_mine").not(".xtweaks-checked-share").each(function() {
 
-			if ($(this).find(".private_label").length > 0) {
+				if ($(this).find(".private_label").length > 0) {
 
-				$(this).find(".post_control.share").css("display","inline-block");
-				$(this).addClass("xtweaks-checked-share");
+					$(this).find(".post_control.share").css("display","inline-block");
+					$(this).addClass("xtweaks-checked-share");
 
-			}
+				}
 
-		});
+			});
+		}
 
 	},
 
@@ -763,7 +746,7 @@ XKit.extensions.tweaks = new Object({
 		}
 
 	},
-	
+
 	full_width_gifs_do_first: function() {
 		$(document.body).on("click", ".post-settings", function() {
 			if (!$("#xkit-full-width-gifs").length) {
@@ -774,7 +757,7 @@ XKit.extensions.tweaks = new Object({
 			}
 		});
 	},
-	
+
 	full_width_gifs_do: function(is_checked) {
 		if (!is_checked) {
 			$(".editor-wrapper").find(".tmblr-full").addClass("tweaks-full-width-gifs");
@@ -785,13 +768,14 @@ XKit.extensions.tweaks = new Object({
 			$(".editor-wrapper").find(".tweaks-full-width-gifs").addClass("tmblr-full");
 			$(".editor").focus();
 			return;
-		} 
+		}
 	},
 
 	destroy: function() {
 
 		this.running = false;
 		XKit.tools.remove_css("xkit_tweaks");
+		XKit.tools.remove_css("tweaks_no_mobile_banner");
 
 		XKit.post_listener.remove("tweaks_check_for_share_on_private_posts");
 		XKit.post_listener.remove("tweaks_fix_hidden_post_height");
@@ -805,7 +789,6 @@ XKit.extensions.tweaks = new Object({
 		$("#tumblr_radar").css("display","block");
 		$("#xkit_customize_button").remove();
 		$("a.spotlight").parent().css("display","block");
-		$("#recommended_tumblelogs, .recommended_tumblelogs, .trending_tumblelogs").css("display","block");
 		$("a.activity").parent().css("display","block");
 		$(".radar_header").parent().css("display","block");
 		$(".customize").parent().css("display","block");

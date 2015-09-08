@@ -1,5 +1,5 @@
 //* TITLE Enhanced Queue **//
-//* VERSION 2.0.1 **//
+//* VERSION 2.0.2 **//
 //* DESCRIPTION Additions to the Queue page. **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS Go to your queue and click on the Shuffle button on the sidebar to shuffle the posts. Note that only the posts you see will be shuffled. If you have more than 15 posts on your queue, scroll down and load more posts in order to shuffle them too. Or click on Shrink Posts button to quickly rearrange them. **//
@@ -12,7 +12,7 @@ XKit.extensions.shuffle_queue = new Object({
 
 	run: function() {
 
-		if (document.location.href.indexOf("/queue") === -1) {
+		if (!XKit.interface.where().queue) {
 			return;
 		}
 
@@ -32,7 +32,7 @@ XKit.extensions.shuffle_queue = new Object({
 		$("ul.controls_section:eq(1)").before(xf_html);*/
 
 
-		var xf_html = 	'<ul class="controls_section" id="queue_plus_ul">' +
+		var xf_html = '<ul class="controls_section" id="queue_plus_ul">' +
 					'<li class="section_header selected">Queue+</li>' +
 					'<li class="no_push" style="height: 36px;"><a href="#" onclick="return false;" id="xshufflequeue_button">' +
 						'<div class="hide_overflow" style="color: rgba(255, 255, 255, 0.5) !important; font-weight: bold; padding-left: 10px; padding-top: 8px;">Shuffle Queue <div class="count" style="padding-top: 8px;">&nbsp;</div> </div>' +
@@ -151,8 +151,7 @@ XKit.extensions.shuffle_queue = new Object({
 		XKit.extensions.shuffle_queue.delete_page++;
 
 
-		var m_url_arr = document.location.href.split("/");
-		var m_url = m_url_arr[4];
+		var m_url = XKit.interface.where().user_url;
 
 
 		GM_xmlhttpRequest({
@@ -215,7 +214,7 @@ XKit.extensions.shuffle_queue = new Object({
 				sarcasm = "<br>But it's not like you had a lot of queued posts anyway.";
 			}
 
-			XKit.window.show("Cleared Queue.","Queue+ deleted " + 	XKit.extensions.shuffle_queue.posts_to_delete_count + " posts from your queue." + sarcasm,"info","<div class=\"xkit-button default\" id=\"xkit-queue-refresh\">Refresh the page</div>");
+			XKit.window.show("Cleared Queue.","Queue+ deleted " + XKit.extensions.shuffle_queue.posts_to_delete_count + " posts from your queue." + sarcasm,"info","<div class=\"xkit-button default\" id=\"xkit-queue-refresh\">Refresh the page</div>");
 
 			$("#xkit-queue-refresh").click(function() {
 
@@ -237,12 +236,9 @@ XKit.extensions.shuffle_queue = new Object({
 
 		$("#xkit-shuffle-queue-progress").html("Deleting posts, please wait.. (post " + xin + " of " + XKit.extensions.shuffle_queue.posts_to_delete_count + ")");
 
-		var m_url_arr = document.location.href.split("/");
-		var m_url = m_url_arr[4];
-
 		var m_object = {};
 		m_object.post_id = post_id;
-		m_object.channel_id = m_url;
+		m_object.channel_id = XKit.interface.where().user_url;
 		var form_key = XKit.interface.form_key();
 
 		GM_xmlhttpRequest({
@@ -294,8 +290,7 @@ XKit.extensions.shuffle_queue = new Object({
 		$("#xshufflequeue_button").addClass("disabled");
 		$("#xshufflequeue_button").find(".count").html("saving");
 
-		var m_url_arr = document.location.href.split("/");
-		var m_url = m_url_arr[4];
+		var m_url = XKit.interface.where().user_url;
 
 		var IDs = [];
 		$("#posts").find(".post").not("#next_post").each(function(){

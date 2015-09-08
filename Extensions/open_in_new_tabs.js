@@ -1,5 +1,5 @@
 //* TITLE Open In Tabs **//
-//* VERSION 1.1.5 **//
+//* VERSION 1.1.6 **//
 //* DESCRIPTION Changes links to open in new tabs **//
 //* DETAILS Open In Tabs allows you to open links on new tabs, useful if you don't like being confined to one tab. Since some links, if opened in new tabs, can break functionality, they are not effected by this extension. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -18,9 +18,9 @@ XKit.extensions.open_in_new_tabs = new Object({
 			type: "separator"
 		},
 		"button_tabs": {
-		    text: "Make buttons open in tabs",
-		    default: true,
-		    value: true
+			text: "Make buttons open in tabs",
+			default: true,
+			value: true
 		},
 		"no_sidebar": {
 			text: "Open in new tab instead of blog sidebar",
@@ -32,31 +32,32 @@ XKit.extensions.open_in_new_tabs = new Object({
 	run: function() {
 		this.running = true;
 
-        if (XKit.extensions.open_in_new_tabs.preferences.button_tabs.value === true) {
-		    $("#content area").attr('target','_blank');
-		    $(document).on("click", XKit.extensions.open_in_new_tabs.do_open);
-        }
+		if (XKit.extensions.open_in_new_tabs.preferences.button_tabs.value) {
+			$("#content area").attr('target','_blank');
+			$(document).on("click", XKit.extensions.open_in_new_tabs.do_open);
+		}
 		
 		if (document.location.href.indexOf('/mega-editor/') != -1)
 			return;
 
-        if (XKit.extensions.open_in_new_tabs.preferences.no_sidebar.value === true) {
-		    XKit.post_listener.add("open_in_new_tabs", XKit.extensions.open_in_new_tabs.do);
-		    XKit.extensions.open_in_new_tabs.do();
-        }
+		if (XKit.extensions.open_in_new_tabs.preferences.no_sidebar.value === true) {
+			XKit.post_listener.add("open_in_new_tabs", XKit.extensions.open_in_new_tabs.do);
+			XKit.extensions.open_in_new_tabs.do();
+		}
 
 	},
 
 	do_open: function(e) {
-	    
-	    //XKit.window.show("do_open!", JSON.stringify(e.target), "info", "<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
-	    //return;
+		
+		//XKit.window.show("do_open!", JSON.stringify(e.target), "info", "<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
+		//return;
 
-        
 		var m_box = e.target;
 
 		var m_url = $(m_box).attr('href');
 		
+		if ($(m_box).closest('.fan_mail').length && $(m_box).hasClass('reply'))
+			return;
 		
 		if (typeof m_url === "undefined") {
 			m_url = $(m_box).parent().attr('href');
@@ -74,20 +75,20 @@ XKit.extensions.open_in_new_tabs = new Object({
 			} else {
 				if($(m_box).attr('target').toLowerCase() !== "_blank") {
 					open_new_tab = true;
-				    
+					
 				}
 			}
 			if ($(m_box).attr('title').toLowerCase() == "dashboard" && XKit.interface.where().dashboard === true) {
-		        open_new_tab = false;
-		    }
-		    
-		    if ($(m_box).attr('title').toLowerCase() == "inbox" && XKit.interface.where().inbox === true) {
-		        open_new_tab = false;
-		    }
-		    
-		    if ($(m_box).attr('title').toLowerCase() == "activity" || $(m_box).attr('title').toLowerCase() == "edit" ) {
-		        open_new_tab = false;
-		    }
+				open_new_tab = false;
+			}
+			
+			if ($(m_box).attr('title').toLowerCase() == "inbox" && XKit.interface.where().inbox === true) {
+				open_new_tab = false;
+			}
+			
+			if ($(m_box).attr('title').toLowerCase() == "activity" || $(m_box).attr('title').toLowerCase() == "edit" ) {
+				open_new_tab = false;
+			}
 
 			if(open_new_tab === true) {
 				e.preventDefault();
@@ -158,7 +159,7 @@ XKit.extensions.open_in_new_tabs = new Object({
 	destroy: function() {
 		this.running = false;
 		$(document).off("click", "#right_column a", XKit.extensions.open_in_new_tabs.do_open);
-	    $(".note_link_current").off("click", XKit.extensions.open_in_new_tabs.click_notes);
+		$(".note_link_current").off("click", XKit.extensions.open_in_new_tabs.click_notes);
 		$("a").off("click", XKit.extensions.open_in_new_tabs.click);
 	}
 

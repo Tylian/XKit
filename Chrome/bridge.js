@@ -125,11 +125,11 @@ function GM_flushStorage(callback) {
 function GM_deleteAllValues(callback) {
 
 	storage.get(function(items) {
-  		for (var key in items) {
+		for (var key in items) {
 			storage.remove(key);
-  		}
-  		storage.clear();
-  		callback();
+		}
+		storage.clear();
+		callback();
 	});
 
 }
@@ -240,17 +240,17 @@ function GM_xmlhttpRequest(settings) {
 			}
 
 			request.onreadystatechange = function (oEvent) {
-			  if (request.readyState === 4) {
-				if (request.status === 200) {
-				if (typeof settings.onload !== "undefined") {
-						settings.onload.call(request, request);
+				if (request.readyState === 4) {
+					if (request.status === 200) {
+						if (typeof settings.onload !== "undefined") {
+								settings.onload.call(request, request);
+						}
+					} else {
+						if (typeof settings.onerror !== "undefined") {
+								settings.onerror.call(request, request);
+						}
+					}
 				}
-				} else {
-				if (typeof settings.onerror !== "undefined") {
-						settings.onerror.call(request, request);
-				}
-				}
-			  }
 			};
 
 			if (typeof settings.headers !== "undefined") {

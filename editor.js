@@ -24,21 +24,23 @@ XKit.extensions.xkit_editor = new Object({
 var script_editor, icon_editor, css_editor, object_editor;
 
 function extension_editor_run() {
-
+	
+	var keyText = navigator.platform.match(/Mac/i) ? "Meta" : "Ctrl";
+	
 	var m_html =	"<div id=\"xkit-editor-sidebar\">" +
 						"<div id=\"xkit-editor-open-file\" class=\"no-file\">No file opened</div>" +
-						"<div id=\"xkit-editor-new\" class=\"xkit-button block\">New Extension</div>" +
-						"<div id=\"xkit-editor-open\" class=\"xkit-button block\">Open Extension</div>" +
-						"<div id=\"xkit-editor-save\" class=\"xkit-button disabled block\">Save</div>" +
-						"<div id=\"xkit-editor-delete\" class=\"xkit-button disabled block\">Delete</div>" +
+						"<div id=\"xkit-editor-new\" class=\"xkit-button block\">New Extension (" + keyText + " + E)</div>" +
+						"<div id=\"xkit-editor-open\" class=\"xkit-button block\">Open Extension (" + keyText + " + O)</div>" +
+						"<div id=\"xkit-editor-save\" class=\"xkit-button disabled block\">Save (" + keyText + " + S)</div>" +
+						"<div id=\"xkit-editor-delete\" class=\"xkit-button disabled block\">Delete (" + keyText + " + D)</div>" +
 						"<div id=\"xkit-editor-update\" class=\"xkit-button disabled block\" style=\"display: none !important;\">Update from XKit Servers</div>" +
 					"</div>" +
 					"<div id=\"xkit-editor-area\">" +
 						"<div id=\"xkit-editor-tabs\">" +
-							"<div id=\"xkit-editor-switch-to-script\" class=\"selected\">Script</div>" +
-							"<div id=\"xkit-editor-switch-to-css\" class=\"\">Stylesheet</div>" +
-							"<div id=\"xkit-editor-switch-to-icon\" class=\"\">Icon</div>" +
-							"<div id=\"xkit-editor-switch-to-object\" class=\"\">JSON</div>" +
+							"<div id=\"xkit-editor-switch-to-script\" class=\"selected\">Script (" + keyText + " + 1)</div>" +
+							"<div id=\"xkit-editor-switch-to-css\" class=\"\">Stylesheet (" + keyText + " + 2)</div>" +
+							"<div id=\"xkit-editor-switch-to-icon\" class=\"\">Icon (" + keyText + " + 3)</div>" +
+							"<div id=\"xkit-editor-switch-to-object\" class=\"\">JSON (" + keyText + " + 4)</div>" +
 						"</div>" +
 						"<div style=\"margin-top: 40px;\" id=\"xkit-editor-textarea\"></div>" +
 						"<div style=\"margin-top: 40px;\" id=\"xkit-editor-textarea-object\"></div>" +
@@ -147,7 +149,15 @@ function extension_editor_finish_run() {
 	$("#xkit-editor-new").click(function() {
 
 		XKit.window.show("Create extension","<input type=\"text\" id=\"xkit-editor-filename\" placeholder=\"Filename (eg: my_extension)\"><br/>No spaces or special characters.","question","<div id=\"xkit-editor-create-extension\" class=\"xkit-button default\">OK</div><div id=\"xkit-close-message\" class=\"xkit-button\">Cancel</div>");
-
+		
+		$("#xkit-editor-filename").focus();
+		
+		$("#xkit-editor-filename").on('keydown', function(event) {
+			if(event.which == 13 || event.keyCode == 13) {
+				$("#xkit-editor-create-extension").click();
+			}
+		});
+		
 		$("#xkit-editor-create-extension").click(function() {
 
 			var new_filename = $("#xkit-editor-filename").val();
@@ -161,25 +171,25 @@ function extension_editor_finish_run() {
 				return;
 			}
 
-			var default_script = 	"//* TITLE " + new_filename + " **//\n" +
-									"//* VERSION 1.0 REV A **//\n" +
-									"//* DESCRIPTION	**//\n" +
-									"//* DEVELOPER STUDIOXENIX **//\n" +
-									"//* FRAME false **//\n" +
-									"//* BETA false **//\n" +
-									"\nXKit.extensions." + new_filename + " = new Object({\n" +
-									"\n" +
-									"\trunning: false,\n" +
-									"\n" +
-									"\trun: function() {\n" +
-									"\t\tthis.running = true;\n" +
-									"\t},\n" +
-									"\n" +
-									"\tdestroy: function() {\n" +
-									"\t\tthis.running = false;\n" +
-									"\t}\n" +
-									"\n" +
-									"});";
+			var default_script = "//* TITLE " + new_filename + " **//\n" +
+								 "//* VERSION 1.0 REV A **//\n" +
+								 "//* DESCRIPTION	**//\n" +
+								 "//* DEVELOPER STUDIOXENIX **//\n" +
+								 "//* FRAME false **//\n" +
+								 "//* BETA false **//\n" +
+								 "\nXKit.extensions." + new_filename + " = new Object({\n" +
+								 "\n" +
+								 "\trunning: false,\n" +
+								 "\n" +
+								 "\trun: function() {\n" +
+								 "\t\tthis.running = true;\n" +
+								 "\t},\n" +
+								 "\n" +
+								 "\tdestroy: function() {\n" +
+								 "\t\tthis.running = false;\n" +
+								 "\t}\n" +
+								 "\n" +
+								 "});";
 
 			var m_object = {};
 			m_object.id = new_filename;
@@ -250,6 +260,45 @@ function extension_editor_finish_run() {
 			XKit.window.close();
 		});
 
+	});
+	
+	$(document).on('keydown', function(event) {
+		if (event.ctrlKey || event.metaKey) {
+			switch (String.fromCharCode(event.which).toLowerCase()) {
+				case "s":
+					event.preventDefault();
+					$("#xkit-editor-save").click();
+					break;
+				case "o":
+					event.preventDefault();
+					$("#xkit-editor-open").click();
+					break;
+				case "e":
+					event.preventDefault();
+					$("#xkit-editor-new").click();
+					break;
+				case "d":
+					event.preventDefault();
+					$("#xkit-editor-delete").click();
+					break;
+				case "1":
+					event.preventDefault();
+					$("#xkit-editor-switch-to-script").click();
+					break;
+				case "2":
+					event.preventDefault();
+					$("#xkit-editor-switch-to-css").click();
+					break;
+				case "3":
+					event.preventDefault();
+					$("#xkit-editor-switch-to-icon").click();
+					break;
+				case "4":
+					event.preventDefault();
+					$("#xkit-editor-switch-to-object").click();
+					break;
+			}
+		}
 	});
 }
 

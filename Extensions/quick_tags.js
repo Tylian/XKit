@@ -23,6 +23,11 @@ XKit.extensions.quick_tags = new Object({
 			value: true,
 			default: true
 		},
+		"show_in_new_post": {
+			text: "Enable Quick Tags in new post popup",
+			value: true,
+			default: true
+		},
 		"show_in_one_click_postage": {
 			text: "Enable Quick Tags in One-Click Postage popup",
 			value: true,
@@ -54,7 +59,7 @@ XKit.extensions.quick_tags = new Object({
 	menu_close: function() {
 		// Only close the menu if it doesn't have keyboard or mouse focus
 		if ($("#xkit-quick-tags-window").find('input:focus').length === 0 &&
-		    $('#xkit-quick-tags-window:hover').length === 0) {
+				$('#xkit-quick-tags-window:hover').length === 0) {
 			XKit.extensions.quick_tags.user_on_box = false;
 			XKit.extensions.quick_tags.menu_closer_int = setTimeout(function() { XKit.extensions.quick_tags.close_window(); }, 500);
 		}
@@ -85,9 +90,9 @@ XKit.extensions.quick_tags = new Object({
 	},
 
 	post_window: function() {
-
-		XKit.interface.post_window.add_control_button("xkit-quick-tags-window", "data-in-window=\"true\"");
-
+		if (XKit.extensions.quick_tags.preferences.show_in_new_post.value) {
+			XKit.interface.post_window.add_control_button("xkit-quick-tags-window", "data-in-window=\"true\"");
+		}
 	},
 
 	submit: function(tags, button) {
@@ -173,6 +178,8 @@ XKit.extensions.quick_tags = new Object({
 			XKit.window.show("Unable to edit post","Something went wrong, my apologies.<br/>Please try again later or file a bug report with the error code:<br/>QT02","error","<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
 		}
 
+		XKit.extensions.quick_tags.user_on_box = false;
+		XKit.extensions.quick_tags.close_window();
 	},
 
 	custom_tag: function() {
@@ -308,7 +315,7 @@ XKit.extensions.quick_tags = new Object({
 		}
 
 		// Let's create our popup first.
-		var m_html = 	"<div id=\"xkit-quick-tags-window\">" +
+		var m_html = "<div id=\"xkit-quick-tags-window\">" +
 					"<div id=\"xkit-quick-tags-user-tags\" class=\"" + add_class + "\">" +
 						"<div class=\"" + add_class_2 + "\">" + m_user_tags + m_add_button + "</div>" +
 					"</div>" +
@@ -509,21 +516,21 @@ XKit.extensions.quick_tags = new Object({
 
 		$(".xkit-quick-tags-cp-down").click(function() {
 
-			 var box = $(this).parent();
-			 $(box).next().after($(box));
+			var box = $(this).parent();
+			$(box).next().after($(box));
 
-			 XKit.extensions.quick_tags.check_div_move_buttons();
-			 XKit.extensions.quick_tags.save_div_positions();
+			XKit.extensions.quick_tags.check_div_move_buttons();
+			XKit.extensions.quick_tags.save_div_positions();
 
 		});
 
 		$(".xkit-quick-tags-cp-up").click(function() {
 
-			 var box = $(this).parent();
-			  $(box).prev().before($(box));
+			var box = $(this).parent();
+			$(box).prev().before($(box));
 
-			 XKit.extensions.quick_tags.check_div_move_buttons();
-			 XKit.extensions.quick_tags.save_div_positions();
+			XKit.extensions.quick_tags.check_div_move_buttons();
+			XKit.extensions.quick_tags.save_div_positions();
 
 		});
 

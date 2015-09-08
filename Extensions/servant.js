@@ -1,8 +1,8 @@
 //* TITLE Servant **//
-//* VERSION 0.4 REV F **//
+//* VERSION 0.5.8 **//
 //* DESCRIPTION XKit Personal Assistant **//
 //* DETAILS Automator for XKit: lets you create little Servants that does tasks for you when the conditions you've set are met. **//
-//* DEVELOPER STUDIOXENIX **//
+//* DEVELOPER new-xkit **//
 //* FRAME false **//
 //* SLOW true **//
 //* BETA false **//
@@ -732,7 +732,7 @@ XKit.extensions.servant = new Object({
 
 				try {
 					/* jshint evil: true */
-					m_return = eval(parameter);
+					m_return = eval(parameter + "\n//# sourceURL=xkit/servant/servant"+(new Date()).getTime()+".js");
 				} catch(e) {
 					m_return = false;
 					console.log("Unable to run Servant! ---> " + e.message);
@@ -1142,14 +1142,14 @@ XKit.extensions.servant = new Object({
 					var to_run = function() {
 						post = m_post;
 						/* jshint evil: true */
-						eval(parameter_fixed);
+						eval(parameter_fixed + "\n//# sourceURL=xkit/servant/servant"+(new Date()).getTime()+".js");
 					};
 					to_run();
 
 				} else {
 
 					/* jshint evil: true */
-					eval(parameter_fixed);
+					eval(parameter_fixed + "\n//# sourceURL=xkit/servant/servant"+(new Date()).getTime()+".js");
 
 				}
 
@@ -1304,7 +1304,7 @@ XKit.extensions.servant = new Object({
 
 			} else {
 
-				m_object = $(".post").not(".xkit-servant-" + obj.id).not("#new_post").first();
+				m_object = $(".posts .post").not(".xkit-servant-" + obj.id).not("#new_post").first();
 				if (m_object.length === 0) { return false; }
 
 			}
@@ -1675,6 +1675,7 @@ XKit.extensions.servant = new Object({
 		m_html = m_html + "<option value=\"photo\">Photo / Photoset</option>";
 		m_html = m_html + "<option value=\"quote\">Quote</option>";
 		m_html = m_html + "<option value=\"link\">Link</option>";
+		m_html = m_html + "<option value=\"chat\">Chat</option>";
 		m_html = m_html + "<option value=\"audio\">Audio</option>";
 		m_html = m_html + "<option value=\"video\">Video</option>";
 
@@ -2093,14 +2094,14 @@ XKit.extensions.servant = new Object({
 
 			for (var i=0;i<XKit.extensions.servant.servants.length;i++) {
 
-				servant_html = servant_html + 	XKit.extensions.servant.create_cpanel_div(XKit.extensions.servant.servants[i]);
+				servant_html = servant_html + XKit.extensions.servant.create_cpanel_div(XKit.extensions.servant.servants[i]);
 				XKit.extensions.servant.servant_count_for_list++;
 
 			}
 
 		}
 
-		var m_html = 	"<div id=\"xkit-servant-cp\">" +
+		var m_html = "<div id=\"xkit-servant-cp\">" +
 					"<div id=\"servant-toolbar\">" +
 						"<div id=\"servant-add-button\" class=\"xkit-button\">Add new servant..</div>" +
 						"<div id=\"servant-refresh-warning\">You need to refresh the page for changes to take affect</div>" +

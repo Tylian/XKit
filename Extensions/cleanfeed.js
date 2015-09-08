@@ -1,5 +1,5 @@
 //* TITLE CleanFeed **//
-//* VERSION 1.5.0 **//
+//* VERSION 1.5.1 **//
 //* DESCRIPTION Browse safely in public **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS This extension, when enabled, hides photo posts until you hover over them. Useful to browse Tumblr in a workspace or in public, and not worry about NSFW stuff appearing. You can also set it to hide avatars and not show non-text posts at all. To activate or disable it, click on the CleanFeed button on your sidebar. It will remember it's on/off setting. **//
@@ -101,7 +101,7 @@ XKit.extensions.cleanfeed = new Object({
 				opt_2 = "selected";
 			}
 
-			var m_html = 	"<div data-mode=\"normal\" id=\"xkit-cleanfeed-mode-normal\" class=\"" + opt_1 + " xkit-checkbox xkit-cleanfeed-mode-toggle\" style=\"display: block; padding-left: 0px; margin-top: 10px; margin-bottom: 5px;\"><b>&nbsp;</b><span style=\"font-weight: bold; margin-right: 3px;\">Normal:</span>Hide everything from everyone.</div>" +
+			var m_html = "<div data-mode=\"normal\" id=\"xkit-cleanfeed-mode-normal\" class=\"" + opt_1 + " xkit-checkbox xkit-cleanfeed-mode-toggle\" style=\"display: block; padding-left: 0px; margin-top: 10px; margin-bottom: 5px;\"><b>&nbsp;</b><span style=\"font-weight: bold; margin-right: 3px;\">Normal:</span>Hide everything from everyone.</div>" +
 					"<div data-mode=\"smart\" id=\"xkit-cleanfeed-mode-smart\" class=\"" + opt_2 + " xkit-checkbox xkit-cleanfeed-mode-toggle\" style=\"display: block; padding-left: 0px;\"><b>&nbsp;</b><span style=\"font-weight: bold; margin-right: 3px;\">Smart:</span>Only hide stuff from NSFW/Adult blogs.</div>" +
 					"<div id=\"xkit-cleanfeed-mode-warning\">" +
 						"<b>Important:</b> Smart mode depends on the blog rating gathered from Tumblr servers. If you turn on Smart mode and a blog is not set as a NSFW/Adult blog, either by the blogger or Tumblr, then their posts will appear on your dashboard without any filtering. Turn on Normal mode for maximum protection against genitalia in public." +
@@ -303,7 +303,7 @@ XKit.extensions.cleanfeed = new Object({
 			XKit.extensions.cleanfeed.added_css = true;
 		}
 
-		$(".post").not(".xkit-cleanfeed-smart-checked").each(function() {
+		$(".posts .post").not(".xkit-cleanfeed-smart-checked").each(function() {
 
 			var rating = $(this).attr('data-tumblelog-content-rating');
 			var is_nsfw = false;
@@ -364,7 +364,7 @@ XKit.extensions.cleanfeed = new Object({
 
 		if (!hide) {
 
-			$(".post").removeClass("xkit-cleanfeed-smart-checked").removeClass("xkit-cleanfeed-smart-checked-flagged");
+			$(".posts .post").removeClass("xkit-cleanfeed-smart-checked").removeClass("xkit-cleanfeed-smart-checked-flagged");
 
 		}
 

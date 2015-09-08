@@ -29,16 +29,23 @@
     "tweaks"
   ],
   "scripts": {
-    "test": "grunt jshint"
+    "test": "gulp lint:scripts"
   },
   "devDependencies": {
-    "grunt": "~0.4.5",
-    "grunt-cli": "^0.1.13",
-    "grunt-contrib-clean": "^0.6.0",
-    "grunt-contrib-compress": "^0.12.0",
-    "grunt-contrib-copy": "^0.6.0",
-    "grunt-contrib-jshint": "~0.10.0",
-    "grunt-contrib-watch": "~0.6.1",
-    "underscore": "^1.7.0"
+    "connect": "^3.4.0",
+    "del": "^1.2.0",
+    "glob": "^5.0.14",
+    "gulp": "^3.9.0",
+    "gulp-cached": "^1.1.0",
+    "gulp-csslint": "^0.2.0",
+    "gulp-jscs": "^2.0.0",
+    "gulp-jshint": "^1.11.2",
+    "gulp-util": "^3.0.6",
+    "gulp-zip": "^3.0.2",
+    "jpm": "^1.0.1",
+    "jshint-stylish": "^2.0.1",
+    "merge-stream": "^0.1.8",
+    "morgan": "^1.6.1",
+    "serve-static": "^1.10.0"
   }
 }

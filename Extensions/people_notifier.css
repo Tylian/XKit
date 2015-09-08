@@ -5,6 +5,12 @@
 	color: rgba(255,255,255,0.55);
 }
 
+.xkit-people-notifier-person a { 
+	position: relative;
+	height: 100%;
+	display: block;
+}
+
 .xkit-people-notifier-person .hide_overflow {
 	width: 125px;
 }
@@ -21,4 +27,32 @@
 
 .xkit-people-notifier-person a:after {
 	background: none !important;
+	display: block;
+	height: 100%;
+	position: relative;
+}
+
+.identity .controls_section .xkit-people-notifier-person a .count,
+.xkit-people-notifier-person .close {
+	float: right;
+	top: 50% !important;
+	display: block;
+	height: 13px;
+	margin-top: -11px;
+	font-size: 13px;
+	position: absolute;
+}
+
+.xkit-people-notifier-person .close {
+	cursor: pointer;
+	right: 10px;
+}
+
+.dashboard_useraction_following .xkit-people-notifier-person:hover,
+.dashboard_useraction_following .xkit-people-notifier-new:hover {
+	background: rgba(0,0,0,0.025) !important;
+}
+
+.dashboard_useraction_following.identity .controls_section a .count {
+	color: #444 !important;
 }

@@ -26,19 +26,19 @@ XKit.extensions.stats = new Object({
 		if (XKit.interface.where().dashboard === false && XKit.interface.where().channel === false) { return; }
 
 		XKit.tools.init_css("stats");
-		
-         if ($('#xstats_ul').length === 0) {
-		    var xf_html = 	'<ul class="controls_section" id="xstats_ul">' +
-			    		'<li class="section_header selected">XSTATS</li>' +
-				    	'<li class="no_push" style="height: 36px;"><a href="#" onclick="return false;" id="xstats_dashboard_stats">' +
-		    				'<div class="hide_overflow" style="color: rgba(255, 255, 255, 0.5) !important; font-weight: bold; padding-left: 10px; padding-top: 8px;">Dashboard Stats</div>' +
-			    		'</a></li>' +
-				    	'<li class="no_push" id="xstats_blog_stats_parent" style="height: 36px;"><a href="#" onclick="return false;" style="display: none;" id="xstats_blog_stats">' +
-					    	'<div class="hide_overflow" style="color: rgba(255, 255, 255, 0.5) !important; font-weight: bold; padding-left: 10px; padding-top: 8px;">Blog Stats</div>' +
-	    				'</a></li>' +
-		    		'</ul>';
-		    $("ul.controls_section:first").before(xf_html);
-         }
+
+		if ($('#xstats_ul').length === 0) {
+			var xf_html = '<ul class="controls_section" id="xstats_ul">' +
+				'<li class="section_header selected">XSTATS</li>' +
+				'<li class="no_push" style="height: 36px;"><a href="#" onclick="return false;" id="xstats_dashboard_stats">' +
+				'<div class="hide_overflow" style="color: rgba(255, 255, 255, 0.5) !important; font-weight: bold; padding-left: 10px; padding-top: 8px;">Dashboard Stats</div>' +
+				'</a></li>' +
+				'<li class="no_push" id="xstats_blog_stats_parent" style="height: 36px;"><a href="#" onclick="return false;" style="display: none;" id="xstats_blog_stats">' +
+				'<div class="hide_overflow" style="color: rgba(255, 255, 255, 0.5) !important; font-weight: bold; padding-left: 10px; padding-top: 8px;">Blog Stats</div>' +
+				'</a></li>' +
+				'</ul>';
+			$("ul.controls_section:first").before(xf_html);
+		}
 
 		$("#xstats_dashboard_stats").click(function() {
 
@@ -165,7 +165,7 @@ XKit.extensions.stats = new Object({
 		if (XKit.extensions.stats.window_id !== m_window_id) { return; }
 
 
- 		var offset = page * 20;
+		var offset = page * 20;
 
 		var api_url = "https://api.tumblr.com/v2/blog/" + blog_url + ".tumblr.com/posts/?api_key=" + XKit.extensions.stats.apiKey + "&reblog_info=true&offset=" + offset;
 
@@ -368,7 +368,7 @@ XKit.extensions.stats = new Object({
 				return;
 			}
 			var perc = Math.round((user.count * 100) / posts.length);
-			var mx_html = 	"<a target=\"_BLANK\" href=\"http://" + user.url + ".tumblr.com/\"><div class=\"xkit-stats-blog\">" +
+			var mx_html = "<a target=\"_BLANK\" href=\"http://" + user.url + ".tumblr.com/\"><div class=\"xkit-stats-blog\">" +
 						"<img src=\"https://api.tumblr.com/v2/blog/" + user.url + ".tumblr.com/avatar/32\" class=\"m_avatar\">" +
 						"<div class=\"m_title\">" + user.url + "</div>" +
 						"<div class=\"m_percentage\">" + perc + "%</div>" +
@@ -379,7 +379,7 @@ XKit.extensions.stats = new Object({
 
 		if (m_count <= 3) {
 			for (var i=m_count;i<4;i++){
-				var mx_html = 	"<div class=\"xkit-stats-blog xkit-empty-slot\">" +
+				var mx_html = "<div class=\"xkit-stats-blog xkit-empty-slot\">" +
 							"<div class=\"m_title\">&nbsp;</div>" +
 						"</div>";
 				m_html = m_html + mx_html;

@@ -1,13 +1,16 @@
 # XKit
 
-[![Join the chat at https://gitter.im/new-xkit/XKit](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/new-xkit/XKit?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Stories In Progress](https://badge.waffle.io/new-xkit/XKit.svg?label=in%20progress&title=In Progress)](http://waffle.io/new-xkit/XKit) [![Build Status](https://travis-ci.org/new-xkit/XKit.svg?branch=master)](https://travis-ci.org/new-xkit/XKit)
 
 XKit is a small extension framework that powers tweaks for Tumblr.
 
 ## Get a release build
-If you want an official XKit release, those are provided by the [official
-download page](http://www.xkit.info/download). For this unofficial fork of
-XKit, look [here](https://github.com/new-xkit/XKit/releases).
+Currently we support [Firefox](https://addons.mozilla.org/en-US/firefox/addon/new-xkit/) and [Chrome](https://chrome.google.com/webstore/detail/new-xkit/inobiceghmpkaklcknpniboilbjmlald) officially. 
+We support Opera unofficially using the same file as the Chrome extension, [which you can download here](https://github.com/new-xkit/XKit/releases).
+
+## Support [![Join the chat at https://gitter.im/new-xkit/support](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/new-xkit/support?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
+First, [check the list of issues](https://github.com/new-xkit/XKit/issues), and see if there's something there that looks like the problem you're having. Otherwise, [file a new issue](https://github.com/new-xkit/XKit/issues) or come join our support chat; visit our [live support page](http://new-xkit-support.tumblr.com/support) or join our [Gitter chat](https://gitter.im/new-xkit/support) if you have a GitHub account. We don't bite!
 
 ## Contribute
 XKit needs all the help it can get! If you want to help out, the first step is
@@ -16,16 +19,27 @@ finding something going wrong. There's a long list of known issues
 [on the original issues page](https://github.com/atesh/XKit/issues). The next step is to
 [fix the bug](https://github.com/new-xkit/XKit/wiki/Fixing-a-bug).
 
-## Writing a New Extension
+Come join us in [the XKit repo chat](https://gitter.im/new-xkit/XKit) if you get stuck, or want some advice! There's normally a few people lurking in there any time of day.
+
+### Writing a New Extension
 Check out [the wiki page](https://github.com/new-xkit/XKit/wiki/Writing-a-New-Extension)!
 
-## Develop XKit
-Download [Node.js](https://nodejs.org/). In your clone of this repository run
-the following:
+### Develop XKit
+Review the project prerequisites and learn how to build XKit from source [over on the wiki](https://github.com/new-xkit/XKit/wiki/Build-XKit).
+
+### Quickstart
+In your clone of this repository run:
+
+```sh
+npm install
 ```
-npm install --dev-dependencies
+
+To build XKit from source, run:
+
+```sh
+gulp build
 ```
-At this point, if you want to build the extensions run `./build.sh all`. They
-will appear in the `build` directory. If you want to run our automated tests,
-run `npm test`. To automatically run those tests whenever you edit files, run
-`grunt watch`.
+
+Builds can be found in the `build/` directory.
+
+For a list of available build tasks, see [the documentation](https://github.com/new-xkit/XKit/wiki/Build-XKit#gulp-tasks).

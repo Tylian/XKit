@@ -35,7 +35,7 @@ XKit.extensions.find_blogs = new Object({
 
 		XKit.tools.init_css("find_blogs");
 
-		var m_css = 	"#iframe_controls { width: auto !important; } " +
+		var m_css = "#iframe_controls { width: auto !important; } " +
 				"#xkit_find_blogs_inblog_button:before {" +
 					" background-size: auto; " +
 					" background-position: 50% 50%; " +
@@ -45,7 +45,7 @@ XKit.extensions.find_blogs = new Object({
 
 		XKit.tools.add_css(m_css, "profiler_in_blog");
 
-		var m_html = 	"<a id=\"xkit_find_blogs_inblog_button\" onclick=\"return false\" class=\"btn icon reblog no_label\">Find Blogs</a>";
+		var m_html = "<a id=\"xkit_find_blogs_inblog_button\" onclick=\"return false\" class=\"btn icon reblog no_label\">Find Blogs</a>";
 
 		$(".btn.dashboard").before(m_html);
 
@@ -323,7 +323,7 @@ XKit.extensions.find_blogs = new Object({
 
 		for (var i=0;i<m_array.length;i++){
 			if (m_count >= 8) {break; }
-			var mx_html = 	"<a target=\"_BLANK\" href=\"http://" + m_array[i] + ".tumblr.com/\"><div class=\"xkit-find-blogs-blog\">" +
+			var mx_html = "<a target=\"_BLANK\" href=\"http://" + m_array[i] + ".tumblr.com/\"><div class=\"xkit-find-blogs-blog\">" +
 						"<img src=\"https://api.tumblr.com/v2/blog/" + m_array[i] + ".tumblr.com/avatar/32\" class=\"m_avatar\">" +
 						"<div class=\"m_title\">" + m_array[i] + "</div>" +
 					"</div></a>";

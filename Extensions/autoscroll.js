@@ -104,7 +104,7 @@ XKit.extensions.autoscroll = new Object({
 	initControl: function(){
 		XKit.tools.init_css("autoscroll");
 		// HTML for control
-		var m_html = 	'<div class="auto_scroll_control_container"><table style="table-layout: fixed"><td>';
+		var m_html = '<div class="auto_scroll_control_container"><table style="table-layout: fixed"><td>';
 		for(var j = 0; j < this.preferences.StepsOnControl.value; j++)
 		{
 			m_html += '<div class="auto_scroll_control_step" number = ' + j + '/>';

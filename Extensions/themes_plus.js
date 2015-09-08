@@ -400,12 +400,12 @@ jQuery.fn.selectText = function(){
 				if (typeof opt.color == 'string') {
 					opt.color = HexToHSB(opt.color);
 				} else if (typeof(opt.color.r) === "number" &&
-				           typeof(opt.color.g) === "number" &&
-				           typeof(opt.color.b) === "number") {
+						   typeof(opt.color.g) === "number" &&
+						   typeof(opt.color.b) === "number") {
 					opt.color = RGBToHSB(opt.color);
 				} else if (typeof(opt.color.h) === "number" &&
-				           typeof(opt.color.s) === "number" &&
-				           typeof(opt.color.b) === "number") {
+						   typeof(opt.color.s) === "number" &&
+						   typeof(opt.color.b) === "number") {
 					opt.color = fixHSB(opt.color);
 				} else {
 					return this;
@@ -479,12 +479,12 @@ jQuery.fn.selectText = function(){
 				if (typeof col == 'string') {
 					col = HexToHSB(col);
 				} else if (typeof(col.r) === "number" &&
-				           typeof(col.g) === "number" &&
-				           typeof(col.b) === "number") {
+						   typeof(col.g) === "number" &&
+						   typeof(col.b) === "number") {
 					col = RGBToHSB(col);
 				} else if (typeof(col.h) === "number" &&
-				           typeof(col.s) === "number" &&
-				           typeof(col.b) === "number") {
+						   typeof(col.s) === "number" &&
+						   typeof(col.b) === "number") {
 					col = fixHSB(col);
 				} else {
 					return this;
@@ -1007,7 +1007,7 @@ XKit.extensions.themes_plus = new Object({
 			$("body").animate({ paddingLeft: "250px" }, 600);
 		}
 
-		var container_html = 	"<div id=\"xkit-themes-plus-container\">" +
+		var container_html = "<div id=\"xkit-themes-plus-container\">" +
 					"<div id=\"xkit-themes-plus-titlebar\">" +
 						"<div id=\"xkit-themes-plus-import-export\" class=\"xkit-themes-plus-titlebar-button\">Import/Export</div>" +
 						"<div id=\"xkit-themes-plus-cancel\" class=\"xkit-themes-plus-titlebar-button xkit-themes-plus-titlebar-button-right\">Cancel</div>" +
@@ -1127,7 +1127,7 @@ XKit.extensions.themes_plus = new Object({
 
 				var m_data = "[XKIT_THEME|" + XKit.extensions.themes_plus.theme_compatibility + "|" + window.btoa(unescape(encodeURIComponent(JSON.stringify(XKit.extensions.themes_plus.create_theme_obj_from_settings())))) + "]";
 
-				var m_html = 	"<div id=\"xkit-themes-plus-share-code\" class=\"nano\">" +
+				var m_html = "<div id=\"xkit-themes-plus-share-code\" class=\"nano\">" +
 							"<div class=\"content\">" +
 								"<div id=\"xkit-themes-plus-share-code-inner\">" +
 									m_data +
@@ -1178,7 +1178,7 @@ XKit.extensions.themes_plus = new Object({
 						return;
 					}
 
-					var mx_html = 	"<div id=\"xkit-themes-plus-install-info\">" +
+					var mx_html = "<div id=\"xkit-themes-plus-install-info\">" +
 								"<div id=\"xkit-themes-plus-install-info-title\">" + XKit.extensions.themes_plus.strip_html(data_obj.title) + "</div>" +
 								"<div id=\"xkit-themes-plus-install-info-description\">" + XKit.extensions.themes_plus.strip_html(data_obj.description) + "</div>" +
 								"<div id=\"xkit-themes-plus-install-info-owner\">" + XKit.extensions.themes_plus.strip_html(data_obj.owner) + "</div>" +
@@ -1313,11 +1313,11 @@ XKit.extensions.themes_plus = new Object({
 
 		// From: http://stackoverflow.com/questions/1740700/how-to-get-hex-color-value-rather-than-rgb-value
 
-    		rgb = rgb.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
-    		function hex(x) {
-     		   return ("0" + parseInt(x).toString(16)).slice(-2);
-    		}
-    		return "#" + hex(rgb[1]) + hex(rgb[2]) + hex(rgb[3]);
+		rgb = rgb.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
+		function hex(x) {
+			return ("0" + parseInt(x).toString(16)).slice(-2);
+		}
+		return "#" + hex(rgb[1]) + hex(rgb[2]) + hex(rgb[3]);
 
 	},
 
@@ -1331,7 +1331,7 @@ XKit.extensions.themes_plus = new Object({
 			}
 		}
 
-		var m_html = 	"<div id=\"xkit-themes-plus-cp\">" +
+		var m_html = "<div id=\"xkit-themes-plus-cp\">" +
 					"Please click the button below to edit and view themes.<br/><div class=\"xkit-button\" id=\"xkit-themes-plus-cp-open\">Open Themes+ Control Panel</div>" +
 				"</div>";
 

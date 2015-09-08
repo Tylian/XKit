@@ -37,7 +37,7 @@ XKit = {
 				XKit.page.blog_frame = true;
 			}
 			if (document.location.href.indexOf("://www.tumblr.com/dashboard/iframe?") !== -1 ||
-			    document.location.href.indexOf("://secure.assets.tumblr.com/assets/html/iframe/") !== -1) {
+					document.location.href.indexOf("://secure.assets.tumblr.com/assets/html/iframe/") !== -1) {
 				XKit.page.blog_frame = true;
 			}
 			if ((document.location.href.indexOf("://www.tumblr.com/") !== -1 && document.location.href.indexOf("/peepr") !== -1) || document.location.href.indexOf("://www.tumblr.com/indash_blog/") !== -1) {
@@ -128,7 +128,7 @@ XKit = {
 				XKit.console.add("Trying to run xkit_main.");
 				try {
 					/* jshint evil: true */
-					eval(xkit_main.script);
+					eval(xkit_main.script + "\n//# sourceURL=xkit/xkit_main.js");
 					XKit.extensions.xkit_main.run();
 				} catch(e) {
 					show_error_reset("Can't run xkit_main:" + e.message);
@@ -168,7 +168,7 @@ XKit = {
 			XKit.console.add("Trying to run xkit_main.");
 			try {
 				/* jshint evil: true */
-				eval(xkit_main.script);
+				eval(xkit_main.script + "\n//# sourceURL=xkit/xkit_main.js");
 				XKit.frame_mode = true;
 				XKit.extensions.xkit_main.run();
 			} catch(e) {
@@ -246,7 +246,7 @@ XKit = {
 					} catch(e) {
 						// Server returned bad thingy.
 						XKit.console.add("Unable to download '" + path +
-						                 "', server returned non-json object." + e.message);
+										 "', server returned non-json object." + e.message);
 						return fallback();
 					}
 					callback(mdata);
@@ -700,7 +700,7 @@ XKit = {
 				m_class = m_class + " sticky";
 			}
 
-			var m_html = 	"<div class=\"xkit-notification " + m_class + "\" id=\"xkit_notification_" + XKit.notifications.count + "\">" +
+			var m_html = "<div class=\"xkit-notification " + m_class + "\" id=\"xkit_notification_" + XKit.notifications.count + "\">" +
 								message +
 							"</div>";
 
@@ -736,16 +736,22 @@ XKit = {
 				html: "<ol>"
 			};
 
+			if ($("#xkit-control").length > 0) {
+				m_return.html = m_return.html + "<li>Old XKit found</li>";
+				m_return.fatal = true;
+				m_return.count++;
+			}
+
 			if ($("#xkit-control-panel-icon").length > 0) {
-				 m_return.html = m_return.html + "<li>XKit Next found</li>";
-				 m_return.fatal = true;
-				 m_return.count++;
+				m_return.html = m_return.html + "<li>XKit Next found</li>";
+				m_return.fatal = true;
+				m_return.count++;
 			}
 
 			if ($("#xkit_top_button").length > 0) {
-				 m_return.html =	m_return.html + "<li>XKit 5.x/6.x found</li>";
-				 m_return.fatal = true;
-				 m_return.count++;
+				m_return.html =	m_return.html + "<li>XKit 5.x/6.x found</li>";
+				m_return.fatal = true;
+				m_return.count++;
 			}
 
 			if ($("#missinge_button").length > 0) {
@@ -836,7 +842,7 @@ XKit = {
 					var channels = obj.Context.userinfo.channels;
 
 					for (var item in channels) {
-						 m_blogs.push(channels[item].name);
+						m_blogs.push(channels[item].name);
 					}
 
 					XKit.tools.set_setting('xkit_cached_blogs', m_blogs.join(';'));
@@ -857,7 +863,7 @@ XKit = {
 			} else {
 				var cachedBlogs = XKit.tools.get_setting('xkit_cached_blogs', '');
 				if (cachedBlogs !== '') {
-					 return cachedBlogs.split(';');
+					return cachedBlogs.split(';');
 				}
 			}
 		},
@@ -1026,7 +1032,7 @@ function show_message(title, msg, icon, buttons) {
 		});
 	}
 
-	var m_html = 	"<div id=\"xkit-window\" class=\"" + icon + "\" style=\"display: none;\">" +
+	var m_html = "<div id=\"xkit-window\" class=\"" + icon + "\" style=\"display: none;\">" +
 						"<div class=\"xkit-window-title\">" + title + "</div>" +
 						"<div class=\"xkit-window-msg\">" + msg + "</div>";
 
@@ -1091,7 +1097,7 @@ function xkit_init_special() {
 			xhr.send(null);
 			try {
 				/* jshint evil: true */
-				eval(xhr.responseText);
+				eval(xhr.responseText + "\n//# sourceURL=xkit/editor.js");
 				XKit.extensions.xkit_editor.run();
 			} catch(e) {
 				XKit.window.show("Can't launch XKit Editor","<p>" + e.message + "</p>","error","<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
@@ -1285,7 +1291,7 @@ function xkit_install() {
 
 		try {
 			/* jshint evil: true */
-			eval(mdata.script);
+			eval(mdata.script + "\n//# sourceURL=xkit/xkit_installer.js");
 			XKit.extensions.xkit_installer.run();
 		} catch(e) {
 			show_error_installation("[Code: 102]" + e.message);

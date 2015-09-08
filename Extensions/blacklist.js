@@ -1,5 +1,5 @@
 //* TITLE Blacklist **//
-//* VERSION 2.7.3 **//
+//* VERSION 2.7.5 **//
 //* DESCRIPTION Clean your dash **//
 //* DETAILS This extension allows you to block posts based on the words you specify. If a post has the text you've written in the post itself or it's tags, it will be replaced by a warning, or won't be shown on your dashboard, depending on your settings. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -8,21 +8,21 @@
 //* SLOW true **//
 
 jQuery.fn.selectText = function(){
-    var doc = document;
-    var element = this[0];
-    var range, selection;
+	var doc = document;
+	var element = this[0];
+	var range, selection;
 
-    if (doc.body.createTextRange) {
-        range = document.body.createTextRange();
-        range.moveToElementText(element);
-        range.select();
-    } else if (window.getSelection) {
-        selection = window.getSelection();
-        range = document.createRange();
-        range.selectNodeContents(element);
-        selection.removeAllRanges();
-        selection.addRange(range);
-    }
+	if (doc.body.createTextRange) {
+		range = document.body.createTextRange();
+		range.moveToElementText(element);
+		range.select();
+	} else if (window.getSelection) {
+		selection = window.getSelection();
+		range = document.createRange();
+		range.selectNodeContents(element);
+		selection.removeAllRanges();
+		selection.addRange(range);
+	}
 };
 
 XKit.extensions.blacklist = new Object({
@@ -155,7 +155,7 @@ XKit.extensions.blacklist = new Object({
 					" .xblacklist_blacklisted_post .post_content { " +
 						" background: transparent; color: rgba(255,255,255,.43); } " +
 					" .xblacklist_blacklisted_post:hover .xblacklist_open_post { "+
-					    "display: inline-block; height: unset; line-height: initial;} " +
+						"display: inline-block; height: unset; line-height: initial;} " +
 					" .xblacklist_blacklisted_post .xblacklist_open_post { display: none; } " +
 					" .xblacklist_blacklisted_post .post_tags { display: none; } " +
 					" .xblacklist_blacklisted_post { " +
@@ -168,7 +168,7 @@ XKit.extensions.blacklist = new Object({
 
 		}
 
-		if ($(".post").length > 0) {
+		if ($(".posts .post").length > 0) {
 			XKit.post_listener.add("blacklist", XKit.extensions.blacklist.check);
 			XKit.extensions.blacklist.check();
 
@@ -205,22 +205,22 @@ XKit.extensions.blacklist = new Object({
 		try {
 
 		if (top.getSelection) {
-        		text = top.getSelection().toString();
-        	} else if (document.selection && document.selection.type != "Control") {
-        		text = document.selection.createRange().text;
-   		}
+			text = top.getSelection().toString();
+		} else if (document.selection && document.selection.type != "Control") {
+			text = document.selection.createRange().text;
+		}
 
 		} catch(err) {
 			// console.log("ho");
 		}
 
-        	if (text === "" ||typeof text === "undefined"){
-        		return;
-        	}
+		if (text === "" ||typeof text === "undefined"){
+			return;
+		}
 
-        	text = $.trim(text);
+		text = $.trim(text);
 
-        	XKit.extensions.blacklist.show_add(text, "");
+		XKit.extensions.blacklist.show_add(text, "");
 
 	},
 
@@ -233,7 +233,7 @@ XKit.extensions.blacklist = new Object({
 		m_data.blacklist = XKit.extensions.blacklist.blacklisted;
 		m_data.whitelist = XKit.extensions.blacklist.whitelisted;
 
-		var m_html = 	"<div id=\"xkit-blacklist-share-code\" class=\"nano\">" +
+		var m_html = "<div id=\"xkit-blacklist-share-code\" class=\"nano\">" +
 					"<div class=\"content\">" +
 						"<div id=\"xkit-blacklist-share-code-inner\">" +
 							JSON.stringify(m_data) +
@@ -280,7 +280,7 @@ XKit.extensions.blacklist = new Object({
 			var to_check_blacklist = "listBlack";
 			var to_check_whitelist = "listWhite";
 
-			var supported_ver = "0.4.9";
+			var supported_ver = "0.4.22";
 
 			if (m_obj.creator === "XKIT") {
 
@@ -347,14 +347,14 @@ XKit.extensions.blacklist = new Object({
 
 					XKit.window.show("Results",	"<b>Imported from XKit Blacklist.</b><br/>" +
 									"Added <b>" + blacklist_count + "</b> new words to the blacklist.<br/>" +
-						 			"Added <b>" + whitelist_count + "</b> new words to the whitelist.<br/><br/>Words that already exist in your list are not added. Your settings are not carried from Tumblr Savior, so you might want to check the settings to configure Blacklist to your liking.","info","<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
+									"Added <b>" + whitelist_count + "</b> new words to the whitelist.<br/><br/>Words that already exist in your list are not added. Your settings are not carried from Tumblr Savior, so you might want to check the settings to configure Blacklist to your liking.","info","<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
 
 
 				} else {
 
 					XKit.window.show("Results",	"<b>Imported from version " +  supported_ver + " of Tumblr Savior.</b><br/>" +
 									"Added <b>" + blacklist_count + "</b> new words to the blacklist.<br/>" +
-						 			"Added <b>" + whitelist_count + "</b> new words to the whitelist.<br/><br/>Words that already exist in your list are not added. Your settings are not carried from Tumblr Savior, so you might want to check the settings to configure Blacklist to your liking.","info","<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
+									"Added <b>" + whitelist_count + "</b> new words to the whitelist.<br/><br/>Words that already exist in your list are not added. Your settings are not carried from Tumblr Savior, so you might want to check the settings to configure Blacklist to your liking.","info","<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
 
 				}
 
@@ -457,7 +457,7 @@ XKit.extensions.blacklist = new Object({
 
 		if (XKit.extensions.blacklist.running !== true) {return; }
 
-		$(".post").not(".xblacklist-done").each(function() {
+		$(".posts .post").not(".xblacklist-done").each(function() {
 
 			try {
 
@@ -931,7 +931,7 @@ XKit.extensions.blacklist = new Object({
 				$(this).find(".xkit-shorten-posts-embiggen").css("display","block");
 				XKit.extensions.blacklist.unhide_post($(this));
 			});
-			 $(".xblacklist-done").removeClass("xblacklist-done");
+			$(".xblacklist-done").removeClass("xblacklist-done");
 			$(".xblacklist_hidden_post").removeClass("xblacklist_hidden_post");
 			$(".xblacklist_blacklisted_post").removeClass("xblacklist_blacklisted_post");
 		}, 500);

@@ -1,5 +1,5 @@
 //* TITLE XKit Installer **//
-//* VERSION 6.9 REV C **//
+//* VERSION 6.9.4 **//
 //* DESCRIPTION Lets you install XKit on your computer. **//
 //* DEVELOPER STUDIOXENIX **//
 XKit.extensions.xkit_installer = new Object({
@@ -79,7 +79,7 @@ XKit.extensions.xkit_installer = new Object({
 				// Try evaling the script.
 				// If it's working, then move to the next one.
 				/* jshint evil: true */
-				eval(mdata.script);
+				eval(mdata.script + "\n//# sourceURL=xkit/"+mdata.id+".js");
 				XKit.extensions.xkit_installer.installed++;
 				XKit.extensions.xkit_installer.next();
 			} catch(e) {

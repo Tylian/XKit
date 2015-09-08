@@ -41,14 +41,14 @@ XKit.extensions.disable_gifs = new Object({
 		$(obj).find(".xkit-disable-gifs-canvas-container").each(function() {
 
 			var image = new Image();
-        		image.src = $(this).attr('data-url');
+			image.src = $(this).attr('data-url');
 
-        		var v_object = $(this).find(".xkit-disable-gifs-canvas-thumbnail");
+			var v_object = $(this).find(".xkit-disable-gifs-canvas-thumbnail");
 
-        		image.onload = (function() {
-        			$(v_object)[0].getContext("2d").drawImage(image, 0, 0);
+			image.onload = (function() {
+				$(v_object)[0].getContext("2d").drawImage(image, 0, 0);
 
-        			if ($(v_object).hasClass("xkit-disable-gifs-for-photoset")) {return; }
+				if ($(v_object).hasClass("xkit-disable-gifs-for-photoset")) {return; }
 
 				$(v_object).click(function() {
 
@@ -69,7 +69,7 @@ XKit.extensions.disable_gifs = new Object({
 
 				});
 
-        		});
+			});
 
 
 
@@ -93,16 +93,16 @@ XKit.extensions.disable_gifs = new Object({
 		$("#xkit-disable-gifs-canvas-for-" + post_id + "___" + img_id).attr("height", height);
 
 		var image = new Image();
-        	image.src = url;
+		image.src = url;
 
-        	image.onload = (function(){
+		image.onload = (function(){
 
-        		console.log("return_as_jpg for " + url + " ---> Complete loading image.");
+			console.log("return_as_jpg for " + url + " ---> Complete loading image.");
 
-        		$("#xkit-disable-gifs-canvas-for-" + post_id + "___" + img_id)[0].getContext("2d").drawImage(image, 0, 0, width, height);
-        		//var image_src = $("#xkit-disable-gifs-canvas-for-" + post_id)[0].toDataURL("image/jpg");
+			$("#xkit-disable-gifs-canvas-for-" + post_id + "___" + img_id)[0].getContext("2d").drawImage(image, 0, 0, width, height);
+			//var image_src = $("#xkit-disable-gifs-canvas-for-" + post_id)[0].toDataURL("image/jpg");
 
-        	});
+		});
 
 	},
 
@@ -124,14 +124,14 @@ XKit.extensions.disable_gifs = new Object({
 		$("#xkit-disable-gifs-canvas-container-for-" + post_id).css("height", height + "px");
 
 		var image = new Image();
-        	image.src = url;
+		image.src = url;
 
-        	image.onload = (function(){
+		image.onload = (function(){
 
-        		console.log("return_as_jpg for " + url + " ---> Complete loading image.");
+			console.log("return_as_jpg for " + url + " ---> Complete loading image.");
 
-        		$("#xkit-disable-gifs-canvas-for-" + post_id)[0].getContext("2d").drawImage(image, 0, 0, width, height);
-        		//var image_src = $("#xkit-disable-gifs-canvas-for-" + post_id)[0].toDataURL("image/jpg");
+			$("#xkit-disable-gifs-canvas-for-" + post_id)[0].getContext("2d").drawImage(image, 0, 0, width, height);
+			//var image_src = $("#xkit-disable-gifs-canvas-for-" + post_id)[0].toDataURL("image/jpg");
 
 			var m_width = $(obj).attr('data-width');
 			var m_height = $(obj).attr('data-height');
@@ -169,7 +169,7 @@ XKit.extensions.disable_gifs = new Object({
 
 			}
 
-        	});
+		});
 
 	},
 
@@ -217,8 +217,8 @@ XKit.extensions.disable_gifs = new Object({
 
 			if ($(this).hasClass("xkit-dont-run-extensions")) { return; }
 
-	  		var m_post = XKit.interface.post($(this));
-	  		// if (m_post.animated !== true) { return; }
+			var m_post = XKit.interface.post($(this));
+			// if (m_post.animated !== true) { return; }
 
 			var image_src = "";
 			//alert(XKit.extensions.disable_gifs.check_if_animated($(this)));

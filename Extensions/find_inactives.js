@@ -1,5 +1,5 @@
 //* TITLE Find Inactives **//
-//* VERSION 0.2.0 **//
+//* VERSION 0.2.1 **//
 //* DESCRIPTION Find the inactive blogs you follow **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS This extension lets you find the blog that haven't been updated for over 30 days. Just go to list of blogs you follow, then click on &quot;Find Inactive Blogs&quot; button below your Crushes to get started. **//
@@ -9,7 +9,6 @@
 XKit.extensions.find_inactives = new Object({
 
 	running: false,
-	apiKey: "fuiKNFp9vQFvjLNvx4sUwti4Yb5yGutBN4Xh10LXZhhRKjWlV4",
 
 	timeout_time: 300,
 
@@ -20,12 +19,12 @@ XKit.extensions.find_inactives = new Object({
 			value: "30",
 			type: "combo",
 			values: [
-				"2 weeks", "15",
+				"2 weeks", "14",
 				"A month", "30",
 				"Two months", "60",
 				"4 months", "120",
-				"A year", "365",
-			],
+				"A year", "365"
+			]
 		}
 	},
 
@@ -51,6 +50,8 @@ XKit.extensions.find_inactives = new Object({
 	page: 0,
 	people_count: 0,
 	people_index: 0,
+	people_per_page: 25,
+	concurrent_requests: 8, //Arbitrary number.  This just seemed to go fast.  ~7.50 for 1000 Tumblrs
 
 	start: function() {
 
@@ -59,28 +60,25 @@ XKit.extensions.find_inactives = new Object({
 		XKit.extensions.find_inactives.page = 0;
 		XKit.extensions.find_inactives.people_index = -1;
 
-		XKit.window.show("Please wait..","I'm trying to find the inactive blogs, this might take a while." + XKit.progress.add("find-inactives") + "<div id=\"xkit-find-inactives-status\">Initializing...</div>","info");
+		XKit.window.show("Please wait..","I'm trying to find the inactive blogs, this might take a while." + XKit.progress.add("find-inactives") + "<div id=\"xkit-find-inactives-status\">Crunching the numbers...</div>","info");
 
 		XKit.extensions.find_inactives.get_count();
 
 	},
 
 	get_count: function() {
-		var done = false;
-		$("#tabs").children().each(function() {
-			if (done) {
-				return;
-			}
-			var tab = $(this);
-			if (tab.attr('href') !== '/following') {
-				return;
-			}
-			done = true;
+		var count_text = $("#tabs").html().match(/Following.*Tumblr/gm)[0];
+		count_text = count_text.replace(/[^0-9\.]/g, '');
+		var people_count = parseInt(count_text);
+		XKit.extensions.find_inactives.people_count = people_count;
 
-			// Extract the first number found
-			XKit.extensions.find_inactives.people_count = parseInt(tab.text().match(/\d+/));
+		XKit.extensions.find_inactives.page_tracker.reset();
+		XKit.extensions.find_inactives.page_tracker.set_page_count(people_count / this.people_per_page);
+
+		//Start our concurrent requests.
+		for(var i = 0; i < XKit.extensions.find_inactives.concurrent_requests; i++) {
 			XKit.extensions.find_inactives.next_page();
-		});
+		}
 	},
 
 	show_error: function(message) {
@@ -88,6 +86,165 @@ XKit.extensions.find_inactives = new Object({
 		XKit.window.close();
 		XKit.window.show("Find Inactives encountered an error", message, "error", "<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
 
+	},
+
+	next_page: function() {
+		var self = this;
+		var next_page = this.page_tracker.get_next_page();
+		if(next_page < 0){
+			if(this.page_tracker.has_completed()){
+				$("#xkit-find-inactives-status").html("Fetching information about the people I've just learned about...");
+				XKit.extensions.find_inactives.list_people();
+			}
+			return;
+		}
+
+		this.page_tracker.start_processing_page(next_page);
+		GM_xmlhttpRequest({
+			method: "GET",
+			url: "http://www.tumblr.com/following/" + (next_page * 25),
+			json: false,
+			onerror: function(response) {
+				XKit.extensions.find_inactives.show_error("<b>Unable to get the blog information.</b><br/>Please try again later.<br/><br/>Error Code: FIA-330");
+				return;
+			},
+			onload: function(response) {
+
+				try {
+
+					var total = XKit.extensions.find_inactives.people_count;
+					var perc = self.page_tracker.get_progress();
+
+					console.log(perc + " | " + total);
+
+					XKit.progress.value("find-inactives", perc);
+
+					$(".follower", response.responseText).each(function() {
+
+						var username = $(this).find(".name").find("a").html();
+						var last_updated = $(this).find(".last_updated").html();
+						var last_updated_days = XKit.extensions.find_inactives.days_since_updated(last_updated);
+
+
+						if (XKit.extensions.find_inactives.people_list.indexOf(username) === -1) {
+							XKit.extensions.find_inactives.people_list.push(username);
+						}
+
+						console.log(username + " => " + last_updated_days);
+
+						if (last_updated_days >= parseInt(XKit.extensions.find_inactives.preferences.time.value)) {
+							var m_user = {};
+							m_user.username = username;
+							m_user.days = last_updated;
+
+							XKit.extensions.find_inactives.retired_people_list.push(m_user);
+						}
+
+					});
+
+					self.page_tracker.finished_processing_page(next_page);
+					setTimeout(function() { XKit.extensions.find_inactives.next_page(); }, XKit.extensions.find_inactives.timeout_time);
+
+				} catch(e) {
+					XKit.extensions.find_inactives.show_error("<b>Unable to get the blog information.</b><br/>Please try again later.<br/><br/>Error Code: FIA-230<br/>" + e.message);
+					return;
+				}
+
+			}
+		});
+
+	},
+
+
+	days_since_updated: function(updated_time){
+		if(! updated_time){
+			return -1;
+		}
+
+		var time_value = updated_time.replace(/[^0-9\.]/g, '');
+		time_value = parseInt(time_value, 10);
+
+		if(updated_time.indexOf("day") > -1){
+			return time_value;
+		}
+		if(updated_time.indexOf("week") > -1){
+			return time_value * 7;
+		}
+		if(updated_time.indexOf("month") > -1){
+			return time_value * 30;
+		}
+		if(updated_time.indexOf("year") > -1){
+			return time_value * 365;
+		}
+
+		return 0;
+	},
+
+	//Keeps track of what pages are currently being processed, finished processing, and need to process.
+	page_tracker: {
+
+		page_count: 0,
+		current_page: 0,
+		page_processed: {}, //page_processed will either be undefined, false, or true.  Undefined: page not started.  false: page started to process.  true: page finished processing.
+
+		//Resets this object to its base state.  Always set it before starting to find inactive followers.
+		reset: function(){
+			this.page_count = 0;
+			this.current_page = 0;
+			this.page_processed = {};
+		},
+
+		set_page_count: function(count){
+			this.page_count = count;
+		},
+
+		//Returns the next page that needs to be processed, -1 of there are no pages to be processed.
+		get_next_page: function(){
+			for(var i = 0; i < this.page_count; i++){
+				if(this.page_processed[i] === undefined){
+					console.log("Processing page " + i + " | " + this.page_count);
+					return i;
+				}
+			}
+			return -1;
+		},
+
+		start_processing_page: function(page){
+			this.page_processed[page] = false;
+			if(this.current_page < page){
+				this.current_page = page;
+			}
+		},
+
+		finished_processing_page: function(page){
+			this.page_processed[page] = true;
+		},
+
+		has_completed: function(){
+			for(var i = 0; i < this.page_count; i++){
+				if(! this.page_processed[i]){
+					return false;
+				}
+			}
+			return true;
+		},
+
+		//returns the progress of finding inactives.  Value are between 0 and 100.
+		get_progress: function(){
+			var progress_points = 0; // Weighted progress points.
+			for(var i = 0; i < this.page_count; i++){
+
+				if(this.page_processed[i] === false){
+					progress_points += 1;
+				}
+				if(this.page_processed[i] === true){
+					progress_points += 2;
+				}
+			}
+
+			var total_points = this.page_count * 2;
+			return (progress_points / total_points) * 100;
+		}
 	},
 
 	list_people: function() {
@@ -103,11 +260,11 @@ XKit.extensions.find_inactives = new Object({
 
 		for (var i=0;i<XKit.extensions.find_inactives.retired_people_list.length;i++) {
 
-			m_html = m_html + 	"<div data-url=\"http://" + XKit.extensions.find_inactives.retired_people_list[i].username + ".tumblr.com/\" class=\"find-inactives-blog\">" +
-							"<div class=\"name\">" + XKit.extensions.find_inactives.retired_people_list[i].username + "</div>" +
-							"<div class=\"days\">Inactive for " + XKit.extensions.find_inactives.retired_people_list[i].days + " days</div>" +
-							"<img src=\"http://api.tumblr.com/v2/blog/" + XKit.extensions.find_inactives.retired_people_list[i].username + ".tumblr.com/avatar/512\" class=\"avatar\">" +
-						"</div>";
+			m_html = m_html + "<div data-url=\"http://" + XKit.extensions.find_inactives.retired_people_list[i].username + ".tumblr.com/\" class=\"find-inactives-blog\">" +
+			"<div class=\"name\">" + XKit.extensions.find_inactives.retired_people_list[i].username + "</div>" +
+			"<div class=\"days\">" + XKit.extensions.find_inactives.retired_people_list[i].days + "</div>" +
+			"<img src=\"http://api.tumblr.com/v2/blog/" + XKit.extensions.find_inactives.retired_people_list[i].username + ".tumblr.com/avatar/512\" class=\"avatar\">" +
+			"</div>";
 
 		}
 
@@ -141,118 +298,6 @@ XKit.extensions.find_inactives = new Object({
 
 	},
 
-	next_person: function() {
-
-		XKit.extensions.find_inactives.people_index++;
-
-		if (XKit.extensions.find_inactives.people_index >= XKit.extensions.find_inactives.people_list.length) {
-
-			XKit.extensions.find_inactives.list_people();
-			return;
-
-		}
-
-		var api_url = "https://api.tumblr.com/v2/blog/" + XKit.extensions.find_inactives.people_list[XKit.extensions.find_inactives.people_index] + ".tumblr.com/info" + "?api_key=" + XKit.extensions.find_inactives.apiKey;
-
-		GM_xmlhttpRequest({
-				method: "GET",
-				url: api_url,
-				json: true,
-			onerror: function(response) {
-				// Probably a bug in the list.
-				setTimeout(function() { XKit.extensions.find_inactives.next_person(); }, 800);
-				console.log("Error -> Can't get API read for person " + XKit.extensions.find_inactives.people_list[XKit.extensions.find_inactives.people_index]);
-				return;
-			},
-			onload: function(response) {
-
-				try {
-
-					var total = XKit.extensions.find_inactives.people_count;
-					var perc = (XKit.extensions.find_inactives.people_index) * 100 / total;
-
-					XKit.progress.value("find-inactives", perc);
-
-					var data = JSON.parse(response.responseText).response;
-					var post_date = new Date(data.blog.updated * 1000);
-
-					var days = Math.round(Math.abs((post_date.getTime() - new Date().getTime())/(24*60*60*1000)));
-
-					console.log("days for user " + XKit.extensions.find_inactives.people_list[XKit.extensions.find_inactives.people_index] + " -> " + days);
-
-					if (days >= parseInt(XKit.extensions.find_inactives.preferences.time.value)) {
-
-						var m_user = {};
-						m_user.username = XKit.extensions.find_inactives.people_list[XKit.extensions.find_inactives.people_index];
-						m_user.days = days;
-
-						XKit.extensions.find_inactives.retired_people_list.push(m_user);
-
-					}
-
-					setTimeout(function() { XKit.extensions.find_inactives.next_person(); }, XKit.extensions.find_inactives.timeout_time);
-
-				} catch(e) {
-					// Probably a bug in the list or an empty blog.
-					console.log("Error on person " + XKit.extensions.find_inactives.people_list[XKit.extensions.find_inactives.people_index] + " -> " + e.message);
-					setTimeout(function() { XKit.extensions.find_inactives.next_person(); }, 800);
-				}
-
-			}
-		});
-
-	},
-
-	next_page: function() {
-
-		GM_xmlhttpRequest({
-			method: "GET",
-			url: "http://www.tumblr.com/following/" + (XKit.extensions.find_inactives.page * 25),
-			json: false,
-			onerror: function(response) {
-				XKit.extensions.find_inactives.show_error("<b>Unable to get the blog information.</b><br/>Please try again later.<br/><br/>Error Code: FIA-330");
-				return;
-			},
-			onload: function(response) {
-
-				try {
-
-					var total = XKit.extensions.find_inactives.people_count;
-					var perc = (XKit.extensions.find_inactives.page * 25) * 100 / total;
-
-					XKit.progress.value("find-inactives", perc);
-
-					$(".follower", response.responseText).each(function() {
-
-						var username = $(this).find(".name").find("a").html();
-
-						if (XKit.extensions.find_inactives.people_list.indexOf(username) === -1) {
-							XKit.extensions.find_inactives.people_list.push(username);
-						}
-
-					});
-
-					if ($(".next", response.responseText).length > 0) {
-
-						XKit.extensions.find_inactives.page++;
-						setTimeout(function() { XKit.extensions.find_inactives.next_page(); }, XKit.extensions.find_inactives.timeout_time);
-
-					} else {
-
-						$("#xkit-find-inactives-status").html("Fetching information about the people I've just learned about...");
-						setTimeout(function() { XKit.extensions.find_inactives.next_person(); }, 500);
-
-					}
-
-				} catch(e) {
-					XKit.extensions.find_inactives.show_error("<b>Unable to get the blog information.</b><br/>Please try again later.<br/><br/>Error Code: FIA-230<br/>" + e.message);
-					return;
-				}
-
-			}
-		});
-
-	},
 
 	destroy: function() {
 		this.running = false;
