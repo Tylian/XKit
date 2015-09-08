@@ -142,8 +142,8 @@ XKit.extensions.retags = {
 
 	mobile_toggle:
 	$('<style class="retags">' +
-		'.note, .mh_post.post.mh_post_notification.notification { display: none; } ' +
-		'.note.with_commentary, .mh_post.post.mh_post_notification.notification.is_retags { display: block; }' +
+		'.note, .mh_post.post.post_type_notification.notification { display: none; } ' +
+		'.note.with_commentary, .mh_post.post.post_type_notification.notification.is_retags { display: block; }' +
 	'</style>'),
 
 	html_toggle:
