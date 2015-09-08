@@ -157,7 +157,7 @@ XKit.extensions.retags = {
 	destroy: function(){
 		this.running = false;
 		XKit.tools.remove_css("retags");
-		XKit.tools.remove_css("retags_mobile");
+		XKit.tools.remove_css('retags_mobile');
 		this.css_toggle.detach();
 		this.html_toggle.detach();
 		this.mobile_toggle.detach();
