@@ -1,7 +1,7 @@
 //* TITLE       Retags **//
 //* DEVELOPER   new-xkit **//
-//* DESCRIPTION Adds tags to reblog notes **//
 //* VERSION     1.0.1 **//
+//* DESCRIPTION Adds tags to reblog notes **//
 //* FRAME       false **//
 //* SLOW        false **//
 //* BETA        false **//
