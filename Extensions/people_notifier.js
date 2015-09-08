@@ -368,21 +368,21 @@ XKit.extensions.people_notifier = new Object({
 
 		var dragging;
 		var dragtarget;
-		var mouseY;
 		var half_div_height = 13;
 		$(document).on("dragstart", ".xkit-people-notifier-person", function(e){
 			dragging = $(this);
-			e.originalEvent.dataTransfer.dropEffect = "move";
-		});
-		$(document).on("drag", ".xkit-people-notifier-person", function(e){
-			mouseY = e.originalEvent.pageY;
+			e.originalEvent.dataTransfer.setData("application/x-kit", $(this).text().replace("☰✖", ""));
 		});
 		$(document).on("dragenter", ".xkit-people-notifier-person", function(e){
-			e.preventDefault();
-			dragtarget = $(this);
+			if (e.originalEvent.dataTransfer.types[0] === "application/x-kit") {
+				e.preventDefault();
+				dragtarget = $(this);
+			}
 		});
 		$(document).on("dragover", ".xkit-people-notifier-person", function(e){
-			e.preventDefault();
+			if (e.originalEvent.dataTransfer.types[0] === "application/x-kit") {
+				e.preventDefault();
+			}
 		});
 		$(document).on("drop", ".xkit-people-notifier-person", function(e){
 			if (dragtarget[0] !== dragging[0]) {
@@ -391,10 +391,13 @@ XKit.extensions.people_notifier = new Object({
 				var dragging_index = XKit.extensions.people_notifier.blogs.indexOf(dragging_obj);
 				var top_of_target = dragtarget.offset().top;
 				dragging.detach();
-				if ((mouseY - top_of_target) > half_div_height) {
+				if (e.originalEvent.pageY - top_of_target > half_div_height) {
 					dragtarget.after(dragging);
+					target_index++;
 				} else {
 					dragtarget.before(dragging);
+				}
+				if (dragging_index < target_index) {
 					target_index--;
 				}
 				XKit.extensions.people_notifier.blogs.splice(dragging_index, 1);
@@ -543,7 +546,6 @@ XKit.extensions.people_notifier = new Object({
 		$(document).off("mouseenter", ".xkit-people-notifier-person");
 		$(document).off("mouseleave", ".xkit-people-notifier-person");
 		$(document).off("dragstart", ".xkit-people-notifier-person");
-		$(document).off("drag", ".xkit-people-notifier-person");
 		$(document).off("dragenter", ".xkit-people-notifier-person");
 		$(document).off("dragover", ".xkit-people-notifier-person");
 		$(document).off("drop", ".xkit-people-notifier-person");

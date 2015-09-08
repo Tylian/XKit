@@ -5,10 +5,23 @@
 	color: rgba(255,255,255,0.55);
 }
 
-.xkit-people-notifier-person a { 
+.xkit-people-notifier-person a {
 	position: relative;
 	height: 100%;
 	display: block;
+}
+
+.xkit-people-notifier-person {
+	cursor: move;
+	cursor: grab;
+	cursor: -moz-grab;
+	cursor: -webkit-grab;
+}
+
+.xkit-people-notifier-person:active {
+	cursor: grabbing !important;
+	cursor: -moz-grabbing !important;
+	cursor: -webkit-grabbing !important;
 }
 
 .xkit-people-notifier-person .hide_overflow {
@@ -33,7 +46,8 @@
 }
 
 .identity .controls_section .xkit-people-notifier-person a .count,
-.xkit-people-notifier-person .close {
+.xkit-people-notifier-person .close,
+.xkit-people-notifier-person .drag {
 	float: right;
 	top: 50% !important;
 	display: block;
@@ -45,6 +59,10 @@
 
 .xkit-people-notifier-person .close {
 	cursor: pointer;
+	right: 10px;
+}
+
+.xkit-people-notifier-person .drag {
 	right: 10px;
 }
 
