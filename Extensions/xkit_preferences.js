@@ -1864,7 +1864,7 @@ XKit.extensions.xkit_preferences = new Object({
 					m_return = m_return + '<option value="">Default Action</option>';
 				}
 
-				for(i=0; i<m_blogs.length; i++) {
+				for(var i=0; i<m_blogs.length; i++) {
 
 					if (m_blogs[i] === "") { continue; }
 

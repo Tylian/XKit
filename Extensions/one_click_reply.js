@@ -606,8 +606,9 @@ XKit.extensions.one_click_reply = new Object({
 	},
 
 	fill_post: function() {
+		var raw_data = XKit.tools.get_setting("xkit_one_click_reply_data", "{}");
+
 		try {
-			var raw_data = XKit.tools.get_setting("xkit_one_click_reply_data", "{}");
 			var data = JSON.parse(raw_data);
 
 			if (!data || !data.sentence) {
