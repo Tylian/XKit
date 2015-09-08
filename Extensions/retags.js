@@ -20,7 +20,7 @@ XKit.extensions.retags = {
 		} catch(e) {}
 		this.add_toggle();
 		this.observer.observe($('body')[0],{childList:true,subtree:true});
-		this.tag(this.selectors);-
+		this.tag(this.selectors);
 	},
 
 	observer: new MutationObserver(function(ms){
@@ -81,8 +81,11 @@ XKit.extensions.retags = {
 			} else if ($t.hasClass('notification') && !XKit.browser().mobile) {
 				$c = $t.find('.notification_sentence');
 				url = $c.find('.notification_target').attr('href');
+			// mobile
 			} else if ($t.hasClass('notification') && XKit.browser().mobile) {
-				
+				cls = 'is_retags';
+				$c = $t.find('.notification-wrapper');
+				url = $c.find('a').not('.notification-username').attr('href');
 			}
 			//we don't need to put tags on a reply, but we also don't need to hide it
 			if ($t.hasClass('is_reply') || $t.hasClass('is_answer')) {
@@ -134,6 +137,12 @@ XKit.extensions.retags = {
 	$('<style class="retags"> ' +
 		'.ui_note { display: none; } ' +
 		'.ui_note.is_retags, .ui_note.is_response, .ui_note.is_user_mention { display: block; } ' +
+	'</style>'),
+	
+
+	mobile_toggle:
+	$('<style class="retags">' +
+	'.note { display: none; } ' +
 	'</style>'),
 
 	html_toggle:
