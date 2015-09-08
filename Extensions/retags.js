@@ -1,7 +1,7 @@
 //* TITLE       Retags **//
 //* DEVELOPER   new-xkit **//
-//* VERSION     1.0.0 **//
 //* DESCRIPTION Adds tags to reblog notes **//
+//* VERSION     1.0.1 **//
 //* FRAME       false **//
 //* SLOW        false **//
 //* BETA        false **//
@@ -9,7 +9,7 @@
 XKit.extensions.retags = {
 	running: false,
 	api_key: '3DFxEZm0tGISOmdvWe9Fl1QsQMo1LFqEatnc8GQ68wgF1YTZ4w',
-	selectors: '.reblog,.is_reblog,.notification_reblog,.is_reply,.is_answer,.is_user_mention,.notification_user_mention',
+	selectors: '.type_2,.type_8,.reblog,.is_reblog,.notification_reblog,.is_reply,.is_answer,.is_user_mention,.notification_user_mention',
 	blog_name: "",
 
 	run: function(){
@@ -20,22 +20,34 @@ XKit.extensions.retags = {
 		} catch(e) {}
 		this.add_toggle();
 		this.observer.observe($('body')[0],{childList:true,subtree:true});
-		this.tag(this.selectors);
+		this.tag(this.selectors);-
 	},
 
 	observer: new MutationObserver(function(ms){
 		ms.forEach(function(m){
-			XKit.extensions.retags.tag($(m.addedNodes).filter(XKit.extensions.retags.selectors));
+			if ($(m.addedNodes).find('.note').length > 0) {
+				XKit.extensions.retags.tag($(m.addedNodes).find('.note').filter(XKit.extensions.retags.selectors));
+			} else {
+				XKit.extensions.retags.tag($(m.addedNodes).filter(XKit.extensions.retags.selectors));
+			}
 		});
 	}),
 
 	add_toggle: function(){
 		var toggle = 'retags_toggle_'+this.blog_name;
-		this.html_toggle.appendTo('.ui_notes_switcher .part-toggle');
+		if (XKit.browser().mobile) {
+			this.html_toggle.appendTo('.primary-nav');
+			XKit.tools.add_css('label.retags .binary_switch_label {font-size:15px; color:white; padding-bottom:15px; }','retags_mobile_label');
+		} else {
+			this.html_toggle.appendTo('.ui_notes_switcher .part-toggle');
+		}
 		$('#retags-toggle').change(function(){
 			if ($(this).prop('checked')) {
 				localStorage.setItem(toggle,'true');
 				XKit.extensions.retags.css_toggle.appendTo('head');
+				if (XKit.browser().mobile) {
+					XKit.extensions.retags.mobile_toggle.appendTo('head');
+				}
 			} else {
 				localStorage.setItem(toggle,'false');
 				XKit.extensions.retags.css_toggle.detach();
@@ -66,9 +78,11 @@ XKit.extensions.retags = {
 				$c = $t.find('.stage');
 				url = $c.find('.part_glass').attr('href');
 			// dashboard
-			} else if ($t.hasClass('notification')) {
+			} else if ($t.hasClass('notification') && !XKit.browser().mobile) {
 				$c = $t.find('.notification_sentence');
 				url = $c.find('.notification_target').attr('href');
+			} else if ($t.hasClass('notification') && XKit.browser().mobile) {
+				
 			}
 			//we don't need to put tags on a reply, but we also don't need to hide it
 			if ($t.hasClass('is_reply') || $t.hasClass('is_answer')) {
