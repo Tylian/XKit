@@ -706,7 +706,7 @@ XKit.extensions.xcloud = new Object({
 		var message = "";
 
 		if(XKit.extensions.xcloud.extensions_upgraded){
-			message = "<b>XCloud successfully restored your settings and your extension versions have been synced with our servers.</b><br/>Please refresh the page to continue.";
+			message = "<b>XCloud successfully restored your settings and your XKit configuration has been synced with our servers.</b><br/>Please refresh the page to continue.";
 		} else {
 			message = "<b>XCloud successfully restored your settings.</b><br/>Please refresh the page to continue.";
 		}
