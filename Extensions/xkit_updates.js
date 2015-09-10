@@ -1,5 +1,5 @@
 //* TITLE XKit Updates **//
-//* VERSION 1.3.0 **//
+//* VERSION 1.3.1 **//
 //* DESCRIPTION Provides automatic updating of extensions **//
 //* DEVELOPER new-xkit **//
 XKit.extensions.xkit_updates = new Object({
@@ -156,9 +156,9 @@ XKit.extensions.xkit_updates = new Object({
 				if (force_mode) {
 
 					var check_this = false;
-					if (XKit.installed.check(mdata.extensions[extension].name) === true) {
+					if (XKit.installed.check(mdata.extensions[extension].name)) {
 
-						if (XKit.extensions.xkit_updates.shouldUpdate(XKit.extensions.xkit_updates.parseVersion(XKit.installed.get(mdata.extensions[extension].name).version), XKit.extensions.xkit_updates.parseVersion(mdata.extensions[extension].version))) {
+						if (XKit.extensions.xkit_updates.shouldUpdate(XKit.tools.parse_version(XKit.installed.get(mdata.extensions[extension].name).version), XKit.tools.parse_version(mdata.extensions[extension].version))) {
 							check_this = true;
 						}
 
@@ -174,8 +174,8 @@ XKit.extensions.xkit_updates = new Object({
 
 				} else {
 
-					if (mdata.extensions[extension].version !== XKit.installed.get(mdata.extensions[extension].name).version) {
-						if (XKit.installed.check(mdata.extensions[extension].name) === true) {
+					if (XKit.installed.check(mdata.extensions[extension].name)) {
+						if (XKit.extensions.xkit_updates.shouldUpdate(XKit.tools.parse_version(XKit.installed.get(mdata.extensions[extension].name).version), XKit.tools.parse_version(mdata.extensions[extension].version))) {
 							XKit.extensions.xkit_updates.to_update.push(mdata.extensions[extension].name);
 						}
 					}
@@ -479,26 +479,6 @@ XKit.extensions.xkit_updates = new Object({
 			return true;
 		}
 		return false;
-	},
-	
-	parseVersion: function(versionString) {
-		var version = {};
-		var versionSplit = versionString.split(".");
-		if (versionSplit.length < 3) {
-			var versionSplit2 = versionSplit[1].toLowerCase().split("rev");
-			version.major = parseInt(versionSplit[0]);
-			version.minor = parseInt(versionSplit2[0].trim());
-			if (typeof(versionSplit2[1]) === "undefined") {
-				version.patch = 0;
-			} else {
-				version.patch = versionSplit2[1].trim().charCodeAt(0) - "a".charCodeAt(0);
-			}
-		} else {
-			version.major = parseInt(versionSplit[0]);
-			version.minor = parseInt(versionSplit[1]);
-			version.patch = parseInt(versionSplit[2]);
-		}
-		return version;
 	},
 	
 	destroy: function() {

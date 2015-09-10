@@ -1,7 +1,7 @@
 //* TITLE XKit Patches **//
-//* VERSION 4.0.5 **//
+//* VERSION 4.0.6 **//
 //* DESCRIPTION Patches framework **//
-//* DEVELOPER STUDIOXENIX **//
+//* DEVELOPER new-xkit **//
 
 XKit.extensions.lang_english = {
 
@@ -351,6 +351,29 @@ XKit.tools.get_current_blog = function() {
 	}
 	XKit.console.add('XKit.tools.get_current_blog: Warning, fell back to main blog');
 	return XKit.tools.get_blogs()[0];
+};
+
+XKit.tools.parse_version = function(versionString) {
+	if (typeof(versionString) === "undefined" || versionString === "") {
+		return {major: 0, minor: 0, patch: 0};
+	}
+	var version = {};
+	var versionSplit = versionString.split(".");
+	if (versionSplit.length < 3) {
+		var versionSplit2 = versionSplit[1].toLowerCase().split("rev");
+		version.major = parseInt(versionSplit[0]);
+		version.minor = parseInt(versionSplit2[0].trim());
+		if (typeof(versionSplit2[1]) === "undefined") {
+			version.patch = 0;
+		} else {
+			version.patch = versionSplit2[1].trim().charCodeAt(0) - "a".charCodeAt(0);
+		}
+	} else {
+		version.major = parseInt(versionSplit[0]);
+		version.minor = parseInt(versionSplit[1]);
+		version.patch = parseInt(versionSplit[2]);
+	}
+	return version;
 };
 
 XKit.tools.get_blogs = function() {
