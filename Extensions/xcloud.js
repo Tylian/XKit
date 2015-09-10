@@ -12,6 +12,8 @@ XKit.extensions.xcloud = new Object({
 	username: "",
 	password: "",
 	useoldserver: true,
+	gallery_available: {},
+	extensions_upgraded: false,
 
 
 	get_xcloud_url: function() {
@@ -642,7 +644,22 @@ XKit.extensions.xcloud = new Object({
 		$("#xcloud-overlay-title").html("Restoring extensions...");
 		$("#xcloud-overlay-message").html(XKit.progress.add("xcloud-restore-process"));
 
-		XKit.extensions.xcloud.process_download_extension_next();
+
+		//Grab the gallery to check available extensions.
+		//We want to exclude unavailable extensions since the install script will make the whole thing partially succeed.
+		// Also to make this backwards compatible we need to use the page function which will go to xkitcs.com for XKit 7.5 and gh_pages for New-XKit
+		XKit.download.page('gallery.php', function(gallery_json){
+			XKit.extensions.xcloud.extensions_upgraded = false;
+
+			var extension_array = [];
+			$.each(gallery_json.extensions, function(index, value){
+				extension_array.push(value.name);
+			});
+
+			XKit.extensions.xcloud.gallery_available = extension_array;
+			XKit.extensions.xcloud.process_download_extension_next();
+		});
+
 
 
 	},
@@ -657,45 +674,51 @@ XKit.extensions.xcloud = new Object({
 		var perc = Math.round((XKit.extensions.xcloud.extensions_to_download_count * 100) / XKit.extensions.xcloud.extensions_to_download.length);
 
 		var m_name = XKit.extensions.xcloud.extensions_to_download[XKit.extensions.xcloud.extensions_to_download_count];
-		XKit.console.add("XCloud restore -> " + m_name);
 
 		XKit.progress.value("xcloud-restore-process", perc);
 
-		XKit.install(m_name, function(mdata) {
+		if($.inArray(m_name, XKit.extensions.xcloud.gallery_available) >= 0){
+			XKit.console.add("XCloud restore -> " + m_name);
+			XKit.install(m_name, function(mdata) {
+				if (mdata.server_down || mdata.errors) {
+					XKit.extensions.xcloud.errors_list.push("Unable to restore extension " + extension_name);
+				} else if (XKit.extensions.xcloud.extensions_to_download_enabled[XKit.extensions.xcloud.extensions_to_download_count] === false) {
+					XKit.installed.disable(XKit.extensions.xcloud.extensions_to_download[XKit.extensions.xcloud.extensions_to_download_count]);
+				}
 
-			if (mdata.server_down || mdata.errors) {
-				XKit.extensions.xcloud.errors_list.push("Unable to restore extension " + extension_name);
+				XKit.extensions.xcloud.extensions_to_download_count++;
 				XKit.extensions.xcloud.process_download_extension_next();
-				return;
-			}
-
-			if (XKit.extensions.xcloud.extensions_to_download_enabled[XKit.extensions.xcloud.extensions_to_download_count] === false) {
-				XKit.installed.disable(XKit.extensions.xcloud.extensions_to_download[XKit.extensions.xcloud.extensions_to_download_count]);
-			}
-
+			});
+		} else {
+			XKit.console.add("XCloud skip -> " + m_name);
+			XKit.extensions.xcloud.extensions_upgraded = true;
 			XKit.extensions.xcloud.extensions_to_download_count++;
 			XKit.extensions.xcloud.process_download_extension_next();
+		}
 
 
-		});
 
 
 	},
 
 	process_complete: function() {
 
+		var message = "";
+
+		if(XKit.extensions.xcloud.extensions_upgraded){
+			message = "<b>XCloud successfully restored your settings and your extension versions have been synced with our servers.</b><br/>Please refresh the page to continue.";
+		} else {
+			message = "<b>XCloud successfully restored your settings.</b><br/>Please refresh the page to continue.";
+		}
+
 		XKit.extensions.xkit_preferences.close();
 		XKit.extensions.xcloud.hide_overlay();
-		XKit.window.show("Restore complete","<b>XCloud successfully restored your settings.</b><br/>Please restart your browser to continue.","info");
-		return;
-
+		XKit.window.show("Restore complete",message,"info");
 	},
 
 	process_error: function(txt) {
 
 		XKit.window.show("Could not restore","Invalid/corrupt XCloud data received.<br/>" + txt + "<br/><br/>Please try again or <a href=\"http://new-xkit-extension.tumblr.com/ask\">send a bug report</a>.","error","<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
-		return;
-
 	},
 
 	start_upload: function() {
