@@ -26,3 +26,13 @@ Returns a random 30-character string.
 ### add_function(func, execute, add_t)
 Adds the function `func` to the page, and executes it if execute is `true`.  
 add_t fills "add_tag" variable, so just pass an empty string there.
+
+### parse_version(version_string)
+Parses Strings in format "Major.Minor.Patch", "Major.Minor" or "Major.Minor REV A" and returns a Semver object
+```
+{
+  major,
+  minor,
+  patch
+}
+```
