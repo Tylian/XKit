@@ -1,5 +1,5 @@
 //* TITLE AccessKit **//
-//* VERSION 1.1.6 **//
+//* VERSION 1.1.7 **//
 //* DESCRIPTION Accessibility tools for Tumblr **//
 //* DETAILS Provides accessibility tools for XKit and your dashboard, such as increased font sizes, more contrast on icons and more. **//
 //* DEVELOPER new-xkit **//
@@ -222,7 +222,7 @@ XKit.extensions.accesskit = new Object({
 		if (this.preferences.increase_font_size.value === true) {
 
 			m_css = m_css + " .post_full .post_notes_label, .post_container { font-size: 15px !important; } " +
-					" .post_body *, .reblog-list *, .reblog-list-item * { font-size: 15px !important; } " +
+					" .post_body *, .reblog-list-item .reblog-header, .reblog-list-item .reblog-content { font-size: 15px !important; } " +
 					" .xtimestamp { font-size: 13px; } " +
 					" .post_full .post_header { font-size: 14px; } " +
 					" .notification .notification_sentence > * { font-size: 14px; } " +
