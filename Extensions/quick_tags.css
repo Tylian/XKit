@@ -123,7 +123,8 @@
 
 }
 
-#x1cpostage_quick_tags .xkit-tag {
+#x1cpostage_quick_tags .xkit-tag,
+#x1cpostage_quick_tags .xkit-tag-add {
 
 	background: rgba(255,255,255,0.86);
 	color: #7a7f8e;
@@ -134,7 +135,12 @@
 
 }
 
-#x1cpostage_quick_tags.xkit-no-reverse-ui .xkit-tag {
+#x1cpostage_quick_tags .xkit-tag-add {
+	text-align: center;
+}
+
+#x1cpostage_quick_tags.xkit-no-reverse-ui .xkit-tag,
+#x1cpostage_quick_tags.xkit-no-reverse-ui .xkit-tag-add {
 
 	border-top: 0;
 	border-bottom: 1px solid #abafbc;
@@ -142,6 +148,7 @@
 }
 
 #x1cpostage_quick_tags .xkit-tag:hover,
+#x1cpostage_quick_tags .xkit-tag-add:hover,
 #xkit-quick-tags-window .xkit-tag:hover {
 
 	background-color: rgba(234,239,246,1);
