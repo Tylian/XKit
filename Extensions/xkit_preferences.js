@@ -1,5 +1,5 @@
 //* TITLE XKit Preferences **//
-//* VERSION 4.0.6 **//
+//* VERSION 5.0.0 **//
 //* DESCRIPTION Lets you customize XKit **//
 //* DEVELOPER STUDIOXENIX **//
 
@@ -1343,21 +1343,11 @@ XKit.extensions.xkit_preferences = new Object({
 					'<div class="more-info" style="display: none;" id="xkit-extension-more-info">attributes</div>' +
 					'<div class="description">' + m_extension.description;
 
-		if (m_extension.pack) {
-			m_html = m_html + '<div class="developer" style="display: block">by ' + m_extension.developer + '</div>';
-		}
-
 		var xkit_developers = ["studioxenix","new-xkit","dlmarquis","hobinjk","thepsionic","nightpool","blackjackkent","wolvan","bvtsang","0xazure"];
 		var third_party_extension = false;
-		if (xkit_developers.indexOf(m_extension.developer.toLowerCase()) === -1 && !this_is_language && !m_extension.pack) {
+		if (xkit_developers.indexOf(m_extension.developer.toLowerCase()) === -1 && !this_is_language) {
 			third_party_extension = true;
 			m_html = m_html + '<div class="xkit-third-party-warning">third party extension</div>';
-		}
-
-		if (m_extension.pack) {
-
-			m_html = m_html + '<div class="xkit-pack-warning">&nbsp;</div>';
-
 		}
 
 		if (m_extension.details !== "" && typeof m_extension.details !== "undefined") {
@@ -1366,24 +1356,9 @@ XKit.extensions.xkit_preferences = new Object({
 
 		m_html = m_html + '</div><div class="buttons">';
 
-		if (m_extension.pack) {
+		m_html = m_html + '<div class="xkit-button" id="xkit-extension-update">' + XKit.lang.get("xkit_preferences.extension.update") + "</div>";
 
-			m_html = m_html + '<div class="xkit-button is-xkit-pack" id="xkit-extension-update">' + XKit.lang.get("xkit_preferences.extension.update") + "</div>";
-			m_html = m_html + '<div class="xkit-button" id="xkit-extension-uninstall" style="border-radius: 0px 3px 3px 0px; margin-right: 6px;">' + XKit.lang.get("xkit_preferences.extension.uninstall") + "</div>";
-
-			if (!m_extension.support_blog) {
-				m_html = m_html + '<div class="xkit-button disabled" id="xkit-extension-support-blog">Support Blog</div>';
-			} else {
-				m_html = m_html + '<a href="http://' + m_extension.support_blog + '.tumblr.com" target="_BLANK" class="xkit-button" id="xkit-extension-support-blog">Support Blog</a>';
-			}
-
-		} else {
-
-			m_html = m_html + '<div class="xkit-button" id="xkit-extension-update">' + XKit.lang.get("xkit_preferences.extension.update") + "</div>";
-
-		}
-
-		if ( !(this_is_internal || this_is_language || m_extension.pack) ) {
+		if ( !(this_is_internal || this_is_language) ) {
 			m_html = m_html + '<div class="xkit-button" id="xkit-extension-uninstall">' + XKit.lang.get("xkit_preferences.extension.uninstall") + "</div>";
 			m_html = m_html + '<div class="xkit-button" id="xkit-extension-reset">' + XKit.lang.get("xkit_preferences.extension.reset_settings") + "</div>";
 		}
@@ -1414,12 +1389,6 @@ XKit.extensions.xkit_preferences = new Object({
 		if (XKit.extensions[extension_id].slow === true) {
 
 			m_html = m_html + '<div id="xkit-extension-panel-slow-extension">This extension might slow down your computer.<div class="xkit-more-info">more information</div></div>';
-
-		}
-
-		if (m_extension.pack === true) {
-
-			m_html = m_html + '<div id="xkit-extension-panel-pack-extension">This is an XKit Pack. It is not verified and might do bad things. <div class="xkit-more-info">more information</div></div>';
 
 		}
 
@@ -1511,49 +1480,24 @@ XKit.extensions.xkit_preferences = new Object({
 
 			$(this).addClass("disabled");
 
-			if ($(this).hasClass("is-xkit-pack")) {
+			XKit.extensions.xkit_updates.update(XKit.extensions.xkit_preferences.current_open_extension_panel, function(mdata) {
 
-				XKit.extensions.xkit_updates.update_pack(XKit.extensions.xkit_preferences.current_open_extension_panel, function(mdata) {
+				if (mdata.errors === false) {
+					XKit.window.show("Done!", "<b>Done updating extension.</b><br/>"+
+						"Please refresh the page for changes to take effect.", "info",
+						'<div id="xkit-close-message" class="xkit-button default">OK</div>');
+					XKit.extensions.xkit_preferences.open_extension_control_panel(XKit.extensions.xkit_preferences.current_open_extension_panel);
+					return;
+				}
 
-					if (mdata.errors === false) {
-						XKit.window.show("Done!",
-							"<b>Done updating extension.</b><br/>Please refresh the page for changes to take effect.", "info",
-							'<div id="xkit-close-message" class="xkit-button default">OK</div>');
-						XKit.extensions.xkit_preferences.open_extension_control_panel(XKit.extensions.xkit_preferences.current_open_extension_panel);
-						return;
-					}
-
-					XKit.window.show("Can't update", "Update manager returned the following message:<p>" + mdata.error +
-					"</p>Please try again later or if the problem continues, reset XKit.", "error",
+				XKit.window.show("Can't update",
+					"Update manager returned the following message:<p>" + mdata.error + "</p>"+
+					"Please try again later or if the problem continues, reset XKit.", "error",
 					'<div id="xkit-close-message" class="xkit-button default">OK</div>'+
 					'<a href="http://www.tumblr.com/xkit_reset" class="xkit-button">Reset XKit</a>');
+				XKit.extensions.xkit_preferences.open_extension_control_panel(XKit.extensions.xkit_preferences.current_open_extension_panel);
 
-					XKit.extensions.xkit_preferences.open_extension_control_panel(XKit.extensions.xkit_preferences.current_open_extension_panel);
-
-				});
-
-			} else {
-
-				XKit.extensions.xkit_updates.update(XKit.extensions.xkit_preferences.current_open_extension_panel, function(mdata) {
-
-					if (mdata.errors === false) {
-						XKit.window.show("Done!", "<b>Done updating extension.</b><br/>"+
-							"Please refresh the page for changes to take effect.", "info",
-							'<div id="xkit-close-message" class="xkit-button default">OK</div>');
-						XKit.extensions.xkit_preferences.open_extension_control_panel(XKit.extensions.xkit_preferences.current_open_extension_panel);
-						return;
-					}
-
-					XKit.window.show("Can't update",
-						"Update manager returned the following message:<p>" + mdata.error + "</p>"+
-						"Please try again later or if the problem continues, reset XKit.", "error",
-						'<div id="xkit-close-message" class="xkit-button default">OK</div>'+
-						'<a href="http://www.tumblr.com/xkit_reset" class="xkit-button">Reset XKit</a>');
-					XKit.extensions.xkit_preferences.open_extension_control_panel(XKit.extensions.xkit_preferences.current_open_extension_panel);
-
-				});
-
-			}
+			});
 
 		});
 
@@ -1657,18 +1601,6 @@ XKit.extensions.xkit_preferences = new Object({
 				"<br/><br/>If XKit is making your browser slower, it is recommended that you disable the extensions with this warning message,"+
 				" or at least disable the features of it you don't use much.", "warning",
 				'<div id="xkit-close-message" class="xkit-button default">OK</div>');
-
-		});
-
-		$("#xkit-extension-panel-pack-extension .xkit-more-info").click(function() {
-
-			XKit.window.show("XKit Pack Warning",
-				"This extension is not verified by the New XKit Team, and might contain malicious code, "+
-				"including code that can steal your personal data, fill your dashboard with ads, "+
-				"hang/crash your browser and prevent access to your account.<br/><br/>"+
-				"If you don't trust this extension or it's developer, please disable/remove it now. "+
-				"The New Xkit Team takes no responsibility for any damage this extension might cause to your account, "+
-				"browser, XKit or computer.", "warning", '<div id="xkit-close-message" class="xkit-button default">OK</div>');
 
 		});
 
