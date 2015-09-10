@@ -1,6 +1,6 @@
 
 //* TITLE Tweaks **//
-//* VERSION 4.0.4 **//
+//* VERSION 4.0.5 **//
 //* DESCRIPTION Various little tweaks for your dashboard. **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS These are small little tweaks that allows you customize your dashboard. If you have used XKit 6, you will notice that some of the extensions have been moved here as options you can toggle. Keep in mind that some of the tweaks (the ones marked with a '*') can slow down your computer. **//
@@ -286,7 +286,7 @@ XKit.extensions.tweaks = new Object({
 		this.running = true;
 
 		if (XKit.extensions.tweaks.preferences.no_mobile_banner.value) { //mobile stuff
-			XKit.tools.add_css(".mobile_app_banner {display: none}", "tweaks_no_mobile_banner");
+			XKit.tools.add_css(".mobile_app_banner, .mobile-banner {display: none}", "tweaks_no_mobile_banner");
 			$(".mobile_banner_active").removeClass("mobile_banner_active");
 			$(".mobile-app-banner-visible").removeClass("mobile-app-banner-visible");
 		}
