@@ -30,7 +30,7 @@
 
 .xkit-people-notifier-person .people-notifier-avatar {
 	position: absolute;
-	top: 50%; left: 12px;
+	top: 50%; left: 18px;
 	margin-top: -9px;
 	box-shadow: inset 0px 1px 4px rgba(0,0,0,0.33), 0px 1px 0px rgba(255,255,255,0.19);
 	border-radius: 3px;
@@ -63,7 +63,7 @@
 }
 
 .xkit-people-notifier-person .drag {
-	right: 10px;
+	padding-left: 4px;
 }
 
 .dashboard_useraction_following .xkit-people-notifier-person:hover,
