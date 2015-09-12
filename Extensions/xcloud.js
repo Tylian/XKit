@@ -920,14 +920,16 @@ XKit.extensions.xcloud = new Object({
 
 	load_user_login: function() {
 
-		XKit.extensions.xcloud.username = XKit.storage.get("xcloud","username","");
-		XKit.extensions.xcloud.password = XKit.storage.get("xcloud","password","");
+		//Unfortunately due to a bug in xkit.js we have to do a get_all instead of just a get.
+		var stored_data = XKit.storage.get_all("xcloud");
+		XKit.extensions.xcloud.username = stored_data.username && stored_data.username.value ? stored_data.username.value : "";
+		XKit.extensions.xcloud.password = stored_data.password && stored_data.password.value ? stored_data.password.value : "";
 
 		//default use old server so users upgrading won't have to relogin.
 		XKit.extensions.xcloud.useoldserver = XKit.storage.get("xcloud", "useoldserver", "true") === "true";
 
 		if (XKit.extensions.xcloud.password.substring(0,1) === "[") {
-			if (XKit.extensions.xcloud.password.substring(XKit.extensions.xcloud.password.length - 1) == "]") {
+			if (XKit.extensions.xcloud.password.substring(XKit.extensions.xcloud.password.length - 1) === "]") {
 				XKit.extensions.xcloud.password = XKit.extensions.xcloud.password.substring(1, XKit.extensions.xcloud.password.length - 1);
 			}
 		}
