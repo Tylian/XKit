@@ -1,7 +1,7 @@
 //* TITLE View On Dash **//
-//* VERSION 0.7.3 **//
+//* VERSION 0.7.4 **//
 //* DESCRIPTION View blogs on your dash **//
-//* DEVELOPER STUDIOXENIX **//
+//* DEVELOPER new-xkit **//
 //* DETAILS This is a preview version of an extension, missing most features due to legal/technical reasons for now. It lets you view the last 20 posts a person has made on their blogs right on your dashboard. If you have User Menus+ installed, you can also access it from their user menu under their avatar. **//
 //* FRAME false **//
 //* BETA false **//
@@ -414,7 +414,7 @@ XKit.extensions.view_on_dash = new Object({
 						"</div>" +
 						post_tags +
 						"<div class=\"post_footer clearfix\">" +
-							'<div class="post_notes"><div class="post_notes_inner"><div class="post_notes_label note_count"><span class="note_link_current">' + data.note_count.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ' notes</span><div class="notes_outer_container popover popover_gradient nipple_on_left" style="display: none;"><div class="notes_container popover_inner"><div class="popover_scroll"><ol class="notes"></ol><div class="more_notes_link_container"><span class="notes_loading">Loading...</span><a class="more_notes_link" style="display:none;" data-next="" rel="nofollow" href="#">Show more notes</a></div></div></div></div></div></div></div>' +
+							'<div class="post_notes"><div class="post_notes_inner"><div class="post_notes_label note_count"><a target="_blank" href="' + data.post_url + '#notes"><span class="note_link_current">' + data.note_count.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ' notes</span></a><div class="notes_outer_container popover popover_gradient nipple_on_left" style="display: none;"><div class="notes_container popover_inner"><div class="popover_scroll"><ol class="notes"></ol><div class="more_notes_link_container"><span class="notes_loading">Loading...</span><a class="more_notes_link" style="display:none;" data-next="" rel="nofollow" href="#">Show more notes</a></div></div></div></div></div></div></div>' +
 							"<div class=\"post_controls\" role=\"toolbar\">" +
 								"<div class=\"post_controls_inner\">" +
 									"<a class=\"post_control reblog\" href=\"/reblog/" + data.id  + "/" + data["reblog-key"] + "?redirect_to=%2Fdashboard\"><span class=\"offscreen\">Reblog</span></a>" +
@@ -422,7 +422,7 @@ XKit.extensions.view_on_dash = new Object({
 							"</div>" +
 						"</div>" +
 					"</div>" +
-					"<a style=\"display: none; height: 0;\" class=\"post_permalink\" id=\"permalink_" + data.id + "\" href=\"" + data.post_url + "\" target=\"_blank\" title=\"View post - whatever\"></a>";
+					"<a class=\"post_permalink\" id=\"permalink_" + data.id + "\" href=\"" + data.post_url + "\" target=\"_blank\" title=\"View post\"></a>";
 
 		//alert("<a style=\"display: none;\" class=\"post_permalink\" id=\"permalink_" + data.id + "\" href=\"" + data.url + "\" target=\"_blank\" title=\"View post - whatever\"></a>");
 		m_html = m_html + "</div>";
