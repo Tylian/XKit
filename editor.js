@@ -1,9 +1,10 @@
 /*
 
 	Extension Editor for XKit 7
-	Version 1.0
+	Version 1.1.0
 
-	(c) 2011 - 2015 STUDIOXENIX & New-XKit Team
+	(c) 2011 - 2014 STUDIOXENIX
+	(c) 2015 New XKit Team and Contributors (https://github.com/new-xkit/XKit/contributors)
 
 */
 
