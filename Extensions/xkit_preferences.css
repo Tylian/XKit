@@ -118,13 +118,6 @@
 	z-index: 4;
 }
 
-#xkit-extension-panel-pack-extension {
-	padding: 5px 10px;
-	border-bottom: 1px solid rgb(230,230,230);
-	font-size: 11px;
-	background: #ffc5c5;
-}
-
 #xkit-extension-panel-slow-extension {
 	padding: 11px 15px;
 	border-bottom: 0;
@@ -132,8 +125,6 @@
 	background: #fffbe6;
 }
 
-
-#xkit-extension-panel-pack-extension .xkit-more-info,
 #xkit-extension-panel-slow-extension .xkit-more-info {
 	float: right;
 	font-weight: bold;
