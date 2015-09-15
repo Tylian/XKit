@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 5.0.1 **//
+//* VERSION 5.1.0 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER new-xkit **//
 
@@ -118,13 +118,14 @@ XKit.tools.parse_version = function(versionString) {
 	var version = {};
 	var versionSplit = versionString.split(".");
 	if (versionSplit.length < 3) {
-		var versionSplit2 = versionSplit[1].toLowerCase().split("rev");
+		var revisionString = versionSplit[1].toLowerCase().split("rev");
 		version.major = parseInt(versionSplit[0]);
-		version.minor = parseInt(versionSplit2[0].trim());
-		if (typeof(versionSplit2[1]) === "undefined") {
+		version.minor = parseInt(revisionString[0].trim());
+		if (typeof(revisionString[1]) === "undefined") {
 			version.patch = 0;
 		} else {
-			version.patch = versionSplit2[1].trim().charCodeAt(0) - "a".charCodeAt(0);
+			// No need for toLowerCase here since we already do that when we split versionSplit above
+			version.patch = revisionString[1].trim().charCodeAt(0) - "a".charCodeAt(0);
 		}
 	} else {
 		version.major = parseInt(versionSplit[0]);
