@@ -1338,7 +1338,7 @@ XKit.extensions.servant = new Object({
 
 			// alert("on " + obj.id + ":\n" + "returned " + m_result.run + " on causer " + i + " --- parameter = " + cause.value + "\ntype = " + cause.id);
 
-			if (m_result.run === false || do_run == 0) {
+			if (m_result.run === false || do_run === 0) {
 				do_run = 0;
 			} else {
 				do_run = 1;
