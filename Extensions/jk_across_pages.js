@@ -9,11 +9,11 @@ XKit.extensions.jk_across_pages = new Object({
 	/*
 	 * If the top of the last post is this far below the top of the screen or less, j will move to the next page.
 	 */
-	scrollBufferJ: 8,
+	scrollBufferJ: 60,
 	/*
 	 * If the top of first post is this far below the top of the screen or more, k will move to the previous page.
 	 */
-	scrollBufferK: 7,
+	scrollBufferK: 59,
 	/*
 	 * Leave this much overlap when using view_entire_posts
 	 */
@@ -85,11 +85,9 @@ XKit.extensions.jk_across_pages = new Object({
 				if (jQuery('input:focus').length !== 0) return;
 
 				that.$posts = jQuery('.post_container').not('#new_post_buttons');
-				var at_bottom_of_screen = jQuery(window).scrollTop() + jQuery(window).height() === jQuery(document).height();
 
 				if (that.preferences.view_entire_posts.value && evt.which === 74 /* j */ &&
-					that.postAtY(that.scrollBufferJ+1)[0] == that.postAtY(window.innerHeight - that.scrollBufferJ)[0] &&
-					!at_bottom_of_screen){
+					that.postAtY(that.scrollBufferJ+1)[0] == that.postAtY(window.innerHeight - that.scrollBufferJ)[0]){
 
 					evt.stopPropagation(); // Try to stop Tumblr's event listener
 
@@ -102,7 +100,7 @@ XKit.extensions.jk_across_pages = new Object({
 					return; // Don't try to go to the next page
 				}
 
-				if (evt.which === 74 /* j */ && at_bottom_of_screen) {
+				if (evt.which === 74 /* j */ && (that.$posts.last().offset().top - window.scrollY <= that.scrollBufferJ || window.scrollY + window.innerHeight >= that.$posts.last().offset().top + that.$posts.last().height())) {
 					if (jQuery('#next_page_link').length > 0) {
 						if (that.preferences.show_notifications.value === true) XKit.notifications.add("Moving to next page", "ok");
 						window.location = jQuery('#next_page_link').attr('href') + '#jk_across_pages_first';
