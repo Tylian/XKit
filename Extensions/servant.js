@@ -1,5 +1,5 @@
 //* TITLE Servant **//
-//* VERSION 0.5.8 **//
+//* VERSION 0.5.9 **//
 //* DESCRIPTION XKit Personal Assistant **//
 //* DETAILS Automator for XKit: lets you create little Servants that does tasks for you when the conditions you've set are met. **//
 //* DEVELOPER new-xkit **//
@@ -1338,7 +1338,7 @@ XKit.extensions.servant = new Object({
 
 			// alert("on " + obj.id + ":\n" + "returned " + m_result.run + " on causer " + i + " --- parameter = " + cause.value + "\ntype = " + cause.id);
 
-			if (m_result.run === false) {
+			if (m_result.run === false || do_run === 0) {
 				do_run = 0;
 			} else {
 				do_run = 1;
