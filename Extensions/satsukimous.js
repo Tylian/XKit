@@ -1,6 +1,6 @@
 //* TITLE Satsukimous **//
 //* VERSION 1.2.0 **//
-//* DESCRIPTION Turns anon icons into Satsuki, Ryuko, Mako or a custom image **//
+//* DESCRIPTION Customize how anons appear **//
 //* DEVELOPER new-xkit **//
 //* DETAILS This extension is a prime example of what happens when you let JavaScript developers stay up past midnight.**//
 //* FRAME false **//
