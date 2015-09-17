@@ -1,5 +1,5 @@
 //* TITLE Editable Reblogs **//
-//* VERSION 2.0.2 **//
+//* VERSION 2.0.3 **//
 //* DESCRIPTION	Restores ability to edit previous reblogs of a post **//
 //* DEVELOPER new-xkit **//
 //* FRAME false **//
@@ -37,7 +37,7 @@ XKit.extensions.editable_reblogs = new Object({
 
 		var title = reblog_tree.find('.reblog-title');
 		$('.post-form--header').append(title);
-		reblog_tree.find( ".reblog-list-item" ).each(function( index ) {
+		reblog_tree.find(".reblog-list-item").each(function(index) {
 			var reblog_data = {
 				reblog_content: $(this).find('.reblog-content').html() ? $(this).find('.reblog-content').html() : '',
 				reblog_author: $(this).find('.reblog-tumblelog-name').text() ? $(this).find('.reblog-tumblelog-name').text() : '',
@@ -53,13 +53,31 @@ XKit.extensions.editable_reblogs = new Object({
 				all_quotes_text = reblog_content;
 			} else {
 				all_quotes_text = "<p><a class='tumblr_blog' href='" + data.reblog_url + "'>" + data.reblog_author + "</a>:</p><blockquote>" + all_quotes_text + reblog_content + "</blockquote>";
-			}		
+			}
 		});
 		var old_content = XKit.interface.post_window.get_content_html();
-		XKit.interface.post_window.set_content_html(all_quotes_text + old_content);
+		//add 'tumblr_blog' class to all tumblr.com links
+		var nodes = $(all_quotes_text + old_content);
+		nodes.find('a[href*="tumblr.com"]').addClass('tumblr_blog');
+		var nodes_text = $('<div>').append($(nodes).clone()).html(); 
+		XKit.interface.post_window.set_content_html(nodes_text);
+		//run submission cleanup before post is submitted
+		$('.controls-container').on('click', '.create_post_button', XKit.extensions.editable_reblogs.process_submit);
 
 		$(".btn-remove-trail .icon").click();
 		$(".control-reblog-trail").hide();
+	},
+	process_submit: function(e) {
+		e.preventDefault();
+		//tumblr_blog must be wrapped in single quotes, not double, or the dash will nom the shit out of your post
+		var text = XKit.interface.post_window.get_content_html();
+		text = text.replace(/"tumblr_blog"/g, "'tumblr_blog'");
+		//also remove empty HTML if the user hasn't added anything
+		if (text.indexOf("<p><br></p>", text.length - 11) !== -1) {
+			text = text.substring(0, text.length - 11);
+		}
+		//sneak this change in through the HTML editor (adding content to the rich text editor changes 'tumblr_blog' back to "tumblr_blog")
+		XKit.interface.post_window.set_content_html_sneak(text);
 	},
 	post_window_legacy: function() {
 		var reblog_tree = $(".reblog-tree");
