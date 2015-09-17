@@ -1,5 +1,5 @@
 //* TITLE Editable Reblogs **//
-//* VERSION 2.0.3 **//
+//* VERSION 2.1.0 **//
 //* DESCRIPTION	Restores ability to edit previous reblogs of a post **//
 //* DEVELOPER new-xkit **//
 //* FRAME false **//
@@ -23,39 +23,44 @@ XKit.extensions.editable_reblogs = new Object({
 			return;
 		}
 		var reblog_tree = $(".post-form .reblog-list");
-		if (reblog_tree.length <= 0) {
-			return;
-		}
 
 		var all_quotes = [];
+		var old_content = '';
+		var all_quotes_text = '';
 		// Guard against double evaluation by marking the tree as processed
 		var processed_class = 'xkit-editable-reblogs-done';
-		if (reblog_tree.hasClass(processed_class)) {
+		if (reblog_tree.length > 0) {
+			if (reblog_tree.hasClass(processed_class)) {
+				return;
+			}
+			reblog_tree.addClass(processed_class);
+
+			var title = reblog_tree.find('.reblog-title');
+			$('.post-form--header').append(title);
+			reblog_tree.find(".reblog-list-item").each(function(index) {
+				var reblog_data = {
+					reblog_content: $(this).find('.reblog-content').html() ? $(this).find('.reblog-content').html() : '',
+					reblog_author: $(this).find('.reblog-tumblelog-name').text() ? $(this).find('.reblog-tumblelog-name').text() : '',
+					reblog_url: $(this).find('.reblog-tumblelog-name').attr('href') ? $(this).find('.reblog-tumblelog-name').attr('href') : ''
+				};
+				all_quotes.push(reblog_data);
+			});
+			all_quotes.forEach(function(data, index, all) {
+				var reblog_content = data.reblog_content.replace("tmblr-truncated read_more_container", "");
+				//don't wrap if the previous user didn't add a comment
+				if (reblog_content.indexOf("</blockquote>", reblog_content.length - 13) !== -1 || reblog_content.length === 0) {
+					all_quotes_text = reblog_content;
+				} else {
+					all_quotes_text = "<p><a class='tumblr_blog' href='" + data.reblog_url + "'>" + data.reblog_author + "</a>:</p><blockquote>" + all_quotes_text + reblog_content + "</blockquote>";
+				}
+			});
+		}
+		try {
+			old_content = XKit.interface.post_window.get_content_html();
+		} catch (e) {
+			XKit.window.show('Invalid editor type', 'ERROR: Editable Reblogs cannot currently get content from your default editor type. To continue using editable reblogs, click <a target="_blank" href="https://www.tumblr.com/settings/dashboard">here</a> to edit your dashboard settings to use the rich text or HTML editors.', 'error', "<div id=\"xkit-close-message\" class=\"xkit-button\">OK</div>");
 			return;
 		}
-		reblog_tree.addClass(processed_class);
-
-		var title = reblog_tree.find('.reblog-title');
-		$('.post-form--header').append(title);
-		reblog_tree.find(".reblog-list-item").each(function(index) {
-			var reblog_data = {
-				reblog_content: $(this).find('.reblog-content').html() ? $(this).find('.reblog-content').html() : '',
-				reblog_author: $(this).find('.reblog-tumblelog-name').text() ? $(this).find('.reblog-tumblelog-name').text() : '',
-				reblog_url: $(this).find('.reblog-tumblelog-name').attr('href') ? $(this).find('.reblog-tumblelog-name').attr('href') : ''
-			};
-			all_quotes.push(reblog_data);
-		});
-		var all_quotes_text = "";
-		all_quotes.forEach(function(data, index, all) {
-			var reblog_content = data.reblog_content.replace("tmblr-truncated read_more_container", "");
-			//don't wrap if the previous user didn't add a comment
-			if (reblog_content.indexOf("</blockquote>", reblog_content.length - 13) !== -1 || reblog_content.length === 0) {
-				all_quotes_text = reblog_content;
-			} else {
-				all_quotes_text = "<p><a class='tumblr_blog' href='" + data.reblog_url + "'>" + data.reblog_author + "</a>:</p><blockquote>" + all_quotes_text + reblog_content + "</blockquote>";
-			}
-		});
-		var old_content = XKit.interface.post_window.get_content_html();
 		//add 'tumblr_blog' class to all tumblr.com links
 		var nodes = $(all_quotes_text + old_content);
 		nodes.find('a[href*="tumblr.com"]').addClass('tumblr_blog');
@@ -69,15 +74,48 @@ XKit.extensions.editable_reblogs = new Object({
 	},
 	process_submit: function(e) {
 		e.preventDefault();
-		//tumblr_blog must be wrapped in single quotes, not double, or the dash will nom the shit out of your post
-		var text = XKit.interface.post_window.get_content_html();
-		text = text.replace(/"tumblr_blog"/g, "'tumblr_blog'");
-		//also remove empty HTML if the user hasn't added anything
-		if (text.indexOf("<p><br></p>", text.length - 11) !== -1) {
-			text = text.substring(0, text.length - 11);
-		}
 		//sneak this change in through the HTML editor (adding content to the rich text editor changes 'tumblr_blog' back to "tumblr_blog")
-		XKit.interface.post_window.set_content_html_sneak(text);
+		XKit.extensions.editable_reblogs.format_post_content_via_html_editor();
+	},
+
+	/**
+	 * Uses sneaky HTML editor magic to handle singlequote issues with editable reblogs
+	 */
+	format_post_content_via_html_editor: function() {
+		if ($(".html-field").css("display") === "none") {
+			//tumblr_blog must be wrapped in single quotes, not double, or the dash will nom the shit out of your post
+			var text = XKit.interface.post_window.get_content_html();
+			text = text.replace(/"tumblr_blog"/g, "'tumblr_blog'");
+			//also remove empty HTML if the user hasn't added anything
+			if (text.indexOf("<p><br></p>", text.length - 11) !== -1) {
+				text = text.substring(0, text.length - 11);
+			}
+			XKit.tools.add_function(function(){
+				var new_content = add_tag[0];
+				var editor_div = document.getElementsByClassName("ace_editor");
+				if (editor_div.length === 1) {
+					var editor = window.ace.edit(editor_div[0]);
+					editor.setValue(new_content);
+					setTimeout(function(){
+						jQuery(".ace_marker-layer").empty();
+					}, 500);
+				}
+			}, true, [text]);
+		} else {
+			XKit.tools.add_function(function(){
+				var editor_div = document.getElementsByClassName("ace_editor");
+				if (editor_div.length === 1) {
+					var editor = window.ace.edit(editor_div[0]);
+					var content = editor.getValue();
+					//tumblr_blog must be wrapped in single quotes, not double, or the dash will nom the shit out of your post
+					content = content.replace(/"tumblr_blog"/g, "'tumblr_blog'");
+					editor.setValue(content);
+					setTimeout(function(){
+						jQuery(".ace_marker-layer").empty();
+					}, 500);
+				}
+			}, true, []);
+		}
 	},
 	post_window_legacy: function() {
 		var reblog_tree = $(".reblog-tree");

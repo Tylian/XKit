@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 5.2.0 **//
+//* VERSION 5.3.0 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER new-xkit **//
 
@@ -664,10 +664,16 @@ XKit.tools.dump_config = function(){
 					if ($(".html-field").css("display") === "none") {
 						var content_editor = $('.post-form--form').find('.editor.editor-richtext');
 						if (content_editor.length === 0) {
-							XKit.console.add('ERROR: unable to set content html');
+							XKit.console.add('ERROR: unable to get content html');
 							return '';
 						}
 						return content_editor.html();
+					} else {
+						var html_or_markdown = $(".tab-label[data-js-srclabel]").text();
+						if (html_or_markdown === 'HTML') {
+							return $('.ace_editor .ace_text-layer').text();
+						}
+						throw "Invalid editor type.";
 					}
 				},
 
@@ -690,29 +696,6 @@ XKit.tools.dump_config = function(){
 					}
 
 					var html_or_markdown = $(".tab-label[data-js-srclabel]").text();
-					XKit.tools.add_function(function(){
-						var new_content = add_tag[0];
-						var html_or_markdown = add_tag[1];
-						var editor_div = document.getElementsByClassName("ace_editor");
-						if (html_or_markdown === "Markdown") {
-							new_content = require('to-markdown').toMarkdown(new_content);
-						}
-						if (editor_div.length === 1) {
-							var editor = window.ace.edit(editor_div[0]);
-							editor.setValue(new_content);
-							setTimeout(function(){
-								jQuery(".ace_marker-layer").empty();
-							}, 500);
-						}
-					}, true, [new_content, html_or_markdown]);
-				},
-
-				/**
-				 * Sets the content of the post window.
-				 * @param {String} new_content
-				 */
-				set_content_html_sneak: function(new_content) {
-					var html_or_markdown = 'html';
 					XKit.tools.add_function(function(){
 						var new_content = add_tag[0];
 						var html_or_markdown = add_tag[1];
