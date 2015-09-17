@@ -1,7 +1,7 @@
 //* TITLE Blog Tracker **//
-//* VERSION 0.4.3 **//
+//* VERSION 0.5.0 **//
 //* DESCRIPTION Track people like tags **//
-//* DEVELOPER STUDIOXENIX **//
+//* DEVELOPER new-xkit **//
 //* DETAILS Blog Tracker lets you track blogs like you can track tags. Add them on your dashboard, and it will let you know how many new posts they've made the last time you've checked their blogs, or if they've changed their URLs.<br><br>Please be aware that the more blogs you add, the longer it will take to track them all. **//
 //* FRAME false **//
 //* BETA false **//
@@ -311,10 +311,11 @@ XKit.extensions.people_notifier = new Object({
 			var current_ms = new Date().getTime();
 			for (var i=0;i<this.blogs.length;i++) {
 
-				m_html = m_html + '<li style="padding-top: 2px; height: 24px;" id="xkit-people-notifier-for---' + this.blogs[i].url + '" data-url="' + this.blogs[i].url + '" class="no_push xkit-people-notifier-person">' +
+				m_html = m_html + '<li style="padding-top: 2px; height: 24px;" id="xkit-people-notifier-for---' + this.blogs[i].url + '" data-url="' + this.blogs[i].url + '" class="no_push xkit-people-notifier-person" draggable="true">' +
 								'<img src="https://api.tumblr.com/v2/blog/' + this.blogs[i].url + '.tumblr.com/avatar/16" class="people-notifier-avatar">' +
 								'<a>' +
-									'<div class="hide_overflow" style="color: ' + text_color + ' !important; padding-left: 36px;">' + this.blogs[i].url + '</div>' +
+									'<div class="hide_overflow" style="color: ' + text_color + ' !important; padding-left: 42px;">' + this.blogs[i].url + '</div>' +
+									'<div class="xkit-people-notifier drag" style="color: ' + text_color + '">☰</div>' +
 									'<div class="xkit-people-notifier close" style="display: none; color: ' + text_color + '">✖</div>';
 
 
@@ -358,6 +359,56 @@ XKit.extensions.people_notifier = new Object({
 		$(document).on("mouseleave", ".xkit-people-notifier-person", function(){
 			$(this).find(".xkit-people-notifier.close").css("display", "none");
 			$(this).find('.count').css('marginRight', '0');
+		});
+
+		var dragging;
+		var dragtarget;
+		$(document).on("dragstart", ".xkit-people-notifier-person", function(e){
+			dragging = $(this);
+			e.originalEvent.dataTransfer.setData("application/x-kit", $(this).text().replace("☰✖", ""));
+		});
+		$(document).on("dragenter", ".xkit-people-notifier-person", function(e){
+			if (e.originalEvent.dataTransfer.types[0] === "application/x-kit") {
+				e.preventDefault();
+				dragtarget = $(this);
+			}
+		});
+		$(document).on("dragover", ".xkit-people-notifier-person", function(e){
+			if (e.originalEvent.dataTransfer.types[0] === "application/x-kit") {
+				e.preventDefault();
+			}
+		});
+		$(document).on("drop", ".xkit-people-notifier-person", function(e){
+			var half_div_height = 13;
+			var index_of_object_with_property = function(array, property_name, property_value) {
+				for (var i = 0; i < array.length; i++) {
+					if (array[i][property_name] === property_value) {
+						return i;
+					}
+				}
+				return -1;
+			};
+			if (dragtarget[0] !== dragging[0]) {
+				var target_index = index_of_object_with_property(XKit.extensions.people_notifier.blogs, 'url', $(dragtarget).attr('data-url'));
+				var dragging_index = index_of_object_with_property(XKit.extensions.people_notifier.blogs, 'url', $(dragging).attr('data-url'));
+				var dragging_obj = XKit.extensions.people_notifier.blogs[dragging_index];
+				var top_of_target = dragtarget.offset().top;
+				dragging.detach();
+				if (e.originalEvent.pageY - top_of_target > half_div_height) {
+					dragtarget.after(dragging);
+					target_index++;
+				} else {
+					dragtarget.before(dragging);
+				}
+				if (dragging_index < target_index) {
+					target_index--;
+				}
+				XKit.extensions.people_notifier.blogs.splice(dragging_index, 1);
+				XKit.extensions.people_notifier.blogs.splice(target_index, 0, dragging_obj);
+				XKit.extensions.people_notifier.save();
+			}
+			dragtarget = null;
+			dragging = null;
 		});
 
 		$(".xkit-people-notifier-person").bind("click", function(event) {
@@ -497,6 +548,10 @@ XKit.extensions.people_notifier = new Object({
 
 		$(document).off("mouseenter", ".xkit-people-notifier-person");
 		$(document).off("mouseleave", ".xkit-people-notifier-person");
+		$(document).off("dragstart", ".xkit-people-notifier-person");
+		$(document).off("dragenter", ".xkit-people-notifier-person");
+		$(document).off("dragover", ".xkit-people-notifier-person");
+		$(document).off("drop", ".xkit-people-notifier-person");
 
 		this.running = false;
 	}
