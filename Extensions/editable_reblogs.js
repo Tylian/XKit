@@ -1,5 +1,5 @@
 //* TITLE Editable Reblogs **//
-//* VERSION 2.0.3 **//
+//* VERSION 2.1.0 **//
 //* DESCRIPTION	Restores ability to edit previous reblogs of a post **//
 //* DEVELOPER new-xkit **//
 //* FRAME false **//
@@ -70,7 +70,49 @@ XKit.extensions.editable_reblogs = new Object({
 	process_submit: function(e) {
 		e.preventDefault();
 		//sneak this change in through the HTML editor (adding content to the rich text editor changes 'tumblr_blog' back to "tumblr_blog")
-		XKit.interface.post_window.set_content_html_sneak();
+		XKit.extensions.editable_reblogs.format_post_content_via_html_editor();
+	},
+
+	/**
+	 * Uses sneaky HTML editor magic to handle singlequote issues with editable reblogs
+	 * @param {String} new_content
+	 */
+	format_post_content_via_html_editor: function() {
+		if ($(".html-field").css("display") === "none") {
+			//tumblr_blog must be wrapped in single quotes, not double, or the dash will nom the shit out of your post
+			var text = XKit.interface.post_window.get_content_html();
+			text = text.replace(/"tumblr_blog"/g, "'tumblr_blog'");
+			//also remove empty HTML if the user hasn't added anything
+			if (text.indexOf("<p><br></p>", text.length - 11) !== -1) {
+				text = text.substring(0, text.length - 11);
+			}
+			XKit.tools.add_function(function(){
+				var new_content = add_tag[0];
+				var editor_div = document.getElementsByClassName("ace_editor");
+				if (editor_div.length === 1) {
+					var editor = window.ace.edit(editor_div[0]);
+					editor.setValue(new_content);
+					setTimeout(function(){
+						jQuery(".ace_marker-layer").empty();
+					}, 500);
+				}
+			}, true, [text]);
+		} else {
+			var new_content = '';
+			XKit.tools.add_function(function(){
+				var editor_div = document.getElementsByClassName("ace_editor");
+				if (editor_div.length === 1) {
+					var editor = window.ace.edit(editor_div[0]);
+					var content = editor.getValue();
+					//tumblr_blog must be wrapped in single quotes, not double, or the dash will nom the shit out of your post
+					content = content.replace(/"tumblr_blog"/g, "'tumblr_blog'");
+					editor.setValue(content);
+					setTimeout(function(){
+						jQuery(".ace_marker-layer").empty();
+					}, 500);
+				}
+			}, true, [new_content]);
+		}
 	},
 	post_window_legacy: function() {
 		var reblog_tree = $(".reblog-tree");

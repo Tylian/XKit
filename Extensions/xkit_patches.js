@@ -715,48 +715,6 @@ XKit.tools.dump_config = function(){
 				},
 
 				/**
-				 * Uses sneaky HTML editor magic to handle singlequote issues with editable reblogs
-				 * @param {String} new_content
-				 */
-				set_content_html_sneak: function() {
-					if ($(".html-field").css("display") === "none") {
-						//tumblr_blog must be wrapped in single quotes, not double, or the dash will nom the shit out of your post
-						var text = XKit.interface.post_window.get_content_html();
-						text = text.replace(/"tumblr_blog"/g, "'tumblr_blog'");
-						//also remove empty HTML if the user hasn't added anything
-						if (text.indexOf("<p><br></p>", text.length - 11) !== -1) {
-							text = text.substring(0, text.length - 11);
-						}
-						XKit.tools.add_function(function(){
-							var new_content = add_tag[0];
-							var editor_div = document.getElementsByClassName("ace_editor");
-							if (editor_div.length === 1) {
-								var editor = window.ace.edit(editor_div[0]);
-								editor.setValue(new_content);
-								setTimeout(function(){
-									jQuery(".ace_marker-layer").empty();
-								}, 500);
-							}
-						}, true, [text]);
-					} else {
-						var new_content = '';
-						XKit.tools.add_function(function(){
-							var editor_div = document.getElementsByClassName("ace_editor");
-							if (editor_div.length === 1) {
-								var editor = window.ace.edit(editor_div[0]);
-								var content = editor.getValue();
-								//tumblr_blog must be wrapped in single quotes, not double, or the dash will nom the shit out of your post
-								content = content.replace(/"tumblr_blog"/g, "'tumblr_blog'");
-								editor.setValue(content);
-								setTimeout(function(){
-									jQuery(".ace_marker-layer").empty();
-								}, 500);
-							}
-						}, true, [new_content]);
-					}
-				},
-
-				/**
 				 * Adds tags to the post window.
 				 * @param {String|Array<String>} tag_or_tags
 				 */
