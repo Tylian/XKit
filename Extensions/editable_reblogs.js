@@ -1,5 +1,5 @@
 //* TITLE Editable Reblogs **//
-//* VERSION 2.1.0 **//
+//* VERSION 2.1.1 **//
 //* DESCRIPTION	Restores ability to edit previous reblogs of a post **//
 //* DEVELOPER new-xkit **//
 //* FRAME false **//
@@ -57,8 +57,14 @@ XKit.extensions.editable_reblogs = new Object({
 		}
 		try {
 			old_content = XKit.interface.post_window.get_content_html();
+			if ($(".tab-label[data-js-srclabel]").text() === 'HTML') {
+					throw "Invalid editor type.";
+			}
 		} catch (e) {
-			XKit.window.show('Invalid editor type', 'ERROR: Editable Reblogs cannot currently get content from your default editor type. To continue using editable reblogs, click <a target="_blank" href="https://www.tumblr.com/settings/dashboard">here</a> to edit your dashboard settings to use the rich text or HTML editors.', 'error', "<div id=\"xkit-close-message\" class=\"xkit-button\">OK</div>");
+			XKit.window.show('Invalid editor type', 'ERROR: Editable Reblogs cannot currently get content from your default editor type. '+
+				'To continue using editable reblogs, click <a target="_blank" href="https://www.tumblr.com/settings/dashboard">here</a> '+
+				'to edit your dashboard settings to use the rich text editor or disable Editable Reblogs from the XKit menu.<br>'+
+				'This is only temporary, and will be fixed ASAP.', 'error', "<div id=\"xkit-close-message\" class=\"xkit-button\">OK</div>");
 			return;
 		}
 		//add 'tumblr_blog' class to all tumblr.com links
