@@ -46,8 +46,8 @@ XKit.extensions.satsukimous = new Object({
 		"name_replacement": {
 			text: "Replacement Name",
 			type: "text",
-			default: "satsuki",
-			value: "satsuki"
+			default: "Anonymous",
+			value: "Anonymous"
 		},
 		"sep-2": {
 			text: "Other Options",
