@@ -673,8 +673,7 @@ XKit.tools.dump_config = function(){
 						if (html_or_markdown === 'HTML') {
 							return $('.ace_editor .ace_text-layer').text();
 						}
-						XKit.window.show('Invalid editor selection', 'ERROR: XKit cannot currently get content from the markdown editor. Click <a href="https://www.tumblr.com/settings/dashboard">here</a> to edit your dashboard settings to use the rich text or HTML editors.', 'error', "<div id=\"xkit-close-message\" class=\"xkit-button\">OK</div>");
-						return '';
+						throw "Invalid editor type.";
 					}
 				},
 

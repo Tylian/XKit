@@ -55,7 +55,13 @@ XKit.extensions.editable_reblogs = new Object({
 				all_quotes_text = "<p><a class='tumblr_blog' href='" + data.reblog_url + "'>" + data.reblog_author + "</a>:</p><blockquote>" + all_quotes_text + reblog_content + "</blockquote>";
 			}
 		});
-		var old_content = XKit.interface.post_window.get_content_html();
+		var old_content = '';
+		try {
+			old_content = XKit.interface.post_window.get_content_html();
+		} catch (e) {
+			XKit.window.show('Invalid editor type', 'ERROR: Editable Reblogs cannot currently get content from your default editor type. To continue using editable reblogs, click <a target="_blank" href="https://www.tumblr.com/settings/dashboard">here</a> to edit your dashboard settings to use the rich text or HTML editors.', 'error', "<div id=\"xkit-close-message\" class=\"xkit-button\">OK</div>");
+			return;
+		}
 		//add 'tumblr_blog' class to all tumblr.com links
 		var nodes = $(all_quotes_text + old_content);
 		nodes.find('a[href*="tumblr.com"]').addClass('tumblr_blog');
