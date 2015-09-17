@@ -719,7 +719,6 @@ XKit.tools.dump_config = function(){
 				 * @param {String} new_content
 				 */
 				set_content_html_sneak: function() {
-					var html_or_markdown = 'html';
 					if ($(".html-field").css("display") === "none") {
 						//tumblr_blog must be wrapped in single quotes, not double, or the dash will nom the shit out of your post
 						var text = XKit.interface.post_window.get_content_html();
@@ -730,7 +729,6 @@ XKit.tools.dump_config = function(){
 						}
 						XKit.tools.add_function(function(){
 							var new_content = add_tag[0];
-							var html_or_markdown = add_tag[1];
 							var editor_div = document.getElementsByClassName("ace_editor");
 							if (editor_div.length === 1) {
 								var editor = window.ace.edit(editor_div[0]);
@@ -739,7 +737,7 @@ XKit.tools.dump_config = function(){
 									jQuery(".ace_marker-layer").empty();
 								}, 500);
 							}
-						}, true, [text, html_or_markdown]);
+						}, true, [text]);
 					} else {
 						var new_content = '';
 						XKit.tools.add_function(function(){
@@ -754,7 +752,7 @@ XKit.tools.dump_config = function(){
 									jQuery(".ace_marker-layer").empty();
 								}, 500);
 							}
-						}, true, [new_content, html_or_markdown]);
+						}, true, [new_content]);
 					}
 				},
 
