@@ -12,7 +12,6 @@ XKit.extensions.people_notifier = new Object({
 	apiKey: "fuiKNFp9vQFvjLNvx4sUwti4Yb5yGutBN4Xh10LXZhhRKjWlV4",
 
 	blogs: [],
-	searchable_blogs: {},
 
 	preferences: {
 
@@ -75,11 +74,6 @@ XKit.extensions.people_notifier = new Object({
 		}
 
 		this.blogs = blogs_obj;
-
-		this.searchable_blogs = {};
-		for (var i = 0; i<blogs_obj.length; i++) {
-			this.searchable_blogs[blogs_obj[i].url] = blogs_obj[i];
-		}
 
 		console.log(this.blogs);
 
@@ -369,7 +363,6 @@ XKit.extensions.people_notifier = new Object({
 
 		var dragging;
 		var dragtarget;
-		var half_div_height = 13;
 		$(document).on("dragstart", ".xkit-people-notifier-person", function(e){
 			dragging = $(this);
 			e.originalEvent.dataTransfer.setData("application/x-kit", $(this).text().replace("☰✖", ""));
@@ -386,10 +379,19 @@ XKit.extensions.people_notifier = new Object({
 			}
 		});
 		$(document).on("drop", ".xkit-people-notifier-person", function(e){
+			var half_div_height = 13;
+			var index_of_object_with_property = function(array, property_name, property_value) {
+				for (var i = 0; i < array.length; i++) {
+					if (array[i][property_name] === property_value) {
+						return i;
+					}
+				}
+				return -1;
+			};
 			if (dragtarget[0] !== dragging[0]) {
-				var target_index = XKit.extensions.people_notifier.blogs.indexOf(XKit.extensions.people_notifier.searchable_blogs[$(dragtarget).attr('data-url')]);
-				var dragging_obj = XKit.extensions.people_notifier.searchable_blogs[$(dragging).attr('data-url')];
-				var dragging_index = XKit.extensions.people_notifier.blogs.indexOf(dragging_obj);
+				var target_index = index_of_object_with_property(XKit.extensions.people_notifier.blogs, 'url', $(dragtarget).attr('data-url'));
+				var dragging_index = index_of_object_with_property(XKit.extensions.people_notifier.blogs, 'url', $(dragging).attr('data-url'));
+				var dragging_obj = XKit.extensions.people_notifier.blogs[dragging_index];
 				var top_of_target = dragtarget.offset().top;
 				dragging.detach();
 				if (e.originalEvent.pageY - top_of_target > half_div_height) {
