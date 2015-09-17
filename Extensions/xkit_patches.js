@@ -673,7 +673,7 @@ XKit.tools.dump_config = function(){
 						if (html_or_markdown === 'HTML') {
 							return $('.ace_editor .ace_text-layer').text();
 						}
-						XKit.console.add('ERROR: unable to get content html for markdown editor');
+						console.error('ERROR: unable to get content html for markdown editor');
 						return '';
 					}
 				},

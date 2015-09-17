@@ -75,7 +75,6 @@ XKit.extensions.editable_reblogs = new Object({
 
 	/**
 	 * Uses sneaky HTML editor magic to handle singlequote issues with editable reblogs
-	 * @param {String} new_content
 	 */
 	format_post_content_via_html_editor: function() {
 		if ($(".html-field").css("display") === "none") {
@@ -98,7 +97,6 @@ XKit.extensions.editable_reblogs = new Object({
 				}
 			}, true, [text]);
 		} else {
-			var new_content = '';
 			XKit.tools.add_function(function(){
 				var editor_div = document.getElementsByClassName("ace_editor");
 				if (editor_div.length === 1) {
@@ -111,7 +109,7 @@ XKit.extensions.editable_reblogs = new Object({
 						jQuery(".ace_marker-layer").empty();
 					}, 500);
 				}
-			}, true, [new_content]);
+			}, true, []);
 		}
 	},
 	post_window_legacy: function() {
