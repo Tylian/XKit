@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 5.3.0 **//
+//* VERSION 5.3.1 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER new-xkit **//
 
@@ -664,14 +664,17 @@ XKit.tools.dump_config = function(){
 					if ($(".html-field").css("display") === "none") {
 						var content_editor = $('.post-form--form').find('.editor.editor-richtext');
 						if (content_editor.length === 0) {
-							XKit.console.add('ERROR: unable to get content html');
+							console.error('ERROR: unable to get content html');
 							return '';
 						}
 						return content_editor.html();
 					} else {
 						var html_or_markdown = $(".tab-label[data-js-srclabel]").text();
 						if (html_or_markdown === 'HTML') {
-							return $('.ace_editor .ace_text-layer').text();
+							var text = $('.ace_editor .ace_text-layer').text();
+							// replace nonebreaking spaces with normal ones
+							text = text.replace(/\xa0/g, ' ');
+							return text;
 						}
 						throw "Invalid editor type.";
 					}
