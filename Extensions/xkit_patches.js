@@ -664,10 +664,17 @@ XKit.tools.dump_config = function(){
 					if ($(".html-field").css("display") === "none") {
 						var content_editor = $('.post-form--form').find('.editor.editor-richtext');
 						if (content_editor.length === 0) {
-							XKit.console.add('ERROR: unable to set content html');
+							XKit.console.add('ERROR: unable to get content html');
 							return '';
 						}
 						return content_editor.html();
+					} else {
+						var html_or_markdown = $(".tab-label[data-js-srclabel]").text();
+						if (html_or_markdown === 'HTML') {
+							return $('.ace_editor .ace_text-layer').text();
+						}
+						XKit.console.add('ERROR: unable to get content html for markdown editor');
+						return '';
 					}
 				},
 
@@ -708,26 +715,47 @@ XKit.tools.dump_config = function(){
 				},
 
 				/**
-				 * Sets the content of the post window.
+				 * Uses sneaky HTML editor magic to handle singlequote issues with editable reblogs
 				 * @param {String} new_content
 				 */
-				set_content_html_sneak: function(new_content) {
+				set_content_html_sneak: function() {
 					var html_or_markdown = 'html';
-					XKit.tools.add_function(function(){
-						var new_content = add_tag[0];
-						var html_or_markdown = add_tag[1];
-						var editor_div = document.getElementsByClassName("ace_editor");
-						if (html_or_markdown === "Markdown") {
-							new_content = require('to-markdown').toMarkdown(new_content);
+					if ($(".html-field").css("display") === "none") {
+						//tumblr_blog must be wrapped in single quotes, not double, or the dash will nom the shit out of your post
+						var text = XKit.interface.post_window.get_content_html();
+						text = text.replace(/"tumblr_blog"/g, "'tumblr_blog'");
+						//also remove empty HTML if the user hasn't added anything
+						if (text.indexOf("<p><br></p>", text.length - 11) !== -1) {
+							text = text.substring(0, text.length - 11);
 						}
-						if (editor_div.length === 1) {
-							var editor = window.ace.edit(editor_div[0]);
-							editor.setValue(new_content);
-							setTimeout(function(){
-								jQuery(".ace_marker-layer").empty();
-							}, 500);
-						}
-					}, true, [new_content, html_or_markdown]);
+						XKit.tools.add_function(function(){
+							var new_content = add_tag[0];
+							var html_or_markdown = add_tag[1];
+							var editor_div = document.getElementsByClassName("ace_editor");
+							if (editor_div.length === 1) {
+								var editor = window.ace.edit(editor_div[0]);
+								editor.setValue(new_content);
+								setTimeout(function(){
+									jQuery(".ace_marker-layer").empty();
+								}, 500);
+							}
+						}, true, [text, html_or_markdown]);
+					} else {
+						var new_content = '';
+						XKit.tools.add_function(function(){
+							var editor_div = document.getElementsByClassName("ace_editor");
+							if (editor_div.length === 1) {
+								var editor = window.ace.edit(editor_div[0]);
+								var content = editor.getValue();
+								//tumblr_blog must be wrapped in single quotes, not double, or the dash will nom the shit out of your post
+								content = content.replace(/"tumblr_blog"/g, "'tumblr_blog'");
+								editor.setValue(content);
+								setTimeout(function(){
+									jQuery(".ace_marker-layer").empty();
+								}, 500);
+							}
+						}, true, [new_content, html_or_markdown]);
+					}
 				},
 
 				/**

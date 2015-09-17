@@ -69,15 +69,8 @@ XKit.extensions.editable_reblogs = new Object({
 	},
 	process_submit: function(e) {
 		e.preventDefault();
-		//tumblr_blog must be wrapped in single quotes, not double, or the dash will nom the shit out of your post
-		var text = XKit.interface.post_window.get_content_html();
-		text = text.replace(/"tumblr_blog"/g, "'tumblr_blog'");
-		//also remove empty HTML if the user hasn't added anything
-		if (text.indexOf("<p><br></p>", text.length - 11) !== -1) {
-			text = text.substring(0, text.length - 11);
-		}
 		//sneak this change in through the HTML editor (adding content to the rich text editor changes 'tumblr_blog' back to "tumblr_blog")
-		XKit.interface.post_window.set_content_html_sneak(text);
+		XKit.interface.post_window.set_content_html_sneak();
 	},
 	post_window_legacy: function() {
 		var reblog_tree = $(".reblog-tree");
