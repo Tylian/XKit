@@ -1,4 +1,4 @@
-//* TITLE Better Reblogs **//
+//* TITLE Reblog Display Options **//
 //* VERSION 1.1 **//
 //* DESCRIPTION Adds different styles to the new reblog layout, including the "classic" nested look. **//
 //* DEVELOPER new-xkit **//
