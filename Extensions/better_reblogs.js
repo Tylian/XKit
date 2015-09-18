@@ -57,7 +57,7 @@ XKit.extensions.better_reblogs = new Object({
             style: "flat",
         },
         "remove_user_names": {
-            text: "Hide usernames and put posts next to avatars. (mouse over avatars for usernames)",
+            text: "Hide usernames and put posts next to avatars. (mouse over avatars for blog info)",
             default: false,
             value: false,
             style: "flat",
@@ -85,6 +85,12 @@ XKit.extensions.better_reblogs = new Object({
             this.run_flat();
         }
 
+    },
+
+    frame_run: function() {
+        if (XKit.page.peepr) {
+            XKit.extensions.better_reblogs.run();
+        }
     },
 
     run_flat: function() {
@@ -126,7 +132,7 @@ XKit.extensions.better_reblogs = new Object({
         }
 
         if (this.preferences.slim_new_reblog.value) {
-            XKit.tools.add_css(".reblog-list-item {padding: 10px 20px 5px !important; min-height: 41px;}", 
+            XKit.tools.add_css(".reblog-list-item {padding: 10px 20px 5px !important; min-height: 41px;}",
                 "better_reblogs");
         }
 
@@ -140,9 +146,11 @@ XKit.extensions.better_reblogs = new Object({
     },
 
     run_nested: function() {
-        XKit.tools.add_css('.reblog-list {display: none!important} '+
-                           '.reblog-list-item.contributed-content {display: none!important;} '+
-                           '.post_full.post .post_content_inner .post_media ~ .old_reblogs {margin-top: 13px;}', 'better_reblogs');
+        var match_only_main_dash = "ol" ? !XKit.page.peepr : "";
+        XKit.tools.add_css(match_only_main_dash+'.posts .reblog-list {display: none!important} '+
+                           match_only_main_dash+'.posts .reblog-list-item.contributed-content {display: none!important;} '+
+                           match_only_main_dash+'.posts .post_full.post .post_content_inner .post_media ~ .old_reblogs {margin-top: 13px;}',
+                        'better_reblogs');
         XKit.extensions.better_reblogs.do_nested();
         XKit.post_listener.add("better_reblogs", XKit.extensions.better_reblogs.do_nested);
     },
@@ -153,6 +161,9 @@ XKit.extensions.better_reblogs = new Object({
         $(posts).each(function() {
             var $this = $(this);
             $this.addClass("xkit-better-reblogs-done");
+
+            // trick tumblr into displaying the little blog info popovers for the reblog avatars
+            $this.find(".reblog-avatar").addClass("post_sub_avatar");
 
             if (XKit.extensions.better_reblogs.preferences.reorder_reblog_title.value){
                 var title = $this.find(".reblog-title");
@@ -166,9 +177,6 @@ XKit.extensions.better_reblogs = new Object({
                 title.remove();
                 parent.prepend(title);
             }
-
-            // trick tumblr into displaying the little blog info popovers for the reblog avatars
-            $this.find(".reblog-avatar").addClass("post_sub_avatar");
         });
     },
 
@@ -181,7 +189,7 @@ XKit.extensions.better_reblogs = new Object({
 
             var reblog_tree = $this.find(".reblog-list");
             var title = reblog_tree.find('.reblog-title');
-            
+
             if (!reblog_tree.length){
                 return;
             }
@@ -199,10 +207,13 @@ XKit.extensions.better_reblogs = new Object({
 
             var all_quotes = [];
             reblog_tree.find(".reblog-list-item").each(function() {
+                var $this = $(this);
+                var content = $this.find('.reblog-content');
+                var author = $this.find('.reblog-tumblelog-name');
                 var reblog_data = {
-                    reblog_content: $(this).find('.reblog-content').html() ? $(this).find('.reblog-content').html() : '',
-                    reblog_author: $(this).find('.reblog-tumblelog-name').text() ? $(this).find('.reblog-tumblelog-name').text() : '',
-                    reblog_url: $(this).find('.reblog-tumblelog-name').attr('href') ? $(this).find('.reblog-tumblelog-name').attr('href') : ''
+                    reblog_content: content.html() || '',
+                    reblog_author: author.contents()[0].data || '',
+                    reblog_url: author.href() || ''
                 };
                 all_quotes.push(reblog_data);
             });
@@ -215,7 +226,7 @@ XKit.extensions.better_reblogs = new Object({
                     all_quotes_text = reblog_content;
                 } else {
                     all_quotes_text = "<p><a class='tumblr_blog' href='" + data.reblog_url + "'>" + data.reblog_author + "</a>:</p><blockquote>" + all_quotes_text + reblog_content + "</blockquote>";
-                }       
+                }
             });
 
             $this.find(".old_reblogs").append(all_quotes_text);
