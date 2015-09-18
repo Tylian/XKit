@@ -1,7 +1,7 @@
 /*
 
 	Extension Editor for XKit 7
-	Version 1.1.0
+	Version 1.2.0
 
 	(c) 2011 - 2014 STUDIOXENIX
 	(c) 2015 New XKit Team and Contributors (https://github.com/new-xkit/XKit/contributors)
@@ -331,9 +331,12 @@ function extension_editor_update_object(m_object) {
 
 	// Check for title, description, developer, version etc. data
 	// here and update the object if neccessary.
-
-	m_object.script = script_editor.getValue();
-
+	if ($("#xkit-editor-switch-to-object").hasClass("selected")) {
+		m_object.script = JSON.parse(object_editor.getValue()).script;
+	} else {
+		m_object.script = script_editor.getValue();
+	}
+		
 	var version = extension_editor_legacy_get_attribute(m_object.script, "version");
 	if (version === "") {
 		XKit.window.show("Can't save file","Required VERSION attribute not found.<br/>Consult XKit Developer Documentation.","error","<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
@@ -356,14 +359,25 @@ function extension_editor_update_object(m_object) {
 		m_object.beta = false;
 	}
 	m_object.details = extension_editor_legacy_get_attribute(m_object.script, "details");
-
-	m_object.icon = icon_editor.getValue();
-	m_object.css = css_editor.getValue();
+	
+	if ($("#xkit-editor-switch-to-object").hasClass("selected")) {
+		m_object.icon = JSON.parse(object_editor.getValue()).icon;
+		m_object.css = JSON.parse(object_editor.getValue()).css;
+	} else {
+		m_object.icon = icon_editor.getValue();
+		m_object.css = css_editor.getValue();
+	}
 
 	m_object.errors = false;
-
+	
 	// Update this area too.
-	object_editor.setValue(JSON.stringify(m_object));
+	if ($("#xkit-editor-switch-to-object").hasClass("selected")) {
+		script_editor.setValue(JSON.parse(object_editor.getValue()).script);
+		icon_editor.setValue(JSON.parse(object_editor.getValue()).icon);
+		css_editor.setValue(JSON.parse(object_editor.getValue()).css);
+	} else {
+		object_editor.setValue(JSON.stringify(m_object));
+	}
 
 	XKit.installed.update(XKit.extensions.xkit_editor.filename, m_object);
 	XKit.notifications.add("Extension " + XKit.extensions.xkit_editor.filename + " saved successfully.");
