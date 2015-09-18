@@ -1,9 +1,10 @@
 /*
 
 	Extension Editor for XKit 7
-	Version 1.0
+	Version 1.1.0
 
-	(c) 2011 - 2013 STUDIOXENIX
+	(c) 2011 - 2014 STUDIOXENIX
+	(c) 2015 New XKit Team and Contributors (https://github.com/new-xkit/XKit/contributors)
 
 */
 
@@ -172,9 +173,9 @@ function extension_editor_finish_run() {
 			}
 
 			var default_script = "//* TITLE " + new_filename + " **//\n" +
-								 "//* VERSION 1.0 REV A **//\n" +
+								 "//* VERSION 1.0.0 **//\n" +
 								 "//* DESCRIPTION	**//\n" +
-								 "//* DEVELOPER STUDIOXENIX **//\n" +
+								 "//* DEVELOPER New-XKit **//\n" +
 								 "//* FRAME false **//\n" +
 								 "//* BETA false **//\n" +
 								 "\nXKit.extensions." + new_filename + " = new Object({\n" +
