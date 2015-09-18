@@ -1,5 +1,5 @@
 //* TITLE Reblog Display Options **//
-//* VERSION 1.1 **//
+//* VERSION 1.0.0 **//
 //* DESCRIPTION Adds different styles to the new reblog layout, including the "classic" nested look. **//
 //* DEVELOPER new-xkit **//
 //* FRAME false **//
@@ -146,7 +146,7 @@ XKit.extensions.better_reblogs = new Object({
     },
 
     run_nested: function() {
-        var match_only_main_dash = "ol" ? !XKit.page.peepr : "";
+        var match_only_main_dash =  !XKit.page.peepr ? "ol" : "";
         XKit.tools.add_css(match_only_main_dash+'.posts .reblog-list {display: none!important} '+
                            match_only_main_dash+'.posts .reblog-list-item.contributed-content {display: none!important;} '+
                            match_only_main_dash+'.posts .post_full.post .post_content_inner .post_media ~ .old_reblogs {margin-top: 13px;}',
@@ -213,7 +213,7 @@ XKit.extensions.better_reblogs = new Object({
                 var reblog_data = {
                     reblog_content: content.html() || '',
                     reblog_author: author.contents()[0].data || '',
-                    reblog_url: author.href() || ''
+                    reblog_url: author.attr('href') || ''
                 };
                 all_quotes.push(reblog_data);
             });
