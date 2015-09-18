@@ -1,5 +1,5 @@
 //* TITLE Drafts+ **//
-//* VERSION 0.2.1 **//
+//* VERSION 0.2.2 **//
 //* DESCRIPTION Enhancements for Drafts page **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//
@@ -23,9 +23,21 @@ XKit.extensions.drafts_plus = new Object({
 					'<div class="hide_overflow" style="color: rgba(255, 255, 255, 0.5) !important; font-weight: bold; padding-left: 10px; padding-top: 8px;">Mass Edit Mode</div>' +
 				'</a>' +
 			'</li>' +
-			'<li class="no_push" style="height: 36px;"><a href="#" onclick="return false;" id="xshrinkposts_button">' +
-				'<div class="hide_overflow" style="color: rgba(255, 255, 255, 0.5) !important; font-weight: bold; padding-left: 10px; padding-top: 8px;">Shrink Posts <div class="count" style="padding-top: 8px;">off</div> </div>' +
-			'</a></li>' +
+			'<li class="no_push" style="height: 36px;">' +
+				'<a href="#" onclick="return false;" id="xshrinkposts_button">' +
+					'<div class="hide_overflow" style="color: rgba(255, 255, 255, 0.5) !important; font-weight: bold; padding-left: 10px; padding-top: 8px;">Shrink Posts <div class="count" style="padding-top: 8px;">off</div></div>' +
+				'</a>' +
+			'</li>' +
+			'<li class="no_push" style="height: 36px;">' +
+				'<a href="#" id="xkit-mass-deleter-100">' +
+					'<div class="hide_overflow" style="color: rgba(255, 255, 255, 0.5) !important; font-weight: bold; padding-left: 10px; padding-top: 8px;">Delete 100 posts</div>' +
+				'</a>' +
+			'</li>' +
+			'<li class="no_push" style="height: 36px;">' +
+				'<a href="#" id="xkit-mass-deleter-1000">' +
+					'<div class="hide_overflow" style="color: rgba(255, 255, 255, 0.5) !important; font-weight: bold; padding-left: 10px; padding-top: 8px;">Delete 1000 posts</div>' +
+				'</a>' +
+			'</li>' +
 			'</ul>';
 
 		$("ul.controls_section:eq(1)").before(xf_html);
@@ -184,7 +196,7 @@ XKit.extensions.drafts_plus = new Object({
 				data: "id=" + m_object.post_id + "&form_key=" + m_object.form_key + "&queue=queue",
 				json: false,
 				onerror: function(response) {
-					XKit.window.show("Can't delete post.","Drafts+ could not perform the requested. There might be a problem with Tumblr servers, please try again later.","error","<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
+					XKit.window.show("Can't delete post.","Drafts+ could not perform the requested action. There might be a problem with Tumblr servers, please try again later.","error","<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
 				},
 				onload: function(response) {
 					$(m_parent).fadeOut('slow', function() { $(m_parent).parent().remove(); });
