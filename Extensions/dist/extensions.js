@@ -122,6 +122,9 @@ extensionBuilder.writeGalleryFile = function(extensions) {
 		if(extension.icon) {
 			galleryExtension.icon = extension.icon;
 		}
+		if(extension.details) {
+			galleryExtension.details = extension.details;
+		}
 		gallery.extensions.push(galleryExtension);
 	});
 
