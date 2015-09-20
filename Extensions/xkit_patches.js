@@ -1435,14 +1435,10 @@ XKit.tools.dump_config = function(){
 			 * @return {Array<Object>} The posts
 			 */
 			get_posts: function(without_tag, mine, can_edit, sel) {
-				//console.log("get_posts");
-
 				var posts = [];
 				var selector;
 
 				if(!sel || typeof sel !== 'string') {
-					//console.log("get_posts --> invalid or no selector provided");
-
 					selector = ".post";
 
 					if (mine && !XKit.interface.where().channel) {
@@ -1870,7 +1866,6 @@ XKit.tools.dump_config = function(){
 			if (post_count != XKit.post_listener.count) {
 				XKit.post_listener.count = post_count;
 				if(XKit.post_listener.count !== 0) {
-					console.log("post_listener --> check: running callbacks");
 					XKit.post_listener.run_callbacks();
 				}
 			}
@@ -1882,7 +1877,6 @@ XKit.tools.dump_config = function(){
 
 		XKit.post_listener.run_callbacks = function() {
 			if (XKit.post_listener.callbacks.length === 0) {
-				// console.log("[Post Listener] No callbacks, quitting.");
 				return;
 			}
 			var successful_count = 0;
