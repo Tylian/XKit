@@ -979,7 +979,12 @@ XKit.extensions.xkit_preferences = new Object({
 
 			$("#xkit-extensions-panel-right-inner").html(m_html + '<div class="xkit-gallery-clearer">&nbsp;</div>');
 			
-			if (XKit.tools.get_setting("xkit_hide_installed_extensions","false") === "true") { XKit.tools.add_css(".xkit-installed-extension { display: none; } .xkit-unable-to-load-extension-gallery { display: block; }", "xkit_hide_installed_extensions"); }
+			if (XKit.tools.get_setting("xkit_hide_installed_extensions","false") === "true") { 
+				XKit.tools.add_css(".xkit-installed-extension { display: none; }", "xkit_hide_installed_extensions");
+				if($("#xkit-extensions-panel-right-inner .xkit-gallery-extension").length === $("#xkit-extensions-panel-right-inner .xkit-installed-extension").length) {
+					XKit.tools.add_css(".xkit-unable-to-load-extension-gallery { display: block; }", "xkit_hide_installed_extensions");
+				}
+			}
 			
 			$("#xkit-extensions-panel-right").nanoScroller();
 			$("#xkit-extensions-panel-right").nanoScroller({ scroll: 'top' });
@@ -998,7 +1003,7 @@ XKit.extensions.xkit_preferences = new Object({
 						$(".xkit-unable-to-load-extension-gallery").css("display", "block");
 					}
 				}
-			})
+			});
 			
 			$("#xkit-gallery-search").keyup(function() {
 
