@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 5.3.1 **//
+//* VERSION 5.3.2 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER new-xkit **//
 
@@ -1431,17 +1431,30 @@ XKit.tools.dump_config = function(){
 			 * @param {String} without_tag - Class that the posts should not have
 			 * @param {Boolean} mine - Whether the posts must be the user's
 			 * @param {Boolean} can_edit - Whether the posts must be editable
+			 * @param {String} sel - custom selector to use to search for posts
 			 * @return {Array<Object>} The posts
 			 */
-			get_posts: function(without_tag, mine, can_edit) {
+			get_posts: function(without_tag, mine, can_edit, sel) {
+				//console.log("get_posts");
+
 				var posts = [];
+				var selector;
 
-				var selector = ".post";
+				if(!sel || typeof sel !== 'string') {
+					//console.log("get_posts --> invalid or no selector provided");
 
-				if (mine && !XKit.interface.where().channel) {
-					selector = ".post.is_mine";
+					selector = ".post";
+
+					if (mine && !XKit.interface.where().channel) {
+						selector = ".post.is_mine";
+					}
+
+					if (XKit.interface.where().activity) {
+						selector = ".indash_blog .posts .post";	//ignores Top Post on Activity Page
+					}
+				} else {
+					selector = sel;
 				}
-
 				var selection = $(selector);
 
 				var exclusions = [".radar", ".new_post_buttons"];
@@ -1850,20 +1863,14 @@ XKit.tools.dump_config = function(){
 		// New Post Listener for Posts_v2
 		XKit.post_listener.check = function(no_timeout) {
 			var post_count = -1;
-			if (typeof XKit.page.peepr != "undefined" && XKit.page.peepr === true) {
-				post_count = $(".post").length;
-			} else {
-				if ($("#posts").length === 0) {
-					return;
-				}
-				post_count = $("#posts .post").length;
-			}
+
+			post_count = $(".posts .post").length;
+
 			if (no_timeout === true) { post_count = -1; }
-			if (XKit.post_listener.count === 0) {
+			if (post_count != XKit.post_listener.count) {
 				XKit.post_listener.count = post_count;
-			} else {
-				if (post_count != XKit.post_listener.count) {
-					XKit.post_listener.count = post_count;
+				if(XKit.post_listener.count !== 0) {
+					console.log("post_listener --> check: running callbacks");
 					XKit.post_listener.run_callbacks();
 				}
 			}
