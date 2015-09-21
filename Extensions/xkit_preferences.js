@@ -709,7 +709,7 @@ XKit.extensions.xkit_preferences = new Object({
 
 				XKit.storage.set("xkit_preferences","festivus","no");
 
-        stopFestivusInterval();
+		stopFestivusInterval();
 			} else {
 
 				$("#xkit-festivus-toggle").html(festivus_off);
@@ -717,42 +717,42 @@ XKit.extensions.xkit_preferences = new Object({
 
 				XKit.storage.set("xkit_preferences","festivus","yes");
 
-        startFestivusInterval();
+		startFestivusInterval();
 			}
 
 		});
 
 		// $("#xkit-festivus").css("background-image","url('" + XKit.extensions.xkit_preferences.festivus_lights + "')");
 
-    function stopFestivusInterval() {
-      clearInterval(XKit.extensions.xkit_preferences.festivus_lights_interval);
-    }
+	function stopFestivusInterval() {
+	  clearInterval(XKit.extensions.xkit_preferences.festivus_lights_interval);
+	}
 
-    function startFestivusInterval() {
-      stopFestivusInterval();
+	function startFestivusInterval() {
+	  stopFestivusInterval();
 
-      XKit.extensions.xkit_preferences.festivus_lights_interval = setInterval(function() {
+	  XKit.extensions.xkit_preferences.festivus_lights_interval = setInterval(function() {
 
-        if ($("#xkit-festivus").attr('data-id-light') === "1") {
-          $("#xkit-festivus").css("background-position","0px 33px");
-          $("#xkit-festivus").attr('data-id-light', "2");
-          return;
-        }
+		if ($("#xkit-festivus").attr('data-id-light') === "1") {
+		  $("#xkit-festivus").css("background-position","0px 33px");
+		  $("#xkit-festivus").attr('data-id-light', "2");
+		  return;
+		}
 
-        if ($("#xkit-festivus").attr('data-id-light') === "2") {
-          $("#xkit-festivus").css("background-position","0px 66px");
-          $("#xkit-festivus").attr('data-id-light', "3");
-          return;
-        }
+		if ($("#xkit-festivus").attr('data-id-light') === "2") {
+		  $("#xkit-festivus").css("background-position","0px 66px");
+		  $("#xkit-festivus").attr('data-id-light', "3");
+		  return;
+		}
 
-        if ($("#xkit-festivus").attr('data-id-light') === "3") {
-          $("#xkit-festivus").css("background-position","0px 0px");
-          $("#xkit-festivus").attr('data-id-light', "1");
-          return;
-        }
+		if ($("#xkit-festivus").attr('data-id-light') === "3") {
+		  $("#xkit-festivus").css("background-position","0px 0px");
+		  $("#xkit-festivus").attr('data-id-light', "1");
+		  return;
+		}
 
-      }, 1000);
-    }
+	  }, 1000);
+	}
 
 		if (XKit.extensions.xkit_preferences.hide_xcloud_if_not_installed === true) {
 			if (XKit.installed.check("xcloud") === false) {
@@ -969,33 +969,33 @@ XKit.extensions.xkit_preferences = new Object({
 
 			}
 
-			m_html = 
+			m_html =
 					'<div id="xkit-gallery-toolbar">' +
-						'<input type="text" id="xkit-gallery-search" placeholder="'+ XKit.lang.get("xkit_preferences.gallery.search") + '">' + 
+						'<input type="text" id="xkit-gallery-search" placeholder="'+ XKit.lang.get("xkit_preferences.gallery.search") + '">' +
 						'<div id="xkit-panel-hide-installed-extensions-from-gallery" class="xkit-checkbox ' + (XKit.tools.get_setting("xkit_hide_installed_extensions","false") === "true" ? "selected" : "") + '">' +
-						'<b>&nbsp;</b>' + XKit.lang.get("xkit_preferences.gallery.hide_installed") + '</div>' + 
+						'<b>&nbsp;</b>' + XKit.lang.get("xkit_preferences.gallery.hide_installed") + '</div>' +
 					'</div>' + m_html + '<div class="xkit-unable-to-load-extension-gallery"><b>No new extensions</b><br/><br/>'+
-										"It looks like you've installed all the currently available extensions.<br/>Come back later!</div>";
+					"It looks like you've installed all the currently available extensions.<br/>Come back later!</div>";
 
 			$("#xkit-extensions-panel-right-inner").html(m_html + '<div class="xkit-gallery-clearer">&nbsp;</div>');
-			
-			if (XKit.tools.get_setting("xkit_hide_installed_extensions","false") === "true") { 
+
+			if (XKit.tools.get_setting("xkit_hide_installed_extensions","false") === "true") {
 				XKit.tools.add_css(".xkit-installed-extension { display: none; }", "xkit_hide_installed_extensions");
 				if($("#xkit-extensions-panel-right-inner .xkit-gallery-extension").length === $("#xkit-extensions-panel-right-inner .xkit-installed-extension").length) {
 					XKit.tools.add_css(".xkit-unable-to-load-extension-gallery { display: block; }", "xkit_hide_installed_extensions");
 				}
 			}
-			
+
 			$("#xkit-extensions-panel-right").nanoScroller();
 			$("#xkit-extensions-panel-right").nanoScroller({ scroll: 'top' });
-			
+
 			$("#xkit-panel-hide-installed-extensions-from-gallery").click(function () {
 				if ($(this).hasClass("selected")) {
 					$(this).removeClass("selected");
 					XKit.tools.set_setting("xkit_hide_installed_extensions","false");
 					XKit.tools.remove_css("xkit_hide_installed_extensions");
 					$(".xkit-unable-to-load-extension-gallery").css("display", "none");
-				} else { 
+				} else {
 					$(this).addClass("selected");
 					XKit.tools.set_setting("xkit_hide_installed_extensions","true");
 					XKit.tools.add_css(".xkit-installed-extension { display: none }", "xkit_hide_installed_extensions");
@@ -1004,7 +1004,7 @@ XKit.extensions.xkit_preferences = new Object({
 					}
 				}
 			});
-			
+
 			$("#xkit-gallery-search").keyup(function() {
 
 				var m_value = $(this).val().toLowerCase();
@@ -1052,9 +1052,9 @@ XKit.extensions.xkit_preferences = new Object({
 			});
 
 			$(".xkit-gallery-extension .xkit-install-extension").click(function() {
-				
+
 				if ($(this).parent().hasClass("xkit-installed-extension")) { return; }
-				
+
 				$(this).parent().addClass("overlayed");
 
 				XKit.install($(this).attr('data-extension-id'), function(mdata) {
@@ -1104,8 +1104,19 @@ XKit.extensions.xkit_preferences = new Object({
 		}
 
 		if (obj.name.startsWith("xkit_") && XKit.tools.get_setting("xkit_show_internals","false") === "false") { return ""; }
-		
-		var m_html = '<div class="xkit-gallery-extension' + (XKit.installed.check(obj.name) ? " xkit-installed-extension" : "") + '" id="xkit-gallery-extension-' + obj.name + '" data-extension-id="' + obj.name + '">' +
+
+		var blacklisted_extensions = ["xkit_installer"];
+
+		for(var i = 0; i < blacklisted_extensions.length; i++) {
+			if (obj.name.toLowerCase() === blacklisted_extensions[i].toLowerCase()) {
+				return "";
+			}
+		}
+
+		var installed_extension_class = "";
+		if(XKit.installed.check(obj.name)) { installed_extension_class = " xkit-installed-extension"; }
+
+		var m_html = '<div class="xkit-gallery-extension' + installed_extension_class + '" id="xkit-gallery-extension-' + obj.name + '" data-extension-id="' + obj.name + '">' +
 			'<div class="overlay">downloading</div>' +
 			'<div class="title">' + obj.title + '</div>' +
 			'<div class="description">' + obj.description + '</div>';
@@ -1114,9 +1125,16 @@ XKit.extensions.xkit_preferences = new Object({
 			m_html = m_html + '<div class="more-info" data-more-info="' + obj.details + '">more info</div>';
 		}
 
+
+		var install_button_text = "Install";
+		if(XKit.installed.check(obj.name)) { install_button_text = "Installed"; }
+
+		var install_button_installed_class = "";
+		if(XKit.installed.check(obj.name)) { install_button_installed_class = " installed"; }
+
 		m_html = m_html +
 				'<div class="icon"><img src="' + obj.icon + '"></div>' +
-					'<div class="xkit-button xkit-install-extension" data-extension-id="' + obj.name + '">' + (XKit.installed.check(obj.name) ? "Installed" : "Install") + '</div>' +
+					'<div class="xkit-button xkit-install-extension ' + install_button_installed_class + '" data-extension-id="' + obj.name + '">' + install_button_text + '</div>' +
 				'</div>';
 
 		return m_html;

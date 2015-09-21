@@ -1386,6 +1386,11 @@
 	border: 1px dashed rgb(160,160,160) !important;
 }
 
+.xkit-installed-extension .xkit-install-extension.installed {
+	box-shadow: none;
+	cursor: default;
+}
+
 .xkit-button:active {
 	top: 0;
 	color: black;
