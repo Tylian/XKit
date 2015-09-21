@@ -1,7 +1,7 @@
 //* TITLE XKit Preferences **//
 //* VERSION 5.1.0 **//
 //* DESCRIPTION Lets you customize XKit **//
-//* DEVELOPER STUDIOXENIX **//
+//* DEVELOPER new-xkit **//
 
 XKit.extensions.lang_english.xkit_preferences = new Object({
 
@@ -1079,7 +1079,7 @@ XKit.extensions.xkit_preferences = new Object({
 					}
 
 					$("#xkit-gallery-extension-" + mdata.id).find(".overlay").addClass("green");
-					$("#xkit-gallery-extension-" + mdata.id).find(".overlay").html("installed!");
+					$("#xkit-gallery-extension-" + mdata.id).find(".overlay").html("Installed!");
 
 					try {
 						/* jshint evil: true */
@@ -1107,17 +1107,15 @@ XKit.extensions.xkit_preferences = new Object({
 
 		var blacklisted_extensions = ["xkit_installer"];
 
-		for(var i = 0; i < blacklisted_extensions.length; i++) {
-			if (obj.name.toLowerCase() === blacklisted_extensions[i].toLowerCase()) {
-				return "";
-			}
+		if (blacklisted_extensions.indexOf(obj.name.toLowerCase()) !== -1) {
+			return "";
 		}
 
 		var installed_extension_class = "";
-		if(XKit.installed.check(obj.name)) { installed_extension_class = " xkit-installed-extension"; }
+		if(XKit.installed.check(obj.name)) { installed_extension_class = "xkit-installed-extension"; }
 
-		var m_html = '<div class="xkit-gallery-extension' + installed_extension_class + '" id="xkit-gallery-extension-' + obj.name + '" data-extension-id="' + obj.name + '">' +
-			'<div class="overlay">downloading</div>' +
+		var m_html = '<div class="xkit-gallery-extension ' + installed_extension_class + '" id="xkit-gallery-extension-' + obj.name + '" data-extension-id="' + obj.name + '">' +
+			'<div class="overlay">Downloading</div>' +
 			'<div class="title">' + obj.title + '</div>' +
 			'<div class="description">' + obj.description + '</div>';
 
@@ -1129,12 +1127,9 @@ XKit.extensions.xkit_preferences = new Object({
 		var install_button_text = "Install";
 		if(XKit.installed.check(obj.name)) { install_button_text = "Installed"; }
 
-		var install_button_installed_class = "";
-		if(XKit.installed.check(obj.name)) { install_button_installed_class = " installed"; }
-
 		m_html = m_html +
 				'<div class="icon"><img src="' + obj.icon + '"></div>' +
-					'<div class="xkit-button xkit-install-extension ' + install_button_installed_class + '" data-extension-id="' + obj.name + '">' + install_button_text + '</div>' +
+					'<div class="xkit-button xkit-install-extension" data-extension-id="' + obj.name + '">' + install_button_text + '</div>' +
 				'</div>';
 
 		return m_html;

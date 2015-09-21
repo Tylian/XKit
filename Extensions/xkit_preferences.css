@@ -234,12 +234,6 @@
 
 }
 
-.xkit-installed-extension .xkit-install-extension, .xkit-installed-extension .xkit-install-extension:hover {
-	background: rgba(60,190,47,0.8);
-	color: white;
-	text-shadow: 0px 1px 2px rgba(0,0,0,0.44);
-}
-
 .xkit-unable-to-load-extension-gallery {
 	display: none;
 }
@@ -253,8 +247,16 @@
 	padding: 4px 0px;
 	margin-left: -40px;
 	border-radius: 40px;
+	background: rgba(60,190,47,0.8);
+	color: white;
 	display: block;
+	text-shadow: 0px 1px 2px rgba(0,0,0,0.44);
 
+}
+
+.xkit-installed-extension {
+	background: #F3F3F3;
+	font-style: oblique;
 }
 
 .xkit-gallery-extension .xkit-button:active {
@@ -1278,6 +1280,29 @@
 	top: auto !important;
 }
 
+.xkit-gallery-extension .xkit-button:hover {
+	background: rgba(60,190,47,0.8);
+	color: white;
+	text-shadow: 0px 1px 2px rgba(0,0,0,0.44);
+	box-shadow: inset 0px 1px 1px rgba(0,0,0,0.53);
+}
+
+.xkit-installed-extension .xkit-install-extension {
+	box-shadow: none;
+	cursor: default;
+	background: rgb(240, 240, 240)/* #66a820 */;
+	color: rgb(100, 100, 100);
+	text-shadow: none;
+}
+
+.xkit-installed-extension:hover .xkit-install-extension, .xkit-installed-extension .xkit-install-extension:active {
+	box-shadow: none;
+	cursor: default;
+	background: rgb(240, 240, 240)/* #66a820 */;
+	color: black;
+	text-shadow: none;
+}
+
 .xkit-checkbox { padding-left: 1px; }
 
 .xkit-checkbox b, .xkit-checkbox strong {
@@ -1299,7 +1324,7 @@
 #xkit-panel-hide-installed-extensions-from-gallery {
 	position: absolute;
 	top: 6px;
-	left: 250px;
+	right: 13px;
 }
 
 .xkit-button {
@@ -1384,11 +1409,6 @@
 	top: 0px;
 	color: rgb(170,170,170) !important;
 	border: 1px dashed rgb(160,160,160) !important;
-}
-
-.xkit-installed-extension .xkit-install-extension.installed {
-	box-shadow: none;
-	cursor: default;
 }
 
 .xkit-button:active {
