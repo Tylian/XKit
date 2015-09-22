@@ -7,6 +7,21 @@
 * Make a clone of the project, or update an existing copy.
 * Install project dependencies with `npm install`.
 
+## Serving Resources Locally
+
+Serving extensions and themes locally is useful for rapid development without requiring the use of the XKit Editor, but some initial set up is required:
+
+1. Run `gulp server` to start the resource server.  This task will automatically build the extension and theme files from source before the server starts.  See [`gulp server`](#gulp-server) for more information.
+1. Navigate to `https://localhost:31337` and create a security exception for the `localhost` domain.  The project uses self-signed SSL/TLS certificates that are untrusted by default in order to work around mixed-content warnings for websites like Tumblr that are served over HTTPS.
+1. Change [the relevant line](https://github.com/new-xkit/XKit/blob/db88af1f6d232a4f3e8ba4626f28a0d64240e2a0/xkit.js#L233) with the URL string in `xkit.js` to `https://localhost:31337/Extensions/dist` to point XKit at `localhost`.
+1. Build the XKit extension from source with `gulp build:PLATFORM`, where `PLATFORM` is one of the supported platforms.  See [`gulp build`](#gulp-build) for more information.
+1. Reload the XKit extension in the browser under test:
+  - Chrome: simply reload the unpacked extension
+  - Firefox: remove any previous versions of XKit used for development and re-install it from the `.xpi` file in `build/firefox/`
+1. Open the XKit settings menu and navigate to Other > Update All and click "Update all my extensions".
+
+> **Note**: changes to extension and theme files are not automatically propagated to the XKit extension in the browser.  Each time changes are made, XKit must be force-updated through "Update all my extensions" before the changes will be reflected.
+
 ## Gulp Tasks:
 
 #### `gulp` (default)
@@ -111,6 +126,6 @@ See also: [`gulp lint:css`](#gulp-lintcss).
 
 #### `gulp server`
 
-Serve extension and theme files locally.  Useful for rapid development without requiring the use of the XKit Editor.
+Serve extension and theme files locally.
 
 See also: [`gulp build:extensions`](#gulp-buildextensions), [`gulp build:themes`](#gulp-buildthemes).
