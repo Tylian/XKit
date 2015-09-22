@@ -96,3 +96,21 @@ See also: [`gulp build`](#gulp-build), [`gulp build:firefox`](#gulp-buildfirefox
 Creates a [Cross-platform Installer Module](https://developer.mozilla.org/en/docs/XPI), `@new-xkit-x.x.x.xpi`, from an existing Firefox source build and outputs it to `build/firefox/`.
 
 See also: [`gulp build`](#gulp-build), [`gulp build:firefox`](#gulp-buildfirefox), [`gulp copy:firefox`](#gulp-copyfirefox).
+
+#### `gulp build:extensions`
+
+Builds the extension distribution from source, including the JSON-ified extension files, `list.json`, and `gallery.json`.
+
+See also: [`gulp lint:scripts`](#gulp-lintscripts).
+
+#### `gulp build:themes`
+
+Builds the themes distribution from source, including `themes.json`.
+
+See also: [`gulp lint:css`](#gulp-lintcss).
+
+#### `gulp server`
+
+Serve extension and theme files locally.  Useful for rapid development without requiring the use of the XKit Editor.
+
+See also: [`gulp build:extensions`](#gulp-buildextensions), [`gulp build:themes`](#gulp-buildthemes).
