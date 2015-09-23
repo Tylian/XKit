@@ -48,8 +48,8 @@ XKit.extensions.postblock = new Object({
 				$(parent).remove();
 				XKit.extensions.postblock.call_tumblr_resize();
 			});
-			if (XKit.extensions.postblock.blacklisted.indexOf($(obj).attr('data-root-id')) === -1) {
-				XKit.extensions.postblock.blacklisted.push($(obj).attr('data-root-id'));
+			if (XKit.extensions.postblock.blacklisted.indexOf($(obj).attr('data-root_id')) === -1) {
+				XKit.extensions.postblock.blacklisted.push($(obj).attr('data-root_id'));
 				XKit.storage.set("postblock","posts",XKit.extensions.postblock.blacklisted.join(","));
 			}
 			return;
@@ -64,8 +64,8 @@ XKit.extensions.postblock = new Object({
 				$(parent).remove();
 				XKit.extensions.postblock.call_tumblr_resize();
 			});
-			if (XKit.extensions.postblock.blacklisted.indexOf($(obj).attr('data-root-id')) === -1) {
-				XKit.extensions.postblock.blacklisted.push($(obj).attr('data-root-id'));
+			if (XKit.extensions.postblock.blacklisted.indexOf($(obj).attr('data-root_id')) === -1) {
+				XKit.extensions.postblock.blacklisted.push($(obj).attr('data-root_id'));
 				XKit.storage.set("postblock","posts",XKit.extensions.postblock.blacklisted.join(","));
 			}
 

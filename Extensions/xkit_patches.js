@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 5.3.1 **//
+//* VERSION 5.3.2 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER new-xkit **//
 
@@ -1522,7 +1522,7 @@ XKit.tools.dump_config = function(){
 				m_return.error = false;
 
 				m_return.id = $(obj).attr('data-post-id');
-				m_return.root_id = $(obj).attr('data-root-id');
+				m_return.root_id = $(obj).attr('data-root_id');
 				m_return.reblog_key = $(obj).attr('data-reblog-key');
 				m_return.owner = $(obj).attr('data-tumblelog-name');
 				m_return.tumblelog_key = $(obj).attr('data-tumblelog-key');
