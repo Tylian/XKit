@@ -1859,13 +1859,27 @@ XKit.tools.dump_config = function(){
 		// New Post Listener for Posts_v2
 		XKit.post_listener.check = function(no_timeout) {
 			var post_count = -1;
-
-			post_count = $(".posts .post").length;
-
+			if (typeof XKit.page.peepr != "undefined" && XKit.page.peepr === true) {
+				post_count = $(".post").length;
+			} else {
+				if ($(".indash_blog .posts").length > 0){
+					post_count = $(".posts .post").length;
+				} else if ($("#posts").length === 0 && !XKit.interface.where().activity) {
+					return;
+				} else {
+					post_count = $("#posts .post").length;
+				}
+			}
 			if (no_timeout === true) { post_count = -1; }
-			if (post_count != XKit.post_listener.count) {
+			if (XKit.post_listener.count === 0) {
 				XKit.post_listener.count = post_count;
-				if(XKit.post_listener.count !== 0) {
+				//runs callback when sideview appears on activity screen
+				if(XKit.post_listener.count > 0 && XKit.interface.where().activity){
+					XKit.post_listener.run_callbacks();
+				}
+			} else {
+				if (post_count != XKit.post_listener.count) {
+					XKit.post_listener.count = post_count;
 					XKit.post_listener.run_callbacks();
 				}
 			}
