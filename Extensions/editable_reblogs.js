@@ -1,5 +1,5 @@
 //* TITLE Editable Reblogs **//
-//* VERSION 2.1.2 **//
+//* VERSION 2.1.3 **//
 //* DESCRIPTION	Restores ability to edit previous reblogs of a post **//
 //* DEVELOPER new-xkit **//
 //* FRAME false **//
@@ -97,6 +97,12 @@ XKit.extensions.editable_reblogs = new Object({
 		if ($(".html-field").css("display") === "none") {
 			// tumblr_blog must be wrapped in single quotes, not double, or the dash will nom the shit out of your post
 			var text = XKit.interface.post_window.get_content_html();
+			//********* DO ANY DOM MANIPULATION FIRST *************
+			//******if done later it will undo the single quote fix*********
+			var nodes = $('<div>').append($(text));
+			nodes.find('.tmblr-truncated').replaceWith('[[MORE]]');
+			text = nodes.html();
+			//********ALL DOM MANIPULATION ABOVE THIS LINE*********
 			text = text.replace(/"tumblr_blog"/g, "'tumblr_blog'");
 			// also remove empty HTML if the user hasn't added anything
 			if (text.indexOf("<p><br></p>", text.length - 11) !== -1) {
