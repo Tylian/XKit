@@ -1431,29 +1431,20 @@ XKit.tools.dump_config = function(){
 			 * @param {String} without_tag - Class that the posts should not have
 			 * @param {Boolean} mine - Whether the posts must be the user's
 			 * @param {Boolean} can_edit - Whether the posts must be editable
-			 * @param {String} sel - custom selector to use to search for posts
 			 * @return {Array<Object>} The posts
 			 */
-			get_posts: function(without_tag, mine, can_edit, sel) {
+			get_posts: function(without_tag, mine, can_edit) {
 				var posts = [];
-				var selector;
 
-				if(!sel || typeof sel !== 'string') {
-					selector = ".post";
+				var selector = ".post";
 
-					if (mine && !XKit.interface.where().channel) {
-						selector = ".post.is_mine";
-					}
-
-					if (XKit.interface.where().activity) {
-						selector = ".indash_blog .posts .post";	//ignores Top Post on Activity Page
-					}
-				} else {
-					selector = sel;
+				if (mine && !XKit.interface.where().channel) {
+					selector = ".post.is_mine";
 				}
+
 				var selection = $(selector);
 
-				var exclusions = [".radar", ".new_post_buttons"];
+				var exclusions = [".radar", ".new_post_buttons", ".micro_post"];
 
 				if (typeof without_tag !== "undefined") {
 					exclusions.push("." + without_tag);
@@ -1862,19 +1853,18 @@ XKit.tools.dump_config = function(){
 			if (typeof XKit.page.peepr != "undefined" && XKit.page.peepr === true) {
 				post_count = $(".post").length;
 			} else {
-				if ($(".indash_blog .posts").length > 0){
+				if ($(".posts").length > 0){
 					post_count = $(".posts .post").length;
-				} else if ($("#posts").length === 0 && !XKit.interface.where().activity) {
-					return;
-				} else {
+				} else if ($("#posts").length > 0) {
 					post_count = $("#posts .post").length;
+				} else {
+					post_count = 0;
 				}
 			}
 			if (no_timeout === true) { post_count = -1; }
 			if (XKit.post_listener.count === 0) {
 				XKit.post_listener.count = post_count;
-				//runs callback when sideview appears on activity screen
-				if(XKit.post_listener.count > 0 && XKit.interface.where().activity){
+				if(XKit.post_listener.count > 0){
 					XKit.post_listener.run_callbacks();
 				}
 			} else {
@@ -1886,7 +1876,6 @@ XKit.tools.dump_config = function(){
 			if (no_timeout !== true) {
 				setTimeout(XKit.post_listener.check, 1000);
 			}
-
 		};
 
 		XKit.post_listener.run_callbacks = function() {

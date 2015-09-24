@@ -23,7 +23,9 @@ XKit.extensions.replyviewer = new Object({
 		XKit.interface.create_control_button("xkit-replyviewer", this.button_icon, "ReplyViewer", "");
 		XKit.extensions.replyviewer.init();
 		XKit.post_listener.add("replyviewer", XKit.extensions.replyviewer.do);
-		XKit.extensions.replyviewer.do();
+		if ($(".posts .post").length > 0) {
+			XKit.extensions.replyviewer.do();
+		}
 	},
 
 	frame_run: function() {

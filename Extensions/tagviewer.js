@@ -31,7 +31,9 @@ XKit.extensions.tagviewer = new Object({
 		XKit.interface.create_control_button("xkit-tagviewer", this.button_icon, "TagViewer", "");
 		XKit.extensions.tagviewer.init();
 		XKit.post_listener.add("tagviewer", XKit.extensions.tagviewer.do);
-		XKit.extensions.tagviewer.do();
+		if ($(".posts .post").length > 0) {
+			XKit.extensions.tagviewer.do();
+		}
 	},
 
 	init: function() {
