@@ -1,7 +1,7 @@
 //* TITLE View On Dash **//
-//* VERSION 0.7.3 **//
+//* VERSION 0.7.4 **//
 //* DESCRIPTION View blogs on your dash **//
-//* DEVELOPER STUDIOXENIX **//
+//* DEVELOPER new-xkit **//
 //* DETAILS This is a preview version of an extension, missing most features due to legal/technical reasons for now. It lets you view the last 20 posts a person has made on their blogs right on your dashboard. If you have User Menus+ installed, you can also access it from their user menu under their avatar. **//
 //* FRAME false **//
 //* BETA false **//
@@ -396,7 +396,7 @@ XKit.extensions.view_on_dash = new Object({
 
 		}
 
-		m_html = m_html + "<div class=\"post post_full " + post_class + " same_user_as_last with_permalink no_source xkit_view_on_dash_post\" id=\"post_" + data.id + "\"  data-post-id='" + data.id + "' data-root-id='" + data.id + "' data-tumblelog-name='" + username + "' data-reblog-key='" + data.reblog_key + "' data-type='" + data.type + "'>" +
+		m_html = m_html + "<div class=\"post post_full " + post_class + " same_user_as_last with_permalink no_source xkit_view_on_dash_post\" id=\"post_" + data.id + "\"  data-post-id='" + data.id + "' data-root_id='" + data.id + "' data-tumblelog-name='" + username + "' data-reblog-key='" + data.reblog_key + "' data-type='" + data.type + "'>" +
 					"<div class=\"post_wrapper\">" +
 						"<div class=\"post_header\">" +
 							"<div class=\"post_info\">" +
