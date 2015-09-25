@@ -1,6 +1,6 @@
 
 //* TITLE Tweaks **//
-//* VERSION 4.0.5 **//
+//* VERSION 5.0.0 **//
 //* DESCRIPTION Various little tweaks for your dashboard. **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS These are small little tweaks that allows you customize your dashboard. If you have used XKit 6, you will notice that some of the extensions have been moved here as options you can toggle. Keep in mind that some of the tweaks (the ones marked with a '*') can slow down your computer. **//
@@ -143,11 +143,6 @@ XKit.extensions.tweaks = new Object({
 		},
 		"hide_like_animation": {
 			text: "Hide the like/unlike heart animation",
-			default: false,
-			value: false
-		},
-		"hide_sponsored": {
-			text: "Dim sponsored posts on dashboard (not recommended)",
 			default: false,
 			value: false
 		},
@@ -442,10 +437,6 @@ XKit.extensions.tweaks = new Object({
 
 		if (XKit.extensions.tweaks.preferences.hide_like_animation.value) {
 			XKit.extensions.tweaks.add_css(" .post .post_animated_heart { display: none !important; width: 0 !important; }", "xkit_tweaks_hide_like_animation");
-		}
-
-		if (XKit.extensions.tweaks.preferences.hide_sponsored.value) {
-			XKit.extensions.tweaks.add_css(".post.sponsored_post { opacity: 0.33 !important } .post.sponsored_post:hover { opacity: 1 !important }", "xkit_tweaks_hide_sponsored");
 		}
 
 		if (XKit.extensions.tweaks.preferences.pin_avatars.value) {

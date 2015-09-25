@@ -1,5 +1,5 @@
 //* TITLE Anti-Capitalism **//
-//* VERSION 1.1.0 **//
+//* VERSION 1.2.0 **//
 //* DESCRIPTION	Removes sponsored posts, vendor buttons, and other nonsense that wants your money. **//
 //* DEVELOPER dlmarquis **//
 //* FRAME false **//
@@ -8,7 +8,7 @@
 XKit.extensions.anti_capitalism = new Object({
 
 	running: false,
-	
+
 	preferences: {
 	    "sep0": {
 			text: "Options",
@@ -19,6 +19,11 @@ XKit.extensions.anti_capitalism = new Object({
 			default: false,
 			value: false
 		},
+		"sponsored_posts": {
+			text: "Remove sponsored posts",
+			default: true,
+			value: true
+		},
 		"sponsored_ads": {
 			text: "Remove those terrible framed ads",
 			default: true,
@@ -28,16 +33,20 @@ XKit.extensions.anti_capitalism = new Object({
 
 	run: function() {
 		this.running = true;
-		
-		if (XKit.extensions.anti_capitalism.preferences.vendor_buttons.value === true) {
+
+		if (XKit.extensions.anti_capitalism.preferences.vendor_buttons.value) {
 	       XKit.tools.add_css(" .post .vendor_button {display: none;}", "anti_capitalism_vendor_buttons");
 	    }
-	    
-	    if (XKit.extensions.anti_capitalism.preferences.sponsored_ads.value === true) {
+
+	    if (XKit.extensions.anti_capitalism.preferences.sponsored_posts.value) {
+	    	XKit.tools.add_css(" .post .sponsored_post {display:none}", "anti_capitalism_sponsored_posts");
+	    }
+
+	    if (XKit.extensions.anti_capitalism.preferences.sponsored_ads.value) {
 	        XKit.tools.add_css(" .yamplus-unit-container, .yam-plus-ad-container, .yam-plus-header {display: none;}", "anti_capitalism_sponsored_ads");
 	    }
 	},
-	
+
 
 	destroy: function() {
 		this.running = false;
