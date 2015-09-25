@@ -277,7 +277,6 @@ XKit.extensions.tagviewer = new Object({
 
 			// Don't add button if we are in inbox.
 			if ($(this).hasClass("is_note") && XKit.interface.where().inbox === true) { return; }
-			if ($(this).hasClass("xkit_view_on_dash_post")) { return; }
 
 			XKit.interface.add_control_button(this, "xkit-tagviewer", "data-xkit-tagviewer-tumblelog-key=\"" + m_post.tumblelog_key + "\" data-xkit-tagviewer-tumblelog-name=\"" + m_post.owner + "\"");
 
@@ -290,5 +289,4 @@ XKit.extensions.tagviewer = new Object({
 		XKit.post_listener.remove("tagviewer");
 		this.running = false;
 	}
-
 });

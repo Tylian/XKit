@@ -1444,7 +1444,7 @@ XKit.tools.dump_config = function(){
 
 				var selection = $(selector);
 
-				var exclusions = [".radar", ".new_post_buttons", ".micro_post"];
+				var exclusions = [".radar", ".new_post_buttons", ".post_micro"];
 
 				if (typeof without_tag !== "undefined") {
 					exclusions.push("." + without_tag);

@@ -280,7 +280,6 @@ XKit.extensions.replyviewer = new Object({
 
 			// Don't add button if we are in inbox.
 			if ($(this).hasClass("is_note") && XKit.interface.where().inbox === true) { return; }
-			if ($(this).hasClass("xkit_view_on_dash_post")) { return; }
 
 			XKit.interface.add_control_button(this, "xkit-replyviewer", "data-xkit-replyviewer-tumblelog-key=\"" + m_post.tumblelog_key + "\" data-xkit-replyviewer-tumblelog-name=\"" + m_post.owner + "\"");
 
