@@ -2,7 +2,7 @@
 //* TITLE Tweaks **//
 //* VERSION 5.0.0 **//
 //* DESCRIPTION Various little tweaks for your dashboard. **//
-//* DEVELOPER STUDIOXENIX **//
+//* DEVELOPER new-xkit **//
 //* DETAILS These are small little tweaks that allows you customize your dashboard. If you have used XKit 6, you will notice that some of the extensions have been moved here as options you can toggle. Keep in mind that some of the tweaks (the ones marked with a '*') can slow down your computer. **//
 //* FRAME false **//
 //* SLOW true **//
