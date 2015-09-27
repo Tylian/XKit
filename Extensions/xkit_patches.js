@@ -669,7 +669,7 @@ XKit.tools.dump_config = function(){
 							return '';
 						}
 						return content_editor.html();
-					} else if ($('.chat-field').css("display") != "none") {
+					} else if ($('.chat-field').css("display") !== "none") {
 						//chat post editor
 						return $('editor-plaintext').html();
 					} else {
