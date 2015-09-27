@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 5.3.2 **//
+//* VERSION 5.3.3 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER new-xkit **//
 
@@ -662,12 +662,16 @@ XKit.tools.dump_config = function(){
 				 */
 				get_content_html: function() {
 					if ($(".html-field").css("display") === "none") {
+						//rich text editor
 						var content_editor = $('.post-form--form').find('.editor.editor-richtext');
 						if (content_editor.length === 0) {
 							console.error('ERROR: unable to get content html');
 							return '';
 						}
 						return content_editor.html();
+					} else if ($('.chat-field').css("display") !== "none") {
+						//chat post editor
+						return $('editor-plaintext').html();
 					} else {
 						var html_or_markdown = $(".tab-label[data-js-srclabel]").text();
 						if (html_or_markdown === 'HTML') {
