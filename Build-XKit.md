@@ -13,7 +13,8 @@ Serving extensions and themes locally is useful for rapid development without re
 
 1. Run `gulp server` to start the resource server.  This task will automatically build the extension and theme files from source before the server starts.  See [`gulp server`](#gulp-server) for more information.
 1. Navigate to `https://localhost:31337` and create a security exception for the `localhost` domain.  The project uses self-signed SSL/TLS certificates that are untrusted by default in order to work around mixed-content warnings for websites like Tumblr that are served over HTTPS.
-1. Change [the relevant line](https://github.com/new-xkit/XKit/blob/db88af1f6d232a4f3e8ba4626f28a0d64240e2a0/xkit.js#L233) with the URL string in `xkit.js` to `https://localhost:31337/Extensions/dist` to point XKit at `localhost`.
+1. Change [the relevant line](https://github.com/new-xkit/XKit/blob/db88af1f6d232a4f3e8ba4626f28a0d64240e2a0/xkit.js#L233) with the URL string in `xkit.js` to `https://localhost:31337/Extensions/dist/` to point XKit at `localhost`.
+  - **Note**: Ensure the above URL is copied exactly.  Malformed URLs will result in XKit falling back to the old servers.
 1. Build the XKit extension from source with `gulp build:PLATFORM`, where `PLATFORM` is one of the supported platforms.  See [`gulp build`](#gulp-build) for more information.
 1. Reload the XKit extension in the browser under test:
   - Chrome: simply reload the unpacked extension
