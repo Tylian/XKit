@@ -1,6 +1,6 @@
 
 //* TITLE Tweaks **//
-//* VERSION 4.0.5 **//
+//* VERSION 4.1.0 **//
 //* DESCRIPTION Various little tweaks for your dashboard. **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS These are small little tweaks that allows you customize your dashboard. If you have used XKit 6, you will notice that some of the extensions have been moved here as options you can toggle. Keep in mind that some of the tweaks (the ones marked with a '*') can slow down your computer. **//
@@ -221,6 +221,11 @@ XKit.extensions.tweaks = new Object({
 			default: false,
 			value: false
 		},
+		"fix_small_text_on_reblogs": {
+			text: "Make small text in reblogs the same size as small text in own posts",
+			default: true,
+			value: true
+		},
 		"sep3": {
 			text: "Navigation and Search tweaks",
 			type: "separator",
@@ -435,6 +440,10 @@ XKit.extensions.tweaks = new Object({
 			}, true, "");
 		}
 
+		if (XKit.extensions.tweaks.preferences.fix_small_text_on_reblogs.value) {
+			XKit.extensions.tweaks.add_css(".is_reblog small { font-size: 12px !important; }", "xkit_tweaks_larger_small_text_on_reblogs");
+		}
+		
 		if (XKit.extensions.tweaks.preferences.slim_popups.value) {
 			XKit.extensions.tweaks.add_css(".tumblelog_menu_link { padding: 6px 10px 6px 34px !important; font-size: 13px !important; }" +
 						".tumblelog_menu .tumblelog_menu_link:before { left: 7px !important; top: 5px !important; } ", "xkit_tweaks_slim_popups");
@@ -776,7 +785,7 @@ XKit.extensions.tweaks = new Object({
 		this.running = false;
 		XKit.tools.remove_css("xkit_tweaks");
 		XKit.tools.remove_css("tweaks_no_mobile_banner");
-
+		XKit.tools.remove_css("xkit_tweaks_larger_small_text_on_reblogs");
 		XKit.post_listener.remove("tweaks_check_for_share_on_private_posts");
 		XKit.post_listener.remove("tweaks_fix_hidden_post_height");
 		XKit.post_listener.remove("tweaks_dont_show_liked");
