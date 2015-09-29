@@ -537,8 +537,10 @@ XKit.extensions.blacklist = new Object({
 					m_content = $(this).find(".caption").html();
 				}
 
-				if ($(this).find(".post_container").length > 0) {
-					m_content = $(this).find(".post_container").html();
+				if ($(this).find(".reblog-list-item").length > 0) {
+					m_content = $(this).find(".reblog-list-item").map(function() {
+					    return $(this).html();
+					}).get().join(" ");
 				}
 
 				m_content = m_content + " " + m_title;
