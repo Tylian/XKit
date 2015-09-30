@@ -9,7 +9,7 @@
 XKit.extensions.retags = {
 	running: false,
 	api_key: '3DFxEZm0tGISOmdvWe9Fl1QsQMo1LFqEatnc8GQ68wgF1YTZ4w',
-	selectors: '.type_2,.type_8,.reblog,.is_reblog,.notification_reblog,.is_reply,.is_answer,.is_user_mention,.notification_user_mention',
+	selectors: '.type_2,.type_8,.type_6,.reblog,.is_reblog,.notification_reblog,.is_reply,.is_answer,.is_user_mention,.notification_user_mention',
 	blog_name: "",
 
 	run: function(){
@@ -88,7 +88,7 @@ XKit.extensions.retags = {
 				url = $c.find('a').not('.notification-username').attr('href');
 			}
 			//we don't need to put tags on a reply, but we also don't need to hide it
-			if ($t.hasClass('is_reply') || $t.hasClass('is_answer')) {
+			if ($t.hasClass('is_reply') || $t.hasClass('is_answer') || $t.hasClass('type_6')) {
 				return;
 			}
 			if (url) {
@@ -138,7 +138,7 @@ XKit.extensions.retags = {
 		'.ui_note { display: none; } ' +
 		'.ui_note.is_retags, .ui_note.is_response, .ui_note.is_user_mention { display: block; } ' +
 	'</style>'),
-	
+
 
 	mobile_toggle:
 	$('<style class="retags">' +
