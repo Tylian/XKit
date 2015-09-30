@@ -29,6 +29,11 @@ XKit.extensions.anti_capitalism = new Object({
 			default: true,
 			value: true
 		},
+		"asktime": {
+			text: "Hide the asktime banner at the top of the dashboard",
+			default: false,
+			value: false
+		}
 	},
 
 	run: function() {
@@ -45,6 +50,10 @@ XKit.extensions.anti_capitalism = new Object({
 	    if (XKit.extensions.anti_capitalism.preferences.sponsored_ads.value) {
 	        XKit.tools.add_css(" .yamplus-unit-container, .yam-plus-ad-container, .yam-plus-header {display: none;}", "anti_capitalism_sponsored_ads");
 	    }
+
+		if (XKit.extensions.anti_capitalism.preferences.asktime.value) {
+			XKit.tools.add_css(" .notification.single_notification.alt.takeover-container { display: none; } ", "anti_capitalism_asktime");
+		}
 	},
 
 

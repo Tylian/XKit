@@ -167,12 +167,6 @@ XKit.extensions.tweaks = new Object({
 			default: false,
 			value: false
 		},
-		"hide_asktime": {
-			text: "Hide the asktime banner at the top of the dash",
-			default: false,
-			value: false,
-			desktop_only: true
-		},
 		"hide_explore": {
 			text: "Hide explore button on trending posts",
 			default: false,
@@ -457,10 +451,6 @@ XKit.extensions.tweaks = new Object({
 			XKit.extensions.tweaks.add_css(".post .post_controls .share_social_button { display: none; } ", "xkit_tweaks_hide_share");
 			XKit.post_listener.add("tweaks_check_for_share_on_private_posts", XKit.extensions.tweaks.check_for_share_on_private_posts);
 			XKit.extensions.tweaks.check_for_share_on_private_posts();
-		}
-
-		if (XKit.extensions.tweaks.preferences.hide_asktime.value) {
-			XKit.extensions.tweaks.add_css(".notification.single_notification.alt.takeover-container { display: none; } ", "xkit_tweaks_hide_asktime");
 		}
 
 		if (XKit.extensions.tweaks.preferences.hide_explore.value) {
