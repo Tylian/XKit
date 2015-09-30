@@ -210,6 +210,11 @@ XKit.extensions.tweaks = new Object({
 			default: false,
 			value: false
 		},
+		"fix_small_text_on_reblogs": {
+			text: "Make small text in reblogs the same size as small text in own posts",
+			default: true,
+			value: true
+		},
 		"sep3": {
 			text: "Navigation and Search tweaks",
 			type: "separator",
@@ -422,6 +427,10 @@ XKit.extensions.tweaks = new Object({
 			XKit.tools.add_function(function() {
 				Tumblr.KeyCommands.animate_scroll = false;
 			}, true, "");
+		}
+
+		if (XKit.extensions.tweaks.preferences.fix_small_text_on_reblogs.value) {
+			XKit.extensions.tweaks.add_css(".is_reblog small { font-size: 12px !important; }", "xkit_tweaks_larger_small_text_on_reblogs");
 		}
 
 		if (XKit.extensions.tweaks.preferences.slim_popups.value) {
@@ -757,7 +766,7 @@ XKit.extensions.tweaks = new Object({
 		this.running = false;
 		XKit.tools.remove_css("xkit_tweaks");
 		XKit.tools.remove_css("tweaks_no_mobile_banner");
-
+		XKit.tools.remove_css("xkit_tweaks_larger_small_text_on_reblogs");
 		XKit.post_listener.remove("tweaks_check_for_share_on_private_posts");
 		XKit.post_listener.remove("tweaks_fix_hidden_post_height");
 		XKit.post_listener.remove("tweaks_dont_show_liked");

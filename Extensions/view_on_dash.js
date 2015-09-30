@@ -1,7 +1,7 @@
 //* TITLE View On Dash **//
-//* VERSION 0.7.3 **//
+//* VERSION 0.7.4 **//
 //* DESCRIPTION View blogs on your dash **//
-//* DEVELOPER STUDIOXENIX **//
+//* DEVELOPER new-xkit **//
 //* DETAILS This is a preview version of an extension, missing most features due to legal/technical reasons for now. It lets you view the last 20 posts a person has made on their blogs right on your dashboard. If you have User Menus+ installed, you can also access it from their user menu under their avatar. **//
 //* FRAME false **//
 //* BETA false **//
@@ -94,7 +94,7 @@ XKit.extensions.view_on_dash = new Object({
 
 	show_open: function() {
 
-		XKit.window.show("View on Dash","Enter the username of the blog you would like to view <input type=\"text\" maxlength=\"50\" placeholder=\"Enter a URL (example: xkit-extension)\" class=\"xkit-textbox\" id=\"xkit-view-on-dash-input-url\" onkeydown=\"if (event.keyCode == 13) document.getElementById('xkit-view-on-dash-ok').click()\">", "question", "<div class=\"xkit-button default\" id=\"xkit-view-on-dash-ok\">Go!</div><div class=\"xkit-button\" id=\"xkit-close-message\">Cancel</div>");
+		XKit.window.show("View on Dash","Enter the username of the blog you would like to view <input type=\"text\" maxlength=\"50\" placeholder=\"Enter a URL (example: new-xkit-extension)\" class=\"xkit-textbox\" id=\"xkit-view-on-dash-input-url\" onkeydown=\"if (event.keyCode == 13) document.getElementById('xkit-view-on-dash-ok').click()\">", "question", "<div class=\"xkit-button default\" id=\"xkit-view-on-dash-ok\">Go!</div><div class=\"xkit-button\" id=\"xkit-close-message\">Cancel</div>");
 
 		$("#xkit-view-on-dash-ok").click(function() {
 
@@ -396,7 +396,7 @@ XKit.extensions.view_on_dash = new Object({
 
 		}
 
-		m_html = m_html + "<div class=\"post post_full " + post_class + " same_user_as_last with_permalink no_source xkit_view_on_dash_post\" id=\"post_" + data.id + "\"  data-post-id='" + data.id + "' data-root-id='" + data.id + "' data-tumblelog-name='" + username + "' data-reblog-key='" + data.reblog_key + "' data-type='" + data.type + "'>" +
+		m_html = m_html + "<div class=\"post post_full " + post_class + " same_user_as_last with_permalink no_source xkit_view_on_dash_post\" id=\"post_" + data.id + "\"  data-post-id='" + data.id + "' data-root_id='" + data.id + "' data-tumblelog-name='" + username + "' data-reblog-key='" + data.reblog_key + "' data-type='" + data.type + "'>" +
 					"<div class=\"post_wrapper\">" +
 						"<div class=\"post_header\">" +
 							"<div class=\"post_info\">" +
@@ -414,7 +414,7 @@ XKit.extensions.view_on_dash = new Object({
 						"</div>" +
 						post_tags +
 						"<div class=\"post_footer clearfix\">" +
-							'<div class="post_notes"><div class="post_notes_inner"><div class="post_notes_label note_count"><span class="note_link_current">' + data.note_count.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ' notes</span><div class="notes_outer_container popover popover_gradient nipple_on_left" style="display: none;"><div class="notes_container popover_inner"><div class="popover_scroll"><ol class="notes"></ol><div class="more_notes_link_container"><span class="notes_loading">Loading...</span><a class="more_notes_link" style="display:none;" data-next="" rel="nofollow" href="#">Show more notes</a></div></div></div></div></div></div></div>' +
+							'<div class="post_notes"><div class="post_notes_inner"><div class="post_notes_label note_count"><a target="_blank" href="' + data.post_url + '#notes"><span class="note_link_current">' + data.note_count.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ' notes</span></a><div class="notes_outer_container popover popover_gradient nipple_on_left" style="display: none;"><div class="notes_container popover_inner"><div class="popover_scroll"><ol class="notes"></ol><div class="more_notes_link_container"><span class="notes_loading">Loading...</span><a class="more_notes_link" style="display:none;" data-next="" rel="nofollow" href="#">Show more notes</a></div></div></div></div></div></div></div>' +
 							"<div class=\"post_controls\" role=\"toolbar\">" +
 								"<div class=\"post_controls_inner\">" +
 									"<a class=\"post_control reblog\" href=\"/reblog/" + data.id  + "/" + data["reblog-key"] + "?redirect_to=%2Fdashboard\"><span class=\"offscreen\">Reblog</span></a>" +
@@ -422,7 +422,7 @@ XKit.extensions.view_on_dash = new Object({
 							"</div>" +
 						"</div>" +
 					"</div>" +
-					"<a style=\"display: none; height: 0;\" class=\"post_permalink\" id=\"permalink_" + data.id + "\" href=\"" + data.post_url + "\" target=\"_blank\" title=\"View post - whatever\"></a>";
+					"<a class=\"post_permalink\" id=\"permalink_" + data.id + "\" href=\"" + data.post_url + "\" target=\"_blank\" title=\"View post\"></a>";
 
 		//alert("<a style=\"display: none;\" class=\"post_permalink\" id=\"permalink_" + data.id + "\" href=\"" + data.url + "\" target=\"_blank\" title=\"View post - whatever\"></a>");
 		m_html = m_html + "</div>";
