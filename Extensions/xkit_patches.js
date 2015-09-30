@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 5.3.3 **//
+//* VERSION 5.3.4 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER new-xkit **//
 
@@ -669,7 +669,7 @@ XKit.tools.dump_config = function(){
 							return '';
 						}
 						return content_editor.html();
-					} else if ($('.chat-field').css("display") !== "none") {
+					} else if ($('.chat-field').length > 0 && $('.chat-field').css("display") !== "none") {
 						//chat post editor
 						return $('editor-plaintext').html();
 					} else {
