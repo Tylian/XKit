@@ -759,6 +759,11 @@ XKit = {
 				m_return.count++;
 			}
 
+			if ($("archive_btn").length > 0) {
+				m_return.html = m_return.html + "<li>Archive Poster found (removal optional)</li>";
+				m_return.count++;
+			}
+
 			if ($("body").hasClass("dashboard_index") === true) {
 				var conflicting_extension = false;
 
