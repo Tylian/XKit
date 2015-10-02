@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 5.3.4 **//
+//* VERSION 5.3.6 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER new-xkit **//
 
@@ -669,7 +669,7 @@ XKit.tools.dump_config = function(){
 							return '';
 						}
 						return content_editor.html();
-					} else if ($('.chat-field').css("display") !== "none") {
+					} else if ($('.chat-field').length > 0 && $('.chat-field').css("display") !== "none") {
 						//chat post editor
 						return $('editor-plaintext').html();
 					} else {
@@ -1586,7 +1586,10 @@ XKit.tools.dump_config = function(){
 					var to_return = "";
 					$(obj).find(".post_tags").find(".post_tag").each(function() {
 						if ($(this).hasClass("post_ask_me_link") === true) { return; }
-						var m_tag = $(this).html().substring(1);
+						var m_tag = $(this).text();
+						if (m_tag[0] === "#") {
+							m_tag = m_tag.substring(1);
+						}
 						if (to_return === "") {
 							to_return = m_tag;
 						} else {
