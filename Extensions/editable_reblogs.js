@@ -1,6 +1,6 @@
 //* TITLE Editable Reblogs **//
-//* VERSION 2.1.4 **//
-//* DESCRIPTION	Restores ability to edit previous reblogs of a post **//
+//* VERSION 3.0.0 **//
+//* DESCRIPTION Restores ability to edit previous reblogs of a post **//
 //* DEVELOPER new-xkit **//
 //* FRAME false **//
 //* BETA false **//
@@ -13,7 +13,9 @@ XKit.extensions.editable_reblogs = new Object({
 		this.running = true;
 
 		XKit.interface.post_window_listener.add("editable_reblogs", XKit.extensions.editable_reblogs.post_window);
-		XKit.tools.add_css(".control-reblog-tree {display: none; } .post-form--header .reblog-title {margin: 10px; color: #444} ", "editable_reblogs_remove_content_tree");
+		XKit.tools.add_css(".control-reblog-tree {display: none; } .post-form--header .reblog-title {margin: 10px; color: #444} "
+			+ ".xkit-editable-reblogs-button { float: right; margin-left: 20px; }"
+			+ ".control.right.xkit-editable-reblogs-control { display: block; width: 210px; text-align: right }", "editable_reblogs_remove_content_tree");
 
 		var pat_ver = XKit.tools.parse_version(XKit.installed.get("xkit_patches").version);
 		if (pat_ver.major <=5 && pat_ver.minor <= 3 && pat_ver.patch <= 0){
@@ -29,13 +31,17 @@ XKit.extensions.editable_reblogs = new Object({
 			});
 		}
 	},
-
 	post_window: function() {
-		var is_legacy = $(".reblog-tree").length > 0;
-		if (is_legacy) {
-			XKit.extensions.editable_reblogs.post_window_legacy();
+		//if we're a new post and not a reblog, gtfo
+		//this saves us from worrying about things like photo replies
+		var location_path = window.location.pathname;
+		var location_items = location_path.split("/");
+		if (location_items[1] === "new") {
 			return;
 		}
+		//set up new buttons
+		XKit.extensions.editable_reblogs.add_button_controls();
+
 		var reblog_tree = $(".post-form .reblog-list");
 
 		var all_quotes = [];
@@ -130,36 +136,120 @@ XKit.extensions.editable_reblogs = new Object({
 			}, true, []);
 		}
 	},
-	post_window_legacy: function() {
-		var reblog_tree = $(".reblog-tree");
-		if (reblog_tree.length <= 0) {
-			return;
+	add_button_controls: function() {
+		var xkit_button = $('.post-form--save-button');
+		$('.post-form--save-button').empty();
+		var new_button_content = "<div class='control right xkit-editable-reblogs-control'>"
+			+ '<div class="post-form--save-button" data-subview="savePostButton">'
+			+ '<button class="flat-button blue caption create_post_button xkit-editable-reblogs-button" id="xkit-editable-reblogs-post">Post</button>'
+			+ '<button class="flat-button blue caption create_post_button xkit-editable-reblogs-button" id="xkit-editable-reblogs-queue">Queue</button>'
+			+ '<button class="flat-button blue caption create_post_button xkit-editable-reblogs-button" id="xkit-editable-reblogs-draft">Draft</button>'
+			+ '</div></div>';
+		$('.post-form--controls .controls-container').append(new_button_content);
+		$('body').on('click', '#xkit-editable-reblogs-post', XKit.extensions.editable_reblogs.send_post_request);
+		$('body').on('click', '#xkit-editable-reblogs-queue', XKit.extensions.editable_reblogs.send_queue_request);
+		$('body').on('click', '#xkit-editable-reblogs-draft', XKit.extensions.editable_reblogs.send_draft_request);
+	},
+	send_post_request: function(e) {
+		e.preventDefault();
+		var request = XKit.extensions.editable_reblogs.build_svc_request();
+		request["post[state]"] = "0";
+		XKit.extensions.editable_reblogs.send_request(request);
+	},
+	send_queue_request: function(e) {
+		e.preventDefault();
+		var request = XKit.extensions.editable_reblogs.build_svc_request();
+	},
+	send_draft_request: function(e) {
+		e.preventDefault();
+		var request = XKit.extensions.editable_reblogs.build_svc_request();
+	},
+	build_svc_request: function() {
+		var post_type = XKit.interface.post_window.post_type();
+		if (post_type.text) {
+			return XKit.extensions.editable_reblogs.build_text_svc_request();
 		}
-
-		// Guard against double evaluation by marking the tree as processed
-		var processed_class = 'xkit-editable-reblogs-done';
-		if (reblog_tree.hasClass(processed_class)) {
-			return;
+	},
+	build_text_svc_request: function() {
+		var request = {};
+		var location_path = window.location.pathname;
+		var location_items = location_path.split("/");
+		location_items.shift();
+		request.form_key = XKit.interface.form_key();
+		request.channel_id = $('.post-form--header .tumblelog-select .caption').text();
+		request.detached = true; //?
+		request.reblog = location_items[0] === "reblog";
+		request.reblog_id = parseInt(location_items[1]);
+		request.reblog_key = location_items[2];
+		request.errors = false;
+		request.silent = false;
+		request.context_id = "";
+		request.reblog_post_id = location_items[1];
+		request.remove_reblog_tree = true;
+		request["is_rich_text[one]"] = "0";
+		request["is_rich_text[two]"] = "1";
+		request["is_rich_text[three]"] = "0";
+		request["post[slug]"] = "";
+		request["post[draft_status]"] = "";
+		request["post[date]"] = "";
+		request["post[type]"] = "regular";
+		request["post[tags]"] = $.map($('.post-form--footer .tag-label'), function(element, index) {
+			return $(element).text();
+		}).join(",");
+		request["post[two]"] = XKit.extensions.editable_reblogs.parse_html(XKit.interface.post_window.get_content_html());
+		if ($('.post-forms--social-buttons .social-button.twitter').hasClass('checked')) {
+			request.send_to_twitter = "on";
 		}
-		reblog_tree.addClass(processed_class);
-
-		// Convert all of the user links to have class tumblr_blog
-		var top_quote_link = reblog_tree.find('p:first-child > a:first-child');
-		var quote_links = reblog_tree.find('blockquote > p:first-child > a:first-child');
-
-		if (top_quote_link.length > 0) {
-			$(top_quote_link[0]).addClass('tumblr_blog');
+		if ($('.post-forms--social-buttons .social-button.facebook').hasClass('checked')) {
+			request.send_to_fbog = "on";
 		}
-		quote_links.each(function() {
-			$(this).addClass('tumblr_blog');
+		//@TODO make title editable
+		request["post[one]"] = $('.post-form--header .reblog-title').text();
+		//@TODO maybe we can do this in the future
+		request.custom_tweet = false;
+		//@TODO created_post, context_page, post_context_page from /svc/fetch (?)
+		return request;
+	},
+	parse_html: function(data) {
+		// tumblr_blog must be wrapped in single quotes, not double, or the dash will nom the shit out of your post
+		var text = XKit.interface.post_window.get_content_html();
+		//********* DO ANY DOM MANIPULATION FIRST *************
+		//******if done later it will undo the single quote fix*********
+		var nodes = $('<div>').append($(text));
+		nodes.find('.tmblr-truncated').replaceWith('[[MORE]]');
+		text = nodes.html();
+		//********ALL DOM MANIPULATION ABOVE THIS LINE*********
+		text = text.replace(/"tumblr_blog"/g, "'tumblr_blog'");
+		// also remove empty HTML if the user hasn't added anything
+		if (text.indexOf("<p><br></p>", text.length - 11) !== -1) {
+			text = text.substring(0, text.length - 11);
+		}
+		return text;
+	},
+	send_request: function(request) {
+		XKit.interface.kitty.get(function(kitty_data) {
+
+			GM_xmlhttpRequest({
+				method: "POST",
+				url: "http://www.tumblr.com/svc/post/update",
+				data: JSON.stringify(request),
+				json: true,
+				headers: {
+					"X-tumblr-puppies": kitty_data.kitten,
+					"X-tumblr-form-key": XKit.interface.form_key(),
+				},
+				onerror: function(response) {
+					XKit.interface.kitty.set("");
+					console.log('fuck');
+				},
+				onload: function(response) {
+					// We are done!
+					XKit.interface.kitty.set(response.getResponseHeader("X-tumblr-kittens"));
+					console.log('success!');
+				}
+			});
+
 		});
-
-		var reblog_content = reblog_tree.html();
-
-		var old_content = XKit.interface.post_window.get_content_html();
-		XKit.interface.post_window.set_content_html(reblog_content + old_content);
-
-		$(".btn-remove-tree").click();
 	},
 	destroy: function() {
 		this.running = false;
