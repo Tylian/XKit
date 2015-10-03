@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 5.3.6 **//
+//* VERSION 5.4.1 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER new-xkit **//
 
@@ -795,6 +795,20 @@ XKit.tools.dump_config = function(){
 
 					return to_return;
 
+				},
+
+				post_type: function() {
+					var post_form = $(".post-form");
+					return {
+						text: post_form.hasClass("post-form--text"),
+						photo: post_form.hasClass("post-form--photo"),
+						video: post_form.hasClass("post-form--video"),
+						chat: post_form.hasClass("post-form--chat"),
+						note: post_form.hasClass("post-form--note"),		// Tumblr calls published answers notes
+						quote: post_form.hasClass("post-form--quote"),
+						audio: post_form.hasClass("post-form--audio"),
+						link: post_form.hasClass("post-form--link")
+					};
 				},
 
 				blog: function() {
