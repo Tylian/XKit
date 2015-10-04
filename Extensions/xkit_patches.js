@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 5.4.0 **//
+//* VERSION 5.4.1 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER new-xkit **//
 
@@ -796,7 +796,7 @@ XKit.tools.dump_config = function(){
 					return to_return;
 
 				},
-				
+
 				post_type: function() {
 					var post_form = $(".post-form");
 					return {
@@ -1462,7 +1462,7 @@ XKit.tools.dump_config = function(){
 
 				var selection = $(selector);
 
-				var exclusions = [".radar", ".new_post_buttons"];
+				var exclusions = [".radar", ".new_post_buttons", ".post_micro"];
 
 				if (typeof without_tag !== "undefined") {
 					exclusions.push("." + without_tag);
@@ -1874,14 +1874,20 @@ XKit.tools.dump_config = function(){
 			if (typeof XKit.page.peepr != "undefined" && XKit.page.peepr === true) {
 				post_count = $(".post").length;
 			} else {
-				if ($("#posts").length === 0) {
-					return;
+				if ($(".posts").length > 0){
+					post_count = $(".posts .post").length;
+				} else if ($("#posts").length > 0) {
+					post_count = $("#posts .post").length;
+				} else {
+					post_count = 0;
 				}
-				post_count = $("#posts .post").length;
 			}
 			if (no_timeout === true) { post_count = -1; }
 			if (XKit.post_listener.count === 0) {
 				XKit.post_listener.count = post_count;
+				if(XKit.post_listener.count > 0){
+					XKit.post_listener.run_callbacks();
+				}
 			} else {
 				if (post_count != XKit.post_listener.count) {
 					XKit.post_listener.count = post_count;
@@ -1891,12 +1897,10 @@ XKit.tools.dump_config = function(){
 			if (no_timeout !== true) {
 				setTimeout(XKit.post_listener.check, 1000);
 			}
-
 		};
 
 		XKit.post_listener.run_callbacks = function() {
 			if (XKit.post_listener.callbacks.length === 0) {
-				// console.log("[Post Listener] No callbacks, quitting.");
 				return;
 			}
 			var successful_count = 0;
