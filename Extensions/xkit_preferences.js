@@ -1,5 +1,5 @@
 //* TITLE XKit Preferences **//
-//* VERSION 5.1.0 **//
+//* VERSION 5.1.1 **//
 //* DESCRIPTION Lets you customize XKit **//
 //* DEVELOPER new-xkit **//
 
@@ -107,7 +107,7 @@ XKit.extensions.xkit_preferences = new Object({
 
 		//$("#new-xkit-control").tipTip({maxWidth: "auto", edgeOffset: 0, delay: 10 });
 
-		if(XKit.storage.get("xkit_preferences", "shown_welcome_bubble") !== "true") {
+		if(XKit.storage.get("xkit_preferences", "shown_welcome_bubble") !== "true" && XKit.interface.where().dashboard) {
 			XKit.extensions.xkit_preferences.show_welcome_bubble();
 		}
 
