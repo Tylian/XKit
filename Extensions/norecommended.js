@@ -31,8 +31,8 @@ XKit.extensions.norecommended = new Object({
 		    default: true,
 		    value: true
 		},
-		"hide_recommended_optica": {
-			text: "Hide recommended posts under permalinked posts on the Optica (default) blog theme",
+		"hide_recommended_on_blogs": {
+			text: "Hide recommended posts under permalinked posts on user blogs",
 			default: false,
 			value: false
 		}
@@ -65,8 +65,8 @@ XKit.extensions.norecommended = new Object({
 			XKit.extensions.norecommended.call_tumblr_resize();
 		}
 
-		if (XKit.extensions.norecommended.preferences.hide_recommended_optica.value) {
-			XKit.extensions.norecommended.hide_recommended_optica();
+		if (XKit.extensions.norecommended.preferences.hide_recommended_on_blogs.value) {
+			XKit.extensions.norecommended.hide_recommended_on_blogs();
 		}
 
 	},
@@ -79,10 +79,10 @@ XKit.extensions.norecommended = new Object({
 
 	},
 
-	hide_recommended_optica: function() {
+	hide_recommended_on_blogs: function() {
 		if (!XKit.interface.is_tumblr_page()) {
 			//We're not going to expect other themes have this class as well.
-			XKit.tools.add_css(".related-posts-wrapper {display:none;}","norecommended_hide_recommended_optica");
+			XKit.tools.add_css(".related-posts-wrapper {display:none;}","norecommended_hide_recommended_on_blogs");
 		}
 	},
 
@@ -90,6 +90,7 @@ XKit.extensions.norecommended = new Object({
 		this.running = false;
 		XKit.tools.remove_css("norecommended_no_mini_recs");
 		XKit.tools.remove_css("norecommended_no_liked");
+		XKit.tools.remove_css("norecommended_hide_recommended_on_blogs");
 	}
 
 });
