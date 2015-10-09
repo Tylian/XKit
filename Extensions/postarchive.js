@@ -367,7 +367,7 @@ XKit.extensions.postarchive = new Object({
 
 		$("#xkit-postarchive-import").bind("click", function() { //Import Function
 
-			XKit.window.show("Import","<b>You can import settings from XKit.</b><br/>Click XKit''s Export button and paste the text below to import your archived posts.<input type=\"text\" placeholder=\"Paste preferences text here.\" class=\"xkit-textbox\" id=\"xkit-postarchive-import-words\">","question","<div class=\"xkit-button default\" id=\"xkit-postarchive-add-words\">Import!</div><div class=\"xkit-button\" id=\"xkit-close-message\">Cancel</div>");
+			XKit.window.show("Import","<b>You can import settings from XKit.</b><br/>Click XKit's Export button and paste the text below to import your archived posts.<input type=\"text\" placeholder=\"Paste preferences text here.\" class=\"xkit-textbox\" id=\"xkit-postarchive-import-words\">","question","<div class=\"xkit-button default\" id=\"xkit-postarchive-add-words\">Import!</div><div class=\"xkit-button\" id=\"xkit-close-message\">Cancel</div>");
 
 			$("#xkit-postarchive-replace-on-import").click(function() {
 				$(this).toggleClass("selected");
