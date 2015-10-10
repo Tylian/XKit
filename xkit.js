@@ -79,11 +79,12 @@ XKit = {
 				return;
 			}
 
-			if (XKit.tools.get_setting("xkit_disable_conflicts", "false") !== "true") {
-				if (XKit.conflicts.check().count > 0) {
-					XKit.conflicts.show(XKit.conflicts.check());
+			var conflicts_check_results = XKit.conflicts.check();
+			if (conflicts_check_results.count > 0) {
+				if (XKit.tools.get_setting("xkit_disable_conflicts", "false") !== "true") {
+					XKit.conflicts.show(conflicts_check_results);
 				}
-				if (XKit.conflicts.check().fatal === true) {
+				if (conflicts_check_results.fatal === true) {
 					return;
 				}
 			}
