@@ -733,7 +733,6 @@ XKit.extensions.xcloud = new Object({
 
 	start_upload: function() {
 
-		// XKit.extensions.xkit_preferences.close();
 		XKit.extensions.xcloud.show_overlay();
 
 		// Get list of installed extensions:
@@ -754,7 +753,9 @@ XKit.extensions.xcloud = new Object({
 
 
 			var m_data;
-			//XCloud data was being pushed up with user's md5 hash which is kind of a security issue.  Let's not do that.
+
+			//XCloud data was being pushed up with user's md5 hash which is kind of a security issue.
+			//	Instead we'll just not upload the XCloud extension.  We know the user will have it when they restore.
 			if (installed[i] === "xcloud"){
 				m_data = this.utf8_to_b64(JSON.stringify({}));
 			} else {
