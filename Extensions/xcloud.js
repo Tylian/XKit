@@ -249,17 +249,21 @@ XKit.extensions.xcloud = new Object({
 					} else {
 
 						var err_desc = "";
+						var err_title = "";
 						if (mdata.error_code === "102") {
 							err_desc = "<br/>Usernames can only have letters and numbers.";
+							err_title = "Invalid Username";
 						}
 						if (mdata.error_code === "202") {
 							err_desc = "<br/>Please enter a password.";
+							err_title = "No Password";
 						}
 						if (mdata.error_code === "100") {
 							err_desc = "<br/>Please pick another username.";
+							err_title = "Username Taken";
 						}
 
-						XKit.window.show("Unable to sign up","<b>" + mdata.error_str + "</b> (code: " + mdata.error_code + ")" + err_desc,"error","<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
+						XKit.window.show("Unable to sign up","<b>" + err_title + "</b> (code: " + mdata.error_code + ")" + err_desc,"error","<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
 						return;
 
 					}
@@ -340,23 +344,29 @@ XKit.extensions.xcloud = new Object({
 					} else {
 
 						var err_desc = "";
+						var err_title = "";
 						if (mdata.error_code === "102") {
 							err_desc = "<br/>Usernames can only have letters and numbers.";
+							err_title = "Invalid Username";
 						}
 						if (mdata.error_code === "202") {
 							err_desc = "<br/>Please enter a password.";
+							err_title = "No Password";
 						}
 						if (mdata.error_code === "100") {
 							err_desc = "<br/>Please pick another username.";
+							err_title = "Username taken.";
 						}
 						if (mdata.error_code === "400") {
 							err_desc = "<br/>Please check your username and try again.";
+							err_title = "Invalid Username";
 						}
 						if (mdata.error_code === "602") {
-							err_desc = "<br/>Please check your password and try again.";
+							err_desc = "<br/>Please check your password and try again.<br/>If you have changed your password, you might need to log out of XCloud and sign back in.";
+							err_title = "Wrong Password";
 						}
 
-						XKit.window.show("Unable to sign in", "<b>" + mdata.error_str + "</b> (code: " + mdata.error_code + ")" + err_desc, "error", "<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
+						XKit.window.show("Unable to sign in", "<b>" + err_title + "</b> (code: " + mdata.error_code + ")" + err_desc, "error", "<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
 						return;
 
 					}
@@ -839,23 +849,29 @@ XKit.extensions.xcloud = new Object({
 				} else {
 					XKit.extensions.xcloud.hide_overlay();
 					var err_desc = "";
+					var err_title = "";
 					if (mdata.error_code === "102") {
 						err_desc = "<br/>Usernames can only have letters and numbers.";
+						err_title = "Invalid Username";
 					}
 					if (mdata.error_code === "202") {
 						err_desc = "<br/>Please enter a password.";
+						err_title = "No Password";
 					}
 					if (mdata.error_code === "100") {
 						err_desc = "<br/>Please pick another username.";
+						err_title = "Username taken.";
 					}
 					if (mdata.error_code === "400") {
 						err_desc = "<br/>Please check your username and try again.";
+						err_title = "Invalid Username";
 					}
 					if (mdata.error_code === "602") {
 						err_desc = "<br/>Please check your password and try again.<br/>If you have changed your password, you might need to log out of XCloud and sign back in.";
+						err_title = "Wrong Password";
 					}
 
-					XKit.window.show("Unable to complete synchronization","<b>" + mdata.error_str + "</b> (code: " + mdata.error_code + ")" + err_desc,"error","<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
+					XKit.window.show("Unable to complete synchronization","<b>" + err_title + "</b> (code: " + mdata.error_code + ")" + err_desc,"error","<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
 				}
 			}
 		};
