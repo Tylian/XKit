@@ -1,10 +1,10 @@
 /* NAME Text **/
-/* VERSION 1.0.2 **/
+/* VERSION 1.0.3 **/
 /* DESCRIPTION Slightly modified Default theme **/
 /* DEVELOPER STUDIOXENIX **/
 
 .identity {
-	background: #3c5a76 url('https://new-xkit.github.io/XKit/Themes/tex/body-background.jpg') no-repeat center top !important;
+	background: #3c5a76 url('https://new-xkit.github.io/XKit/Themes/text/body-background.jpg') no-repeat center top !important;
 }
 
 .selection_nipple,
