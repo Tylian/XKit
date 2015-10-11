@@ -241,21 +241,6 @@ XKit.extensions.xkit_preferences = new Object({
 
 		XKit.extensions.xkit_preferences.spring_cleaning();
 
-		var shown_safari = XKit.storage.get("xkit_preferences","shown_safari","0");
-		if (shown_safari == "0" && XKit.browser().safari) {
-			XKit.notifications.add("<strong>Safari no longer supported.</strong>"+
-			"<br>Unfortunately, I've been forced to discontinue all Safari support for XKit. "+
-			"Please click here to learn more, and dismiss this message.", "warning", true,
-			function() {
-				XKit.window.show("Safari Support Ended.","<strong>Unfortunately, due to various reasons, "+
-					"XKit is no longer supported on Safari.</strong><br><br>I'm terribly sorry about this. "+
-					'Please see <a href="http://xkit-extension.tumblr.com/post/84236134977/a-few-changes-for-the-summer" target="_BLANK">this post</a> '+
-					"to learn why it was discontinued and what you can do. This warning notification will not show up again after you click OK.",
-					"warning", '<div class="xkit-button default" id="xkit-close-message">OK</div>');
-				XKit.storage.set("xkit_preferences","shown_safari","yass");
-			});
-		}
-
 		/*if (shown_notification_notification === "0") {
 			XKit.notifications.add("<b>Turn off notifications</b><br/>You can turn off \"Unread XKit News\" notifications from XKit Control Panel > Other > News. If you have unread mail, please read them first.<br/>Click here to close this notification. This message will be shown only once.","warning",true);
 			XKit.storage.set("xkit_preferences","shown_notification_notification","1");
