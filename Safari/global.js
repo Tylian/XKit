@@ -33,7 +33,7 @@ XBackground.prototype.onMessage = function(event) {
 		}
 		console.log("XBackground: Unknown message '" + event.name + "'");
 	} catch(e) {
-		alert("XBackground Error: " + e);
+		alert("XBackground Error: " + e + " with event " + JSON.stringify(event));
 	}
 };
 

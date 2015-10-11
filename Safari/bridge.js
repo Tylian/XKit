@@ -31,8 +31,12 @@ if (!String.prototype.startsWith) {
 
 			// Let's first fetch the storage and framework version.
 			safari.self.addEventListener("message", XBridge.message, false);
-			safari.self.tab.dispatchMessage("framework_version", {});
+			XBridge.dispatchMessage("framework_version", {});
+		},
 
+		dispatchMessage: function(name, message) {
+			message.location = document.location.href;
+			safari.self.tab.dispatchMessage(name, message);
 		},
 
 		message: function(ev) {
@@ -124,13 +128,13 @@ if (!String.prototype.startsWith) {
 
 					callback = XBridge.storage.callbacks[i];
 
-					if (callback.id == ev.message) {
+					if (callback.id == ev.message.id) {
 						XBridge.storage.callbacks[i].callback();
 						XBridge.storage.callbacks.splice(i, 1);
 						return;
 					}
 
-					console.log("XBridge: Warning! Callback for Storage Deletion Request " +  ev.message + " not found!");
+					console.log("XBridge: Warning! Callback for Storage Deletion Request " +  ev.message.id + " not found!");
 
 				}
 
@@ -210,7 +214,7 @@ if (!String.prototype.startsWith) {
 				delete toSend.settings.onerror;
 				toSend.settings.headers = JSON.stringify(toSend.settings.headers);
 
-				safari.self.tab.dispatchMessage("http_request", toSend);
+				XBridge.dispatchMessage("http_request", toSend);
 
 			}
 
@@ -226,10 +230,10 @@ if (!String.prototype.startsWith) {
 				XBridge.storage_area[name] = toWrite;
 
 				// Send data to background page so it would get saved.
-				var toSend = {};
-				toSend.name = name;
-				toSend.value = toWrite;
-				safari.self.tab.dispatchMessage("save_storage_value", toSend);
+				XBridge.dispatchMessage("save_storage_value", {
+					name: name,
+					value: toWrite
+				});
 
 			},
 
@@ -255,28 +259,22 @@ if (!String.prototype.startsWith) {
 			erase: function(name) {
 
 				delete XBridge.storage_area[name];
-				var toSend = { name: name };
-				safari.self.tab.dispatchMessage("delete_storage_value", toSend);
+				XBridge.dispatchMessage("delete_storage_value", {name: name});
 
 			},
 
 			erase_all: function(callback) {
-
-				var callbackObject = {};
-				callbackObject.id = XBridge.make_id();
-				callbackObject.callback = callback;
+				var callbackObject = {
+					id: XBridge.make_id(),
+					callback: callback
+				};
 				XBridge.storage.callbacks.push(callbackObject);
 
-				safari.self.tab.dispatchMessage("delete_storage", callbackObject.id);
-
+				XBridge.dispatchMessage("delete_storage", {id: callbackObject.id});
 			}
-
 		},
-
 	};
-
 	XBridge.init();
-
 }());
 
 // Legacy/Unused/GM functions
