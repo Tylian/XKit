@@ -4,7 +4,7 @@
 /* DEVELOPER HeyItsJono - http://kaywhatever.tumblr.com/ **/
 
 body {
-	background: url('https://raw.githubusercontent.com/HeyItsJono/XKit/HeyItsJono-blur-theme/Themes/blur/body-background.png') center #000000 repeat fixed !important;
+	background: url('https://new-xkit.github.io/XKit/Themes/blur/body-background.jpg') center #000000 repeat fixed !important;
 	background-size: cover;
 }
 
@@ -17,15 +17,11 @@ body {
 }
 
 .selected .tab_notice {
-    background-color: rgb(193,33,91);
     background: rgb(193,33,91);
-    color: rgb(193,33,91);
 }
 
 .tab-bar-container .tab_notice {
-    background-color: rgb(193,33,91);
     background: rgb(193,33,91);
-    color: rgb(193,33,91);
 }
 
 .tab-notice--outlined {
@@ -49,15 +45,12 @@ body {
 }
 
 .identity-refresh .controls_section.user_list li .follow_list_item_blog:before {
-    background-color: rgba(0, 0, 0, 0);
-    background-image: none;
+    background: rgba(0, 0, 0, 0);
     border-right: none;
 }
 
 .identity-refresh .controls_section.user_list li:hover .follow_list_item_blog:before {
     background: none;
-    background-image: none;
-    background-color: none;
     border-right: none;
 }
 
@@ -73,15 +66,11 @@ body {
 }
 
 .identity-refresh .radar .radar_footer .radar_avatar:before {
-    background-image: none;
     background: rgba(0, 0, 0, 0);
-    background-color: rgba(0, 0, 0, 0);
 }
 
 .radar .radar_footer .radar_avatar:before {
     background: rgba(0, 0, 0, 0);
-    background-color: rgba(0, 0, 0, 0);
-    background-image: none;
 }
 
 .l-container.l-container--two-column-dashboard .left_column {
@@ -92,10 +81,16 @@ body {
     background-color: rgba(1,1,1,0);
 }
 
+/*
 .post {
 	background: blue;
 	border-radius: 20px;
 }
+
+.post-container {
+    background: transparent;
+}
+*/
 
 .post_content{
 	background: transparent !important;
