@@ -10,14 +10,14 @@ XKit.extensions.mirrorposts = new Object({
 	running: false,
 
 	preferences: {
-		"wayback": {
-			text: "Use WayBack Machine instead of archive.is",
+		"archiveis": {
+			text: "Use archive.is instead of The WayBack Machine",
 			default: false,
 			value: false
 		},
 		"menu": {
 			text: "Archive posts through the share menu instead of having a button",
-			default: false,
+			default: true,
 			value: false
 		}
 	},
@@ -50,10 +50,10 @@ XKit.extensions.mirrorposts = new Object({
 			var posturl = $(".post_permalink", this).attr("href");
 
 			var archiveurl;
-			if(XKit.extensions.mirrorposts.preferences.wayback.value){
-				archiveurl = "https://web.archive.org/save/" +posturl;
-			} else {
+			if(XKit.extensions.mirrorposts.preferences.archiveis.value){
 				archiveurl = "https://archive.is/?run=1&url=" + encodeURIComponent(posturl);
+			} else {
+				archiveurl = "https://web.archive.org/save/" +posturl;
 			}
 
 
