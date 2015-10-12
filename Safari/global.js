@@ -2,7 +2,7 @@
 
 function XBackground() {
 	this.version = 1;
-	this.frameworkVersion = safari.extension.displayVersion;
+	this.framework_version = safari.extension.displayVersion;
 	this.storageData = {};
 
 	safari.application.addEventListener("message", this.onMessage.bind(this), false);
@@ -52,7 +52,7 @@ XBackground.prototype.dispatchEventMessage = function(event, name, message) {
 XBackground.prototype.messageHandlers = {
 	framework_version: function(ev) {
 		this.dispatchEventMessage(ev, "framework_version", {
-			version: XBackground.framework_version,
+			version: this.framework_version,
 			storage: JSON.stringify(this.storageData)
 		});
 	},
