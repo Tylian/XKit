@@ -1,6 +1,7 @@
 //* TITLE Mirror Button **//
 //* VERSION 1.0.0 **//
-//* DESCRIPTION	A button to easily backup posts to archive.is or archive.org **//
+//* DESCRIPTION	A button to easily backup posts **//
+//* DETAILS on either archive.org or archive.is **//
 //* DEVELOPER Legoben **//
 //* FRAME false **//
 //* BETA false **//
@@ -35,9 +36,11 @@ XKit.extensions.mirrorposts = new Object({
 		XKit.post_listener.remove("archivebutton_addButton");
 		XKit.tools.remove_css("mirrorposts");
 		$(".archivebutton-button").remove();
-
+		
+		$(".archivebutton_applied .share_social_button").unbind();
 		$(".archivebutton_applied").removeClass("archivebutton_applied");
-
+		
+		
 		this.running = false;
 
 	},
@@ -70,11 +73,8 @@ XKit.extensions.mirrorposts = new Object({
 			} else {
 				$(".share_social_button", this).click(function(){
 					var menuitem = $('<li class="popover_menu_item"><a class="popover_menu_item_anchor">Archive this post</a></li>');
-
-
-					$(menuitem).click(function(){
-						window.open(archiveurl, '_blank');
-					});
+					$("a", menuitem).attr("href", archiveurl);
+					$("a", menuitem).attr("target", "_blank");
 
 					setTimeout(function(){ //Make sure the pop-up has popped up
 						$(".share_reddit", "#dashboard_index > div.popover--post-share-popover").after(menuitem);
