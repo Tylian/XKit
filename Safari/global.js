@@ -37,9 +37,21 @@ XBackground.prototype.onMessage = function(event) {
 	}
 };
 
+XBackground.prototype.dispatchEventMessage = function(event, name, message) {
+	if (!event || !event.target || !event.target.page) {
+		console.warn("XBackground: Dispatching to dead or private page");
+		return;
+	}
+	try {
+		event.target.page.dispatchMessage(name, message);
+	} catch(e) {
+		console.error("XBackground Error: During dispatchEventMessage " + e);
+	}
+};
+
 XBackground.prototype.messageHandlers = {
 	framework_version: function(ev) {
-		ev.target.page.dispatchMessage("framework_version", {
+		this.dispatchEventMessage(ev, "framework_version", {
 			version: XBackground.framework_version,
 			storage: JSON.stringify(this.storageData)
 		});
@@ -58,11 +70,12 @@ XBackground.prototype.messageHandlers = {
 		this.storageData = {};
 		localStorage.clear();
 
-		ev.target.page.dispatchMessage("delete_storage_complete", ev.message);
+		this.dispatchEventMessage(ev, "delete_storage_complete", ev.message);
 	},
 
 	http_request: function(ev) {
 
+		var background = this;
 		var settings = ev.message.settings;
 		var request = new XMLHttpRequest();
 
@@ -88,7 +101,8 @@ XBackground.prototype.messageHandlers = {
 			response.settings = request.settings;
 			response.request_id = request.xkit_request_object.request_id;
 			response.headers = request.getAllResponseHeaders();
-			ev.target.page.dispatchMessage("http_response", response);
+
+			background.dispatchEventMessage(ev, "http_response", response);
 
 		};
 
