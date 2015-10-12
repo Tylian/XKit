@@ -8,10 +8,6 @@ body {
 	background-size: cover;
 }
 
-#content {
-	background: rgba(155,90,120,0.9);
-}
-
 .l-header-container--refresh {
     background-color: rgba(50,53,60,0.67);
 }
