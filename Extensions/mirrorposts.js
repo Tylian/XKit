@@ -16,8 +16,8 @@ XKit.extensions.mirrorposts = new Object({
 			value: false
 		},
 		"menu": {
-			text: "Archive posts through the share menu instead of having a button",
-			default: true,
+			text: "Create a mirror button below each post insead of having it in the share menu",
+			default: false,
 			value: false
 		}
 	},
@@ -58,6 +58,16 @@ XKit.extensions.mirrorposts = new Object({
 
 
 			if(XKit.extensions.mirrorposts.preferences.menu.value){
+
+				var button = $("<div></div>");
+				$(button).addClass("post_control archivebutton-button");
+				$(button).attr("archiveurl", archiveurl);
+				$(button).click(function () {
+					window.open(archiveurl, '_blank');
+				});
+				$(".post_controls_inner", this).prepend(button);
+				
+			} else {
 				$(".share_social_button", this).click(function(){
 					var menuitem = $('<li class="popover_menu_item"><a class="popover_menu_item_anchor">Archive this post</a></li>');
 
@@ -70,16 +80,6 @@ XKit.extensions.mirrorposts = new Object({
 						$(".share_reddit", "#dashboard_index > div.popover--post-share-popover").after(menuitem);
 					}, 10);
 				});
-
-
-			} else {
-				var button = $("<div></div>");
-				$(button).addClass("post_control archivebutton-button");
-				$(button).attr("archiveurl", archiveurl);
-				$(button).click(function () {
-					window.open(archiveurl, '_blank');
-				});
-				$(".post_controls_inner", this).prepend(button);
 			}
 
 		});
