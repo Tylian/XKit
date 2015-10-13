@@ -1,15 +1,15 @@
 Here is a really simple, example extension that removes the Tumblr logo and changes the title of the window upon start.  
 
-For information about XKit API, check the [XKit Object](https://github.com/atesh/XKit/wiki/XKit-object).
+For information about XKit API, check the [XKit Object](https://github.com/new-xkit/XKit/wiki/XKit-object).
 ```javascript
 	//* TITLE Example Extension **//
-	//* VERSION 1.0 REV A **//
+	//* VERSION 1.0.0 **//
 	//* DESCRIPTION Nothing useful is done here? **//
 	//* DEVELOPER atesh **//
 	//* FRAME false **//
 	//* BETA false **//
 
-	XKit.extensions.example = new Object({
+	XKit.extensions.example = {
 
 		running: false,
 	
@@ -27,18 +27,18 @@ For information about XKit API, check the [XKit Object](https://github.com/atesh
 		run: function() {
 		
 			// This gets called by xkit_main.
-			// Time to boot up. 
+			// Time to boot up.
 			this.running = true;
 	
-			if (document.location.href.indexOf("www.tumblr.com/dashboard") === -1) {	
+			if (!XKit.interface.where().dashboard) {	
 				// The user is not on the dashboard, lets quit.
-				return;	
+				return;
 			}
 		
-			$("#logo").css("display","none");
+			$(".logo").css("display","none");
 			
-			// If the text is not blank, then show it.
-			if (XKit.extensions.example.preferences.title_text.value !== "") {
+			// If the text is not blank, then show it. (non-empty strings are truthy)
+			if (XKit.extensions.example.preferences.title_text.value) {
 				document.title = XKit.extensions.example.preferences.title_text.value;
 			} else {
 				document.title = "Your logo is now gone!";
@@ -55,12 +55,12 @@ For information about XKit API, check the [XKit Object](https://github.com/atesh
 			this.running = false;
 		
 			// Especially the logo.
-			$("#logo").css("display","block");
+			$(".logo").css("display","block");
 		
 			// oh and the title.
 			document.title = XKit.extensions.example.default_title;
 		
 		}
 
-	});
+	};
 ```
