@@ -1,5 +1,5 @@
 //* TITLE XKit Preferences **//
-//* VERSION 5.1.2 **//
+//* VERSION 5.1.3 **//
 //* DESCRIPTION Lets you customize XKit **//
 //* DEVELOPER new-xkit **//
 
