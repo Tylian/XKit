@@ -59,6 +59,10 @@ Cleans the `build/chrome/` directory, deleting the previous build for Chrome.
 
 Cleans the `build/firefox/` directory, deleting the previous build for Firefox.
 
+#### `gulp clean:safari`
+
+Cleans the `build/safari.safariextension/` directory, deleting the previous build for Safari.
+
 #### `gulp lint`
 
 Top-level linting task.
@@ -77,7 +81,7 @@ Lints CSS files using CSSLint and reports the output.
 
 Top-level build task.
 
-See also: [`gulp build:chrome`](#gulp-buildchrome), [`gulp build:firefox`](#gulp-buildfirefox).
+See also: [`gulp build:chrome`](#gulp-buildchrome), [`gulp build:firefox`](#gulp-buildfirefox), [`gulp build:safari`](#gulp-buildsafari).
 
 #### `gulp build:chrome`
 
@@ -112,6 +116,18 @@ See also: [`gulp build`](#gulp-build), [`gulp build:firefox`](#gulp-buildfirefox
 Creates a [Cross-platform Installer Module](https://developer.mozilla.org/en/docs/XPI), `@new-xkit-x.x.x.xpi`, from an existing Firefox source build and outputs it to `build/firefox/`.
 
 See also: [`gulp build`](#gulp-build), [`gulp build:firefox`](#gulp-buildfirefox), [`gulp copy:firefox`](#gulp-copyfirefox).
+
+#### `gulp build:safari`
+
+Builds the Safari browser extension from source and outputs it to `build/safari.safariextension/`.
+
+See also: [`gulp copy:safari`](#gulp-copysafari).
+
+#### `gulp copy:safari`
+
+Builds the Safari browser extension from source and outputs it to `build/safari.safariextension/`.
+
+See also: [`gulp build`](#gulp-build), [`gulp build:safari`](#gulp-buildsafari).
 
 #### `gulp build:extensions`
 
