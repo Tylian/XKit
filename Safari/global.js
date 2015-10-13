@@ -12,7 +12,7 @@ function XBackground() {
 XBackground.prototype.readAllStorage = function() {
 	this.storageData = {};
 
-	var localStorageLength = localStorage.length
+	var localStorageLength = localStorage.length;
 	for (var i = 0; i < localStorageLength; i++) {
 		var key = localStorage.key(i);
 		this.storageData[key] = localStorage.getItem(key);
@@ -82,10 +82,10 @@ XBackground.prototype.messageHandlers = {
 		// Save our settings to the XMLHttpRequest object.
 		request.xkit_request_object = ev.message;
 
-		if (settings['method'] === "POST") {
-			request.open('POST', settings['url'], true);
+		if (settings.method === "POST") {
+			request.open('POST', settings.url, true);
 		} else {
-			request.open('GET', settings['url'], true);
+			request.open('GET', settings.url, true);
 		}
 
 		// Learn to listen to event changes.
@@ -107,24 +107,24 @@ XBackground.prototype.messageHandlers = {
 		};
 
 		// Set headers if available.
-		if (typeof settings['headers'] !== "undefined") {
-			settings['headers'] = JSON.parse(settings['headers']);
+		if (typeof settings.headers !== "undefined") {
+			settings.headers = JSON.parse(settings.headers);
 			console.log(" ------      FOUND HEADERS YAY XKIT   ----- ");
-			console.log(settings['headers']);
-			for (var header in settings['headers']) {
-					request.setRequestHeader(header, settings['headers'][header]);
+			console.log(settings.headers);
+			for (var header in settings.headers) {
+					request.setRequestHeader(header, settings.headers[header]);
 			}
 		} else {
 			console.log(" ------ !! ----- NO HEADERS ------ !! ----- ");
 		}
 
-		if (settings['method'] === "POST") {
-			if (settings['json'] === true) {
+		if (settings.method === "POST") {
+			if (settings.json === true) {
 				request.setRequestHeader('Content-Type', "application/json");
 			} else {
 				request.setRequestHeader('Content-Type', "application/x-www-form-urlencoded");
 			}
-			request.send(settings['data']);
+			request.send(settings.data);
 		} else {
 			request.send(null);
 		}
