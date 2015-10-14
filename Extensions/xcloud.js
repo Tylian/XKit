@@ -18,7 +18,7 @@ XKit.extensions.xcloud = new Object({
 
 	get_xcloud_url: function() {
 		if (XKit.extensions.xcloud.useoldserver) {
-			return "https://www.xkitcs.com";
+			return "https://uyjv93kxna.execute-api.us-west-2.amazonaws.com/production";
 		} else {
 			return "https://cloud.new-xkit.com";
 		}
@@ -214,6 +214,7 @@ XKit.extensions.xcloud = new Object({
 
 			var registerRequest = {
 				url: xcloud_url + "/xcloud/register",
+
 				onerror: function() {
 
 					XKit.extensions.xcloud.hide_overlay();
@@ -272,7 +273,7 @@ XKit.extensions.xcloud = new Object({
 
 			if(XKit.extensions.xcloud.useoldserver){
 				registerRequest.method = "GET";
-				registerRequest += "?username=" + m_username + "&password=" + m_password;
+				registerRequest.url += "?username=" + m_username + "&password=" + m_password;
 				registerRequest.json = false;
 			} else {
 				registerRequest.method = "POST";
@@ -879,7 +880,6 @@ XKit.extensions.xcloud = new Object({
 
 
 		if(XKit.extensions.xcloud.useoldserver){
-			uploadRequest.url = "http://xcloud.puaga.com/upload/?ftch_id=" + XKit.tools.random_string();
 			uploadRequest.data = "username=" + m_username + "&password=" + m_password + "&" + "data=" + to_send;
 			uploadRequest.json = false;
 		} else {
