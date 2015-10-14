@@ -1,7 +1,7 @@
 //* TITLE Mirror Button **//
 //* VERSION 1.0.0 **//
 //* DESCRIPTION	A button to easily backup posts **//
-//* DETAILS on either archive.org or archive.is **//
+//* DETAILS This exention provides a button that will create a mirror of a post on either archive.org or archive.is **//
 //* DEVELOPER Legoben **//
 //* FRAME false **//
 //* BETA false **//
@@ -17,7 +17,7 @@ XKit.extensions.mirrorposts = new Object({
 			value: false
 		},
 		"menu": {
-			text: "Create a mirror button below each post insead of having it in the share menu",
+			text: "Create a mirror button below each post instead of having it in the share menu",
 			default: false,
 			value: false
 		}
