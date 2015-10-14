@@ -606,6 +606,13 @@ XKit = {
 			to_return.firefox = true;
 			to_return.version = get_real_version("firefox/");
 		}
+		// Is it Safari?
+		else if (navigator.userAgent.toLowerCase().indexOf('safari') > -1) {
+			to_return.name = "Apple Safari";
+			to_return.safari = true;
+			//Safari's actual version is actually after the version tag
+			to_return.version = get_real_version("version/");
+		}
 
 		// Check if there is spoofing!
 		// A lot of people now switch to IE.
