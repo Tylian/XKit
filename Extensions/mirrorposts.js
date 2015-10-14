@@ -1,7 +1,7 @@
 //* TITLE Mirror Button **//
 //* VERSION 1.0.0 **//
 //* DESCRIPTION	A button to easily backup posts **//
-//* DETAILS This exention provides a button that will create a mirror of a post on either archive.org or archive.is **//
+//* DETAILS This extension provides a button that will create a mirror of a post on either archive.org or archive.is **//
 //* DEVELOPER Legoben **//
 //* FRAME false **//
 //* BETA false **//
