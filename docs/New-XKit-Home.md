@@ -1,0 +1,1 @@
+Welcome to the New XKit wiki! Most of the information you want is probably on the [XKit wiki](https://github.com/atesh/XKit/wiki).
