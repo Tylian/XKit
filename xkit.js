@@ -1116,7 +1116,7 @@ function xkit_init_special() {
 				XKit.window.show("Can't launch XKit Editor","<p>" + e.message + "</p>","error","<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
 			}
 		}
-		if (XKit.browser().firefox === true) {
+		if (XKit.browser().firefox === true || XKit.browser().safari === true) {
 			XKit.extensions.xkit_editor.run();
 		}
 	}
