@@ -1,5 +1,5 @@
 /* NAME Mega Rainbows **/
-/* VERSION 1.0.2 **/
+/* VERSION 1.0.3 **/
 /* DESCRIPTION Extremely colorful sidebars **/
 /* DEVELOPER dahlkzer **/
 
@@ -243,4 +243,8 @@ ul.controls_section li:nth-child(34) {
 .post .post_content blockquote blockquote blockquote blockquote blockquote,
 .post .post_content blockquote blockquote blockquote blockquote blockquote blockquote {
 	border-left: 3px solid #0f0;
+}
+
+.post_avatar {
+	background-color: transparent;
 }

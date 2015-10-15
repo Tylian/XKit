@@ -1,5 +1,5 @@
 /* NAME White **/
-/* VERSION 1.0.2 **/
+/* VERSION 1.0.3 **/
 /* DESCRIPTION A basic white dashboard **/
 /* DEVELOPER period-doritos **/
 
@@ -28,7 +28,7 @@ body.layout_standard,
 .radar .radar_post,
 .dashboard_options_form,
 .tag_psa,
-.post_avatar,
+.post_avatar_wrapper,
 .notification.single_notification,
 .controls_section .recessed,
 .controls_section .recessed:hover {
@@ -171,4 +171,8 @@ a#xshufflequeue_button {
 .identity .controls_section .item:hover .follow:hover {
 	color: black;
 	background-color: #ad6133;
+}
+
+.post_avatar {
+	background-color: transparent;
 }

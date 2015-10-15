@@ -1,5 +1,5 @@
 /* NAME Orange Wall **/
-/* VERSION 1.0.3 **/
+/* VERSION 1.0.4 **/
 /* DESCRIPTION That is one orange wallpaper you got there **/
 /* DEVELOPER STUDIOXENIX **/
 
@@ -101,7 +101,8 @@ li.post:hover {
 
 .identity .controls_section li:not(.section_header):not(.selected_blog):hover,
 .l-header-container--refresh,
-.l-content {
+.l-content,
+.post_avatar {
     background-color: transparent !important;
 }
 

@@ -1,5 +1,5 @@
 /* NAME Nebula **/
-/* VERSION 2.0.0 **/
+/* VERSION 2.0.1 **/
 /* DESCRIPTION A modern, translucent dashboard theme with nebula background **/
 /* DEVELOPER internet-tears **/
 
@@ -143,7 +143,8 @@
 }
 
 .l-header-container--refresh,
-.l-content {
+.l-content,
+.post_avatar {
     background-color: transparent !important;
 }
 
