@@ -245,6 +245,7 @@ ul.controls_section li:nth-child(34) {
 	border-left: 3px solid #0f0;
 }
 
-.post_avatar {
+.post_avatar,
+.post_avatar .post_avatar_link {
 	background-color: transparent;
 }

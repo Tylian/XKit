@@ -107,6 +107,7 @@ li.post:hover {
 	display: none !important;
 }
 
-.post_avatar {
+.post_avatar,
+.post_avatar .post_avatar_link {
 	background-color: transparent;
 }

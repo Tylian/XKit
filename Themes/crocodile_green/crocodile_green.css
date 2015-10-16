@@ -62,6 +62,7 @@
     color: #152715;
 }
 
-.post_avatar {
+.post_avatar,
+.post_avatar .post_avatar_link {
 	background-color: transparent;
 }

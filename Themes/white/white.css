@@ -173,6 +173,7 @@ a#xshufflequeue_button {
 	background-color: #ad6133;
 }
 
-.post_avatar {
+.post_avatar,
+.post_avatar .post_avatar_link {
 	background-color: transparent;
 }

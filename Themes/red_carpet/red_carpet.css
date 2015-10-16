@@ -92,6 +92,7 @@
 	background-color: #df8f8f;
 }
 
-.post_avatar {
+.post_avatar,
+.post_avatar .post_avatar_link {
 	background-color: transparent;
 }

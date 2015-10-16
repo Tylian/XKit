@@ -102,7 +102,8 @@ li.post:hover {
 .identity .controls_section li:not(.section_header):not(.selected_blog):hover,
 .l-header-container--refresh,
 .l-content,
-.post_avatar {
+.post_avatar,
+.post_avatar .post_avatar_link {
     background-color: transparent !important;
 }
 

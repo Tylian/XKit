@@ -144,7 +144,8 @@
 
 .l-header-container--refresh,
 .l-content,
-.post_avatar {
+.post_avatar,
+.post_avatar .post_avatar_link {
     background-color: transparent !important;
 }
 

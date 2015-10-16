@@ -9,7 +9,8 @@
 
 #right_column,
 .l-container.l-container--two-column-dashboard .left_column,
-.post_avatar {
+.post_avatar,
+.post_avatar .post_avatar_link {
 	background-color: transparent;
 }
 
