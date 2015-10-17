@@ -1,5 +1,5 @@
 //* TITLE Mirror Button **//
-//* VERSION 1.0.0 **//
+//* VERSION 1.0.1 **//
 //* DESCRIPTION	A button to easily backup posts **//
 //* DETAILS This extension provides a button that will create a mirror of a post on either archive.org or archive.is **//
 //* DEVELOPER Legoben **//
@@ -65,6 +65,7 @@ XKit.extensions.mirrorposts = new Object({
 				var button = $("<div></div>");
 				$(button).addClass("post_control archivebutton-button");
 				$(button).attr("archiveurl", archiveurl);
+				$(button).attr("title", "Mirror Button");
 				$(button).click(function () {
 					window.open(archiveurl, '_blank');
 				});
