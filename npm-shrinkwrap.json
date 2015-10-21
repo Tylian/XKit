@@ -1186,14 +1186,19 @@
       }
     },
     "jpm": {
-      "version": "1.0.1",
-      "from": "jpm@1.0.1",
-      "resolved": "https://registry.npmjs.org/jpm/-/jpm-1.0.1.tgz",
+      "version": "1.0.2",
+      "from": "jpm@1.0.2",
+      "resolved": "https://registry.npmjs.org/jpm/-/jpm-1.0.2.tgz",
       "dependencies": {
         "commander": {
           "version": "2.6.0",
           "from": "commander@2.6.0",
           "resolved": "https://registry.npmjs.org/commander/-/commander-2.6.0.tgz"
+        },
+        "jpm-core": {
+          "version": "0.0.11",
+          "from": "jpm-core@0.0.11",
+          "resolved": "https://registry.npmjs.org/jpm-core/-/jpm-core-0.0.11.tgz"
         },
         "lodash": {
           "version": "3.3.1",
@@ -1216,11 +1221,6 @@
           "resolved": "https://registry.npmjs.org/semver/-/semver-4.3.3.tgz"
         }
       }
-    },
-    "jpm-core": {
-      "version": "0.0.9",
-      "from": "jpm-core@0.0.9",
-      "resolved": "https://registry.npmjs.org/jpm-core/-/jpm-core-0.0.9.tgz"
     },
     "js-tokens": {
       "version": "1.0.1",
