@@ -1,5 +1,5 @@
 //* TITLE Tweaks **//
-//* VERSION 5.0.2 **//
+//* VERSION 5.1.0 **//
 //* DESCRIPTION Various little tweaks for your dashboard. **//
 //* DEVELOPER new-xkit **//
 //* DETAILS These are small little tweaks that allows you customize your dashboard. If you have used XKit 6, you will notice that some of the extensions have been moved here as options you can toggle. Keep in mind that some of the tweaks (the ones marked with a '*') can slow down your computer. **//
@@ -284,27 +284,7 @@ XKit.extensions.tweaks = new Object({
 		this.running = true;
 
 		if (XKit.extensions.tweaks.preferences.old_photo_margins.value) {
-			XKit.tools.add_css(".post_full.is_photoset .photoset .photoset_row .photoset_photo {margin-left: 0;}","tweaks_old_photo_margins");
-
-			$(".post_media_photo.image").each(function() {
-				$(this).attr("style","margin-left: 20px; width: 500px;");
-			});
-
-			$(".photoset_row").each(function() {
-				var photoset_row = $(this);
-				photoset_row.attr("style","margin-left: 20px; margin-bottom: 10px;");
-				photoset_row.find("img").each(function() {
-					var img = $(this);
-					var imgstyle = img.attr("style").trim().slice(-12);
-					if (imgstyle == "width:540px;")  {
-						img.attr("style", "width: 500px;");
-					} else if (imgstyle == "width:268px;") {
-						img.attr("style", "width: 245px; margin-right: 10px;");
-					} else if (imgstyle == "width:177px;" || imgstyle == "width:178px;") {
-						img.attr("style", "width: 160px; margin-right: 10px;");
-					}
-				});
-			});
+			XKit.post_listener.add("tweaks_old_photo_margins", XKit.extensions.tweaks.old_photo_margins);
 		}
 
 		if (XKit.extensions.tweaks.preferences.no_mobile_banner.value) { //mobile stuff
@@ -652,6 +632,31 @@ XKit.extensions.tweaks = new Object({
 
 		XKit.tools.add_css(XKit.extensions.tweaks.css_to_add, "xkit_tweaks");
 
+	},
+
+	old_photo_margins: function() {
+
+		XKit.tools.add_css(".post_full.is_photoset .photoset .photoset_row .photoset_photo {margin-left: 0;}","tweaks_old_photo_margins");
+
+		$(".post_media_photo.image").each(function() {
+			$(this).attr("style","margin-left: 20px; width: 500px;");
+		});
+
+		$(".photoset_row").each(function() {
+			var photoset_row = $(this);
+			photoset_row.attr("style","margin-left: 20px; margin-bottom: 10px;");
+			photoset_row.find("img").each(function() {
+				var img = $(this);
+				var imgstyle = img.attr("style").trim().slice(-12);
+				if (imgstyle == "width:540px;")  {
+					img.attr("style", "width: 500px;");
+				} else if (imgstyle == "width:268px;") {
+					img.attr("style", "width: 245px; margin-right: 10px;");
+				} else if (imgstyle == "width:177px;" || imgstyle == "width:178px;") {
+					img.attr("style", "width: 160px; margin-right: 10px;");
+				}
+			});
+		});
 	},
 
 	check_for_liked_posts: function() {
