@@ -302,8 +302,6 @@ XKit.extensions.tweaks = new Object({
 						img.attr("style", "width: 245px; margin-right: 10px;");
 					} else if (imgstyle == "width:177px;" || imgstyle == "width:178px;") {
 						img.attr("style", "width: 160px; margin-right: 10px;");
-					} else {
-						alert("NOPE!\n" + '"' + imgstyle + '"');
 					}
 				});
 			});
