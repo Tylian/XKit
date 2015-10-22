@@ -1,4 +1,3 @@
-
 //* TITLE Tweaks **//
 //* VERSION 5.0.1 **//
 //* DESCRIPTION Various little tweaks for your dashboard. **//
@@ -98,6 +97,11 @@ XKit.extensions.tweaks = new Object({
 		"sep1": {
 			text: "User Interface tweaks",
 			type: "separator",
+		},
+		"old_photo_margins": {
+			text: "Use the old 500/245/160px photo dimensions on posts",
+			default: false,
+			value: false
 		},
 		"show_new_on_secondary": {
 			text: "Show new post icons on secondary dashboard pages",
@@ -278,6 +282,32 @@ XKit.extensions.tweaks = new Object({
 
 	run: function() {
 		this.running = true;
+
+		if (XKit.extensions.tweaks.preferences.old_photo_margins.value) {
+			XKit.tools.add_css(".post_full.is_photoset .photoset .photoset_row .photoset_photo {margin-left: 0;}","tweaks_old_photo_margins");
+
+			$(".post_media_photo.image").each(function() {
+				$(this).attr("style","margin-left: 20px; width: 500px;");
+			});
+
+			$(".photoset_row").each(function() {
+				var photoset_row = $(this);
+				photoset_row.attr("style","margin-left: 20px; margin-bottom: 10px;");
+				photoset_row.find("img").each(function() {
+					var img = $(this);
+					var imgstyle = img.attr("style").trim().slice(-12);
+					if (imgstyle == "width:540px;")  {
+						img.attr("style", "width: 500px;");
+					} else if (imgstyle == "width:268px;") {
+						img.attr("style", "width: 245px; margin-right: 10px;");
+					} else if (imgstyle == "width:177px;" || imgstyle == "width:178px;") {
+						img.attr("style", "width: 160px; margin-right: 10px;");
+					} else {
+						alert("NOPE!\n" + '"' + imgstyle + '"');
+					}
+				});
+			});
+		}
 
 		if (XKit.extensions.tweaks.preferences.no_mobile_banner.value) { //mobile stuff
 			XKit.tools.add_css(".mobile_app_banner, .mobile-banner {display: none}", "tweaks_no_mobile_banner");
@@ -765,6 +795,7 @@ XKit.extensions.tweaks = new Object({
 
 		this.running = false;
 		XKit.tools.remove_css("xkit_tweaks");
+		XKit.tools.remove_css("tweaks_old_photo_margins");
 		XKit.tools.remove_css("tweaks_no_mobile_banner");
 		XKit.tools.remove_css("xkit_tweaks_larger_small_text_on_reblogs");
 		XKit.post_listener.remove("tweaks_check_for_share_on_private_posts");
