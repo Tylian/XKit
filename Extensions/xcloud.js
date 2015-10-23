@@ -1,5 +1,5 @@
 //* TITLE XCloud **//
-//* VERSION 1.0.0 **//
+//* VERSION 1.1.0 **//
 //* DESCRIPTION Sync XKit data on clouds **//
 //* DETAILS XCloud stores your XKit configuration on New-XKit servers so you can back up your data and synchronize it with other computers and browsers easily. Also compatable with STUDIOXENIX servers.**//
 //* DEVELOPER new-xkit **//
@@ -156,9 +156,11 @@ XKit.extensions.xcloud = new Object({
 		var m_html ="<div id=\"xcloud-panel\"><div id=\"xcloud-beta-tag\">&nbsp;</div>" +
 					"<div id=\"xcloud-panel-right\">" + XKit.extensions.xcloud.return_panel_welcome() +
 					"</div>" +
-					"<div id=\"xcloud-panel-left\">&nbsp;</div>" +
+					'<div id="xcloud-panel-left"><div id="xcloud-local-datastore"><span style="color: whitesmoke; font-weight: bold;">Local Backup</span><br>' +
+						'<div id="xcloud-local-export" class="xcloud-local-button">Export</div><br>' +
+						'<div id="xcloud-local-import" class="xcloud-local-button">Import</div>' +
+					'</div></div>' +
 					"</div>";
-
 		return m_html;
 
 	},
@@ -178,7 +180,19 @@ XKit.extensions.xcloud = new Object({
 
 	panel_appended: function() {
 		var xcloud_url = this.get_xcloud_url();
+		var self = this;
 
+		var exportPanel = $("#xcloud-local-export");
+		exportPanel.unbind("click");
+		exportPanel.bind("click", function(){
+			self.local_export();
+		});
+
+		var importPanel = $("#xcloud-local-import");
+		importPanel.unbind("click");
+		importPanel.bind("click", function(){
+			self.local_import();
+		});
 
 		$("#xcloud-use-old").unbind('change');
 		$("#xcloud-use-old").bind('change', function(){
@@ -454,6 +468,43 @@ XKit.extensions.xcloud = new Object({
 
 	},
 
+	local_export: function(){
+		var upload_data = this.create_export_data(false);
+		var element = document.createElement('a');
+		element.setAttribute('href', 'data:text/plain;charset=utf-8,' + upload_data);
+		element.setAttribute('download', 'xcloud_preferences.txt');
+
+		element.style.display = 'none';
+		document.body.appendChild(element);
+
+		element.click();
+
+		document.body.removeChild(element);
+	},
+
+	local_import: function(){
+		var self = this;
+		var element = document.createElement('input');
+		element.setAttribute('type', 'file');
+		element.addEventListener("change", function(){
+			XKit.extensions.xcloud.show_overlay(true);
+			if(this.files.length === 1){
+				var reader  = new FileReader();
+				reader.addEventListener('loadend', function(result){
+					console.log("starting process restore");
+					console.log(result);
+					self.process_restore({"data":result.currentTarget.result});
+				});
+				reader.readAsText(this.files[0]);
+			}
+
+		}, false);
+		document.body.appendChild(element);
+		element.click();
+		document.body.removeChild(element);
+	},
+
+
 	show_overlay: function(fetch_mode) {
 
 		$("#xcloud-overlay-background").remove();
@@ -574,12 +625,15 @@ XKit.extensions.xcloud = new Object({
 			m_obj = JSON.parse(XKit.extensions.xcloud.base64_decode(mdata.data));
 		} catch(e) {
 			XKit.extensions.xcloud.process_error("Unable to parse JSON");
+			this.hide_overlay();
+			return;
 		}
 
 
 
 		if (m_obj.identifier !== "XCLOUD") {
 			XKit.extensions.xcloud.process_error("Invalid Identifier");
+			this.hide_overlay();
 			return;
 		}
 
@@ -732,9 +786,7 @@ XKit.extensions.xcloud = new Object({
 		XKit.window.show("Could not restore","Invalid/corrupt XCloud data received.<br/>" + txt + "<br/><br/>Please try again or <a href=\"http://new-xkit-extension.tumblr.com/ask\">send a bug report</a>.","error","<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
 	},
 
-	start_upload: function() {
-
-		XKit.extensions.xcloud.show_overlay();
+	create_export_data: function(limit_data){
 
 		// Get list of installed extensions:
 		var installed = XKit.installed.list();
@@ -768,7 +820,7 @@ XKit.extensions.xcloud = new Object({
 			m_to_add.preferences = m_data;
 			m_to_add.enabled = XKit.installed.enabled(installed[i]);
 
-			if ((m_data.length / 1024 / 1024) >= 1.5) {
+			if (limit_data && (m_data.length / 1024 / 1024) >= 1.5) {
 				console.log("Skipping " + m_to_add.extension + " because length = " + (m_data.length / 1024 / 1024) + " kilobytes");
 				skipping.push(m_to_add.extension);
 				skipping_size.push((m_data.length / 1024 / 1024));
@@ -792,6 +844,13 @@ XKit.extensions.xcloud = new Object({
 
 		//We need to base64 encode it without utf8 support so it's compatible with the old payload.
 		to_send = "XCS" + XKit.extensions.xcloud.base64_encode(to_send) + "XCE";
+
+		return to_send;
+	},
+
+	start_upload: function() {
+		XKit.extensions.xcloud.show_overlay();
+		var to_send = this.create_export_data(true);
 
 		if ((to_send.length / 1024 / 1024) >= 5) {
 
