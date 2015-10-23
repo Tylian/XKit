@@ -647,12 +647,12 @@ XKit.extensions.tweaks = new Object({
 			photoset_row.attr("style","margin-left: 20px; margin-bottom: 10px;");
 			photoset_row.find("img").each(function() {
 				var img = $(this);
-				var imgstyle = img.attr("style").trim().slice(-12);
-				if (imgstyle == "width:540px;")  {
+				var imgstyle = img.css("width");
+				if (imgstyle == "540px")  {
 					img.attr("style", "width: 500px;");
-				} else if (imgstyle == "width:268px;") {
+				} else if (imgstyle == "268px") {
 					img.attr("style", "width: 245px; margin-right: 10px;");
-				} else if (imgstyle == "width:177px;" || imgstyle == "width:178px;") {
+				} else if (imgstyle == "177px" || imgstyle == "178px") {
 					img.attr("style", "width: 160px; margin-right: 10px;");
 				}
 			});
