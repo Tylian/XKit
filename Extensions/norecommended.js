@@ -82,7 +82,7 @@ XKit.extensions.norecommended = new Object({
 	hide_recommended_on_blogs: function() {
 		if (!XKit.interface.is_tumblr_page()) {
 			//We're not going to expect other themes have this class as well.
-			XKit.tools.add_css(".related-posts-wrapper {display:none;}","norecommended_hide_recommended_on_blogs");
+			XKit.tools.add_css(".related-posts-wrapper, .recommended-posts-wrapper {display:none;}","norecommended_hide_recommended_on_blogs");
 		}
 	},
 
