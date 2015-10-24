@@ -1,5 +1,5 @@
 /* NAME Purple **/
-/* VERSION 1.0.2 **/
+/* VERSION 1.0.3 **/
 /* DESCRIPTION Takeover-inspired theme **/
 /* DEVELOPER STUDIOXENIX **/
 
@@ -13,7 +13,7 @@
 	width: 897px;
 }
 
-#posts .post_avatar,
+#posts .post_avatar_wrapper,
 #posts .post {
 	border-radius: 0 !important;
 	box-shadow: 0 0 1px 1px rgb(190, 190, 190);
@@ -64,7 +64,9 @@
 	border-right: 5px solid #3f1c59;
 }
 
-.identity .controls_section li:not(.section_header):not(.selected_blog):hover {
+.identity .controls_section li:not(.section_header):not(.selected_blog):hover,
+.post_avatar,
+.post_avatar .post_avatar_link {
     background-color: transparent !important;
 }
 

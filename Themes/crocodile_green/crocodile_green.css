@@ -1,5 +1,5 @@
 /* NAME Crocodile Green **/
-/* VERSION 1.0.2 **/
+/* VERSION 1.0.3 **/
 /* DESCRIPTION Crocodile skin background with green trim **/
 /* DEVELOPER crocodilesinbusinesssuits **/
 
@@ -60,4 +60,9 @@
 .tab_notice .tab_notice_value,
 .plus-follow-button {
     color: #152715;
+}
+
+.post_avatar,
+.post_avatar .post_avatar_link {
+	background-color: transparent;
 }

@@ -1,6 +1,6 @@
 
 //* TITLE Tweaks **//
-//* VERSION 5.0.1 **//
+//* VERSION 5.0.2 **//
 //* DESCRIPTION Various little tweaks for your dashboard. **//
 //* DEVELOPER new-xkit **//
 //* DETAILS These are small little tweaks that allows you customize your dashboard. If you have used XKit 6, you will notice that some of the extensions have been moved here as options you can toggle. Keep in mind that some of the tweaks (the ones marked with a '*') can slow down your computer. **//
@@ -410,7 +410,7 @@ XKit.extensions.tweaks = new Object({
 		}
 
 		if (XKit.extensions.tweaks.preferences.show_top_arrow.value) {
-			XKit.extensions.tweaks.add_css(".elevator { opacity: 1 !important; visibility: visible !important; transform: translateY(0px) translateZ(0px) !important; }", "xkit_tweaks_show_top_arrow");
+			XKit.extensions.tweaks.add_css(".elevator-wrapper { display: block !important; } .elevator { opacity: 1 !important; visibility: visible !important; transform: translateY(0px) translateZ(0px) !important; }", "xkit_tweaks_show_top_arrow");
 			XKit.tools.add_function(function() {
 				Tumblr.KeyCommands.elevate = function(){jQuery("html, body").stop(true).animate({scrollTop:0},"slow");};
 			}, true, "");
@@ -463,7 +463,7 @@ XKit.extensions.tweaks = new Object({
 		}
 
 		if (XKit.extensions.tweaks.preferences.hide_explore.value) {
-			XKit.extensions.tweaks.add_css(".post .explore-trending-badge-footer { display: none; } ", "xkit_tweaks_hide_explore");
+			XKit.extensions.tweaks.add_css(".post .explore-trending-badge-footer, .post .recommendation-reason-footer { display: none; } ", "xkit_tweaks_hide_explore");
 		}
 
 		if (XKit.extensions.tweaks.preferences.hide_explore_buttons.value) {
