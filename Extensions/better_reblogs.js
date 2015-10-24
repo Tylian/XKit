@@ -1,5 +1,5 @@
 //* TITLE Reblog Display Options **//
-//* VERSION 1.0.0 **//
+//* VERSION 1.0.1 **//
 //* DESCRIPTION Adds different styles to the new reblog layout, including the "classic" nested look. **//
 //* DEVELOPER new-xkit **//
 //* FRAME false **//
@@ -46,8 +46,8 @@ XKit.extensions.better_reblogs = new Object({
         },
         "remove_last_user": {
             text: "Remove the username/avatar from the last post if its new (not reblogged)",
-            default: true,
-            value: true,
+            default: false,
+            value: false,
             style: "flat"
         },
         "reorder_reblog_title": {
@@ -102,19 +102,19 @@ XKit.extensions.better_reblogs = new Object({
         }
 
         if (this.preferences.margin.value) {
-            XKit.tools.add_css(list_sel+".reblog-list-item .reblog-content {margin-left:35px;}" +
-                               list_sel+".reblog-list-item .reblog-title {margin-left:35px;}", "better_reblogs");
+            XKit.tools.add_css(list_sel+".reblog-list-item .reblog-content {margin-left:35px;} " +
+                list_sel+".reblog-list-item .reblog-title {margin-left:35px;}", "better_reblogs");
         }
 
         if (this.preferences.remove_icon.value) {
-            XKit.tools.add_css(".reblog-header .sub-icon-reblog:before {display: none!important;}" +
-                               ".reblog-header .sub-icon-reblog:after {display:none!important;}", "better_reblogs");
+            XKit.tools.add_css(".reblog-header .sub-icon-reblog:before {display: none!important;} " +
+                ".reblog-header .sub-icon-reblog:after {display:none!important;}", "better_reblogs");
 
         }
 
         if (this.preferences.add_border.value) {
-            XKit.tools.add_css(list_sel+".reblog-list-item .reblog-content {border-left: 2px solid #E7E7E7; padding-left: 10px;}" +
-                               ".post.post_full "+list_sel+".reblog-list-item .tmblr-full > img {padding: 0 20px}", "better_reblogs");
+            XKit.tools.add_css(list_sel+".reblog-list-item .reblog-content {border-left: 2px solid #E7E7E7; padding-left: 10px;} " +
+                ".post.post_full "+list_sel+".reblog-list-item .tmblr-full > img {padding: 0 20px}", "better_reblogs");
 
             if (!(this.preferences.margin.value || this.preferences.remove_user_names.value)) {
                 XKit.tools.add_css(".reblog-list-item .reblog-content {margin-left: 3px;}", "better_reblogs");
@@ -123,7 +123,7 @@ XKit.extensions.better_reblogs = new Object({
 
         if (this.preferences.remove_user_names.value) {
             XKit.tools.add_css(".reblog-tumblelog-name {display:none;} .reblog-list-item .reblog-header {margin-bottom: 0;} "+
-                               list_sel+".reblog-content {margin-left:35px;} .reblog-title {margin-left:35px; margin-top:-10px;}", "better_reblogs");
+                list_sel+".reblog-content {margin-left:35px;} .reblog-title {margin-left:35px; margin-top:-10px;}", "better_reblogs");
         }
 
         if (this.preferences.remove_avatars.value) {
@@ -137,7 +137,8 @@ XKit.extensions.better_reblogs = new Object({
         }
 
         if (this.preferences.reorder_reblog_title.value) {
-            XKit.tools.add_css(".reblog-list-item .reblog-title {margin-left:0!important;}", "better_reblogs");
+            XKit.tools.add_css(".reblog-list-item .reblog-title {margin-left:0!important;}",
+                "better_reblogs");
         }
 
         XKit.extensions.better_reblogs.do_flat();
@@ -148,15 +149,18 @@ XKit.extensions.better_reblogs = new Object({
     run_nested: function() {
         var match_only_main_dash =  !XKit.page.peepr ? "ol" : "";
         XKit.tools.add_css(match_only_main_dash+'.posts .reblog-list {display: none!important} '+
-                           match_only_main_dash+'.posts .reblog-list-item.contributed-content {display: none!important;} '+
-                           match_only_main_dash+'.posts .post_full.post .post_content_inner .post_media ~ .old_reblogs {margin-top: 13px;}',
-                        'better_reblogs');
+                match_only_main_dash+'.posts .reblog-title {display: none!important} '+
+                match_only_main_dash+'.posts .reblog-list-item.contributed-content '+
+                    '{display: none!important;} '+
+                match_only_main_dash+'.posts .post_full.post .post_content_inner .post_media '+
+                '~ .xkit-better-reblogs-old {margin-top: 13px;}',
+            'better_reblogs');
         XKit.extensions.better_reblogs.do_nested();
         XKit.post_listener.add("better_reblogs", XKit.extensions.better_reblogs.do_nested);
     },
 
     do_flat: function() {
-        var posts = XKit.interface.get_posts("better-reblogs-done");
+        var posts = XKit.interface.get_posts("xkit-better-reblogs-done");
 
         $(posts).each(function() {
             var $this = $(this);
@@ -175,7 +179,7 @@ XKit.extensions.better_reblogs = new Object({
                     return;
                 }
                 title.remove();
-                parent.prepend(title);
+                parent.prepend();
             }
         });
     },
@@ -188,22 +192,28 @@ XKit.extensions.better_reblogs = new Object({
             $this.addClass("xkit-better-reblogs-done");
 
             var reblog_tree = $this.find(".reblog-list");
-            var title = reblog_tree.find('.reblog-title');
+            var title = reblog_tree.find('.reblog-title').clone();
 
             if (!reblog_tree.length){
+                // this shouldn't happen, but does sometimes on broken posts
+                var content = $this.find(".reblog-list-item.contributed-content .reblog-content").clone();
+                if(content.length){
+                    content.addClass("post_body"); // sure why not.
+                    $this.find(".post_container").append(content);
+                }
                 return;
             }
 
             var cc = $this.find('.contributed-content');
             if (cc.length) {
-                cc.after('<div class="old_reblogs post_body"></div>');
+                cc.after('<div class="xkit-better-reblogs-old post_body"></div>');
                 cc.after(title);
             } else {
-                reblog_tree.after('<div class="old_reblogs post_body"></div>');
+                reblog_tree.after('<div class="xkit-better-reblogs-old post_body"></div>');
                 reblog_tree.after(title);
             }
             title.removeClass("reblog-title");
-            title.addClass("post_title");
+            title.addClass("post_title xkit-better-reblogs-title");
 
             var all_quotes = [];
             reblog_tree.find(".reblog-list-item").each(function() {
@@ -221,17 +231,15 @@ XKit.extensions.better_reblogs = new Object({
             var all_quotes_text = "";
             all_quotes.forEach(function(data, index, all) {
                 var reblog_content = data.reblog_content;
-                //don't wrap if the previous user didn't add a comment
-                if (reblog_content.indexOf("</blockquote>", reblog_content.length - 13) !== -1 || reblog_content.length === 0) {
-                    all_quotes_text = reblog_content;
-                } else {
-                    all_quotes_text = "<p><a class='tumblr_blog' href='" + data.reblog_url + "'>" + data.reblog_author + "</a>:</p><blockquote>" + all_quotes_text + reblog_content + "</blockquote>";
-                }
+                all_quotes_text = 
+                    "<p><a class='tumblr_blog' href='" + data.reblog_url + "'>" +
+                        data.reblog_author + "</a>:</p>" +
+                    "<blockquote>" + all_quotes_text + reblog_content + "</blockquote>";
             });
 
-            $this.find(".old_reblogs").append(all_quotes_text);
-            var post_c = $this.find(".reblog-list-item.contributed-content .reblog-content").html();
-            $this.find(".old_reblogs").append(post_c);
+            $this.find(".xkit-better-reblogs-old").append(all_quotes_text);
+            var post_c = $this.find(".reblog-list-item.contributed-content .reblog-content").clone();
+            $this.find(".xkit-better-reblogs-old").append(post_c);
         });
     },
 
@@ -248,8 +256,24 @@ XKit.extensions.better_reblogs = new Object({
                 }
             }
         };
-        cp.find("select[data-setting-id=type]").change(function(){
-            update($(this).val());
+        var old_val;
+        cp.find("select[data-setting-id=type]").focus(function(){
+            old_val = $(this).val();
+        }).change(function(){
+            var $el = $(this);
+            var val = $el.val();
+            $el.blur();
+            XKit.window.show("Warning", "Changing the reblog style requires refreshing the page. "+
+                "<br>Are you sure you wish to continue?",
+                "warning",
+                '<div id="xkit-confirm-refresh" class="xkit-button default">Refresh</div>'+
+                '<div id="xkit-close-message" class="xkit-button">Cancel</div>');
+            $("#xkit-confirm-refresh").click(function(){
+                window.location = window.location;
+            });
+            $("#xkit-close-message").click(function(){
+                $el.val(old_val);
+            });
         });
         update(cp.find("select[data-setting-id=type]").val());
     },
@@ -258,6 +282,8 @@ XKit.extensions.better_reblogs = new Object({
         this.running = false;
         XKit.tools.remove_css("better_reblogs");
         XKit.post_listener.remove("better_reblogs");
+        $(".xkit-better-reblogs-old").remove();
+        $(".xkit-better-reblogs-title").remove();
         $(".xkit-better-reblogs-done").removeClass("xkit-better-reblogs-done");
     }
 
