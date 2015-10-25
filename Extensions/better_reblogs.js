@@ -1,5 +1,5 @@
 //* TITLE Reblog Display Options **//
-//* VERSION 1.1.0 **//
+//* VERSION 1.1.1 **//
 //* DESCRIPTION Adds different styles to the new reblog layout, including the "classic" nested look. **//
 //* DEVELOPER new-xkit **//
 //* FRAME false **//
@@ -240,12 +240,11 @@ XKit.extensions.better_reblogs = new Object({
     },
 
     run_nested: function() {
-        var match_only_main_dash =  !XKit.page.peepr ? "ol" : "";
-        XKit.tools.add_css(match_only_main_dash+'.posts .reblog-list {display: none!important} '+
-                match_only_main_dash+'.posts .reblog-title {display: none!important} '+
-                match_only_main_dash+'.posts .reblog-list-item.contributed-content '+
+        XKit.tools.add_css('.posts .reblog-list {display: none!important} '+
+                '.posts .reblog-title {display: none!important} '+
+                '.posts .reblog-list-item.contributed-content '+
                     '{display: none!important;} '+
-                match_only_main_dash+'.posts .post_full.post .post_content_inner .post_media '+
+                '.posts .post_full.post .post_content_inner .post_media '+
                 '~ .xkit-better-reblogs-old {margin-top: 13px;}',
             'better_reblogs');
         XKit.extensions.better_reblogs.do_nested();
@@ -287,7 +286,7 @@ XKit.extensions.better_reblogs = new Object({
                     return;
                 }
                 title.remove();
-                parent.prepend();
+                parent.prepend(title);
             }
         });
     },
