@@ -371,7 +371,7 @@ XKit.extensions.better_reblogs = new Object({
 
             $(this).find("blockquote").each(function() {
 
-                if (count >= XKit.extensions.better_reblogs.colors.length) { count = 0; }
+                if (count >= colors.length) { count = 0; }
 
                 var m_color = XKit.extensions.better_reblogs.hex_to_rgb(colors[count]);
 
