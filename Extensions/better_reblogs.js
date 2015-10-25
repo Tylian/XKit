@@ -1,5 +1,5 @@
 //* TITLE Reblog Display Options **//
-//* VERSION 1.0.1 **//
+//* VERSION 1.1.0 **//
 //* DESCRIPTION Adds different styles to the new reblog layout, including the "classic" nested look. **//
 //* DEVELOPER new-xkit **//
 //* FRAME false **//
@@ -73,7 +73,55 @@ XKit.extensions.better_reblogs = new Object({
             default: false,
             value: false,
             style: "flat",
+        },
+        "color_quotes": {
+            text: "Enable Color Quotes",
+            default: false,
+            value: false,
+            style: "nested",
+        },
+        "dont_fade_if_less_than_two": {
+            text: "Don't color the block quotes if there is only one",
+            default: true,
+            value: true,
+            style: "nested",
+        },
+        "cq_theme": {
+            text: "Color Theme",
+            default: "rainbow",
+            value: "rainbow",
+            type: "combo",
+            values: [
+                "Default Rainbow", "rainbow",
+                "Pastel Rainbow", "pastel",
+                "Tumblr Blue", "blue",
+                "Grayscale", "grayscale",
+                "Pink and Red", "pink",
+                "Red and Gray", "rag",
+            ],
+            style: "nested",
+        },
+        "do_backgrounds": {
+            text: "Use a faded color on block quote backgrounds too",
+            default: false,
+            value: false,
+            style: "nested",
+        },
+        "increase_padding": {
+            text: "Increase padding for easier reading",
+            default: false,
+            value: false,
+            style: "nested",
         }
+    },
+
+    colors: {
+        rainbow: ["ff1900","ff9000","ffd000","6adc13","00cd8b","00a5e7","001999","cc00b9","ff78e1"],
+        pastel: ["e45c5c","ffcc66","d7e972","76e2c2","5dc6cd","be7ce4","e45c5c","ffcc66","d7e972"],
+        blue: ["36536e","536c83","6a8094","798c9f","36536e","536c83","6a8094","798c9f","36536e"],
+        grayscale: ["b2b2b2","969696","6b6b6b","3d3d3d","d3d0d0","b2b2b2","969696","6b6b6b","3d3d3d"],
+        pink: ["c53b3c","f09dd8","c53b3c","f09dd8","c53b3c","f09dd8","c53b3c","f09dd8"],
+        rag: ["e24545","acacac","e24545","acacac","e24545","acacac","e24545","acacac"]
     },
 
     run: function() {
@@ -91,6 +139,51 @@ XKit.extensions.better_reblogs = new Object({
         if (XKit.page.peepr) {
             XKit.extensions.better_reblogs.run();
         }
+    },
+
+    destroy: function() {
+        this.running = false;
+        XKit.tools.remove_css("better_reblogs");
+        XKit.post_listener.remove("better_reblogs");
+        $(".xkit-better-reblogs-old").remove();
+        $(".xkit-better-reblogs-title").remove();
+        $(".xkit-better-reblogs-done").removeClass("xkit-better-reblogs-done");
+        this.destroy_cq();
+    },
+
+    cpanel: function(cp) {
+        var update = function(type) {
+            for (var i in XKit.extensions.better_reblogs.preferences){
+                var j = XKit.extensions.better_reblogs.preferences[i];
+                if(j.style){
+                    if (j.style === type){
+                        cp.find('[data-setting-id="'+i+'"]').show();
+                    } else {
+                        cp.find('[data-setting-id="'+i+'"]').hide();
+                    }
+                }
+            }
+        };
+        var old_val;
+        cp.find("select[data-setting-id=type]").focus(function(){
+            old_val = $(this).val();
+        }).change(function(){
+            var $el = $(this);
+            var val = $el.val();
+            $el.blur();
+            XKit.window.show("Warning", "Changing the reblog style requires refreshing the page. "+
+                "<br>Are you sure you wish to continue?",
+                "warning",
+                '<div id="xkit-confirm-refresh" class="xkit-button default">Refresh</div>'+
+                '<div id="xkit-close-message" class="xkit-button">Cancel</div>');
+            $("#xkit-confirm-refresh").click(function(){
+                window.location = window.location;
+            });
+            $("#xkit-close-message").click(function(){
+                $el.val(old_val);
+            });
+        });
+        update(cp.find("select[data-setting-id=type]").val());
     },
 
     run_flat: function() {
@@ -157,6 +250,21 @@ XKit.extensions.better_reblogs = new Object({
             'better_reblogs');
         XKit.extensions.better_reblogs.do_nested();
         XKit.post_listener.add("better_reblogs", XKit.extensions.better_reblogs.do_nested);
+        if(this.preferences.color_quotes.value){
+            this.run_cq();
+        }
+    },
+
+    run_cq: function() {
+        if (this.preferences.increase_padding.value === true) {
+            XKit.tools.add_css("#posts .post_content blockquote "+
+                "{ padding-top: 8px; padding-bottom: 8px; }", "colorquotes_padding");
+        }
+
+        if ($("#posts").length > 0) {
+            XKit.post_listener.add("br-colorquotes", this.do_cq);
+            this.do_cq();
+        }
     },
 
     do_flat: function() {
@@ -243,48 +351,66 @@ XKit.extensions.better_reblogs = new Object({
         });
     },
 
-    cpanel: function(cp) {
-        var update = function(type) {
-            for (var i in XKit.extensions.better_reblogs.preferences){
-                var j = XKit.extensions.better_reblogs.preferences[i];
-                if(j.style){
-                    if (j.style === type){
-                        cp.find('[data-setting-id="'+i+'"]').show();
-                    } else {
-                        cp.find('[data-setting-id="'+i+'"]').hide();
-                    }
-                }
+    do_cq: function() {
+
+        var posts = XKit.interface.get_posts("xkit-color-quoted");
+
+        var colors = XKit.extensions.better_reblogs
+            .colors[XKit.extensions.better_reblogs.preferences.cq_theme.value];
+
+        $(posts).each(function() {
+
+            $(this).addClass("xkit-color-quoted");
+
+            var m_post = XKit.interface.post($(this));
+
+            var count = 0;
+
+            if (XKit.extensions.better_reblogs.preferences.dont_fade_if_less_than_two.value === true) {
+                if ($(this).find("blockquote").length === 1) { return; }
             }
-        };
-        var old_val;
-        cp.find("select[data-setting-id=type]").focus(function(){
-            old_val = $(this).val();
-        }).change(function(){
-            var $el = $(this);
-            var val = $el.val();
-            $el.blur();
-            XKit.window.show("Warning", "Changing the reblog style requires refreshing the page. "+
-                "<br>Are you sure you wish to continue?",
-                "warning",
-                '<div id="xkit-confirm-refresh" class="xkit-button default">Refresh</div>'+
-                '<div id="xkit-close-message" class="xkit-button">Cancel</div>');
-            $("#xkit-confirm-refresh").click(function(){
-                window.location = window.location;
+
+            $(this).find("blockquote").each(function() {
+
+                if (count >= XKit.extensions.better_reblogs.colors.length) { count = 0; }
+
+                var m_color = XKit.extensions.better_reblogs.hex_to_rgb(colors[count]);
+
+                $(this).css("border-left-color", "#" + colors[count]);
+                $(this).attr('xkit-border-color', JSON.stringify(m_color));
+                $(this).addClass("xkit-colorquotes-border-item");
+
+                if (XKit.extensions.better_reblogs.preferences.do_backgrounds.value === true) {
+                    $(this).css("background", "rgba(" + m_color.r + "," + m_color.g + "," + m_color.b + ",0.1)");
+                }
+
+                count++;
+
             });
-            $("#xkit-close-message").click(function(){
-                $el.val(old_val);
-            });
+
+
         });
-        update(cp.find("select[data-setting-id=type]").val());
+
     },
 
-    destroy: function() {
-        this.running = false;
-        XKit.tools.remove_css("better_reblogs");
-        XKit.post_listener.remove("better_reblogs");
-        $(".xkit-better-reblogs-old").remove();
-        $(".xkit-better-reblogs-title").remove();
-        $(".xkit-better-reblogs-done").removeClass("xkit-better-reblogs-done");
-    }
+    destroy_cq: function() {
+        XKit.post_listener.remove("br-colorquotes");
+        $(".xkit-color-quoted").removeClass("xkit-color-quoted");
+        XKit.tools.remove_css("colorquotes_padding");
+        $(".xkit-colorquotes-border-item").css("background","").css("border-left-color","");
+    },    
+
+    hex_to_rgb: function(hex) {
+
+        // From: http://stackoverflow.com/questions/5623838/rgb-to-hex-and-hex-to-rgb
+
+        var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+        return result ? {
+            r: parseInt(result[1], 16),
+            g: parseInt(result[2], 16),
+            b: parseInt(result[3], 16)
+        } : null;
+
+    },
 
 });
