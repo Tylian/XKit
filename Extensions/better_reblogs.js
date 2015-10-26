@@ -1,5 +1,5 @@
 //* TITLE Reblog Display Options **//
-//* VERSION 1.1.1 **//
+//* VERSION 1.1.2 **//
 //* DESCRIPTION Adds different styles to the new reblog layout, including the "classic" nested look. **//
 //* DEVELOPER new-xkit **//
 //* FRAME false **//
@@ -302,11 +302,10 @@ XKit.extensions.better_reblogs = new Object({
             var title = reblog_tree.find('.reblog-title').clone();
 
             if (!reblog_tree.length){
-                // this shouldn't happen, but does sometimes on broken posts
                 var content = $this.find(".reblog-list-item.contributed-content .reblog-content").clone();
                 if(content.length){
-                    content.addClass("post_body"); // sure why not.
-                    $this.find(".post_container").append(content);
+                    content.addClass("post_body");
+                    $this.find(".reblog-list-item.contributed-content").before(content);
                 }
                 return;
             }
@@ -371,7 +370,7 @@ XKit.extensions.better_reblogs = new Object({
 
             $(this).find("blockquote").each(function() {
 
-                if (count >= XKit.extensions.better_reblogs.colors.length) { count = 0; }
+                if (count >= colors.length) { count = 0; }
 
                 var m_color = XKit.extensions.better_reblogs.hex_to_rgb(colors[count]);
 
