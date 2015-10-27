@@ -1,6 +1,8 @@
 `XKit.post_listener`: listens for new posts to manipulate.  Use it to modify new posts when they appear on the user's dashboard.
 
-#### `add(extension_id, func)`
+## Methods
+
+<a name="add" href="XKit.post_listener.md#add">#</a> XKit.post_listener.**add**(_extension_id_, _func_)
 
 Adds `func` to the callback list.
 
@@ -10,7 +12,7 @@ Example usage:
 XKit.post_listener.add("my_extension", XKit.extensions.my_extension.to_be_called);
 ```
 
-#### `remove(extension_id)`
+<a name="remove" href="XKit.post_listener.md#remove">#</a> XKit.post_listener.**remove**(_extension_id_)
 
 Removes the previously added callback.
 
@@ -45,7 +47,7 @@ destroy: function() {
 
 ## Tips
 
-* Always remove the listener when `destroy` is called.
+* Always remove the listener when `destroy()` is called.
 * You can have several listeners at once:
   * `XKit.post_listener.add("my_extension_red", XKit.extensions.my_extension.paint_red);`
   * `XKit.post_listener.add("my_extension_blue", XKit.extensions.my_extension.paint_blue);`

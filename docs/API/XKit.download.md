@@ -1,26 +1,30 @@
+`XKit.download`: download extension data from the XKit servers.
+
 ## Methods
 
-### extension(extension_id, callback)
-Download extension_id and return the results to callback.
+<a name="extension" href="XKit.download.md#extension">#</a> XKit.download.**extension**(_extension_id_, _callback_)
 
-### page(page_url, callback)
-Download page_url from XKit servers and call the callback afterwards.
+Download `extension_id` and return the results to callback.
 
-## Usage Example:
+<a name="page" href="XKit.download.md#page">#</a> XKit.download.**page**(_url_, _callback_)
 
-	XKit.download.page("some_page.php", function(obj) {
-	
-		// Check if the server was down?
-		if (obj.server_down === true) {
-			alert("Can't reach!");
-			return;	
-		}
-		
-		alert(obj.some_data);
-		
-	});
+Download `url` (which is appended to the server URL) from XKit servers and call the callback.
 
-## Things to how about XKit.download
-* Everything is JSON-ized.
-* XKit.download loops thru the server list, giving up after 8 tries.
-* Always check for `errors` and `server_down`
+Example usage:
+
+```javascript
+XKit.download.page("some_page.php", function(obj) {
+	// Check if the server was down?
+	if (obj.server_down === true) {
+		alert("Can't reach!");
+		return;
+	}
+
+	alert(obj.some_data);
+});
+```
+
+## Tips
+
+* Everything is a JSON object.
+* Always check for `errors` and `server_down`.

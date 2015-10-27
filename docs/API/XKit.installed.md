@@ -1,28 +1,39 @@
+`XKit.installed`: helpers for dealing with installed extensions.
+
 ## Methods
 
-### list
-Returns an array of installed extensions
+<a name="list" href="XKit.installed.md#list">#</a> XKit.installed.**list**()
 
-### check(extension_id)
-Returns true if extension_id is installed.
+Returns an array of installed extensions.
 
-### version(extension_id)
-Returns the version of extension_id
+<a name="check" href="XKit.installed.md#check">#</a> XKit.installed.**check**(_extension_id_)
 
-### title(extension_id)
-Returns the user-friendly title of extension_id
+Returns `true` if `extension_id` is installed.
 
-### icon(extension_id)
-Returns the icon of extension_id
+<a name="version" href="XKit.installed.md#version">#</a> XKit.installed.**version**(_extension_id_)
 
-### css(extension_id)
-Returns the stylesheet of extension_id
+Returns the version of `extension_id`.
 
-### description(extension_id)
-Returns the description of extension_id
+<a name="title" href="XKit.installed.md#title">#</a> XKit.installed.**title**(_extension_id_)
 
-### developer(extension_id)
-Returns the developer of extension_id
+Returns the human-friendly title of `extension_id`.
+
+<a name="icon" href="XKit.installed.md#icon">#</a> XKit.installed.**icon**(_extension_id_)
+
+Returns the base64-encoded icon of `extension_id`.
+
+<a name="css" href="XKit.installed.md#css">#</a> XKit.installed.**css**(_extension_id_)
+
+Returns the stylesheet of `extension_id`.
+
+<a name="description" href="XKit.installed.md#description">#</a> XKit.installed.**description**(_extension_id_)
+
+Returns the description of `extension_id`.
+
+<a name="developer" href="XKit.installed.md#developer">#</a> XKit.installed.**developer**(_extension_id_)
+
+Returns the developer of `extension_id`.
 
 ## Tips
-* XKit.installed also functions to remove/add extensions, but do not use them, since they are reserved for XKit only and never should be used in an extension.
+
+* `XKit.installed` also contains private methods reserved for XKit only that should never be used in an extension.
