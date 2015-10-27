@@ -32,11 +32,10 @@ XKit.extensions.editable_reblogs = new Object({
 		}
 	},
 	post_window: function() {
-		//if we're a new post and not a reblog, gtfo
-		//this saves us from worrying about things like photo replies
-		var location_path = window.location.pathname;
-		var location_items = location_path.split("/");
-		if (location_items[1] === "new") {
+		//if we don't have a reblog tree to edit, gtfo
+		//this also applies to new posts
+		//which saves us from worrying about things like photo replies
+		if ($(".post-form .reblog-list").length === 0) {
 			return;
 		}
 		//also just let chat and quote posts do what they do
@@ -82,6 +81,9 @@ XKit.extensions.editable_reblogs = new Object({
 		try {
 			old_content = XKit.interface.post_window.get_content_html();
 		} catch (e) {
+			XKit.tools.add_function(function() {
+				Tumblr.Events.trigger("postForms:saved");
+			}, true, "");
 			XKit.window.show('Invalid editor type', 'ERROR: Editable Reblogs cannot currently get content from your default editor type. '+
 				'To continue using editable reblogs, click <a target="_blank" href="https://www.tumblr.com/settings/dashboard">here</a> '+
 				'to edit your dashboard settings to use the rich text editor or HTML editor',
