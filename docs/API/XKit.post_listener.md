@@ -1,9 +1,51 @@
-_For more information, visit [Post Listener page](https://github.com/atesh/XKit/wiki/Post-Listener), which includes examples._
+`XKit.post_listener`: listens for new posts to manipulate.  Use it to modify new posts when they appear on the user's dashboard.
 
-### add(extension_id, func)
-Adds `func` to the callback list.  
-`XKit.post_listener.add("my_extension", XKit.extensions.my_extension.to_be_called);`
+#### `add(extension_id, func)`
 
-### remove(extension_id)
-Removes the previously added callback.  
-`XKit.post_listener.remove("my_extension");`
+Adds `func` to the callback list.
+
+Example usage:
+
+```javascript
+XKit.post_listener.add("my_extension", XKit.extensions.my_extension.to_be_called);
+```
+
+#### `remove(extension_id)`
+
+Removes the previously added callback.
+
+Example usage:
+
+```javascript
+XKit.post_listener.remove("my_extension");
+```
+
+## Usage
+
+```javascript
+run: function() {
+    XKit.post_listener.add("my_extension", XKit.extensions.my_extension.paint_red);
+    XKit.extensions.my_extension.paint_red();
+},
+
+paint_red: function() {
+    $(".post").not(".already-red").each(function() {
+        // Add class so we wouldn't hit this post again.
+        $(this).addClass("already-red");
+        // Paint it red!
+        $(this).("background","red");
+    });
+},
+
+destroy: function() {
+    // Always remove the listener on destroy!
+    XKit.post_listener.remove("my_extension");
+}
+```
+
+## Tips
+
+* Always remove the listener when `destroy` is called.
+* You can have several listeners at once:
+  * `XKit.post_listener.add("my_extension_red", XKit.extensions.my_extension.paint_red);`
+  * `XKit.post_listener.add("my_extension_blue", XKit.extensions.my_extension.paint_blue);`
