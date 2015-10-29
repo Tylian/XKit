@@ -11,10 +11,10 @@ These are the stylesheet classes used by Tumblr on their pages.
 
 ### Data attributes
 
-* data-post-id for post ID
-* data-type for post Type
-* data-following-tumblelog if following that user
-* data-tumblelog-name for owner of the post
+* `data-post-id` for post ID
+* `data-type` for post Type
+* `data-following-tumblelog` if following that user
+* `data-tumblelog-name` for owner of the post
 
 ### Post Types
 
@@ -27,4 +27,5 @@ These are the stylesheet classes used by Tumblr on their pages.
 * .is_quote
 
 ### Others
+
 * .is_mine if posted by user on main/sideblogs.

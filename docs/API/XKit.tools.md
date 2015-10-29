@@ -1,5 +1,7 @@
 `XKit.tools`: Utility functions for XKit.
 
+## Methods
+
 <a name="get_blogs" href="XKit.tools.md#get_blogs">#</a> XKit.tools.**get_blogs**()
 
 Returns an array of the URLs of the blogs the user has.
@@ -8,25 +10,53 @@ Returns an array of the URLs of the blogs the user has.
 
 Removes the CSS added by `extension_id`.
 
-For more information, [check the Stylesheets page](../extensions/Stylesheets.md)
-
 <a name="add_css" href="XKit.tools.md#add_css">#</a> XKit.tools.**add_css**(_css_, _extension_id_)
 
 Adds `css` to the page with id `extension_id`.
 
-For more information, [check the Stylesheets page](../extensions/Stylesheets.md)
-
 Example usage:
 
 ```javascript
-XKit.tools.add_css("body { background: red; }", "my_extension");
+run: function() {
+    var hide_post = true;
+    if (hide_posts) {
+        // Lets hide all posts.
+        XKit.tools.add_css("#posts .post { display: none; }", "my_extension_name");
+    }
+},
+
+destroy: function() {
+    XKit.tools.remove_css("my_extension_name");
+}
 ```
 
 <a name="init_css" href="XKit.tools.md#init_css">#</a> XKit.tools.**init_css**(_extension_id_)
 
 Loads the extension's CSS into the page.
 
-For more information, [check the Stylesheets page](../extensions/Stylesheets.md)
+If your CSS has code that you'll be using all the time, use the Stylesheet tab on XKit Editor, then call init_css function to let XKit load it to the page. Use `XKit.tools.remove_css` to remove it.
+
+Example usage:
+
+```css
+/* my_extension.css */
+#my_fancy_div {
+    background: red;
+    color: yellow;
+}
+```
+
+```javascript
+// my_extension.js
+run: function() {
+    XKit.tools.init_css("my_extension_name");
+    $("body").append("<div id=\"my_fancy_div\">This will be red and yellow.</div>");
+},
+
+destroy: function() {
+    XKit.tools.remove_css("my_extension_name");
+}
+```
 
 <a name"random_string" href="XKit.tools.md#random_string">#</a> XKit.tools.**random_string**()
 
@@ -48,3 +78,9 @@ Parses `version_string` in format `<MAJOR>.<MINOR>.<PATCH>`, `<MAJOR>.<MINOR>`, 
   patch
 }
 ```
+
+## Tips
+
+* Always remove the CSS you've added when you are done with it, and on the `destroy` function.
+* Name your class names/ids with a prefix to avoid conflicts with other extensions.
+  * For example, do not use `.my_div`; instead use `.my_extension_my_div`

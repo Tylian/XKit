@@ -22,7 +22,7 @@ finding something going wrong. There's a long list of known issues
 Come join us in [the XKit repo chat](https://gitter.im/new-xkit/XKit) if you get stuck, or want some advice! There's normally a few people lurking in there any time of day.
 
 ### Writing a New Extension
-Check out [the documentation](./docs/extensions/Writing-a-New-Extension.md)!
+Read the guide on [writing a new extension](./docs/extensions/Writing-a-New-Extension.md)!
 
 ### Develop XKit
 Review the project prerequisites and learn how to [build XKit from source](./docs/contributing/Build-XKit.md).

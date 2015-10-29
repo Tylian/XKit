@@ -2,7 +2,7 @@
 
 These are the functions used by Tumblr on their pages.
 
-> *Help Needed*: If you know more events, functions and triggers Tumblr uses, please add them to this page.
+> **Help Needed**: If you know more events, functions and triggers Tumblr uses, please add them to this page.
 
 ### updateRect
 
