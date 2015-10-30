@@ -469,7 +469,7 @@ XKit.extensions.xcloud = new Object({
 	},
 
 	local_export: function(){
-		var upload_data = this.create_export_data(false);
+		var upload_data = this.create_export_data(false)[0];
 		var data_blob = new Blob([upload_data], {type: "text/plain"});
 
 
@@ -862,12 +862,14 @@ XKit.extensions.xcloud = new Object({
 		//We need to base64 encode it without utf8 support so it's compatible with the old payload.
 		to_send = "XCS" + XKit.extensions.xcloud.base64_encode(to_send) + "XCE";
 
-		return to_send;
+		return [to_send, skipping];
 	},
 
 	start_upload: function() {
 		XKit.extensions.xcloud.show_overlay();
-		var to_send = this.create_export_data(true);
+		var payload_pair = this.create_export_data(true);
+		var to_send = payload_pair[0];
+		var skipping = payload_pair[1];
 
 		if ((to_send.length / 1024 / 1024) >= 5) {
 
