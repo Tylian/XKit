@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 5.3.1 **//
+//* VERSION 5.4.1 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER new-xkit **//
 
@@ -662,12 +662,16 @@ XKit.tools.dump_config = function(){
 				 */
 				get_content_html: function() {
 					if ($(".html-field").css("display") === "none") {
+						//rich text editor
 						var content_editor = $('.post-form--form').find('.editor.editor-richtext');
 						if (content_editor.length === 0) {
 							console.error('ERROR: unable to get content html');
 							return '';
 						}
 						return content_editor.html();
+					} else if ($('.chat-field').length > 0 && $('.chat-field').css("display") !== "none") {
+						//chat post editor
+						return $('editor-plaintext').html();
 					} else {
 						var html_or_markdown = $(".tab-label[data-js-srclabel]").text();
 						if (html_or_markdown === 'HTML') {
@@ -791,6 +795,20 @@ XKit.tools.dump_config = function(){
 
 					return to_return;
 
+				},
+
+				post_type: function() {
+					var post_form = $(".post-form");
+					return {
+						text: post_form.hasClass("post-form--text"),
+						photo: post_form.hasClass("post-form--photo"),
+						video: post_form.hasClass("post-form--video"),
+						chat: post_form.hasClass("post-form--chat"),
+						note: post_form.hasClass("post-form--note"),		// Tumblr calls published answers notes
+						quote: post_form.hasClass("post-form--quote"),
+						audio: post_form.hasClass("post-form--audio"),
+						link: post_form.hasClass("post-form--link")
+					};
 				},
 
 				blog: function() {
@@ -1444,7 +1462,7 @@ XKit.tools.dump_config = function(){
 
 				var selection = $(selector);
 
-				var exclusions = [".radar", ".new_post_buttons"];
+				var exclusions = [".radar", ".new_post_buttons", ".post_micro"];
 
 				if (typeof without_tag !== "undefined") {
 					exclusions.push("." + without_tag);
@@ -1522,7 +1540,7 @@ XKit.tools.dump_config = function(){
 				m_return.error = false;
 
 				m_return.id = $(obj).attr('data-post-id');
-				m_return.root_id = $(obj).attr('data-root-id');
+				m_return.root_id = $(obj).attr('data-root_id');
 				m_return.reblog_key = $(obj).attr('data-reblog-key');
 				m_return.owner = $(obj).attr('data-tumblelog-name');
 				m_return.tumblelog_key = $(obj).attr('data-tumblelog-key');
@@ -1582,7 +1600,10 @@ XKit.tools.dump_config = function(){
 					var to_return = "";
 					$(obj).find(".post_tags").find(".post_tag").each(function() {
 						if ($(this).hasClass("post_ask_me_link") === true) { return; }
-						var m_tag = $(this).html().substring(1);
+						var m_tag = $(this).text();
+						if (m_tag[0] === "#") {
+							m_tag = m_tag.substring(1);
+						}
 						if (to_return === "") {
 							to_return = m_tag;
 						} else {
@@ -1853,14 +1874,20 @@ XKit.tools.dump_config = function(){
 			if (typeof XKit.page.peepr != "undefined" && XKit.page.peepr === true) {
 				post_count = $(".post").length;
 			} else {
-				if ($("#posts").length === 0) {
-					return;
+				if ($(".posts").length > 0){
+					post_count = $(".posts .post").length;
+				} else if ($("#posts").length > 0) {
+					post_count = $("#posts .post").length;
+				} else {
+					post_count = 0;
 				}
-				post_count = $("#posts .post").length;
 			}
 			if (no_timeout === true) { post_count = -1; }
 			if (XKit.post_listener.count === 0) {
 				XKit.post_listener.count = post_count;
+				if(XKit.post_listener.count > 0){
+					XKit.post_listener.run_callbacks();
+				}
 			} else {
 				if (post_count != XKit.post_listener.count) {
 					XKit.post_listener.count = post_count;
@@ -1870,12 +1897,10 @@ XKit.tools.dump_config = function(){
 			if (no_timeout !== true) {
 				setTimeout(XKit.post_listener.check, 1000);
 			}
-
 		};
 
 		XKit.post_listener.run_callbacks = function() {
 			if (XKit.post_listener.callbacks.length === 0) {
-				// console.log("[Post Listener] No callbacks, quitting.");
 				return;
 			}
 			var successful_count = 0;

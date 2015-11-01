@@ -1,4 +1,6 @@
 #!/bin/bash
+git checkout master &&\
+git pull &&\
 git checkout gh-pages &&\
 git merge master -m "Merge master" &&\
 gulp build:extensions &&\

@@ -2,7 +2,7 @@
   "title": "New XKit",
   "name": "new-xkit",
   "fullName": "New XKit",
-  "version": "7.7.0",
+  "version": "7.7.1",
   "description": "Fork of XKit, the Tumblr extension framework",
   "main": "index.js",
   "author": "",
@@ -11,5 +11,6 @@
     "fennec": ">=35.0"
   },
   "license": "GPL",
-  "icon": "icon.png"
+  "icon": "icon.png",
+  "updateURL": "http://new-xkit.github.io/XKit/Firefox/update.rdf"
 }

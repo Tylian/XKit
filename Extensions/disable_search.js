@@ -1,5 +1,5 @@
 //* TITLE Classic Search **//
-//* VERSION 1.0.4 **//
+//* VERSION 1.0.5 **//
 //* DESCRIPTION Get the old search back **//
 //* DETAILS This is a very simple extension that simply redirects your search requests to the old Tumblr tag search pages. Note that features of the new search page, such as multiple tag search will not work when this extension is enabled. **//
 //* DEVELOPER new-xkit **//
