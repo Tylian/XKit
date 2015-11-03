@@ -1,6 +1,6 @@
 //* TITLE       Retags **//
 //* DEVELOPER   new-xkit **//
-//* VERSION     1.0.4 **//
+//* VERSION     1.0.5 **//
 //* DESCRIPTION Adds tags to reblog notes **//
 //* FRAME       false **//
 //* SLOW        false **//
@@ -166,7 +166,7 @@ XKit.extensions.retags = {
 
 		// And finally write back to storage!
 		settingKeys.forEach(function(key) {
-			XKit.storage.set('retags', key, cache[key]);
+			XKit.storage.set('retags', key, cache[key].value);
 		});
 	},
 
