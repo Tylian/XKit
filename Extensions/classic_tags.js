@@ -60,16 +60,29 @@ XKit.extensions.classic_tags = new Object({
 			value: false
 		}
 	},
+
+	tagcounts: {},
 	
 	observer: new MutationObserver(function(mutations) {
-		if (XKit.extensions.classic_tags.preferences.open_in_new_tab.value) {
-			$(".result_link").each(function() { $(this).attr("target", "_BLANK"); });
-		} else {
-			$(".result_link").each(function() { $(this).attr("target", ""); });
-		}
-		if (XKit.extensions.classic_tags.preferences.redirect_to_tagged.value) {
-			$(".result_link").each(XKit.extensions.classic_tags.redirect_to_tagged);
-		}
+		$("#popover_search .result_link").each(function() {
+			var link = $(this);
+			if (XKit.extensions.classic_tags.preferences.open_in_new_tab.value) {
+				link.attr("target", "_BLANK");
+			} else {
+				link.attr("target", "");
+			}
+
+			if (XKit.extensions.classic_tags.preferences.redirect_to_tagged.value) {
+				XKit.extensions.classic_tags.redirect_to_tagged.call(this);
+			}
+
+			var tag_name = link.attr("data-tag-result");
+			var count = XKit.extensions.classic_tags.tagcounts[tag_name];
+			if (count) {
+				var title = link.find(".result_title");
+				title.text(title.text() + " (" + count + ")");
+			}
+		});
 	}),
 
 	redirect_to_tagged: function() {
@@ -138,13 +151,13 @@ XKit.extensions.classic_tags = new Object({
 							promise.resolve(data.response.length);
 							return;
 						}
-						
+
 						var newer_posts_count = data.response.map(function (post) {
 							return post.timestamp;
 						}).filter(function (timestamp) {
 							return timestamp > newest_post_seen;
 						}).length;
-						
+
 						promise.resolve(newer_posts_count);
 					} catch(e) {
 						fail();
@@ -155,7 +168,11 @@ XKit.extensions.classic_tags = new Object({
 			fail();
 		}
 
-		return promise;
+		return promise.then(function (count) {
+			if (count === 5) { count = "5+"; }
+			self.tagcounts[tag_name] = count;
+			return count;
+		});
 	},
 
 	update_tag_timestamp: function () {
@@ -174,6 +191,59 @@ XKit.extensions.classic_tags = new Object({
 		}
 	},
 
+	update_tag_counts: function () {
+		var self = this;
+		var new_post_count_promises = [];
+
+		function fetch_count(tag_name) {
+			var promise = self.get_unread_post_count_for_tag(tag_name);
+			new_post_count_promises.push(promise);
+			return promise;
+		}
+
+		if (self.preferences.show_tags_on_sidebar.value) {
+			var list = $("#xtags");
+			var list_hidden = list.hasClass("hidden");
+			$(".xtag").each(function () {
+				var li = $(this);
+				var anchor = li.find(".result_link");
+				var tag_name = anchor.attr("data-tag-result");
+				fetch_count(tag_name).then(function (count) {
+					if (!count) { return; }
+					if (list_hidden) {
+						list.removeClass("hidden");
+						list_hidden = false;
+					}
+					
+					li.removeClass("hidden");
+					var existing_count = anchor.find(".count");
+					if (existing_count.length) {
+						existing_count.text(count);
+					} else {
+						anchor.find(".result_title").removeClass("no_count").after("<span class='count'>" + count + "</span>");
+					}
+				});
+			});
+		} else {
+			$("#popover_search .result_link").each(function () {
+				var link = $(this);
+				var tag_name = link.attr("data-tag-result");
+				fetch_count(tag_name);
+			});
+		}
+
+		var search = $("#search_query");
+		var new_label = " [new]";
+		if (self.preferences.show_new_notification.value && search.attr("placeholder").indexOf(new_label) === -1) {
+			$.when.apply($, new_post_count_promises).then(function () {
+				var any_new_posts = Array.prototype.some.call(arguments, function (count) { return !!count; });
+				if (any_new_posts) {
+					search.attr("placeholder", search.attr("placeholder") + new_label);
+				}
+			});
+		}
+	},
+
 	run: function() {
 
 		try {
@@ -185,7 +255,7 @@ XKit.extensions.classic_tags = new Object({
 				}
 			}
 
-			if (XKit.extensions.classic_tags.preferences.show_tags_on_sidebar.value && XKit.interface.where().tagged && !location.href.match(/before=[0-9]+/i)) {
+			if (XKit.interface.where().tagged && !location.href.match(/before=[0-9]+/i)) {
 				XKit.extensions.classic_tags.update_tag_timestamp().then(function () {
 					XKit.extensions.classic_tags.show();
 				});
@@ -211,7 +281,6 @@ XKit.extensions.classic_tags = new Object({
 			}
 		}
 
-		var self = this;
 		var extra_classes = "";
 		var m_html = "";
 		var total_tag_count = $(".tracked_tag").length;
@@ -246,11 +315,6 @@ XKit.extensions.classic_tags = new Object({
 
 			}
 		}
-		
-		if (XKit.extensions.classic_tags.preferences.show_new_notification.value === true && $(".result_sub_title").length !== 0) {
-			$("#search_query").attr("placeholder", "Search [new]");
-		}
-		
 
 		$(".tracked_tag").each(function() {
 			var result = $(this).find(".result_link");
@@ -289,23 +353,8 @@ XKit.extensions.classic_tags = new Object({
 			    //$("#right_column").append(m_html);
 				$(".controls_section_radar").before(m_html);
 			}
-
-			var list = $("#xtags");
-			$(".xtag").each(function() {
-				var li = $(this);
-				var anchor = li.find(".result_link");
-				var tag_name = anchor.attr("data-tag-result");
-				self.get_unread_post_count_for_tag(tag_name).then(function (count) {
-					if (!count) { return; }
-					if (count === 5) { count = "5+"; }
-
-					list.removeClass("hidden");
-					li.removeClass("hidden");
-					anchor.find(".result_title").removeClass("no_count").after("<span class='count'>" + count + "</span>");
-				});
-			});
-
 		}
+
 		var target = document.querySelector('#popover_search');
 		XKit.extensions.classic_tags.observer.observe(target, {
 			attributes: true
@@ -318,6 +367,8 @@ XKit.extensions.classic_tags = new Object({
 		if (XKit.extensions.classic_tags.preferences.redirect_to_tagged.value) {
 			$(".result_link").each(XKit.extensions.classic_tags.redirect_to_tagged);
 		}
+
+		XKit.extensions.classic_tags.update_tag_counts();
 	},
 
 	destroy: function() {
