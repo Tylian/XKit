@@ -1,5 +1,5 @@
 //* TITLE Tag Tracking+ **//
-//* VERSION 1.6.2 **//
+//* VERSION 1.6.3 **//
 //* DESCRIPTION Shows your tracked tags on your sidebar **//
 //* DEVELOPER new-xkit **//
 //* FRAME false **//
@@ -10,6 +10,9 @@ XKit.extensions.classic_tags = new Object({
 	running: false,
 	slow: true,
 	apiKey: XKit.api_key,
+	max_posts_per_tag: 5,
+	tagcounts: {},
+	count_update_handle: null,
 
 	preferences: {
 		"sep-1": {
@@ -61,8 +64,6 @@ XKit.extensions.classic_tags = new Object({
 		}
 	},
 
-	tagcounts: {},
-	
 	observer: new MutationObserver(function(mutations) {
 		$("#popover_search .result_link").each(function() {
 			var link = $(this);
@@ -130,7 +131,7 @@ XKit.extensions.classic_tags = new Object({
 
 	get_unread_post_count_for_tag: function(tag_name) {
 		var self = this;
-		var api_url = "https://api.tumblr.com/v2/tagged?limit=5&tag=" + tag_name + "&api_key=" + self.apiKey;
+		var api_url = "https://api.tumblr.com/v2/tagged?limit=" + self.max_posts_per_tag + "&tag=" + tag_name + "&api_key=" + self.apiKey;
 		var promise = $.Deferred();
 
 		function fail() {
@@ -169,7 +170,7 @@ XKit.extensions.classic_tags = new Object({
 		}
 
 		return promise.then(function (count) {
-			if (count === 5) { count = "5+"; }
+			if (count === self.max_posts_per_tag) { count += "+"; }
 			self.tagcounts[tag_name] = count;
 			return count;
 		});
@@ -191,7 +192,7 @@ XKit.extensions.classic_tags = new Object({
 		}
 	},
 
-	update_tag_counts: function () {
+	update_tag_counts: function (next_update) {
 		var self = this;
 		var new_post_count_promises = [];
 
@@ -208,6 +209,10 @@ XKit.extensions.classic_tags = new Object({
 				var li = $(this);
 				var anchor = li.find(".result_link");
 				var tag_name = anchor.attr("data-tag-result");
+				if (parseInt(self.tagcounts[tag_name], 10) === self.max_posts_per_tag) {
+					return true;
+				}
+
 				fetch_count(tag_name).then(function (count) {
 					if (!count) { return; }
 					if (list_hidden) {
@@ -228,7 +233,9 @@ XKit.extensions.classic_tags = new Object({
 			$("#popover_search .result_link").each(function () {
 				var link = $(this);
 				var tag_name = link.attr("data-tag-result");
-				fetch_count(tag_name);
+				if (parseInt(self.tagcounts[tag_name], 10) < self.max_posts_per_tag) {
+					fetch_count(tag_name);
+				}
 			});
 		}
 
@@ -242,6 +249,8 @@ XKit.extensions.classic_tags = new Object({
 				}
 			});
 		}
+
+		self.count_update_handle = setTimeout(self.update_tag_counts.bind(self, next_update * 1.5), next_update);
 	},
 
 	run: function() {
@@ -368,7 +377,7 @@ XKit.extensions.classic_tags = new Object({
 			$(".result_link").each(XKit.extensions.classic_tags.redirect_to_tagged);
 		}
 
-		XKit.extensions.classic_tags.update_tag_counts();
+		XKit.extensions.classic_tags.update_tag_counts(2 * 60 * 1000); //start at 2 minutes
 	},
 
 	destroy: function() {
@@ -376,6 +385,7 @@ XKit.extensions.classic_tags = new Object({
 		$("#xtags").remove();
 		$("#search_query").attr("placeholder", "Search Tumblr");
 		XKit.extensions.classic_tags.observer.disconnect();
+		clearTimeout(XKit.extensions.classic_tags.count_update_handle);
 	}
 
 });
