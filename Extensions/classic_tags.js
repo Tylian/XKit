@@ -233,7 +233,8 @@ XKit.extensions.classic_tags = new Object({
 			$("#popover_search .result_link").each(function () {
 				var link = $(this);
 				var tag_name = link.attr("data-tag-result");
-				if (parseInt(self.tagcounts[tag_name], 10) < self.max_posts_per_tag) {
+				var count = self.tagcounts[tag_name];
+				if (!count || parseInt(count, 10) < self.max_posts_per_tag) {
 					fetch_count(tag_name);
 				}
 			});
