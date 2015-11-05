@@ -10,7 +10,7 @@ XKit.extensions.classic_tags = new Object({
 	running: false,
 	slow: true,
 	apiKey: XKit.api_key,
-	max_posts_per_tag: 5,
+	max_posts_per_tag: 10,
 	tagcounts: {},
 	count_update_handle: null,
 
@@ -241,12 +241,12 @@ XKit.extensions.classic_tags = new Object({
 		}
 
 		var search = $("#search_query");
-		var new_label = " [new]";
-		if (self.preferences.show_new_notification.value && search.attr("placeholder").indexOf(new_label) === -1) {
+		var new_label = "Search [new]";
+		if (self.preferences.show_new_notification.value && search.attr("placeholder") !== new_label) {
 			$.when.apply($, new_post_count_promises).then(function () {
 				var any_new_posts = Array.prototype.some.call(arguments, function (count) { return !!count; });
 				if (any_new_posts) {
-					search.attr("placeholder", search.attr("placeholder") + new_label);
+					search.attr("placeholder", new_label);
 				}
 			});
 		}
