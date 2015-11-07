@@ -1,5 +1,5 @@
 //* TITLE Editable Reblogs **//
-//* VERSION 3.0.0 **//
+//* VERSION 3.0.1 **//
 //* DESCRIPTION Restores ability to edit previous reblogs of a post **//
 //* DEVELOPER new-xkit **//
 //* FRAME false **//
@@ -30,6 +30,9 @@ XKit.extensions.editable_reblogs = new Object({
 				}
 			});
 		}
+		$('body').on('click', '#xkit-editable-reblogs-post', XKit.extensions.editable_reblogs.send_post_request);
+		$('body').on('click', '#xkit-editable-reblogs-queue', XKit.extensions.editable_reblogs.send_queue_request);
+		$('body').on('click', '#xkit-editable-reblogs-draft', XKit.extensions.editable_reblogs.send_draft_request);
 	},
 	post_window: function() {
 		//if we don't have a reblog tree to edit, gtfo
@@ -112,9 +115,6 @@ XKit.extensions.editable_reblogs = new Object({
 			+ '<button class="flat-button blue caption create_post_button xkit-editable-reblogs-button" id="xkit-editable-reblogs-draft">Draft</button>'
 			+ '</div></div>';
 		$('.post-form--controls .controls-container').append(new_button_content);
-		$('body').on('click', '#xkit-editable-reblogs-post', XKit.extensions.editable_reblogs.send_post_request);
-		$('body').on('click', '#xkit-editable-reblogs-queue', XKit.extensions.editable_reblogs.send_queue_request);
-		$('body').on('click', '#xkit-editable-reblogs-draft', XKit.extensions.editable_reblogs.send_draft_request);
 	},
 	send_post_request: function(e) {
 		e.preventDefault();
