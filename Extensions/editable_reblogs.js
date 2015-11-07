@@ -256,6 +256,9 @@ XKit.extensions.editable_reblogs = new Object({
 	destroy: function() {
 		this.running = false;
 		XKit.tools.remove_css("editable_reblogs_remove_content_tree");
+		$('body').off('click', '#xkit-editable-reblogs-post', XKit.extensions.editable_reblogs.send_post_request);
+		$('body').off('click', '#xkit-editable-reblogs-queue', XKit.extensions.editable_reblogs.send_queue_request);
+		$('body').off('click', '#xkit-editable-reblogs-draft', XKit.extensions.editable_reblogs.send_draft_request);
 		XKit.interface.post_window_listener.remove("editable_reblogs");
 	}
 });
