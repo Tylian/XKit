@@ -153,13 +153,18 @@ XKit.extensions.xkit_updates = new Object({
 				var to_show = XKit.tools.get_setting("xkit_show_update_notifications","true");
 
 				if (to_show === "true") {
-
-					XKit.notifications.add("XKit updated " + XKit.extensions.xkit_updates.updated_list.length + " extension" + XKit.extensions.xkit_updates.updated_list.length == 1 ? "" : "s" + ". Click here to view them.", "ok", true, function() {
+					var suffix = "";
+					
+					if(XKit.extensions.xkit_updates.updated_list.length != 1){
+						suffix = "s";
+					}
+					
+					XKit.notifications.add("XKit updated " + XKit.extensions.xkit_updates.updated_list.length + " extension" + suffix + ". Click here to view them.", "ok", true, function() {
 						var m_result = "";
 						for (i=0;i<XKit.extensions.xkit_updates.updated_list.length;i++) {
 							m_result = m_result + "<br/>" + XKit.extensions.xkit_updates.updated_list[i] + " &middot; " + XKit.extensions.xkit_updates.updated_list_versions[i];
 						}
-						XKit.window.show("Auto-Update results","<b>XKit updated the following extension" + XKit.extensions.xkit_updates.updated_list.length == 1 ? "" : "s" + ":</b>" + m_result, "info", "<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
+						XKit.window.show("Auto-Update results","<b>XKit updated the following extension" + : suffix + ":</b>" + m_result, "info", "<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
 					});
 
 				}
