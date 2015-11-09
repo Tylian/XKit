@@ -1,5 +1,5 @@
 //* TITLE XKit Preferences **//
-//* VERSION 6.0.1 **//
+//* VERSION 6.0.2 **//
 //* DESCRIPTION Lets you customize XKit **//
 //* DEVELOPER new-xkit **//
 
@@ -1006,7 +1006,7 @@ XKit.extensions.xkit_preferences = new Object({
 
 		if (obj.name.startsWith("xkit_") && XKit.tools.get_setting("xkit_show_internals","false") === "false") { return ""; }
 
-		var blacklisted_extensions = ["xkit_installer","color_quotes"];
+		var blacklisted_extensions = ["xkit_installer"];
 
 		if (blacklisted_extensions.indexOf(obj.name.toLowerCase()) !== -1) {
 			return "";
