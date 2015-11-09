@@ -164,7 +164,7 @@ XKit.extensions.xkit_updates = new Object({
 						for (i=0;i<XKit.extensions.xkit_updates.updated_list.length;i++) {
 							m_result = m_result + "<br/>" + XKit.extensions.xkit_updates.updated_list[i] + " &middot; " + XKit.extensions.xkit_updates.updated_list_versions[i];
 						}
-						XKit.window.show("Auto-Update results","<b>XKit updated the following extension" + : suffix + ":</b>" + m_result, "info", "<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
+						XKit.window.show("Auto-Update results","<b>XKit updated the following extension" + suffix + ":</b>" + m_result, "info", "<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
 					});
 
 				}
