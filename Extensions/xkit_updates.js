@@ -155,7 +155,7 @@ XKit.extensions.xkit_updates = new Object({
 				if (to_show === "true") {
 					var suffix = "";
 					
-					if(XKit.extensions.xkit_updates.updated_list.length != 1){
+					if(XKit.extensions.xkit_updates.updated_list.length !== 1){
 						suffix = "s";
 					}
 					
