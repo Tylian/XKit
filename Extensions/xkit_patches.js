@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 5.4.1 **//
+//* VERSION 5.4.2 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER new-xkit **//
 
@@ -1713,7 +1713,8 @@ XKit.tools.dump_config = function(){
 					endless: false,
 					dashboard: false,
 					likes: false,
-					following: false
+					following: false,
+					tagged: false
 				};
 
 				if ($("body").hasClass("dashboard_messages_inbox") === true || $("body").hasClass("dashboard_messages_submissions") === true) {
@@ -1778,6 +1779,10 @@ XKit.tools.dump_config = function(){
 
 				if ($("body").hasClass("dashboard_useraction_following")) {
 					m_return.following = true;
+				}
+
+				if ($("body").hasClass("tagged_actions_display") && document.location.href.indexOf("/tagged") !== 1) {
+					m_return.tagged = true;
 				}
 
 				if (document.location.href.indexOf("www.tumblr.com/blog/") !== -1) {
