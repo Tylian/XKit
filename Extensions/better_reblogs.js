@@ -273,6 +273,9 @@ XKit.extensions.better_reblogs = new Object({
 
         $(posts).each(function() {
             var $this = $(this);
+            if ($this.is("[data-js-container-inner]") || $this.hasClass("control-reblog-trail")){
+                return;
+            }
             $this.addClass("xkit-better-reblogs-done");
 
             // trick tumblr into displaying the little blog info popovers for the reblog avatars
@@ -298,6 +301,9 @@ XKit.extensions.better_reblogs = new Object({
 
         $(posts).each(function() {
             var $this = $(this);
+            if ($this.is("[data-js-container-inner]") || $this.hasClass("control-reblog-trail")){
+                return;
+            }
             $this.addClass("xkit-better-reblogs-done");
 
             var reblog_tree = $this.find(".reblog-list");
