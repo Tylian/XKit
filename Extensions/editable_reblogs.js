@@ -1,5 +1,5 @@
 //* TITLE Editable Reblogs **//
-//* VERSION 3.0.3 **//
+//* VERSION 3.0.4 **//
 //* DESCRIPTION Restores ability to edit previous reblogs of a post **//
 //* DEVELOPER new-xkit **//
 //* FRAME false **//
@@ -30,9 +30,6 @@ XKit.extensions.editable_reblogs = new Object({
 				}
 			});
 		}
-		$('body').on('click', '#xkit-editable-reblogs-post', XKit.extensions.editable_reblogs.send_post_request);
-		$('body').on('click', '#xkit-editable-reblogs-queue', XKit.extensions.editable_reblogs.send_queue_request);
-		$('body').on('click', '#xkit-editable-reblogs-draft', XKit.extensions.editable_reblogs.send_draft_request);
 	},
 	post_window: function() {
 		//if we don't have a reblog tree to edit, gtfo
@@ -70,8 +67,8 @@ XKit.extensions.editable_reblogs = new Object({
 				var reblog_data = {
 					reblog_content: $(this).find('.reblog-content').html() ? $(this).find('.reblog-content').html() : '',
 					reblog_author: $(this).find('.reblog-tumblelog-name').text() ? $(this).find('.reblog-tumblelog-name').text() : '',
-					reblog_url: $(this).find('.reblog-tumblelog-name').attr('href') 
-						? $(this).find('.reblog-tumblelog-name').attr('href') 
+					reblog_url: $(this).find('.reblog-tumblelog-name').attr('href')
+						? $(this).find('.reblog-tumblelog-name').attr('href')
 						: 'http://' + $(this).find('.reblog-tumblelog-name').text() + '.tumblr.com'
 				};
 				all_quotes.push(reblog_data);
@@ -107,14 +104,6 @@ XKit.extensions.editable_reblogs = new Object({
 	},
 	add_button_controls: function() {
 		var xkit_button = $('.post-form--save-button');
-		$('.post-form--save-button').empty();
-		var new_button_content = "<div class='control right xkit-editable-reblogs-control'>"
-			+ '<div class="post-form--save-button" data-subview="savePostButton">'
-			+ '<button class="flat-button blue caption create_post_button xkit-editable-reblogs-button" id="xkit-editable-reblogs-post">Post</button>'
-			+ '<button class="flat-button blue caption create_post_button xkit-editable-reblogs-button" id="xkit-editable-reblogs-queue">Queue</button>'
-			+ '<button class="flat-button blue caption create_post_button xkit-editable-reblogs-button" id="xkit-editable-reblogs-draft">Draft</button>'
-			+ '</div></div>';
-		$('.post-form--controls .controls-container').append(new_button_content);
 	},
 	send_post_request: function(e) {
 		e.preventDefault();
@@ -258,9 +247,6 @@ XKit.extensions.editable_reblogs = new Object({
 	destroy: function() {
 		this.running = false;
 		XKit.tools.remove_css("editable_reblogs_remove_content_tree");
-		$('body').off('click', '#xkit-editable-reblogs-post', XKit.extensions.editable_reblogs.send_post_request);
-		$('body').off('click', '#xkit-editable-reblogs-queue', XKit.extensions.editable_reblogs.send_queue_request);
-		$('body').off('click', '#xkit-editable-reblogs-draft', XKit.extensions.editable_reblogs.send_draft_request);
 		XKit.interface.post_window_listener.remove("editable_reblogs");
 	}
 });
