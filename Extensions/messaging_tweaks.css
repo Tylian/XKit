@@ -1,0 +1,13 @@
+.tab.iconic.tab_messaging .true-icon {
+	background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABYAAAAVCAYAAABCIB6VAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAACxSURBVEhLrZNRDsMwCEN7/0tnwGLmAaHplidZsTD4L9cYo9Md1Y2pHIqekjrSQPQP3sOFKqaaRZZ3CMrwbbdeeODFFTznvXjD3olLDLJqp8uMGCwXN/i6jSUIWR3LfTcTDuF3pLD/mElc5FepPL+e8yLAAjLeqTx2OcsDgWfwnRT2RhoIPHvywhtpMMEcWfdCzPJLK5x1qmiLf8X6Thd738li7jpWzD2mNAi6o7oRjesFZ0tq6opXmBsAAAAASUVORK5CYII=') no-repeat !important;
+	margin-left: -6px;
+	margin-right: -15px;
+	width: 46px;
+	background-size: 27px !important;
+	background-attachment: fixed;
+	background-position: center !important;
+}
+
+.tab_bar .tab_messaging .true-icon:before {
+	content: "" !important;
+}
