@@ -8,6 +8,14 @@
 XKit.extensions.editable_reblogs = new Object({
 
 	running: false,
+	post_types: {
+		PUBLISH: 0,
+		QUEUE: 1,
+		DRAFT: 2,
+		PRIVATE: 3,
+		SCHEDULE: 4
+	},
+	selected_post_type: "PUBLISH",
 
 	run: function() {
 		this.running = true;
@@ -30,6 +38,9 @@ XKit.extensions.editable_reblogs = new Object({
 				}
 			});
 		}
+		$("body").on("click", ".create_post_button", XKit.extensions.editable_reblogs.make_post);
+		// DOM nodes containing options disappear before a handler can be run
+		$("body").on("click", XKit.extensions.editable_reblogs.record_post_type);
 	},
 	post_window: function() {
 		//if we don't have a reblog tree to edit, gtfo
@@ -43,8 +54,10 @@ XKit.extensions.editable_reblogs = new Object({
 		if (post_type.chat || post_type.quote) {
 			return;
 		}
-		//set up new buttons
-		XKit.extensions.editable_reblogs.add_button_controls();
+		var xkit_button = $('.post-form--save-button');
+		// Prevent Tumblr's event handler from acting on the save button
+		xkit_button.find("[data-js-clickablesave]").removeAttr("data-js-clickablesave");
+		XKit.extensions.editable_reblogs.selected_post_type = "PUBLISH";
 		XKit.extensions.editable_reblogs.process_existing_content();
 	},
 	process_existing_content: function() {
@@ -102,8 +115,38 @@ XKit.extensions.editable_reblogs = new Object({
 		$(".btn-remove-trail .icon").click();
 		$(".control-reblog-trail").hide();
 	},
-	add_button_controls: function() {
-		var xkit_button = $('.post-form--save-button');
+	record_post_type: function(e) {
+		var options = $(e.target).parents(".popover--save-post-dropdown");
+		if (options.length > 0) {
+			for (var i = 0; i < e.target.parentNode.attributes.length; i++) {
+				var attribute = e.target.parentNode.attributes[i].name;
+				if (attribute.startsWith("data-js-") && !attribute.endsWith("preview")) {
+					// looking for attribute like "data-js-publish" and "data-js-draft"
+					XKit.extensions.editable_reblogs.selected_post_type = attribute.substring(8).toUpperCase();
+					return;
+				}
+			}
+		}
+	},
+	make_post: function(e) {
+		var post_types = XKit.extensions.editable_reblogs.post_types;
+		switch (post_types[XKit.extensions.editable_reblogs.selected_post_type]) {
+			case post_types.PUBLISH:
+				XKit.extensions.editable_reblogs.send_post_request(e);
+				break;
+			case post_types.QUEUE:
+				XKit.extensions.editable_reblogs.send_queue_request(e);
+				break;
+			case post_types.DRAFT:
+				XKit.extensions.editable_reblogs.send_draft_request(e);
+				break;
+			case post_types.PRIVATE:
+				// TODO
+				break;
+			case post_types.SCHEDULE:
+				// TODO
+				break;
+		}
 	},
 	send_post_request: function(e) {
 		e.preventDefault();
@@ -247,6 +290,8 @@ XKit.extensions.editable_reblogs = new Object({
 	destroy: function() {
 		this.running = false;
 		XKit.tools.remove_css("editable_reblogs_remove_content_tree");
+		$("body").off("click", ".create_post_button", XKit.extensions.editable_reblogs.send_post_request);
+		$("body").off("click", XKit.extensions.editable_reblogs.record_post_type);
 		XKit.interface.post_window_listener.remove("editable_reblogs");
 	}
 });
