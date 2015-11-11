@@ -1,5 +1,5 @@
 //* TITLE Messaging Tweaks **//
-//* VERSION 1.0.1 **//
+//* VERSION 1.1.0 **//
 //* DESCRIPTION Helpful tweaks for Tumblr IM **//
 //* DETAILS This adds a few helpful tweaks to the Tumblr IM, for example minimising the chat, hiding the IM icon or changing the looks of the chat window. **//
 //* DEVELOPER New-XKit **//
@@ -61,6 +61,18 @@ XKit.extensions.messaging_tweaks = new Object({
 			type: "text",
 			default: "rgba(0,0,0,.1)",
 			value: "rgba(0,0,0,.1)"
+		},
+		"my_chat_bubble_text": {
+			text: "Text color for my chat bubbles",
+			type: "text",
+			default: "rgb(68,68,68)",
+			value: "rgb(68,68,68)"
+		},
+		"other_chat_bubble_text": {
+			text: "Text color for other people's chat bubbles",
+			type: "text",
+			default: "rgb(68,68,68)",
+			value: "rgb(68,68,68)"
 		},
 		"background_override": {
 			text: "Change chat background color",
@@ -174,6 +186,12 @@ XKit.extensions.messaging_tweaks = new Object({
 		
 		XKit.tools.add_css(".messaging-conversation .xkit-others_messaging_message .conversation-message-text .message-bubble { background-color: " + XKit.extensions.messaging_tweaks.preferences.other_chat_bubble_background.value + " !important; }", "messaging_tweaks");
 		XKit.tools.add_css(".messaging-conversation .xkit-my_messaging_message .conversation-message-text .message-bubble { background-color: " + XKit.extensions.messaging_tweaks.preferences.my_chat_bubble_background.value + " !important; }", "messaging_tweaks");
+		
+		XKit.tools.add_css(".messaging-conversation .xkit-others_messaging_message .conversation-message-text .message-bubble { color: " + XKit.extensions.messaging_tweaks.preferences.other_chat_bubble_text.value + " !important; }", "messaging_tweaks");
+		XKit.tools.add_css(".messaging-conversation .xkit-my_messaging_message .conversation-message-text .message-bubble { color: " + XKit.extensions.messaging_tweaks.preferences.my_chat_bubble_text.value + " !important; }", "messaging_tweaks");
+		
+		XKit.tools.add_css(".messaging-conversation .xkit-others_messaging_message .conversation-message-text .message-bubble-header a { color: " + XKit.extensions.messaging_tweaks.preferences.other_chat_bubble_text.value + " !important; }", "messaging_tweaks");
+		XKit.tools.add_css(".messaging-conversation .xkit-my_messaging_message .conversation-message-text .message-bubble-header a { color: " + XKit.extensions.messaging_tweaks.preferences.my_chat_bubble_text.value + " !important; }", "messaging_tweaks");
 		
 		// There's either 1 or no messaging-conversation-popovers on extension start
 		$(".messaging-conversation-popovers").each(function() {
