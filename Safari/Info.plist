@@ -71,7 +71,7 @@
 		</dict>
 	</dict>
 	<key>Update Manifest URL</key>
-	<string>http://new-xkit.github.io/XKit/Safari/Update.plist</string>
+	<string>http://new-xkit.github.io/XKit/Extensions/dist/page/SafariUpdate.plist</string>
 	<key>Website</key>
 	<string>http://new-xkit-extension.tumblr.com/</string>
 </dict>
