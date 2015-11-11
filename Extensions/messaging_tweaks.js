@@ -1,5 +1,5 @@
 //* TITLE Messaging Tweaks **//
-//* VERSION 1.0.0 **//
+//* VERSION 1.0.1 **//
 //* DESCRIPTION Helpful tweaks for Tumblr IM **//
 //* DETAILS This adds a few helpful tweaks to the Tumblr IM, for example minimising the chat, hiding the IM icon or changing the looks of the chat window. **//
 //* DEVELOPER New-XKit **//
@@ -72,7 +72,11 @@ XKit.extensions.messaging_tweaks = new Object({
 	},
 	
 	get_current_chat_user: function() {
-		return $($(".title").find("a").get(0)).data("js-tumblelog-name");
+		if($(".title").text().indexOf("+") !== -1) {
+			return $($(".title").find("a").get(0)).data("js-tumblelog-name");
+		} else {
+			return XKit.tools.get_current_blog();
+		}
 	},
 	
 	do_messages: function() {
