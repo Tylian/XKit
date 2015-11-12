@@ -141,7 +141,7 @@ XKit.extensions.editable_reblogs = new Object({
 				XKit.extensions.editable_reblogs.send_draft_request(e);
 				break;
 			case post_types.PRIVATE:
-				// TODO
+				XKit.extensions.editable_reblogs.send_private_request(e);
 				break;
 			case post_types.SCHEDULE:
 				// TODO
@@ -164,6 +164,12 @@ XKit.extensions.editable_reblogs = new Object({
 		e.preventDefault();
 		var request = XKit.extensions.editable_reblogs.build_svc_request();
 		request["post[state]"] = "1";
+		XKit.extensions.editable_reblogs.send_request(request);
+	},
+	send_private_request: function(e) {
+		e.preventDefault();
+		var request = XKit.extensions.editable_reblogs.build_svc_request();
+		request["post[state]"] = "private";
 		XKit.extensions.editable_reblogs.send_request(request);
 	},
 	build_svc_request: function() {
