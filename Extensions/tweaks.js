@@ -650,6 +650,7 @@ XKit.extensions.tweaks = new Object({
 		$(".post_media_photo.image").each(function() {
 			if ($(this).attr("width") > 500 ) {
 				$(this).attr("style","margin-left: 20px; width: 500px;");
+				$(this).attr("height","auto");
 			}
 		});
 
