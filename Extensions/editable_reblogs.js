@@ -58,7 +58,7 @@ XKit.extensions.editable_reblogs = new Object({
 		var xkit_button = $('.post-form--save-button');
 		// Prevent Tumblr's event handler from acting on the save button
 		xkit_button.find("[data-js-clickablesave]").removeAttr("data-js-clickablesave");
-		XKit.extensions.editable_reblogs.selected_post_type = "PUBLISH";
+		XKit.extensions.editable_reblogs.initialize_selected_post_type();
 		XKit.extensions.editable_reblogs.scheduled_date = "Next Tuesday, 10am";
 		XKit.extensions.editable_reblogs.process_existing_content();
 	},
@@ -116,6 +116,16 @@ XKit.extensions.editable_reblogs = new Object({
 
 		$(".btn-remove-trail .icon").click();
 		$(".control-reblog-trail").hide();
+	},
+	initialize_selected_post_type: function() {
+		var where = XKit.interface.where();
+		if (where.dashboard) {
+			XKit.extensions.editable_reblogs.selected_post_type = "PUBLISH";
+		} else if (where.drafts) {
+			XKit.extensions.editable_reblogs.selected_post_type = "DRAFT";
+		} else if (where.queue) {
+			XKit.extensions.editable_reblogs.selected_post_type = "QUEUE";
+		}
 	},
 	record_post_settings: function(e) {
 		var post_dropdown_exists = $(e.target).parents(".popover--save-post-dropdown").length > 0;
