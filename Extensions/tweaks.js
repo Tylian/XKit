@@ -655,8 +655,18 @@ XKit.extensions.tweaks = new Object({
 		});
 
 		$(".photoset_row").each(function() {
+
 			var photoset_row = $(this);
-			photoset_row.attr("style","margin-left: 20px; margin-bottom: 10px;");
+			var ratio = 500.0/540.0;
+
+			if (photoset_row.attr("class") == "photoset_row photoset_row_2") {
+				ratio = 245.0/268.0;
+			} else if (photoset_row.attr("class") == "photoset_row photoset_row_3") {
+				ratio = 160.0/177.0;
+			}
+
+			photoset_row.attr("style", "margin-left: 20px; margin-bottom: 10px; height: " + parseInt(photoset_row.css("height").slice(0,-2))*ratio + "px;");
+
 			photoset_row.find("img").each(function() {
 				var img = $(this);
 				var imgstyle = img.css("width");
@@ -668,7 +678,9 @@ XKit.extensions.tweaks = new Object({
 					img.attr("style", "width: 160px; margin-right: 10px;");
 				}
 			});
+
 		});
+
 	},
 
 	check_for_liked_posts: function() {
