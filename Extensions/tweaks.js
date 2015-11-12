@@ -648,7 +648,9 @@ XKit.extensions.tweaks = new Object({
 		XKit.tools.add_css(".post_full.is_photoset .photoset .photoset_row .photoset_photo {margin-left: 0;}","tweaks_old_photo_margins");
 
 		$(".post_media_photo.image").each(function() {
-			$(this).attr("style","margin-left: 20px; width: 500px;");
+			if ($(this).attr("width") > 500 ) {
+				$(this).attr("style","margin-left: 20px; width: 500px;");
+			}
 		});
 
 		$(".photoset_row").each(function() {
