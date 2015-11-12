@@ -16,6 +16,7 @@ XKit.extensions.editable_reblogs = new Object({
 		SCHEDULE: 4
 	},
 	selected_post_type: "PUBLISH",
+	scheduled_date: "Next Tuesday, 10am",
 
 	run: function() {
 		this.running = true;
@@ -40,7 +41,7 @@ XKit.extensions.editable_reblogs = new Object({
 		}
 		$("body").on("click", ".create_post_button", XKit.extensions.editable_reblogs.make_post);
 		// DOM nodes containing options disappear before a handler can be run
-		$("body").on("click", XKit.extensions.editable_reblogs.record_post_type);
+		$("body").on("click", XKit.extensions.editable_reblogs.record_post_settings);
 	},
 	post_window: function() {
 		//if we don't have a reblog tree to edit, gtfo
@@ -58,6 +59,7 @@ XKit.extensions.editable_reblogs = new Object({
 		// Prevent Tumblr's event handler from acting on the save button
 		xkit_button.find("[data-js-clickablesave]").removeAttr("data-js-clickablesave");
 		XKit.extensions.editable_reblogs.selected_post_type = "PUBLISH";
+		XKit.extensions.editable_reblogs.scheduled_date = "Next Tuesday, 10am";
 		XKit.extensions.editable_reblogs.process_existing_content();
 	},
 	process_existing_content: function() {
@@ -115,18 +117,28 @@ XKit.extensions.editable_reblogs = new Object({
 		$(".btn-remove-trail .icon").click();
 		$(".control-reblog-trail").hide();
 	},
-	record_post_type: function(e) {
-		var options = $(e.target).parents(".popover--save-post-dropdown");
-		if (options.length > 0) {
-			for (var i = 0; i < e.target.parentNode.attributes.length; i++) {
-				var attribute = e.target.parentNode.attributes[i].name;
+	record_post_settings: function(e) {
+		var post_dropdown_exists = $(e.target).parents(".popover--save-post-dropdown").length > 0;
+		if (post_dropdown_exists) {
+			var clicked_li = e.target.tagName !== "LI" ? e.target.parentNode : e.target;
+			for (var i = 0; i < clicked_li.attributes.length; i++) {
+				// looking for attribute like "data-js-publish" and "data-js-draft"
+				var attribute = clicked_li.attributes[i].name;
 				if (attribute.startsWith("data-js-") && !attribute.endsWith("preview")) {
-					// looking for attribute like "data-js-publish" and "data-js-draft"
-					XKit.extensions.editable_reblogs.selected_post_type = attribute.substring(8).toUpperCase();
+					var type = attribute.substring(8).toUpperCase();
+					XKit.extensions.editable_reblogs.selected_post_type = type;
+
+					if (type === "SCHEDULE") {
+						$("[data-js-scheduletext]").off("blur");
+						$("[data-js-scheduletext]").on("blur", XKit.extensions.editable_reblogs.update_scheduled_date);
+					}
 					return;
 				}
 			}
 		}
+	},
+	update_scheduled_date: function(e) {
+		XKit.extensions.editable_reblogs.scheduled_date = e.target.value;
 	},
 	make_post: function(e) {
 		var post_types = XKit.extensions.editable_reblogs.post_types;
@@ -144,7 +156,7 @@ XKit.extensions.editable_reblogs = new Object({
 				XKit.extensions.editable_reblogs.send_private_request(e);
 				break;
 			case post_types.SCHEDULE:
-				// TODO
+				XKit.extensions.editable_reblogs.send_schedule_request(e);
 				break;
 		}
 	},
@@ -170,6 +182,13 @@ XKit.extensions.editable_reblogs = new Object({
 		e.preventDefault();
 		var request = XKit.extensions.editable_reblogs.build_svc_request();
 		request["post[state]"] = "private";
+		XKit.extensions.editable_reblogs.send_request(request);
+	},
+	send_schedule_request: function(e) {
+		e.preventDefault();
+		var request = XKit.extensions.editable_reblogs.build_svc_request();
+		request["post[state]"] = "on.2";
+		request["post[publish_on]"] = XKit.extensions.editable_reblogs.scheduled_date;
 		XKit.extensions.editable_reblogs.send_request(request);
 	},
 	build_svc_request: function() {
@@ -297,7 +316,7 @@ XKit.extensions.editable_reblogs = new Object({
 		this.running = false;
 		XKit.tools.remove_css("editable_reblogs_remove_content_tree");
 		$("body").off("click", ".create_post_button", XKit.extensions.editable_reblogs.send_post_request);
-		$("body").off("click", XKit.extensions.editable_reblogs.record_post_type);
+		$("body").off("click", XKit.extensions.editable_reblogs.record_post_settings);
 		XKit.interface.post_window_listener.remove("editable_reblogs");
 	}
 });
