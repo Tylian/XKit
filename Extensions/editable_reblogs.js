@@ -44,10 +44,7 @@ XKit.extensions.editable_reblogs = new Object({
 		$("body").on("click", XKit.extensions.editable_reblogs.record_post_settings);
 	},
 	post_window: function() {
-		//if we don't have a reblog tree to edit, gtfo
-		//this also applies to new posts
-		//which saves us from worrying about things like photo replies
-		if ($(".post-form .reblog-list").length === 0) {
+		if (!XKit.extensions.editable_reblogs.reblog_tree_exists()) {
 			return;
 		}
 		//also just let chat, link, and quote posts do what they do
@@ -117,6 +114,12 @@ XKit.extensions.editable_reblogs = new Object({
 		$(".btn-remove-trail .icon").click();
 		$(".control-reblog-trail").hide();
 	},
+	reblog_tree_exists: function() {
+		//if we don't have a reblog tree to edit, gtfo
+		//this also applies to new posts
+		//which saves us from worrying about things like photo replies
+		return $(".post-form .reblog-list").length !== 0;
+	},
 	initialize_selected_post_type: function() {
 		var where = XKit.interface.where();
 		if (where.dashboard) {
@@ -151,6 +154,9 @@ XKit.extensions.editable_reblogs = new Object({
 		XKit.extensions.editable_reblogs.scheduled_date = e.target.value;
 	},
 	make_post: function(e) {
+		if (!XKit.extensions.editable_reblogs.reblog_tree_exists()) {
+			return;
+		}
 		var post_types = XKit.extensions.editable_reblogs.post_types;
 		switch (post_types[XKit.extensions.editable_reblogs.selected_post_type]) {
 			case post_types.PUBLISH:
