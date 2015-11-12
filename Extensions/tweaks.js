@@ -657,13 +657,17 @@ XKit.extensions.tweaks = new Object({
 		$(".photoset_row").each(function() {
 
 			var photoset_row = $(this);
-			var ratio = 500.0/540.0;
+			var ratio = 1;
 
-			if (photoset_row.attr("class") == "photoset_row photoset_row_2") {
+			if (photoset_row.attr("class") == "photoset_row photoset_row_1") {
+				ratio = 500.0/540.0;
+			} else if (photoset_row.attr("class") == "photoset_row photoset_row_2") {
 				ratio = 245.0/268.0;
 			} else if (photoset_row.attr("class") == "photoset_row photoset_row_3") {
 				ratio = 160.0/177.0;
 			}
+
+			photoset_row.addClass("xkit-protected-photoset-row");
 
 			photoset_row.attr("style", "margin-left: 20px; margin-bottom: 10px; height: " + parseInt(photoset_row.css("height").slice(0,-2))*ratio + "px;");
 
