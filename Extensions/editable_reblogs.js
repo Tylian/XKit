@@ -1,5 +1,5 @@
 //* TITLE Editable Reblogs **//
-//* VERSION 3.0.2 **//
+//* VERSION 3.0.3 **//
 //* DESCRIPTION Restores ability to edit previous reblogs of a post **//
 //* DEVELOPER new-xkit **//
 //* FRAME false **//
@@ -43,7 +43,7 @@ XKit.extensions.editable_reblogs = new Object({
 		}
 		//also just let chat, link, and quote posts do what they do
 		var post_type = XKit.interface.post_window.post_type();
-		if (post_type.chat || post_type.quote || post_type.link) {
+		if (post_type.chat || post_type.quote) {
 			return;
 		}
 		//set up new buttons
@@ -158,6 +158,8 @@ XKit.extensions.editable_reblogs = new Object({
 		}
 		if (post_type.link) {
 			request["post[type]"] = "link";
+			request["post[three]"] = request["post[two]"];
+			request["post[two]"] = "";
 		}
 		return request;
 	},
