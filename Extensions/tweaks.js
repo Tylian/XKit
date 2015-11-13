@@ -1,6 +1,5 @@
-
 //* TITLE Tweaks **//
-//* VERSION 5.0.3 **//
+//* VERSION 5.1.0 **//
 //* DESCRIPTION Various little tweaks for your dashboard. **//
 //* DEVELOPER new-xkit **//
 //* DETAILS These are small little tweaks that allows you customize your dashboard. If you have used XKit 6, you will notice that some of the extensions have been moved here as options you can toggle. Keep in mind that some of the tweaks (the ones marked with a '*') can slow down your computer. **//
@@ -98,6 +97,11 @@ XKit.extensions.tweaks = new Object({
 		"sep1": {
 			text: "User Interface tweaks",
 			type: "separator",
+		},
+		"old_photo_margins": {
+			text: "Use the old 500/245/160px photo dimensions on posts",
+			default: false,
+			value: false
 		},
 		"show_new_on_secondary": {
 			text: "Show new post icons on secondary dashboard pages",
@@ -283,6 +287,10 @@ XKit.extensions.tweaks = new Object({
 
 	run: function() {
 		this.running = true;
+
+		if (XKit.extensions.tweaks.preferences.old_photo_margins.value) {
+			XKit.post_listener.add("tweaks_old_photo_margins", XKit.extensions.tweaks.old_photo_margins);
+		}
 
 		if (XKit.extensions.tweaks.preferences.no_mobile_banner.value) { //mobile stuff
 			XKit.tools.add_css(".mobile_app_banner, .mobile-banner {display: none}", "tweaks_no_mobile_banner");
@@ -635,6 +643,50 @@ XKit.extensions.tweaks = new Object({
 
 	},
 
+	old_photo_margins: function() {
+
+		XKit.tools.add_css(".post_full.is_photoset .photoset .photoset_row .photoset_photo {margin-left: 0;}","tweaks_old_photo_margins");
+
+		$(".post_media_photo.image").each(function() {
+			if ($(this).attr("width") > 500 ) {
+				$(this).attr("style","margin-left: 20px; width: 500px;");
+				$(this).attr("height","auto");
+			}
+		});
+
+		$(".photoset_row").each(function() {
+
+			var photoset_row = $(this);
+			var ratio = 1;
+
+			if (photoset_row.attr("class") == "photoset_row photoset_row_1") {
+				ratio = 500.0/540.0;
+			} else if (photoset_row.attr("class") == "photoset_row photoset_row_2") {
+				ratio = 245.0/268.0;
+			} else if (photoset_row.attr("class") == "photoset_row photoset_row_3") {
+				ratio = 160.0/177.0;
+			}
+
+			photoset_row.addClass("xkit-protected-photoset-row");
+
+			photoset_row.attr("style", "margin-left: 20px; margin-bottom: 10px; height: " + parseInt(photoset_row.css("height").slice(0,-2))*ratio + "px;");
+
+			photoset_row.find("img").each(function() {
+				var img = $(this);
+				var imgstyle = img.css("width");
+				if (imgstyle == "540px")  {
+					img.attr("style", "width: 500px;");
+				} else if (imgstyle == "268px") {
+					img.attr("style", "width: 245px; margin-right: 10px;");
+				} else if (imgstyle == "177px" || imgstyle == "178px") {
+					img.attr("style", "width: 160px; margin-right: 10px;");
+				}
+			});
+
+		});
+
+	},
+
 	check_for_liked_posts: function() {
 
 		if (document.location.href.indexOf('/dashboard') === -1) {
@@ -774,6 +826,7 @@ XKit.extensions.tweaks = new Object({
 
 		this.running = false;
 		XKit.tools.remove_css("xkit_tweaks");
+		XKit.tools.remove_css("tweaks_old_photo_margins");
 		XKit.tools.remove_css("tweaks_no_mobile_banner");
 		XKit.tools.remove_css("xkit_tweaks_larger_small_text_on_reblogs");
 		XKit.post_listener.remove("tweaks_check_for_share_on_private_posts");
