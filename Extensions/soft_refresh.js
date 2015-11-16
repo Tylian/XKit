@@ -1,7 +1,7 @@
 //* TITLE Soft Refresh **//
-//* VERSION 0.5.4 **//
+//* VERSION 0.5.5 **//
 //* DESCRIPTION Refresh without refreshing **//
-//* DEVELOPER STUDIOXENIX **//
+//* DEVELOPER new-xkit **//
 //* DETAILS This extension allows you to see new posts on your dashboard without refreshing the page. When you get the New Posts bubble, click on the Tumblr logo, and new posts will appear on your dashboard.<br><br>If you still want to refresh the page completely (perform a Hard Refresh), hold the ALT key while clicking on logo and the page will refresh.<br><br>Please note that this extension is highly experimental, and might not work properly all the time. **//
 //* FRAME false **//
 //* BETA false **//
@@ -41,11 +41,11 @@ XKit.extensions.soft_refresh = new Object({
 			return;
 		}
 
-		$(".logo_anchor").attr('data-old-href', $(".logo_anchor").attr('href'));
+		$(".logo-anchor").attr('data-old-href', $(".logo-anchor").attr('href'));
 		if (this.preferences.use_logo.value) {
-			$(".logo_anchor").attr('onclick','return false');
-			$(".logo_anchor").attr('href', '#');
-			$(document).on("click", ".logo_anchor", XKit.extensions.soft_refresh.logo_clicked);
+			$(".logo-anchor").attr('onclick','return false');
+			$(".logo-anchor").attr('href', '#');
+			$(document).on("click", ".logo-anchor", XKit.extensions.soft_refresh.logo_clicked);
 		}
 
 		$("#home_button a").attr('data-old-href', $("#home_button a").attr('href'));
@@ -200,9 +200,9 @@ XKit.extensions.soft_refresh = new Object({
 
 	destroy: function() {
 
-		$(".logo_anchor").attr('href', $(".logo_anchor").attr('data-old-href'));
-		$(document).off("click", ".logo_anchor", XKit.extensions.soft_refresh.logo_clicked);
-		$(".logo_anchor").attr('onclick','');
+		$(".logo-anchor").attr('href', $(".logo-anchor").attr('data-old-href'));
+		$(document).off("click", ".logo-anchor", XKit.extensions.soft_refresh.logo_clicked);
+		$(".logo-anchor").attr('onclick','');
 
 		$("#home_button a").attr('href', $("#home_button a").attr('data-old-href'));
 		$(document).off("click", "#home_button", XKit.extensions.soft_refresh.logo_clicked);
