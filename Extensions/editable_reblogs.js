@@ -17,6 +17,8 @@ XKit.extensions.editable_reblogs = new Object({
 	},
 	selected_post_type: "PUBLISH",
 	scheduled_date: "Next Tuesday, 10am",
+	post_date_metadata: null,
+	post_slug_metadata: null,
 
 	run: function() {
 		this.running = true;
@@ -42,9 +44,16 @@ XKit.extensions.editable_reblogs = new Object({
 		$("body").on("click", ".create_post_button", XKit.extensions.editable_reblogs.make_post);
 		// DOM nodes containing options disappear before a handler can be run
 		$("body").on("click", XKit.extensions.editable_reblogs.record_post_settings);
+		$('body').on("keyup", '#customUrl_input', function() {
+			XKit.extensions.editable_reblogs.post_slug_metadata = $(this).val();
+		});
+		$('body').on("keyup", '#postDate_input', function() {
+			XKit.extensions.editable_reblogs.post_date_metadata = $(this).val();
+		});
 	},
 	post_window: function() {
-		if (!XKit.extensions.editable_reblogs.reblog_tree_exists()) {
+		var self = XKit.extensions.editable_reblogs;
+		if (!self.reblog_tree_exists()) {
 			return;
 		}
 		//also just let chat, link, and quote posts do what they do
@@ -55,9 +64,32 @@ XKit.extensions.editable_reblogs = new Object({
 		var xkit_button = $('.post-form--save-button');
 		// Prevent Tumblr's event handler from acting on the save button
 		xkit_button.find("[data-js-clickablesave]").removeAttr("data-js-clickablesave");
-		XKit.extensions.editable_reblogs.initialize_selected_post_type();
-		XKit.extensions.editable_reblogs.scheduled_date = "Next Tuesday, 10am";
-		XKit.extensions.editable_reblogs.process_existing_content();
+		self.initialize_selected_post_type();
+		self.scheduled_date = "Next Tuesday, 10am";
+		self.load_initial_metadata();
+		self.process_existing_content();
+	},
+	load_initial_metadata: function() {
+		//if this is an edit, we need to load the custom date and slug metadata if there is any
+		//so we can maintain it if they don't change anything
+		var self = XKit.extensions.editable_reblogs;
+		self.post_date_metadata = "";
+		self.post_slug_metadata = "";
+		var location_path = window.location.pathname;
+		var location_items = location_path.split("/");
+		location_items.shift();
+		if (location_items[0] != "edit") {
+			return;
+		}
+		var post_fetch_request = {
+			id: parseInt(location_items[1]),
+			form_key: XKit.interface.form_key(),
+			post_type: false
+		};
+		XKit.interface.fetch(post_fetch_request, function(response) {
+			self.post_date_metadata = response.data.post.date;
+			self.post_slug_metadata = response.data.post.slug;
+		});
 	},
 	process_existing_content: function() {
 		var reblog_tree = $(".post-form .reblog-list");
@@ -265,9 +297,9 @@ XKit.extensions.editable_reblogs = new Object({
 		request["is_rich_text[one]"] = "0";
 		request["is_rich_text[two]"] = "1";
 		request["is_rich_text[three]"] = "0";
-		request["post[slug]"] = "";
+		request["post[slug]"] = XKit.extensions.editable_reblogs.post_slug_metadata;
 		request["post[draft_status]"] = "";
-		request["post[date]"] = "";
+		request["post[date]"] = XKit.extensions.editable_reblogs.post_date_metadata;
 		request["post[tags]"] = $.map($('.post-form--footer .tag-label'), function(element, index) {
 			return $(element).text();
 		}).join(",");
