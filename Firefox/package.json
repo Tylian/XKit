@@ -12,5 +12,5 @@
   },
   "license": "GPL",
   "icon": "icon.png",
-  "updateURL": "http://new-xkit.github.io/XKit/Extensions/dist/page/FirefoxUpdate.rdf"
+  "updateURL": "https://new-xkit.github.io/XKit/Extensions/dist/page/FirefoxUpdate.rdf"
 }
