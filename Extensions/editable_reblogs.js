@@ -89,6 +89,9 @@ XKit.extensions.editable_reblogs = new Object({
 		XKit.interface.fetch(post_fetch_request, function(response) {
 			self.post_date_metadata = response.data.post.date;
 			self.post_slug_metadata = response.data.post.slug;
+			if (response.data.post.is_private === 1) {
+				self.selected_post_type = "PRIVATE";
+			}
 		});
 	},
 	process_existing_content: function() {
