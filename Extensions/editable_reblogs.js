@@ -351,6 +351,7 @@ XKit.extensions.editable_reblogs = new Object({
 						"Error: XER-SR.<br /><br />There was an error reblogging your post. Please try again shortly. If you continue to receive this, please contact XKit staff.",
 						"error",
 						"<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div><a href=\"http://new-xkit-extension.tumblr.com/\" class=\"xkit-button\">Visit the New XKit Blog</a>");
+					console.log("editable_reblogs.send_request:\n", response);
 				},
 				onload: function(response) {
 					// We are done!
