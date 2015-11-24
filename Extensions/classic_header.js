@@ -40,14 +40,20 @@ XKit.extensions.classic_header = new Object({
 			mobile_only: true
 		},
 		"mobile_logout": {
-			"sep1": {
+			text: "Add logout button to menu",
+			default: false,
+			value: false,
+			mobile_onlly: true
+		"sep1": {
 			text: "Blogs on the header",
 			type: "separator",
+			desktop_only: true
 		},
 		"show_avatars": {
 			text: "Show my blogs on the header",
 			default: true,
-			value: true
+			value: true,
+			desktop_only: true
 		},
 		appearance: {
 			text: "Avatar Appearance",
@@ -58,6 +64,7 @@ XKit.extensions.classic_header = new Object({
 				"Circle (default)", "circle",
 				"Rounded Box", "box"
 			],
+			desktop_only: true
 		},
 		maximum: {
 			text: "Maximum blogs to show",
@@ -71,11 +78,13 @@ XKit.extensions.classic_header = new Object({
 				"4 Blogs", "b4",
 				"5 Blogs", "b5"
 			],
+			desktop_only: true
 		},
 		"show_bubble": {
 			text: "Show blog title bubble on hover",
 			default: true,
-			value: true
+			value: true,
+			desktop_only: true
 		}
 	},
 
@@ -102,6 +111,7 @@ XKit.extensions.classic_header = new Object({
 		}
 
 		if (XKit.extensions.classic_header.preferences.mobile_sticky.value === true) {
+			// The nav menu is written terribly. Thanks @staff.
 			XKit.tools.add_css(" #container { position: absolute; top:44px; } .mobile-nav { position: fixed; top: 0; z-index: 99; left: 0; width: calc(100% + 1px); } .nav-menu .drawer, .nav-menu.active .sneeze-guard { height: calc(100vh - 44px); top:44px; }","classic_header_mobile_sticky");
 			$('#footer').insertAfter($('#load_more_posts'));
 		}	
@@ -206,6 +216,8 @@ XKit.extensions.classic_header = new Object({
 		XKit.tools.remove_css("classic_header_fixed_color");
 		XKit.tools.remove_css("classic_header_fixed_position");
 		XKit.tools.remove_css("classic_header_fixed_width");
+		XKit.tools.remove_css("classic_header_mobile_sticky");
+		$(".nav-item-goodbye").remove();
 		$("#xoldeheader").remove();
 		XKit.tools.remove_css("classic_header_box");
 	}
