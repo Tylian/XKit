@@ -27,6 +27,7 @@ XKit.extensions.classic_header = new Object({
 			default: false,
 			value: false,
 			desktop_only: true
+		},
 		"fix_color": {
 			text: "Make the tab notification bubbles red again",
 			default: false,
@@ -43,7 +44,8 @@ XKit.extensions.classic_header = new Object({
 			text: "Add logout button to menu",
 			default: false,
 			value: false,
-			mobile_onlly: true
+			mobile_only: true
+		},
 		"sep1": {
 			text: "Blogs on the header",
 			type: "separator",
