@@ -1,7 +1,7 @@
 //* TITLE Header Options **//
 //* VERSION 2.4.0 **//
 //* DESCRIPTION Customize the header. **//
-//* DEVELOPER STUDIOXENIX **//
+//* DEVELOPER new-xkit **//
 //* DETAILS This extension adds your blogs on the top of the page, so you can easily switch between blogs. The blog limit on the header is five, but you can limit this to three blogs and turn off the blog title bubble from the settings. **//
 //* FRAME false **//
 //* BETA false **//
