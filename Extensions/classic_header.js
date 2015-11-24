@@ -1,5 +1,5 @@
 //* TITLE Header Options **//
-//* VERSION 2.3.1 **//
+//* VERSION 2.4.0 **//
 //* DESCRIPTION Customize the header. **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS This extension adds your blogs on the top of the page, so you can easily switch between blogs. The blog limit on the header is five, but you can limit this to three blogs and turn off the blog title bubble from the settings. **//
@@ -19,19 +19,28 @@ XKit.extensions.classic_header = new Object({
 		"fixed_width": {
 			text: "Fixed width header",
 			default: false,
-			value: false
+			value: false,
+			desktop_only: true
 		},
 		"fixed_position": {
 			text: "Fixed position header (un-stickify)",
 			default: false,
-			value: false
-		},
+			value: false,
+			desktop_only: true
 		"fix_color": {
 			text: "Make the tab notification bubbles red again",
 			default: false,
-			value: false
+			value: false,
+			desktop_only: true
 		},
-		"sep1": {
+		"mobile_sticky": {
+			text: "Scrolling headedr (like desktop)",
+			default: false,
+			value: false,
+			mobile_only: true
+		},
+		"mobile_logout": {
+			"sep1": {
 			text: "Blogs on the header",
 			type: "separator",
 		},
@@ -90,6 +99,16 @@ XKit.extensions.classic_header = new Object({
 
 		if (XKit.extensions.classic_header.preferences.fix_color.value === true) {
 			XKit.tools.add_css(" .tab_notice_value { color: #ffffff !important; } .selected .tab_notice, .tab_notice { background: #bc3333 !important; } .tab_bar .tab.selected .tab_anchor, .tab_bar .tab.active .tab_anchor {opacity: 0.5;}", "classic_header_fixed_color");
+		}
+
+		if (XKit.extensions.classic_header.preferences.mobile_sticky.value === true) {
+			XKit.tools.add_css(" #container { position: absolute; top:44px; } .mobile-nav { position: fixed; top: 0; z-index: 99; left: 0; width: calc(100% + 1px); } .nav-menu .drawer, .nav-menu.active .sneeze-guard { height: calc(100vh - 44px); top:44px; }","classic_header_mobile_sticky");
+			$('#footer').insertAfter($('#load_more_posts'));
+		}	
+
+		if (XKit.extensions.classic_header.preferences.mobile_logout.value === true) {
+			m_html = '<a class=\"nav-item with-icon\" href=\"/logout\"><span class=\"nav-text nav-item-goodbye\">Log Out</span></a>';
+			$('.nav-site-sections').append(m_html);
 		}
 
 	},
