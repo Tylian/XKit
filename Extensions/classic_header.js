@@ -95,30 +95,30 @@ XKit.extensions.classic_header = new Object({
 		XKit.tools.init_css("classic_header");
 		$("#xoldeheader").remove();
 
-		if (XKit.extensions.classic_header.preferences.show_avatars.value === true) {
+		if (XKit.extensions.classic_header.preferences.show_avatars.value) {
 			XKit.extensions.classic_header.show_blogs();
 		}
 
-		if (XKit.extensions.classic_header.preferences.fixed_width.value === true) {
+		if (XKit.extensions.classic_header.preferences.fixed_width.value) {
 			XKit.tools.add_css(" #search_query, .search_form_field, .search_form_row { width: 150px !important; } .ui_search { width: 160px !important; } .l-header { width: 925px !important; min-width: 925px !important; } .l-header.l-fixed-header { width: 925px !important; }", "classic_header_fixed_width");
 			$(".l-header").addClass("l-fixed-header");
 		}
 
-		if (XKit.extensions.classic_header.preferences.fixed_position.value === true) {
+		if (XKit.extensions.classic_header.preferences.fixed_position.value) {
 			XKit.tools.add_css(" .l-header-container { position: absolute !important; }", "classic_header_fixed_position");
 		}
 
-		if (XKit.extensions.classic_header.preferences.fix_color.value === true) {
+		if (XKit.extensions.classic_header.preferences.fix_color.value) {
 			XKit.tools.add_css(" .tab_notice_value { color: #ffffff !important; } .selected .tab_notice, .tab_notice { background: #bc3333 !important; } .tab_bar .tab.selected .tab_anchor, .tab_bar .tab.active .tab_anchor {opacity: 0.5;}", "classic_header_fixed_color");
 		}
 
-		if (XKit.extensions.classic_header.preferences.mobile_sticky.value === true) {
+		if (XKit.extensions.classic_header.preferences.mobile_sticky.value) {
 			// The nav menu is written terribly. Thanks @staff.
 			XKit.tools.add_css(" #container { position: absolute; top:44px; } .mobile-nav { position: fixed; top: 0; z-index: 99; left: 0; width: calc(100% + 1px); } .nav-menu .drawer, .nav-menu.active .sneeze-guard { height: calc(100vh - 44px); top:44px; }","classic_header_mobile_sticky");
 			$('#footer').insertAfter($('#load_more_posts'));
 		}	
 
-		if (XKit.extensions.classic_header.preferences.mobile_logout.value === true) {
+		if (XKit.extensions.classic_header.preferences.mobile_logout.value) {
 			m_html = '<a class=\"nav-item with-icon\" href=\"/logout\"><span class=\"nav-text nav-item-goodbye\">Log Out</span></a>';
 			$('.nav-site-sections').append(m_html);
 		}
