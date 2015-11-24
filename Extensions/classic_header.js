@@ -35,7 +35,7 @@ XKit.extensions.classic_header = new Object({
 			desktop_only: true
 		},
 		"mobile_sticky": {
-			text: "Scrolling headedr (like desktop)",
+			text: "Scrolling header (like desktop)",
 			default: false,
 			value: false,
 			mobile_only: true
