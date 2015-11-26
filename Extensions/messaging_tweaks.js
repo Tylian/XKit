@@ -273,15 +273,13 @@ XKit.extensions.messaging_tweaks = new Object({
 		}
 		if (XKit.extensions.messaging_tweaks.preferences.move_self_to_right.value) {
 			XKit.tools.add_css(".xkit-my_messaging_icon { position: absolute; right: 0px; margin-right: 0px !important; }", "messaging_tweaks");
-			XKit.tools.add_css(".xkit-my_messaging_message .message-bubble { margin-left: 0px !important; margin-right: 40px; text-align: right;}", "messaging_tweaks");
+			XKit.tools.add_css(".xkit-my_messaging_message .message-bubble { margin-left: 0px !important; margin-right: 40px; }", "messaging_tweaks");
 			XKit.tools.add_css(".xkit-my_messaging_message .message-container { justify-content: flex-end !important; }", "messaging_tweaks");
-			XKit.tools.add_css(".xkit-my_messaging_message .message-bubble-header { justify-content: flex-end !important; }", "messaging_tweaks");
 		}
 		if (XKit.extensions.messaging_tweaks.preferences.move_other_to_right.value) {
 			XKit.tools.add_css(".xkit-others_messaging_icon { position: absolute; right: 0px; margin-right: 0px !important; }", "messaging_tweaks");
-			XKit.tools.add_css(".xkit-others_messaging_message .message-bubble { margin-left: 0px !important; margin-right: 40px; text-align: right;}", "messaging_tweaks");
+			XKit.tools.add_css(".xkit-others_messaging_message .message-bubble { margin-left: 0px !important; margin-right: 40px; }", "messaging_tweaks");
 			XKit.tools.add_css(".xkit-others_messaging_message .message-container { justify-content: flex-end !important; }", "messaging_tweaks");
-			XKit.tools.add_css(".xkit-others_messaging_message .message-bubble-header { justify-content: flex-end !important; }", "messaging_tweaks");
 		}
 		
 		XKit.tools.add_css(".messaging-conversation .xkit-others_messaging_message .conversation-message-text .message-bubble { background-color: " + XKit.extensions.messaging_tweaks.preferences.other_chat_bubble_background.value + " !important; }", "messaging_tweaks");
