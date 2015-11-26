@@ -62,8 +62,8 @@ XKit.extensions.messaging_tweaks = new Object({
 		},
 		"sound_notification": {
 			text: "Make a sound if you receive a new message",
-			default: true,
-			value: true
+			default: false,
+			value: false
 		},
 		"desktop_notification": {
 			text: "Show a desktop notification",
