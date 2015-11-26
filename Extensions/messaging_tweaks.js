@@ -1,5 +1,5 @@
 //* TITLE Messaging Tweaks **//
-//* VERSION 1.2.1 **//
+//* VERSION 1.3.0 **//
 //* DESCRIPTION Helpful tweaks for Tumblr IM **//
 //* DETAILS This adds a few helpful tweaks to the Tumblr IM, for example minimising the chat, hiding the IM icon or changing the looks of the chat window. **//
 //* DEVELOPER New-XKit **//
@@ -52,6 +52,11 @@ XKit.extensions.messaging_tweaks = new Object({
 		},
 		"allow_minimising": {
 			text: "Allow minimising a chat by clicking on the title",
+			default: true,
+			value: true
+		},
+		"allow_emojis": {
+			text: "Enable Emojis in the chat",
 			default: true,
 			value: true
 		},
@@ -138,6 +143,9 @@ XKit.extensions.messaging_tweaks = new Object({
 	do_messages: function() {
 		XKit.extensions.messaging_tweaks.observer.disconnect();
 		var icons = $(".messaging-conversation-popovers .avatar:not(.xkit-my_messaging_icon, .xkit-others_messaging_icon)");
+		function img_onload(msg_div, emoji_text, emoji) {
+			msg_div.html(msg_div.html().replace(new RegExp(emoji_text, "g") , emoji.outerHTML));
+		}
 		icons.each(function() {
 			if ($(this).parents(".conversation-compose").length !== 0) { return; }
 			if ($(this).attr("data-js-tumblelog-name") === XKit.extensions.messaging_tweaks.get_current_chat_user()) {
@@ -146,6 +154,32 @@ XKit.extensions.messaging_tweaks = new Object({
 			} else {
 				$(this).addClass("xkit-others_messaging_icon");
 				$(this).parents(".conversation-message").addClass("xkit-others_messaging_message");
+			}
+			if (XKit.extensions.messaging_tweaks.preferences.allow_emojis.value) {
+				var msg_div = $(this).parents(".conversation-message").find(".message-bubble .message");
+				
+				// Use regex to find emoji patterns in the chat message
+				// Find the string between the two ":" to find which image to use
+				// but only if there are emoji tags found
+				var emojis = msg_div.text().match(/:(.*?):/gi);
+				if (emojis) {
+					var already_replaced = {};
+					for (var i = 0; i < emojis.length; i++) {
+						if (already_replaced[emojis[i]]) { continue; }
+						already_replaced[emojis[i]] = true;
+						var emoji_tag = emojis[i].toLowerCase().substring(1, emojis[i].length - 1);
+						var emoji_url = "http://www.emoji-cheat-sheet.com/graphics/emojis/" + emoji_tag + ".png";
+						if (emoji_tag === "tobdog") {
+							emoji_url = "http://vignette1.wikia.nocookie.net/steamtradingcards/images/2/21/Tobdog.png/revision/latest?cb=20151011230955";
+						}
+						var emoji = new Image();
+						emoji.alt = ":" + emoji_tag + ":";
+						emoji.title = ":" + emoji_tag + ":";
+						emoji.height = "22";
+						emoji.onload = img_onload.bind(this, msg_div, emojis[i], emoji);
+						emoji.src = emoji_url;
+					}
+				}
 			}
 		});
 		if (XKit.extensions.messaging_tweaks.preferences.move_self_to_right.value) {
@@ -320,6 +354,14 @@ XKit.extensions.messaging_tweaks = new Object({
 		}
 		$(".true-icon").removeClass("true-icon");
 		$(".tab.iconic.tab_messaging").show();
+		$(".xkit-others_messaging_message, .xkit-my_messaging_message").each(function() {
+			var msg_div = $(this).find(".message-bubble .message");
+			msg_div.find("img").each(function() {
+				var img_html = $('<div>').append($(this).clone()).html();
+				var img_alt = $(this).attr("alt");
+				msg_div.html(msg_div.html().replace(img_html, img_alt));
+			});
+		});
 		$(".xkit-others_messaging_message").removeClass("xkit-others_messaging_message");
 		$(".xkit-others_messaging_icon").removeClass("xkit-others_messaging_icon");
 		$(".xkit-my_messaging_message").removeClass("xkit-my_messaging_message");
