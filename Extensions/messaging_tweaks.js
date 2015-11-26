@@ -1,5 +1,5 @@
 //* TITLE Messaging Tweaks **//
-//* VERSION 1.2.0 **//
+//* VERSION 1.2.1 **//
 //* DESCRIPTION Helpful tweaks for Tumblr IM **//
 //* DETAILS This adds a few helpful tweaks to the Tumblr IM, for example minimising the chat, hiding the IM icon or changing the looks of the chat window. **//
 //* DEVELOPER New-XKit **//
@@ -71,7 +71,7 @@ XKit.extensions.messaging_tweaks = new Object({
 			value: false
 		},
 		"tab_title_notification": {
-			text: "Allow minimising a chat by clicking on the title",
+			text: "Show <[!!]> in Tab when you receive a new message.",
 			default: true,
 			value: true
 		},
