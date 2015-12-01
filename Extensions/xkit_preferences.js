@@ -1,68 +1,7 @@
 //* TITLE XKit Preferences **//
-//* VERSION 6.0.3 **//
+//* VERSION 7.0.0 **//
 //* DESCRIPTION Lets you customize XKit **//
 //* DEVELOPER new-xkit **//
-
-XKit.extensions.lang_english.xkit_preferences = new Object({
-
-	language_file: "Language File",
-
-	tabs: {
-		"my_xkit": "My XKit",
-		"get_extensions": "Get Extensions",
-		"news": "News",
-		"other": "Other",
-		"about": "About + Support"
-	},
-
-	other: {
-
-		"configuration_title": "Configuration",
-		"notifications_title": "Notifications",
-		"language": "Language Settings",
-		"reset_xkit": "Reset XKit",
-		"config_data": "Export Configuration",
-		"news_notifications": "News Notifications",
-		"update_notifications": "Update Notifications",
-		"update_all": "Update All",
-		"storage": "Storage",
-		"advanced_settings": "Advanced Settings",
-		"console": "Console",
-		"xkit_editor": "XKit Editor",
-		"show_internals": "Internals",
-		"flags": "Flags"
-	},
-
-	gallery: {
-
-		"loading": "Loading extension gallery..",
-		"error": "<strong>Unable to load extension gallery.<br>Sorry about that.</strong><br><br>"+
-		"XKit servers might be experiencing some problems. Please try again, and if you cant't reach "+
-		"the servers for more than a few days, please"+'<a href="https://github.com/hobinjk/XKit/issues">report a problem</a>.',
-		"search": "Search the gallery",
-		"hide_installed": "Hide installed extensions"
-	},
-
-	extension: {
-
-		"no_settings": "No settings available for this extension.",
-		"reset_settings": "Reset Settings",
-		"update": "Update",
-		"uninstall": "Uninstall",
-		"enable": "Enable %1",
-		"more_information": "more information",
-		"search_box": "Search"
-
-	},
-
-	language_panel: {
-
-		"title": "Language Settings",
-		"text": "More comfortable in another language than English? Click on the Get Extensions tab below to download a language "+
-		"file. After that, you can select the language you like here."
-	}
-
-});
 
 XKit.extensions.xkit_preferences = new Object({
 
@@ -644,12 +583,12 @@ XKit.extensions.xkit_preferences = new Object({
 		var m_html = '<div id="xkit-control-panel">' +
 					'<div id="xkit-control-panel-inner"></div>' +
 					'<div id="xkit-control-panel-tabs">' +
-						'<div id="xkit-cp-tab-my-extensions" class="selected">' + XKit.lang.get("xkit_preferences.tabs.my_xkit") + '</div>' +
-						'<div id="xkit-cp-tab-get-extensions">' + XKit.lang.get("xkit_preferences.tabs.get_extensions") + '</div>' +
-						'<div id="xkit-cp-tab-news">' + XKit.lang.get("xkit_preferences.tabs.news") + '</div>' +
+						'<div id="xkit-cp-tab-my-extensions" class="selected">My XKit</div>' +
+						'<div id="xkit-cp-tab-get-extensions">Get Extensions</div>' +
+						'<div id="xkit-cp-tab-news">News</div>' +
 						'<div id="xkit-cp-tab-xcloud">XCloud</div>' +
-						'<div id="xkit-cp-tab-other">' + XKit.lang.get("xkit_preferences.tabs.other") + '</div>' +
-						'<div id="xkit-cp-tab-about">' + XKit.lang.get("xkit_preferences.tabs.about") + '</div>' +
+						'<div id="xkit-cp-tab-other">Other</div>' +
+						'<div id="xkit-cp-tab-about">About + Support</div>' +
 					'</div>' +
 				'</div>' +
 				'<div id="xkit-control-panel-shadow">&nbsp;</div>';
@@ -842,7 +781,7 @@ XKit.extensions.xkit_preferences = new Object({
 		var m_html =
 				'<div class="nano xkit-wide-panel white" id="xkit-extensions-panel-right">' +
 					'<div class="content" id="xkit-extensions-panel-right-inner">'+
-					'<div id="xkit-gallery-loading">' + XKit.lang.get("xkit_preferences.gallery.loading") + "</div></div>" +
+					'<div id="xkit-gallery-loading">Loading extension gallery...</div></div>' +
 				'</div>';
 
 		$("#xkit-control-panel-inner").html(m_html);
@@ -856,7 +795,11 @@ XKit.extensions.xkit_preferences = new Object({
 			if (mdata.server_down === true) {
 
 				$("#xkit-extensions-panel-right-inner").html(
-					'<div class="xkit-unable-to-load-extension-gallery">' + XKit.lang.get("xkit_preferences.gallery.error") + "</div>");
+					'<div class="xkit-unable-to-load-extension-gallery">' +
+						'<strong>Unable to load extension gallery.<br>Sorry about that.</strong><br><br>' +
+						'XKit servers might be experiencing some problems. Please try again, and if you cant\'t reach '+
+						'the servers for more than a few days, please <a href="https://github.com/new-xkit/XKit/issues">report a problem</a>.' +
+					'</div>');
 				$("#xkit-extensions-panel-right").nanoScroller();
 				$("#xkit-extensions-panel-right").nanoScroller({ scroll: 'top' });
 				return;
@@ -872,9 +815,9 @@ XKit.extensions.xkit_preferences = new Object({
 
 			m_html =
 					'<div id="xkit-gallery-toolbar">' +
-						'<input type="text" id="xkit-gallery-search" placeholder="'+ XKit.lang.get("xkit_preferences.gallery.search") + '">' +
+						'<input type="text" id="xkit-gallery-search" placeholder="Search the gallery">' +
 						'<div id="xkit-panel-hide-installed-extensions-from-gallery" class="xkit-checkbox ' + (XKit.tools.get_setting("xkit_hide_installed_extensions","false") === "true" ? "selected" : "") + '">' +
-						'<b>&nbsp;</b>' + XKit.lang.get("xkit_preferences.gallery.hide_installed") + '</div>' +
+						'<b>&nbsp;</b>Hide installed extensions</div>' +
 					'</div>' + m_html + '<div class="xkit-unable-to-load-extension-gallery"><b>No new extensions</b><br/><br/>'+
 										"It looks like you've installed all the currently available extensions.<br/>Come back later!</div>";
 
@@ -1066,7 +1009,7 @@ XKit.extensions.xkit_preferences = new Object({
 				'<div class="nano" id="xkit-extensions-panel-right">' +
 					'<div class="content" id="xkit-extensions-panel-right-inner"></div>' +
 				'</div>' +
-				'<input type="text" id="xkit-extensions-panel-left-search" placeholder="' + XKit.lang.get("xkit_preferences.extension.search_box") + '"/>' +
+				'<input type="text" id="xkit-extensions-panel-left-search" placeholder="Search"/>' +
 				'<div data-type="normal" class="xkit-extensions-display-type-switcher ' + m_list_class + '" id="xkit-extensions-display-type-normal">&nbsp;</div>'+
 				'<div data-type="iconic" class="xkit-extensions-display-type-switcher ' + m_iconic_class + '" id="xkit-extensions-display-type-iconic">&nbsp;</div>';
 
@@ -1230,7 +1173,6 @@ XKit.extensions.xkit_preferences = new Object({
 		});
 
 		var this_is_internal = extension_id.substring(0,5) === "xkit_";
-		var this_is_language = extension_id.substring(0,5) === "lang_";
 		var m_extension = XKit.installed.get(extension_id);
 
 		XKit.extensions.xkit_preferences.current_open_extension_panel = extension_id;
@@ -1265,14 +1207,6 @@ XKit.extensions.xkit_preferences = new Object({
 			return;
 		}
 
-		if (this_is_language) {
-			m_extension.description = "Translated by " + m_extension.developer;
-		}
-
-		if (XKit.lang.get(m_extension.id + ".description") !== "???") {
-			m_extension.description = XKit.lang.get(m_extension.id + ".description");
-		}
-
 		var m_html = '<div id="xkit-extensions-panel-top">' +
 					'<div class="title">' + m_extension.title + '</div>' +
 					'<div class="version">' + m_extension.version + '</div>' +
@@ -1281,41 +1215,33 @@ XKit.extensions.xkit_preferences = new Object({
 
 		var xkit_developers = ["studioxenix","new-xkit","dlmarquis","hobinjk","thepsionic","nightpool","blackjackkent","wolvan","bvtsang","0xazure"];
 		var third_party_extension = false;
-		if (xkit_developers.indexOf(m_extension.developer.toLowerCase()) === -1 && !this_is_language) {
+		if (xkit_developers.indexOf(m_extension.developer.toLowerCase()) === -1) {
 			third_party_extension = true;
 			m_html = m_html + '<div class="xkit-third-party-warning">third party extension</div>';
 		}
 
 		if (m_extension.details !== "" && typeof m_extension.details !== "undefined") {
-			m_html = m_html + '<div class="details" id="xkit-extension-details">' + XKit.lang.get("xkit_preferences.extension.more_information") + "</div>";
+			m_html = m_html + '<div class="details" id="xkit-extension-details">more information</div>';
 		}
 
 		m_html = m_html + '</div><div class="buttons">';
 
-		m_html = m_html + '<div class="xkit-button" id="xkit-extension-update">' + XKit.lang.get("xkit_preferences.extension.update") + "</div>";
+		m_html = m_html + '<div class="xkit-button" id="xkit-extension-update">Update</div>';
 
-		if ( !(this_is_internal || this_is_language) ) {
-			m_html = m_html + '<div class="xkit-button" id="xkit-extension-uninstall">' + XKit.lang.get("xkit_preferences.extension.uninstall") + "</div>";
-			m_html = m_html + '<div class="xkit-button" id="xkit-extension-reset">' + XKit.lang.get("xkit_preferences.extension.reset_settings") + "</div>";
+		if (!this_is_internal) {
+			m_html = m_html + '<div class="xkit-button" id="xkit-extension-uninstall">Uninstall</div>';
+			m_html = m_html + '<div class="xkit-button" id="xkit-extension-reset">Reset Settings</div>';
 		}
 
 		m_html = m_html + "</div>";
 
 
-		if (this_is_internal === false && this_is_language === false) {
+		if (!this_is_internal) {
 
 			if (XKit.installed.enabled(extension_id) === true) {
-				m_html = m_html + '<div class="xkit-checkbox selected" id="xkit-extension-enabled"><b>&nbsp;</b>' + XKit.lang.get("xkit_preferences.extension.enable", m_extension.title) + "</div>";
+				m_html = m_html + '<div class="xkit-checkbox selected" id="xkit-extension-enabled"><b>&nbsp;</b>Enable ' + m_extension.title + '</div>';
 			} else {
-				m_html = m_html + '<div class="xkit-checkbox" id="xkit-extension-enabled"><b>&nbsp;</b>' + XKit.lang.get("xkit_preferences.extension.enable", m_extension.title) + "</div>";
-			}
-
-		} else {
-
-			if (this_is_language === true) {
-				m_html = m_html + '<div id="xkit-extension-internal-label">This is a language file. Select it from Others > Language to activate it.</div>';
-			} else {
-				m_html = m_html + '<div id="xkit-extension-internal-label">This extension is a part of XKit and can\'t be removed or disabled.</div>';
+				m_html = m_html + '<div class="xkit-checkbox" id="xkit-extension-enabled"><b>&nbsp;</b>Enable ' + m_extension.title + '</div>';
 			}
 
 		}
@@ -1330,7 +1256,7 @@ XKit.extensions.xkit_preferences = new Object({
 
 		if (typeof XKit.extensions[extension_id].preferences === "undefined" && typeof XKit.extensions[extension_id].cpanel === "undefined") {
 
-			m_html = m_html + '<div id="xkit-extension-panel-no-settings">' + XKit.lang.get("xkit_preferences.extension.no_settings") + "</div>";
+			m_html = m_html + '<div id="xkit-extension-panel-no-settings">No settings available for this extension.</div>';
 
 		} else {
 
@@ -1448,7 +1374,7 @@ XKit.extensions.xkit_preferences = new Object({
 			XKit.window.show("Reset " + m_ext.title + "?",
 				"This will delete all the settings and data this extension is saving on your computer.", "question",
 				'<div id="xkit-extension-yes-reset" class="xkit-button default">Yes, reset settings</div>'+
-				'<div id="xkit-close-message" class="xkit-button">' + XKit.lang.get("common.cancel") + '</div>');
+				'<div id="xkit-close-message" class="xkit-button">Cancel</div>');
 
 			$("#xkit-extension-yes-reset").click(function() {
 
@@ -1483,7 +1409,7 @@ XKit.extensions.xkit_preferences = new Object({
 				"This extension will be completely deleted from your computer."+
 				"If you change your mind, you can re-download it from the extension gallery later.",
 				"question", '<div id="xkit-extension-yes-uninstall" class="xkit-button default">Yes, uninstall</div>'+
-				'<div id="xkit-close-message" class="xkit-button">'  + XKit.lang.get("common.cancel") +  '</div>');
+				'<div id="xkit-close-message" class="xkit-button">Cancel</div>');
 
 			$("#xkit-extension-yes-uninstall").click(function() {
 
@@ -1709,11 +1635,6 @@ XKit.extensions.xkit_preferences = new Object({
 				}
 
 				var pref_title = XKit.extensions[extension_id].preferences[pref].text;
-				if (XKit.lang.get([extension_id] + ".preferences." + pref) !== "???") {
-
-					pref_title = XKit.lang.get([extension_id] + ".preferences." + pref);
-
-				}
 
 				m_return = m_return + '<div class="title">' + pref_title + "</div>";
 
@@ -1785,11 +1706,6 @@ XKit.extensions.xkit_preferences = new Object({
 				}
 
 				var pref_title = XKit.extensions[extension_id].preferences[pref].text;
-				if (XKit.lang.get([extension_id] + ".preferences." + pref) !== "???") {
-
-					pref_title = XKit.lang.get([extension_id] + ".preferences." + pref);
-
-				}
 
 				m_return = m_return + '<div class="title">' + pref_title + "</div>";
 
@@ -1855,11 +1771,6 @@ XKit.extensions.xkit_preferences = new Object({
 				}
 
 				var pref_title = XKit.extensions[extension_id].preferences[pref].text;
-				if (XKit.lang.get([extension_id] + ".preferences." + pref) !== "???") {
-
-					pref_title = XKit.lang.get([extension_id] + ".preferences." + pref);
-
-				}
 
 				m_return = m_return + '<div class="title">' + pref_title + "</div>";
 
@@ -1882,11 +1793,6 @@ XKit.extensions.xkit_preferences = new Object({
 			if (XKit.extensions[extension_id].preferences[pref].type === "separator") {
 
 				var pref_title = XKit.extensions[extension_id].preferences[pref].text;
-				if (XKit.lang.get([extension_id] + ".preferences." + pref) !== "???") {
-
-					pref_title = XKit.lang.get([extension_id] + ".preferences." + pref);
-
-				}
 
 				var m_extra_style = "";
 				if (XKit.extensions[extension_id].preferences[pref].mobile_only === true && XKit.browser().mobile === false) {
@@ -1931,11 +1837,6 @@ XKit.extensions.xkit_preferences = new Object({
 				}
 
 				var pref_title = XKit.extensions[extension_id].preferences[pref].text;
-				if (XKit.lang.get([extension_id] + ".preferences." + pref) !== "???") {
-
-					pref_title = XKit.lang.get([extension_id] + ".preferences." + pref);
-
-				}
 
 				if (XKit.extensions[extension_id].preferences[pref].value === false) {
 					m_return = m_return + '<div data-extension-id="' + extension_id + '" data-setting-id="' + pref + '" class="xkit-checkbox xkit-change-ext-setting-checkbox"><b>&nbsp;</b>' + pref_title + "</div>";
@@ -1970,20 +1871,19 @@ XKit.extensions.xkit_preferences = new Object({
 		var m_html =
 				'<div class="nano long" id="xkit-extensions-panel-left">' +
 					'<div class="content" id="xkit-extensions-panel-left-inner">' +
-						'<div class="xkit-extension text-only separator">' + XKit.lang.get("xkit_preferences.other.configuration_title") + "</div>" +
-						'<div data-pname="update-all" class="xkit-extension text-only">' + XKit.lang.get("xkit_preferences.other.update_all") + "</div>" +
-						'<div data-pname="reset" class="xkit-extension text-only">'+ XKit.lang.get("xkit_preferences.other.reset_xkit") + "</div>" +
-						'<div data-pname="config" class="xkit-extension text-only">'+ XKit.lang.get("xkit_preferences.other.config_data") + "</div>" +
-						'<div data-pname="storage" class="xkit-extension text-only">' + XKit.lang.get("xkit_preferences.other.storage") +  "</div>" +
-						'<div data-pname="language" style="display: none;" class="xkit-extension text-only">' + XKit.lang.get("xkit_preferences.other.language") + "</div>" +
-						'<div class="xkit-extension text-only separator">' + XKit.lang.get("xkit_preferences.other.notifications_title") + "</div>" +
-						'<div data-pname="news" class="xkit-extension text-only">' + XKit.lang.get("xkit_preferences.other.news_notifications") + "</div>" +
-						'<div data-pname="updates" class="xkit-extension text-only">' + XKit.lang.get("xkit_preferences.other.update_notifications") + "</div>" +
-						'<div class="xkit-extension text-only separator">'  + XKit.lang.get("xkit_preferences.other.advanced_settings") +   "</div>" +
-						'<div data-pname="console" class="xkit-extension text-only">' + XKit.lang.get("xkit_preferences.other.console") +  "</div>" +
-						'<div data-pname="editor" class="xkit-extension text-only">' + XKit.lang.get("xkit_preferences.other.xkit_editor") +  "</div>" +
-						'<div data-pname="internal" class="xkit-extension text-only">' + XKit.lang.get("xkit_preferences.other.show_internals") +  "</div>" +
-						'<div data-pname="flags" class="xkit-extension text-only" style="display: none;">' + XKit.lang.get("xkit_preferences.other.flags") + "</div>" +
+						'<div class="xkit-extension text-only separator">Configuration</div>' +
+						'<div data-pname="update-all" class="xkit-extension text-only">Update All</div>' +
+						'<div data-pname="reset" class="xkit-extension text-only">Reset XKit</div>' +
+						'<div data-pname="config" class="xkit-extension text-only">Export Configuration</div>' +
+						'<div data-pname="storage" class="xkit-extension text-only">Storage</div>' +
+						'<div class="xkit-extension text-only separator">Notifications</div>' +
+						'<div data-pname="news" class="xkit-extension text-only">News Notifications</div>' +
+						'<div data-pname="updates" class="xkit-extension text-only">Update Notifications</div>' +
+						'<div class="xkit-extension text-only separator">Advanced Settings</div>' +
+						'<div data-pname="console" class="xkit-extension text-only">Console</div>' +
+						'<div data-pname="editor" class="xkit-extension text-only">XKit Editor</div>' +
+						'<div data-pname="internal" class="xkit-extension text-only">Internals</div>' +
+						'<div data-pname="flags" class="xkit-extension text-only" style="display: none;">Flags</div>' +
 					"</div>" +
 				"</div>" +
 				'<div class="nano" id="xkit-extensions-panel-right">' +
@@ -2002,9 +1902,6 @@ XKit.extensions.xkit_preferences = new Object({
 			$("#xkit-extensions-panel-left-inner > .xkit-extension").removeClass("selected");
 			$this.addClass("selected");
 
-			if ($this.attr('data-pname') === "language") {
-				XKit.extensions.xkit_preferences.show_others_panel_language();
-			}
 			if ($this.attr('data-pname') === "reset") {
 				XKit.extensions.xkit_preferences.show_others_panel_reset();
 			}
@@ -2352,54 +2249,6 @@ XKit.extensions.xkit_preferences = new Object({
 		$("#xkit-panel-show-flags").click(function() {
 
 			XKit.extensions.xkit_preferences.flags();
-
-		});
-
-	},
-
-	show_others_panel_language: function() {
-
-		var m_languages = "";
-		var m_extensions = XKit.installed.list();
-
-		m_languages = m_languages + '<div data-extension="lang_english" class="xkit-data-language-button xkit-lang-button-for-lang_english xkit-checkbox"><b>&nbsp;</b>English</div>';
-
-		for (var i=0;i<m_extensions.length;i++) {
-
-			if (m_extensions[i].substring(0,5) === "lang_") {
-
-				m_languages = m_languages + '<div data-extension="' + m_extensions[i] +
-					'" class="xkit-data-language-button xkit-lang-button-for-' +
-					m_extensions[i] + ' xkit-checkbox"><b>&nbsp;</b>' +
-					XKit.installed.title(m_extensions[i]) + "</div>";
-
-			}
-
-		}
-
-		var m_html =
-				'<div class="xkit-others-panel">' +
-				'<div class="title">' + XKit.lang.get("xkit_preferences.language_panel.title") + "</div>" +
-				'<div class="description" style="height: 92px;">' + XKit.lang.get("xkit_preferences.language_panel.text") + "</div>" +
-				'<div class="bottom-part">' +
-					m_languages +
-				"</div>" +
-				"</div>";
-
-		$("#xkit-extensions-panel-right-inner").html(m_html);
-		$("#xkit-extensions-panel-right").nanoScroller();
-
-
-		$(".xkit-lang-button-for-lang_" + XKit.lang.current).addClass("selected");
-
-		$(".xkit-data-language-button").click(function() {
-
-			$(".xkit-data-language-button").not(this).removeClass("selected");
-			$(this).addClass("selected");
-
-			XKit.lang.current = $(this).attr('data-extension').substring(5);
-
-			XKit.extensions.xkit_preferences.show_others_panel_language();
 
 		});
 

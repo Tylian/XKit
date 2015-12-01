@@ -1,18 +1,7 @@
 //* TITLE XKit Patches **//
-//* VERSION 5.4.2 **//
+//* VERSION 6.0.0 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER new-xkit **//
-
-XKit.extensions.lang_english = {
-
-	common: {
-
-		"ok": "OK",
-		"cancel": "Cancel"
-
-	}
-
-};
 
 XKit.api_key = "Ux4LGODTVuvFBSRAelySTNT1Mucd4xQcVNXLxbpMraEFVFmlVK";
 
@@ -475,62 +464,6 @@ XKit.tools.dump_config = function(){
 			});
 
 		};
-
-		XKit.lang = new Object({
-
-			default: "english",
-			current: "",
-
-			init: function() {
-
-				var lang = XKit.storage.get("xkit_patches","language","");
-
-				if (lang === "" || typeof lang === "undefined") {
-					lang = "english";
-				}
-
-				XKit.lang.current = lang;
-
-			},
-
-			get: function(path, par1, par2, par3) {
-
-				var m_path = path.split(".");
-
-				var m_lang = XKit.extensions["lang_" + XKit.lang.current];
-
-				if (typeof m_lang == "undefined") {
-					m_lang = XKit.extensions["lang_" + XKit.lang.default];
-				}
-
-				var m_obj = m_lang;
-				var set_to_default = false;
-
-				for (var i=0;i<m_path.length;i++) {
-
-					if (typeof m_obj[m_path[i]] !== "undefined") {
-						m_obj = m_obj[m_path[i]];
-					} else {
-						return "???";
-					}
-
-				}
-
-				if (typeof par1 === "undefined") { par1 = "???" }
-				if (typeof par2 === "undefined") { par2 = "???" }
-				if (typeof par3 === "undefined") { par3 = "???" }
-
-				m_obj = m_obj.replace("%1", par1);
-				m_obj = m_obj.replace("%2", par2);
-				m_obj = m_obj.replace("%3", par3);
-
-				return m_obj;
-
-			}
-
-		});
-
-		XKit.lang.init();
 
 		XKit.interface = new Object({
 

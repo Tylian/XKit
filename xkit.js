@@ -1074,7 +1074,7 @@ function show_message(title, msg, icon, buttons) {
 
 function xkit_error(title, message) {
 
-	message = "<b>" + message + "</b><br/>" + XKit.language.generic_errors.trailing;
+	message = "<b>" + message + "</b><br/>";
 	show_error(title, message, "error", "<div id=\"xkit-close-message\" class=\"xkit-button\">OK</div></div>");
 
 }
