@@ -17,7 +17,7 @@ XKit.extensions.classic_header = new Object({
 			type: "separator",
 		},
 		"fixed_width": {
-			text: "Fixed width header",
+			text: "Reduce the max width of the header to match the dashboard",
 			default: false,
 			value: false,
 			desktop_only: true
@@ -98,10 +98,8 @@ XKit.extensions.classic_header = new Object({
 		if (XKit.extensions.classic_header.preferences.show_avatars.value) {
 			XKit.extensions.classic_header.show_blogs();
 		}
-
-		if (XKit.extensions.classic_header.preferences.fixed_width.value) {
-			XKit.tools.add_css(" #search_query, .search_form_field, .search_form_row { width: 150px !important; } .ui_search { width: 160px !important; } .l-header { width: 925px !important; min-width: 925px !important; } .l-header.l-fixed-header { width: 925px !important; }", "classic_header_fixed_width");
-			$(".l-header").addClass("l-fixed-header");
+		if (XKit.extensions.classic_header.preferences.fixed_width.value === true) {
+			XKit.tools.add_css(" @media screen and (min-width: 900px){.l-header {max-width: 900px!important;}}", "classic_header_fixed_width");
 		}
 
 		if (XKit.extensions.classic_header.preferences.fixed_position.value) {
@@ -116,7 +114,7 @@ XKit.extensions.classic_header = new Object({
 			// The nav menu is written terribly. Thanks @staff.
 			XKit.tools.add_css(" #container { position: absolute; top:44px; } .mobile-nav { position: fixed; top: 0; z-index: 99; left: 0; width: calc(100% + 1px); } .nav-menu .drawer, .nav-menu.active .sneeze-guard { height: calc(100vh - 44px); top:44px; }","classic_header_mobile_sticky");
 			$('#footer').insertAfter($('#load_more_posts'));
-		}	
+		}
 
 		if (XKit.extensions.classic_header.preferences.mobile_logout.value) {
 			m_html = '<a class=\"nav-item with-icon\" href=\"/logout\"><span class=\"nav-text nav-item-goodbye\">Log Out</span></a>';

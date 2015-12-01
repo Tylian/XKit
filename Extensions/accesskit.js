@@ -1,5 +1,5 @@
 //* TITLE AccessKit **//
-//* VERSION 1.1.7 **//
+//* VERSION 1.1.8 **//
 //* DESCRIPTION Accessibility tools for Tumblr **//
 //* DETAILS Provides accessibility tools for XKit and your dashboard, such as increased font sizes, more contrast on icons and more. **//
 //* DEVELOPER new-xkit **//
@@ -113,7 +113,7 @@ XKit.extensions.accesskit = new Object({
 
 		if (this.preferences.font.value === "opendyslexic") {
 
-			m_css = m_css + " @font-face { font-family: open-dyslexic; src: url('http://puaga.com/seven/accesskit/OpenDyslexic-Regular.ttf'); }" +
+			m_css = m_css + " @font-face { font-family: open-dyslexic; src: url('https://cdn.jsdelivr.net/open-dyslexic/2.1.0/ttf/OpenDyslexic-Regular.ttf'); }" +
 					" .post_wrapper *{ font-family: open-dyslexic; } ";
 
 		}

@@ -1,8 +1,8 @@
 //* TITLE Limit People **//
-//* VERSION 0.2 REV C **//
+//* VERSION 0.2.3 **//
 //* DESCRIPTION Limit the appearance of blogs on dash **//
 //* DETAILS Some people on your dashboard posting a lot? Limit people limits how many consecutive posts by the same person appear on your dashboard at once. If a user makes more than 2 consecutive posts, the rest will be hidden until you click on a button to show them. **//
-//* DEVELOPER STUDIOXENIX **//
+//* DEVELOPER new-xkit **//
 //* FRAME false **//
 //* BETA false **//
 
@@ -76,6 +76,7 @@ XKit.extensions.limit_people = new Object({
 	last_grouped: false,
 
 	do: function() {
+		if (XKit.page.peepr) { return; }
 
 		var size_changed = false;
 
@@ -88,7 +89,9 @@ XKit.extensions.limit_people = new Object({
 		var total = $(posts).length;
 
 		$(posts).each(function(index) {
-
+			
+			if ($(this).parents('.peepr-drawer').length > 0) { return; }
+			
 			var m_post = XKit.interface.post($(this));
 			$(this).addClass("xkit-limit-people-checked");
 
@@ -163,6 +166,7 @@ XKit.extensions.limit_people = new Object({
 
 	destroy: function() {
 		this.running = false;
+		XKit.post_listener.remove("limit_people");
 	}
 
 });

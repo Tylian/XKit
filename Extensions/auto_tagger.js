@@ -1,5 +1,5 @@
 //* TITLE Auto Tagger **//
-//* VERSION 0.6.6 **//
+//* VERSION 0.6.7 **//
 //* DESCRIPTION Tags posts automatically. **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS This extension allows you to automatically add tags to posts based on state (reblogged, original, queued) or post type (audio, video, etc) and keeping original tags while reblogging a post. **//
@@ -14,7 +14,7 @@ XKit.extensions.auto_tagger = new Object({
 
 		"sep0": {
 			text: "Keeping Tags",
-			type: "separator",
+			type: "separator"
 		},
 
 		"keep_tags": {
@@ -25,7 +25,7 @@ XKit.extensions.auto_tagger = new Object({
 
 		"sep1": {
 			text: "Tags by Type",
-			type: "separator",
+			type: "separator"
 		},
 
 		"tag_for_text": {
@@ -86,7 +86,7 @@ XKit.extensions.auto_tagger = new Object({
 
 		"sep2": {
 			text: "Tags by State",
-			type: "separator",
+			type: "separator"
 		},
 
 		"tag_for_original": {
@@ -112,7 +112,7 @@ XKit.extensions.auto_tagger = new Object({
 
 		"sep3": {
 			text: "Miscellaneous",
-			type: "separator",
+			type: "separator"
 		},
 
 		"tag_person": {
@@ -361,8 +361,9 @@ XKit.extensions.auto_tagger = new Object({
 	},
 
 	inject_to_window: function(raw_string) {
-
-		if($(".post-form").length <= 0) {
+        $(".post-form--footer").css("display", "block");
+        $(".post-form--footer").css("opacity", "1");
+        if($(".post-form").length <= 0) {
 			setTimeout(function() {
 				XKit.extensions.auto_tagger.inject_to_window(raw_string);
 			}, 200);

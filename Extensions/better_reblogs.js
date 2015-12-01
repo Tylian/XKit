@@ -1,5 +1,5 @@
 //* TITLE Reblog Display Options **//
-//* VERSION 1.1.3 **//
+//* VERSION 1.1.4 **//
 //* DESCRIPTION Adds different styles to the new reblog layout, including the "classic" nested look. **//
 //* DEVELOPER new-xkit **//
 //* FRAME false **//
@@ -273,6 +273,9 @@ XKit.extensions.better_reblogs = new Object({
 
         $(posts).each(function() {
             var $this = $(this);
+            if ($this.is("[data-js-container-inner]") || $this.hasClass("control-reblog-trail")){
+                return;
+            }
             $this.addClass("xkit-better-reblogs-done");
 
             // trick tumblr into displaying the little blog info popovers for the reblog avatars
@@ -298,6 +301,9 @@ XKit.extensions.better_reblogs = new Object({
 
         $(posts).each(function() {
             var $this = $(this);
+            if ($this.is("[data-js-container-inner]") || $this.hasClass("control-reblog-trail")){
+                return;
+            }
             $this.addClass("xkit-better-reblogs-done");
 
             var reblog_tree = $this.find(".reblog-list");
@@ -305,8 +311,12 @@ XKit.extensions.better_reblogs = new Object({
 
             if (!reblog_tree.length){
                 var content = $this.find(".reblog-list-item.contributed-content .reblog-content").clone();
+                title = $this.find(".reblog-list-item.contributed-content .reblog-title").clone();
                 if(content.length){
                     content.addClass("post_body");
+                    $this.find(".reblog-list-item.contributed-content").before(title);
+                    title.removeClass("reblog-title");
+                    title.addClass("post_title xkit-better-reblogs-title");
                     $this.find(".reblog-list-item.contributed-content").before(content);
                 }
                 return;
