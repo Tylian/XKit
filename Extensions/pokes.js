@@ -1,5 +1,5 @@
 //* TITLE Pokés **//
-//* VERSION 0.1.1 **//
+//* VERSION 0.1.2 **//
 //* DESCRIPTION Gotta catch them all! **//
 //* DETAILS Randomly spawns Pokémon on your dash for you to collect. **//
 //* DEVELOPER new-xkit **//
@@ -68,6 +68,18 @@ XKit.extensions.pokes = {
 						var poke_id = $(this).data("pokeid");
 						var poke_gender = $(this).data("pokegender");
 						var poke_name = $(this).data("pokename");
+						if (poke_name.indexOf(" ") > -1) {
+							var firstWord = poke_name.split(" ")[0];
+						if (firstWord == "Mega" || firstWord == "Primal") {
+								var poke_wiki_name = poke_name.split(" ")[1];								
+							} else if (firstWord == "Cosplay") {
+								var poke_wiki_name = "Cosplay Pikachu";								
+							} else {
+								var poke_wiki_name = firstWord;
+							}
+						} else {
+							var poke_wiki_name = poke_name;
+						}
 						var old_amount = 0;
 						for (var i = 0; i < storage_array.length; i++) {
 							if (storage_array[i].id === poke_id && storage_array[i].gender === poke_gender) {
@@ -77,7 +89,9 @@ XKit.extensions.pokes = {
 						}
 						storage_array.push({id: poke_id, gender: poke_gender, amount: old_amount + 1});
 						XKit.storage.set("pokes","pokemon_storage",JSON.stringify(storage_array));
-						XKit.notifications.add("You caught a " + poke_gender + " " + poke_name.charAt(0).toUpperCase() + poke_name.substr(1) + "!","pokes");
+						XKit.notifications.add("You caught a " + poke_gender + " " + poke_name.charAt(0).toUpperCase() + poke_name.substr(1) + "!","pokes", false, function () {
+							window.open("http://bulbapedia.bulbagarden.net/wiki/" + poke_wiki_name);
+						});
 						$(this).hide();
 					} else {
 						XKit.window.show("Catching failed!", "Something went wrong trying to catch the Pokémon. Please try again.<br/><br/>Error code: PKMN-001","error","<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
@@ -129,16 +143,16 @@ XKit.extensions.pokes = {
 		this.running = false;
 		XKit.post_listener.remove("pokes");
 	},
-
+	
 	cpanel: function(m_div) {
 		if ($("#xkit-pokes-custom-panel").length > 0) {
 			// Panel already exists, probably in refresh mode.
 			// Remove it first.
 			$("#xkit-pokes-custom-panel").remove();
 		}
-
+		
 		m_div.html('<div id="xkit-loading_pokemon">Loading Pokémon, please wait...</div>');
-
+		
 		GM_xmlhttpRequest({
 			method: "GET",
 			url: "https://gist.githubusercontent.com/ThePsionic/54a1f629dba66e53aaa4/raw/73da44a7295f99c3cd7e29cd8012bbbe341a78d8/pokedex.json",
