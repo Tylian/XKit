@@ -1,5 +1,5 @@
 //* TITLE Pokés **//
-//* VERSION 0.1.2 **//
+//* VERSION 0.2.0 **//
 //* DESCRIPTION Gotta catch them all! **//
 //* DETAILS Randomly spawns Pokémon on your dash for you to collect. **//
 //* DEVELOPER new-xkit **//
@@ -68,18 +68,19 @@ XKit.extensions.pokes = {
 						var poke_id = $(this).data("pokeid");
 						var poke_gender = $(this).data("pokegender");
 						var poke_name = $(this).data("pokename");
+						var poke_wiki_name = poke_name;
+						
 						if (poke_name.indexOf(" ") > -1) {
 							var firstWord = poke_name.split(" ")[0];
 						if (firstWord == "Mega" || firstWord == "Primal") {
-								var poke_wiki_name = poke_name.split(" ")[1];								
+								poke_wiki_name = poke_name.split(" ")[1];								
 							} else if (firstWord == "Cosplay") {
-								var poke_wiki_name = "Cosplay Pikachu";								
+								poke_wiki_name = "Cosplay Pikachu";								
 							} else {
-								var poke_wiki_name = firstWord;
+								poke_wiki_name = firstWord;
 							}
-						} else {
-							var poke_wiki_name = poke_name;
 						}
+						
 						var old_amount = 0;
 						for (var i = 0; i < storage_array.length; i++) {
 							if (storage_array[i].id === poke_id && storage_array[i].gender === poke_gender) {
