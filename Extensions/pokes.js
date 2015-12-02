@@ -1,5 +1,5 @@
 //* TITLE Pokés **//
-//* VERSION 0.1.0 **//
+//* VERSION 0.1.1 **//
 //* DESCRIPTION Gotta catch them all! **//
 //* DETAILS Randomly spawns Pokémon on your dash for you to collect. **//
 //* DEVELOPER new-xkit **//
@@ -94,7 +94,7 @@ XKit.extensions.pokes = {
 	fetchPoke: function(db_nr, pokedThing) {
 		GM_xmlhttpRequest({
 			method: "GET",
-			url: "https://gist.githubusercontent.com/ThePsionic/54a1f629dba66e53aaa4/raw/73da44a7295f99c3cd7e29cd8012bbbe341a78d8/pokedex.json",
+			url: "https://gist.githubusercontent.com/ThePsionic/54a1f629dba66e53aaa4/raw/pokedex.json",
 			json: true,
 			onerror: function(response) {
 				console.log("Poke data could not be retrieved. Skipping instance.");
@@ -129,16 +129,16 @@ XKit.extensions.pokes = {
 		this.running = false;
 		XKit.post_listener.remove("pokes");
 	},
-	
+
 	cpanel: function(m_div) {
 		if ($("#xkit-pokes-custom-panel").length > 0) {
 			// Panel already exists, probably in refresh mode.
 			// Remove it first.
 			$("#xkit-pokes-custom-panel").remove();
 		}
-		
+
 		m_div.html('<div id="xkit-loading_pokemon">Loading Pokémon, please wait...</div>');
-		
+
 		GM_xmlhttpRequest({
 			method: "GET",
 			url: "https://gist.githubusercontent.com/ThePsionic/54a1f629dba66e53aaa4/raw/73da44a7295f99c3cd7e29cd8012bbbe341a78d8/pokedex.json",
