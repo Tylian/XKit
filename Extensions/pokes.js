@@ -1,5 +1,5 @@
 //* TITLE Pokés **//
-//* VERSION 0.2.0 **//
+//* VERSION 0.3.0 **//
 //* DESCRIPTION Gotta catch them all! **//
 //* DETAILS Randomly spawns Pokémon on your dash for you to collect. **//
 //* DEVELOPER new-xkit **//
@@ -9,6 +9,15 @@
 
 XKit.extensions.pokes = {
 	running: false,
+	
+	preferences: {
+		"catch_backgrounds": {
+			text: "Give Pokémon a background (for visibility)",
+			default: false,
+			value: false
+		}
+	},
+	
 	run: function() {
 		this.running = true;
 		XKit.tools.init_css('pokes');
@@ -53,9 +62,14 @@ XKit.extensions.pokes = {
 
 		var rarityPicker = Math.floor(Math.random() * 255);
 		if (rarityPicker >= 0 && rarityPicker <= rarity) {
-			var poke_html = '<div class="poke" data-pokeid="'+db_nr+'" data-pokename="'+poke_name+'" data-pokegender="'+poke_gender+'">'+
-				'<img src="'+poke_sprite+'" alt="'+poke_name+'"/>'+
-			'</div>';
+			var poke_html;
+			if (XKit.extensions.pokes.preferences.catch_backgrounds.value) {
+				poke_html = '<div class="poke poke_background" data-pokeid="'+db_nr+'" data-pokename="'+poke_name+'" data-pokegender="'+poke_gender+'">'+
+				'<img src="'+poke_sprite+'" alt="'+poke_name+'"/>'+'</div>';			
+			} else {
+				poke_html = '<div class="poke" data-pokeid="'+db_nr+'" data-pokename="'+poke_name+'" data-pokegender="'+poke_gender+'">'+
+				'<img src="'+poke_sprite+'" alt="'+poke_name+'"/>'+'</div>';
+			}
 			pokedThing.after(poke_html);
 			pokedThing.parent().find(".poke").click(function(event) {
 				if (XKit.storage.get("pokes","pokemon_storage","") === "") {
@@ -146,13 +160,7 @@ XKit.extensions.pokes = {
 	},
 	
 	cpanel: function(m_div) {
-		if ($("#xkit-pokes-custom-panel").length > 0) {
-			// Panel already exists, probably in refresh mode.
-			// Remove it first.
-			$("#xkit-pokes-custom-panel").remove();
-		}
-		
-		m_div.html('<div id="xkit-loading_pokemon">Loading Pokémon, please wait...</div>');
+		m_div.append('<div id="xkit-loading_pokemon">Loading Pokémon, please wait...</div>');
 		
 		GM_xmlhttpRequest({
 			method: "GET",
@@ -173,10 +181,10 @@ XKit.extensions.pokes = {
 					});
 					m_html = m_html + "</table>";
 
-					$(m_div).html(m_html);
+					$("#xkit-loading_pokemon").html(m_html);
 				} catch(e) {
 					console.log("Poke data received was not valid JSON. Not showing Pokémon.");
-					$(m_div).html("<div id='xkit-pokes-custom-panel'>Failed to load Pokémon Data!<br>Please refresh the page or try again later!</div>");
+					$("#xkit-loading_pokemon").html("<div id='xkit-pokes-custom-panel'>Failed to load Pokémon Data!<br>Please refresh the page or try again later!</div>");
 				}
 			}
 		});
