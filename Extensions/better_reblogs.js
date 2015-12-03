@@ -233,7 +233,12 @@ XKit.extensions.better_reblogs = new Object({
         }
 
         if (this.preferences.alternating_reblogs.value) {
-            XKit.tools.add_css(".reblog-list-item:nth-child(odd){background-color: rgb(245,245,245);padding-bottom: 15px;}.reblog-list-item:nth-child(even){background-color: rgb(250,250,250);}.original-reblog-content {background-color: #fff !important;padding-bottom: 15px;}.contributed-content {background-color: #F0F5FA !important;padding-bottom:15px !important;border-top: 1px solid #D9E2EA;}",
+            XKit.tools.add_css(
+                ".reblog-list-item:nth-child(odd){background-color: rgb(245,245,245); padding-bottom: 15px;}"+
+                ".reblog-list-item:nth-child(even){background-color: rgb(250,250,250);}"+
+                ".original-reblog-content {background-color: #fff !important; padding-bottom: 15px;}"+
+                ".contributed-content {background-color: #F0F5FA !important;"+
+                    "padding-bottom:15px !important; border-top: 1px solid #D9E2EA;}",
                 "better_reblogs");
         }
 
