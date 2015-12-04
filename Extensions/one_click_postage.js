@@ -1,5 +1,5 @@
 //* TITLE One-Click Postage **//
-//* VERSION 4.0.9 **//
+//* VERSION 4.0.10 **//
 //* DESCRIPTION Lets you easily reblog, draft and queue posts **//
 //* DEVELOPER new-xkit **//
 //* FRAME false **//
@@ -1454,6 +1454,7 @@ XKit.extensions.one_click_postage = new Object({
 						m_object[variable_to_use] = current_caption + "<p>" + caption + "</p>";
 					}
 				} else {
+					m_object.remove_reblog_tree = true;
 					if (!XKit.extensions.one_click_postage.preferences.enable_popup_html.value) {
 						m_object[variable_to_use] = caption.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 					} else {
