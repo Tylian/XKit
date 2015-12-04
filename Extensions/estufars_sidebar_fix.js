@@ -1,5 +1,5 @@
 //* TITLE Old Sidebar **//
-//* VERSION 1.1.1 **//
+//* VERSION 1.1.2 **//
 //* DESCRIPTION Get the sidebar back **//
 //* DEVELOPER estufar **//
 //* FRAME false **//
@@ -26,7 +26,7 @@ XKit.extensions.estufars_sidebar_fix = new Object({
 				return;
 			}
 		} else {
-			var disallowedurls = ["://www.tumblr.com/explore", "://www.tumblr.com/search", "/reblog"];
+			var disallowedurls = ["://www.tumblr.com/explore", "://www.tumblr.com/search", "://www.tumblr.com/following", "/reblog"];
 			for (var i = 0; i < disallowedurls.length; i++) {
 				if (document.location.href.indexOf(disallowedurls[i]) !== -1) {
 					return;
