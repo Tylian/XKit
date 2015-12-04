@@ -1,5 +1,5 @@
 //* TITLE Pokés **//
-//* VERSION 0.3.0 **//
+//* VERSION 0.3.1 **//
 //* DESCRIPTION Gotta catch them all! **//
 //* DETAILS Randomly spawns Pokémon on your dash for you to collect. **//
 //* DEVELOPER new-xkit **//
@@ -122,23 +122,28 @@ XKit.extensions.pokes = {
 	},
 
 	fetchPoke: function(db_nr, pokedThing) {
-		GM_xmlhttpRequest({
-			method: "GET",
-			url: XKit.extensions.pokes.pokedex_url,
-			json: true,
-			onerror: function(response) {
-				console.log("Poke data could not be retrieved. Skipping instance.");
-			},
-			onload: function(response) {
-				var mdata = {};
-				try {
-					mdata = JSON.parse(response.responseText);
-					XKit.extensions.pokes.parse_pokemon(mdata, db_nr, pokedThing);
-				} catch(e) {
-					console.log("Poke data received was not valid JSON. Skipping instance.");
+		if (!XKit.extensions.pokes.gist_cache) {
+			GM_xmlhttpRequest({
+				method: "GET",
+				url: XKit.extensions.pokes.pokedex_url,
+				json: true,
+				onerror: function(response) {
+					console.log("Poke data could not be retrieved. Skipping instance.");
+				},
+				onload: function(response) {
+					var mdata = {};
+					try {
+						mdata = JSON.parse(response.responseText);
+						XKit.extensions.pokes.gist_cache = mdata;
+						XKit.extensions.pokes.parse_pokemon(mdata, db_nr, pokedThing);
+					} catch(e) {
+						console.log("Poke data received was not valid JSON. Skipping instance.");
+					}
 				}
-			}
-		});
+			});
+		} else {
+			XKit.extensions.pokes.parse_pokemon(XKit.extensions.pokes.gist_cache, db_nr, pokedThing);
+		}
 	},
 
 	chanceGen: function() {
@@ -162,33 +167,50 @@ XKit.extensions.pokes = {
 	
 	cpanel: function(m_div) {
 		m_div.append('<div id="xkit-loading_pokemon">Loading Pokémon, please wait...</div>');
-		
-		GM_xmlhttpRequest({
-			method: "GET",
-			url: XKit.extensions.pokes.pokedex_url,
-			json: true,
-			onerror: function(response) {
-				console.log("Poke data could not be retrieved. Not showing Pokémon.");
-				$(m_div).html("<div id='xkit-pokes-custom-panel'>Failed to load Pokémon Data!<br>Please refresh the page or try again later!</div>");
-			},
-			onload: function(response) {
-				var mdata = {};
-				try {
-					mdata = JSON.parse(response.responseText);
-					var m_html = "<table id=\"xkit-pokes-custom-panel\" class='pokemon_display'>";
-					var caught = JSON.parse(XKit.storage.get("pokes","pokemon_storage","[]"));
-					$.each(caught, function(index, value) {
-						m_html = m_html + "<tr class='caught' data-pokegender='" + value.gender + "'><td class='poke_sprite'><div><img src='" + mdata[value.id].sprite + "'></div></td><td class='poke_gender'><div></div></td><td class='poke_stats'><div>Name: " + mdata[value.id].name + "</div></td></tr>";
-					});
-					m_html = m_html + "</table>";
+		if (!XKit.extensions.pokes.gist_cache) {
+			GM_xmlhttpRequest({
+				method: "GET",
+				url: XKit.extensions.pokes.pokedex_url,
+				json: true,
+				onerror: function(response) {
+					console.log("Poke data could not be retrieved. Not showing Pokémon.");
+					$(m_div).html("<div id='xkit-pokes-custom-panel'>Failed to load Pokémon Data!<br>Please refresh the page or try again later!</div>");
+				},
+				onload: function(response) {
+					var mdata = {};
+					try {
+						mdata = JSON.parse(response.responseText);
+						XKit.extensions.pokes.gist_cache = mdata;
+						var m_html = "<table id=\"xkit-pokes-custom-panel\" class='pokemon_display'>";
+						var caught = JSON.parse(XKit.storage.get("pokes","pokemon_storage","[]"));
+						$.each(caught, function(index, value) {
+							m_html = m_html + "<tr class='caught' data-pokegender='" + value.gender + "'><td class='poke_sprite'><div><img src='" + mdata[value.id].sprite + "'></div></td><td class='poke_gender'><div></div></td><td class='poke_stats'><div>Name: " + mdata[value.id].name + "</div></td></tr>";
+						});
+						m_html = m_html + "</table>";
 
-					$("#xkit-loading_pokemon").html(m_html);
-				} catch(e) {
-					console.log("Poke data received was not valid JSON. Not showing Pokémon.");
-					$("#xkit-loading_pokemon").html("<div id='xkit-pokes-custom-panel'>Failed to load Pokémon Data!<br>Please refresh the page or try again later!</div>");
+						$("#xkit-loading_pokemon").html(m_html);
+					} catch(e) {
+						console.log("Poke data received was not valid JSON. Not showing Pokémon.");
+						$("#xkit-loading_pokemon").html("<div id='xkit-pokes-custom-panel'>Failed to load Pokémon Data!<br>Please refresh the page or try again later!</div>");
+					}
 				}
+			});
+		} else {
+			try {
+				var mdata = XKit.extensions.pokes.gist_cache;
+				var m_html = "<table id=\"xkit-pokes-custom-panel\" class='pokemon_display'>";
+				var caught = JSON.parse(XKit.storage.get("pokes","pokemon_storage","[]"));
+				$.each(caught, function(index, value) {
+					m_html = m_html + "<tr class='caught' data-pokegender='" + value.gender + "'><td class='poke_sprite'><div><img src='" + mdata[value.id].sprite + "'></div></td><td class='poke_gender'><div></div></td><td class='poke_stats'><div>Name: " + mdata[value.id].name + "</div></td></tr>";
+				});
+				m_html = m_html + "</table>";
+
+				$("#xkit-loading_pokemon").html(m_html);
+			} catch(e) {
+				console.log("Poke data received was not valid JSON. Not showing Pokémon.");
+				$("#xkit-loading_pokemon").html("<div id='xkit-pokes-custom-panel'>Failed to load Pokémon Data!<br>Please refresh the page or try again later!</div>");
 			}
-		});
+		}
 
 		$("#xkit-extensions-panel-right").nanoScroller();
 		$("#xkit-extensions-panel-right").nanoScroller({ scroll: 'top' });
