@@ -9,6 +9,7 @@
 
 XKit.extensions.pokes = {
 	running: false,
+	pokedex_url: "https://gist.githubusercontent.com/ThePsionic/54a1f629dba66e53aaa4/raw/pokedex.json",
 	
 	preferences: {
 		"catch_backgrounds": {
@@ -123,7 +124,7 @@ XKit.extensions.pokes = {
 	fetchPoke: function(db_nr, pokedThing) {
 		GM_xmlhttpRequest({
 			method: "GET",
-			url: "https://gist.githubusercontent.com/ThePsionic/54a1f629dba66e53aaa4/raw/pokedex.json",
+			url: XKit.extensions.pokes.pokedex_url,
 			json: true,
 			onerror: function(response) {
 				console.log("Poke data could not be retrieved. Skipping instance.");
@@ -164,7 +165,7 @@ XKit.extensions.pokes = {
 		
 		GM_xmlhttpRequest({
 			method: "GET",
-			url: "https://gist.githubusercontent.com/ThePsionic/54a1f629dba66e53aaa4/raw/73da44a7295f99c3cd7e29cd8012bbbe341a78d8/pokedex.json",
+			url: XKit.extensions.pokes.pokedex_url,
 			json: true,
 			onerror: function(response) {
 				console.log("Poke data could not be retrieved. Not showing Pokémon.");
