@@ -1,5 +1,5 @@
 //* TITLE Pokés **//
-//* VERSION 0.3.1 **//
+//* VERSION 0.3.2 **//
 //* DESCRIPTION Gotta catch them all! **//
 //* DETAILS Randomly spawns Pokémon on your dash for you to collect. **//
 //* DEVELOPER new-xkit **//
@@ -9,8 +9,8 @@
 
 XKit.extensions.pokes = {
 	running: false,
-	pokedex_url: "https://gist.githubusercontent.com/ThePsionic/54a1f629dba66e53aaa4/raw/pokedex.json",
-	
+	pokedex_url: "https://new-xkit.github.io/XKit/Extensions/dist/page/pokedex.json",
+
 	preferences: {
 		"catch_backgrounds": {
 			text: "Give Pokémon a background (for visibility)",
@@ -18,7 +18,7 @@ XKit.extensions.pokes = {
 			value: false
 		}
 	},
-	
+
 	run: function() {
 		this.running = true;
 		XKit.tools.init_css('pokes');
@@ -52,7 +52,7 @@ XKit.extensions.pokes = {
 			callback(XKit.extensions.pokes.gist_cache);
 		}
 	},
-	
+
 	checkEligibility: function() {
 		$(".post_avatar:not(.poked):not(.unpokable)").each(function() {
 			if (XKit.extensions.pokes.chanceGen()) {
@@ -93,7 +93,7 @@ XKit.extensions.pokes = {
 			var poke_html;
 			if (XKit.extensions.pokes.preferences.catch_backgrounds.value) {
 				poke_html = '<div class="poke poke_background" data-pokeid="'+db_nr+'" data-pokename="'+poke_name+'" data-pokegender="'+poke_gender+'">'+
-				'<img src="'+poke_sprite+'" alt="'+poke_name+'"/>'+'</div>';			
+				'<img src="'+poke_sprite+'" alt="'+poke_name+'"/>'+'</div>';
 			} else {
 				poke_html = '<div class="poke" data-pokeid="'+db_nr+'" data-pokename="'+poke_name+'" data-pokegender="'+poke_gender+'">'+
 				'<img src="'+poke_sprite+'" alt="'+poke_name+'"/>'+'</div>';
@@ -111,18 +111,18 @@ XKit.extensions.pokes = {
 						var poke_gender = $(this).data("pokegender");
 						var poke_name = $(this).data("pokename");
 						var poke_wiki_name = poke_name;
-						
+
 						if (poke_name.indexOf(" ") > -1) {
 							var firstWord = poke_name.split(" ")[0];
 						if (firstWord == "Mega" || firstWord == "Primal") {
-								poke_wiki_name = poke_name.split(" ")[1];								
+								poke_wiki_name = poke_name.split(" ")[1];
 							} else if (firstWord == "Cosplay") {
-								poke_wiki_name = "Cosplay Pikachu";								
+								poke_wiki_name = "Cosplay Pikachu";
 							} else {
 								poke_wiki_name = firstWord;
 							}
 						}
-						
+
 						var old_amount = 0;
 						for (var i = 0; i < storage_array.length; i++) {
 							if (storage_array[i].id === poke_id && storage_array[i].gender === poke_gender) {
@@ -172,7 +172,7 @@ XKit.extensions.pokes = {
 		this.running = false;
 		XKit.post_listener.remove("pokes");
 	},
-	
+
 	cpanel: function(m_div) {
 		m_div.append('<div id="xkit-loading_pokemon">Loading Pokémon, please wait...</div>');
 		XKit.extensions.pokes.fetch_pokedex(function(mdata) {
