@@ -1,5 +1,5 @@
 //* TITLE Pokés **//
-//* VERSION 0.3.2 **//
+//* VERSION 0.4.0 **//
 //* DESCRIPTION Gotta catch them all! **//
 //* DETAILS Randomly spawns Pokémon on your dash for you to collect. **//
 //* DEVELOPER new-xkit **//
@@ -176,8 +176,9 @@ XKit.extensions.pokes = {
 	cpanel: function(m_div) {
 		m_div.append('<div id="xkit-loading_pokemon">Loading Pokémon, please wait...</div>');
 		XKit.extensions.pokes.fetch_pokedex(function(mdata) {
-			var m_html = "<table id=\"xkit-pokes-custom-panel\" class='pokemon_display'>";
 			var caught = JSON.parse(XKit.storage.get("pokes","pokemon_storage","[]"));
+			var m_html = "You caught " + caught.length + " of " + mdata.length + " Pokémon!";
+			m_html = m_html + "<table id=\"xkit-pokes-custom-panel\" class='pokemon_display'>";
 			$.each(caught, function(index, value) {
 				m_html = m_html + "<tr class='caught' data-pokegender='" + value.gender + "'><td class='poke_sprite'><div><img src='" + mdata[value.id].sprite + "'></div></td><td class='poke_gender'><div></div></td><td class='poke_stats'><div>Name: " + mdata[value.id].name + "</div></td></tr>";
 			});
