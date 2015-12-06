@@ -1,5 +1,5 @@
 //* TITLE Outbox **//
-//* VERSION 0.9.7 **//
+//* VERSION 0.9.8 **//
 //* DESCRIPTION Saves your sent replies, fan mail and asks. **//
 //* DETAILS This extension stores and lets you view the last 50 asks you've answered privately. Please keep in mind that this is a highly experimental extension, so if you hit a bug, please send the XKit blog an ask with the problem you've found. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -164,7 +164,7 @@ XKit.extensions.outbox = new Object({
 		var form_key = $('meta[name=tumblr-form-key]').attr("content");
 
 		m_messages_array.unshift(m_obj);
-		//XKit.storage.set("outbox", "messages_" + XKit.extensions.outbox.fan_mail_form_key, JSON.stringify(m_messages_array));
+
 		if (XKit.extensions.outbox.preferences.use_shared.value) {
 			XKit.storage.set("outbox", "messages", JSON.stringify(m_messages_array));
 		} else {
@@ -177,7 +177,9 @@ XKit.extensions.outbox = new Object({
 
 		var form_key = XKit.interface.form_key();
 
-		$(document).on("click", "#ask_button", function() {
+		$(document).on("click", ".post-form--asks .ask-button", function() {
+
+			var $form = $(this).closest('.post-form--asks');
 
 			var m_messages = XKit.storage.get("outbox", "messages_" + form_key, "");
 			if (XKit.extensions.outbox.preferences.use_shared.value) {
@@ -196,19 +198,15 @@ XKit.extensions.outbox = new Object({
 				m_messages_array = [];
 			}
 
-			m_username = document.location.href.substring(document.location.href.indexOf('/ask_form') + 10);
-			m_username = m_username.substring(0, m_username.indexOf("."));
-
 			var m_obj = {};
 			m_obj.avatar = "ask";
-			m_obj.username = $("#from").find(".tumblelog_name").html();
-			m_obj.message = $("#question").val();
+			m_obj.username = $form.find('.ask-from .tumblelog_name').text();
+			m_obj.message = $form.find('textarea[name=question]').val();
 			m_obj.answer = "";
-			m_obj.to = $("#recipient_label").html();
+			m_obj.to = $form.find(".ask-recipient-label").text();
 			m_obj.time = new Date().getTime();
 
 			m_messages_array.unshift(m_obj);
-			//XKit.storage.set("outbox", "messages_" + form_key, JSON.stringify(m_messages_array));
 			if (XKit.extensions.outbox.preferences.use_shared.value) {
 				XKit.storage.set("outbox", "messages", JSON.stringify(m_messages_array));
 			} else {
@@ -444,10 +442,7 @@ XKit.extensions.outbox = new Object({
 		} catch(err) {
 		}
 
-		console.log(m_messages_array);
 		m_messages_array.splice(parseInt($(obj).attr('data-outbox-id')), 1);
-
-		console.log(m_messages_array);
 
 		if (XKit.extensions.outbox.preferences.use_shared.value) {
 			XKit.storage.set("outbox", "messages", JSON.stringify(m_messages_array));
