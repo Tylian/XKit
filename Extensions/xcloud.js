@@ -197,7 +197,6 @@ XKit.extensions.xcloud = new Object({
 		$("#xcloud-use-old").unbind('change');
 		$("#xcloud-use-old").bind('change', function(){
 			XKit.extensions.xcloud.useoldserver = $(this).is(':checked');
-			console.log("Use XCloud old server: " + XKit.extensions.xcloud.useoldserver);
 		});
 
 		$("#xcloud-login").unbind("click");
@@ -499,8 +498,6 @@ XKit.extensions.xcloud = new Object({
 			if(this.files.length === 1){
 				var reader  = new FileReader();
 				reader.addEventListener('loadend', function(result){
-					console.log("starting process restore");
-					console.log(result);
 					self.process_restore({"data":result.currentTarget.result});
 				});
 				reader.readAsText(this.files[0]);
@@ -838,11 +835,9 @@ XKit.extensions.xcloud = new Object({
 			m_to_add.enabled = XKit.installed.enabled(installed[i]);
 
 			if (limit_data && (m_data.length / 1024 / 1024) >= 1.5) {
-				console.log("Skipping " + m_to_add.extension + " because length = " + (m_data.length / 1024 / 1024) + " kilobytes");
 				skipping.push(m_to_add.extension);
 				skipping_size.push((m_data.length / 1024 / 1024));
 			} else {
-				console.log("Added " + m_to_add.extension + " to upload object. Length = " + (m_data.length / 1024 / 1024) + " kilobytes");
 				to_send.settings.push(m_to_add);
 			}
 
@@ -854,7 +849,6 @@ XKit.extensions.xcloud = new Object({
 		//Add this flag to the payload so we know we can unescape the payload.
 		to_send.use_utf8 = true;
 
-		console.log("Encoding upload object.");
 
 		to_send = JSON.stringify(to_send);
 		console.log("Original size = " + (to_send.length / 1024 / 1024) + " megabytes");
