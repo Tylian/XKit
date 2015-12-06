@@ -1,5 +1,5 @@
 //* TITLE Messaging Tweaks **//
-//* VERSION 1.5.1 **//
+//* VERSION 1.6.0 **//
 //* DESCRIPTION Helpful tweaks for Tumblr IM **//
 //* DETAILS This adds a few helpful tweaks to the Tumblr IM, for example minimising the chat, hiding the IM icon or changing the looks of the chat window. **//
 //* DEVELOPER New-XKit **//
@@ -57,6 +57,11 @@ XKit.extensions.messaging_tweaks = new Object({
 		},
 		"allow_minimising": {
 			text: "Allow minimising a chat by clicking on the title",
+			default: true,
+			value: true
+		},
+		"minimise_hotkey": {
+			text: "Use Alt+[Down Arrow] to minimise and Alt+[Up Arrow] to bring the chatbox back",
 			default: true,
 			value: true
 		},
@@ -267,6 +272,20 @@ XKit.extensions.messaging_tweaks = new Object({
 		if (!XKit.interface.is_tumblr_page()) {
 			return;
 		}
+		
+		if (XKit.extensions.messaging_tweaks.preferences.minimise_hotkey.value) {
+			$(document).on("keydown.minimise_header", function(e) {
+				if (!e.altKey) { return; }
+				if (e.which === 40) {
+					$(".messaging-conversation-popovers").animate({bottom: "-404px"});
+					$(this).addClass("minimised");
+				} else if (e.which === 38) {
+					document.title = "Tumblr";
+					$(".messaging-conversation-popovers").animate({bottom: "0px"});
+					$(this).removeClass("minimised");
+				}
+			});
+		}
 
 		if (XKit.extensions.messaging_tweaks.preferences.desktop_notification.value) {
 			XKit.extensions.messaging_tweaks.notification.requestPermission(function(result) {
@@ -394,6 +413,7 @@ XKit.extensions.messaging_tweaks = new Object({
 			$(".conversation-header-main").removeClass("minimised");
 		}
 		$(".conversation-header-main").off("click.minimise_header");
+		$(document).off("keydown.minimise_header");
 		this.running = false;
 	}
 
