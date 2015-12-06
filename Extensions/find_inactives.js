@@ -29,10 +29,10 @@ XKit.extensions.find_inactives = new Object({
 		}
 	},
 
-	language_date_day: ["day", "tag", " jour", " giorn", "?", " gün ", " día", "???", " dzie?", " dni", "dia", " dag", "?", "?"],
-	language_date_week: ["week", "woche", " semaine", "settiman", "??", " hafta ", " semana", "?????", " tydzie?", " tygodnie", " semana", " weken", "?", "?", "?"],
-	language_date_month: ["month", "monat", " mois", " mese", " mesi", "?", " ay ", " mes", "?????", " mies", "mês", " meses", " maand", "?"],
-	language_date_year: ["year", "jahr", " an", "anno", " anni", "?", " y?l ", " año", "???", " rok", " lat", " ano", " jaar", "?", "??"],
+	language_date_day: ["day", "tag", " jour", " giorn", "\u65e5", " gün ", " día", "\u0434\u043d\u044f", " dzie\u0144", " dni", "dia", " dag", "\uc77c", "\u5929"],
+	language_date_week: ["week", "woche", " semaine", "settiman", "\u9031\u9593", " hafta ", " semana", "\u043d\u0435\u0434\u0435\u043b", " tydzie\u0144", " tygodnie", " semana", " weken", "\uc8fc", "\u5468", "\u9031"],
+	language_date_month: ["month", "monat", " mois", " mese", " mesi", "\u6708", " ay ", " mes", "\u043c\u0435\u0441\u044f\u0446", " mies", "mês", " meses", " maand", "\ub2ec"],
+	language_date_year: ["year", "jahr", " an", "anno", " anni", "\u5e74", " y\u0131l ", " año", "\u0433\u043e\u0434", " rok", " lat", " ano", " jaar", "\ub144", "\uc5f0\ub839"],
 
 	language_date_strip: ["Mis à jour il y a"],
 
