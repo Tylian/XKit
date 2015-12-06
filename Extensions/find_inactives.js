@@ -29,12 +29,12 @@ XKit.extensions.find_inactives = new Object({
 		}
 	},
 
-	language_date_day: ["day", "tag", " jour", " giorn", "\u65e5", " gün ", " día", "\u0434\u043d\u044f", " dzie\u0144", " dni", "dia", " dag", "\uc77c", "\u5929"],
+	language_date_day: ["day", "tag", " jour", " giorn", "\u65e5","g\u00fcn ", " d\u00eda", "\u0434\u043d\u044f", " dzie\u0144", " dni", "dia", " dag", "\uc77c", "\u5929"],
 	language_date_week: ["week", "woche", " semaine", "settiman", "\u9031\u9593", " hafta ", " semana", "\u043d\u0435\u0434\u0435\u043b", " tydzie\u0144", " tygodnie", " semana", " weken", "\uc8fc", "\u5468", "\u9031"],
-	language_date_month: ["month", "monat", " mois", " mese", " mesi", "\u6708", " ay ", " mes", "\u043c\u0435\u0441\u044f\u0446", " mies", "mês", " meses", " maand", "\ub2ec"],
-	language_date_year: ["year", "jahr", " an", "anno", " anni", "\u5e74", " y\u0131l ", " año", "\u0433\u043e\u0434", " rok", " lat", " ano", " jaar", "\ub144", "\uc5f0\ub839"],
+	language_date_month: ["month", "monat", " mois", " mese", " mesi", "\u6708", " ay ", " mes", "\u043c\u0435\u0441\u044f\u0446", " mies", "m\u00eas", " meses", " maand", "\ub2ec"],
+	language_date_year: ["year", "jahr", " an", "anno", " anni", "\u5e74", " y\u0131l ", " a\u00f1o", "\u0433\u043e\u0434", " rok", " lat", " ano", " jaar", "\ub144", "\uc5f0\ub839"],
 
-	language_date_strip: ["Mis à jour il y a"],
+	language_date_strip: ["Mis \u00e0 jour il y a"],
 
 	run: function() {
 		this.running = true;
@@ -78,7 +78,6 @@ XKit.extensions.find_inactives = new Object({
 		var count_text = $("#tabs").html();
 		count_text = count_text.replace(/[^0-9]/g, '');
 
-		console.log("User count: " + count_text);
 
 		var people_count = parseInt(count_text);
 		XKit.extensions.find_inactives.people_count = people_count;
@@ -125,7 +124,6 @@ XKit.extensions.find_inactives = new Object({
 					var total = XKit.extensions.find_inactives.people_count;
 					var perc = self.page_tracker.get_progress();
 
-					console.log(perc + " | " + total);
 
 					XKit.progress.value("find-inactives", perc);
 
@@ -140,7 +138,6 @@ XKit.extensions.find_inactives = new Object({
 							XKit.extensions.find_inactives.people_list.push(username);
 						}
 
-						console.log(username + " => " + last_updated_days);
 
 						if (last_updated_days >= parseInt(XKit.extensions.find_inactives.preferences.time.value)) {
 							var m_user = {};
@@ -234,7 +231,6 @@ XKit.extensions.find_inactives = new Object({
 		get_next_page: function(){
 			for(var i = 0; i < this.page_count; i++){
 				if(this.page_processed[i] === undefined){
-					console.log("Processing page " + i + " | " + this.page_count);
 					return i;
 				}
 			}
