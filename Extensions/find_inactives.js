@@ -1,5 +1,5 @@
 //* TITLE Find Inactives **//
-//* VERSION 0.3.0 **//
+//* VERSION 0.3.1 **//
 //* DESCRIPTION Find the inactive blogs you follow **//
 //* DEVELOPER new-xkit **//
 //* DETAILS This extension lets you find blogs that haven't been updated in a certain amount of time. Just go to list of blogs you follow, then click on &quot;Find Inactive Blogs&quot; button below your Crushes to get started. **//
@@ -28,6 +28,13 @@ XKit.extensions.find_inactives = new Object({
 			]
 		}
 	},
+
+	language_date_day: ["day", "tag", " jour", " giorn", "?", " gün ", " día", "???", " dzie?", " dni", "dia", " dag", "?", "?"],
+	language_date_week: ["week", "woche", " semaine", "settiman", "??", " hafta ", " semana", "?????", " tydzie?", " tygodnie", " semana", " weken", "?", "?", "?"],
+	language_date_month: ["month", "monat", " mois", " mese", " mesi", "?", " ay ", " mes", "?????", " mies", "mês", " meses", " maand", "?"],
+	language_date_year: ["year", "jahr", " an", "anno", " anni", "?", " y?l ", " año", "???", " rok", " lat", " ano", " jaar", "?", "??"],
+
+	language_date_strip: ["Mis à jour il y a"],
 
 	run: function() {
 		this.running = true;
@@ -68,8 +75,11 @@ XKit.extensions.find_inactives = new Object({
 	},
 
 	get_count: function() {
-		var count_text = $("#tabs").html().match(/Following.*Tumblr/gm)[0];
-		count_text = count_text.replace(/[^0-9\.]/g, '');
+		var count_text = $("#tabs").html();
+		count_text = count_text.replace(/[^0-9]/g, '');
+
+		console.log("User count: " + count_text);
+
 		var people_count = parseInt(count_text);
 		XKit.extensions.find_inactives.people_count = people_count;
 
@@ -107,7 +117,6 @@ XKit.extensions.find_inactives = new Object({
 			json: false,
 			onerror: function(response) {
 				XKit.extensions.find_inactives.show_error("<b>Unable to get the blog information.</b><br/>Please try again later.<br/><br/>Error Code: FIA-330");
-				return;
 			},
 			onload: function(response) {
 
@@ -148,7 +157,6 @@ XKit.extensions.find_inactives = new Object({
 
 				} catch(e) {
 					XKit.extensions.find_inactives.show_error("<b>Unable to get the blog information.</b><br/>Please try again later.<br/><br/>Error Code: FIA-230<br/>" + e.message);
-					return;
 				}
 
 			}
@@ -165,19 +173,42 @@ XKit.extensions.find_inactives = new Object({
 		var time_value = updated_time.replace(/[^0-9\.]/g, '');
 		time_value = parseInt(time_value, 10);
 
-		if(updated_time.indexOf("day") > -1){
-			return time_value;
-		}
-		if(updated_time.indexOf("week") > -1){
-			return time_value * 7;
-		}
-		if(updated_time.indexOf("month") > -1){
-			return time_value * 30;
-		}
-		if(updated_time.indexOf("year") > -1){
-			return time_value * 365;
+		for(var i = 0; i < this.language_date_strip.length; i++) {
+			updated_time = updated_time.replace(this.language_date_strip[i], '');
 		}
 
+
+		var days = this.calculate_days(updated_time, time_value, this.language_date_day, 1);
+		if(days > 0){
+			return days;
+		}
+
+		days = this.calculate_days(updated_time, time_value, this.language_date_week, 7);
+		if(days > 0){
+			return days;
+		}
+
+		days = this.calculate_days(updated_time, time_value, this.language_date_month, 30);
+		if(days > 0){
+			return days;
+		}
+
+		days = this.calculate_days(updated_time, time_value, this.language_date_year, 365);
+		if(days > 0){
+			return days;
+		}
+
+		return 0;
+	},
+
+	calculate_days: function(updated_time, time_value, time_language_array, multiplier){
+		var i = 0;
+		while(i < time_language_array.length){
+			if(updated_time.indexOf(time_language_array[i]) > -1){
+				return multiplier * time_value;
+			}
+			i++;
+		}
 		return 0;
 	},
 
