@@ -5978,7 +5978,7 @@
   {
     "id": "747",
     "identifier": "unown-exclamation",
-    "name": "Unown (Exclamation)",
+    "name": "Unown (!)",
     "sprite": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoCAMAAAC7IEhfAAAAZlBMVEX///81NTWjo6MxMTE2NjY5OTkyMjJUVFSioqJTU1OkpKSlpaXMzMz8/Pxra2uBgYFubm43NzdSUlKCgoKDg4OEhIT9/f2hoaFsbGw0NDRRUVFpaWlqamr6+vr7+/s2NjWFhYX+/v4SbBqSAAAAAXRSTlMAQObYZgAAAHBJREFUeNrtzUcOgDAMRFEnTiWE3jv3vyRcANlbpPz10wykfpRAppO94cGWDQtM8NOZskBkuKWzNutpqbosBOtmcnCTL5ReIgmn1oWrIaFeozdV1Tgkv/daxMGWNQX1GO8h9wqAlkfuT2CkhVCQ+k0PFisFBDQmxiYAAAAASUVORK5CYII=",
     "gender_rate": "-1",
     "rarity": "225"
@@ -5986,7 +5986,7 @@
   {
     "id": "748",
     "identifier": "unown-question",
-    "name": "Unown (Question)",
+    "name": "Unown (?)",
     "sprite": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoCAAAAACpleexAAAAAnRSTlMA/1uRIrUAAACoSURBVDjL7dTREcIgDAbgrhRq2mMMoUsInjvY4iBtYJtOpNTad/GSB33wrjx/l/CHI9UqPNUOfwQRQASRUlIggX0IMShZa1eQxTDoogxuF30r+QH2Hr4KC66YuiYvghS9AcHAlTMgeBk8DqajwFdshpiSpQMH0dEGyZJi4Xmd4s2wUJ+yVf5ippoNc28xL9215aAe83OZbcPPUY+P2aLkz+gGcV8pfwRfrcnsC9Z94E4AAAAASUVORK5CYII=",
     "gender_rate": "-1",
     "rarity": "225"
@@ -6010,7 +6010,7 @@
   {
     "id": "751",
     "identifier": "castform-snowy",
-    "name": "Castform (Hail)",
+    "name": "Castform (Snowy)",
     "sprite": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoCAMAAAC7IEhfAAAALVBMVEX///8xMTE1NjVCe0pKm3JKnHNSUlJSVFNaSq1rva17Y86Me/+U59alrf////8IsCFDAAAAAXRSTlMAQObYZgAAAKZJREFUeAHt0DFuxTAMg2FTsfRMx+r9j1siaMYqXoou+YdMXwjB7e1vArDH1iI23GIoABvOqRx4guShZFFBkppU8l5LFYpcROWG865YhHOOH+qjHswpejUlCxhznpl5Tv3AQo7MmV+hr2B5pGQGBOUcv7sYmsqNwbiujMttvLfYcK8knHc1lHQecciFXJVZfPzTe5i1h6x7t2em4GhbWbe2l9zb//cNP+sHET2K/ToAAAAASUVORK5CYII=",
     "gender_rate": "4",
     "rarity": "45"
@@ -6042,7 +6042,7 @@
   {
     "id": "755",
     "identifier": "burmy-sandy",
-    "name": "Burmy (Sand Cloak)",
+    "name": "Burmy (Sandy Cloak)",
     "sprite": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoCAMAAAC7IEhfAAAAWlBMVEX///9SUlKEhHPOvVKDg3L07IMzMzHMu1IyMjJUVFI0MzI1NTWCgnE2NjZRUVHLulExMTFTU1Lz7IL27oP374RUU1FTU1GFhXKNhEqNhUq6o0EyMjH8zDn9zDkCfQYdAAAAAXRSTlMAQObYZgAAALJJREFUeNrtkzkOwzAMBENSl2XHlq/c+f83swJSU2yCNF5A3WCEBcnTkd/lXIzckExcP3CyCUcqNhBGG0fkkqXx6JhKm1s2mSmuucVN61YjIBu+juCrrEr2S+eYiTycQRV2rx3ke/e6EqBLKJ0eFw+lWiUPDOMVn2d9eD7DyLXP/alPxX97N9qMABHA8aYaJxFZwTmKQd/FqQ4Qr8FBOTsGKaG9tUawrlmUUGw3WE5H/p4Ph/IJL/hv8E8AAAAASUVORK5CYII=",
     "gender_rate": "4",
     "rarity": "120"
@@ -6058,7 +6058,7 @@
   {
     "id": "757",
     "identifier": "wormadam-sandy",
-    "name": "Wormadam (Sand Cloak)",
+    "name": "Wormadam (Sandy Cloak)",
     "sprite": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoCAMAAAC7IEhfAAAAhFBMVEX///8xMTFSUlJxcXFycnLOvXP/75RUVFOtjEIyMjJTU1JTUlE2NjZzc3OLajGMazGri0JRUVHLunFSUlH+7pMyMTG9U0pUUlLMu3IyMjHNu3KrikHnXFP+7JIzMzKKajG6UUm6uro1NTXmWVHmW1LnWlK9Ukr87JL8/Px0dHSsi0F1dXUE5rQGAAAAAXRSTlMAQObYZgAAAOtJREFUeAHt0klvgzAQBWBmvGDA7JCELE2b7u3//399EB+dKZeql7yDkdCn59HIyd/lHk8rmcrWuEury1XQK+ZfBFGQcqM/1/V4dUyy65kI31FlaBdgzxXoeSQ1n9KIV6rLkqu6p0TqrHowhLlxk7BBaj++FwhXEOEHRRu7XGcqFBbVl5sO4DH3stVLIw6eOxvn3BSDm+ftMmL29DnLWxBysKkOje82JTrARaEZUtyomeGsebi5dk9d3hQw9vh6sgZSWHoLt0CT7wSYXDpjhuPJpjuxEPGPb/vNHirsWoRgQYmyi14qPPR7/jc/IdsQCehtQL8AAAAASUVORK5CYII=",
     "gender_rate": "8",
     "rarity": "45"
@@ -6098,7 +6098,7 @@
   {
     "id": "762",
     "identifier": "rotom-heat",
-    "name": "Rotom (Oven)",
+    "name": "Rotom (Heat)",
     "sprite": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoCAMAAAC7IEhfAAAAclBMVEX/////WkpSUlL3jEL7WUk0MTHTYkIxMTH/c1rWY0LWZUTzikHTYkH3jUQ0MjH+/PwzMTH/cllUUlH/i3L/jHNqalnVZENra1q2S0L1ikL2jEO6urr2i0L8/Pz0i0L+/fy9vLv////7+/tRUVG9u7tsallxWkrZAAAAAXRSTlMAQObYZgAAAOVJREFUeNrt0ckSgjAQBFA7C4uAsgm47///i86QSFGYWNy82BeqklfpSVj886sA81xVR5jn6noORFENDvgKo8oCaDWSmEKWZlEnKzWayCFhvgyBAU4lAMPCRMpVaCgcV+w3mHVbKbstUVooosjRzS6RQ7gfJNlNu/VteXi7OM6VnfxT6n1D8HzNiFnoflOdrjN5adYZuzJU/UBOeD/RgcvHjpgIcgUv3AghjtRMjKvBcZ+4aVvBCWy1B0IT5IigFP1DervTp4Ei4Ev7Ax2mMdnewcvsvyYb56b4O2WrMHEeS+yfX+cF2MULCzy8c9oAAAAASUVORK5CYII=",
     "gender_rate": "-1",
     "rarity": "30"
@@ -6106,7 +6106,7 @@
   {
     "id": "763",
     "identifier": "rotom-wash",
-    "name": "Rotom (Washing Machine)",
+    "name": "Rotom (Wash)",
     "sprite": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoCAMAAAC7IEhfAAAAflBMVEX///9ClN73jELWY0IxMTExMjNSUlL0i0JUUlFBktszMTFRUVFzc3OySUE0MjHzikH3jUT+/fxDlN30jET2i0L7+/tEld7TYkJTUVG1SkLTYkH2jENycnJCktujxPy6urq9vLtRU1RitPZxcXHVYkK7vL38/Pz8/f5DlN7////JvDluAAAAAXRSTlMAQObYZgAAANlJREFUeNrt0EcSwjAMBVAkyyW9QULv9f4XRAEPbKKQHSz4M/bqjWT/0T/fDsBAp4NhUmdpMGwgw4/bATRliCl9oC1zFtHZlvZuVWP0SSUJvHaSM1R8+FJhIJaiN2WFnolQz8NAT+oKsbjl2AcThlmR47a8PKBrfy5NPMQWi/q0QOVMEzKELqjCyFhnzryZmVICBD2fHZ3hLOPYPt/IrFMSRWZ93RmL+IbQXWS0Ag9bx9mDUGYyNc341Q4rURJRxnDmXyhLjqZkSuxk+B77cE/pnTh25OE/v587WH0KFSCaKOEAAAAASUVORK5CYII=",
     "gender_rate": "-1",
     "rarity": "30"
@@ -6114,7 +6114,7 @@
   {
     "id": "764",
     "identifier": "rotom-frost",
-    "name": "Rotom (Refrigerator)",
+    "name": "Rotom (Frost)",
     "sprite": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoCAMAAAC7IEhfAAAAe1BMVEX///+Me//3jEKKefsxMTHWY0L0i0IyMjRUUlF1c3L3jUSljP+1SkK8m/+9nP8zMTHzikE0MjGki/9xcXGMfP3VYkJRUVGNff9SUlJzc3PTYkL8/Pz+/fz///+2S0L2i0LUY0L2jEO6urq9vLv7+/t0cnL9/P+8u771i0Q34Cz1AAAAAXRSTlMAQObYZgAAAOpJREFUeNrtz7duA0EMBFCTmy4n5Sxb8f+/0CRtAgZuF1JhQI2muOYeZrgf77w+AP8MIRh4pg1C15v0f2XB2rnvTWp9qOGHkco8Ym8TtG5KYNYhojsgZp5pDJYEw3xNiKR8MX7owIXnQhFl35rUa8LX9E59YvfVLAGlcUFwuyucq2bOKYQxnGwKPE2vdEC2Vgg1jKe7fOW3i9unQmZNo1DDEDHf7AoUWLUGhjIKgWR+vKy8QHLAkty4cuJzT63LpSwDS4hBORLxz4nKYtu/y5k1KSbSMqXplhzDpGRKbcQIqUtSYY8jk++8PN9UZAvQNPoqkAAAAABJRU5ErkJggg==",
     "gender_rate": "-1",
     "rarity": "30"
@@ -6130,7 +6130,7 @@
   {
     "id": "766",
     "identifier": "rotom-mow",
-    "name": "Rotom (Lawnmower)",
+    "name": "Rotom (Mow)",
     "sprite": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoCAMAAAC7IEhfAAAAjVBMVEX////3jEIyMzFRUVFSUlJUUlFiYmKE3jHTYkLWY0L2i0IxMTH0i0I0MjHTYkGC2zH3jUT+/fxtxjS2S0KU71q9vLu+vr5jY2P9/f1sxTOD2zFTUVFkYmLVYkKzSkLWZUTzikG1SkL0jEH1ikIzMzP2jEO6urq7vbr7+/v8/Pz8/vtUVFT+/PwzMTH///8u3TVvAAAAAXRSTlMAQObYZgAAAPBJREFUeNrt0skOgjAQBmCnC1LKqoD7vq/v/3j+ox48lMrFm38IIeHLTGbazj8/SveZFk5YJOt+d2lERtusRT2WtwzdvW5ptAq1UtzdY+GAYtiIErZN44pUKyC81HxDlKBmw7gMY+pPINkmmautDAZWssPUL4eZXAUDBWUiQjS7mXFCgWKnnN7RXhhXo/WHDM3K3VrGRQ+wuOdwwQASa3cOE0ZFTtXonFN/Csew4fRSjFL0DjujA95688LFcWE41wtvHc5zJfbDelhvrQy5oO/S8vHIsbDS795hj8Ye9vntcI6//pRlO1q+aCvHzz8/zQMSqQ8BaHD4TQAAAABJRU5ErkJggg==",
     "gender_rate": "-1",
     "rarity": "30"
