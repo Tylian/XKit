@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 6.0.1 **//
+//* VERSION 6.1.0 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER new-xkit **//
 
@@ -318,61 +318,45 @@ XKit.tools.dump_config = function(){
 
 		XKit.iframe = {
 
-			__full_mode: false,
-
-			___resize: function(width, height) {
-
-				try {
-
-					var m_obj = {};
-					m_obj.width = width;
-					m_obj.height = height;
-
-					XKit.tools.add_function(function() {
-						try {
-							add_tag = JSON.parse(add_tag);
-							_t.postMessage(["resize_iframe", add_tag.width, add_tag.height, "body_class", "top_bar", _t.protocol_host()], "*", window.parent);
-						} catch(e) {
-							// console.log("[!!!] XKit Patches: Unable to resize the iframe: " + e.message);
-						}
-					}, true, JSON.stringify(m_obj));
-
-				} catch(e) {
-
-					// console.log("[!!!] XKit Patches: Unable to resize the iframe: " + e.message);
-
-				}
-
+			get_tumblelog: function() {
+				var new_channel_id = document.location.href.match(/[&?]tumblelogName=([\w-]+)/);
+				var old_channel_id = $("#tumblelog_name").attr('data-tumblelog-name');
+				return (new_channel_id && new_channel_id[1]) || old_channel_id;
 			},
 
-			resize: function(width, height) {
-
-				XKit.iframe.___full_mode = false;
-				XKit.iframe.___resize(width, height);
-
+			single_post_id: function() {
+				var new_post_id = document.location.href.match(/[&?]singlePostId=(\d+)/);
+				var old_post_id = document.location.href.match(/[&?]pid=(\d+)/);
+				var id_match = new_post_id || old_post_id;
+				return (id_match && id_match[1]);
 			},
 
-			full: function() {
-
-				XKit.iframe.___full_mode = true;
-				XKit.iframe.___resize(window.outerWidth, window.outerHeight);
-
-				window.onresize = function() {
-
-					if (XKit.iframe.___full_mode) {
-						XKit.iframe.___resize(window.outerWidth, window.outerHeight);
-					}
-
-				};
-
+			form_key: function() {
+				var new_form_key = $("meta[name=tumblr-form-key]").attr("content");
+				var old_form_key = $(".btn.reblog").attr('data-form-key');
+		        return new_form_key || old_form_key;
 			},
 
-			restore: function() {
+			hide_button: function(button) {
+				button.addClass("no_label");
+				button.addClass("no-text").wrapInner('<span class="hidden">');
+			},
 
-				XKit.iframe.___full_mode = false;
-				XKit.iframe.___resize(360, 26);
+			unfollow_button: function() {
+				return $(".btn.unfollow,.tx-button.unfollow-button");
+			},
 
-			}
+			delete_button: function() {
+				return $(".btn.delete,.tx-button.delete-button");
+			},
+
+			reblog_button: function() {
+				return $(".btn.reblog,.tx-button.reblog-button");
+			},
+
+			dashboard_button: function() {
+				return $(".btn.dashboard,.tx-button.dashboard-button");
+			},
 
 		};
 
@@ -382,8 +366,7 @@ XKit.tools.dump_config = function(){
 
 			// console.log("XKit Patches determined that it's in frame mode, resizing stuff!");
 
-			$("#iframe_controls").css("width","auto");
-			XKit.iframe.restore();
+			$("#iframe_controls,#dashboard_iframe").css("width","auto");
 
 			var m_url = $("#tumblelog_name").attr('data-tumblelog-name');
 
