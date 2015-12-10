@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 6.1.0 **//
+//* VERSION 6.1.1 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER new-xkit **//
 
@@ -325,10 +325,8 @@ XKit.tools.dump_config = function(){
 			},
 
 			single_post_id: function() {
-				var new_post_id = document.location.href.match(/[&?]singlePostId=(\d+)/);
-				var old_post_id = document.location.href.match(/[&?]pid=(\d+)/);
-				var id_match = new_post_id || old_post_id;
-				return (id_match && id_match[1]);
+				var all_post_ids = document.location.href.match(/[&?](singlePostId|pid|postId)=(\d+)/);
+				return all_post_ids[2];
 			},
 
 			form_key: function() {
