@@ -1,5 +1,5 @@
 //* TITLE Messaging Tweaks **//
-//* VERSION 1.4.0 **//
+//* VERSION 1.5.0 **//
 //* DESCRIPTION Helpful tweaks for Tumblr IM **//
 //* DETAILS This adds a few helpful tweaks to the Tumblr IM, for example minimising the chat, hiding the IM icon or changing the looks of the chat window. **//
 //* DEVELOPER New-XKit **//
@@ -32,6 +32,11 @@ XKit.extensions.messaging_tweaks = new Object({
 		},
 		"hide_chat_bubble": {
 			text: "Hide the chat bubble completely",
+			default: false,
+			value: false
+		},
+		"hide_send_post": {
+			text: "Hide the send post paper plane on posts",
 			default: false,
 			value: false
 		},
@@ -326,6 +331,9 @@ XKit.extensions.messaging_tweaks = new Object({
 		}
 		if (XKit.extensions.messaging_tweaks.preferences.remove_message_headers.value) {
 			XKit.tools.add_css(".conversation-message-text .message-bubble-header a {display:none;}", "messaging_tweaks");
+		}
+		if (XKit.extensions.messaging_tweaks.preferences.hide_send_post.value) {
+			XKit.tools.add_css(".post_control.messaging {display:none;}", "messaging_tweaks");
 		}
 		
 		XKit.tools.add_css(".messaging-conversation .xkit-others_messaging_message .conversation-message-text .message-bubble { background-color: " + XKit.extensions.messaging_tweaks.preferences.other_chat_bubble_background.value + " !important; }", "messaging_tweaks");
