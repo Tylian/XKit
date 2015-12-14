@@ -1,5 +1,5 @@
 //* TITLE XKit Preferences **//
-//* VERSION 7.0.0 **//
+//* VERSION 7.1.0 **//
 //* DESCRIPTION Lets you customize XKit **//
 //* DEVELOPER new-xkit **//
 
@@ -36,6 +36,23 @@ XKit.extensions.xkit_preferences = new Object({
 		var mobile_html = '<div class="tab iconic" id="new-xkit-control" style="position: relative; top: 50%; height: 26px; transform: translateY(-50%);">' +
 			'<a style="color:transparent;" class="tab_anchor" href="#" onclick="return false">XKit</a>' +
 			'</div>';
+			
+		if (XKit.browser().mobile) {
+			XKit.tools.add_css('#xkit-window, #xkit-window-old { max-width: 650px !important; width: 100% !important; max-height: 100%; overflow: scroll; margin: auto 0 !important;} .xkit-window-buttons { padding-top: 0 !important; } .xkit-window-buttons .xkit-button { height: 40px !important; padding: 0 !important; }','mobile_window_fix');
+			
+			var mobile_control_panel = '#xkit-control-panel { width: 100%; height: 100%; top: 0; left: 0; margin: 0; } ' +
+				'#xkit-control-panel-inner { height: calc(100% - 40px); padding: 0; overflow: hidden; } ' +
+				'#xkit-control-panel-tabs { display: flex; overflow: scroll; whitespace: no-wrap; } ' +
+				'#xkit-control-panel-tabs div { float: none; whitespace: no-wrap; } ' +
+				'#xkit-extensions-panel-left { height: 100% !important; top: 0; left: 0; } ' +
+				'.xkit-extensions-display-type-switcher { bottom: 0; } #xkit-extensions-panel-left-search { left: 0; bottom: 0; } ' +
+				'#xkit-extensions-panel-right { height: calc(100% - 40px); width: 100%; } ' +
+				'#xkit-extensions-panel-right.xkit-wide-panel { left: 0; width: 100%; } ' +
+				'#xkit-extensions-panel-top { min-height: 100px; height: unset; } ' +
+				'#xkit-extensions-panel-top .buttons, #xkit-extension-enabled, #xkit-extension-internal-label, #xkit-extensions-panel-top .more-info, #xkit-extensions-panel-top .version, #xkit-extensions-panel-top .title { display: block; position: relative; right: unset; bottom: unset; top: unset; } ' +
+				'.xkit-extension-setting { background-position: 3px bottom; } '
+			XKit.tools.add_css(mobile_control_panel,'mobile_xkit_menu');
+		}
 
 		$(".l-header").find("#logout_button").parent().before(m_html);
 		$(".l-header").find("#account_button").before(m_html);
@@ -589,6 +606,7 @@ XKit.extensions.xkit_preferences = new Object({
 						'<div id="xkit-cp-tab-xcloud">XCloud</div>' +
 						'<div id="xkit-cp-tab-other">Other</div>' +
 						'<div id="xkit-cp-tab-about">About + Support</div>' +
+						'<div id="xkit-cp-tab-close">&#10006;</div>' +
 					'</div>' +
 				'</div>' +
 				'<div id="xkit-control-panel-shadow">&nbsp;</div>';
@@ -596,6 +614,9 @@ XKit.extensions.xkit_preferences = new Object({
 		$("body").append(m_html);
 		//$('#container').foggy({ blurRadius: 2 });
 		$(".l-container").css("opacity","0.66");
+		if (!XKit.browser().mobile) {
+			$('#xkit-cp-tab-close').css('display','none');
+		}
 
 		if (XKit.extensions.xkit_preferences.hide_xcloud_if_not_installed === true) {
 			if (XKit.installed.check("xcloud") === false) {
@@ -704,6 +725,10 @@ XKit.extensions.xkit_preferences = new Object({
 
 			if (div_id === "xkit-cp-tab-about") {
 				XKit.extensions.xkit_preferences.show_about();
+			}
+
+			if (div_id === "xkit-cp-tab-close") {
+				XKit.extensions.xkit_preferences.close();
 			}
 
 		});
