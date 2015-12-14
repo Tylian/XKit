@@ -1,5 +1,5 @@
 //* TITLE Reblog Display Options **//
-//* VERSION 1.1.4 **//
+//* VERSION 1.3.0 **//
 //* DESCRIPTION Adds different styles to the new reblog layout, including the "classic" nested look. **//
 //* DEVELOPER new-xkit **//
 //* FRAME false **//
@@ -74,6 +74,12 @@ XKit.extensions.better_reblogs = new Object({
             value: false,
             style: "flat",
         },
+        "alternating_reblogs": {
+			text: "Lightly highlight reblogs in alternating gray and new comments in blue",
+			default: false,
+			value: false,
+			style: "flat"
+        },
         "color_quotes": {
             text: "Enable Color Quotes",
             default: false,
@@ -93,6 +99,7 @@ XKit.extensions.better_reblogs = new Object({
             type: "combo",
             values: [
                 "Default Rainbow", "rainbow",
+                "Reverse Rainbow", "revrainbow",
                 "Pastel Rainbow", "pastel",
                 "Tumblr Blue", "blue",
                 "Grayscale", "grayscale",
@@ -117,6 +124,7 @@ XKit.extensions.better_reblogs = new Object({
 
     colors: {
         rainbow: ["ff1900","ff9000","ffd000","6adc13","00cd8b","00a5e7","001999","cc00b9","ff78e1"],
+        revrainbow: ["ff78e1","cc00b9","001999","00a5e7","00cd8b","6adc13","ffd000","ff9000","ff1900"],
         pastel: ["e45c5c","ffcc66","d7e972","76e2c2","5dc6cd","be7ce4","e45c5c","ffcc66","d7e972"],
         blue: ["36536e","536c83","6a8094","798c9f","36536e","536c83","6a8094","798c9f","36536e"],
         grayscale: ["b2b2b2","969696","6b6b6b","3d3d3d","d3d0d0","b2b2b2","969696","6b6b6b","3d3d3d"],
@@ -221,6 +229,16 @@ XKit.extensions.better_reblogs = new Object({
 
         if (this.preferences.remove_avatars.value) {
             XKit.tools.add_css(".reblog-avatar {display:none !important;} .reblog-header {padding-left: 0px !important;}",
+                "better_reblogs");
+        }
+
+        if (this.preferences.alternating_reblogs.value) {
+            XKit.tools.add_css(
+                ".reblog-list-item:nth-child(odd){background-color: rgb(245,245,245); padding-bottom: 15px;}"+
+                ".reblog-list-item:nth-child(even){background-color: rgb(250,250,250);}"+
+                ".original-reblog-content {background-color: #fff !important; padding-bottom: 15px;}"+
+                ".contributed-content {background-color: #F0F5FA !important;"+
+                    "padding-bottom:15px !important; border-top: 1px solid #D9E2EA;}",
                 "better_reblogs");
         }
 
@@ -344,7 +362,7 @@ XKit.extensions.better_reblogs = new Object({
             var all_quotes_text = "";
             all_quotes.forEach(function(data, index, all) {
                 var reblog_content = data.reblog_content;
-                all_quotes_text = 
+                all_quotes_text =
                     '<p class="reblog-user">'+"<a class='tumblr_blog' href='" + data.reblog_url + "'>" +
                         data.reblog_author + "</a>:</p>" +
                     '<blockquote class="reblog-quote">' + all_quotes_text + reblog_content + "</blockquote>";
@@ -403,7 +421,7 @@ XKit.extensions.better_reblogs = new Object({
         $(".xkit-color-quoted").removeClass("xkit-color-quoted");
         XKit.tools.remove_css("colorquotes_padding");
         $(".xkit-colorquotes-border-item").css("background","").css("border-left-color","");
-    },    
+    },
 
     hex_to_rgb: function(hex) {
 
