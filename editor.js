@@ -82,7 +82,7 @@ function makeEditorShim(id) {
 
 
 function extension_editor_finish_run() {
-	if (typeof(unsafeWindow) !== 'undefined') {
+	if ((typeof(unsafeWindow) !== 'undefined') && (navigator.userAgent.indexOf('Mobile') === -1)) {
 		script_editor = unsafeWindow.ace.edit('xkit-editor-textarea');
 		object_editor = unsafeWindow.ace.edit('xkit-editor-textarea-object');
 		css_editor = unsafeWindow.ace.edit('xkit-editor-textarea-css');
