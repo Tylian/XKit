@@ -1,5 +1,5 @@
 //* TITLE Messaging Tweaks **//
-//* VERSION 1.5.0 **//
+//* VERSION 1.5.1 **//
 //* DESCRIPTION Helpful tweaks for Tumblr IM **//
 //* DETAILS This adds a few helpful tweaks to the Tumblr IM, for example minimising the chat, hiding the IM icon or changing the looks of the chat window. **//
 //* DEVELOPER New-XKit **//
@@ -181,12 +181,14 @@ XKit.extensions.messaging_tweaks = new Object({
 						var emoji_url = "http://www.emoji-cheat-sheet.com/graphics/emojis/" + emoji_tag + ".png";
 						if (emoji_tag === "tobdog") {
 							emoji_url = "http://vignette1.wikia.nocookie.net/steamtradingcards/images/2/21/Tobdog.png/revision/latest?cb=20151011230955";
+						} else if (emoji_tag === "+1") {
+							emoji_url = "http://www.emoji-cheat-sheet.com/graphics/emojis/plus1.png";
 						}
 						var emoji = new Image();
 						emoji.alt = ":" + emoji_tag + ":";
 						emoji.title = ":" + emoji_tag + ":";
 						emoji.height = "22";
-						emoji.onload = img_onload.bind(this, msg_div, emojis[i], emoji);
+						emoji.onload = img_onload.bind(this, msg_div, emojis[i].replace("+", "\\+"), emoji);
 						emoji.src = emoji_url;
 					}
 				}
