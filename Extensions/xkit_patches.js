@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 6.1.1 **//
+//* VERSION 6.1.2 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER new-xkit **//
 
@@ -338,6 +338,10 @@ XKit.tools.dump_config = function(){
 			hide_button: function(button) {
 				button.addClass("no_label");
 				button.addClass("no-text").wrapInner('<span class="hidden">');
+			},
+
+			follow_button: function() {
+				return $(".btn.follow,.tx-button.follow-button");
 			},
 
 			unfollow_button: function() {
