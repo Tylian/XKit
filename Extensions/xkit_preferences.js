@@ -1,5 +1,5 @@
 //* TITLE XKit Preferences **//
-//* VERSION 7.1.0 **//
+//* VERSION 7.2.0 **//
 //* DESCRIPTION Lets you customize XKit **//
 //* DEVELOPER new-xkit **//
 
@@ -587,6 +587,8 @@ XKit.extensions.xkit_preferences = new Object({
 
 	},
 
+	scroll_pos: $(window).scrollTop(),
+
 	open: function(open_news) {
 
 		if ($("#xkit-control-panel-shadow").length > 0) {
@@ -751,6 +753,10 @@ XKit.extensions.xkit_preferences = new Object({
 			$("#xkit-control-panel-shadow").remove();
 			$("#xkit-control-panel").remove();
 		});
+
+		if (XKit.browser().mobile) {
+			$(window).scrollTop(XKit.extensions.xkit_preferences.scroll_pos);
+		}
 
 	},
 
@@ -2448,6 +2454,7 @@ XKit.extensions.xkit_preferences = new Object({
 
 	destroy: function() {
 		$("#new-xkit-control").remove();
+		XKit.tools.remove_css('mobile_xkit_menu');
 		this.running = false;
 	}
 });
