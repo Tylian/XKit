@@ -41,7 +41,7 @@ XKit.extensions.xkit_preferences = new Object({
 			XKit.tools.add_css('#xkit-window, #xkit-window-old { max-width: 650px !important; width: 100% !important; max-height: 100%; overflow: scroll; margin: auto 0 !important;} .xkit-window-buttons { padding-top: 0 !important; } .xkit-window-buttons .xkit-button { height: 40px !important; padding: 0 !important; }','mobile_window_fix');
 			
 			var mobile_control_panel = '#xkit-control-panel { width: 100%; height: 100%; top: 0; left: 0; margin: 0; } ' +
-				'#xkit-control-panel-inner { height: calc(100% - 40px); padding: 0; overflow: hidden; } ' +
+				'#xkit-control-panel-inner { height: calc(100% - 40px); padding: 0; overflow: scroll; } ' +
 				'#xkit-control-panel-tabs { display: flex; overflow: scroll; whitespace: no-wrap; } ' +
 				'#xkit-control-panel-tabs div { float: none; whitespace: no-wrap; } ' +
 				'#xkit-extensions-panel-left { height: 100% !important; top: 0; left: 0; } ' +
