@@ -50,7 +50,7 @@ XKit.extensions.xkit_preferences = new Object({
 				'#xkit-extensions-panel-right.xkit-wide-panel { left: 0; width: 100%; } ' +
 				'#xkit-extensions-panel-top { min-height: 100px; height: unset; } ' +
 				'#xkit-extensions-panel-top .buttons, #xkit-extension-enabled, #xkit-extension-internal-label, #xkit-extensions-panel-top .more-info, #xkit-extensions-panel-top .version, #xkit-extensions-panel-top .title { display: block; position: relative; right: unset; bottom: unset; top: unset; } ' +
-				'.xkit-extension-setting { background-position: 3px bottom; } '
+				'.xkit-change-ext-setting-checkbox { font: 15px !important; bottom: 7px; }  .xkit-change-ext-setting-checkbox b { position: relative; bottom: -3px; } '
 			XKit.tools.add_css(mobile_control_panel,'mobile_xkit_menu');
 		}
 
