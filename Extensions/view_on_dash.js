@@ -1,5 +1,5 @@
 //* TITLE View On Dash **//
-//* VERSION 0.7.5 **//
+//* VERSION 0.7.6 **//
 //* DESCRIPTION View blogs on your dash **//
 //* DEVELOPER new-xkit **//
 //* DETAILS This is a preview version of an extension, missing most features due to legal/technical reasons for now. It lets you view the last 20 posts a person has made on their blogs right on your dashboard. If you have User Menus+ installed, you can also access it from their user menu under their avatar. **//
@@ -275,6 +275,22 @@ XKit.extensions.view_on_dash = new Object({
 				post_contents = post_contents + "<div class=\"post_body\">" + data.caption + "</div>";
 			}
 
+		}
+
+		if (data.type === "chat") {
+			post_class = "is_conversation";
+			post_contents += "<div class=\"post_body\"><ul class=\"conversation_lines\">";
+			if (data.dialogue && data.dialogue.length > 0) {
+				for (var index = 0; index < data.dialogue.length; index++) {
+					var line = data.dialogue[index];
+					post_contents += "<li class=\"chat_line\">";
+					if (line.label !== "") {
+						post_contents += "<strong>" + line.label + " </strong>";
+					}
+					post_contents += line.phrase + "</li>";
+				}
+			}
+			post_contents += "</ul></div>";
 		}
 
 		if (data.type === "photo") {
