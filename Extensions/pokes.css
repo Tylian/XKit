@@ -112,10 +112,9 @@
 	font-size: 25px;
 }
 .nickname::before {
-	content: "";
+	content: "\EA25";
 	font-family: "tumblr-icons";
 	float: left;
-	display: none;
 }
 .species {
 	display: none;
@@ -171,6 +170,30 @@
 	text-align: center;
 	font-weight: bold;
 	font-size: 20px;
+}
+.xkit-pokes-pc-info .nickname-textbox {
+	height: 35px;
+	width: 400px;
+	font-size: 25px;
+}
+.xkit-pokes-pc-info .xkit-button {
+	position: relative;
+	top: -10px;
+	float: right;
+	height: 30px;
+	border: none;
+	background-color: transparent;
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: 100%;
+}
+.xkit-pokes-pc-info .xkit-button:active {
+	color: black;
+	background-color: transparent;
+	box-shadow: none;
+}
+.xkit-pokes-pc-info .release_pokemon {
+	background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADYAAAA2CAYAAACMRWrdAAAEQUlEQVRoBd3BIW8baxqA0ecdWboeVpjNLwgsu5GGuNICw5QFFizI6iMG8zO8kkE/5YILCsO20GClNRkpZYWFRYlh2XjRs7aVRk5umibxOK16Tqj8inrsQFmWcoe2bYNnEipdKcvSNy8WfM/ppcGOFXSkLEvfvFjwEP/8W8iOhcq2yrL0zYsFd5nscW0054bTS4Md6bEjkz3+YrLH2mjOzoXKNsqy9M2LBZsme3zXaM7auy992rYNOlbwA4zmMPm8YOVwOKMsS8uylA4VdGyyx71Gc5h8XrDy6fCc0ckBZ+/nHA5nlGUpHSl4RqM5TD4v+Gp0csDkj0+sjE4OOBzOKMtSOlDQgXdf+txnNIfRHD4dnvPVdLbgttHJAV0p6MDZ+znvvvTZNJrDaA6jOZxeGqeXBlemswUrw0Gf2w6HM8qylC316MjZ+znHR3vAgpXTS4MNr15/cHr2ktumZy8ZHn9kdHLAyujkgOMpWyvowOSPT6wcDme8+9Ln9NLgDv0/f6P/5288h4IttW0b59MB3zP7+++sLP7xP55Djw60bRuvXn/wfDqgbdtgQ2RkafCfD0zPXvJcCjry33//Hm3bBlciY2RkyUTwDcPjj4xODuhaj45FRjaYCB7h+GiPtm2DLRV0KDKywURwh+Ggz8p0tmBXQmVbkZFbTAS3vHr9wenZS74aHn9kdHLAV8dHe7RtG3SgYEuR0URwxUSYCB7p+GiPtm2DrqioqKioqKioqKioqKioqPDWFXirvHUFFRUVFRUVFZXB0bmLxcLB0bmDo3P7/b68dQUVFRUVFRUVFRUVFRUVFRUVFRWVUHmKyGgiIiNLJoIHiIx8g4mgIwVPEBlZiow8QmTkyriCccUNkZGOhMpjREZuMRHcIzJyZVxxp7rhmolgS6HyUJGRpXEFdQMmgm+IjGwYV9xQNzCuuKFuWDMRbClUHiIysjSuWKsbOjOuuFY3rJkIttDjkeqGBzMRbIiM3DKuWKsbOtXjgUwEGyIjt5gInqBu6FyodOFfH7FuwESwFBm5x7iCwT43zC6gbsBEsKUeHYuMLJkINkRGNtQNjCsY7PMXkdFEsIUeHTMR3MFEcCUycofBPowrqBu2VtCRumEtMvIdJoKluoHZBXeKjGyhoEMmwkRExsgYGXmkwT6MK9YiI0/UYwdMBEuRMTLyCLMLqBvWTARP1GOHTAT3iIxsmF1wzUSwhYKfTN3QiR4dMRFsYXYBdQMmgg4U/KIKfgKzC6gbOlXwg0RGbjERdKTgF1XwA0RGlsYVDPbZiYJfVMEzi4xcGeyzMwU/yLhibXYBdUPnCp5RZGRpXMFgn50qeCaRkaVxBYN9rg322YmCZxAZWRpXMNhnbXbBToXKLkVGvmFcca1uwETQkVDZlcjIBhPBlcjIhnEFdQMmgg6Eyi5ERhPBA0RGrpgIOhAqP4vIyJKJYEuh8iv6P8tdLS3deMKNAAAAAElFTkSuQmCC');
 }
 .caught.active {
 	background: rgba(255,255,255,.7);
