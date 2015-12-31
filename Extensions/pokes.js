@@ -1,5 +1,5 @@
 //* TITLE Pokés **//
-//* VERSION 0.5.0 **//
+//* VERSION 0.6.0 **//
 //* DESCRIPTION Gotta catch them all! **//
 //* DETAILS Randomly spawns Pokémon on your dash for you to collect. **//
 //* DEVELOPER new-xkit **//
@@ -127,14 +127,7 @@ XKit.extensions.pokes = {
 							}
 						}
 
-						var old_amount = 0;
-						for (var i = 0; i < storage_array.length; i++) {
-							if (storage_array[i].id === poke_id && storage_array[i].gender === poke_gender) {
-								old_amount = storage_array[i].amount;
-								storage_array.splice(i, 1);
-							}
-						}
-						storage_array.push({id: poke_id, gender: poke_gender, amount: old_amount + 1});
+						storage_array.push({id: poke_id, gender: poke_gender});
 						XKit.storage.set("pokes","pokemon_storage",JSON.stringify(storage_array));
 						XKit.notifications.add("You caught a " + poke_gender + " " + poke_name.charAt(0).toUpperCase() + poke_name.substr(1) + "!","pokes", false, function () {
 							window.open("http://bulbapedia.bulbagarden.net/wiki/" + poke_wiki_name);
@@ -177,6 +170,38 @@ XKit.extensions.pokes = {
 		XKit.post_listener.remove("pokes");
 	},
 
+	rename_poke: function(index, nick, cb) {
+		if (!cb) { cb = function() {}; }
+		try {
+			var storage_array = JSON.parse(XKit.storage.get("pokes","pokemon_storage", ""));
+			if (storage_array) {
+				storage_array[index].nickname = nick;
+				XKit.storage.set("pokes","pokemon_storage",JSON.stringify(storage_array));
+				cb();
+			} else {
+				XKit.window.show("Renaming failed!", "Something went wrong trying to rename the Pokémon. Please try again.<br/><br/>Error code: PKMN-003","error","<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
+			}
+		} catch(e) {
+			XKit.window.show("Renaming failed!", "Something went wrong trying to rename the Pokémon. Please try again.<br/><br/>Error code: PKMN-004","error","<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
+		}
+	},
+	
+	delete_poke: function(index, cb) {
+		if (!cb) { cb = function() {}; }
+		try {
+			var storage_array = JSON.parse(XKit.storage.get("pokes","pokemon_storage", ""));
+			if (storage_array) {
+				storage_array.splice(index,1);
+				XKit.storage.set("pokes","pokemon_storage",JSON.stringify(storage_array));
+				cb();
+			} else {
+				XKit.window.show("Removing failed!", "Something went wrong trying to remove the Pokémon. Please try again.<br/><br/>Error code: PKMN-005","error","<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
+			}
+		} catch(e) {
+			XKit.window.show("Removing failed!", "Something went wrong trying to remove the Pokémon. Please try again.<br/><br/>Error code: PKMN-006","error","<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
+		}
+	},
+	
 	render_pokelist: function() {
 		var m_html = 
 			'<div class="xkit-pokes-lightbox" style="opacity: 0">' +
@@ -184,7 +209,9 @@ XKit.extensions.pokes = {
 				'<div class="xkit-pokes-pc-info">' +
 					'<div class="gender"></div>' +
 					'<div class="nickname"></div>' +
+					'<input class="xkit-textbox nickname-textbox" maxlength="32" style="display: none" placeholder="Press Enter after editing">' +
 					'<div class="species"></div>' +
+					'<div class="xkit-button release_pokemon" style="display: none" title="Release Pokémon"></div>' +
 					'<div class="caught_stats"></div>' +
 				'</div>' +
 				'<div class="xkit-pokes-pc-pokemon">' +
@@ -208,18 +235,66 @@ XKit.extensions.pokes = {
 		$(".xkit-pokes-lightbox").animate({
 			opacity: 1
 		});
+		$(".xkit-pokes-pc-info .nickname").click(function() {
+			$(this).hide();
+			$(".xkit-pokes-pc-info .nickname-textbox").show();
+			$(".xkit-pokes-pc-info .nickname-textbox").focus();
+		});
+		$(".xkit-pokes-pc-info .nickname-textbox").change(function() {
+			$(this).hide();
+			XKit.extensions.pokes.rename_poke($("div.active").attr("data-array_index"), $(this).val(), function() {
+				$("div.active").attr("data-pokenick", $(".xkit-pokes-pc-info .nickname-textbox").val());
+				$(".xkit-pokes-pc-info .nickname").show();
+				if (typeof $("div.active").attr("data-pokenick") !== "undefined" && $("div.active").attr("data-pokenick")) {
+					$(".xkit-pokes-pc-info .nickname").html("<div title='Click to nickname!'>" + $("div.active").attr("data-pokenick") + "</div>");
+				} else {
+					$(".xkit-pokes-pc-info .nickname").html("<div title='Click to nickname!'>" + $("div.active").attr("data-pokespecies") + "</div>");
+				}
+			});
+		});
+		$(".xkit-pokes-pc-info .release_pokemon").click(function() {
+			var pokename = $("div.active").attr("data-pokespecies");
+			if (typeof $("div.active").attr("data-pokenick") !== "undefined" && $("div.active").attr("data-pokenick")) {
+				pokename = $("div.active").attr("data-pokenick") + " (" + pokename + ")";
+			}
+			XKit.window.show("Release Pokémon","Do you really want to release <b>" + pokename + "</b>?<br/>This Pokémon will be lost. You can not undo this action.","question","<div id=\"release-pokemon-yes\" class=\"xkit-button default\">Yes, release Pokémon</div><div id=\"release-pokemon-no\" class=\"xkit-button\">Cancel</div>");
+			$("#release-pokemon-no").click(function() {
+				XKit.window.close();
+			});
+			$("#release-pokemon-yes").click(function() {
+				$(this).addClass("disabled");
+				$("#release-pokemon-no").addClass("disabled");
+				XKit.window.close();
+				XKit.extensions.pokes.delete_poke($("div.active").attr("data-array_index"), function() {
+					var array_index = $("div.active").attr("data-array_index");
+					$("div.active").remove();
+					$(".caught").filter(function() {
+						return $(this).attr("data-array_index") > array_index;
+					}).each(function() {
+						$(this).attr("data-array_index", $(this).attr("data-array_index") - 1);
+					});
+					$(".xkit-pokes-pc-info .caught_stats").show();
+					$(".xkit-pokes-pc-info .gender").hide();
+					$(".xkit-pokes-pc-info .species").hide();
+					$(".xkit-pokes-pc-info .nickname").hide();
+					$(".xkit-pokes-pc-info .release_pokemon").hide();
+					$(".xkit-pokes-pc-info .nickname-textbox").hide();
+					
+				});
+			});
+		});
 		XKit.extensions.pokes.fetch_pokedex(function(mdata) {
 			var caught = JSON.parse(XKit.storage.get("pokes","pokemon_storage","[]"));
 			var header = "<p>You've caught " + caught.length + " total Pokémon!<br/> That's ";
 			var checklist = [];
 			var m_html = "";
 			$.each(caught, function(index, value) {
-				m_html = m_html + "<div class='caught' data-pokegender='" + value.gender + "' data-pokespecies='" + mdata[value.id].name + "' data-pokenick='" + (value.nickname || "") + "'><img class='caught poke_sprite' src='" + mdata[value.id].sprite + "'></div>";
+				m_html = m_html + "<div class='caught' data-pokegender='" + value.gender + "' data-pokespecies='" + mdata[value.id].name + "' data-pokenick='" + (value.nickname || "") + "' data-array_index=" + index + "><img class='caught poke_sprite' src='" + mdata[value.id].sprite + "'></div>";
 				if (checklist.indexOf(value.id) === -1) checklist.push(value.id);
 			});
 			header += checklist.length + " out of " + mdata.length + " different species of Pokémon!</p>";
 			$("#xkit-loading_pokemon").html(m_html);
-			$(".caught_stats").html(header);		
+			$(".caught_stats").html(header);	
 			$(".xkit-pokes-pc-pokemon .caught").click(function () {
 				if ($(this).hasClass("active")) {
 					$(this).removeClass("active");
@@ -227,6 +302,8 @@ XKit.extensions.pokes = {
 					$(".xkit-pokes-pc-info .gender").hide();
 					$(".xkit-pokes-pc-info .species").hide();
 					$(".xkit-pokes-pc-info .nickname").hide();
+					$(".xkit-pokes-pc-info .release_pokemon").hide();
+					$(".xkit-pokes-pc-info .nickname-textbox").hide();
 				} else {
 					$(".active").removeClass("active");
 					$(this).addClass("active");
@@ -235,11 +312,14 @@ XKit.extensions.pokes = {
 					$(".xkit-pokes-pc-info .gender").show();
 					$(".xkit-pokes-pc-info .species").show();
 					$(".xkit-pokes-pc-info .nickname").show();
+					$(".xkit-pokes-pc-info .release_pokemon").show();
+					$(".xkit-pokes-pc-info .nickname-textbox").hide();
+					$(".xkit-pokes-pc-info .nickname-textbox").val($(this).attr("data-pokenick"));
 					$(".xkit-pokes-pc-info .gender").attr(  "data-pokegender", ( $(this).attr("data-pokegender") ) );
 					$(".xkit-pokes-pc-info .gender").text( $(this).attr("data-pokegender") );
 					$(".xkit-pokes-pc-info .species").text( "Species: " + $(this).attr("data-pokespecies") );
 					if (typeof $(this).attr("data-pokenick") !== "undefined" && $(this).attr("data-pokenick")) {
-						$(".xkit-pokes-pc-info .nickname").html("<div>" + $(this).attr("data-pokenick") + "</div>" );
+						$(".xkit-pokes-pc-info .nickname").html("<div title='Click to nickname!'>" + $(this).attr("data-pokenick") + "</div>");
 					} else {
 						$(".xkit-pokes-pc-info .nickname").html("<div title='Click to nickname!'>" + $(this).attr("data-pokespecies") + "</div>");
 					}
