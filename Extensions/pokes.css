@@ -1,3 +1,8 @@
+@font-face {
+	font-family: "pokepixelplus";
+	src: url(http://new-xkit.github.io/XKit/Extensions/dist/pokepixelplus.ttf);
+}
+
 /*
  * Style for Pokémon appearing on Dashboard
 */
@@ -15,20 +20,26 @@
 	image-rendering: pixelated;
 }
 .poke::after {
-	font-size: 26px;
-	font-weight: bold;
+	float: right;
+	font-size: 30px;
 	position: relative;
-	left: -26px;
+	top: 55px;
+	right: 12px;
+	font-weight: 100;
+	font-family: pokepixelplus, monospace;
 }
 .poke[data-pokegender="male"]::after {
+	font-family: pokepixelplus, monospace;
 	content: "\2642";
 	color: #6CA0DC;
 }
 .poke[data-pokegender="female"]::after {
+	font-family: pokepixelplus, monospace;
 	content: "\2640";
 	color: #FF69B4;
 }
 .poke[data-pokegender="genderless"]::after {
+	font-family: pokepixelplus, monospace;
 	content: "\26AA";
 	color: #9370DB;
 }
@@ -54,6 +65,7 @@
 	text-align: center;
 	cursor: pointer;
 	border: 1px solid #D0D0D0;
+	font-family: pokepixelplus, monospace;
 }
 .xkit-pokes-menu_button.disabled {
 	cursor: default;
@@ -65,13 +77,15 @@
 	content: "This feature is not ready just yet!";
 }
 .xkit-pokes-menu_button .title {
-	font-weight: bold;
+	font-weight: 600;
 	margin-top: 4px;
+	font-size: 20px;
 }
 .xkit-pokes-menu_button .description {
 	max-height: 60px;
 	overflow: hidden;
 	text-overflow: ellipsis;
+	font-size: 17px;
 }
 .xkit-pokes-menu_button .icon {
 	position: absolute;
@@ -89,14 +103,14 @@
 }
 
 /*
- * Pokémon list style 
+ * Pokémon list style
 */
 .xkit-pokes-lightbox {
 	position: fixed;
 	top: 0px;
 	bottom: 0px;
 	right: 0px;
-	left: 0px; 
+	left: 0px;
 	z-index: 15000;
 	overflow: hidden;
 	background-color: rgba(25,25,25,.92);
@@ -104,12 +118,14 @@
 .gender {
 	display: none;
 	float: right;
-	font-size: 20px;
+	font-size: 26px;
+	font-family: pokepixelplus, monospace;
 }
 .nickname {
 	display: none;
-	font-weight: 700;
-	font-size: 25px;
+	font-family: pokepixelplus, monospace;
+	font-weight: 500;
+	font-size: 28px;
 }
 .nickname::before {
 	content: "\EA25";
@@ -118,10 +134,12 @@
 }
 .species {
 	display: none;
+	font-family: pokepixelplus, monospace;
 	font-size: 16px;
 	margin-top: 3px;
 }
 #xkit-pokes-nickinput {
+	font-family: pokepixelplus, monospace;
 	font-size: 20px;
 }
 .xkit-pokes-pc {
@@ -144,7 +162,7 @@
 }
 .xkit-pokes-pc-info {
 	position: absolute;
-	background: #fff;		
+	background: #fff;
 	height: 90px;
 	width: 85%;
 	padding: 10px;
@@ -155,18 +173,22 @@
 	filter: grayscale(0%);
 }
 .xkit-pokes-pc-info .gender[data-pokegender="male"]::after {
+	font-family: pokepixelplus, monospace;
 	content: " \2642";
 	color: #6CA0DC;
 }
 .xkit-pokes-pc-info .gender[data-pokegender="female"]::after {
+	font-family: pokepixelplus, monospace;
 	content: " \2640";
 	color: #FF69B4;
 }
 .xkit-pokes-pc-info .gender[data-pokegender="genderless"]::after {
+	font-family: pokepixelplus, monospace;
 	content: " \26AA";
 	color: #9370DB;
 }
 .xkit-pokes-pc-info .caught_stats {
+	font-family: pokepixelplus, monospace;
 	text-align: center;
 	font-weight: bold;
 	font-size: 20px;
@@ -175,6 +197,7 @@
 	height: 35px;
 	width: 400px;
 	font-size: 25px;
+	font-family: pokepixelplus, monospace;
 }
 .xkit-pokes-pc-info .xkit-button {
 	position: relative;
@@ -220,6 +243,7 @@
 	position: relative;
 	top: -40px;
 	font-weight: 100;
+	font-family: pokepixelplus, monospace;
 }
 .caught[data-pokegender="male"]::after {
 	content: " \2642";

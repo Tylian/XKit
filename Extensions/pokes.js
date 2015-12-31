@@ -1,5 +1,5 @@
 //* TITLE Pokés **//
-//* VERSION 0.6.0 **//
+//* VERSION 0.7.0 **//
 //* DESCRIPTION Gotta catch them all! **//
 //* DETAILS Randomly spawns Pokémon on your dash for you to collect. **//
 //* DEVELOPER new-xkit **//
@@ -185,7 +185,7 @@ XKit.extensions.pokes = {
 			XKit.window.show("Renaming failed!", "Something went wrong trying to rename the Pokémon. Please try again.<br/><br/>Error code: PKMN-004","error","<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
 		}
 	},
-	
+
 	delete_poke: function(index, cb) {
 		if (!cb) { cb = function() {}; }
 		try {
@@ -201,9 +201,9 @@ XKit.extensions.pokes = {
 			XKit.window.show("Removing failed!", "Something went wrong trying to remove the Pokémon. Please try again.<br/><br/>Error code: PKMN-006","error","<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
 		}
 	},
-	
+
 	render_pokelist: function() {
-		var m_html = 
+		var m_html =
 			'<div class="xkit-pokes-lightbox" style="opacity: 0">' +
 			'<div class="xkit-pokes-pc">' +
 				'<div class="xkit-pokes-pc-info">' +
@@ -220,7 +220,7 @@ XKit.extensions.pokes = {
 					'</div>' +
 				'</div>' +
 			'</div>';
-		
+
 		$("body").prepend(m_html);
 		$(".xkit-pokes-lightbox").click(function(e) {
 			if (e.target !== this) return;
@@ -279,7 +279,7 @@ XKit.extensions.pokes = {
 					$(".xkit-pokes-pc-info .nickname").hide();
 					$(".xkit-pokes-pc-info .release_pokemon").hide();
 					$(".xkit-pokes-pc-info .nickname-textbox").hide();
-					
+
 				});
 			});
 		});
@@ -294,7 +294,7 @@ XKit.extensions.pokes = {
 			});
 			header += checklist.length + " out of " + mdata.length + " different species of Pokémon!</p>";
 			$("#xkit-loading_pokemon").html(m_html);
-			$(".caught_stats").html(header);	
+			$(".caught_stats").html(header);
 			$(".xkit-pokes-pc-pokemon .caught").click(function () {
 				if ($(this).hasClass("active")) {
 					$(this).removeClass("active");
@@ -329,7 +329,7 @@ XKit.extensions.pokes = {
 			$("#xkit-loading_pokemon").html("<div id='xkit-pokes-custom-panel'>Failed to load Pokémon Data!<br>Please refresh the page or try again later!</div>");
 		});
 	},
-	
+
 	cpanel: function(m_div) {
 		var m_html = '<div id="xkit-pokes-menu">' +
 			'<div class="xkit-pokes-menu_button" id="xkit-pokes-show_poke_list">' +
@@ -349,12 +349,12 @@ XKit.extensions.pokes = {
 			'</div>' +
 		'</div>';
 		m_div.append(m_html);
-		
+
 		$("#xkit-pokes-show_poke_list").click(function() {
 			XKit.extensions.xkit_preferences.close();
 			setTimeout(XKit.extensions.pokes.render_pokelist, 250);
 		});
-		
+
 		$("#xkit-extensions-panel-right").nanoScroller();
 		$("#xkit-extensions-panel-right").nanoScroller({ scroll: 'top' });
 	}
