@@ -1,6 +1,6 @@
 @font-face {
 	font-family: "pokepixelplus";
-	src: url(http://new-xkit.github.io/XKit/Extensions/dist/pokepixelplus.ttf);
+	src: url(https://new-xkit.github.io/XKit/Extensions/dist/pokepixelplus.ttf);
 }
 
 /*
@@ -135,7 +135,7 @@
 .species {
 	display: none;
 	font-family: pokepixelplus, monospace;
-	font-size: 16px;
+	font-size: 20px;
 	margin-top: 3px;
 }
 #xkit-pokes-nickinput {
