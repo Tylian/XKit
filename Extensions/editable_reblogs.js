@@ -1,5 +1,5 @@
 //* TITLE Editable Reblogs **//
-//* VERSION 3.0.4 **//
+//* VERSION 3.0.5 **//
 //* DESCRIPTION Restores ability to edit previous reblogs of a post **//
 //* DEVELOPER new-xkit **//
 //* FRAME false **//
@@ -59,6 +59,13 @@ XKit.extensions.editable_reblogs = new Object({
 		//also just let chat, link, and quote posts do what they do
 		var post_type = XKit.interface.post_window.post_type();
 		if (post_type.chat || post_type.quote) {
+			return;
+		}
+		//disable on search page for now until we've refactored more effectively
+		var location_path = window.location.pathname;
+		var location_items = location_path.split("/");
+		location_items.shift();
+		if (location_items[0] === "search") {
 			return;
 		}
 		var xkit_button = $('.post-form--save-button');
