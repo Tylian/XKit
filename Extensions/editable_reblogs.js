@@ -61,11 +61,12 @@ XKit.extensions.editable_reblogs = new Object({
 		if (post_type.chat || post_type.quote) {
 			return;
 		}
-		//disable on search page for now until we've refactored more effectively
+		//disable on pages that don't include reblog_key and post_id in the URL
+		//for now until we've refactored more effectively
 		var location_path = window.location.pathname;
 		var location_items = location_path.split("/");
 		location_items.shift();
-		if (location_items[0] === "search") {
+		if (location_items[0] != "reblog" && location_items[0] != "edit") {
 			return;
 		}
 		var xkit_button = $('.post-form--save-button');
