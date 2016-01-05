@@ -36,11 +36,12 @@ XKit.extensions.xkit_preferences = new Object({
 		var mobile_html = '<div class="tab iconic" id="new-xkit-control" style="position: relative; top: 50%; height: 26px; transform: translateY(-50%);">' +
 			'<a style="color:transparent;" class="tab_anchor" href="#" onclick="return false">XKit</a>' +
 			'</div>';
-			
+
 		if (XKit.browser().mobile) {
 			XKit.tools.add_css('#xkit-window, #xkit-window-old { max-width: 650px !important; width: 100% !important; max-height: 100%; overflow: scroll; margin: auto 0 !important;} .xkit-window-buttons { padding-top: 0 !important; } .xkit-window-buttons .xkit-button { height: 40px !important; padding: 0 !important; }','mobile_window_fix');
-			
-			var mobile_control_panel = '#xkit-control-panel { width: 100%; height: 100%; top: 0; left: 0; margin: 0; } ' +
+
+
+			var mobile_control_panel = '#xkit-control-panel { width: 100%; height: 100%; top: 0; left: 0; margin: 0 !important; } ' +
 				'#xkit-control-panel-inner { height: calc(100% - 40px); padding: 0; overflow: scroll; } ' +
 				'#xkit-control-panel-tabs { display: flex; overflow: scroll; whitespace: no-wrap; } ' +
 				'#xkit-control-panel-tabs div { float: none; whitespace: no-wrap; } ' +
@@ -50,7 +51,12 @@ XKit.extensions.xkit_preferences = new Object({
 				'#xkit-extensions-panel-right.xkit-wide-panel { left: 0; width: 100%; } ' +
 				'#xkit-extensions-panel-top { min-height: 100px; height: unset; } ' +
 				'#xkit-extensions-panel-top .buttons, #xkit-extension-enabled, #xkit-extension-internal-label, #xkit-extensions-panel-top .more-info, #xkit-extensions-panel-top .version, #xkit-extensions-panel-top .title { display: block; position: relative; right: unset; bottom: unset; top: unset; } ' +
-				'.xkit-change-ext-setting-checkbox { font: 15px !important; bottom: 7px; }  .xkit-change-ext-setting-checkbox b { position: relative; bottom: -3px; } '
+				'#xkit-extension-enabled { top: 5px; }' +
+				'.xkit-change-ext-setting-checkbox { font-size: 15px !important; bottom: 7px; top: 5px; }  .xkit-change-ext-setting-checkbox b { position: relative; bottom: -3px; } ' +
+				'.xkit-extension-setting .checkbox { height: unset !important; min-height: 30px; } ' +
+				'.xkit-extension-setting .title { font-size: 15px !important; } .xkit-extension-setting { padding: 10px 15px 10px 15px !important; } ' +
+				'#xkit-gallery-search, #xkit-panel-hide-installed-extensions-from-gallery { position: relative !important; top: unset !important; right: unset !important; } ' +
+				'.xkit-gallery-extension { vertical-align: middle; float: unset !important; margin: 0 calc(100% / 175) !important; } '; //This is lazy as sin but it looks better
 			XKit.tools.add_css(mobile_control_panel,'mobile_xkit_menu');
 		}
 
