@@ -26,6 +26,8 @@ XKit.extensions.xkit_preferences = new Object({
 		var holiday_class = ""; var tmp_date = new Date();
 		if (tmp_date.getDate() === 31 && tmp_date.getMonth() === 9) {
 			holiday_class = " halloween";
+		} else if ((tmp_date.getDate() >= 24 && tmp_date.getDate() <= 26) && tmp_date.getMonth() === 11) {
+			holiday_class = " christmas";
 		}
 
 		var m_html = '<div class="tab iconic' + holiday_class + '" id="new-xkit-control">' +
