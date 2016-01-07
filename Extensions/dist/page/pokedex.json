@@ -6852,7 +6852,7 @@
     "identifier": "latias-mega",
     "name": "Mega Latias",
     "sprite": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoCAMAAAHMJ3jJAAAASFBMVEUAAAD///8xMTExMTIyMjM1NDNRUVFSUlJSUlNTUlRiWZJjWpRjWpV6crN7c7WLi4uMjIyaitOai9OcjNa1tbXe3t73xjn///+E4QINAAAAAnRSTlMAAHaTzTgAAAFvSURBVDjLzVTRktNADJPVHoYu+MLJov//pzxkE5r2bsoLzOXJo9VKlr0TREQEAgAQBIAYi4iJR0QABAAbAGAJt6ebQK/HQID96kwAAeByejkBB+675f4Fdq0A1HvJ9KIEAqi2vivXvjmYQDy1eAoCJJu47SVApW8xBIKqazboElmcTICj7SWlkjhBjkFlVWVS0nmbNvBCABhT8+/7/BcgMNe8pwwE0Dhkj0CAzUcwZd9fp3V9YErVJmkVR+1GZHYuljK5g2DOcZa8uY9MOy1Jyv36SK1D5k9J+5MGxyC+XP4kwj5zbkb/acifj4i59eM+cdzjRmQTdH9E3YnMzLQ/lNyItCX1U2tK+sXrMhVJkpzFkUh2d7q7s77aZUsaVcWHMGugbtu2lZmSJE3Jm9SskWnbi1OSqiR9y7fzXeoxRnen7JSlqsy3VVNn8mBNkmBVZeaPKl7GOM1cvOtx/ihy9kUO4t0wW6ab8pj607/H3xc6FUAytYE5AAAAAElFTkSuQmCC",
-    "gender_rate": "-1",
+    "gender_rate": "8",
     "rarity": "3"
   },
   {
@@ -6860,7 +6860,7 @@
     "identifier": "latios-mega",
     "name": "Mega Latios",
     "sprite": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoBAMAAAEJ15XIAAAAJFBMVEUAAAD///8xMTFSUlJjWpR7c7WMjIycjNa1tbXe3t73UkL///+15B55AAAAAnRSTlMAAHaTzTgAAAFVSURBVCjPrVFNS8NAEJ0MiO0tLYLXdRpogxdxLSE3qTl4lNbQH+Ch5No2DHoq9pLcRNC6v8OT/66z6aaUFg9KB2Z483jztQutlg8+ALTFzyYKbG4dJTfiTQbHiYFfCgV+L9MSYUDg+N1ozYPGm42nCxsxnlx5cFLOZx4ADgQfVB1AH+nVtfK7sXKwnX8vwjENLQtB+RnlrARi0u2nussX1Smy1S14v/T9C9y8gpjARlPVsBduYWRqQXv1U7PneUlhHjxYAXaWGWtlIXTME6fPFgbaxMyzSnDH/fSa2QoAE3VT9QV7Atqy/61+RFK2AnfwxryK7KmwVHskam3e95Xhisv9cuSXy0yURARIypFULL+KfvxheJ4Ot4NkVGGMmWlmppqkR21MFnE+Zj2tpyf3RWSiVT6KRDolV06E6Uinw2SAMq7uKdaRbhionUEA7sPJkcd/zzWtVlgXMQuVNgAAAABJRU5ErkJggg==",
-    "gender_rate": "-1",
+    "gender_rate": "0",
     "rarity": "3"
   },
   {
