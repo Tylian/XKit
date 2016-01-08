@@ -1,5 +1,5 @@
 //* TITLE XKit Preferences **//
-//* VERSION 7.2.0 **//
+//* VERSION 7.3.0 **//
 //* DESCRIPTION Lets you customize XKit **//
 //* DEVELOPER new-xkit **//
 
@@ -2212,7 +2212,7 @@ XKit.extensions.xkit_preferences = new Object({
 
 			var text = "XKit version "+XKit.version+"\n"+
 					"extensions:\n"+XKit.installed.list().map(function(i){
-						return "  "+i+": "+XKit.installed.version(i);
+						return "   " +i+ ": "+XKit.installed.version(i) + (XKit.installed.enabled(i) ? "" : " (disabled)");
 					}).join("\n");
 
 			update_button($(this), text);
