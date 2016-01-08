@@ -1,5 +1,5 @@
 //* TITLE Header Options **//
-//* VERSION 2.4.0 **//
+//* VERSION 2.4.1 **//
 //* DESCRIPTION Customize the header. **//
 //* DEVELOPER new-xkit **//
 //* DETAILS This extension adds your blogs on the top of the page, so you can easily switch between blogs. The blog limit on the header is five, but you can limit this to three blogs and turn off the blog title bubble from the settings. **//
@@ -111,9 +111,16 @@ XKit.extensions.classic_header = new Object({
 		}
 
 		if (XKit.extensions.classic_header.preferences.mobile_sticky.value) {
+
 			// The nav menu is written terribly. Thanks @staff.
-			XKit.tools.add_css(" #container { position: absolute; top:44px; } .mobile-nav { position: fixed; top: 0; z-index: 99; left: 0; width: calc(100% + 1px); } .nav-menu .drawer, .nav-menu.active .sneeze-guard { height: calc(100vh - 44px); top:44px; }","classic_header_mobile_sticky");
+			XKit.tools.add_css(" #container { position: absolute; top:44px; max-width: 800px; width: 100%; } .mobile-nav { position: fixed; top: 0; z-index: 99; left: 0; width: calc(100% + 1px); } .nav-menu .drawer, .nav-menu.active .sneeze-guard { height: calc(100vh - 44px); top:44px; }","classic_header_mobile_sticky");
+
 			$('#footer').insertAfter($('#load_more_posts'));
+
+			if ($('.mh_post_buttons').length > 0) {
+				$('.mh_post_buttons').insertBefore($('#content'));
+			}
+
 		}
 
 		if (XKit.extensions.classic_header.preferences.mobile_logout.value) {
