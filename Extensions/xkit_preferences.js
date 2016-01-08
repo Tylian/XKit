@@ -45,8 +45,8 @@ XKit.extensions.xkit_preferences = new Object({
 
 			var mobile_control_panel = '#xkit-control-panel { width: 100%; height: 100%; top: 0; left: 0; margin: 0 !important; } ' +
 				'#xkit-control-panel-inner { height: calc(100% - 40px); padding: 0; overflow: scroll; } ' +
-				'#xkit-control-panel-tabs { display: flex; overflow: scroll; whitespace: no-wrap; } ' +
-				'#xkit-control-panel-tabs div { float: none; whitespace: no-wrap; } ' +
+				'#xkit-control-panel-tabs { display: flex; overflow: scroll; white-space: nowrap; } ' +
+				'#xkit-control-panel-tabs div { float: none; white-space: nowrap; } ' +
 				'#xkit-extensions-panel-left { height: 100% !important; top: 0; left: 0; } ' +
 				'.xkit-extensions-display-type-switcher { bottom: 0; } #xkit-extensions-panel-left-search { left: 0; bottom: 0; } ' +
 				'#xkit-extensions-panel-right { height: calc(100% - 40px); width: 100%; } ' +
