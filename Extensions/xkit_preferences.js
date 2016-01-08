@@ -56,7 +56,7 @@ XKit.extensions.xkit_preferences = new Object({
 				'#xkit-extension-enabled { top: 5px; }' +
 				'.xkit-change-ext-setting-checkbox { font-size: 15px !important; bottom: 7px; top: 5px; }  .xkit-change-ext-setting-checkbox b { position: relative; bottom: -3px; } ' +
 				'.xkit-extension-setting .checkbox { height: unset !important; min-height: 30px; } ' +
-				'.xkit-extension-setting .title { font-size: 15px !important; } .xkit-extension-setting { padding: 10px 15px 10px 15px !important; } ' +
+				'.xkit-extension-setting .title { font-size: 15px !important; position: relative !important; } .xkit-extension-setting { padding: 10px 15px 10px 15px !important; } ' +
 				'#xkit-gallery-search, #xkit-panel-hide-installed-extensions-from-gallery { position: relative !important; top: unset !important; right: unset !important; } ' +
 				'.xkit-gallery-extension { vertical-align: middle; float: unset !important; margin: 0 calc(100% / 175) !important; } '; //This is lazy as sin but it looks better
 			XKit.tools.add_css(mobile_control_panel,'mobile_xkit_menu');
