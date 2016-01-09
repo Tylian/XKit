@@ -1,6 +1,6 @@
 //* TITLE Show picture size **//
 //* VERSION 1.0.0 **//
-//* DESCRIPTION	Shows the resolution of media post pictures in the upper right corner of the picture **//
+//* DESCRIPTION Shows the resolution of media post pictures in the upper right corner of the picture **//
 //* DEVELOPER TiMESPLiNTER **//
 //* FRAME false **//
 //* BETA false **//
