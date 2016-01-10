@@ -193,6 +193,11 @@
 	font-weight: bold;
 	font-size: 20px;
 }
+.xkit-pokes-pc-info .shiny {
+	font-family: pokepixelplus, monospace;
+	font-size: 20px;
+	position: absolute;
+}
 .xkit-pokes-pc-info .nickname-textbox {
 	height: 35px;
 	width: 400px;
@@ -230,6 +235,7 @@
 	width: 90px;
 	height: 90px;
 	border-radius: 10px;
+	position: relative;
 }
 .caught img {
 	width: 90px;
@@ -256,4 +262,18 @@
 .caught[data-pokegender="genderless"]::after {
 	content: " \26AA";
 	color: #9370DB;
+}
+.caught.pokes_shiny::before, .poke.pokes_shiny::before {
+	content: "\2605";
+	color: red;
+	position: absolute;
+	z-index: 1;
+}
+.caught.pokes_shiny::before {
+	top: 5px;
+	left: 77.5px;
+}
+.poke.pokes_shiny::before {
+	top: 6px;
+	left: 86.5px;
 }
