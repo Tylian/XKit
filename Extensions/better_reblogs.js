@@ -221,14 +221,14 @@ XKit.extensions.better_reblogs = new Object({
                 XKit.tools.add_css(".reblog-list-item .reblog-content {margin-left: 3px;}", "better_reblogs");
             }
 
-						if (this.preferences.remove_last_user.value) {
-							XKit.tools.add_css(list_sel+".contributed-content .reblog-content {border-left: unset !important; padding-left: unset !important;}", "better_reblogs");
+            if (this.preferences.remove_last_user.value) {
+                XKit.tools.add_css(list_sel+".contributed-content .reblog-content {border-left: unset !important; padding-left: unset !important;}", "better_reblogs");
 
-							if (!(this.preferences.margin.value || this.preferences.remove_user_names.value)) {
-								XKit.tools.add_css(list_sel+".contributed-content .reblog-content {margin-left: -10px;}", "better_reblogs");
-							}
+                if (!(this.preferences.margin.value || this.preferences.remove_user_names.value)) {
+                    XKit.tools.add_css(list_sel+".contributed-content .reblog-content {margin-left: -10px;}", "better_reblogs");
+                }
 
-						}
+            }
 
         }
 
