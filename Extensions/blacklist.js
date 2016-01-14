@@ -1,5 +1,5 @@
 //* TITLE Blacklist **//
-//* VERSION 2.7.7 **//
+//* VERSION 2.7.8 **//
 //* DESCRIPTION Clean your dash **//
 //* DETAILS This extension allows you to block posts based on the words you specify. If a post has the text you've written in the post itself or it's tags, it will be replaced by a warning, or won't be shown on your dashboard, depending on your settings. **//
 //* DEVELOPER new-xkit **//
@@ -1085,7 +1085,7 @@ XKit.extensions.blacklist = new Object({
 
 			$("#xkit-blacklist-populate-continue").click(function() {
 
-				var m_array = ["tw:*","nsfw","trigger*","porn*","naked","cut*","rape","sex*","gay*","lesbian*","nude*","ass*","horny*","xxx","adult","amateur","tit*","fuck*","boob*","cock","cunt","pussy*","anal*","hardcore"];
+				var m_array = ["tw:*","nsfw","trigger*","porn*","naked","cut*","rape","sex*","blood*","gore*","nude*","ass*","horny*","xxx","adult","amateur","tit*","fuck*","boob*","cock","cunt","pussy*","anal*","hardcore"];
 
 				XKit.extensions.blacklist.blacklisted = m_array;
 				XKit.extensions.blacklist.save_blacklist();
