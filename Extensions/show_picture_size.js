@@ -16,6 +16,8 @@ XKit.extensions.show_picture_size = new Object({
 
         XKit.tools.init_css('show_picture_size');
 
+        XKit.extensions.show_picture_size.post_listener();
+
         XKit.post_listener.add('show_picture_size', XKit.extensions.show_picture_size.post_listener);
     },
 
