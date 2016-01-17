@@ -1,8 +1,8 @@
 //* TITLE Glowing Follow **//
-//* VERSION 1.0.4 **//
+//* VERSION 1.0.5 **//
 //* DESCRIPTION Glowing plusses on non-mutual followers' blogs **//
 //* DETAILS Makes the Follow button on people's blogs glow if they are following you and you are not following them. Before proceeding, please keep in mind that sometimes, ignorance is bliss. **//
-//* DEVELOPER STUDIOXENIX **//
+//* DEVELOPER new-xkit **//
 //* FRAME true **//
 //* BETA false **//
 
