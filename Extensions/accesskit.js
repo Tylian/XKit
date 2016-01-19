@@ -159,7 +159,6 @@ XKit.extensions.accesskit = new Object({
 
 		if (this.preferences.visible_captions.value === true) {
 			XKit.post_listener.add("accesskit_vis_caps", XKit.extensions.accesskit.vis_caps);
-			//XKit.extension.accesskit.vis_caps();
 		}
 
 		if (this.preferences.make_links_blue.value === true) {
