@@ -1,5 +1,5 @@
 //* TITLE Editable Reblogs **//
-//* VERSION 3.0.5 **//
+//* VERSION 3.0.6 **//
 //* DESCRIPTION Restores ability to edit previous reblogs of a post **//
 //* DEVELOPER new-xkit **//
 //* FRAME false **//
@@ -364,9 +364,16 @@ XKit.extensions.editable_reblogs = new Object({
 				onload: function(response) {
 					// We are done!
 					XKit.interface.kitty.set(response.getResponseHeader("X-tumblr-kittens"));
+					var redirect_url = XKit.tools.getParameterByName("redirect_to");
 					XKit.tools.add_function(function() {
 						Tumblr.Events.trigger("postForms:saved");
-					}, true, "");
+						var redirect_url = add_tag;
+						if (redirect_url !== "") {
+							setTimeout(function(){
+								window.location.replace(redirect_url);
+							}, 500);
+						}
+					}, true, redirect_url);
 				}
 			});
 

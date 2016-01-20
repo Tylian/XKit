@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 6.1.2 **//
+//* VERSION 6.2.0 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER new-xkit **//
 
@@ -221,6 +221,19 @@ XKit.tools.dump_config = function(){
 		obj[x] = GM_getValue(x);
 		return obj;
 	}, {});
+};
+
+// http://stackoverflow.com/a/901144/2073440
+XKit.tools.getParameterByName = function(name){
+	name = encodeURIComponent(name);
+	var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+		results = regex.exec(location.search);
+	if (results === null) {
+		return "";
+	} else {
+		var parameter = results[1];
+		return decodeURIComponent(parameter.replace(/\+/g, " "));
+	}
 };
 
 	XKit.browser = function() {

@@ -79,6 +79,12 @@ Parses `version_string` in format `<MAJOR>.<MINOR>.<PATCH>`, `<MAJOR>.<MINOR>`, 
 }
 ```
 
+<a name"get_parameter_by_name" href="XKit.tools.md#get_parameter_by_name">#</a> XKit.tools.**getParameterByName**(_name_)
+
+Gets a query string value by name.
+
+Example: for the URL `https://www.tumblr.com/reblog/137048498063/jL2F1abw/?redirect_to=http://www.example.com`, calling `XKit.tools.getParameterByName("redirect_to")` will return `http://www.example.com`.
+
 ## Tips
 
 * Always remove the CSS you've added when you are done with it, and on the `destroy` function.
