@@ -1,7 +1,7 @@
 //* TITLE Auto Tagger **//
-//* VERSION 0.6.7 **//
+//* VERSION 0.6.8 **//
 //* DESCRIPTION Tags posts automatically. **//
-//* DEVELOPER STUDIOXENIX **//
+//* DEVELOPER new-xkit **//
 //* DETAILS This extension allows you to automatically add tags to posts based on state (reblogged, original, queued) or post type (audio, video, etc) and keeping original tags while reblogging a post. **//
 //* FRAME false **//
 //* BETA false **//
@@ -151,7 +151,7 @@ XKit.extensions.auto_tagger = new Object({
 
 		if ($(".post-header").length <= 0) { setTimeout(function() { XKit.extensions.auto_tagger.is_queue(); }, 100); return; }
 
-		if ($("#post_state").val() === "2") { // .create-post-button ?
+		if ($(".create_post_button").html() == "Queue") {
 			if (XKit.extensions.auto_tagger.preferences.tag_for_queued.value !== "") {
 				if (XKit.extensions.auto_tagger.check_if_tag_exists(XKit.extensions.auto_tagger.preferences.tag_for_queued.value) === false) {
 					XKit.extensions.auto_tagger.inject_to_window(XKit.extensions.auto_tagger.preferences.tag_for_queued.value);
@@ -182,6 +182,7 @@ XKit.extensions.auto_tagger = new Object({
 			return;
 		}
 		
+		this.is_queue(); // Mutation Observer would work somewhere in this mess
 
 		var post_forms = $(".post-form");
 
