@@ -152,7 +152,7 @@ XKit.extensions.auto_tagger = new Object({
 		if ($(".post-form--header").length <= 0) { setTimeout(function() { XKit.extensions.auto_tagger.is_queue(); }, 100); return; }
 
 		if ($(".create_post_button").html() == "Queue") {
-			if (XKit.extensions.auto_tagger.preferences.tag_for_queued.value !== "" && !$('.create_post_button).hasClass('xkit-queuetag')) {
+			if (XKit.extensions.auto_tagger.preferences.tag_for_queued.value !== "" && !$('.create_post_button').hasClass('xkit-queuetag')) {
 				$('.create_post_button').addClass('xkit-queuetag');
 				XKit.extensions.auto_tagger.inject_to_window(XKit.extensions.auto_tagger.preferences.tag_for_queued.value);
 			}
