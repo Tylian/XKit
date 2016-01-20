@@ -147,11 +147,11 @@ XKit.extensions.auto_tagger = new Object({
 		}
 	},
 
-	reblog_do: function() {
+	is_queue: function() {
 
-		if ($(".post-header").length <= 0) { setTimeout(function() { XKit.extensions.auto_tagger.reblog_do(); }, 100); return; }
+		if ($(".post-header").length <= 0) { setTimeout(function() { XKit.extensions.auto_tagger.is_queue(); }, 100); return; }
 
-		if ($("#post_state").val() === "2") {
+		if ($("#post_state").val() === "2") { // .create-post-button ?
 			if (XKit.extensions.auto_tagger.preferences.tag_for_queued.value !== "") {
 				if (XKit.extensions.auto_tagger.check_if_tag_exists(XKit.extensions.auto_tagger.preferences.tag_for_queued.value) === false) {
 					XKit.extensions.auto_tagger.inject_to_window(XKit.extensions.auto_tagger.preferences.tag_for_queued.value);
@@ -181,6 +181,7 @@ XKit.extensions.auto_tagger = new Object({
 			// Url is wrong for a new post, neither new nor reblog
 			return;
 		}
+		
 
 		var post_forms = $(".post-form");
 
