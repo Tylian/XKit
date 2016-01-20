@@ -149,20 +149,18 @@ XKit.extensions.auto_tagger = new Object({
 
 	is_queue: function() {
 
-		if ($(".post-header").length <= 0) { setTimeout(function() { XKit.extensions.auto_tagger.is_queue(); }, 100); return; }
+		if ($(".post-form--header").length <= 0) { setTimeout(function() { XKit.extensions.auto_tagger.is_queue(); }, 100); return; }
 
 		if ($(".create_post_button").html() == "Queue") {
-			if (XKit.extensions.auto_tagger.preferences.tag_for_queued.value !== "") {
-				if (XKit.extensions.auto_tagger.check_if_tag_exists(XKit.extensions.auto_tagger.preferences.tag_for_queued.value) === false) {
-					XKit.extensions.auto_tagger.inject_to_window(XKit.extensions.auto_tagger.preferences.tag_for_queued.value);
-				}
+			if (XKit.extensions.auto_tagger.preferences.tag_for_queued.value !== "" && !$('.create_post_button).hasClass('xkit-queuetag')) {
+				$('.create_post_button').addClass('xkit-queuetag');
+				XKit.extensions.auto_tagger.inject_to_window(XKit.extensions.auto_tagger.preferences.tag_for_queued.value);
 			}
 		} else {
-			if (XKit.extensions.auto_tagger.preferences.tag_for_queued.value !== "") {
-				if (XKit.extensions.auto_tagger.check_if_tag_exists(XKit.extensions.auto_tagger.preferences.tag_for_queued.value) === true) {
-					// Remove tag.
-					XKit.extensions.auto_tagger.remove_tag(XKit.extensions.auto_tagger.preferences.tag_for_queued.value);
-				}
+			if (XKit.extensions.auto_tagger.preferences.tag_for_queued.value !== "" && $('.create_post_button').hasClass('xkit-queuetag')) {
+				// Remove tag
+				$('.create_post_button').removeClass('xkit-queuetag');
+				XKit.extensions.auto_tagger.remove_tag(XKit.extensions.auto_tagger.preferences.tag_for_queued.value);
 			}
 		}
 
