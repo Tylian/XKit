@@ -1,5 +1,5 @@
 //* TITLE Tweaks **//
-//* VERSION 5.2.0 **//
+//* VERSION 5.2.1 **//
 //* DESCRIPTION Various little tweaks for your dashboard. **//
 //* DEVELOPER new-xkit **//
 //* DETAILS These are small little tweaks that allows you customize your dashboard. If you have used XKit 6, you will notice that some of the extensions have been moved here as options you can toggle. Keep in mind that some of the tweaks (the ones marked with a '*') can slow down your computer. **//
@@ -667,6 +667,7 @@ XKit.extensions.tweaks = new Object({
 
 			var photoset_row = $(this);
 			var ratio = 1;
+			var is_viscaps = $(this).hasClass('xkit-accesskit-viscaps');
 
 			if (photoset_row.attr("class") == "photoset_row photoset_row_1") {
 				ratio = 500.0/540.0;
@@ -676,9 +677,16 @@ XKit.extensions.tweaks = new Object({
 				ratio = 160.0/177.0;
 			}
 
+			var photoHeight = parseInt(photoset_row.css("height").slice(0,-2))*ratio;
+
 			photoset_row.addClass("xkit-protected-photoset-row");
 
-			photoset_row.attr("style", "margin-left: 20px; margin-bottom: 10px; height: " + parseInt(photoset_row.css("height").slice(0,-2))*ratio + "px;");
+			if (!is_viscaps) {
+				photoset_row.attr("style", "margin-left: 20px; margin-bottom: 10px; height: " + photoHeight + "px;");
+			} else {
+				photoset_row.attr("style", "margin-left: 20px; margin-bottom: 10px; min-height: " + photoHeight + "px;");
+				photoset_row.find("div").attr("style", "height: " + photoHeight + "px;");
+			}
 
 			photoset_row.find("img").each(function() {
 				var img = $(this);
