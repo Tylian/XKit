@@ -225,7 +225,7 @@ XKit.tools.dump_config = function(){
 
 // http://stackoverflow.com/a/901144/2073440
 XKit.tools.getParameterByName = function(name){
-	name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+	name = encodeURIComponent(name);
 	var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
 		results = regex.exec(location.search);
 	return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
