@@ -370,7 +370,7 @@ XKit.extensions.editable_reblogs = new Object({
 						var redirect_url = add_tag;
 						if (redirect_url !== "") {
 							setTimeout(function(){
-								window.location.replace(decodeURIComponent(redirect_url));
+								window.location.replace(redirect_url);
 							}, 500);
 						}
 					}, true, redirect_url);
