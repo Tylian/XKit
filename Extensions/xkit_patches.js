@@ -228,7 +228,12 @@ XKit.tools.getParameterByName = function(name){
 	name = encodeURIComponent(name);
 	var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
 		results = regex.exec(location.search);
-	return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+	if (results === null) {
+		return "";
+	} else {
+		var parameter = results[1];
+		return decodeURIComponent(parameter.replace(/\+/g, " "));
+	}
 };
 
 	XKit.browser = function() {
