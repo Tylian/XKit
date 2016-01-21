@@ -175,6 +175,8 @@ XKit.extensions.auto_tagger = new Object({
 		var original = true;
 		if (document.location.href.indexOf("://www.tumblr.com/reblog/") !== -1) {
 			original = false;
+		} else if (document.location.href.indexOf("://www.tumblr.com/edit") === -1 && $(".post-form").length > 0) {
+			// A new post has been created from the button in the header
 		} else if (document.location.href.indexOf("://www.tumblr.com/new/") === -1) {
 			// Url is wrong for a new post, neither new nor reblog
 			return;
