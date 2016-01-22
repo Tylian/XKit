@@ -1,7 +1,7 @@
-//* TITLE Lethe **//
-//* VERSION 1.1.1 **//
-//* DESCRIPTION Forgets posts once they scroll off the screen. **//
-//* DEVELOPER hobinjk **//
+//* TITLE Hermes **//
+//* VERSION 1.2.0 **//
+//* DESCRIPTION Helps speed up your Tumblr experience **//
+//* DEVELOPER new-xkit **//
 //* FRAME false **//
 //* BETA true **//
 
