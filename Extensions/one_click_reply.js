@@ -230,7 +230,7 @@ XKit.extensions.one_click_reply = new Object({
 
 		m_object["post[slug]"] = "";
 		m_object["post[draft_status]"] = "";
-		m_object["post[source_url]"] = "http://";
+		m_object["post[source_url]"] = "https://";
 		m_object["post[date]"] = "";
 
 		m_object["post[type]"] = "regular";
@@ -275,7 +275,7 @@ XKit.extensions.one_click_reply = new Object({
 
 			GM_xmlhttpRequest({
 				method: "POST",
-				url: "http://www.tumblr.com/svc/post/update",
+				url: "https://www.tumblr.com/svc/post/update",
 				data: JSON.stringify(m_object),
 				json: true,
 				headers: {
@@ -412,7 +412,7 @@ XKit.extensions.one_click_reply = new Object({
 			};
 			XKit.tools.set_setting("xkit_one_click_reply_data", JSON.stringify(data));
 
-			var m_url = "http://www.tumblr.com/new/text";
+			var m_url = "https://www.tumblr.com/new/text";
 
 			if (document.location.href.indexOf("/blog/") !== -1) {
 				// Maybe we can make this better?
@@ -810,7 +810,7 @@ XKit.extensions.one_click_reply = new Object({
 			m_sentence = "<img src=\"" + avatar_url + "\" class=\"image_thumbnail\">" + m_sentence;
 		}
 
-		var m_url = "http://www.tumblr.com/new/text";
+		var m_url = "https://www.tumblr.com/new/text";
 
 		if (document.location.href.indexOf("/blog/") !== -1) {
 			// Maybe we can make this better?
@@ -924,7 +924,7 @@ XKit.extensions.one_click_reply = new Object({
 					};
 					XKit.tools.set_setting("xkit_one_click_reply_data", JSON.stringify(data));
 
-					var m_url = "http://www.tumblr.com/new/text";
+					var m_url = "https://www.tumblr.com/new/text";
 
 					if (document.location.href.indexOf("/blog/") !== -1) {
 						// Maybe we can make this better?
@@ -1049,7 +1049,7 @@ XKit.extensions.one_click_reply = new Object({
 			m_sentence = "<img src=\"" + avatar_url + "\" class=\"image_thumbnail\">" + m_sentence;
 		}
 
-		var m_url = "http://www.tumblr.com/new/text";
+		var m_url = "https://www.tumblr.com/new/text";
 
 		if (document.location.href.indexOf("/blog/") !== -1) {
 			// Maybe we can make this better?
@@ -1161,7 +1161,7 @@ XKit.extensions.one_click_reply = new Object({
 			m_sentence = "<p><img src=\"" + avatar_url + "\" class=\"image_thumbnail\"></p>" + m_sentence;
 		}
 
-		var m_url = "http://www.tumblr.com/new/text";
+		var m_url = "https://www.tumblr.com/new/text";
 
 		if (document.location.href.indexOf("/blog/") !== -1) {
 			// Maybe we can make this better?
