@@ -129,7 +129,7 @@ XKit.extensions.one_click_reply = new Object({
 						"<div id=\"xkit-one-click-reply-quick-reply-window\">" +
 							"<div id=\"xkit-one-click-reply-quick-reply-close\">&nbsp;</div>" +
 							"<div id=\"xkit-one-click-reply-quick-reply-title\">" +
-								"<img src=\"http://31.media.tumblr.com/avatar_b5acef4abf8c_64.png\" class=\"xkit-qr-avatar\">" +
+								"<img src=\"https://31.media.tumblr.com/avatar_b5acef4abf8c_64.png\" class=\"xkit-qr-avatar\">" +
 								"Replying to <span id=\"xkit-one-click-reply-quick-reply-username\">xenix</span>" +
 							"</div>" +
 							"<textarea id=\"xkit-one-click-reply-quick-reply-text\"></textarea>" +
