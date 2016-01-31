@@ -36,12 +36,19 @@ XKit.extensions.xkit_patches = new Object({
 
 	},
 
+	/**
+	 * If User Menus+ is running, run patch_ask whenever the user menu is shown
+	 */
 	do_support_links: function() {
 		XKit.installed.when_running("show_more", function() {
 			$(document).on('click','.tumblelog_menu_btn', XKit.extensions.xkit_patches.patch_ask);
 		});
 	},
 
+	/**
+	 * When User Menus+ is running rename the "Ask" button on the
+	 * xkit-extension blog to "XKit Support"
+	 */
 	patch_ask: function() {
 
 		var m_parent;
@@ -63,6 +70,10 @@ XKit.extensions.xkit_patches = new Object({
 
 	},
 
+	/**
+	 * Detect whether the user is running a UA switcher to pretend to be IE,
+	 * warning if detected.
+	 */
 	check_user_agent: function() {
 
 		var from_framework = XKit.browser().name;
@@ -81,6 +92,9 @@ XKit.extensions.xkit_patches = new Object({
 
 	},
 
+	/**
+	 * Injects xkit_patches into the XKit object.
+	 */
 	run: function() {
 		this.running = true;
 
@@ -88,6 +102,10 @@ XKit.extensions.xkit_patches = new Object({
 
 		this.check_user_agent();
 
+/**
+ * Get the user's currently selected blog.
+ * @return {String} blog id, e.g. new-xkit-extension.
+ */
 XKit.tools.get_current_blog = function() {
 	var avatar = $("#post_controls_avatar");
 	if (avatar.length > 0) {
@@ -100,6 +118,10 @@ XKit.tools.get_current_blog = function() {
 	return XKit.tools.get_blogs()[0];
 };
 
+/**
+ * Parse an XKit extension version string of form X.Y.Z or X.Y REV Z
+ * @return {Object} version descriptor with keys major, minor, and patch
+ */
 XKit.tools.parse_version = function(versionString) {
 	if (typeof(versionString) === "undefined" || versionString === "") {
 		return {major: 0, minor: 0, patch: 0};
@@ -154,6 +176,9 @@ XKit.extensions.xkit_patches.blog_list_message_listener = function(e){
 window.addEventListener("message", XKit.extensions.xkit_patches.blog_list_message_listener);
 
 
+/**
+ * @return {Array<String>} user's blogs' IDs
+ */
 XKit.tools.get_blogs = function() {
 	var m_blogs = [];
 
@@ -213,6 +238,12 @@ XKit.tools.get_blogs = function() {
 	}
 };
 
+/**
+ * Create an anonymous Github gist
+ * @param {String} text - the gist's intended text
+ * @param {String?} name - the user name to be associated with the gist
+ * @return {Promise<String>} Promise resolved with the gist's URL
+ */
 XKit.tools.make_gist = function(text, name) {
 
 	if(!name){
@@ -234,6 +265,15 @@ XKit.tools.make_gist = function(text, name) {
 	});
 };
 
+/**
+ * Copies a function from the addon context into the page context. This
+ * function will be serialized to a string, and then injected as a script tag
+ * into the page.
+ * @param {Function} func
+ * @param {boolean} exec - Whether to execute the function immediately
+ * @param {Object} addt - The desired contents of the global variable
+ *                        `add_tag`. Only useful if `exec` is true
+ */
 XKit.tools.add_function = function(func, exec, addt) {
 	try {
 		var script = document.createElement("script");
@@ -245,6 +285,10 @@ XKit.tools.add_function = function(func, exec, addt) {
 	}
 };
 
+/**
+ * @return {Object} The elements of XKit's storage as a map from setting key to
+ *                  setting value
+ */
 XKit.tools.dump_config = function(){
 	var values = GM_listValues();
 	if(values.length === 0) { // chrome bridge.js#GM_listValues doesn't work.
@@ -278,8 +322,12 @@ XKit.tools.escape_html = function(text){
         .replace(/\//g, "&#x2F;");
 };
 
-// http://stackoverflow.com/a/901144/2073440
+/**
+ * @param {String} name - Name of URL parameter to retrieve
+ * @return {String} Value of parameter or ""
+ */
 XKit.tools.getParameterByName = function(name){
+	// http://stackoverflow.com/a/901144/2073440
 	name = encodeURIComponent(name);
 	var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
 		results = regex.exec(location.search);
@@ -291,6 +339,17 @@ XKit.tools.getParameterByName = function(name){
 	}
 };
 
+/**
+ * @return {Object} An overview of the browser's information:
+ *	name: "Google Chrome" | "Mozilla Firefox" | "Apple Safari" - The browser's human-readable name
+ *	spoofed: boolean - Whether XKit suspects the user of spoofing an IE user agent.
+ *	chrome: boolean - Whether the browser is Chrome
+ *	firefox: boolean - Whether the browser is Firefox
+ *	safari: boolean - Whether the browser is Safari
+ *	opera: boolean - Whether the browser is Opera (Always false as implemented currently)
+ *	version: number - The numerical representation of the browser's version or 0 if unknown
+ *	mobile: boolean - Whether Tumblr is serving the mobile version of the site
+ */
 	XKit.browser = function() {
 
 		var to_return = {};
@@ -357,6 +416,7 @@ XKit.tools.getParameterByName = function(name){
 
 	};
 
+		// Identify retina screen displays. Unused anywhere else
 		try {
 
 			XKit.retina = window.devicePixelRatio > 1;
@@ -386,23 +446,38 @@ XKit.tools.getParameterByName = function(name){
 
 		XKit.iframe = {
 
+			/**
+			 * @return {String} Id of blog which the iframe refers to (usually
+			 *                  the blog in which the iframe is embedded)
+			 */
 			get_tumblelog: function() {
 				var new_channel_id = document.location.href.match(/[&?]tumblelogName=([\w-]+)/);
 				var old_channel_id = $("#tumblelog_name").attr('data-tumblelog-name');
 				return (new_channel_id && new_channel_id[1]) || old_channel_id;
 			},
 
+			/**
+			 * @return {String} Post to which this iframe refers
+			 */
 			single_post_id: function() {
 				var all_post_ids = document.location.href.match(/[&?](singlePostId|pid|postId)=(\d+)/);
 				return all_post_ids[2];
 			},
 
+			/**
+			 * @return {String} Form key of the iframe (the data to use in a
+			 *                  reblog or other API request)
+			 */
 			form_key: function() {
 				var new_form_key = $("meta[name=tumblr-form-key]").attr("content");
 				var old_form_key = $(".btn.reblog").attr('data-form-key');
 				return new_form_key || old_form_key;
 			},
 
+			/**
+			 * Hide the text of a button in the iframe.
+			 * @param {JQuery} button
+			 */
 			hide_button: function(button) {
 				button.addClass("no_label");
 				button.addClass("no-text").contents()
@@ -413,22 +488,37 @@ XKit.tools.getParameterByName = function(name){
 				button.children(".icon-wrapper").addClass("xkit-hidden");
 			},
 
+			/**
+			 * @return {JQuery} The follow button in the iframe
+			 */
 			follow_button: function() {
 				return $(".btn.follow,.tx-button.follow-button");
 			},
 
+			/**
+			 * @return {JQuery} The unfollow button in the iframe
+			 */
 			unfollow_button: function() {
 				return $(".btn.unfollow,.tx-button.unfollow-button");
 			},
 
+			/**
+			 * @return {JQuery} The delete button in the iframe
+			 */
 			delete_button: function() {
 				return $(".btn.delete,.tx-button.delete-button");
 			},
 
+			/**
+			 * @return {JQuery} The reblog button in the iframe
+			 */
 			reblog_button: function() {
 				return $(".btn.reblog,.tx-button.reblog-button");
 			},
 
+			/**
+			 * @return {JQuery} The dashboard button in the iframe
+			 */
 			dashboard_button: function() {
 				return $(".btn.dashboard,.tx-button.dashboard-button");
 			},
@@ -461,6 +551,9 @@ XKit.tools.getParameterByName = function(name){
 			XKit.storage.max_area_size = 153600;
 		}
 
+		/**
+		 * Close the current XKit alert window. Counterpart to `XKit.window.show`
+		 */
 		XKit.window.close = function() {
 
 			$("#xkit-window-shadow").fadeOut('fast');
@@ -474,6 +567,17 @@ XKit.tools.getParameterByName = function(name){
 
 		};
 
+		/**
+		 * Show an XKit alert window
+		 * @param {String} title - Text for alert window's title bar
+		 * @param {String} msg - Text for body of window, can be HTML
+		 * @param {"error"|"warning"|"question"|"info"} icon - Window's
+		 *   icon type, determined by CSS class `icon`.
+		 *   See also xkit_patches.css.
+		 * @param {String} buttons - The HTML to be used in the button area of the window.
+		 *                           Usually divs with class "xkit-button".
+		 * @param {boolean} wide - Whether the XKit window should be wide.
+		 */
 		XKit.window.show = function(title, msg, icon, buttons, wide) {
 
 			if (typeof icon === "undefined") {
@@ -536,12 +640,19 @@ XKit.tools.getParameterByName = function(name){
 			post_window_listener_running: false,
 			post_window_listener_window_id: 0,
 
+			/**
+			 * Interface for tracking the secure_form_key used in Tumblr API
+			 * requests.
+			 */
 			kitty: {
 
 				stored: "",
 				store_time: 0,
 				expire_time: 600000,
 
+				/**
+				 * @param {String} kitty - The new secure_form_key value.
+				 */
 				set: function(kitty) {
 
 					if (typeof kitty === "undefined") { kitty = ""; }
@@ -550,6 +661,10 @@ XKit.tools.getParameterByName = function(name){
 
 				},
 
+				/**
+				 * Get the secure_form_key through a request using the current form_key
+				 * @param {Function} callback invoked with `{errors: boolean, kitten: String}`
+				 */
 				get: function(callback) {
 
 					var m_object = {};
@@ -605,6 +720,14 @@ XKit.tools.getParameterByName = function(name){
 				added_icon_icon: [],
 				added_icon_text: [],
 
+				/**
+				 * Create a specification for a control button that can be added to
+				 * future posts using `XKit.post_window.add_control_button`.
+				 * @param {String} class_name - CSS class of the button to be created
+				 * @param {String} icon - URL of the button's icon
+				 * @param {String} text - Hover text of the button
+				 * @param {EventListener} func - Function called on click of control button
+				 */
 				create_control_button: function(class_name, icon, text, func) {
 
 					XKit.interface.post_window.added_icon.push(class_name);
@@ -623,6 +746,12 @@ XKit.tools.getParameterByName = function(name){
 
 				},
 
+				/**
+				 * Instantiate and add a previously "created" button to the
+				 * current post window.
+				 * @param {String} class_name - CSS class of the button to be added
+				 * @param {String?} additional - String inserted into the button's div tag
+				 */
 				add_control_button: function(class_name, additional) {
 
 					if (typeof additional == "undefined") {additional = ""; }
@@ -648,8 +777,7 @@ XKit.tools.getParameterByName = function(name){
 				},
 
 				/**
-				 * Gets the content of the post window.
-				 * @param {String} new_content
+				 * @return {String} HTML content of the current post window
 				 */
 				get_content_html: function() {
 					if ($(".html-field").css("display") === "none") {
@@ -732,6 +860,10 @@ XKit.tools.getParameterByName = function(name){
 					}
 				},
 
+				/**
+				 * @param {String} tag
+				 * @return {boolean} Whether the tag exists in the current post window's tag input
+				 */
 				tag_exists: function(tag) {
 
 					var found = false;
@@ -752,10 +884,17 @@ XKit.tools.getParameterByName = function(name){
 
 				},
 
+				/**
+				 * Remove all tags from the current post window
+				 */
 				remove_all_tags: function() {
 					$(".post-form--tag-editor").find(".tag-label").click();
 				},
 
+				/**
+				 * Remove a specific tag from the current post window
+				 * @param {String} tag
+				 */
 				remove_tag: function(tag) {
 
 					tag = tag.toLowerCase();
@@ -775,6 +914,13 @@ XKit.tools.getParameterByName = function(name){
 					});
 				},
 
+				/**
+				 * @return {Object} State of the post, with keys
+				 *	publish: boolean - Whether the post will be published (default new post)
+				 *	draft: boolean - Whether the post will be drafted
+				 *	queue: boolean - Whether the post will be queued
+				 *	private: boolean - Whether the post will be "published privately"
+				 */
 				state: function() {
 
 					var to_return = {};
@@ -788,6 +934,9 @@ XKit.tools.getParameterByName = function(name){
 
 				},
 
+				/**
+				 * @return {Object} Description of post type, see keys in function source
+				 */
 				post_type: function() {
 					var post_form = $(".post-form");
 					return {
@@ -802,12 +951,19 @@ XKit.tools.getParameterByName = function(name){
 					};
 				},
 
+				/**
+				 * @return {String} Blog making the post
+				 */
 				blog: function() {
 
 					return $("#channel_id").val();
 
 				},
 
+				/**
+				 * @param {String} url - URL of blog to which to switch the post window
+				 * @return {boolean} Whether the switch succeeded
+				 */
 				switch_blog: function(url) {
 
 					$("#tumblelog_choices").find(".option").each(function() {
@@ -823,12 +979,18 @@ XKit.tools.getParameterByName = function(name){
 
 				},
 
+				/**
+				 * @return {boolean} Whether the post window is currently open
+				 */
 				open: function() {
 
 					return XKit.interface.post_window_listener_window_id !== 0;
 
 				},
 
+				/**
+				 * @return {String} Type of post, see also XKit.interface.post_window.post_type
+				 */
 				type: function() {
 					var to_return = {};
 					var types = ['text', 'photo', 'quote', 'link', 'chat', 'audio', 'video'];
@@ -843,6 +1005,10 @@ XKit.tools.getParameterByName = function(name){
 					return 'text';
 				},
 
+				/**
+				 * @return {Object} Description of originality of post with boolean
+				 *                  keys is_reblog and is_original for the two cases.
+				 */
 				origin: function() {
 
 					var to_return = {};
@@ -858,6 +1024,9 @@ XKit.tools.getParameterByName = function(name){
 
 			post_window_listener: {
 
+				/**
+				 * Begin running the post_window_listener
+				 */
 				run: function() {
 
 					if (XKit.interface.post_window_listener_running) { return; }
@@ -867,12 +1036,21 @@ XKit.tools.getParameterByName = function(name){
 
 				},
 
+				/**
+				 * Schedule the execution of XKit.interface.post_window_listener
+				 */
 				set_listen: function() {
 
 					setTimeout(function() { XKit.interface.post_window_listener.do(); }, 800);
 
 				},
 
+				/**
+				 * Perform the logic of the post_window_listener, running all
+				 * registered post_window_listener callbacks if there is a
+				 * newly opened post window. Otherwise schedules itself to run
+				 * later using set_listen.
+				 */
 				do: function() {
 
 					if (!XKit.interface.post_window_listener_running) { XKit.interface.post_window_listener_window_id = 0; return XKit.interface.post_window_listener.set_listen(); }
@@ -936,6 +1114,10 @@ XKit.tools.getParameterByName = function(name){
 					}
 				},
 
+				/**
+				 * @param {String} id - ID of function to remove as provided in
+				 *                      XKit.interface.post_window_listener.add
+				 */
 				remove: function(id) {
 
 					var m_id = XKit.interface.post_window_listener_id.indexOf(id);
@@ -956,6 +1138,11 @@ XKit.tools.getParameterByName = function(name){
 				// Each function here requires a Interface Post Object,
 				// you can get using interface.post.
 
+				/**
+				 * Set the tags of a post
+				 * @param {Object} post_obj - Interface Post Object provided by XKit.interface.post
+				 * @param {String} tags - Comma-separated array of tags
+				 */
 				tags: function(post_obj, tags) {
 
 					var post_div = $("#post_" + post_obj.id);
@@ -1002,6 +1189,14 @@ XKit.tools.getParameterByName = function(name){
 
 			},
 
+			/**
+			 * Override parameters of a post object
+			 * @param {Object} tumblr_object
+			 * @param {Object} settings - Object with keys `tags` and/or `caption` which
+			 *                            will override tumblr_object's corresponding keys.
+			 * @return {Object} Updated tumblr_object (same as the param) or an
+			 *                  error object with keys `error` and `message`
+			 */
 			edit_post_object: function(tumblr_object, settings) {
 
 				// Used to modify a Tumblr Post Object.
@@ -1047,6 +1242,15 @@ XKit.tools.getParameterByName = function(name){
 
 			},
 
+			/**
+			 * Edit a post
+			 * @param {Object} tumblr_object - Tumblr information corresponding to post
+			 * @param {Function} func - Callback upon edit completion or error. If error,
+			 *                          argument has keys error:true and message:String. Otherwise
+			 *                          it contains JSON data of Tumblr's response to the edit.
+			 * @param {boolean?} retry_mode - True if this function has failed and is
+			 *                                attempting to retry the edit
+			 */
 			edit: function(tumblr_object, func, retry_mode) {
 
 				// Used to edit a post.
@@ -1249,6 +1453,13 @@ XKit.tools.getParameterByName = function(name){
 
 			},
 
+			/**
+			 * @param {Object} post_obj - Interface Post Object provided by XKit.interface.post
+			 * @param {Function} func - Called on error or on completion with an object describing
+			 *                          the results of the fetch. The object has key error: true
+			 *                          if there is an error.
+			 * @param {boolean} reblog_mode - Whether the post is a reblog
+			 */
 			fetch: function(post_object, func, reblog_mode) {
 
 				// Fetches internal Tumblr object for a post, then calls callback (func)
@@ -1315,9 +1526,13 @@ XKit.tools.getParameterByName = function(name){
 
 			},
 
+			/**
+			 * Adds or removes the "working" animation from the control button.
+			 * @param {JQuery} obj
+			 * @param {boolean} working - Whether the button should be "working"
+			 */
 			switch_control_button: function(obj, working) {
 
-				// Switches control button between "working" and normal.
 
 				if (working) {
 					$(obj).addClass("xkit-interface-working");
@@ -1328,9 +1543,13 @@ XKit.tools.getParameterByName = function(name){
 
 			},
 
+			/**
+			 * Adds or removes the "disabled" animation from the control button.
+			 * @param {JQuery} obj
+			 * @param {boolean} disabled - Whether the button should be "disabled"
+			 */
 			disable_control_button: function(obj, disabled) {
 
-				// Switches control button between disabled and normal.
 
 				if (disabled) {
 					$(obj).addClass("xkit-interface-disabled");
@@ -1341,9 +1560,13 @@ XKit.tools.getParameterByName = function(name){
 
 			},
 
+			/**
+			 * Adds or removes the "green/completed" animation from the control button.
+			 * @param {JQuery} obj
+			 * @param {boolean} completed - Whether the button should be "green/completed"
+			 */
 			completed_control_button: function(obj, completed) {
 
-				// Switches control button between normal and "green/completed"
 
 				if (completed) {
 					$(obj).addClass("xkit-interface-completed");
@@ -1354,6 +1577,16 @@ XKit.tools.getParameterByName = function(name){
 
 			},
 
+			/**
+			 * Create a specification for a control button that can be added to
+			 * future posts using `XKit.interface.add_control_button`.
+			 * @param {String} class_name - CSS class of the button to be created
+			 * @param {String} icon - URL of the button's icon
+			 * @param {String} text - Hover text of the button
+			 * @param {EventListener} func - Function called on click of control button
+			 * @param {String?} ok_icon - URL of icon displayed when the button is
+			 *                            "completed" (e.g. reblog button turning green)
+			 */
 			create_control_button: function(class_name, icon, text, func, ok_icon) {
 
 				XKit.interface.added_icon.push(class_name);
@@ -1404,6 +1637,13 @@ XKit.tools.getParameterByName = function(name){
 
 			},
 
+			/**
+			 * Instantiate and add a previously "created" button to the
+			 * specified post.
+			 * @param {Object} obj - Interface Post Object
+			 * @param {String} class_name - CSS class of the button to be added
+			 * @param {String?} additional - String inserted into the button's div tag
+			 */
 			add_control_button: function(obj, class_name, additional) {
 
 				if (typeof additional == "undefined") {additional = ""; }
@@ -1474,6 +1714,10 @@ XKit.tools.getParameterByName = function(name){
 				return posts;
 			},
 
+			/**
+			 * @param {String} post_id
+			 * @return {Object} Interface Post Object of post with given id
+			 */
 			find_post: function(post_id) {
 
 				// Return a post object based on post ID.
@@ -1491,6 +1735,10 @@ XKit.tools.getParameterByName = function(name){
 
 			},
 
+			/**
+			 * @param {JQuery} obj - Post element
+			 * @return {Object} Interface Post Object or {error: true}
+			 */
 			post: function(obj) {
 
 				var m_return = {};
@@ -1608,6 +1856,9 @@ XKit.tools.getParameterByName = function(name){
 
 			},
 
+			/**
+			 * @return {String} The current Tumblr form_key used for authentication
+			 */
 			form_key: function() {
 
 				var to_return = $('meta[name=tumblr-form-key]').attr("content");
@@ -1623,12 +1874,26 @@ XKit.tools.getParameterByName = function(name){
 
 			},
 
+			/**
+			 * @return {String} The concatentation of two form keys. Unused and likely a typo.
+			 */
 			check_key: function() {
 
 				return $("body").attr('data-form-key') + $("body").attr('data-form-key');
 
 			},
 
+			/**
+			 * @return {Object} Various information about the current user with keys
+			 *	posts: number - Number of posts
+			 *	followers: number - Number of followers
+			 *	drafts: number - Number of drafts
+			 *	processing: number - Number of posts "processing" (may be defunct)
+			 *	queue: number - Number of posts in queue
+			 *	activity: String - Activity data as a stringified array
+			 *	name: String - username
+			 *  title: String - blog title
+			 */
 			user: function() {
 
 				var m_return = {};
@@ -1691,6 +1956,22 @@ XKit.tools.getParameterByName = function(name){
 
 			},
 
+			/**
+			 * @return {Object} Information about the browser's current location in Tumblr with keys
+			 *	inbox: boolean - Whether viewing inbox
+			 *	activity: boolean - Whether viewing activity
+			 *	queue: boolean - Whether viewing queue
+			 *	channel: boolean - Whether viewing a channel
+			 *	search: boolean - Whether viewing a search
+			 *	drafts: boolean - Whether viewing drafts
+			 *	followers: boolean - Whether viewing followers
+			 *	channel: boolean - Whether viewing a channel
+			 *	tagged: boolean - Whether viewing tagged posts
+			 *	user_url: String - The url of the currently viewed side blog.
+			 *	                   Otherwise the user's main URL
+			 *	endless: boolean - Whether the current view scrolls endlessly
+			 *	following: boolean - Whether the viewed blog follows the user
+			 */
 			where: function() {
 				var m_return = {
 					inbox: false,
@@ -1834,6 +2115,9 @@ XKit.tools.getParameterByName = function(name){
 			}
 		});
 
+		/**
+		 * Initialize all of XKit
+		 */
 		XKit.init = function() {
 
 			// Check page then return control to init_extension.
@@ -1864,7 +2148,12 @@ XKit.tools.getParameterByName = function(name){
 			}
 		};
 
-		// New Post Listener for Posts_v2
+		/**
+		 * Check for the existence of new posts on the page, running callbacks
+		 * if there are new posts
+		 * @param {boolean?} no_timeout - If true, do not schedule the check for
+		 *                                running in the future
+		 */
 		XKit.post_listener.check = function(no_timeout) {
 			var post_count = -1;
 			if (typeof XKit.page.peepr != "undefined" && XKit.page.peepr === true) {
@@ -1895,6 +2184,9 @@ XKit.tools.getParameterByName = function(name){
 			}
 		};
 
+		/**
+		 * Run all callbacks registered to run when new posts appear
+		 */
 		XKit.post_listener.run_callbacks = function() {
 			if (XKit.post_listener.callbacks.length === 0) {
 				return;
@@ -1921,7 +2213,14 @@ XKit.tools.getParameterByName = function(name){
 
 		}
 
-		// Patch notifications adder
+		/**
+		 * Add an XKit notification popup (will appear in bottom left corner)
+		 * @param {String} message - Text of notification
+		 * @param {String} type - Desired CSS class of notification, see function
+		 *                        for possibilities.
+		 * @param {boolean} sticky - If true, the notification will not fade out over time.
+		 * @param {Function} callback - On click callback for notification
+		 */
 		XKit.notifications.add = function(message, type, sticky, callback) {
 
 				//alert($("#xkit-notifications").length);
@@ -1974,6 +2273,9 @@ XKit.tools.getParameterByName = function(name){
 
 	},
 
+	/**
+	 * Clean up xkit_patches
+	 */
 	destroy: function() {
 		// console.log = XKit.log_back;
 		window.removeEventListener("message", XKit.extensions.xkit_patches.blog_list_message_listener);
