@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 6.2.0 **//
+//* VERSION 6.2.1 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER new-xkit **//
 
@@ -345,12 +345,17 @@ XKit.tools.getParameterByName = function(name){
 			form_key: function() {
 				var new_form_key = $("meta[name=tumblr-form-key]").attr("content");
 				var old_form_key = $(".btn.reblog").attr('data-form-key');
-		        return new_form_key || old_form_key;
+				return new_form_key || old_form_key;
 			},
 
 			hide_button: function(button) {
 				button.addClass("no_label");
-				button.addClass("no-text").wrapInner('<span class="hidden">');
+				button.addClass("no-text").contents()
+					.filter(function() {
+						return this.nodeType === 3;
+					}).wrap('<span class="hidden">');
+
+				button.children(".icon-wrapper").addClass("xkit-hidden");
 			},
 
 			follow_button: function() {
