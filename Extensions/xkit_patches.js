@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 6.2.1 **//
+//* VERSION 6.2.2 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER new-xkit **//
 
@@ -124,33 +124,76 @@ XKit.tools.parse_version = function(versionString) {
 	return version;
 };
 
+var blogs_get = document.createElement("script");
+blogs_get.textContent = "("+(function(){
+	var blogs = [];
+	var models = Tumblr.dashboardControls.allTumblelogs;
+
+	models.filter(function(model){
+		return model.attributes.hasOwnProperty("is_current");
+	}).forEach(function(model){
+		blogs.push(model.attributes.name);
+	});
+	if(blogs.length){
+		window.postMessage({
+			xkit_blogs: blogs,
+		}, window.location.protocol+"//"+window.location.host);
+	}
+}).toString()+")();";
+document.body.appendChild(blogs_get);
+
+XKit.extensions.xkit_patches.blog_list_message_listener = function(e){
+	if (e.origin == window.location.protocol+"//"+window.location.host &&
+		e.data.hasOwnProperty("xkit_blogs")) {
+
+		XKit.blogs_from_tumblr = e.data.xkit_blogs.map(XKit.tools.escape_html);
+	}
+};
+
+window.addEventListener("message", XKit.extensions.xkit_patches.blog_list_message_listener);
+
+
 XKit.tools.get_blogs = function() {
 	var m_blogs = [];
 
-	// Approach 2: Find where Tumblr invokes its bootstrap function
-	var script_tags = $("script");
-	for (var i = 0; i < script_tags.length; i++) {
-		var s = $(script_tags[i]).html();
+	// Approach 1: Scrape the tumblelog models for ones we control
+	// code is above
 
-		if (s.indexOf("require(\"context\").bootloader") < 0) {
-			continue;
-		}
-
-		s = s.replace("require(\"context\").bootloader(", "");
-		s = s.substring(0, s.length - 2);
-
-		var obj = JSON.parse(s);
-		var channels = obj.Context.userinfo.channels;
-
-		for (var item in channels) {
-			m_blogs.push(channels[item].name);
-		}
-
-		XKit.tools.set_setting("xkit_cached_blogs", m_blogs.join(';'));
+	if (XKit.blogs_from_tumblr.length){
+		m_blogs = XKit.blogs_from_tumblr;
+		XKit.tools.set_setting('xkit_cached_blogs', m_blogs.join(';'));
 		return m_blogs;
 	}
 
-	// Approach 1: Scrape the hidden tab switching element
+	// Approach 2: Scrape from the dynamically-created popover element.
+
+	if (!$("[data-js-channel-list]").length) {
+		// create the popover element
+		var account_menu = $("#account_button");
+		account_menu.click();
+		setTimeout(function(){
+			account_menu.click();
+		},10);
+	}
+
+	var blog_menu_items = $("[data-js-channel-list] .popover_menu_item_blog");
+	if (blog_menu_items.length) {
+
+		blog_menu_items.each(function(){
+			blog_url = this.id.split("--")[1];
+			if (blog_url) {
+				m_blogs.push(blog_url);
+			}
+		});
+
+		if (m_blogs.length) {
+			XKit.tools.set_setting('xkit_cached_blogs', m_blogs.join(';'));
+			return m_blogs;
+		}
+	}
+
+	// Approach 3: Scrape the hidden tab switching element
+
 	var tab_switching = $("#tab_switching");
 	if (tab_switching.length > 0) {
 		tab_switching.find(".tab_blog.item").not(".tab_dashboard").each(function() {
@@ -160,17 +203,6 @@ XKit.tools.get_blogs = function() {
 			XKit.tools.set_setting('xkit_cached_blogs', m_blogs.join(';'));
 			return m_blogs;
 		}
-	}
-
-	// Approach 3: Scrape from the dynamically-created popover element.
-	if ($("#popover_blogs").length > 0) {
-		$("#popover_blogs > .popover_inner").children(".item").not(":last-child").each(function(index, obj) {
-			var mX = $(this).attr("id");
-			mX = mX.substring(9, mX.length);
-			m_blogs.push(mX);
-		});
-		XKit.tools.set_setting("xkit_cached_blogs", m_blogs.join(';'));
-		return m_blogs;
 	}
 
 	// Approach 4: Use the last good cached data that we saved in settings
@@ -221,6 +253,28 @@ XKit.tools.dump_config = function(){
 		obj[x] = GM_getValue(x);
 		return obj;
 	}, {});
+};
+
+/**
+ * @param {String} text - the text to be escaped
+ * @return {String} Will return the passed text, with all potentially
+ *                  dangerous-for-HTML characters escaped
+ *
+ * see also https://www.owasp.org/index.php/XSS_%28Cross_Site_Scripting%29_Prevention_Cheat_Sheet#XSS_Prevention_Rules
+ * for the source of the list of escaping rules in this function.
+ *
+ * Under no circumstances should the output of this function be injected into
+ * an unquoted element attribute, as there are many ways to escape from an
+ * unquoted attribute that aren't covered here. Don't use unquoted attributes
+ */
+XKit.tools.escape_html = function(text){
+    return String(text)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;")
+        .replace(/\//g, "&#x2F;");
 };
 
 // http://stackoverflow.com/a/901144/2073440
@@ -1921,6 +1975,7 @@ XKit.tools.getParameterByName = function(name){
 
 	destroy: function() {
 		// console.log = XKit.log_back;
+		window.removeEventListener("message", XKit.extensions.xkit_patches.blog_list_message_listener);
 		XKit.tools.remove_css("xkit_patches");
 		this.running = false;
 	}
