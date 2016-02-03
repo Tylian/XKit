@@ -124,18 +124,43 @@ XKit.tools.parse_version = function(versionString) {
 	return version;
 };
 
-XKit.tools.get_blogs = function() {
-	var m_blogs = [];
-
-	// Approach 1: Scrape the tumblelog models for ones we control
+var blogs_get = document.createElement("script");
+blogs_get.textContent = "("+(function(){
+	var blogs = [];
 	var models = Tumblr.dashboardControls.allTumblelogs;
 
 	models.filter(function(model){
 		return model.attributes.hasOwnProperty("is_current");
 	}).forEach(function(model){
-		m_blogs.push(model.attributes.name);
+		blogs.push(model.attributes.name);
 	});
-	if(m_blogs.length){
+	if(blogs.length){
+		window.postMessage({
+			xkit_blogs: blogs,
+		}, window.location.protocol+"//"+window.location.host);
+	}
+}).toString()+")();";
+document.body.appendChild(blogs_get);
+
+XKit.extensions.xkit_patches.blog_list_message_listener = function(e){
+	if (e.origin == window.location.protocol+"//"+window.location.host &&
+		e.data.hasOwnProperty("xkit_blogs")) {
+
+		XKit.blogs_from_tumblr = e.data.xkit_blogs.map(XKit.tools.escape_html);
+	}
+};
+
+window.addEventListener("message", XKit.extensions.xkit_patches.blog_list_message_listener);
+
+
+XKit.tools.get_blogs = function() {
+	var m_blogs = [];
+
+	// Approach 1: Scrape the tumblelog models for ones we control
+	// code is above
+
+	if (XKit.blogs_from_tumblr.length){
+		m_blogs = XKit.blogs_from_tumblr;
 		XKit.tools.set_setting('xkit_cached_blogs', m_blogs.join(';'));
 		return m_blogs;
 	}
@@ -1950,6 +1975,7 @@ XKit.tools.getParameterByName = function(name){
 
 	destroy: function() {
 		// console.log = XKit.log_back;
+		window.removeEventListener("message", XKit.extensions.xkit_patches.blog_list_message_listener);
 		XKit.tools.remove_css("xkit_patches");
 		this.running = false;
 	}
