@@ -230,6 +230,28 @@ XKit.tools.dump_config = function(){
 	}, {});
 };
 
+/**
+ * @param {String} text - the text to be escaped
+ * @return {String} Will return the passed text, with all potentially
+ *                  dangerous-for-HTML characters escaped
+ *
+ * see also https://www.owasp.org/index.php/XSS_%28Cross_Site_Scripting%29_Prevention_Cheat_Sheet#XSS_Prevention_Rules
+ * for the source of the list of escaping rules in this function.
+ *
+ * Under no circumstances should the output of this function be injected into
+ * an unquoted element attribute, as there are many ways to escape from an
+ * unquoted attribute that aren't covered here. Don't use unquoted attributes
+ */
+XKit.tools.escape_html = function(text){
+    return String(text)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;")
+        .replace(/\//g, "&#x2F;");
+};
+
 // http://stackoverflow.com/a/901144/2073440
 XKit.tools.getParameterByName = function(name){
 	name = encodeURIComponent(name);
