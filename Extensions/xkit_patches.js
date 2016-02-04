@@ -159,7 +159,7 @@ XKit.tools.get_blogs = function() {
 	// Approach 1: Scrape the tumblelog models for ones we control
 	// code is above
 
-	if (XKit.blogs_from_tumblr.length){
+	if (XKit.blogs_from_tumblr){
 		m_blogs = XKit.blogs_from_tumblr;
 		XKit.tools.set_setting('xkit_cached_blogs', m_blogs.join(';'));
 		return m_blogs;
