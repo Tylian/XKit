@@ -58,6 +58,14 @@ destroy: function() {
 }
 ```
 
+<a name"escape_html" href="XKit.tools.md#escape_html">#</a> XKit.tools.**escape_html**(_text_)
+
+Will return the passed text, with all potentially dangerous-for-HTML characters escaped.
+
+see also [the OWASP wiki](https://www.owasp.org/index.php/XSS_%28Cross_Site_Scripting%29_Prevention_Cheat_Sheet#XSS_Prevention_Rules) for the source of the list of escaping rules in this function.
+
+Under no circumstances should the output of this function be injected into an unquoted element attribute, as there are many ways to escape from an unquoted attribute that aren't covered here. Don't use unquoted attributes.
+
 <a name"random_string" href="XKit.tools.md#random_string">#</a> XKit.tools.**random_string**()
 
 Returns a random 30-character string.

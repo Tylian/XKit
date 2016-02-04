@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 6.2.2 **//
+//* VERSION 6.2.3 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER new-xkit **//
 
@@ -127,18 +127,19 @@ XKit.tools.parse_version = function(versionString) {
 var blogs_get = document.createElement("script");
 blogs_get.textContent = "("+(function(){
 	var blogs = [];
-	var models = Tumblr.dashboardControls.allTumblelogs;
-
-	models.filter(function(model){
-		return model.attributes.hasOwnProperty("is_current");
-	}).forEach(function(model){
-		blogs.push(model.attributes.name);
-	});
-	if(blogs.length){
-		window.postMessage({
-			xkit_blogs: blogs,
-		}, window.location.protocol+"//"+window.location.host);
-	}
+	try {
+		var models = Tumblr.dashboardControls.allTumblelogs;
+		models.filter(function(model){
+			return model.attributes.hasOwnProperty("is_current");
+		}).forEach(function(model){
+			blogs.push(model.attributes.name);
+		});
+		if(blogs.length){
+			window.postMessage({
+				xkit_blogs: blogs,
+			}, window.location.protocol+"//"+window.location.host);
+		}
+	} catch (_) {}
 }).toString()+")();";
 document.body.appendChild(blogs_get);
 
@@ -159,7 +160,7 @@ XKit.tools.get_blogs = function() {
 	// Approach 1: Scrape the tumblelog models for ones we control
 	// code is above
 
-	if (XKit.blogs_from_tumblr.length){
+	if (XKit.blogs_from_tumblr){
 		m_blogs = XKit.blogs_from_tumblr;
 		XKit.tools.set_setting('xkit_cached_blogs', m_blogs.join(';'));
 		return m_blogs;
