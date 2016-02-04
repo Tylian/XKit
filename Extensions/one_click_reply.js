@@ -1,5 +1,5 @@
 //* TITLE One-Click Reply **//
-//* VERSION 2.0.6 **//
+//* VERSION 2.0.7 **//
 //* DESCRIPTION Lets you reply to notifications **//
 //* DEVELOPER new-xkit **//
 //* DETAILS To use this extension, hover over a notification and click on the Reply button. If Multi-Reply is on, hold down the ALT key while clicking on the Reply button to select/deselect posts and reply to all of them at once. **//
@@ -129,7 +129,7 @@ XKit.extensions.one_click_reply = new Object({
 						"<div id=\"xkit-one-click-reply-quick-reply-window\">" +
 							"<div id=\"xkit-one-click-reply-quick-reply-close\">&nbsp;</div>" +
 							"<div id=\"xkit-one-click-reply-quick-reply-title\">" +
-								"<img src=\"http://31.media.tumblr.com/avatar_b5acef4abf8c_64.png\" class=\"xkit-qr-avatar\">" +
+								"<img src=\"https://31.media.tumblr.com/avatar_b5acef4abf8c_64.png\" class=\"xkit-qr-avatar\">" +
 								"Replying to <span id=\"xkit-one-click-reply-quick-reply-username\">xenix</span>" +
 							"</div>" +
 							"<textarea id=\"xkit-one-click-reply-quick-reply-text\"></textarea>" +
@@ -230,7 +230,7 @@ XKit.extensions.one_click_reply = new Object({
 
 		m_object["post[slug]"] = "";
 		m_object["post[draft_status]"] = "";
-		m_object["post[source_url]"] = "http://";
+		m_object["post[source_url]"] = "https://";
 		m_object["post[date]"] = "";
 
 		m_object["post[type]"] = "regular";
@@ -275,7 +275,7 @@ XKit.extensions.one_click_reply = new Object({
 
 			GM_xmlhttpRequest({
 				method: "POST",
-				url: "http://www.tumblr.com/svc/post/update",
+				url: "https://www.tumblr.com/svc/post/update",
 				data: JSON.stringify(m_object),
 				json: true,
 				headers: {
@@ -412,7 +412,7 @@ XKit.extensions.one_click_reply = new Object({
 			};
 			XKit.tools.set_setting("xkit_one_click_reply_data", JSON.stringify(data));
 
-			var m_url = "http://www.tumblr.com/new/text";
+			var m_url = "https://www.tumblr.com/new/text";
 
 			if (document.location.href.indexOf("/blog/") !== -1) {
 				// Maybe we can make this better?
@@ -810,7 +810,7 @@ XKit.extensions.one_click_reply = new Object({
 			m_sentence = "<img src=\"" + avatar_url + "\" class=\"image_thumbnail\">" + m_sentence;
 		}
 
-		var m_url = "http://www.tumblr.com/new/text";
+		var m_url = "https://www.tumblr.com/new/text";
 
 		if (document.location.href.indexOf("/blog/") !== -1) {
 			// Maybe we can make this better?
@@ -924,7 +924,7 @@ XKit.extensions.one_click_reply = new Object({
 					};
 					XKit.tools.set_setting("xkit_one_click_reply_data", JSON.stringify(data));
 
-					var m_url = "http://www.tumblr.com/new/text";
+					var m_url = "https://www.tumblr.com/new/text";
 
 					if (document.location.href.indexOf("/blog/") !== -1) {
 						// Maybe we can make this better?
@@ -1049,7 +1049,7 @@ XKit.extensions.one_click_reply = new Object({
 			m_sentence = "<img src=\"" + avatar_url + "\" class=\"image_thumbnail\">" + m_sentence;
 		}
 
-		var m_url = "http://www.tumblr.com/new/text";
+		var m_url = "https://www.tumblr.com/new/text";
 
 		if (document.location.href.indexOf("/blog/") !== -1) {
 			// Maybe we can make this better?
@@ -1161,7 +1161,7 @@ XKit.extensions.one_click_reply = new Object({
 			m_sentence = "<p><img src=\"" + avatar_url + "\" class=\"image_thumbnail\"></p>" + m_sentence;
 		}
 
-		var m_url = "http://www.tumblr.com/new/text";
+		var m_url = "https://www.tumblr.com/new/text";
 
 		if (document.location.href.indexOf("/blog/") !== -1) {
 			// Maybe we can make this better?
