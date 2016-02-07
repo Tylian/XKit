@@ -688,20 +688,24 @@ XKit.tools.getParameterByName = function(name){
 
 					//// console.log("XKitty: Kitty blank / expired, requesting new feline.");
 
-					$.ajax({
-						type: "POST",
-						url: "/svc/secure_form_key",
+					GM_xmlhttpRequest({
+						method: "POST",
+						url: "https://www.tumblr.com/svc/secure_form_key",
 						headers: {
 							"X-tumblr-form-key": XKit.interface.form_key(),
 						},
-						success: function (data, status, res) {
+						onload: function (response) {
 							//// console.log("XKitty: YAY! Kitty request complete!");
 							XKit.interface.kitty.store_time = new Date().getTime();
-							XKit.interface.kitty.stored = res.getResponseHeader("X-tumblr-secure-form-key");
+							var kitty_text = response.getResponseHeader("X-tumblr-secure-form-key");
+							if (!kitty_text) {
+								kitty_text = response.getResponseHeader("x-tumblr-secure-form-key");
+							}
+							XKit.interface.kitty.stored = kitty_text;
 							m_object.kitten = XKit.interface.kitty.stored;
 							callback(m_object);
 						},
-						error: function(data, status, res) {
+						onerror: function(response) {
 							//// console.log("XKitty: DAMN IT! Kitty request FAILED!");
 							m_object.errors = true;
 							m_object.kitten = "";
