@@ -1,6 +1,6 @@
 .xglow {
 	text-shadow: 0 0 3px #FFF;
-	background: rgba(0,0,0,0.70);
+	background: rgba(0,0,0,0.70) !important;
 	animation: glow 1.75s;
 	-moz-animation: glow 1.75s;
 	-webkit-animation: glow 1.75s;
