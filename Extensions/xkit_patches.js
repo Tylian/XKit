@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 6.2.3 **//
+//* VERSION 6.2.4 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER new-xkit **//
 
@@ -388,8 +388,9 @@ XKit.tools.getParameterByName = function(name){
 
 			get_tumblelog: function() {
 				var new_channel_id = document.location.href.match(/[&?]tumblelogName=([\w-]+)/);
+				var archive_channel_id = document.location.href.match(/[&?]name=([\w-]+)/);
 				var old_channel_id = $("#tumblelog_name").attr('data-tumblelog-name');
-				return (new_channel_id && new_channel_id[1]) || old_channel_id;
+				return (new_channel_id && new_channel_id[1]) || (archive_channel_id && archive_channel_id[1]) || old_channel_id;
 			},
 
 			single_post_id: function() {
