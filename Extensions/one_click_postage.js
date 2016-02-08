@@ -1,5 +1,5 @@
 //* TITLE One-Click Postage **//
-//* VERSION 4.1.2 **//
+//* VERSION 4.2.0 **//
 //* DESCRIPTION Lets you easily reblog, draft and queue posts **//
 //* DEVELOPER new-xkit **//
 //* FRAME false **//
@@ -58,6 +58,8 @@ XKit.extensions.one_click_postage = new Object({
 			value: "a3000",
 			type: "combo",
 			values: [
+				"10,000 Posts", "a10000",
+				"5,000 Posts", "a5000",
 				"Default (3,000)", "a3000",
 				"1,500 Posts", "a1500",
 				"1,000 Posts", "a1000",
