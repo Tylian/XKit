@@ -1,5 +1,5 @@
 //* TITLE Audio+ **//
-//* VERSION 0.4.1 **//
+//* VERSION 0.4.2 **//
 //* DESCRIPTION Enhancements for the Audio Player **//
 //* DEVELOPER new-xkit **//
 //* FRAME false **//
@@ -14,10 +14,15 @@ XKit.extensions.audio_plus = {
 			text: "Options",
 			type: "separator"
 		},
+		add_volume_control: {
+			text: "Add a volume slider to audio posts",
+			value: true,
+			default: true
+		},
 		pop_out_player: {
 			text: "Pop out controls when you scroll away from playing audio",
-			value: false,
-			default: false,
+			value: true,
+			default: true
 		}
 	},
 
@@ -33,9 +38,13 @@ XKit.extensions.audio_plus = {
 		}
 
 		XKit.tools.init_css("audio_plus");
-		$(document).on("mousemove mousedown mouseup mouseout click", ".xkit-audio-plus-slider", XKit.extensions.audio_plus.slider_handle_event);
-		XKit.post_listener.add("audio_plus", XKit.extensions.audio_plus.do);
-		setTimeout(function() { XKit.extensions.audio_plus.do(); }, 500);
+
+		if (XKit.extensions.audio_plus.preferences.add_volume_control.value) {
+			$(document).on("mousemove mousedown mouseup mouseout click", ".xkit-audio-plus-slider", XKit.extensions.audio_plus.slider_handle_event);
+			XKit.post_listener.add("audio_plus", XKit.extensions.audio_plus.do);
+			setTimeout(function() { XKit.extensions.audio_plus.do(); }, 500);
+		}
+
 		$("body").append("<div id=\"xkit-audio-plus-current-player\"></div>");
 		XKit.extensions.audio_plus.start_check_current();
 
