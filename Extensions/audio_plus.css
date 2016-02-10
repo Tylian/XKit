@@ -36,7 +36,9 @@
 .xkit-audio-plus-controls {
 	position: fixed;
 	bottom: 50px;
-	right: 50px;
+	left: 50%;
+	transform: translateX(245px) translateY(0px);
+
 	background-color: #f8f8f8;
 	z-index: 10000;
 	width: 70px;
@@ -53,8 +55,7 @@
 /* The following three heavily use Tumblr's dock_button styles */
 #xkit-audio-plus-controls-undock-container {
 	position: fixed;
-	bottom: 98px;
-	right: 48px;
+	right: -1.5px;
 
 	background-color: #748089;
 	border-radius: 100%;

@@ -1,5 +1,5 @@
 //* TITLE Audio+ **//
-//* VERSION 0.4.2 **//
+//* VERSION 0.4.3 **//
 //* DESCRIPTION Enhancements for the Audio Player **//
 //* DEVELOPER new-xkit **//
 //* FRAME false **//
