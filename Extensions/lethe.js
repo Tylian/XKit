@@ -1,5 +1,5 @@
 //* TITLE Hermes **//
-//* VERSION 1.2.0 **//
+//* VERSION 1.2.1 **//
 //* DESCRIPTION Helps speed up your Tumblr experience **//
 //* DEVELOPER new-xkit **//
 //* FRAME false **//
@@ -87,7 +87,6 @@ Lethe.prototype.updatePosts = function() {
 Lethe.prototype.hidePost = function(post) {
   var rect = post.getBoundingClientRect();
   var placeholder = document.createElement('div');
-  placeholder.classList.add('post_media');
   placeholder.classList.add('post_media_hidden');
   placeholder.style.width = rect.width + 'px';
   placeholder.style.height = rect.height + 'px';
