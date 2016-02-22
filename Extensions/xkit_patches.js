@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 6.2.4 **//
+//* VERSION 6.2.5 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER new-xkit **//
 
@@ -1018,8 +1018,8 @@ XKit.tools.getParameterByName = function(name){
 
 					var to_return = {};
 
-					to_return.is_reblog = $(".post-header").find(".reblog_source").length > 0;
-					to_return.is_original = $(".post-header").find(".reblog_source").length <= 0;
+					to_return.is_reblog = $(".post-form--header").find(".reblog_source").length > 0;
+					to_return.is_original = $(".post-form--header").find(".reblog_source").length <= 0;
 
 					return to_return;
 
