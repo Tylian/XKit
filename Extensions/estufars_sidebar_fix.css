@@ -141,8 +141,8 @@
 }
 
 /* activity line is grey, use blend modes to match blue of other menu items */
-
-.right_column .blog-sub-nav-item-data.sparkline {
+/* nevermind, chrome has a bug that causes the message dropdown to disappear? */
+/*.right_column .blog-sub-nav-item-data.sparkline {
 	mix-blend-mode: screen;
 	opacity: 0.6;
-}
+}*/
