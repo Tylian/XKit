@@ -157,6 +157,7 @@
 /* z-index change will mess with the first section
    (another chrome issue, will be fixed in chrome 50) */
 
-.right_column .popover_subsection:first-child .popover_header, .right_column .popover_subsection:first-child .popover_header>.popover_item_suffix {
+.right_column .popover_subsection:first-child .popover_header,
+.right_column .popover_subsection:first-child .popover_header>.popover_item_suffix {
 	position: static;
 }
