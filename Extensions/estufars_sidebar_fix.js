@@ -1,5 +1,5 @@
 //* TITLE Old Sidebar **//
-//* VERSION 1.1.4 **//
+//* VERSION 1.1.5 **//
 //* DESCRIPTION Get the sidebar back **//
 //* DEVELOPER estufar **//
 //* FRAME false **//
@@ -32,6 +32,7 @@ XKit.extensions.estufars_sidebar_fix = new Object({
 				"://www.tumblr.com/following",
 				"/reblog",
 				"://www.tumblr.com/help",
+				"://www.tumblr.com/support",
 				"://www.tumblr.com/docs",
 				"://www.tumblr.com/developers",
 				"://www.tumblr.com/about",

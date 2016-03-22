@@ -141,8 +141,23 @@
 }
 
 /* activity line is grey, use blend modes to match blue of other menu items */
-/* nevermind, chrome has a bug that causes the message dropdown to disappear? */
-/*.right_column .blog-sub-nav-item-data.sparkline {
+
+.right_column .blog-sub-nav-item-data.sparkline {
 	mix-blend-mode: screen;
 	opacity: 0.6;
-}*/
+}
+
+/* chrome will cause the chat menu to disappear when the blend mode is set for some reason
+   work around this by setting right column z-index which makes it appear again */
+
+.right_column {
+	z-index: 1;
+}
+
+/* z-index change will mess with the first section
+   (another chrome issue, will be fixed in chrome 50) */
+
+.right_column .popover_subsection:first-child .popover_header,
+.right_column .popover_subsection:first-child .popover_header>.popover_item_suffix {
+	position: static;
+}
