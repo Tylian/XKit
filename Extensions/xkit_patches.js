@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 6.2.5 **//
+//* VERSION 6.2.6 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER new-xkit **//
 
@@ -266,6 +266,11 @@ XKit.tools.make_gist = function(text, name) {
 };
 
 /**
+ * Cached nonce for use in script injection to overcome CSP
+ */
+XKit.tools.add_function_nonce = "";
+
+/**
  * Copies a function from the addon context into the page context. This
  * function will be serialized to a string, and then injected as a script tag
  * into the page.
@@ -275,10 +280,24 @@ XKit.tools.make_gist = function(text, name) {
  *                        `add_tag`. Only useful if `exec` is true
  */
 XKit.tools.add_function = function(func, exec, addt) {
+	if (!XKit.tools.add_function_nonce) {
+		var scripts = document.querySelectorAll('script');
+		for (var i = 0; i < scripts.length; i++) {
+			var nonce = scripts[i].getAttribute('nonce');
+			if (nonce) {
+				XKit.tools.add_function_nonce = nonce;
+				break;
+			}
+		}
+	}
+
 	try {
 		var script = document.createElement("script");
 		script.textContent = "var add_tag = " + JSON.stringify(addt) + ";";
 		script.textContent = script.textContent + (exec ? "(" : "") + func.toString() + (exec ? ")();" : "");
+		if (XKit.tools.add_function_nonce) {
+			script.setAttribute('nonce', XKit.tools.add_function_nonce);
+		}
 		document.body.appendChild(script);
 	} catch(e) {
 		alert(e.message);
