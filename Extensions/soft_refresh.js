@@ -1,5 +1,5 @@
 //* TITLE Soft Refresh **//
-//* VERSION 0.5.5 **//
+//* VERSION 0.5.6 **//
 //* DESCRIPTION Refresh without refreshing **//
 //* DEVELOPER new-xkit **//
 //* DETAILS This extension allows you to see new posts on your dashboard without refreshing the page. When you get the New Posts bubble, click on the Tumblr logo, and new posts will appear on your dashboard.<br><br>If you still want to refresh the page completely (perform a Hard Refresh), hold the ALT key while clicking on logo and the page will refresh.<br><br>Please note that this extension is highly experimental, and might not work properly all the time. **//
@@ -101,17 +101,25 @@ XKit.extensions.soft_refresh = new Object({
 		$("#new_post_notice_container .tab_notice_value").html("0");
 
 		function soft_refresh_hit_triggers() {
+			var postIds = add_tag;
+			var Tumblr = window.Tumblr || window.top.Tumblr;
 
-			if (typeof Tumblr === "undefined") {
-				window.top.Tumblr.Events.trigger("posts:load");
-				window.top.Tumblr.AudioPlayer.update_all();
-				window.top.Tumblr.Events.trigger("DOMEventor:updateRect");
-			} else {
-				Tumblr.Events.trigger("posts:load");
-				Tumblr.AudioPlayer.update_all();
-				Tumblr.Events.trigger("DOMEventor:updateRect");
+			try {
+				postIds.forEach(function(id) {
+					var postId = "post_" + id;
+					var postElement = jQuery(document.getElementById(postId));
+					var fakeView = new Tumblr.PostView({
+						el: postElement,
+						model: Tumblr.PostsView.prototype.createPostModelFromEl(postElement)
+					});
+					Tumblr.Events.trigger("postsView:createPost", fakeView);
+				});
+			} catch(e) {
+				console.warn("soft_refresh new approach failed:", e);
 			}
-
+			Tumblr.Events.trigger("posts:load");
+			Tumblr.Events.trigger("DOMEventor:updateRect");
+			Tumblr.AudioPlayer.update_all();
 		}
 
 		GM_xmlhttpRequest({
@@ -131,19 +139,21 @@ XKit.extensions.soft_refresh = new Object({
 				var new_posts = $("ol#posts", resText).html();
 
 				var m_count = 0;
+				var post_ids = [];
+
 				$($("ol#posts .post", resText).get().reverse()).each(function() {
 
 					if ($(this).attr('id') == "new_post_buttons" || typeof $(this).attr('data-post-id') == "undefined")
 						return;
 
-					console.log("post ID = " + $(this).attr('data-post-id'));
-					var exists = $("[data-post-id='" + $(this).attr('data-post-id') + "']").length > 0;
-					exists = exists || $("[data-xkit-post-id='" + $(this).attr('data-post-id') + "']").length > 0;
-					console.log("exists  = " + exists);
+					var post_id = $(this).attr('data-post-id');
+					var exists = $("[data-post-id='" + post_id + "']").length > 0;
+					exists = exists || $("[data-xkit-post-id='" + post_id + "']").length > 0;
 
 					if (!exists) {
 
 						m_count++;
+						post_ids.push(post_id);
 						if ($(".new_post_buttons_container").length > 0) {
 							$(".new_post_buttons_container").after($(this).parent()[0].outerHTML);
 						} else {
@@ -161,7 +171,7 @@ XKit.extensions.soft_refresh = new Object({
 						XKit.notifications.add("No new posts found.","info");
 					}
 				} else {
-					XKit.tools.add_function(soft_refresh_hit_triggers, true, "");
+					XKit.tools.add_function(soft_refresh_hit_triggers, true, post_ids);
 					XKit.extensions.soft_refresh.check_embeds();
 					if (XKit.extensions.soft_refresh.preferences.show_notifications.value === true) {
 						XKit.notifications.add("Added " + m_count + " new posts.","ok");
