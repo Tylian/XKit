@@ -1,5 +1,5 @@
 //* TITLE Show Originals **//
-//* VERSION 1.2.2 **//
+//* VERSION 1.2.3 **//
 //* DESCRIPTION Only shows non-reblogged posts **//
 //* DETAILS This is a really experimental extension allows you see original (non-reblogged) posts made by users on your dashboard. Please keep in mind that if you don't have enough people creating new posts on your dashboard, it might slow down your computer. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -65,8 +65,10 @@ XKit.extensions.show_originals = new Object({
 
 		XKit.extensions.show_originals.update_button();
 
-		$("#xshow_originals_ul").click(function() {
+		$("#xshoworiginals_button").click(function() {
 			XKit.extensions.show_originals.toggle();
+
+			return false;
 		});
 
 		XKit.tools.init_css("show_originals");
