@@ -128,7 +128,9 @@ XKit.extensions.theme_editor = new Object({
 
 	destroy: function() {
 		this.running = false;
+		$("#xkit-theme-editor-ul").remove();
 		$("#xkit-theme-editor-user-theme").remove();
+		XKit.tools.remove_css("theme_editor");
 	}
 
 });
