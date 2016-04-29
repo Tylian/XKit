@@ -1,5 +1,5 @@
 //* TITLE Old Sidebar **//
-//* VERSION 1.1.5 **//
+//* VERSION 1.1.6 **//
 //* DESCRIPTION Get the sidebar back **//
 //* DEVELOPER estufar **//
 //* FRAME false **//
@@ -55,15 +55,18 @@ XKit.extensions.estufars_sidebar_fix = new Object({
 		
 		var account = document.getElementById("account_button");
 		account.click();
-		var popover = document.getElementsByClassName("popover--account-popover")[0];
-		var sidebar = document.getElementById("right_column");
-		popover.childNodes[0].classList.add("estufars_sidebar_fix");
-		sidebar.insertBefore(popover.childNodes[0], sidebar.firstChild);
-		account.style.display = "none";
-		// this needs to be delayed a second for some reason
+		// wait for the menu to pop up
 		window.setTimeout(function() {
-			document.querySelector(".tab_nav_account.active").click();
-		}, 1000);
+			var popover = document.getElementsByClassName("popover--account-popover")[0];
+			var sidebar = document.getElementById("right_column");
+			popover.childNodes[0].classList.add("estufars_sidebar_fix");
+			sidebar.insertBefore(popover.childNodes[0], sidebar.firstChild);
+			account.style.display = "none";
+			// wait and then let tumblr know the menu is no longer active
+			window.setTimeout(function() {
+				document.querySelector(".tab_nav_account.active").click();
+			}, 500);
+		}, 250);
 	},
 	
 	destroy: function() {
