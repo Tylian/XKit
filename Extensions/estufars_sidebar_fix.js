@@ -1,5 +1,5 @@
 //* TITLE Old Sidebar **//
-//* VERSION 1.1.6 **//
+//* VERSION 1.1.7 **//
 //* DESCRIPTION Get the sidebar back **//
 //* DEVELOPER estufar **//
 //* FRAME false **//
@@ -18,7 +18,6 @@ XKit.extensions.estufars_sidebar_fix = new Object({
 	},
 	
 	run: function() {
-		XKit.tools.init_css("estufars_sidebar_fix");
 		this.running = true;
 		
 		if (XKit.extensions.estufars_sidebar_fix.preferences.dashonly.value) {
@@ -52,6 +51,8 @@ XKit.extensions.estufars_sidebar_fix = new Object({
 				}
 			}
 		}
+		
+		XKit.tools.init_css("estufars_sidebar_fix");
 		
 		var account = document.getElementById("account_button");
 		account.click();
