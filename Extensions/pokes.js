@@ -1,5 +1,5 @@
 //* TITLE Pokés **//
-//* VERSION 0.8.1 **//
+//* VERSION 0.9.0 **//
 //* DESCRIPTION Gotta catch them all! **//
 //* DETAILS Randomly spawns Pokémon on your dash for you to collect. **//
 //* DEVELOPER new-xkit **//
@@ -169,7 +169,7 @@ XKit.extensions.pokes = {
 	},
 
 	pokeGen: function() {
-		return Math.floor(Math.random() * 889); // TODO: Use a no-hardcoding-required method instead
+		return Math.floor(Math.random() * 889);
 	},
 
 	destroy: function() {
