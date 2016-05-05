@@ -214,7 +214,7 @@ XKit.extensions.pokes = {
 			'<div class="xkit-pokes-lightbox" style="opacity: 0">' +
 			'<div class="xkit-pokes-pc">' +
 					'<div class="xkit-pokes-pc-sorter">' +
-              '<input type="radio" name="xkit-pokes-sort" class="xkit-pokes-sorter" id="chronological" title="Order of capture"></input>'+
+              '<input type="radio" name="xkit-pokes-sort" class="xkit-pokes-sorter" id="chronological" title="Order of capture" checked="checked"></input>'+
               '<label for="chronological"></label>'+
               '<input type="radio" name="xkit-pokes-sort" class="xkit-pokes-sorter" id="alphabetical" title="Name"></input>'+
               '<label for="alphabetical"></label>'+
