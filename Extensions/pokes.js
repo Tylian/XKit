@@ -214,14 +214,14 @@ XKit.extensions.pokes = {
 			'<div class="xkit-pokes-lightbox" style="opacity: 0">' +
 			'<div class="xkit-pokes-pc">' +
 					'<div class="xkit-pokes-pc-sorter">' +
-							'<input type="radio" name="xkit-pokes-sort" class="xkit-pokes-sorter" id="chronological"></input>'+
-							'<label for="chronological"></label>'+
-							'<input type="radio" name="xkit-pokes-sort" class="xkit-pokes-sorter" id="alphabetical"></input>'+
-							'<label for="alphabetical"></label>'+
-							'<input type="radio" name="xkit-pokes-sort" class="xkit-pokes-sorter" id="pokeid"></input>'+
-							'<label for="pokeid"></label>'+
-							'<input type="checkbox" class="xkit-pokes-sorter" id="reverse-toggle"></input>'+
-							'<label for="reverse-toggle"></label>'+
+              '<input type="radio" name="xkit-pokes-sort" class="xkit-pokes-sorter" id="chronological" title="Order of capture"></input>'+
+              '<label for="chronological"></label>'+
+              '<input type="radio" name="xkit-pokes-sort" class="xkit-pokes-sorter" id="alphabetical" title="Name"></input>'+
+              '<label for="alphabetical"></label>'+
+              '<input type="radio" name="xkit-pokes-sort" class="xkit-pokes-sorter" id="pokeid" title="Pokédex # ordering"></input>'+
+              '<label for="pokeid"></label>'+
+              '<input type="checkbox" class="xkit-pokes-sorter" id="reverse-toggle"></input>'+
+              '<label for="reverse-toggle"></label>'+
 					'</div>' +
 				'<div class="xkit-pokes-pc-info">' +
 					'<div class="gender"></div>' +
