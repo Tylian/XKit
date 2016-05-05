@@ -252,11 +252,11 @@ XKit.extensions.pokes = {
 		});
 
 		var sortFunction = function(dataAttr, optData) {
-				var up = $('input.xkit-pokes-sorter#reverse-toggle').is(":checked") ? -1 : 1
-				return function(a, b) {
-						return ($(b).data(dataAttr) || $(b).data(optData)) < ($(a).data(dataAttr) || $(a).data(optData)) ? up : -up;
-				}
-		}
+			var up = ($('input.xkit-pokes-sorter#reverse-toggle').is(":checked") ? -1 : 1);
+			return function(a, b) {
+				return ($(b).data(dataAttr) || $(b).data(optData)) < ($(a).data(dataAttr) || $(a).data(optData)) ? up : -up;
+			};
+		};
 
 		$('input:radio[name="xkit-pokes-sort"]#pokeid').change(function(e){
 						$("#xkit-loading_pokemon div.caught").sort(sortFunction("pokeid", "pokeid"))
