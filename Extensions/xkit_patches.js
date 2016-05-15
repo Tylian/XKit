@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 6.2.7 **//
+//* VERSION 6.2.8 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER new-xkit **//
 
@@ -146,25 +146,6 @@ XKit.tools.parse_version = function(versionString) {
 	return version;
 };
 
-var blogs_get = document.createElement("script");
-blogs_get.textContent = "("+(function(){
-	var blogs = [];
-	try {
-		var models = Tumblr.dashboardControls.allTumblelogs;
-		models.filter(function(model){
-			return model.attributes.hasOwnProperty("is_current");
-		}).forEach(function(model){
-			blogs.push(model.attributes.name);
-		});
-		if(blogs.length){
-			window.postMessage({
-				xkit_blogs: blogs,
-			}, window.location.protocol+"//"+window.location.host);
-		}
-	} catch (_) {}
-}).toString()+")();";
-document.body.appendChild(blogs_get);
-
 XKit.extensions.xkit_patches.blog_list_message_listener = function(e){
 	if (e.origin == window.location.protocol+"//"+window.location.host &&
 		e.data.hasOwnProperty("xkit_blogs")) {
@@ -218,20 +199,7 @@ XKit.tools.get_blogs = function() {
 		}
 	}
 
-	// Approach 3: Scrape the hidden tab switching element
-
-	var tab_switching = $("#tab_switching");
-	if (tab_switching.length > 0) {
-		tab_switching.find(".tab_blog.item").not(".tab_dashboard").each(function() {
-			m_blogs.push($(this).attr('id').replace(/^tab_blog_/,''));
-		});
-		if (m_blogs.length > 0) {
-			XKit.tools.set_setting('xkit_cached_blogs', m_blogs.join(';'));
-			return m_blogs;
-		}
-	}
-
-	// Approach 4: Use the last good cached data that we saved in settings
+	// Approach 3: Use the last good cached data that we saved in settings
 	m_blogs = XKit.tools.get_setting("xkit_cached_blogs","");
 	if (m_blogs !== "") {
 		return m_blogs.split(";");
@@ -303,6 +271,24 @@ XKit.tools.add_function = function(func, exec, addt) {
 		alert(e.message);
 	}
 };
+
+// Scrape Tumblr's data object now that we can run add_function
+XKit.tools.add_function(function() {
+	var blogs = [];
+	try {
+		var models = Tumblr.dashboardControls.allTumblelogs;
+		models.filter(function(model){
+			return model.attributes.hasOwnProperty("is_current");
+		}).forEach(function(model){
+			blogs.push(model.attributes.name);
+		});
+		if(blogs.length){
+			window.postMessage({
+				xkit_blogs: blogs,
+			}, window.location.protocol+"//"+window.location.host);
+		}
+	} catch (_) {}
+}, true);
 
 /**
  * @return {Object} The elements of XKit's storage as a map from setting key to
