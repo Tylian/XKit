@@ -52,11 +52,6 @@ XKit.extensions.one_click_postage = new Object({
 			default: false,
 			value: false
 		},
-		"alreadyreblogged_use_checkmark": {
-			text: "Add a checkmark over the reblog sign of already reblogged posts",
-			default: false,
-			value: false
-		},
 		"already_reblogged_limit": {
 			text: "Remember the last <i>X</i> posts reblogged",
 			default: "a3000",
@@ -960,12 +955,6 @@ XKit.extensions.one_click_postage = new Object({
 
 	make_button_reblogged: function(m_button) {
     m_button.addClass("reblogged");
-    if (XKit.extensions.one_click_postage.preferences.alreadyreblogged_use_checkmark.value) {
-			var checkmark = document.createElement("div");
-			checkmark.innerHTML = "&#10003;";
-			checkmark.setAttribute("class", "xkit-checkmark");
-			m_button.prepend(checkmark);
-	  }
 	},
 
 	destroy: function() {
