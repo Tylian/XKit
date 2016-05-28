@@ -1,5 +1,5 @@
 .post_controls .post_control.reblog.reblogged:after {
-    content: '✓';
+    content: '\2713';
     font-size: 18px;
     color: #56bc8a;
     opacity: 100;
