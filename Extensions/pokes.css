@@ -8,10 +8,22 @@
 */
 .poke {
 	position: absolute;
-	right: -126px;
+	margin-left: 40%;
+	width: 100px;
+	z-index: 10;
 }
-.poke_background {
-	background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASBAMAAACk4JNkAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAYdEVYdFNvZnR3YXJlAHBhaW50Lm5ldCA0LjAuNvyMY98AAAAhUExURf///zAwMEhQUHh4gJhIOKCgwNhYONjI8PiQOPjQOPj4+CJu/FkAAAALdFJOUwC0tLS0tLS0tLS0/fXDXAAAAH1JREFUCNdjYGBgEBQUZAADwY6ODjCTEcjoaBMAsiRmgpiJQKHOVTOArDQBJJZEB1g2LRHIAutAYYmAWWlpjgxCHk1KQEaKIoOQkupStTQnJUUGRiOtVUpKSspA86pMlwIZpUDrxBcbl5eXB4JcEA5khAqAXRUaGgpzINilAJ/TLm7LlTr9AAAAAElFTkSuQmCC) no-repeat;
+.fixed {
+	right: -129px;
+}
+.poke_bg {
+	background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAYAAABWzo5XAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAIGNIUk0AAHpyAACAjgAA/TYAAH9bAAB7LQAA8/wAADr1AAASznY2hTMAAAC/SURBVHjatNQtFsMgDMBxjoTsEZCROwqSI0xW5ihIZCXHqIzLxMYWGrJ+vE38Hfk92gc4770zYqPhehOg+zTMAhViAbJ6mxSmkeXVSUwjRM+WfUhiP4X6RSc+TWKHf7CF/Aeaw3VkDgIKAB0WAN5ZQEMCQA/JEDMTESNmDgDDYVmDnPeeY0yfXbQjQKSGZDEmfY5qWZmIOMakdjQCalkZMStIYa1a1mESGV5axGwON2CLfH1G2sC2o8/I5YftMQCo6KTHQZNtVAAAAABJRU5ErkJggg==');
+	background-repeat: no-repeat;		 
+	background-size: 100px 100px;
+	image-rendering: pixelated;
+}
+.poke_bg_transp {
+	background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASBAMAAACk4JNkAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAYdEVYdFNvZnR3YXJlAHBhaW50Lm5ldCA0LjAuNvyMY98AAAAhUExURf///zAwMEhQUHh4gJhIOKCgwNhYONjI8PiQOPjQOPj4+CJu/FkAAAALdFJOUwC0tLS0tLS0tLS0/fXDXAAAAH1JREFUCNdjYGBgEBQUZAADwY6ODjCTEcjoaBMAsiRmgpiJQKHOVTOArDQBJJZEB1g2LRHIAutAYYmAWWlpjgxCHk1KQEaKIoOQkupStTQnJUUGRiOtVUpKSspA86pMlwIZpUDrxBcbl5eXB4JcEA5khAqAXRUaGgpzINilAJ/TLm7LlTr9AAAAAElFTkSuQmCC);
+	background-repeat: no-repeat;		 
 	background-size: 100px 100px;
 	image-rendering: pixelated;
 }
@@ -20,13 +32,20 @@
 	image-rendering: pixelated;
 }
 .poke::after {
-	float: right;
-	font-size: 30px;
-	position: relative;
-	top: 55px;
-	right: 12px;
-	font-weight: 100;
 	font-family: pokepixelplus, monospace;
+	font-size: 30px;
+	background: white 26px center;
+	border: 2px solid black;
+	-moz-border-radius: 26px;
+	-webkit-border-radius: 26px;
+	border-radius: 26px;
+	position: relative;
+	width: 28px; height: 30px;
+	right: -20px; bottom: 120px;
+	text-align: center;
+	padding-left: 2px;
+	line-height: 32px;
+	float: right;
 }
 .poke[data-pokegender="male"]::after {
 	font-family: pokepixelplus, monospace;
