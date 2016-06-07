@@ -147,7 +147,7 @@
 	font-size: 28px;
 }
 .nickname::before {
-	content: "\EA25";
+	content: "\EA27";
 	font-family: "tumblr-icons";
 	float: left;
 }
