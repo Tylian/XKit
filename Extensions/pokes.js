@@ -1,5 +1,5 @@
 //* TITLE Pokés **//
-//* VERSION 0.10.1 **//
+//* VERSION 0.10.2 **//
 //* DESCRIPTION Gotta catch them all! **//
 //* DETAILS Randomly spawns Pokémon on your dash for you to collect. **//
 //* DEVELOPER new-xkit **//
@@ -206,6 +206,7 @@ XKit.extensions.pokes = {
 	destroy: function() {
 		this.running = false;
 		XKit.post_listener.remove("pokes");
+		$(".poke").remove();
 	},
 
 	rename_poke: function(index, nick, cb) {
