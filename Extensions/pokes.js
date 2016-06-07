@@ -1,5 +1,5 @@
 //* TITLE Pokés **//
-//* VERSION 0.10.0 **//
+//* VERSION 0.10.1 **//
 //* DESCRIPTION Gotta catch them all! **//
 //* DETAILS Randomly spawns Pokémon on your dash for you to collect. **//
 //* DEVELOPER new-xkit **//
