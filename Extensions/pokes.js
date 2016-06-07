@@ -1,5 +1,5 @@
 //* TITLE Pokés **//
-//* VERSION 0.9.1 **//
+//* VERSION 0.10.0 **//
 //* DESCRIPTION Gotta catch them all! **//
 //* DETAILS Randomly spawns Pokémon on your dash for you to collect. **//
 //* DEVELOPER new-xkit **//
@@ -12,14 +12,28 @@ XKit.extensions.pokes = {
 	pokedex_url: "https://new-xkit.github.io/XKit/Extensions/dist/page/pokedex.json",
 
 	preferences: {
+		"allow_fullwidth": {
+			text: "Allow spawning across the entire width of the page",
+			default: "true",
+			value: "true"
+		},
+		"sep0": {
+			text: "Backgrounds",
+			type: "separator"
+		},
 		"catch_backgrounds": {
 			text: "Give Pokémon a background (for visibility)",
 			default: false,
 			value: false
 		},
+		"transp_background": {
+			text: "Transparent Backgrounds",
+			default: "true",
+			value: "true"
+		},
 		"pokes_menu_header": {
 			text: "Menu",
-			type: "separator",
+			type: "separator"
 		},
 	},
 
@@ -73,6 +87,10 @@ XKit.extensions.pokes = {
 		});
 	},
 
+	randomInt: function(min, max) {
+		return Math.floor(Math.random() * (max - min + 1) + min);
+	},
+
 	parse_pokemon: function(mdata, db_nr, pokedThing) {
 		var poke_name = mdata[db_nr].name;
 		var poke_sprite = mdata[db_nr].sprite;
@@ -102,13 +120,26 @@ XKit.extensions.pokes = {
 		var rarityPicker = Math.floor(Math.random() * 255);
 		if (rarityPicker >= 0 && rarityPicker <= rarity) {
 			var poke_html;
+			var poke_class;
+			var xpos = XKit.extensions.pokes.randomInt(-($(window).width()/3), ($(window).width()/2)-100);
+			var ypos = XKit.extensions.pokes.randomInt(0, 600);
+
 			if (XKit.extensions.pokes.preferences.catch_backgrounds.value) {
-				poke_html = '<div class="poke poke_background' + shiny_class + '" data-pokeid="' + db_nr + '" data-pokename="' + poke_name + '" data-pokegender="' + poke_gender + '">' +
+				if (XKit.extensions.pokes.preferences.transp_background.value) {
+					poke_class = "poke_bg_transp";
+				} else {
+					poke_class = "poke_bg";
+				}
+			}
+			
+			if (XKit.extensions.pokes.preferences.allow_fullwidth.value) {
+				poke_html = '<div class="poke ' + poke_class + shiny_class + '" data-pokeid="' + db_nr + '" data-pokename="' + poke_name + '" data-pokegender="' + poke_gender + '" style="left:' + xpos + 'px; margin-top:' + ypos + 'px;">' +
 				'<img src="'+poke_sprite+'" alt="'+poke_name+'"/>'+'</div>';
 			} else {
-				poke_html = '<div class="poke' + shiny_class + '" data-pokeid="' + db_nr + '" data-pokename="' + poke_name + '" data-pokegender="' + poke_gender + '">' +
+				poke_html = '<div class="poke fixed ' + poke_class + shiny_class + '" data-pokeid="' + db_nr + '" data-pokename="' + poke_name + '" data-pokegender="' + poke_gender + '" style="margin-top:' + ypos + 'px;">' +
 				'<img src="'+poke_sprite+'" alt="'+poke_name+'"/>'+'</div>';
 			}
+
 			pokedThing.after(poke_html);
 			pokedThing.parent().find(".poke").click(function(event) {
 				if (XKit.storage.get("pokes","pokemon_storage","") === "") {
