@@ -1,5 +1,5 @@
 //* TITLE Tweaks **//
-//* VERSION 5.3.0 **//
+//* VERSION 5.3.1 **//
 //* DESCRIPTION Various little tweaks for your dashboard. **//
 //* DEVELOPER new-xkit **//
 //* DETAILS These are small little tweaks that allows you customize your dashboard. If you have used XKit 6, you will notice that some of the extensions have been moved here as options you can toggle. Keep in mind that some of the tweaks (the ones marked with a '*') can slow down your computer. **//
@@ -297,10 +297,10 @@ XKit.extensions.tweaks = new Object({
 
 	run: function() {
 		this.running = true;
-        
+
 		if (XKit.extensions.tweaks.preferences.old_sidebar_width.value) {
-			XKit.tools.add_css(".right_column{width: 250px !important;} .left_column{padding-left:75px;}" +
-			".toastr .toast-kit{width: 250px !important;} #sidebar_footer_nav{margin-left: -420px !important;}", 
+			XKit.tools.add_css(".right_column, .toastr .toast-kit, .small_links {width: 250px !important;} " +
+			".left_column{margin-left:75px;} #sidebar_footer_nav{margin-left: -420px !important;} .pagination{padding-left:160px;}",
 			"tweaks_old_sidebar_width");
 		}
 
