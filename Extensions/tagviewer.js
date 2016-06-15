@@ -1,7 +1,7 @@
 //* TITLE TagViewer **//
-//* VERSION 0.4.1 **//
+//* VERSION 0.4.2 **//
 //* DESCRIPTION View post tags easily **//
-//* DEVELOPER STUDIOXENIX **//
+//* DEVELOPER new-xkit **//
 //* DETAILS This extension allows you to see what tags people added to a post while they reblogged it. It also provides access to the post, and to Tumblr search pages to find similar posts.<br><br>Based on the work of <a href='http://inklesspen.tumblr.com'>inklesspen</a> **//
 //* FRAME false **//
 //* BETA false **//
@@ -48,14 +48,13 @@ XKit.extensions.tagviewer = new Object({
 	},
 
 	notes_url: "",
-	notes_url_from: "",
 	found_count: 0,
 	last_page: false,
 	loading_more: false,
 	post_id: "",
 	init_id: "",
 
-	view_tags: function(post_id, tumblelog_key, tumblelog_name, from) {
+	view_tags: function(post_id, tumblelog_key, tumblelog_name) {
 
 		// Set tag viewer up and show our window.
 
@@ -64,8 +63,7 @@ XKit.extensions.tagviewer = new Object({
 		XKit.extensions.tagviewer.post_id = post_id;
 		XKit.extensions.tagviewer.last_page = false;
 		XKit.extensions.tagviewer.loading_more = false;
-		XKit.extensions.tagviewer.notes_url_from = "";
-		XKit.extensions.tagviewer.notes_url = "http://www.tumblr.com/dashboard/notes/" + post_id + "/" + tumblelog_key + "/" + tumblelog_name;
+		XKit.extensions.tagviewer.notes_url = "https://www.tumblr.com/svc/tumblelog/" + tumblelog_name + "/" + post_id + "/notes?mode=rollup"; //"http://www.tumblr.com/dashboard/notes/" + post_id + "/" + tumblelog_key + "/" + tumblelog_name;
 
 		XKit.console.add("tagviewer -> init_id is " + XKit.extensions.tagviewer.init_id);
 
@@ -88,20 +86,11 @@ XKit.extensions.tagviewer = new Object({
 		var m_url = XKit.extensions.tagviewer.notes_url;
 		var m_init_id = XKit.extensions.tagviewer.init_id;
 
-		if (XKit.extensions.tagviewer.notes_url_from !== "") {
-			m_url += "?from_c=" + XKit.extensions.tagviewer.notes_url_from;
-		}
-
 		var m_post_id = XKit.extensions.tagviewer.post_id;
-
-		// Quick Hack:
-		if (document.location.href.toLowerCase().indexOf("https://") !== -1) {
-			m_url = m_url.replace("http://","https://");
-		}
 
 		$.ajax({
 			url: m_url,
-			dataType: 'html'
+			dataType: "json"
 		}).error(function() {
 
 			XKit.window.close();
@@ -114,19 +103,16 @@ XKit.extensions.tagviewer = new Object({
 				return;
 			}
 
-			var next_note = jqXHR.getResponseHeader('X-next-note');
-
-			var notes = $($.parseHTML(data));
-			var reblogs = notes.find("li.reblog");
+			var reblogs = data.response.notes.filter(function(item) {
+				return item.type === "reblog";
+			});
 
 			$(reblogs).each(function() {
-
-				var post_url = $(this).find(".action").attr('data-post-url');
-
-				var blog_username = $(this).attr('data-tumblelog');
-				var blog_name = post_url.split("/")[2];
-				var post_id = post_url.split("/")[4];
-				var blog_avatar = $(this).find("img.avatar").attr('src');
+				
+				var blog_username = this.blog_url;
+				var blog_name = this.blog_name;
+				var post_id = this.post_id;
+				var blog_avatar = this.avatar_url[48];
 
 				var api_url = "https://api.tumblr.com/v2/blog/" + blog_name + "/posts" + "?api_key=" + XKit.extensions.tagviewer.apiKey + "&id=" + post_id;
 
@@ -151,7 +137,7 @@ XKit.extensions.tagviewer = new Object({
 
 							if (typeof post.tags !== "undefined") {
 								if (post.tags.length > 0) {
-									XKit.extensions.tagviewer.add_tags(blog_username, post.tags, post_url, blog_avatar);
+									XKit.extensions.tagviewer.add_tags(blog_name, post.tags, post.post_url, blog_avatar);
 									XKit.extensions.tagviewer.found_count++;
 								}
 							}
@@ -165,8 +151,8 @@ XKit.extensions.tagviewer = new Object({
 
 			});
 
-			if (next_note > 0) {
-				XKit.extensions.tagviewer.notes_url_from = next_note;
+			if (data.response._links) {
+				XKit.extensions.tagviewer.notes_url = "https://www.tumblr.com" + data.response._links.next.href;
 				XKit.console.add("Another page found.");
 				if (XKit.extensions.tagviewer.found_count <= 7) {
 					XKit.console.add(" -- Not enough posts loaded, auto-loading..");
