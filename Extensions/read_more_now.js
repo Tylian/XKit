@@ -1,5 +1,5 @@
 //* TITLE Read More Now **//
-//* VERSION 1.4.5 **//
+//* VERSION 1.4.6 **//
 //* DESCRIPTION Read Mores in your dash **//
 //* DETAILS This extension allows you to read 'Read More' posts without leaving your dash. Just click on the 'Read More Now!' button on posts and XKit will automatically load and display the post on your dashboard. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -148,17 +148,17 @@ XKit.extensions.read_more_now = new Object({
                                            && (link_text !== "Weiterlesen")        //German
                                            && (link_text !== "Afficher davantage") //French
                                            && (link_text !== "Continua a leggere") //Italian
-                                           && (link_text !== "さらに読む")         //Japanese
+                                           && (link_text !== "\u3055\u3089\u306B\u8AAD\u3080")         //Japanese
                                            && (link_text !== "Okumaya devam et")   //Turkish
                                            && (link_text !== "Seguir leyendo")     //Spanish
-                                           && (link_text !== "Читать дальше")      //Russian
+                                           && (link_text !== "\u0427\u0438\u0442\u0430\u0442\u044C \u0434\u0430\u043B\u044C\u0448\u0435")      //Russian
                                            && (link_text !== "Czytaj dalej")       //Polish
                                            && (link_text !== "Continuar a ler")    //Portuguese (Portugal)
                                            && (link_text !== "Continuar lendo")    //Portuguese (Brazil)
                                            && (link_text !== "Lees verder")        //Dutch
-                                           && (link_text !== "더 보기")  //Korean
-                                           && (link_text !== "继续阅读") //Simplified Chinese
-                                           && (link_text !== "繼續閱讀") /*Traditional Chinese (Hong Kong & Taiwan)*/) {
+                                           && (link_text !== "\uB354 \uBCF4\uAE30")  //Korean
+                                           && (link_text !== "\u7EE7\u7EED\u9605\u8BFB") //Simplified Chinese
+                                           && (link_text !== "\u7E7C\u7E8C\u95B1\u8B80") /*Traditional Chinese (Hong Kong & Taiwan)*/) {
 						return;
 					}
 					need_reflow = true;
