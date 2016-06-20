@@ -10,7 +10,7 @@ XKit.extensions.read_more_now = new Object({
 
 	running: false,
 	button_caption: "Read More Now!",
-	apiKey: XKit.api_key, //*"fuiKNFp9vQFvjLNvx4sUwti4Yb5yGutBN4Xh10LXZhhRKjWlV4",**//
+	apiKey: XKit.api_key,
 
 	preferences: {
 		auto_open: {
