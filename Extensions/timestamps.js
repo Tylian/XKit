@@ -11,7 +11,7 @@ XKit.extensions.timestamps = new Object({
 
 	running: false,
 	slow: true,
-	apiKey: XKit.api_key, //*"fuiKNFp9vQFvjLNvx4sUwti4Yb5yGutBN4Xh10LXZhhRKjWlV4",**//
+	apiKey: XKit.api_key,
 
 	preferences: {
 		only_on_hover: {
