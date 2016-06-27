@@ -83,7 +83,9 @@ XKit.extensions.editable_reblogs = new Object({
 			save_button.attr("data-js-clickablesave", "");
 
 			if (!e.hide_popup) {
-				var github_url = XKit.tools.github_issue("Editable Reblogs "+this.state+" error", { state: this.state }, e);
+				var github_url = XKit.tools.github_issue("Editable Reblogs "+this.state+" error",
+					{ state: this.state, "ER Version": XKit.installed.get("editable_reblogs").version },
+				e);
 
 				XKit.window.show('Editable Reblogs Error', 'ERROR: Editable Reblogs failed to proccess some part of your post safely. '+
 					'Therefore, it has been disabled to prevent unintentional side-effects that could potentially corrupt the post. '+
@@ -421,7 +423,8 @@ XKit.extensions.editable_reblogs = new Object({
 					XKit.interface.kitty.set("");
 
 					var github_url = XKit.tools.github_issue("Editable Reblogs posting error",
-						{ user: request.channel_id, body: request["post[two]"], response: JSON.stringify(response)},
+						{ "ER Version": XKit.installed.get("editable_reblogs").version,
+						 user: request.channel_id, body: request["post[two]"], response: JSON.stringify(response)},
 					e);
 
 					XKit.window.show("Error",
