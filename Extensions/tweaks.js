@@ -495,8 +495,6 @@ XKit.extensions.tweaks = new Object({
 
 		if (XKit.extensions.tweaks.preferences.hide_share.value) {
 			XKit.tools.add_css(".post_control.share { display: none; } ", "xkit_tweaks_hide_share");
-			XKit.post_listener.add("tweaks_check_for_share_on_private_posts", XKit.extensions.tweaks.check_for_share_on_private_posts);
-			XKit.extensions.tweaks.check_for_share_on_private_posts();
 		}
 
 		if (XKit.extensions.tweaks.preferences.hide_explore.value) {
@@ -797,23 +795,6 @@ XKit.extensions.tweaks = new Object({
 
 	},
 
-	check_for_share_on_private_posts: function() {
-
-		if (!XKit.browser().mobile) { // mobile stuff
-			$(".post.is_mine").not(".xtweaks-checked-share").each(function() {
-
-				if ($(this).find(".private_label").length > 0) {
-
-					$(this).find(".post_control.share").css("display","inline-block");
-					$(this).addClass("xtweaks-checked-share");
-
-				}
-
-			});
-		}
-
-	},
-
 	upload_photos: function() {
 
 
@@ -881,7 +862,6 @@ XKit.extensions.tweaks = new Object({
 		XKit.tools.remove_css("tweaks_no_mobile_banner");
 		XKit.tools.remove_css("xkit_tweaks_larger_small_text_on_reblogs");
 		XKit.tools.remove_css("xkit_tweaks_hide_share");
-		XKit.post_listener.remove("tweaks_check_for_share_on_private_posts");
 		XKit.post_listener.remove("tweaks_fix_hidden_post_height");
 		XKit.post_listener.remove("tweaks_dont_show_liked");
 		clearInterval(this.run_interval);
