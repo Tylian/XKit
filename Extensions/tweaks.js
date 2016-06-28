@@ -1,5 +1,5 @@
 //* TITLE Tweaks **//
-//* VERSION 5.3.1 **//
+//* VERSION 5.3.2 **//
 //* DESCRIPTION Various little tweaks for your dashboard. **//
 //* DEVELOPER new-xkit **//
 //* DETAILS These are small little tweaks that allows you customize your dashboard. If you have used XKit 6, you will notice that some of the extensions have been moved here as options you can toggle. Keep in mind that some of the tweaks (the ones marked with a '*') can slow down your computer. **//
@@ -494,9 +494,7 @@ XKit.extensions.tweaks = new Object({
 		}
 
 		if (XKit.extensions.tweaks.preferences.hide_share.value) {
-			XKit.extensions.tweaks.add_css(".post .post_controls .share_social_button { display: none; } ", "xkit_tweaks_hide_share");
-			XKit.post_listener.add("tweaks_check_for_share_on_private_posts", XKit.extensions.tweaks.check_for_share_on_private_posts);
-			XKit.extensions.tweaks.check_for_share_on_private_posts();
+			XKit.tools.add_css(".post_control.share { display: none; } ", "xkit_tweaks_hide_share");
 		}
 
 		if (XKit.extensions.tweaks.preferences.hide_explore.value) {
@@ -797,23 +795,6 @@ XKit.extensions.tweaks = new Object({
 
 	},
 
-	check_for_share_on_private_posts: function() {
-
-		if (!XKit.browser().mobile) { // mobile stuff
-			$(".post.is_mine").not(".xtweaks-checked-share").each(function() {
-
-				if ($(this).find(".private_label").length > 0) {
-
-					$(this).find(".post_control.share").css("display","inline-block");
-					$(this).addClass("xtweaks-checked-share");
-
-				}
-
-			});
-		}
-
-	},
-
 	upload_photos: function() {
 
 
@@ -880,7 +861,7 @@ XKit.extensions.tweaks = new Object({
 		XKit.tools.remove_css("tweaks_old_photo_margins");
 		XKit.tools.remove_css("tweaks_no_mobile_banner");
 		XKit.tools.remove_css("xkit_tweaks_larger_small_text_on_reblogs");
-		XKit.post_listener.remove("tweaks_check_for_share_on_private_posts");
+		XKit.tools.remove_css("xkit_tweaks_hide_share");
 		XKit.post_listener.remove("tweaks_fix_hidden_post_height");
 		XKit.post_listener.remove("tweaks_dont_show_liked");
 		clearInterval(this.run_interval);
