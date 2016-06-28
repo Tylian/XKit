@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 6.2.9 **//
+//* VERSION 6.3.0 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER new-xkit **//
 
@@ -227,10 +227,48 @@ XKit.tools.make_gist = function(text, name) {
 			public: false,
 			files: files,
 		}),
-		// '{"description": "a gist for a user with token api call via ajax","public": false,"files": {"file1.txt": {"content": "testing 1 2 3"}}}'
 	}).then(function(resp){
 		return resp.html_url;
 	});
+};
+
+/**
+ * Creates a link to a github issue with error text and template
+ * @param {String} title - the title of the github issue--should be unique and useful
+ * @param {Object?} data - Key-value pairs to list at the top of the issue.
+ * @param {Error?} error - An exception to serialize, if availible
+ * @return {String} The url to link the user to
+ */
+XKit.tools.github_issue = function(title, data, error) {
+	/*jshint -W069 */
+
+	if (!data) {
+		data = {};
+	}
+
+	data['User Agent'] = window.navigator.userAgent;
+	data['XKit Version'] = XKit.version;
+	data['Patches Version'] = XKit.installed.get("xkit_patches").version;
+	data['Extensions'] = XKit.installed.list().join(", ");
+	data['URL'] = window.location.toString();
+
+	body = "\xA0\n*Please describe what actions we can take to reproduce the bug you found, " +
+			  "including any links or screenshots that might help us figure out what's going on.*\n\n\n" +
+	       "-----------\n\n";
+
+	if (error) {
+		body += "```\n" +
+				error.stack +
+				"\n```\n\n";
+	}
+
+	body += "System Data | \xA0 \n";
+	body += "----------- | -----------\n";
+	$.each(data, function(key, value){
+		body += key + " | " + value + "\n";
+	});
+
+	return "https://github.com/new-xkit/XKit/issues/new?" + $.param({body: body, title: title});
 };
 
 /**
