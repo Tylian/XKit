@@ -1,5 +1,5 @@
 //* TITLE Show Picture Size **//
-//* VERSION 1.0.0 **//
+//* VERSION 1.0.1 **//
 //* DESCRIPTION Shows the resolution of media post pictures in the upper right corner of the picture **//
 //* DEVELOPER TiMESPLiNTER **//
 //* FRAME false **//
@@ -45,12 +45,12 @@ XKit.extensions.show_picture_size = new Object({
                     if (photoLink.length == 1 && !!photoLink.attr('data-big-photo')) {
                         tmpImg.src = photoLink.attr('data-big-photo');
                         $(tmpImg).one('load', function() {
-                            photo.after($('<div class="show-picture-size">' + tmpImg.width + 'x' + tmpImg.height + '</div>'));
+                            photo.parent().after($('<div class="show-picture-size">' + tmpImg.width + 'x' + tmpImg.height + '</div>'));
                         });
                     } else {
                         tmpImg.src = photo.attr('src');
                         $(tmpImg).one('load', function() {
-                            photo.after($('<div class="show-picture-size">' + tmpImg.width + 'x' + tmpImg.height + '</div>'));
+                            photo.parent().after($('<div class="show-picture-size">' + tmpImg.width + 'x' + tmpImg.height + '</div>'));
                         });
                     }
                 });
@@ -62,7 +62,7 @@ XKit.extensions.show_picture_size = new Object({
                     var tmpImg = new Image();
                     tmpImg.src = $(this).attr('href');
                     $(tmpImg).one('load',function() {
-                        photoLink.append($('<div class="show-picture-size">' + tmpImg.width + 'x' + tmpImg.height + '</div>'));
+                        photoLink.parent().append($('<div class="show-picture-size">' + tmpImg.width + 'x' + tmpImg.height + '</div>'));
                     });
                 });
             }
