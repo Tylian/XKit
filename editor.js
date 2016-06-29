@@ -1,7 +1,7 @@
 /*
 
 	Extension Editor for XKit 7
-	Version 1.2.0
+	Version 1.2.1
 
 	(c) 2011 - 2014 STUDIOXENIX
 	(c) 2015 New XKit Team and Contributors (https://github.com/new-xkit/XKit/contributors)
@@ -61,6 +61,10 @@ function makeEditorShim(id) {
 	var currentNode = document.getElementById(id);
 	var newNode = document.createElement('textarea');
 	newNode.id = id;
+	newNode.autocomplete = "off";
+	newNode.autocorrect = "off";
+	newNode.autocapitalize = "off";
+	newNode.spellcheck = false;
 	if (currentNode.hasAttribute('style')) {
 		newNode.setAttribute('style', currentNode.getAttribute('style'));
 	}
