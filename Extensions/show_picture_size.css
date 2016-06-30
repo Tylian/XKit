@@ -17,3 +17,7 @@
 .xkit-show-picture-size .photoset .photoset_photo:hover .show-picture-size {
     display: none;
 }
+
+.photoset_row {
+	position: relative;
+}
