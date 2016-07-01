@@ -1,5 +1,5 @@
 //* TITLE Tweaks **//
-//* VERSION 5.3.2 **//
+//* VERSION 5.3.3 **//
 //* DESCRIPTION Various little tweaks for your dashboard. **//
 //* DEVELOPER new-xkit **//
 //* DETAILS These are small little tweaks that allows you customize your dashboard. If you have used XKit 6, you will notice that some of the extensions have been moved here as options you can toggle. Keep in mind that some of the tweaks (the ones marked with a '*') can slow down your computer. **//
@@ -47,7 +47,7 @@ XKit.extensions.tweaks = new Object({
 			default: false,
 			value: false
 		},
-		"hide_share": {
+		"hide_share_menu": {
 			text: "Hide the share button on posts",
 			default: false,
 			value: false,
@@ -493,7 +493,7 @@ XKit.extensions.tweaks = new Object({
 			XKit.extensions.tweaks.add_css("#recommended_tumblelogs, .recommended_tumblelogs, .trending_tumblelogs, .is_recommended, .recommended-unit-container { display: none !important; }", "xkit_tweaks_hide_recommended");
 		}
 
-		if (XKit.extensions.tweaks.preferences.hide_share.value) {
+		if (XKit.extensions.tweaks.preferences.hide_share_menu.value) {
 			XKit.tools.add_css(".post_control.share { display: none; } ", "xkit_tweaks_hide_share");
 		}
 
