@@ -44,15 +44,13 @@ XKit.extensions.show_picture_size = new Object({
 
                     if (photoLink.length == 1 && !!photoLink.attr('data-big-photo')) {
                         tmpImg.src = photoLink.attr('data-big-photo');
-                        $(tmpImg).one('load', function() {
-                            photo.parent().after($('<div class="show-picture-size">' + tmpImg.width + 'x' + tmpImg.height + '</div>'));
-                        });
                     } else {
                         tmpImg.src = photo.attr('src');
-                        $(tmpImg).one('load', function() {
-                            photo.parent().after($('<div class="show-picture-size">' + tmpImg.width + 'x' + tmpImg.height + '</div>'));
-                        });
                     }
+
+                    $(tmpImg).one('load', function() {
+                        photo.parents('.post_media').append($('<div class="show-picture-size">' + tmpImg.width + 'x' + tmpImg.height + '</div>'));
+                    });
                 });
             } else if (post.type === 'photoset') {
                 // Photo set
