@@ -1,5 +1,5 @@
 //* TITLE Show Picture Size **//
-//* VERSION 1.0.1 **//
+//* VERSION 1.0.2 **//
 //* DESCRIPTION Shows the resolution of media post pictures in the upper right corner of the picture **//
 //* DEVELOPER TiMESPLiNTER **//
 //* FRAME false **//
