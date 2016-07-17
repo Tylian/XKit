@@ -22,6 +22,7 @@ XKit.extensions.show_picture_size = new Object({
     },
 
     destroy: function() {
+        $('.post.xkit-show-picture-size .show-picture-size').remove();
         $('.post.xkit-show-picture-size').removeClass('xkit-show-picture-size');
         XKit.tools.remove_css('show_picture_size');
         XKit.post_listener.remove('show_picture_size');
@@ -49,7 +50,7 @@ XKit.extensions.show_picture_size = new Object({
                     }
 
                     $(tmpImg).one('load', function() {
-                        photo.parents('.post_media').append($('<div class="show-picture-size">' + tmpImg.width + 'x' + tmpImg.height + '</div>'));
+                        photo.closest('.post_media').append($('<div class="show-picture-size">' + tmpImg.width + 'x' + tmpImg.height + '</div>'));
                     });
                 });
             } else if (post.type === 'photoset') {
