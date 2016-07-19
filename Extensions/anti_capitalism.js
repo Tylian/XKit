@@ -1,5 +1,5 @@
 //* TITLE Anti-Capitalism **//
-//* VERSION 1.2.4 **//
+//* VERSION 1.3.0 **//
 //* DESCRIPTION	Removes sponsored posts, vendor buttons, and other nonsense that wants your money. **//
 //* DEVELOPER new-xkit **//
 //* FRAME false **//
@@ -10,17 +10,17 @@ XKit.extensions.anti_capitalism = new Object({
 	running: false,
 
 	preferences: {
-	    "sep0": {
+		"sep0": {
 			text: "Options",
 			type: "separator",
 		},
-		"vendor_buttons": {
-			text: "Disable 'Buy' buttons on posts",
-			default: false,
-			value: false
-		},
 		"sponsored_posts": {
 			text: "Remove sponsored posts",
+			default: true,
+			value: true
+		},
+		"video_ad": {
+			text: "Terminate with extreme prejudice the auto-playing audio sidebar ads",
 			default: true,
 			value: true
 		},
@@ -28,6 +28,11 @@ XKit.extensions.anti_capitalism = new Object({
 			text: "Remove those terrible framed ads",
 			default: true,
 			value: true
+		},
+		"vendor_buttons": {
+			text: "Disable 'Buy' buttons on posts",
+			default: false,
+			value: false
 		},
 		"asktime": {
 			text: "Hide the asktime banner at the top of the dashboard",
@@ -40,19 +45,28 @@ XKit.extensions.anti_capitalism = new Object({
 		this.running = true;
 
 		if (XKit.extensions.anti_capitalism.preferences.vendor_buttons.value) {
-	       XKit.tools.add_css(" .post .vendor_button {display: none;}", "anti_capitalism_vendor_buttons");
-	    }
+			XKit.tools.add_css(" .post .vendor_button {display: none;}", "anti_capitalism_vendor_buttons");
+		}
 
 		if (XKit.extensions.anti_capitalism.preferences.sponsored_posts.value) {
 			XKit.tools.add_css(" .post.sponsored_post {display:none}", "anti_capitalism_sponsored_posts");
 		}
 
-	    if (XKit.extensions.anti_capitalism.preferences.sponsored_ads.value) {
-	        XKit.tools.add_css(" .remnant-unit-container, .yamplus-unit-container, .yam-plus-ad-container, .yam-plus-header, .video-ad-container, .video-ad, .standalone-ad-container {display: none;}", "anti_capitalism_sponsored_ads");
-	    }
+		if (XKit.extensions.anti_capitalism.preferences.sponsored_ads.value) {
+			XKit.tools.add_css(" .remnant-unit-container, .yamplus-unit-container, .yam-plus-ad-container, .yam-plus-header, .video-ad-container, .video-ad, .standalone-ad-container {display: none;}", "anti_capitalism_sponsored_ads");
+		}
 
 		if (XKit.extensions.anti_capitalism.preferences.asktime.value) {
 			XKit.tools.add_css(" .notification.single_notification.alt.takeover-container { display: none; } ", "anti_capitalism_asktime");
+		}
+
+		if (this.preferences.video_ad.value) {
+			var interval_id = setInterval(function (){
+				if ($(".sidebar-ad-content iframe").length) {
+					$(".sidebar-ad-content iframe").remove();
+					clearInterval(interval_id);
+				}
+			}, 400);
 		}
 	},
 
@@ -60,7 +74,7 @@ XKit.extensions.anti_capitalism = new Object({
 	destroy: function() {
 		this.running = false;
 		XKit.tools.remove_css("anti_capitalism_vendor_buttons");
-        XKit.tools.remove_css("anti_capitalism_sponsored_ads");
+		XKit.tools.remove_css("anti_capitalism_sponsored_ads");
 		XKit.tools.remove_css("anti_capitalism_sponsored_posts");
 		XKit.tools.remove_css("anti_capitalism_asktime");
 	}
