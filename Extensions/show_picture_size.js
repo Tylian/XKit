@@ -1,5 +1,5 @@
 //* TITLE Show Picture Size **//
-//* VERSION 1.0.1 **//
+//* VERSION 1.0.2 **//
 //* DESCRIPTION Shows the resolution of media post pictures in the upper right corner of the picture **//
 //* DEVELOPER TiMESPLiNTER **//
 //* FRAME false **//
@@ -22,6 +22,7 @@ XKit.extensions.show_picture_size = new Object({
     },
 
     destroy: function() {
+        $('.post.xkit-show-picture-size .show-picture-size').remove();
         $('.post.xkit-show-picture-size').removeClass('xkit-show-picture-size');
         XKit.tools.remove_css('show_picture_size');
         XKit.post_listener.remove('show_picture_size');
@@ -44,15 +45,13 @@ XKit.extensions.show_picture_size = new Object({
 
                     if (photoLink.length == 1 && !!photoLink.attr('data-big-photo')) {
                         tmpImg.src = photoLink.attr('data-big-photo');
-                        $(tmpImg).one('load', function() {
-                            photo.parent().after($('<div class="show-picture-size">' + tmpImg.width + 'x' + tmpImg.height + '</div>'));
-                        });
                     } else {
                         tmpImg.src = photo.attr('src');
-                        $(tmpImg).one('load', function() {
-                            photo.parent().after($('<div class="show-picture-size">' + tmpImg.width + 'x' + tmpImg.height + '</div>'));
-                        });
                     }
+
+                    $(tmpImg).one('load', function() {
+                        photo.closest('.post_media').append($('<div class="show-picture-size">' + tmpImg.width + 'x' + tmpImg.height + '</div>'));
+                    });
                 });
             } else if (post.type === 'photoset') {
                 // Photo set
