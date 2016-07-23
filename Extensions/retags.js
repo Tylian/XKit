@@ -1,6 +1,6 @@
 //* TITLE       Retags **//
 //* DEVELOPER   new-xkit **//
-//* VERSION     1.1.0 **//
+//* VERSION     1.1.1 **//
 //* DESCRIPTION Adds tags to reblog notes **//
 //* FRAME       false **//
 //* SLOW        false **//
@@ -146,16 +146,23 @@ XKit.extensions.retags = {
 		}
 		//otherwise make API call
 		var tags = [];
-		return $.get(url)
-			.then(
-				function(data){
-					tags = data.response.posts[0].tags;
-					if (XKit.extensions.retags.should_clear_posts()) {
-						XKit.extensions.retags.clear_old_posts();
-					}
-					XKit.storage.set('retags', cache_label, tags);
-					return tags;
-				});
+		var deferred = $.Deferred();
+		GM_xmlhttpRequest({
+			method: 'GET',
+			url: url,
+			onload: function(data){
+				tags = JSON.parse(data.responseText).response.posts[0].tags;
+				if (XKit.extensions.retags.should_clear_posts()) {
+					XKit.extensions.retags.clear_old_posts();
+				}
+				XKit.storage.set('retags', cache_label, tags);
+				deferred.resolve(tags);
+			},
+			onerror: function(error) {
+				deferred.reject(error);
+			}
+		});
+		return deferred;
 	},
 
 	build_tag_collection: function($element, retagClass, tags){
