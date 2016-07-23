@@ -1,5 +1,5 @@
 //* TITLE XKit Preferences **//
-//* VERSION 7.3.1 **//
+//* VERSION 7.3.2 **//
 //* DESCRIPTION Lets you customize XKit **//
 //* DEVELOPER new-xkit **//
 
@@ -31,7 +31,7 @@ XKit.extensions.xkit_preferences = new Object({
 		}
 
 		var m_html = '<div class="tab iconic' + holiday_class + '" id="new-xkit-control">' +
-			'<a style="width: 26px; margin-left: -6px; margin-right: -6px;" class="tab_anchor" href="#">XKit Control Panel</a>' +
+			'<a style="margin-left: 6px; margin-right: 6px;" class="tab_anchor" href="#">XKit Control Panel</a>' +
 			'</div>';
 
 		// mobile stuff
