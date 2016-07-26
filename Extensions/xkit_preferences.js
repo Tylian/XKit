@@ -1,5 +1,5 @@
 //* TITLE XKit Preferences **//
-//* VERSION 7.3.2 **//
+//* VERSION 7.4.0 **//
 //* DESCRIPTION Lets you customize XKit **//
 //* DEVELOPER new-xkit **//
 
@@ -2431,17 +2431,18 @@ XKit.extensions.xkit_preferences = new Object({
 					'<div class="title">XKit Version ' + XKit.version + '</div>' +
 					'<div class="subtitle">The Extension Framework for Tumblr.</div>' +
 					'<div class="copyright">&copy; 2011 - 2014 STUDIOXENIX</div>' +
-					'<div class="thanks">STUDIOXENIX would like to thank all the beta testers, bug reporters, and people who support, suggest features, donate to and use XKit.</div>' +
+					'<div class="copyright">&copy; 2015 - 2016 the New XKit Team</div>' +
+					'<div>XKit Patches v. ' + XKit.installed.version('xkit_patches') + '</div>' +
+					'<div class="thanks">The New XKit Team would like to thank all of the myriad users and, '+
+					'contributors who have worked to make this plugin what it is today. '+
+					"Above all we would like to thank Atesh, the original XKit Guy, "+
+					'without whom we all would have been lost to the outer darkness some time ago.</div>' +
 				'</div>' +
 				'<div id="xkit-about-window-links">' +
-					'<a href="http://www.xkit.info/seven">XKit Website</a>' +
+					'<a href="https://new-xkit-extension.tumblr.com">New XKit Tumblr</a>' +
 					'<a href="#" id="xkit-open-credits">Credits</a>' +
-					'<a href="http://new-xkit-extension.tumblr.com">New XKit Blog</a>' +
-					'<a href="http://www.xkit.info/seven/donate">Donate to XKit</a>' +
-					'<a href="http://www.xkit.info/seven/spread">Spread XKit</a>' +
 					'<a href="http://new-xkit-support.tumblr.com/support">Support</a>' +
 					'<a href="https://github.com/new-xkit/XKit/wiki">Documentation</a>' +
-					'<a href="http://www.xkit.info/eula">Legal</a>' +
 				'</div>';
 		$("#xkit-control-panel-inner").html(m_html);
 
@@ -2453,9 +2454,8 @@ XKit.extensions.xkit_preferences = new Object({
 					'<a href="http://code.drewwilson.com/entry/tiptip-jquery-plugin">TipTip</a> by Drew Wilson and '+
 					'<a href="http://jamesflorentino.github.io/nanoScrollerJS/">nanoScroll</a> by James Florentino. '+
 					'<br/><br/>'+
-					'XKit is written by <a href="http://www.studioxenix.com/">STUDIOXENIX</a>, a one-man entity.<br/><br/>'+
-					'All trademarks are the property of their respective owners.<br/>'+
-					'By using this software you are agreeing to <a href="http://www.xkit.info/eula">XKit EULA</a>.',
+					'The original XKit extension was written by <a href="http://www.studioxenix.com/">STUDIOXENIX</a>, a one-man entity.<br/><br/>'+
+					'All trademarks are the property of their respective owners.',
 				"info", '<div class="xkit-button default" id="xkit-close-message">OK</div>');
 
 				return false;
