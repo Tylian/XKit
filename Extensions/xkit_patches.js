@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 6.4.0 **//
+//* VERSION 6.4.1 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER new-xkit **//
 
@@ -468,7 +468,13 @@ XKit.tools.getParameterByName = function(name){
 		setTimeout(function() { XKit.extensions.xkit_patches.do_support_links(); }, 3500);
 
 		XKit.tools.add_function(function fix_autoplaying_yanked_videos() {
-			window.Tumblr.Prima.CrtPlayer.prototype.onLoadedMetadata =
+
+			if (!window._ || !window.jQuery){
+				return;
+			}
+
+			if (_.get(window,"Tumblr.Prima.CrtPlayer")) {
+				window.Tumblr.Prima.CrtPlayer.prototype.onLoadedMetadata =
 				_.wrap(window.Tumblr.Prima.CrtPlayer.prototype.onLoadedMetadata,
 					function(wrapped, _event) {
 						if (!this.$el.is(":visible") || !jQuery.contains(document, this.$el[0])) {
@@ -476,6 +482,7 @@ XKit.tools.getParameterByName = function(name){
 						}
 						return wrapped.call(this, _event);
 					});
+			}
 
 			// unfortunately we're not fast enought to catch some
 			// CRT instances that are currently instantiated, so handle those differently
