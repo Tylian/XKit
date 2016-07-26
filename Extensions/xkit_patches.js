@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 6.3.0 **//
+//* VERSION 6.4.0 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER new-xkit **//
 
@@ -461,21 +461,33 @@ XKit.tools.getParameterByName = function(name){
 
 		// Identify retina screen displays. Unused anywhere else
 		try {
-
 			XKit.retina = window.devicePixelRatio > 1;
-
-			if (XKit.retina === true) {
-				// console.log("Retina screen mode.");
-			}
-
-		} catch(e) {
-
-			// console.log("!!!!!!" + e.message);
-
-		}
+		} catch(e) { }
 
 		setTimeout(function() { XKit.extensions.xkit_patches.check_unfollower_hater(); }, 2000);
 		setTimeout(function() { XKit.extensions.xkit_patches.do_support_links(); }, 3500);
+
+		XKit.tools.add_function(function fix_autoplaying_yanked_videos() {
+			window.Tumblr.Prima.CrtPlayer.prototype.onLoadedMetadata =
+				_.wrap(window.Tumblr.Prima.CrtPlayer.prototype.onLoadedMetadata,
+					function(wrapped, _event) {
+						if (!this.$el.is(":visible") || !jQuery.contains(document, this.$el[0])) {
+							return true;
+						}
+						return wrapped.call(this, _event);
+					});
+
+			// unfortunately we're not fast enought to catch some
+			// CRT instances that are currently instantiated, so handle those differently
+			jQuery('video').parent().each(function() {
+				this.addEventListener('loadedmetadata', function(event) {
+					var $target = jQuery(event.target);
+					if (!$target.is(":visible") || !jQuery.contains(document, event.target)) {
+						event.stopPropagation();
+					}
+				}, true); // uses .parent() and capturing to pre-empty tumblr's js
+			});
+		}, true, {});
 
 		setTimeout(function() {
 
