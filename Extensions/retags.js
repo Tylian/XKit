@@ -1,6 +1,6 @@
 //* TITLE       Retags **//
 //* DEVELOPER   new-xkit **//
-//* VERSION     1.1.1 **//
+//* VERSION     1.1.2 **//
 //* DESCRIPTION Adds tags to reblog notes **//
 //* FRAME       false **//
 //* SLOW        false **//
@@ -262,13 +262,13 @@ XKit.extensions.retags = {
 	css_toggle:
 	$('<style class="retags"> ' +
 		'.ui_note { display: none; } ' +
-		'.ui_note.is_retags, .ui_note.is_response, .ui_note.is_user_mention { display: block; } ' +
+		'.ui_note.is_retags, .ui-note.is_reply, .ui_note.is_response, .ui_note.is_user_mention { display: block; } ' +
 	'</style>'),
 
 	mobile_toggle:
 	$('<style class="retags">' +
 		'.note, .mh_post.post.post_type_notification.notification { display: none; } ' +
-		'.note.with_commentary, .mh_post.post.post_type_notification.notification.is_retags { display: block; }' +
+		'.note.with_commentary, .note.is_reply, .mh_post.post.post_type_notification.notification.is_retags { display: block; }' +
 	'</style>'),
 
 	html_toggle:
