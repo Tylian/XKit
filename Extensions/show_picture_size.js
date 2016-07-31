@@ -61,7 +61,7 @@ XKit.extensions.show_picture_size = new Object({
                     var tmpImg = new Image();
                     tmpImg.src = $(this).attr('href');
                     $(tmpImg).one('load',function() {
-                        photoLink.parent().append($('<div class="show-picture-size">' + tmpImg.width + 'x' + tmpImg.height + '</div>'));
+                        photoLink.append($('<div class="show-picture-size">' + tmpImg.width + 'x' + tmpImg.height + '</div>'));
                     });
                 });
             }
