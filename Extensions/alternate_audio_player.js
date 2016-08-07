@@ -42,7 +42,7 @@ XKit.extensions.alternate_audio_player = new Object({
 			const key = ob.attr("data-post-key");
 			if (typeof url !== "undefined" && typeof key !== "undefined") {
 				const player = jQuery("<audio class='xkit-audio-player' src='" + url + "?play_key=" + key +
-					"' preload='none' style='width:100%;margin-top:8px;' controls><p>No audio support detected</p></audio>")
+					"' preload='none' style='width:100%;margin-top:8px;' controls><p>No audio support detected</p></audio>");
 				player.prop("volume", XKit.extensions.alternate_audio_player.preferences.default_volume.value);
 				ob.parent().append(player);
 			}
