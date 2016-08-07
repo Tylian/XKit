@@ -1,6 +1,7 @@
 //* TITLE Alternate Audio Player **//
 //* VERSION 0.1.0 **//
-//* DESCRIPTION	Attempts to create a working audio player on all audio posts **//
+//* DESCRIPTION	Adds an alternative (working) audio player to audio posts **//
+//* DETAILS This extension adds a native HTML5 audio player to every audio post, which should always work as well as enabling looping, downloading, and better seeking.  **//
 //* DEVELOPER akunohomu **//
 //* FRAME false **//
 //* BETA true **//
@@ -8,7 +9,7 @@
 XKit.extensions.alternate_audio_player = new Object({
 
 	running: false,
-	
+
 	preferences: {
 		"default_volume": {
 			text: "Default volume",
