@@ -6,7 +6,6 @@
 //* FRAME false **//
 //* BETA true **//
 
-"use strict";
 XKit.extensions.vanilla_audio = new Object({
 
 	running: false,
@@ -28,12 +27,14 @@ XKit.extensions.vanilla_audio = new Object({
 	},
 
 	run: function() {
+		"use strict";
 		this.running = true;
 		XKit.post_listener.add("vanilla_audio", this.add_audio);
 		this.add_audio();
 	},
 
 	add_audio: function() {
+		"use strict";
 		$(".audio_player_container").not(".xkit-audio-added").each(function(index) {
 			var $this = $(this);
 			$this.addClass("xkit-audio-added");
@@ -49,6 +50,7 @@ XKit.extensions.vanilla_audio = new Object({
 	},
 
 	destroy: function() {
+		"use strict";
 		XKit.post_listener.remove("vanilla_audio");
 		$(".xkit-audio-added").removeClass("xkit-audio-added");
 		$(".xkit-audio-player").remove();
