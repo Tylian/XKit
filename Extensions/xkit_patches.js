@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 6.4.1 **//
+//* VERSION 6.4.2 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER new-xkit **//
 
@@ -478,7 +478,9 @@ XKit.tools.getParameterByName = function(name){
 				_.wrap(window.Tumblr.Prima.CrtPlayer.prototype.onLoadedMetadata,
 					function(wrapped, _event) {
 						if (!this.$el.is(":visible") || !jQuery.contains(document, this.$el[0])) {
-							return true;
+							if (!this.$el.find('video[src^="blob:"]').length) {
+								return true;
+							}
 						}
 						return wrapped.call(this, _event);
 					});
@@ -492,7 +494,7 @@ XKit.tools.getParameterByName = function(name){
 					if (!$target.is(":visible") || !jQuery.contains(document, event.target)) {
 						event.stopPropagation();
 					}
-				}, true); // uses .parent() and capturing to pre-empty tumblr's js
+				}, true); // uses .parent() and capturing to preempt tumblr's js
 			});
 		}, true, {});
 
