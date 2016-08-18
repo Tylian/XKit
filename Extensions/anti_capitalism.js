@@ -1,5 +1,5 @@
 //* TITLE Anti-Capitalism **//
-//* VERSION 1.3.2 **//
+//* VERSION 1.4.0 **//
 //* DESCRIPTION	Removes sponsored posts, vendor buttons, and other nonsense that wants your money. **//
 //* DEVELOPER new-xkit **//
 //* FRAME false **//
@@ -34,6 +34,11 @@ XKit.extensions.anti_capitalism = new Object({
 			default: false,
 			value: false
 		},
+		"yahoo_view": {
+			text: "Hide the Yahoo View links on posts",
+			default: false,
+			value: false
+		},
 		"asktime": {
 			text: "Hide the asktime banner at the top of the dashboard",
 			default: false,
@@ -60,6 +65,10 @@ XKit.extensions.anti_capitalism = new Object({
 			XKit.tools.add_css(" .notification.single_notification.alt.takeover-container { display: none; } ", "anti_capitalism_asktime");
 		}
 
+		if (XKit.extensions.anti_capitalism.preferences.yahoo_view.value) {
+			XKit.tools.add_css(' .recommendation-reason-link[href*="//view.yahoo.com"] { display: none; } ', "anti_capitalism_yahoo_view");
+		}
+
 		if (this.preferences.video_ad.value) {
 			this.interval_id = setInterval(function (){
 				var players = $(".sidebar-ad-content iframe, .sponsored_post iframe, .sponsored_post video, .standalone-ad-container video");
@@ -83,6 +92,7 @@ XKit.extensions.anti_capitalism = new Object({
 		XKit.tools.remove_css("anti_capitalism_sponsored_ads");
 		XKit.tools.remove_css("anti_capitalism_sponsored_posts");
 		XKit.tools.remove_css("anti_capitalism_asktime");
+		XKit.tools.remove_css("anti_capitalism_yahoo_view");
 		clearInterval(this.interval_id);
 	}
 
