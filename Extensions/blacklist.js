@@ -1,5 +1,5 @@
 //* TITLE Blacklist **//
-//* VERSION 2.9.0 **//
+//* VERSION 2.9.1 **//
 //* DESCRIPTION Clean your dash **//
 //* DETAILS This extension allows you to block posts based on the words you specify. If a post has the text you've written in the post itself or it's tags, it will be replaced by a warning, or won't be shown on your dashboard, depending on your settings. **//
 //* DEVELOPER new-xkit **//
@@ -697,14 +697,21 @@ XKit.extensions.blacklist = new Object({
 
 		}
 
+		var post_id = $(obj).attr('id');
+		// If the post doesn't have an id, reuse a conveniently unique attribute
+		if (!post_id) {
+			post_id = $(obj).attr('data-post-id');
+			$(obj).attr('id', post_id);
+		}
+
 		var block_excuse = '<div class="xblacklist_excuse">' +
 					'Blocked because it contains the word "<b>' + word + '</b>"'  + to_add_type +
-					'<div data-post-id="' + $(obj).attr('id') + '" class="xblacklist_open_post xkit-button">Show it anyway</div></div>';
+					'<div data-post-id="' + post_id + '" class="xblacklist_open_post xkit-button">Show it anyway</div></div>';
 
 		if (XKit.extensions.blacklist.preferences.dont_show_cause.value === true) {
 			block_excuse = '<div class="xblacklist_excuse">' +
 					'Post blocked.' + to_add_type +
-					'<div data-post-id="' + $(obj).attr('id') + '" class="xblacklist_open_post xkit-button">Show it anyway</div></div>';
+					'<div data-post-id="' + post_id + '" class="xblacklist_open_post xkit-button">Show it anyway</div></div>';
 		}
 
 		$(obj).addClass("xblacklist_blacklisted_post");
