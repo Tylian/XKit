@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 6.4.2 **//
+//* VERSION 6.4.3 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER new-xkit **//
 
@@ -37,70 +37,12 @@ XKit.extensions.xkit_patches = new Object({
 	},
 
 	/**
-	 * If User Menus+ is running, run patch_ask whenever the user menu is shown
-	 */
-	do_support_links: function() {
-		XKit.installed.when_running("show_more", function() {
-			$(document).on('click','.tumblelog_menu_btn', XKit.extensions.xkit_patches.patch_ask);
-		});
-	},
-
-	/**
-	 * When User Menus+ is running rename the "Ask" button on the
-	 * xkit-extension blog to "XKit Support"
-	 */
-	patch_ask: function() {
-
-		var m_parent;
-		if ($(".tumblelog_popover_v1").length > 0) {
-			m_parent = $(".tumblelog_popover_v1").find(".tumblelog_menu_popover").find("ul");
-		} else {
-			m_parent = $(".tumblelog_popover").find(".tumblelog_menu_popover").find("ul");
-		}
-
-		//// console.log("->" + $(m_parent).html());
-
-		if ($(m_parent).find(".ask").attr('data-tumblelog-name') === "xkit-extension") {
-
-			$(m_parent).find(".ask").html("XKit Support");
-			$(m_parent).find(".ask").addClass("xkit-support-ask");
-			$(m_parent).find(".ask").removeClass("ask");
-
-		}
-
-	},
-
-	/**
-	 * Detect whether the user is running a UA switcher to pretend to be IE,
-	 * warning if detected.
-	 */
-	check_user_agent: function() {
-
-		var from_framework = XKit.browser().name;
-
-		var is_spoofed = false;
-
-		if ($("body").hasClass("is_ie")) {
-			is_spoofed = true;
-		}
-
-		if (is_spoofed) {
-
-			XKit.notifications.add("<b>User Agent Switcher detected.</b> User Agent Switchers cause a lot of problems with XKit and other extensions. Please disable it before sending a bug report.","ok");
-
-		}
-
-	},
-
-	/**
 	 * Injects xkit_patches into the XKit object.
 	 */
 	run: function() {
 		this.running = true;
 
 		XKit.tools.init_css("xkit_patches");
-
-		this.check_user_agent();
 
 /**
  * Get the user's currently selected blog.
@@ -465,7 +407,6 @@ XKit.tools.getParameterByName = function(name){
 		} catch(e) { }
 
 		setTimeout(function() { XKit.extensions.xkit_patches.check_unfollower_hater(); }, 2000);
-		setTimeout(function() { XKit.extensions.xkit_patches.do_support_links(); }, 3500);
 
 		XKit.tools.add_function(function fix_autoplaying_yanked_videos() {
 
