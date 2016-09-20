@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 6.5.1 **//
+//* VERSION 6.6.0 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER new-xkit **//
 
@@ -2041,7 +2041,8 @@ XKit.tools.getParameterByName = function(name){
 					dashboard: false,
 					likes: false,
 					following: false,
-					tagged: false
+					tagged: false,
+					explore: false
 				};
 
 				if ($("body").hasClass("dashboard_messages_inbox") === true || $("body").hasClass("dashboard_messages_submissions") === true) {
@@ -2120,6 +2121,11 @@ XKit.tools.getParameterByName = function(name){
 
 				if (document.location.href.indexOf("tumblr.com/search/") !== -1) {
 					m_return.search = true;
+				}
+
+				if ($("body").hasClass("discover") ||
+						document.location.href.indexOf("tumblr.com/explore/") !== -1) {
+					m_return.explore = true;
 				}
 
 				if ($("body").hasClass("dashboard_posts_likes") ||
