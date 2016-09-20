@@ -1,5 +1,5 @@
 //* TITLE One-Click Postage **//
-//* VERSION 4.3.1 **//
+//* VERSION 4.3.2 **//
 //* DESCRIPTION Lets you easily reblog, draft and queue posts **//
 //* DEVELOPER new-xkit **//
 //* FRAME false **//
@@ -592,6 +592,9 @@ XKit.extensions.one_click_postage = new Object({
 	},
 
 	run: function() {
+
+		//Bail on user blogs
+		if (!XKit.interface.is_tumblr_page()) { return; }
 
 		XKit.tools.init_css("one_click_postage");
 
