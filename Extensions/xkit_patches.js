@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 6.4.3 **//
+//* VERSION 6.5.0 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER new-xkit **//
 
@@ -211,6 +211,31 @@ XKit.tools.github_issue = function(title, data, error) {
 	});
 
 	return "https://github.com/new-xkit/XKit/issues/new?" + $.param({body: body, title: title});
+};
+
+
+/**
+ * Quick-and-dirty function debouncing.
+ * Debounced functions will only occur 'delay' milliseconds after their last call.
+ * Multiple calls before the function is executed resets the timer.
+ * @param {Function} func - Function to wrap. Will be executed with
+                            the *last* passed 'this' values and arguments
+ * @param {Number} wait - Milliseconds to pass to setTimeout. Delay that occurs after the last function call
+ * @return {Function} The wrapped, debounced function.
+ */
+XKit.tools.debounce = function(func, wait) {
+	var timeout_id;
+	return function() {
+		var last_context = this;
+		var last_args = arguments;
+
+		var exec = function() {
+			timeout_id = null;
+			func.apply(last_context, last_args);
+		};
+		clearTimeout(timeout_id);
+		timeout_id = setTimeout(exec, wait);
+	};
 };
 
 /**
@@ -1674,7 +1699,6 @@ XKit.tools.getParameterByName = function(name){
 
 				var m_html = "<div " + m_data + " title=\"" + m_text + "\" class=\"xkit-interface-control-button post_control post_control_icon " + class_name + "\" " + additional + "></div>";
 
-
 				if ($(obj).find(".post_controls_inner").length > 0) {
 					$(obj).find(".post_controls_inner").prepend(m_html);
 				} else if (XKit.browser().mobile) {
@@ -1683,6 +1707,9 @@ XKit.tools.getParameterByName = function(name){
 					$(obj).find(".post_controls").prepend(m_html);
 				}
 
+				if (XKit.interface.where().search) {
+					XKit.interface.trigger_reflow();
+				}
 			},
 
 			/**
@@ -2108,7 +2135,7 @@ XKit.tools.getParameterByName = function(name){
 			 * Tell Tumblr to reflow the page. Used to recalculate post dimensions
 			 * and j/k scrolling.
 			 */
-			trigger_reflow: function() {
+			trigger_reflow: XKit.tools.debounce(function() {
 				if (this.where().search) {
 					// Found by logging calls to Tumblr.Events.trigger on the search page
 					// search:post:photo_expanded is where the magic happens
@@ -2122,7 +2149,7 @@ XKit.tools.getParameterByName = function(name){
 						Tumblr.Events.trigger("DOMEventor:updateRect");
 					}, true, "");
 				}
-			}
+			}, 250)
 		});
 
 		/**
