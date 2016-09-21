@@ -1,5 +1,5 @@
 //* TITLE Editable Reblogs **//
-//* VERSION 3.1.0 **//
+//* VERSION 3.1.1 **//
 //* DESCRIPTION Restores ability to edit previous reblogs of a post **//
 //* DEVELOPER new-xkit **//
 //* FRAME false **//
@@ -398,7 +398,7 @@ XKit.extensions.editable_reblogs = new Object({
 		// not double, or the dash will nom the shit out of your post
 		//********ALL DOM MANIPULATION ABOVE THIS LINE*********
 		text = nodes.html();
-		text = text.replace(/"tumblr_blog"/g, "'tumblr_blog'");
+		text = text.replace(/['"]tumblr_blog['"]/g, "tumblr_blog tumblr_blog");
 		// also remove empty HTML if the user hasn't added anything
 		if (text.indexOf("<p><br></p>", text.length - 11) !== -1) {
 			text = text.substring(0, text.length - 11);
