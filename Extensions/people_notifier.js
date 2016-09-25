@@ -1,5 +1,5 @@
 //* TITLE Blog Tracker **//
-//* VERSION 0.5.1 **//
+//* VERSION 0.6.0 **//
 //* DESCRIPTION Track people like tags **//
 //* DEVELOPER new-xkit **//
 //* DETAILS Blog Tracker lets you track blogs like you can track tags. Add them on your dashboard, and it will let you know how many new posts they've made the last time you've checked their blogs, or if they've changed their URLs.<br><br>Please be aware that the more blogs you add, the longer it will take to track them all. **//
@@ -14,15 +14,17 @@ XKit.extensions.people_notifier = new Object({
 	blogs: [],
 
 	preferences: {
-
 		"view_on_dash": {
-
 			text: "Use View on Dash to open blogs (requires View On Dash to be installed)",
 			value: false,
 			default: false
+		},
 
+		"open_new_tab": {
+			text: "Open tumblr blogs in a new window",
+			value: false,
+			default: false
 		}
-
 	},
 
 	max_tracks: 30,
@@ -440,8 +442,6 @@ XKit.extensions.people_notifier = new Object({
 				return;
 			}
 
-			var open_in_vod = XKit.extensions.people_notifier.preferences.view_on_dash.value;
-
 			// Reset unread counter to 0 because we're going to the blog
 			XKit.extensions.people_notifier.load_blogs();
 			for (var person in XKit.extensions.people_notifier.blogs) {
@@ -453,14 +453,20 @@ XKit.extensions.people_notifier = new Object({
 				}
 			}
 
-			if (!open_in_vod) {
-				window.open("http://" + $(this).attr('data-url') + ".tumblr.com/");
-			} else {
+			var open_in_vod = XKit.extensions.people_notifier.preferences.view_on_dash.value;
+			var open_new_tab = XKit.extensions.people_notifier.preferences.open_new_tab.value;
+			if (open_in_vod) {
 				try {
 					XKit.extensions.view_on_dash.view($(this).attr('data-url'));
 				} catch(e) {
-					alert("Unable to use View On Dash to open blog.\nPlease try again later or file a bug report at new-xkit-extension.tumblr.com/ask with error code PEP-119A");
+					alert("Unable to use View On Dash to open blog.\n"+
+						"Please try again later or file a bug report at"+
+						"new-xkit-extension.tumblr.com/ask with error code PEP-119A");
 				}
+			} else if (open_new_tab) {
+				window.open("http://" + $(this).attr('data-url') + ".tumblr.com/");
+			} else {
+				XKit.interface.show_peepr_for($(this).attr('data-url'));
 			}
 
 			// Rerender the blog list
