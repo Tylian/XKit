@@ -464,6 +464,23 @@ XKit.tools.getParameterByName = function(name){
 			});
 		}, true, {});
 
+		XKit.tools.add_function(function fix_jk_scrolling() {
+			if (!window._ || !window.jQuery){
+				return;
+			}
+
+			if (_.get(window,"Tumblr.KeyCommands.update_post_positions")) {
+				Tumblr.KeyCommands.update_post_positions = _.wrap(Tumblr.KeyCommands.update_post_positions,
+					function(wrapped, _event) {
+						wrapped.call(this);
+						this.post_positions = _.pick(this.post_positions,
+							function(scroll_pos, element_id) {
+								return !!document.getElementById(element_id);
+							});
+					});
+			}
+		}, true, {});
+
 		setTimeout(function() {
 
 			var form_key_to_save = $('meta[name=tumblr-form-key]').attr("content");
