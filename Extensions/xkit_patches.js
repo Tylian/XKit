@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 6.5.0 **//
+//* VERSION 6.5.1 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER new-xkit **//
 
@@ -475,7 +475,8 @@ XKit.tools.getParameterByName = function(name){
 						wrapped.call(this);
 						this.post_positions = _.pick(this.post_positions,
 							function(scroll_pos, element_id) {
-								return !!document.getElementById(element_id);
+								var element = jQuery("[data-pageable='"+element_id+"']");
+								return element.is(":visible") && element.height() > 0;
 							});
 					});
 			}
