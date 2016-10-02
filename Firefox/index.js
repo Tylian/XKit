@@ -95,6 +95,9 @@ function onAttach(worker) {
     };
     if (headers) {
       requestSettings.headers = headers;
+      if (headers['Content-Type']) {
+        requestSettings.contentType = headers['Content-Type'];
+      }
     }
     if (data) {
       requestSettings.content = data;
