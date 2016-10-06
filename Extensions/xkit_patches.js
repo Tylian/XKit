@@ -2173,7 +2173,20 @@ XKit.tools.getParameterByName = function(name){
 						Tumblr.Events.trigger("DOMEventor:updateRect");
 					}, true, "");
 				}
-			}, 250)
+			}, 250),
+
+			show_peepr_for: function(blog, post) {
+				var payload = {
+					tumblelog_name: blog
+				};
+				if (post) {
+					payload.post_id = post;
+				}
+
+				XKit.tools.add_function(function(){
+					Tumblr.Events.trigger("peepr-open-request", add_tag);
+				}, true, payload);
+			}
 		});
 
 		/**
