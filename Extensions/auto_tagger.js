@@ -131,8 +131,20 @@ XKit.extensions.auto_tagger = new Object({
 			text: "Tag with date (ie: <i>#August 21th 2013, #August, #21th, #2013</i>)",
 			default: false,
 			value: false
-		}
+		},
 
+		"tag_source": {
+			text: "When reblogging, tag with the username of the original source",
+			default: false,
+			value: false
+		},
+
+		"tag_source_prefix": {
+			text: "Prefix used for source tags",
+			type: "text",
+			default: "",
+			value: ""
+		},
 	},
 
 	new_post_check_interval: 0,
@@ -287,6 +299,18 @@ XKit.extensions.auto_tagger = new Object({
 				to_return = this.mreturn_add(to_return, obj.owner);
 			}
 
+		}
+
+
+		if (XKit.extensions.auto_tagger.preferences.tag_source.value && obj.source_owner !== "") {
+			if (XKit.extensions.auto_tagger.preferences.tag_person_replace_hyphens.value) {
+				if (obj.source_owner !== undefined) {
+					to_return = this.mreturn_add(to_return, XKit.extensions.auto_tagger.preferences.tag_source_prefix.value + obj.source_owner.replace(/-/g, ' '));
+				}
+				
+			} else {
+				to_return = this.mreturn_add(to_return, XKit.extensions.auto_tagger.preferences.tag_source_prefix.value + obj.source_owner);
+			}
 		}
 
 		if (XKit.extensions.auto_tagger.preferences.tag_date.value) {

@@ -1859,6 +1859,17 @@ XKit.tools.getParameterByName = function(name){
 				m_return.is_mine = $(obj).hasClass("is_mine");
 				m_return.is_following = ($(obj).attr('data-following-tumblelog') === true);
 				m_return.can_edit = $(obj).find(".post_control.edit").length > 0;
+				
+				if (m_return.is_reblogged)
+				{
+					var json = $(obj).attr('data-json');
+					var parsedJson = JSON.parse(json);
+					m_return.source_owner = parsedJson['tumblelog-root-data']['name'];
+				}
+				else
+				{
+					m_return.source_owner = m_return.owner;
+				}
 
 				if (m_return.is_reblogged) {
 
