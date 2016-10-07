@@ -6,7 +6,6 @@
 //* BETA false **//
 
 XKit.extensions.one_click_postage = new Object({
-
 	running: false,
 
 	qq_icon: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAATCAYAAAByUDbMAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBNYWNpbnRvc2giIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6QzgxMzAzQzIwRDZGMTFFM0IyOTBDRDZCRDY3Qzk1QTkiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6QzgxMzAzQzMwRDZGMTFFM0IyOTBDRDZCRDY3Qzk1QTkiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDpDODEzMDNDMDBENkYxMUUzQjI5MENENkJENjdDOTVBOSIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDpDODEzMDNDMTBENkYxMUUzQjI5MENENkJENjdDOTVBOSIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PpK36AkAAAFxSURBVHjalJSxS8NAFMZzJruuhSBCdHMISIcWhw4OAZfO/hHSySmFblnF2cH/wA6CDg5Oujg4dHJRUGinklWo1O/kO3h5Hkl88OOSd+++vHv3cma9XgfajDE9DEegD/ZBB8zBDDyCe6x7+rPQijlgCSjAwk7VsGBcUlkvhLrgukFEY+O7FTFmpIVeQQZiEHLM6NeCiRQrVEAe1Fuu4gtX+56qkRY6B8/gUNU3VzW0OsFYbU3bDeeOlVigtjze4PE7Ow3+ZzK+H7GPnM08CwzHXfTfAZ/fwFLF/+qsRKqhR+zO0xInnAuFbxWxs2NO2k7/VGJnYBt8gW/6liLe2VxnsQO25N/RYJnI7NY5U/AuJh6saAuxymk6pxUqwRCMOHnVIObts5SOiQi0mZU1Yt4/IBI1KkXd7PMm32MWt8PjvwB7QngKLuWX7OIXMOCX7PuUmbW/NWgjT+CkRsx7nxmRXcrMSm59gIAhuv6j7U37I8AABDEAB/datwYAAAAASUVORK5CYII=",
@@ -163,21 +162,16 @@ XKit.extensions.one_click_postage = new Object({
 	quick_tags: false,
 
 	frame_run: function() {
-
 		if (XKit.page.blog_frame && XKit.extensions.one_click_postage.preferences.enable_quick_blog_reblog.value) {
-
 			XKit.extensions.one_click_postage.in_blog();
-
 		}
 
 		if (XKit.page.peepr) {
 			XKit.extensions.one_click_postage.run();
 		}
-
 	},
 
 	in_blog: function() {
-
 		if (XKit.iframe.reblog_button().length === 0) {return; }
 
 		XKit.iframe.hide_button(XKit.iframe.reblog_button());
@@ -232,11 +226,9 @@ XKit.extensions.one_click_postage = new Object({
 		$("#x1cpostage_in_blog_draft").click(function() {
 			XKit.extensions.one_click_postage.in_blog_post($(this), 1, false);
 		});
-
 	},
 
 	in_blog_post: function(obj, state, retry_mode) {
-
 		if ($(obj).hasClass("xkit-button-working") === true) { return; }
 
 		$(obj).removeClass("xkit-button-error");
@@ -265,21 +257,14 @@ XKit.extensions.one_click_postage = new Object({
 		XKit.extensions.one_click_postage.blogs_list = XKit.tools.get_blogs();
 
 		if (XKit.extensions.one_click_postage.preferences.default_blog.value !== "") {
-
 			if (XKit.extensions.one_click_postage.blogs_list.indexOf(XKit.extensions.one_click_postage.preferences.default_blog.value) !== -1) {
-
 				channel_id = XKit.extensions.one_click_postage.preferences.default_blog.value;
 				blog_id = channel_id;
-
 			} else {
-
 				$(obj).removeClass("xkit-button-working");
 				$(obj).addClass("xkit-button-error");
-
 				return;
-
 			}
-
 		}
 
 		m_object = {
@@ -299,7 +284,6 @@ XKit.extensions.one_click_postage = new Object({
 			data: JSON.stringify(m_object),
 			json: true,
 			onerror: function(response) {
-
 				if (response.status === 401) {
 					alert("Unable to QuickReblog/Queue:\nError Code: INOCP01");
 				} else {
@@ -337,11 +321,9 @@ XKit.extensions.one_click_postage = new Object({
 				}
 			}
 		});
-
 	},
 
 	in_blog_process: function(data, state, obj, _m_object, retry_mode) {
-
 		var m_object = {};
 
 		m_object.form_key = _m_object.form_key;
@@ -382,21 +364,13 @@ XKit.extensions.one_click_postage = new Object({
 		}
 
 		if (reblog_as_text) {
-
 			try {
-
 				if (data.post.can_reblog_as[0] === "regular") {
-
 					m_object["post[type]"] = "regular";
-
 				}
-
 			} catch(e) {
-
 				console.log("Can't read can_reblog_as....");
-
 			}
-
 		}
 
 		m_object["post[tags]"] = "";
@@ -416,9 +390,7 @@ XKit.extensions.one_click_postage = new Object({
 		m_object.custom_tweet = "";
 
 		XKit.interface.kitty.get(function(kitty_data) {
-
 			if (kitty_data.errors === true) {
-
 				// We fucked up for some reason.
 				if (retry_mode !== true) {
 					XKit.extensions.one_click_postage.in_blog_process(data, state, obj, m_object, true);
@@ -427,9 +399,7 @@ XKit.extensions.one_click_postage = new Object({
 					$(obj).removeClass("xkit-button-working");
 					$(obj).addClass("xkit-button-error");
 				}
-
 				return;
-
 			}
 
 			GM_xmlhttpRequest({
@@ -483,9 +453,7 @@ XKit.extensions.one_click_postage = new Object({
 					}
 				}
 			});
-
 		});
-
 	},
 
 	/**
@@ -539,19 +507,14 @@ XKit.extensions.one_click_postage = new Object({
 	},
 
 	cpanel: function(obj) {
-
 		$(obj).append("<div id=\"one_click_postage_warning_movage\">Tagging options are moved to a separate extension called \"Auto Tagger.\"</div>");
 
 		$("#xkit-alreadyreblogged-help").click(function() {
-
 			XKit.window.show("AlreadyReblogged","AlreadyReblogged keeps the track of the posts you reblog using One-Click Postage.<br/><br/>When you queue, draft or reblog a post using One-Click postage, the next time you refresh your page, the reblog button will turn green automatically.<br/><br/>Please note that this feature is experimental, and for now only keeps the last 3,000 posts.","info","<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
-
 		});
-
 	},
 
 	get_autotagger: function() {
-
 		if (XKit.installed.check("auto_tagger") === false) {
 			XKit.extensions.one_click_postage.auto_tagger = false;
 		} else {
@@ -568,11 +531,9 @@ XKit.extensions.one_click_postage = new Object({
 				XKit.extensions.one_click_postage.auto_tagger = false;
 			}
 		}
-
 	},
 
 	get_quicktags: function() {
-
 		if (XKit.installed.check("quick_tags") === false) {
 			XKit.extensions.one_click_postage.quick_tags = false;
 		} else {
@@ -588,11 +549,9 @@ XKit.extensions.one_click_postage = new Object({
 				XKit.extensions.one_click_postage.quick_tags = false;
 			}
 		}
-
 	},
 
 	run: function() {
-
 		//Bail on user blogs
 		if (!XKit.interface.is_tumblr_page()) { return; }
 
@@ -609,12 +568,10 @@ XKit.extensions.one_click_postage = new Object({
 		}
 
 		if (this.preferences.show_small_ui.value) {
-
 			this.caption_height = 50;
 			var slim_css = "#x1cpostage_caption { height: 50px; }" +
 					"#x1cpostage_reblog, #x1cpostage_queue, #x1cpostage_draft { height: 32px; }";
 			XKit.tools.add_css(slim_css, "one_click_postage_slim");
-
 		}
 
 		var m_remove_button = "<div id=\"x1cpostage_remove_caption\">remove caption</div>";
@@ -637,7 +594,6 @@ XKit.extensions.one_click_postage = new Object({
 		var m_html = "";
 
 		if (this.preferences.show_reverse_ui.value) {
-
 			m_html = "<div id=\"x1cpostage_box\">" +
 						"<input id=\"x1cpostage_tags\" placeholder=\"tags (comma separated)\" />" +
 						m_clear_tags_button +
@@ -650,10 +606,7 @@ XKit.extensions.one_click_postage = new Object({
 					"</div>";
 
 			XKit.tools.add_css("#x1cpostage_draft { border-radius: 0px 0px 3px 0px; } #x1cpostage_reblog { border-radius: 0px 0px 0px 3px; } #x1cpostage_tags { border-radius: 3px 3px 0px 0px; border-bottom: 0; } #x1cpostage_replace { border-bottom: 0; } #x1cpostage_remove_caption { border-top: 1px solid #abafbc; border-bottom: 0; }","x1cpostage_reverse_ui");
-
-
 		} else {
-
 			m_html = "<div id=\"x1cpostage_box\" class=\"xkit-no-nipple xkit-1xcpostage-non-reversed\">" +
 						"<div id=\"x1cpostage_reblog\"><i>&nbsp;</i></div>" +
 						"<div id=\"x1cpostage_queue\"><i>&nbsp;</i></div>" +
@@ -664,37 +617,27 @@ XKit.extensions.one_click_postage = new Object({
 						"<input id=\"x1cpostage_tags\" placeholder=\"tags (comma separated)\" />" +
 						m_clear_tags_button +
 					"</div>";
-
-
 		}
 
 		$("body").append(m_html);
 
 		$(document).on("mouseover","#x1cpostage_queue", function() {
-
 			$("#x1cpostage_box").removeClass("xkit_x1cpostage_queue_press");
 			$("#x1cpostage_box").addClass("xkit_x1cpostage_queue_hover");
-
 		});
 
 		$(document).on("mouseout","#x1cpostage_queue", function() {
-
 			$("#x1cpostage_box").removeClass("xkit_x1cpostage_queue_press");
 			$("#x1cpostage_box").removeClass("xkit_x1cpostage_queue_hover");
-
 		});
 
 		$(document).on("mousedown","#x1cpostage_queue", function() {
-
 			$("#x1cpostage_box").removeClass("xkit_x1cpostage_queue_hover");
 			$("#x1cpostage_box").addClass("xkit_x1cpostage_queue_press");
-
 		});
 
 		$(document).on("mouseup","#x1cpostage_queue", function() {
-
 			$("#x1cpostage_box").removeClass("xkit_x1cpostage_queue_press");
-
 		});
 
 		var m_blogs = XKit.tools.get_blogs();
@@ -767,7 +710,6 @@ XKit.extensions.one_click_postage = new Object({
 			XKit.extensions.one_click_postage.close_menu($(this), true);
 		});
 
-
 		var cancel_menu_close = function() {
 			clearTimeout(XKit.extensions.one_click_postage.menu_closer_int);
 			XKit.extensions.one_click_postage.user_on_box = true;
@@ -800,9 +742,7 @@ XKit.extensions.one_click_postage = new Object({
 		});
 
 		$("#x1cpostage_remove_caption").click(function() {
-
 			if (XKit.extensions.one_click_postage.preferences.show_reverse_ui.value) {
-
 				$("#x1cpostage_remove_caption").css('display','none');
 				$("#x1cpostage_caption").css('display','none');
 				$("#x1cpostage_replace").css('display','none');
@@ -817,27 +757,18 @@ XKit.extensions.one_click_postage = new Object({
 
 				$("#x1cpostage_box").css("top", box_top + "px");
 				$("#x1cpostage_box").css("left", box_left + "px");
-
-
 			} else {
-
 				$("#x1cpostage_remove_caption").slideUp('fast');
 				$("#x1cpostage_caption").slideUp('fast');
 				$("#x1cpostage_replace").slideUp('fast');
-
 			}
-
 
 			$("#x1cpostage_caption").addClass("x1cpostage_remove_caption_on");
 			$("#x1cpostage_tags").css("border-top","1px solid #abafbc");
-
-
 		});
 
 		$("#x1cpostage_clear_tags").click(function() {
-
 			$("#x1cpostage_tags").val("");
-
 		});
 
 		$("#x1cpostage_replace").click(function() {
@@ -865,7 +796,6 @@ XKit.extensions.one_click_postage = new Object({
 		this.init_keep_tags_dashboard();
 
 		if (this.preferences.enable_alreadyreblogged.value) {
-
 			var m_data = XKit.storage.get("one_click_postage","already_reblogged","");
 
 			try {
@@ -876,11 +806,9 @@ XKit.extensions.one_click_postage = new Object({
 
 			XKit.post_listener.add("already_reblogged", XKit.extensions.one_click_postage.check_if_alreadyreblogged);
 			XKit.extensions.one_click_postage.check_if_alreadyreblogged();
-
 		}
 
 		if (this.preferences.enable_quick_queue.value) {
-
 			if (XKit.interface.where().drafts === true || XKit.interface.where().queue === true) { return; }
 			if ($("body").hasClass("is_private_channel")) {return; }
 
@@ -889,19 +817,14 @@ XKit.extensions.one_click_postage = new Object({
 			XKit.extensions.one_click_postage.quick_queue_do_posts();
 
 			$(document).on('click', '.xkit-one-click-postage-quickqueue', XKit.extensions.one_click_postage.quick_queue_button_clicked);
-
 		}
 
 		if (XKit.extensions.one_click_postage.preferences.dont_scroll_quicktags.value) {
-
 			XKit.tools.add_css("#x1cpostage_quick_tags { max-height: 10000px !important; }","one_click_postage_qtdontscroll");
-
 		}
-
 	},
 
 	quick_queue_button_clicked: function(e) {
-
 		var obj = $(e.target);
 
 		if ($(obj).hasClass("xkit-interface-working") === true) { return; }
@@ -914,50 +837,39 @@ XKit.extensions.one_click_postage = new Object({
 
 		XKit.interface.switch_control_button($(obj), true);
 		XKit.extensions.one_click_postage.post(2, false, true);
-
 	},
 
 	quick_queue_do_posts: function() {
-
 		var posts = XKit.interface.get_posts("xkit-1cp-quick-queue-done");
 
 		if (XKit.interface.where().queue === true) { return; }
 
 		$(posts).each(function() {
-
 			$(this).addClass("xkit-1cp-quick-queue-done");
 
 			if (XKit.interface.where().inbox === true) { return; }
 
 			XKit.interface.add_control_button(this, "xkit-one-click-postage-quickqueue", "");
-
 		});
-
 	},
 
 	check_if_alreadyreblogged: function() {
-
 		$(".post").not(".xkit_already_reblogged_check").each(function() {
-
 			var post_id = $(this).attr('data-root_id');
 			$(this).addClass("xkit_already_reblogged_check");
 
 			if (XKit.extensions.one_click_postage.is_alreadyreblogged(post_id)) {
-
 				if (XKit.extensions.one_click_postage.preferences.enable_hide_alreadyreblogged.value) {
 					if (XKit.interface.where().dashboard === true) { $(this).remove(); }
 				}
 
 				XKit.extensions.one_click_postage.make_button_reblogged($(this).find(".post_control.reblog"));
-
 			}
-
 		});
-
 	},
 
 	make_button_reblogged: function(m_button) {
-    m_button.addClass("reblogged");
+		m_button.addClass("reblogged");
 	},
 
 	destroy: function() {
@@ -974,9 +886,7 @@ XKit.extensions.one_click_postage = new Object({
 	},
 
 	init_keep_tags_dashboard: function() {
-
 		$(document).on('click', '.reblog_button,.post_control.reblog', XKit.extensions.one_click_postage.process_click);
-
 	},
 
 	/**
@@ -1055,7 +965,6 @@ XKit.extensions.one_click_postage = new Object({
 	 * Allows keep_tags to continue to work even in the post editor.
 	 */
 	process_click: function(e) {
-
 		var parent_box = $(e.target).parentsUntil('.post').parent();
 
 		if (XKit.extensions.one_click_postage.auto_tagger && typeof XKit.extensions.auto_tagger != "undefined") {
@@ -1068,11 +977,9 @@ XKit.extensions.one_click_postage = new Object({
 				}, 200);
 			}
 		}
-
 	},
 
 	open_menu: function(obj, hide_ui, force_on_screen) {
-
 		if ($(obj).attr('x1cpostage_disabled') === "true" || $(obj).hasClass("xkit-one-click-reblog-working") === true) {
 			// we are!
 			return;
@@ -1149,14 +1056,11 @@ XKit.extensions.one_click_postage = new Object({
 			var offset = $(obj).offset();
 
 			// Box position
-
 			var box_left = offset.left - ($("#x1cpostage_box").width() / 2) + 13;
 			var box_top = offset.top + 35;
 
 			if (XKit.extensions.one_click_postage.preferences.show_reverse_ui.value) {
-
 				box_top = (offset.top - $("#x1cpostage_box").height()) - 12;
-
 			}
 
 			if (force_on_screen === true) {
@@ -1185,9 +1089,8 @@ XKit.extensions.one_click_postage = new Object({
 		XKit.extensions.one_click_postage.last_object = parent_box;
 		XKit.extensions.one_click_postage.last_icon_object = obj;
 		XKit.extensions.one_click_postage.last_post_id = $(parent_box).attr('data-post-id');
-
-
 	},
+
 	reset_box: function() {
 		$("#x1cpostage_caption").val("");
 		$("#x1cpostage_tags").val("");
@@ -1195,8 +1098,8 @@ XKit.extensions.one_click_postage = new Object({
 		$("#x1cpostage_caption").blur();
 		XKit.extensions.one_click_postage.auto_tagger_done = false;
 	},
-	close_menu: function(obj, force) {
 
+	close_menu: function(obj, force) {
 		clearTimeout(XKit.extensions.one_click_postage.menu_closer_int);
 
 		if (force === true) {
@@ -1230,15 +1133,14 @@ XKit.extensions.one_click_postage = new Object({
 	 *                                     instead of the OCP ui (I think)
 	 */
 	post: function(state, retry_mode, quick_queue_mode) {
-
 		if (XKit.extensions.one_click_postage.preferences.show_reverse_ui.value) {
 			$("#x1cpostage_box").fadeOut('fast');
 		} else {
 			$("#x1cpostage_box").slideUp('fast');
 		}
+
 		var form_key = XKit.interface.form_key();
 		var post = XKit.interface.post(XKit.extensions.one_click_postage.last_object);
-
 		var post_id = post.id;
 		var reblog_key = post.reblog_key;
 		var channel_id = post.owner;
@@ -1256,28 +1158,21 @@ XKit.extensions.one_click_postage = new Object({
 			form_key: form_key,
 			post_type: post.type,
 		};
-
 		var blog_id = XKit.extensions.one_click_postage.default_blog_id;
+
 		if ($("#x1cpostage_blog").length > 0) {
 			blog_id = $("#x1cpostage_blog").val();
 			XKit.extensions.one_click_postage.default_blog_id = $("#x1cpostage_blog").val();
 		} else {
-
 			if (XKit.extensions.one_click_postage.preferences.default_blog.value !== "") {
-
 				if (XKit.extensions.one_click_postage.blogs_list.indexOf(XKit.extensions.one_click_postage.preferences.default_blog.value) !== -1) {
 
 					blog_id = XKit.extensions.one_click_postage.preferences.default_blog.value;
-
 				} else {
-
 					XKit.window.show("Default blog not available","<b>Your default blog is no longer available.</b><br/>This might be caused by changing the URL of the blog or logging into a different account.<br/><br/>Please change the default blog or enable \"Blog Selector\" from One-Click Postage Control Panel to continue.","error","<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
 					return;
-
 				}
-
 			}
-
 		}
 
 		if (quick_queue_mode !== true) {
@@ -1306,7 +1201,6 @@ XKit.extensions.one_click_postage = new Object({
 			data: JSON.stringify(m_object),
 			json: true,
 			onerror: function(response) {
-
 				if (response.status === 401) {
 					XKit.extensions.one_click_postage.show_error("OCP01", state);
 				} else {
@@ -1342,15 +1236,12 @@ XKit.extensions.one_click_postage = new Object({
 				}
 			}
 		});
-
 	},
 
 	process: function(data, state, form_key, blog_id, post_id, caption, tags, reblog_key, m_button, retry_mode, root_id, quick_queue_mode) {
-
 		var m_object = {};
 
 		if (blog_id === "" || typeof blog_id === "undefined") {
-
 			var m_blogs = XKit.tools.get_blogs();
 			for(i=0;i<m_blogs.length;i++) {
 				if (m_blogs[i] !== "") {
@@ -1437,9 +1328,7 @@ XKit.extensions.one_click_postage = new Object({
 			m_object.remove_reblog_tree = true;
 			m_object["post[two]"] = "";
 			m_object["post[three]"] = "";
-
 		} else {
-
 			if (caption !== "" && typeof caption !== "undefined") {
 				if ($("#x1cpostage_replace").hasClass("selected") === false) {
 					if (!XKit.extensions.one_click_postage.preferences.enable_popup_html.value) {
@@ -1458,7 +1347,6 @@ XKit.extensions.one_click_postage = new Object({
 			} else {
 				m_object[variable_to_use] = current_caption;
 			}
-
 		}
 
 		if (m_object[variable_to_use]) {
@@ -1481,18 +1369,14 @@ XKit.extensions.one_click_postage = new Object({
 		m_object.custom_tweet = "";
 
 		XKit.interface.kitty.get(function(kitty_data) {
-
 			if (kitty_data.errors === true) {
-
 				// We fucked up for some reason.
 				if (retry_mode !== true) {
 					XKit.extensions.one_click_postage.process(data, state, form_key, "", post_id, caption, tags, reblog_key, m_button, true, root_id, quick_queue_mode);
 				} else {
 					XKit.extensions.one_click_postage.show_error("OCP-FORMKEYREQFAIL08", state);
 				}
-
 				return;
-
 			}
 
 			GM_xmlhttpRequest({
@@ -1533,13 +1417,12 @@ XKit.extensions.one_click_postage = new Object({
 						$(m_button).removeClass("xkit-one-click-reblog-working");
 						return;
 					}
+
 					if (mdata.errors === false) {
 						$(m_button).removeClass("xkit-one-click-reblog-working");
 						if (mdata.message === "" || typeof mdata.message === "undefined") {
 							// No message
 						} else {
-
-
 							if (XKit.extensions.one_click_postage.preferences.enable_alreadyreblogged.value) {
 								XKit.extensions.one_click_postage.add_to_alreadyreblogged(root_id);
 							}
@@ -1565,32 +1448,25 @@ XKit.extensions.one_click_postage = new Object({
 					}
 				}
 			});
-
 		});
-
 	},
 
 	add_to_alreadyreblogged: function(post_id) {
-
 		if (XKit.extensions.one_click_postage.already_reblogged.indexOf(post_id) === -1) {
 			XKit.extensions.one_click_postage.already_reblogged.push(post_id);
 			XKit.extensions.one_click_postage.save_alreadyreblogged();
 		}
-
 	},
 
 	is_alreadyreblogged: function(post_id) {
-
 		if (XKit.extensions.one_click_postage.already_reblogged.indexOf(post_id) === -1) {
 			return false;
 		} else {
 			return true;
 		}
-
 	},
 
 	save_alreadyreblogged: function() {
-
 		var limit_count = XKit.extensions.one_click_postage.preferences.already_reblogged_limit.value;
 
 		var limit = 3000;
@@ -1610,11 +1486,9 @@ XKit.extensions.one_click_postage = new Object({
 
 		console.log("already_reblogged length is " + XKit.extensions.one_click_postage.already_reblogged.length);
 		XKit.storage.set("one_click_postage","already_reblogged", JSON.stringify(XKit.extensions.one_click_postage.already_reblogged));
-
 	},
 
 	show_error: function(code, state) {
-
 		var m_word = "reblog";
 		if (state === 1) { m_word = "draft"; }
 		if (state === 2) { m_word = "queue"; }
@@ -1634,7 +1508,5 @@ XKit.extensions.one_click_postage = new Object({
 		}
 
 		XKit.window.show("I could not " + m_word + " your post.","<b>One of the following might be the reason for that:</b>" + m_causes + "<small>Error Code: <b>" + code + "</b>.</small>","error","<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div><a href=\"http://new-xkit-extension.tumblr.com/\" class=\"xkit-button\">Visit the New XKit Blog</a><a href=\"http://new-xkit-extension.tumblr.com/ask\" class=\"xkit-button\">Send an ask</a>");
-
 	}
-
 });
