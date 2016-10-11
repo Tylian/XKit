@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 6.6.1 **//
+//* VERSION 6.7.0 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER new-xkit **//
 
@@ -1860,14 +1860,18 @@ XKit.tools.getParameterByName = function(name){
 				m_return.is_following = ($(obj).attr('data-following-tumblelog') === true);
 				m_return.can_edit = $(obj).find(".post_control.edit").length > 0;
 				
-				if (m_return.is_reblogged)
-				{
-					var json = $(obj).attr('data-json');
-					var parsedJson = JSON.parse(json);
-					m_return.source_owner = parsedJson['tumblelog-root-data']['name'];
-				}
-				else
-				{
+				if (m_return.is_reblogged) {
+					try
+					{
+						var json = $(obj).attr('data-json');
+						var parsedJson = JSON.parse(json);
+						m_return.source_owner = parsedJson['tumblelog-root-data'].name;
+					}
+					catch (e)
+					{
+						console.log('Error retrieving data-json attribute of post');
+					}
+				} else {
 					m_return.source_owner = m_return.owner;
 				}
 
