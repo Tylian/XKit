@@ -134,7 +134,7 @@ XKit.extensions.auto_tagger = new Object({
 		},
 
 		"tag_source": {
-			text: "When reblogging, tag with the username of the original source",
+			text: "When reblogging, tag with the username of the original source if possible",
 			default: false,
 			value: false
 		},
@@ -302,15 +302,16 @@ XKit.extensions.auto_tagger = new Object({
 		}
 
 
-		if (XKit.extensions.auto_tagger.preferences.tag_source.value && obj.source_owner !== "") {
+		if (XKit.extensions.auto_tagger.preferences.tag_source.value && obj.source_owner) {
+			var sourceTag;
+			
 			if (XKit.extensions.auto_tagger.preferences.tag_person_replace_hyphens.value) {
-				if (obj.source_owner !== undefined) {
-					to_return = this.mreturn_add(to_return, XKit.extensions.auto_tagger.preferences.tag_source_prefix.value + obj.source_owner.replace(/-/g, ' '));
-				}
-				
+				sourceTag = XKit.extensions.auto_tagger.preferences.tag_source_prefix.value + obj.source_owner.replace(/-/g, ' ');
 			} else {
-				to_return = this.mreturn_add(to_return, XKit.extensions.auto_tagger.preferences.tag_source_prefix.value + obj.source_owner);
+				sourceTag = XKit.extensions.auto_tagger.preferences.tag_source_prefix.value + obj.source_owner;
 			}
+			
+			to_return = this.mreturn_add(to_return, sourceTag);
 		}
 
 		if (XKit.extensions.auto_tagger.preferences.tag_date.value) {

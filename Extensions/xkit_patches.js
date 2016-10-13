@@ -1861,14 +1861,11 @@ XKit.tools.getParameterByName = function(name){
 				m_return.can_edit = $(obj).find(".post_control.edit").length > 0;
 				
 				if (m_return.is_reblogged) {
-					try
-					{
+					try {
 						var json = $(obj).attr('data-json');
 						var parsedJson = JSON.parse(json);
 						m_return.source_owner = parsedJson['tumblelog-root-data'].name;
-					}
-					catch (e)
-					{
+					} catch (e) {
 						console.log('Error retrieving data-json attribute of post');
 					}
 				} else {
