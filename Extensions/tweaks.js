@@ -1,5 +1,5 @@
 //* TITLE Tweaks **//
-//* VERSION 5.3.3 **//
+//* VERSION 5.4.0 **//
 //* DESCRIPTION Various little tweaks for your dashboard. **//
 //* DEVELOPER new-xkit **//
 //* DETAILS These are small little tweaks that allows you customize your dashboard. If you have used XKit 6, you will notice that some of the extensions have been moved here as options you can toggle. Keep in mind that some of the tweaks (the ones marked with a '*') can slow down your computer. **//
@@ -289,6 +289,12 @@ XKit.extensions.tweaks = new Object({
 			default: true,
 			value: true,
 			desktop_only: true
+		},
+		"hide_follower_count": {
+			text: "Hide your follower count in the account menu and on the sidebar",
+			default: false,
+			value: false,
+			desktop_only: true
 		}
 	},
 
@@ -554,6 +560,14 @@ XKit.extensions.tweaks = new Object({
 
 		if (XKit.extensions.tweaks.preferences.old_chat_posts.value) {
 			XKit.extensions.tweaks.add_css(".post_full.is_conversation .conversation_lines { border: 1px solid rgb(200,200,200); padding: 0px; font: normal 14px/1.4 \"Helvetica Neue\",\"HelveticaNeue\",Helvetica,Arial,sans-serif; } li.chat_line { padding: 10px 17px !important; border-bottom: 1px solid rgb(200,200,200); } li.chat_line:last-child { border-bottom: 0; }", "xkit_tweaks_fix_blockquotes");
+		}
+
+
+		if (XKit.extensions.tweaks.preferences.hide_follower_count.value) {
+			XKit.extensions.tweaks.add_css(
+				".popover_menu_item_blog a[href*='/followers'] .blog-sub-nav-item-data { display: none; } " +
+				"[data-blog-controls-count='follower_count'] .count { display: none; }",
+			"xkit_tweaks_hide_follower_count");
 		}
 
 		if (XKit.extensions.tweaks.preferences.wrap_tags.value &&
