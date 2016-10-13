@@ -14,8 +14,8 @@ XKit.extensions.fresh_prince = new Object({
 	preferences: {
 		fresh_song_of_bel_air: {
 			text: "NOW THIS IS A STORY ALL ABOUT HOW MY LIFE",
-			default: false,
-			value: false
+			default: true,
+			value: true
 		},
 		flavor: {
 			text: "GOT FLIPPED TURNED UPSIDE DOWN",
