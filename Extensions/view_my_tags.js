@@ -1,5 +1,5 @@
 //* TITLE View My Tags **//
-//* VERSION 0.4.4 **//
+//* VERSION 0.4.5 **//
 //* DESCRIPTION Lets you view your recently used tags **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//
@@ -34,7 +34,7 @@ XKit.extensions.view_my_tags = new Object({
 		this.running = true;
 		if ($("#post_controls_avatar").length === 1) {
 			// For now, this will only work on pages where the user's avatar is visible
-			this.url = $("#post_controls_avatar").attr("href").replace("http://", "").replace("/", "");
+			this.url = $("#post_controls_avatar").attr("href").replace(/https?:\/\//, '').replace(/\//g, '');
 		}
 
 		$("body").append("<div id=\"xkit-view-my-tags-data\"></div>");
@@ -46,7 +46,7 @@ XKit.extensions.view_my_tags = new Object({
 		$(document).on("click",".xkit-view-my-tags-window", XKit.extensions.view_my_tags.post_window_icon);
 
 		if (XKit.extensions.view_my_tags.url !== "") {
-			var api_url = "https://api.tumblr.com/v2/blog/" +  XKit.extensions.view_my_tags.url + "/posts?api_key=" + XKit.extensions.view_my_tags.apiKey + "&limit=20";
+			var api_url = "https://api.tumblr.com/v2/blog/" + XKit.extensions.view_my_tags.url + "/posts?api_key=" + XKit.extensions.view_my_tags.apiKey + "&limit=20";
 
 			GM_xmlhttpRequest({
 				method: "GET",
@@ -120,7 +120,10 @@ XKit.extensions.view_my_tags = new Object({
 
 		var m_data = $("#xkit-view-my-tags-data").html();
 
-		if (m_data === "") { XKit.extensions.view_my_tags.show_error("VMT-509"); }
+		if (m_data === "") {
+			XKit.extensions.view_my_tags.show_error("VMT-509");
+			return;
+		}
 
 		try {
 
