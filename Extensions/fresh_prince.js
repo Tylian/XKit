@@ -76,7 +76,7 @@ XKit.extensions.fresh_prince = new Object({
 				"}", "fresh_prince");
 			this.remove_fastdash();
 		}
-		if (this.preferences.fresh_song_of_bel_air.value) {
+		if (this.preferences.fresh_song_of_bel_air.value && $(".l-container").length > 0) {
 			$("head").append('<div class="fresh_prince_video" style="width:1px;height:1px;overflow:hidden"><iframe width="300" height="300" src="https://www.youtube.com/embed' + XKit.extensions.fresh_prince.preferences.flavor.value + '?autoplay=1&amp;playlist=' + XKit.extensions.fresh_prince.preferences.flavor.value.substring(1) + '&amp;loop=' + ( XKit.extensions.fresh_prince.preferences.loop.value ? "1" : "0" ) + '" frameborder="0" allowfullscreen></iframe></div>');
 		}
 	},
