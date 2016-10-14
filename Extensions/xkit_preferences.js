@@ -1,5 +1,5 @@
 //* TITLE XKit Preferences **//
-//* VERSION 7.4.0 **//
+//* VERSION 7.4.1 **//
 //* DESCRIPTION Lets you customize XKit **//
 //* DEVELOPER new-xkit **//
 
@@ -71,37 +71,8 @@ XKit.extensions.xkit_preferences = new Object({
 			XKit.extensions.xkit_preferences.show_welcome_bubble();
 		}
 
-		$("body").bind("keydown keyup", function(event) {
-
-			if(event.altKey) {
-
-				if (XKit.extensions.xkit_preferences.showing_help_button !== true) {
-
-					$("#new-xkit-control").addClass("xkit-help-forwarder");
-					XKit.extensions.xkit_preferences.showing_help_button = true;
-
-				}
-
-			} else {
-
-				if (XKit.extensions.xkit_preferences.showing_help_button === true) {
-
-					$("#new-xkit-control").removeClass("xkit-help-forwarder");
-					XKit.extensions.xkit_preferences.showing_help_button = false;
-
-				}
-
-			}
-
-		});
-
 		$("#new-xkit-control").click(function(event) {
-			if(!event.altKey) {
-				XKit.extensions.xkit_preferences.open();
-			} else {
-				document.location.href = ("http://www.tumblr.com/help");
-			}
-
+			XKit.extensions.xkit_preferences.open();
 			return false;
 		});
 
