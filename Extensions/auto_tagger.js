@@ -1,5 +1,5 @@
 //* TITLE Auto Tagger **//
-//* VERSION 0.6.8 **//
+//* VERSION 0.7.0 **//
 //* DESCRIPTION Tags posts automatically. **//
 //* DEVELOPER new-xkit **//
 //* DETAILS This extension allows you to automatically add tags to posts based on state (reblogged, original, queued) or post type (audio, video, etc) and keeping original tags while reblogging a post. **//
@@ -131,8 +131,20 @@ XKit.extensions.auto_tagger = new Object({
 			text: "Tag with date (ie: <i>#August 21th 2013, #August, #21th, #2013</i>)",
 			default: false,
 			value: false
-		}
+		},
 
+		"tag_source": {
+			text: "When reblogging, tag with the username of the original source if possible",
+			default: false,
+			value: false
+		},
+
+		"tag_source_prefix": {
+			text: "Prefix used for source tags",
+			type: "text",
+			default: "",
+			value: ""
+		},
 	},
 
 	new_post_check_interval: 0,
@@ -287,6 +299,19 @@ XKit.extensions.auto_tagger = new Object({
 				to_return = this.mreturn_add(to_return, obj.owner);
 			}
 
+		}
+
+
+		if (XKit.extensions.auto_tagger.preferences.tag_source.value && obj.source_owner) {
+			var sourceTag;
+			
+			if (XKit.extensions.auto_tagger.preferences.tag_person_replace_hyphens.value) {
+				sourceTag = XKit.extensions.auto_tagger.preferences.tag_source_prefix.value + obj.source_owner.replace(/-/g, ' ');
+			} else {
+				sourceTag = XKit.extensions.auto_tagger.preferences.tag_source_prefix.value + obj.source_owner;
+			}
+			
+			to_return = this.mreturn_add(to_return, sourceTag);
 		}
 
 		if (XKit.extensions.auto_tagger.preferences.tag_date.value) {

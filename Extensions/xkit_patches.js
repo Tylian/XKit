@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 6.6.1 **//
+//* VERSION 6.7.0 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER new-xkit **//
 
@@ -1859,6 +1859,41 @@ XKit.tools.getParameterByName = function(name){
 				m_return.is_mine = $(obj).hasClass("is_mine");
 				m_return.is_following = ($(obj).attr('data-following-tumblelog') === true);
 				m_return.can_edit = $(obj).find(".post_control.edit").length > 0;
+				
+				
+				if (m_return.is_reblogged && $(obj).attr('data-json')) {
+					try {
+						var json = $(obj).attr('data-json');
+						var parsedJson = JSON.parse(json);
+						m_return.source_owner = parsedJson['tumblelog-root-data'].name;
+					} catch (e) {
+						console.log('Error retrieving data-json attribute of post');
+					}
+				} else if ($(obj).hasClass("has_source")) {
+					// Different pages (such as the sidebar) don't always have data-json defined,
+					// so fall back to checking for source elements
+					try {
+						var sourceJson = $(obj).find('.post-source-link').attr('data-peepr');
+						var parsedSourceJson = JSON.parse(sourceJson);
+						m_return.source_owner = parsedSourceJson.tumblelog;
+					} catch (e) {
+						console.log('Error retrieving data-peepr attribute of post-source-link');
+					}
+				} else if ($(obj).find(".reblog_info").length > 0) {
+					// If there is no source link but there is a reblog link, then
+					// the reblog source is the source
+					try {
+						var reblogJson = $(obj).find(".reblog_info").attr('data-peepr');
+						var parsedReblogJson = JSON.parse(reblogJson);
+						m_return.source_owner = parsedReblogJson.tumblelog;
+					} catch (e) {
+						console.log('Error retrieving data-peepr attribute of reblog_info');
+					} 
+				} else {
+					// If there is no reblog or source link, consider the 
+					// post owner to be the original source
+					m_return.source_owner = m_return.owner;
+				}
 
 				if (m_return.is_reblogged) {
 
