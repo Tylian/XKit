@@ -319,7 +319,8 @@ XKit.extensions.xkit_preferences = new Object({
 							"Please update to the latest version as soon as possible. If you don't, XKit might not work properly, "+
 							"or might not work at all in the future.<br/><br/>All you have to do is to go to the XKit download page, "+
 							"and re-download XKit. XKit will update itself, and all your settings will be preserved.",
-							"warning", '<a class="xkit-button default" href="http://www.xkit.info/download/">Go to Download page</a>'+
+							"warning",
+							'<a class="xkit-button default" href="https://new-xkit-extension.tumblr.com/downloads">Go to Download page</a>'+
 							'<div class="xkit-button" id="xkit-close-message">Not now, remind me later.</div>');
 						});
 				}
