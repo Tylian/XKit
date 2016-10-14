@@ -1860,14 +1860,37 @@ XKit.tools.getParameterByName = function(name){
 				m_return.is_following = ($(obj).attr('data-following-tumblelog') === true);
 				m_return.can_edit = $(obj).find(".post_control.edit").length > 0;
 				
-				if (m_return.is_reblogged) {
-					try {
+				
+				if (m_return.is_reblogged && $(obj).attr('data-json')) {
+					try
+					{
 						var json = $(obj).attr('data-json');
 						var parsedJson = JSON.parse(json);
 						m_return.source_owner = parsedJson['tumblelog-root-data'].name;
-					} catch (e) {
+					}
+					catch (e)
+					{
 						console.log('Error retrieving data-json attribute of post');
 					}
+					
+				} else if ($(obj).hasClass("has_source")) {
+					// Different pages (such as the sidebar) don't always have data-json defined,
+					// so fall back to checking for source elements
+					try {
+						var json = $(obj).find('.post-source-link').attr('data-peepr');
+						var parsedJson = JSON.parse(json);
+						m_return.source_owner = parsedJson.tumblelog;
+					} catch (e) {
+						console.log('Error retrieving data-peepr attribute of post-source-link');
+					}
+				} else if ($(obj).find(".reblog_info").length > 0) {
+					try {
+						var json = $(obj).find(".reblog_info").attr('data-peepr');
+						var parsedJson = JSON.parse(json);
+						m_return.source_owner = parsedJson.tumblelog;
+					} catch (e) {
+						console.log('Error retrieving data-peepr attribute of reblog_info');
+					} 
 				} else {
 					m_return.source_owner = m_return.owner;
 				}
