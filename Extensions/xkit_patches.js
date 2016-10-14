@@ -1862,17 +1862,13 @@ XKit.tools.getParameterByName = function(name){
 				
 				
 				if (m_return.is_reblogged && $(obj).attr('data-json')) {
-					try
-					{
+					try {
 						var json = $(obj).attr('data-json');
 						var parsedJson = JSON.parse(json);
 						m_return.source_owner = parsedJson['tumblelog-root-data'].name;
-					}
-					catch (e)
-					{
+					} catch (e) {
 						console.log('Error retrieving data-json attribute of post');
 					}
-					
 				} else if ($(obj).hasClass("has_source")) {
 					// Different pages (such as the sidebar) don't always have data-json defined,
 					// so fall back to checking for source elements
