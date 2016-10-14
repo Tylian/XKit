@@ -1,5 +1,5 @@
 //* TITLE XKit Preferences **//
-//* VERSION 7.4.1 **//
+//* VERSION 7.4.2 **//
 //* DESCRIPTION Lets you customize XKit **//
 //* DEVELOPER new-xkit **//
 
@@ -424,7 +424,7 @@ XKit.extensions.xkit_preferences = new Object({
 			if (m_result === true) {
 				XKit.console.add("News " + id + " pushed successfully.");
 			} else {
-				show_error_reset("Can not push news_object. Storage might be full.");
+				console.error("Can not push news_object. Storage might be full.");
 			}
 
 		},
@@ -519,7 +519,7 @@ XKit.extensions.xkit_preferences = new Object({
 			if (m_result === true) {
 				XKit.console.add("News " + id + " pushed successfully.");
 			} else {
-				show_error_reset("Can not save news_object with read flag. Storage might be full.");
+				console.error("Can not save news_object with read flag. Storage might be full.");
 			}
 
 		},
@@ -1366,9 +1366,9 @@ XKit.extensions.xkit_preferences = new Object({
 
 				XKit.window.show("Can't update",
 					"Update manager returned the following message:<p>" + mdata.error + "</p>"+
-					"Please try again later or if the problem continues, reset XKit.", "error",
+					"Please try again later or if the problem continues, contact New XKit Support.", "error",
 					'<div id="xkit-close-message" class="xkit-button default">OK</div>'+
-					'<a href="http://www.tumblr.com/xkit_reset" class="xkit-button">Reset XKit</a>');
+					'<a href="http://new-xkit-support.tumblr.com/support" class="xkit-button">Support Chat Room</a>');
 				XKit.extensions.xkit_preferences.open_extension_control_panel(XKit.extensions.xkit_preferences.current_open_extension_panel);
 
 			});

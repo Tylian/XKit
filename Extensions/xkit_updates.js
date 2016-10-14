@@ -1,5 +1,5 @@
 //* TITLE XKit Updates **//
-//* VERSION 2.0.2 **//
+//* VERSION 2.0.3 **//
 //* DESCRIPTION Provides automatic updating of extensions **//
 //* DEVELOPER new-xkit **//
 XKit.extensions.xkit_updates = new Object({
@@ -130,9 +130,24 @@ XKit.extensions.xkit_updates = new Object({
 
 	show_update_failure: function() {
 
-		XKit.notifications.add("<b>Could not update XKit:</b><br/>I could not reach the XKit servers to update myself. You might be running an old and buggy version of XKit. Click here for details.", "error", true, function() {
+		XKit.notifications.add("<b>Could not update New XKit:</b><br/>"+
+			"I could not reach the New XKit servers to update myself. "+
+			"You might be running an old and buggy version of New XKit. Click here for details.",
+			"error", true, function() {
 
-			XKit.window.show("Auto-Update failed.","XKit automatically updates itself from time to time in the background to bring you the latest features and bug fixes. Unfortunately, it was unable to contact the servers and download the latest updates. This might be a temporary server error or a problem with your connection.<br/><br/><b>If you have received this message more than twice in the last three days, it is highly recommended that you reset XKit.</b> If you don't, you'll be running an out-of-date XKit which might not work properly and cause problems.","error","<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div><a href=\"http://www.tumblr.com/xkit_reset\" class=\"xkit-button\">Reset XKit</a>");
+			XKit.window.show("Auto-Update failed.",
+				"New XKit automatically updates itself from time to time in the background "+
+				"to bring you the latest features and bug fixes. Unfortunately, it was "+
+				"unable to contact the servers and download the latest updates. This "+
+				"might be a temporary server error or a problem with your connection."+
+				"<br/><br/>"+
+				"<b>If you have received this message more than twice in the last three days, "+
+				"you should try to get into contact with New XKit support to try to fix the issue.</b> "+
+				"If you don't, you'll be running an out-of-date New XKit which might not work properly and cause problems.",
+				"error",
+				'<div class="xkit-button default" id="xkit-close-message">OK</div>'+
+				'<a href="https://new-xkit-extension.tumblr.com" class="xkit-button">New XKit Blog</a>'+
+				'<a href="https://new-xkit-support.tumblr.com" class="xkit-button">New XKit Support</a>');
 
 		});
 
@@ -154,11 +169,11 @@ XKit.extensions.xkit_updates = new Object({
 
 				if (to_show === "true") {
 					var suffix = "";
-					
+
 					if(XKit.extensions.xkit_updates.updated_list.length !== 1){
 						suffix = "s";
 					}
-					
+
 					XKit.notifications.add("XKit updated " + XKit.extensions.xkit_updates.updated_list.length + " extension" + suffix + ". Click here to view them.", "ok", true, function() {
 						var m_result = "";
 						for (i=0;i<XKit.extensions.xkit_updates.updated_list.length;i++) {
@@ -269,7 +284,7 @@ XKit.extensions.xkit_updates = new Object({
 		}
 		return false;
 	},
-	
+
 	destroy: function() {
 		this.running = false;
 	}
