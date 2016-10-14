@@ -1877,21 +1877,25 @@ XKit.tools.getParameterByName = function(name){
 					// Different pages (such as the sidebar) don't always have data-json defined,
 					// so fall back to checking for source elements
 					try {
-						var json = $(obj).find('.post-source-link').attr('data-peepr');
-						var parsedJson = JSON.parse(json);
-						m_return.source_owner = parsedJson.tumblelog;
+						var sourceJson = $(obj).find('.post-source-link').attr('data-peepr');
+						var parsedSourceJson = JSON.parse(sourceJson);
+						m_return.source_owner = parsedSourceJson.tumblelog;
 					} catch (e) {
 						console.log('Error retrieving data-peepr attribute of post-source-link');
 					}
 				} else if ($(obj).find(".reblog_info").length > 0) {
+					// If there is no source link but there is a reblog link, then
+					// the reblog source is the source
 					try {
-						var json = $(obj).find(".reblog_info").attr('data-peepr');
-						var parsedJson = JSON.parse(json);
-						m_return.source_owner = parsedJson.tumblelog;
+						var reblogJson = $(obj).find(".reblog_info").attr('data-peepr');
+						var parsedReblogJson = JSON.parse(reblogJson);
+						m_return.source_owner = parsedReblogJson.tumblelog;
 					} catch (e) {
 						console.log('Error retrieving data-peepr attribute of reblog_info');
 					} 
 				} else {
+					// If there is no reblog or source link, consider the 
+					// post owner to be the original source
 					m_return.source_owner = m_return.owner;
 				}
 
