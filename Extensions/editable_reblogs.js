@@ -1,5 +1,5 @@
 //* TITLE Editable Reblogs **//
-//* VERSION 3.1.1 **//
+//* VERSION 3.1.2 **//
 //* DESCRIPTION Restores ability to edit previous reblogs of a post **//
 //* DEVELOPER new-xkit **//
 //* FRAME false **//
@@ -392,6 +392,7 @@ XKit.extensions.editable_reblogs = new Object({
 
 		var nodes = $('<div>').append($(text));
 		nodes.find('.tmblr-truncated').replaceWith('[[MORE]]');
+		XKit.extensions.editable_reblogs.format_video_media(nodes);
 
 
 		// tumblr_blog must be wrapped in single quotes,
@@ -404,6 +405,52 @@ XKit.extensions.editable_reblogs = new Object({
 			text = text.substring(0, text.length - 11);
 		}
 		return text;
+	},
+
+	format_video_media: function(nodes) {
+		//parse items embedded in the current post
+		var embeds = nodes.find('.media-holder');
+		$.each(embeds, function(index, value) {
+			var element = $(value);
+			element.find('.media-killer').remove();
+			element.find('.media-mover').remove();
+			element.find('.thumbnail-preview').remove();
+			var figure = element.find('figure');
+			figure.removeClass('tmblr-embed-placeholder')
+					.removeClass('embed-thumbnail-preview')
+					.addClass('tmblr-embed')
+					.removeAttr(' data-embed-code')
+					.unwrap();
+		});
+		//parse items embedded in earlier reblogs
+		var figures = nodes.find('figure.tmblr-embed');
+		$.each(figures, function(index, value) {
+			var figure = $(value);
+			var iframe = figure.find('iframe');
+			if (!iframe.is('[data-src]')) {
+				var src = iframe.attr('src');
+				iframe.attr('data-src', src);
+			}
+			if (!figure.is('[data-orig-height]')) {
+				var height = iframe.attr('height');
+				figure.attr('data-orig-height', height);
+			}
+			if (!figure.is('[data-orig-width]')) {
+				var width = iframe.attr('width');
+				figure.attr('data-orig-width', width);
+			}
+			if (!figure.is('[data-url]')) {
+				var tumblrSource = iframe.attr('data-src');
+				var embedId = iframe.attr('id');
+				var segments = tumblrSource.split('/');
+				var url = segments[6].replace('#' + embedId, '');
+				figure.attr('data-url', url);
+			}
+			if (!figure.is('[data-provider]')) {
+				//it doesn't seem to matter what this value is as long as it exists
+				figure.attr('data-provider', 'youtube');
+			}
+		});
 	},
 
 	send_request: function(request) {
