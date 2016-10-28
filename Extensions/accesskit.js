@@ -1,5 +1,5 @@
 //* TITLE AccessKit **//
-//* VERSION 1.2.0 **//
+//* VERSION 1.2.1 **//
 //* DESCRIPTION Accessibility tools for Tumblr **//
 //* DETAILS Provides accessibility tools for XKit and your dashboard, such as increased font sizes, more contrast on icons and more. **//
 //* DEVELOPER new-xkit **//
@@ -84,19 +84,19 @@ XKit.extensions.accesskit = new Object({
 			type: "separator"
 		},
 		invert: {
-			text: "Invert colors (Chrome/Safari only, may cause slowness/problems)",
+			text: "Invert colors (May cause slowness/problems)",
 			default: false,
 			value: false,
 			experimental: true
 		},
 		grayscale: {
-			text: "Use grayscale colors (Chrome/Safari only, may cause slowness/problems)",
+			text: "Use grayscale colors (May cause slowness/problems)",
 			default: false,
 			value: false,
 			experimental: true
 		},
 		contrast: {
-			text: "Increase overall contrast (Chrome/Safari only, may cause slowness/problems)",
+			text: "Increase overall contrast (May cause slowness/problems)",
 			default: false,
 			value: false,
 			experimental: true
@@ -153,7 +153,7 @@ XKit.extensions.accesskit = new Object({
 
 		if (m_filters !== "") {
 
-			m_css = m_css + " html { -webkit-filter: " + m_filters + "; } ";
+			m_css = m_css + " html { filter: " + m_filters + "; } ";
 
 		}
 
