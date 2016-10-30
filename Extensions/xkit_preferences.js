@@ -1,5 +1,5 @@
 //* TITLE XKit Preferences **//
-//* VERSION 7.4.2 **//
+//* VERSION 7.4.3 **//
 //* DESCRIPTION Lets you customize XKit **//
 //* DEVELOPER new-xkit **//
 
@@ -867,8 +867,9 @@ XKit.extensions.xkit_preferences = new Object({
 				var m_value = $(this).val().toLowerCase();
 				m_value = $.trim(m_value);
 				if (m_value === "") {
-					$("#xkit-extensions-panel-right-inner .xkit-gallery-extension").css("display","block");
+					$("#xkit-extensions-panel-right-inner .xkit-gallery-extension").css("display", "");
 					$("#xkit-extensions-panel-right-inner .xkit-gallery-not-found-error").remove();
+					return;
 				}
 
 				var found_count = 0;
