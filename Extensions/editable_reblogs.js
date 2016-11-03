@@ -57,7 +57,14 @@ XKit.extensions.editable_reblogs = new Object({
 		if (post_type.chat || post_type.quote) {
 			return;
 		}
-
+		var has_displayed_ER_warning = XKit.storage.get('editable_reblogs', 'has_displayed_ER_warning');
+		if (!has_displayed_ER_warning) {
+			XKit.window.show('Editable Reblogs Warning', 'WARNING: Editable Reblogs no longer preserves Tumblr\'s reblog structure due to changes on Tumblr\'s side. Any posts reblogged ' +
+					' with Editable Reblogs will display the entire reblog tree as a single blockquoted post. The XKit team deeply apologizes for any inconvenience this causes but Tumblr\'s ' +
+					' updates are in this case beyond our control. As always, this extension can be disabled at any time from the XKit preferences panel.',
+					'error', '<div id="xkit-close-message" class="xkit-button">OK</div>');
+			XKit.storage.set('editable_reblogs', 'has_displayed_ER_warning', 1);
+		}
 		//disable on pages that don't include reblog_key and post_id in the URL
 		//for now until we've refactored more effectively
 		var location_path = window.location.pathname;
