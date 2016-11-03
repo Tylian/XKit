@@ -1,5 +1,5 @@
 //* TITLE Editable Reblogs **//
-//* VERSION 3.1.1 **//
+//* VERSION 3.2.0 **//
 //* DESCRIPTION Restores ability to edit previous reblogs of a post **//
 //* DEVELOPER new-xkit **//
 //* FRAME false **//
@@ -57,7 +57,22 @@ XKit.extensions.editable_reblogs = new Object({
 		if (post_type.chat || post_type.quote) {
 			return;
 		}
-
+		var has_displayed_ER_warning = XKit.storage.get('editable_reblogs', 'has_displayed_ER_warning');
+		if (!has_displayed_ER_warning) {
+			XKit.window.show('Editable Reblogs Warning',
+				"WARNING: Editable Reblogs no longer preserves Tumblr's reblog " +
+				"structure due to changes on Tumblr's side. Any posts reblogged " +
+				"with Editable Reblogs will display the entire reblog tree as a " +
+				"single blockquoted post.<br><br>" +
+				"The XKit team deeply apologizes for any inconvenience this causes, "+
+				"and we're working to restore the original functionality, "+
+				"but Tumblr's updates are in this case beyond our control.<br><br>" +
+				"As always, this extension can be disabled at any time from the XKit preferences panel.",
+				'error', '<div id="xkit-close-message" class="xkit-button ER-ack-blockquotes">OK</div>');
+			$(".ER-ack-blockquotes").click(function(){
+				XKit.storage.set('editable_reblogs', 'has_displayed_ER_warning', 1);
+			});
+		}
 		//disable on pages that don't include reblog_key and post_id in the URL
 		//for now until we've refactored more effectively
 		var location_path = window.location.pathname;
@@ -152,13 +167,21 @@ XKit.extensions.editable_reblogs = new Object({
 						? $(this).find('.reblog-tumblelog-name').attr('href').trim()
 						: 'http://' + $(this).find('.reblog-tumblelog-name').text().trim() + '.tumblr.com/post/1/undefined'
 				};
+
 				all_quotes.push(reblog_data);
 			});
 
 			all_quotes.forEach(function(data, index, all) {
 				var reblog_content = data.reblog_content.replace("tmblr-truncated read_more_container", "");
-				all_quotes_text = "<p><a class='tumblr_blog' href='" + data.reblog_url + "'>" + data.reblog_author + "</a>:</p><blockquote>" + all_quotes_text + reblog_content + "</blockquote>";
-			});
+
+				if (!all_quotes_text && this.is_blockquote_reblog(data.reblog_content)) {
+					all_quotes_text = reblog_content;
+				} else {
+					all_quotes_text = "<p><a href='" + data.reblog_url + "'>" + data.reblog_author + "</a>:</p>"+
+						"<xkit></xkit>"+
+					"<blockquote>" + all_quotes_text + reblog_content + "</blockquote>";
+				}
+			}.bind(this));
 		}
 
 		try {
@@ -177,15 +200,15 @@ XKit.extensions.editable_reblogs = new Object({
 		// add 'tumblr_blog' class to all tumblr.com links,
 		// assuming that they're part of a reblog-structure that's not being parsed properly
 		var nodes = $(all_quotes_text + old_content);
-		nodes.find('a[href*="tumblr.com"]').addClass('tumblr_blog');
+		// nodes.find('a[href*="tumblr.com"]').addClass('tumblr_blog');
 		var nodes_text = $('<div>').append($(nodes).clone()).html();
 
-		var undefined_urls = nodes_text.match(new RegExp("<a .*post/1/undefined", "g")) || [];
-		if (undefined_urls.length > 1) {
-			var error = new Error("Too many bad urls");
-			error.hide_url = true;
-			throw error;
-		}
+		// var undefined_urls = nodes_text.match(new RegExp("<a .*post/1/undefined", "g")) || [];
+		// if (undefined_urls.length > 1) {
+		// 	var error = new Error("Too many bad urls");
+		// 	error.hide_url = true;
+		// 	throw error;
+		// }
 
 		this.state = "mutation";
 
@@ -195,6 +218,31 @@ XKit.extensions.editable_reblogs = new Object({
 
 		$(".btn-remove-trail .icon").click();
 		$(".control-reblog-trail").hide();
+	},
+
+	is_blockquote_reblog: function(text) {
+		var elements = $(text);
+
+		elements = elements.filter(function(index, node){
+			if (!node.innerHTML || node.innerHTML == "<br>") {
+				return false;
+			}
+			return true;
+		});
+
+		if (elements.length != 2) {
+			return false;
+		}
+
+		var url = elements[0];
+		var is_url = url.tagName == "P" &&
+					 url.childNodes[0].tagName == "A" &&
+					 url.childNodes[0].href.match("/post/");
+
+		var blockquote = elements[1];
+		var is_blockquote = blockquote.tagName == "BLOCKQUOTE";
+
+		return is_url && is_blockquote;
 	},
 
 	reblog_tree_exists: function() {
@@ -398,7 +446,14 @@ XKit.extensions.editable_reblogs = new Object({
 		// not double, or the dash will nom the shit out of your post
 		//********ALL DOM MANIPULATION ABOVE THIS LINE*********
 		text = nodes.html();
-		text = text.replace(/['"]tumblr_blog['"]/g, "tumblr_blog tumblr_blog");
+		// text = text.replace(/['"]tumblr_blog['"]/g, "tumblr_blog tumblr_blog");
+
+		// break up blockquote links that may confuse tumblr
+		text = text.replace(
+			/(<\/a>:<\/\w+>)(\s|<p><\/p>)*?(\n?<blockquote>)/g,
+			'$1<xkit></xkit>$3'
+		);
+
 		// also remove empty HTML if the user hasn't added anything
 		if (text.indexOf("<p><br></p>", text.length - 11) !== -1) {
 			text = text.substring(0, text.length - 11);
