@@ -31,18 +31,31 @@ XKit.extensions.editable_reblogs = new Object({
 			+ ".xkit-editable-reblogs-button { float: right; margin-left: 20px; }"
 			+ ".control.right.xkit-editable-reblogs-control { display: block; width: 210px; text-align: right }", "editable_reblogs_remove_content_tree");
 
-		$("body").on("click", ".create_post_button", this.make_post.bind(this));
+		var create_post_button_click_handler = this.make_post.bind(this);
+		$("body").on("click", ".create_post_button", create_post_button_click_handler);
 
 		// DOM nodes containing options disappear before a handler can be run
-		$("body").on("click", this.record_post_settings.bind(this));
+		var record_post_settings_handler = this.record_post_settings.bind(this);
+		$("body").on("click", record_post_settings_handler);
 
+		var post_setting_keyup_handlers = {};
 		$.each({"#customUrl_input": "post_slug_metadata", "#postDate_input": "post_date_metadata"},
 			function(selector, property){
-				$('body').on("keyup", selector, function() {
+				post_setting_keyup_handlers[selector] = function() {
 					XKit.extensions.editable_reblogs[property] = $(this).val();
-				});
+				};
+
+				$('body').on("keyup", selector, post_setting_keyup_handlers[selector]);
 			}
 		);
+
+		this.teardown_event_handlers = function() {
+			$("body").off("click", ".create_post_button", create_post_button_click_handler);
+			$("body").off("click", record_post_settings_handler);
+			$.each(post_setting_keyup_handlers, function(selector, handler){
+				$('body').off("keyup", selector, handler);
+			});
+		}
 	},
 
 	post_window: function() {
@@ -109,7 +122,6 @@ XKit.extensions.editable_reblogs = new Object({
 			}
 		}
 	},
-
 
 	load_initial_metadata: function() {
 		//if this is an edit, we need to load the custom date and slug metadata if there is any
@@ -514,8 +526,7 @@ XKit.extensions.editable_reblogs = new Object({
 	destroy: function() {
 		this.running = false;
 		XKit.tools.remove_css("editable_reblogs_remove_content_tree");
-		$("body").off("click", ".create_post_button", XKit.extensions.editable_reblogs.send_post_request);
-		$("body").off("click", XKit.extensions.editable_reblogs.record_post_settings);
+		this.teardown_event_handlers();
 		XKit.interface.post_window_listener.remove("editable_reblogs");
 	}
 });
