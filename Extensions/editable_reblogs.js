@@ -70,7 +70,7 @@ XKit.extensions.editable_reblogs = new Object({
 		if (post_type.chat || post_type.quote) {
 			return;
 		}
-		var has_displayed_ER_warning = XKit.storage.get('editable_reblogs', 'has_displayed_ER_warning');
+		var has_displayed_ER_warning = XKit.storage.get('editable_reblogs', 'has_displayed_ER_warning', '');
 		if (!has_displayed_ER_warning) {
 			XKit.window.show('Editable Reblogs Warning',
 				"WARNING: Editable Reblogs no longer preserves Tumblr's reblog " +
@@ -81,9 +81,9 @@ XKit.extensions.editable_reblogs = new Object({
 				"and we're working to restore the original functionality, "+
 				"but Tumblr's updates are in this case beyond our control.<br><br>" +
 				"As always, this extension can be disabled at any time from the XKit preferences panel.",
-				'error', '<div id="xkit-close-message" class="xkit-button ER-ack-blockquotes">OK</div>');
-			$(".ER-ack-blockquotes").click(function(){
-				XKit.storage.set('editable_reblogs', 'has_displayed_ER_warning', 1);
+				'error', '<div id="xkit-close-message" class="xkit-button xkit-er-ack-blockquotes">OK</div>');
+			$(".xkit-er-ack-blockquotes").click(function(){
+				XKit.storage.set('editable_reblogs', 'has_displayed_ER_warning', 'true');
 			});
 		}
 		//disable on pages that don't include reblog_key and post_id in the URL
