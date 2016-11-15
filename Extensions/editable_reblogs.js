@@ -1,5 +1,5 @@
 //* TITLE Editable Reblogs **//
-//* VERSION 3.2.0 **//
+//* VERSION 3.3.0 **//
 //* DESCRIPTION Restores ability to edit previous reblogs of a post **//
 //* DEVELOPER new-xkit **//
 //* FRAME false **//
@@ -27,9 +27,8 @@ XKit.extensions.editable_reblogs = new Object({
 
 		XKit.interface.post_window_listener.add("editable_reblogs", this.post_window.bind(this));
 
-		XKit.tools.add_css(".control-reblog-tree {display: none; } .post-form--header .reblog-title {margin: 10px; color: #444} "
-			+ ".xkit-editable-reblogs-button { float: right; margin-left: 20px; }"
-			+ ".control.right.xkit-editable-reblogs-control { display: block; width: 210px; text-align: right }", "editable_reblogs_remove_content_tree");
+
+		XKit.tools.init_css("editable_reblogs");
 
 		var create_post_button_click_handler = this.make_post.bind(this);
 		$("body").on("click", ".create_post_button", create_post_button_click_handler);
@@ -55,7 +54,7 @@ XKit.extensions.editable_reblogs = new Object({
 			$.each(post_setting_keyup_handlers, function(selector, handler){
 				$('body').off("keyup", selector, handler);
 			});
-		}
+		};
 	},
 
 	post_window: function() {
@@ -95,8 +94,47 @@ XKit.extensions.editable_reblogs = new Object({
 			return;
 		}
 
-		var save_button = $('.post-form--save-button [data-js-clickablesave]');
+		var element = this.add_edit_button();
+		$(element).one('click', function(){
+			this.edit_the_reblogs();
+			$(element).addClass('disabled');
+		}.bind(this));
+	},
 
+	add_edit_button: function() {
+		var post_margin = $(".post-form .post-margin");
+		post_margin.append(
+			'<div class="xkit-er-edit-button icon_edit_pencil"></div>'
+		);
+
+		if (!XKit.storage.get('editable_reblogs', 'has_dismissed_button_callout', '')) {
+			post_margin.append(
+				'<div class="xkit-er-callout--container">' +
+				  '<div class="xkit-er-callout--header">Editable Reblogs</div>' +
+				  '<div class="xkit-er-callout--body">click this button to trim or edit this post</div>' +
+				'</div>'
+			);
+
+			$('.xkit-er-callout--container').delay(800).slideDown(800);
+			$('.post-form .editor').one('keyup', function(){
+				$('.xkit-er-callout--container').delay(2000).slideUp(800);
+			});
+
+			$(".xkit-er-edit-button").click(function(){
+				XKit.storage.set('editable_reblogs', 'has_dismissed_button_callout', 'true');
+				$('.xkit-er-callout--container').slideUp(800);
+			});
+			$('.xkit-er-callout--container').click(function(){
+				XKit.storage.set('editable_reblogs', 'has_dismissed_button_callout', 'true');
+				$('.xkit-er-callout--container').slideUp(800);
+			});
+		}
+
+		return $('.xkit-er-edit-button')[0];
+	},
+
+	edit_the_reblogs: function() {
+		var save_button = $('.post-form--save-button [data-js-clickablesave]');
 		try {
 			// Prevent Tumblr's event handler from acting on the save button
 			save_button.removeAttr("data-js-clickablesave");
