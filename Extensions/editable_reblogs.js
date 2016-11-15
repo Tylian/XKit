@@ -361,6 +361,8 @@ XKit.extensions.editable_reblogs = new Object({
 				this.send_schedule_request(e);
 				break;
 		}
+
+		this.state = "finished";
 	},
 
 	send_post_request: function(e) {
