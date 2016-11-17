@@ -1,5 +1,5 @@
 //* TITLE Editable Reblogs **//
-//* VERSION 3.3.0 **//
+//* VERSION 3.3.1 **//
 //* DESCRIPTION Restores ability to edit previous reblogs of a post **//
 //* DEVELOPER new-xkit **//
 //* FRAME false **//
@@ -94,6 +94,10 @@ XKit.extensions.editable_reblogs = new Object({
 			return;
 		}
 
+		this.initialize_selected_post_type();
+		this.scheduled_date = "Next Tuesday, 10am";
+		this.load_initial_metadata();
+
 		var element = this.add_edit_button();
 		$(element).one('click', function(){
 			this.edit_the_reblogs();
@@ -138,9 +142,6 @@ XKit.extensions.editable_reblogs = new Object({
 		try {
 			// Prevent Tumblr's event handler from acting on the save button
 			save_button.removeAttr("data-js-clickablesave");
-			this.initialize_selected_post_type();
-			this.scheduled_date = "Next Tuesday, 10am";
-			this.load_initial_metadata();
 			this.process_existing_content();
 			this.state = "success";
 		} catch(e) {
