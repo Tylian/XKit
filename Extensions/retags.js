@@ -1,6 +1,6 @@
 //* TITLE       Retags **//
 //* DEVELOPER   new-xkit **//
-//* VERSION     1.1.2 **//
+//* VERSION     1.1.3 **//
 //* DESCRIPTION Adds tags to reblog notes **//
 //* FRAME       false **//
 //* SLOW        false **//
@@ -65,7 +65,7 @@ XKit.extensions.retags = {
 					host = peepr_data.tumblelog.trim() + '.tumblr.com';
 					id = peepr_data.postId.trim();
 				}
-			} 
+			}
 			if (host && id) {
 				XKit.extensions.retags.request(host, id).then(function(tags) {
 						XKit.extensions.retags.append_tag_popover($element, retagClass, $target, tags);
@@ -262,7 +262,7 @@ XKit.extensions.retags = {
 	css_toggle:
 	$('<style class="retags"> ' +
 		'.ui_note { display: none; } ' +
-		'.ui_note.is_retags, .ui-note.is_reply, .ui_note.is_response, .ui_note.is_user_mention { display: block; } ' +
+		'.ui_note.is_retags, .ui_note.is_reply, .ui_note.is_response, .ui_note.is_user_mention { display: block; } ' +
 	'</style>'),
 
 	mobile_toggle:
