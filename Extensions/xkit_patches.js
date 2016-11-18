@@ -2223,6 +2223,11 @@ XKit.tools.getParameterByName = function(name){
 				}, true, payload);
 			},
 
+			/**
+			 * Determines whether a user is following the given blog.
+			 * The logged-in user must be a member of the given blog to determine this.
+			 * @return {Promise<Boolean>}
+			 */
 			is_following: function(username, blog) {
 				return $.ajax({
 					type: "GET",
