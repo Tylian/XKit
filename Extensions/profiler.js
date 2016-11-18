@@ -1,5 +1,5 @@
 //* TITLE Profiler **//
-//* VERSION 1.2.4 **//
+//* VERSION 1.2.5 **//
 //* DESCRIPTION The User Inspection Gadget **//
 //* DETAILS Select Profiler option from the User Menu to see information such as when they started blogging, how many posts they have, timezone, and more.<br><br>Requires User Menus+ to be installed. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -334,22 +334,11 @@ XKit.extensions.profiler = new Object({
 			}
 		}
 
-		$.ajax({
-			type: "POST",
-			url: "/svc/tumblelog/followed_by",
-			data: "tumblelog=" + blog_id + "&query=" + user_url,
-			dataType: "text",
-		}).done(function( msg ) {
-			if (XKit.extensions.profiler.window_id !== m_window_id) {return; }
-			try {
-				msg = JSON.parse(msg);
-				if (msg.response.is_friend === 1) {
-					$("#xkit-profiler-is-following").removeClass("loading-up").html("Yes");
-				} else {
-					$("#xkit-profiler-is-following").removeClass("loading-up").html("No");
-				}
-			} catch(e){
-				console.log("Profiler: " + e.message);
+		XKit.interface.is_following(user_url, blog_id).then(function(follow) {
+			if (follow) {
+				$("#xkit-profiler-is-following").removeClass("loading-up").html("Yes");
+			} else {
+				$("#xkit-profiler-is-following").removeClass("loading-up").html("No");
 			}
 		});
 

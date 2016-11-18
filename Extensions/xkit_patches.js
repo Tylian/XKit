@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 6.7.1 **//
+//* VERSION 6.8.0 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER new-xkit **//
 
@@ -2221,6 +2221,17 @@ XKit.tools.getParameterByName = function(name){
 				XKit.tools.add_function(function(){
 					Tumblr.Events.trigger("peepr-open-request", add_tag);
 				}, true, payload);
+			},
+
+			is_following: function(username, blog) {
+				return $.ajax({
+					type: "GET",
+					url: "/svc/blog/followed_by",
+					data: "tumblelog=" + blog + "&query=" + username,
+					dataType: "json",
+				}).then(function(msg) {
+					return msg.response.is_friend == 1;
+				});
 			}
 		});
 
