@@ -1,5 +1,5 @@
 //* TITLE One-Click Reply **//
-//* VERSION 2.0.7 **//
+//* VERSION 2.0.8 **//
 //* DESCRIPTION Lets you reply to notifications **//
 //* DEVELOPER new-xkit **//
 //* DETAILS To use this extension, hover over a notification and click on the Reply button. If Multi-Reply is on, hold down the ALT key while clicking on the Reply button to select/deselect posts and reply to all of them at once. **//
@@ -159,15 +159,6 @@ XKit.extensions.one_click_reply = new Object({
 			$(document).on("mouseleave",".post.is_mine .notes_container .note, .ui_notes .ui_note", XKit.extensions.one_click_reply.exit_pn);
 			$(document).on("mouseenter",".post.is_mine .notes_container .note, .ui_notes .ui_note", XKit.extensions.one_click_reply.enter_pn);
 			$(document).on("mouseenter",".notification", XKit.extensions.one_click_reply.enter);
-			$(document).on("click",".xkit-reply-button", function(e) {
-				var m_parent = $(this).parentsUntil(".notification").parent();
-				XKit.extensions.one_click_reply.make_post(m_parent, false, e);
-			});
-			$(document).on("click",".xkit-reply-button-pn", function(e) {
-				e.preventDefault();
-				XKit.extensions.one_click_reply.make_post(this, true, e);
-			});
-
 		} catch(e) {
 			alert("Error:\n" + e.message);
 		}
@@ -508,7 +499,7 @@ XKit.extensions.one_click_reply = new Object({
 
 		if ($(n_box).find(".xkit-reply-button-pn").length <= 0) {
 
-			var m_html = "<a onclick=\"return false\" class=\"xkit-reply-button-pn\">reply</a>";
+			var m_html = '<a class="xkit-reply-button-pn">reply</a>';
 			if (new_style) {
 				m_html = "<div class=\"xkit-reply-button-pn xkit-notes-new-style-fix\">reply</div>";
 			}
@@ -522,7 +513,7 @@ XKit.extensions.one_click_reply = new Object({
 					flush_to_right = true;
 				}
 				if ($(n_box).hasClass("reblog")) { flush_to_right = false; }
-				m_html = "<a onclick=\"return false\" class=\"xkit-reply-button-pn xkit-notes-new-style-fix-pn\">reply</a>";
+				m_html = '<a class="xkit-reply-button-pn xkit-notes-new-style-fix-pn">reply</a>';
 			}
 
 			$(n_box).append(m_html);
@@ -544,11 +535,10 @@ XKit.extensions.one_click_reply = new Object({
 				$(n_box).find("a.block").css("right", m_right + "px");
 			}
 
-			/*if (XKit.extensions.one_click_reply.added_css_pn !== true) {
-
-				XKit.tools.add_css("#posts .notes_outer_container.popover .note.like a.block { right: " + m_right + "px !important; }", "one_click_reply");
-				XKit.extensions.one_click_reply.added_css_pn = true;
-			}*/
+			$(n_box).find(".xkit-reply-button-pn").click(function(e) {
+				e.preventDefault();
+				XKit.extensions.one_click_reply.make_post(this, true, e);
+			});
 
 			if (XKit.extensions.one_click_reply.added_css_pn_new !== true) {
 				XKit.tools.add_css(".ui_notes .ui_note .part_ignore { right: " + m_new_right + "px !important; }", "one_click_reply");
@@ -575,7 +565,7 @@ XKit.extensions.one_click_reply = new Object({
 		}
 
 		if ($(n_box).find(".xkit-reply-button").length < 1) {
-			var m_html = "<a onclick=\"return false\" class=\"xkit-reply-button\">reply</a>";
+			var m_html = '<a class="xkit-reply-button">reply</a>';
 			if ($(n_box).find(".block").length > 0) {
 				$(n_box).find(".block").after(m_html);
 			} else {
@@ -596,6 +586,13 @@ XKit.extensions.one_click_reply = new Object({
 					}
 				}
 			}
+
+			$(n_box).find(".xkit-reply-button").click(function(e) {
+				e.preventDefault();
+				var m_parent = $(this).parentsUntil(".notification").parent();
+				XKit.extensions.one_click_reply.make_post(m_parent, false, e);
+			});
+
 			var m_right = 45 + $(n_box).find(".xkit-reply-button").width();
 			if (XKit.extensions.one_click_reply.added_css !== true) {
 				XKit.tools.add_css(".notification .block, .notification .ignore { right: " + m_right + "px !important; }", "one_click_reply");
