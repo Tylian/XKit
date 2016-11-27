@@ -1,5 +1,5 @@
 //* TITLE Pokés **//
-//* VERSION 0.10.2 **//
+//* VERSION 0.11.1 **//
 //* DESCRIPTION Gotta catch them all! **//
 //* DETAILS Randomly spawns Pokémon on your dash for you to collect. **//
 //* DEVELOPER new-xkit **//
@@ -131,7 +131,7 @@ XKit.extensions.pokes = {
 					poke_class = "poke_bg";
 				}
 			}
-			
+
 			if (XKit.extensions.pokes.preferences.allow_fullwidth.value) {
 				poke_html = '<div class="poke ' + poke_class + shiny_class + '" data-pokeid="' + db_nr + '" data-pokename="' + poke_name + '" data-pokegender="' + poke_gender + '" style="left:' + xpos + 'px; margin-top:' + ypos + 'px;">' +
 				'<img src="'+poke_sprite+'" alt="'+poke_name+'"/>'+'</div>';

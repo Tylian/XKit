@@ -1,5 +1,5 @@
 //* TITLE Profiler **//
-//* VERSION 1.2.3 **//
+//* VERSION 1.2.5 **//
 //* DESCRIPTION The User Inspection Gadget **//
 //* DETAILS Select Profiler option from the User Menu to see information such as when they started blogging, how many posts they have, timezone, and more.<br><br>Requires User Menus+ to be installed. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -334,22 +334,11 @@ XKit.extensions.profiler = new Object({
 			}
 		}
 
-		$.ajax({
-			type: "POST",
-			url: "/svc/tumblelog/followed_by",
-			data: "tumblelog=" + blog_id + "&query=" + user_url,
-			dataType: "text",
-		}).done(function( msg ) {
-			if (XKit.extensions.profiler.window_id !== m_window_id) {return; }
-			try {
-				msg = JSON.parse(msg);
-				if (msg.response.is_friend === 1) {
-					$("#xkit-profiler-is-following").removeClass("loading-up").html("Yes");
-				} else {
-					$("#xkit-profiler-is-following").removeClass("loading-up").html("No");
-				}
-			} catch(e){
-				console.log("Profiler: " + e.message);
+		XKit.interface.is_following(user_url, blog_id).then(function(follow) {
+			if (follow) {
+				$("#xkit-profiler-is-following").removeClass("loading-up").html("Yes");
+			} else {
+				$("#xkit-profiler-is-following").removeClass("loading-up").html("No");
 			}
 		});
 
@@ -422,7 +411,7 @@ XKit.extensions.profiler = new Object({
 
 		GM_xmlhttpRequest({
 			method: "GET",
-			url: "http://" + user_url + ".tumblr.com/api/read/json?read_id=" + XKit.tools.random_string(),
+			url: "https://" + user_url + ".tumblr.com/api/read/json?read_id=" + XKit.tools.random_string(),
 			json: false,
 			onerror: function(response) {
 				console.log("Error getting page.");
@@ -433,18 +422,18 @@ XKit.extensions.profiler = new Object({
 
 				if (XKit.extensions.profiler.window_id !== m_window_id) {return; }
 
-				var data = response.responseText.substring("var tumblr_api_read = ".length,
-														   response.responseText.length - 1);
-
-				try {
-					data = JSON.parse(data);
-				} catch(e) {
-					console.log("Error parsing data.");
-					XKit.extensions.profiler.display_error(m_window_id);
-					return;
+				// Manually look for the string "timezone":"Whatever" because
+				// the responseText is a substring of a JSON object
+				var timezone = '';
+				if (response.responseText) {
+					timezone = response.responseText.match(/"timezone":\s*("[^"]*")/)[1];
 				}
 
-				$("#xkit-profiler-timezone").removeClass("loading-up").html(data.tumblelog.timezone);
+				if (timezone) {
+					// Unescape the JS string
+					timezone = JSON.parse(timezone);
+					$("#xkit-profiler-timezone").removeClass("loading-up").html(timezone);
+				}
 
 			}
 		});

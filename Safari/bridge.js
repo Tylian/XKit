@@ -226,7 +226,7 @@ if (!String.prototype.startsWith) {
 
 			write: function(name, value) {
 
-				var toWrite = (typeof value)[0] + window.btoa(value);
+				var toWrite = '%' + (typeof value)[0] + window.btoa(encodeURIComponent(value));
 				XBridge.storage_area[name] = toWrite;
 
 				// Send data to background page so it would get saved.
@@ -243,7 +243,13 @@ if (!String.prototype.startsWith) {
 				if (!value) { return defaultValue; }
 
 				var type = value[0];
-				value = window.atob(value.substring(1));
+				// Leading '%' denotes escaped encoding
+				if (type === '%') {
+					type = value[1];
+					value = decodeURIComponent(window.atob(value.substring(2)));
+				} else {
+					value = value.substring(1);
+				}
 
 				switch (type) {
 					case 'b':

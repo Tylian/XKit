@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 6.7.0 **//
+//* VERSION 6.8.0 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER new-xkit **//
 
@@ -1363,7 +1363,7 @@ XKit.tools.getParameterByName = function(name){
 
 				m_object['post[type]'] = tumblr_object.post.type;
 
-				if (tumblr_object.post.type === "regular") {
+				if (typeof tumblr_object.post.one !== "undefined") {
 					m_object['post[one]'] = tumblr_object.post.one;
 				}
 
@@ -1859,8 +1859,8 @@ XKit.tools.getParameterByName = function(name){
 				m_return.is_mine = $(obj).hasClass("is_mine");
 				m_return.is_following = ($(obj).attr('data-following-tumblelog') === true);
 				m_return.can_edit = $(obj).find(".post_control.edit").length > 0;
-				
-				
+
+
 				if (m_return.is_reblogged && $(obj).attr('data-json')) {
 					try {
 						var json = $(obj).attr('data-json');
@@ -1888,9 +1888,9 @@ XKit.tools.getParameterByName = function(name){
 						m_return.source_owner = parsedReblogJson.tumblelog;
 					} catch (e) {
 						console.log('Error retrieving data-peepr attribute of reblog_info');
-					} 
+					}
 				} else {
-					// If there is no reblog or source link, consider the 
+					// If there is no reblog or source link, consider the
 					// post owner to be the original source
 					m_return.source_owner = m_return.owner;
 				}
@@ -2221,6 +2221,22 @@ XKit.tools.getParameterByName = function(name){
 				XKit.tools.add_function(function(){
 					Tumblr.Events.trigger("peepr-open-request", add_tag);
 				}, true, payload);
+			},
+
+			/**
+			 * Determines whether a user is following the given blog.
+			 * The logged-in user must be a member of the given blog to determine this.
+			 * @return {Promise<Boolean>}
+			 */
+			is_following: function(username, blog) {
+				return $.ajax({
+					type: "GET",
+					url: "/svc/blog/followed_by",
+					data: "tumblelog=" + blog + "&query=" + username,
+					dataType: "json",
+				}).then(function(msg) {
+					return msg.response.is_friend == 1;
+				});
 			}
 		});
 
