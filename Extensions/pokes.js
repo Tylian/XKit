@@ -1,5 +1,5 @@
 //* TITLE Pokés **//
-//* VERSION 0.10.2 **//
+//* VERSION 0.11.0 **//
 //* DESCRIPTION Gotta catch them all! **//
 //* DETAILS Randomly spawns Pokémon on your dash for you to collect. **//
 //* DEVELOPER new-xkit **//
@@ -40,6 +40,7 @@ XKit.extensions.pokes = {
 	run: function() {
 		this.running = true;
 		XKit.tools.init_css('pokes');
+		XKit.extensions.pokes.firstRunAfterSortUpdate();
 		XKit.post_listener.add('pokes', XKit.extensions.pokes.checkEligibility);
 		XKit.extensions.pokes.checkEligibility();
 	},
@@ -51,7 +52,7 @@ XKit.extensions.pokes = {
 				url: XKit.extensions.pokes.pokedex_url,
 				json: true,
 				onerror: function(response) {
-					console.log("Poke data could not be retrieved. Skipping instance.");
+					console.warn("Poke data could not be retrieved. Skipping instance.");
 					if (error) { error(response); }
 				},
 				onload: function(response) {
@@ -61,7 +62,7 @@ XKit.extensions.pokes = {
 						XKit.extensions.pokes.gist_cache = mdata;
 						callback(mdata);
 					} catch(e) {
-						console.log("Poke data received was not valid JSON. Skipping instance.");
+						console.warn("Poke data received was not valid JSON. Skipping instance.");
 						if (error) { error(response); }
 					}
 				}
@@ -92,6 +93,7 @@ XKit.extensions.pokes = {
 	},
 
 	parse_pokemon: function(mdata, db_nr, pokedThing) {
+		var poke_sortid = mdata[db_nr].sortid;
 		var poke_name = mdata[db_nr].name;
 		var poke_sprite = mdata[db_nr].sprite;
 		var m_f_ratio = parseInt(mdata[db_nr].gender_rate);
@@ -131,12 +133,12 @@ XKit.extensions.pokes = {
 					poke_class = "poke_bg";
 				}
 			}
-			
+
 			if (XKit.extensions.pokes.preferences.allow_fullwidth.value) {
-				poke_html = '<div class="poke ' + poke_class + shiny_class + '" data-pokeid="' + db_nr + '" data-pokename="' + poke_name + '" data-pokegender="' + poke_gender + '" style="left:' + xpos + 'px; margin-top:' + ypos + 'px;">' +
+				poke_html = '<div class="poke ' + poke_class + shiny_class + '" data-pokeid="' + db_nr + '" data-pokesortid="' + poke_sortid + '"  data-pokename="' + poke_name + '" data-pokegender="' + poke_gender + '" style="left:' + xpos + 'px; margin-top:' + ypos + 'px;">' +
 				'<img src="'+poke_sprite+'" alt="'+poke_name+'"/>'+'</div>';
 			} else {
-				poke_html = '<div class="poke fixed ' + poke_class + shiny_class + '" data-pokeid="' + db_nr + '" data-pokename="' + poke_name + '" data-pokegender="' + poke_gender + '" style="margin-top:' + ypos + 'px;">' +
+				poke_html = '<div class="poke fixed ' + poke_class + shiny_class + '" data-pokeid="' + db_nr + '" data-pokesortid="' + poke_sortid + '" data-pokename="' + poke_name + '" data-pokegender="' + poke_gender + '" style="margin-top:' + ypos + 'px;">' +
 				'<img src="'+poke_sprite+'" alt="'+poke_name+'"/>'+'</div>';
 			}
 
@@ -150,6 +152,7 @@ XKit.extensions.pokes = {
 					var storage_array = JSON.parse(XKit.storage.get("pokes","pokemon_storage", ""));
 					if (storage_array !== "") {
 						var poke_id = $(this).data("pokeid");
+						var poke_sortid = $(this).data("pokesortid");
 						var poke_gender = $(this).data("pokegender");
 						var poke_name = $(this).data("pokename");
 						var poke_wiki_name = poke_name;
@@ -165,7 +168,7 @@ XKit.extensions.pokes = {
 							}
 						}
 
-						storage_array.push({ id: poke_id, gender: poke_gender, shiny: $(this).hasClass("pokes_shiny") });
+						storage_array.push({ id: poke_id, sortid: poke_sortid, gender: poke_gender, shiny: $(this).hasClass("pokes_shiny") });
 						XKit.storage.set("pokes","pokemon_storage",JSON.stringify(storage_array));
 						XKit.notifications.add("You caught a " + ($(this).hasClass("pokes_shiny") ? "shiny " : "") + poke_gender + " " + poke_name.charAt(0).toUpperCase() + poke_name.substr(1) + "!","pokes", false, function () {
 							window.open("http://bulbapedia.bulbagarden.net/wiki/" + poke_wiki_name);
@@ -291,7 +294,7 @@ XKit.extensions.pokes = {
 		};
 
 		$('input:radio[name="xkit-pokes-sort"]#pokeid').change(function(e){
-						$("#xkit-loading_pokemon div.caught").sort(sortFunction("pokeid", "pokeid"))
+						$("#xkit-loading_pokemon div.caught").sort(sortFunction("pokesortid", "pokesortid"))
 									.prependTo("#xkit-loading_pokemon");
 		});
 				$('input:radio[name="xkit-pokes-sort"]#alphabetical').change(function(e){
@@ -368,7 +371,7 @@ XKit.extensions.pokes = {
 				if (value.shiny) {
 					sprite = mdata[value.id].sprite_shiny || mdata[value.id].sprite;
 				}
-				m_html = m_html + "<div class='caught" + (value.shiny ? " pokes_shiny" : "") + "' data-pokeid='" + value.id + "' data-pokegender='" + value.gender + "' data-pokespecies='" + mdata[value.id].name + "' data-pokenick='" + (value.nickname || "") + "' data-array_index=" + index + "><img class='caught poke_sprite' src='" + sprite + "' /></div>";
+				m_html = m_html + "<div class='caught" + (value.shiny ? " pokes_shiny" : "") + "' data-pokeid='" + value.id + "' data-pokesortid='" + value.sortid + "' data-pokegender='" + value.gender + "' data-pokespecies='" + mdata[value.id].name + "' data-pokenick='" + (value.nickname || "") + "' data-array_index=" + index + "><img class='caught poke_sprite' src='" + sprite + "' /></div>";
 				if (checklist.indexOf(value.id) === -1) checklist.push(value.id);
 			});
 			header += checklist.length + " out of " + mdata.length + " different species of Pokémon!</p>";
@@ -439,5 +442,29 @@ XKit.extensions.pokes = {
 
 		$("#xkit-extensions-panel-right").nanoScroller();
 		$("#xkit-extensions-panel-right").nanoScroller({ scroll: 'top' });
+	},
+
+	firstRunAfterSortUpdate: function() {
+		if (!XKit.storage.get("pokes", "fixedAfterSortUpdate", "")) {
+			XKit.window.show("Format-changing Pokés update released","An update made a change to the way we store your Pokémon. Please close any other open Tumblr tabs, and we'll automagically fix these for you when you're ready!","info","<div class=\"xkit-button default\" id=\"xkit-pokes-update-ready\">I'm ready, let's go!</div>");
+			$("#xkit-pokes-update-ready").click(function() {
+				XKit.window.show("Updating caught Pokémon...","This may take a while to complete, depending on how many Pokémon you have. And no, we won't release all of them. We swear.","info");
+				try {
+					XKit.extensions.pokes.gist_cache = "";
+					XKit.extensions.pokes.fetch_pokedex(function(mdata) {
+						var pokes = JSON.parse(XKit.storage.get("pokes", "pokemon_storage", "[]"));
+						$.each(pokes, function(index,value) {
+							value.sortid = mdata[value.id].sortid;
+						});
+						XKit.storage.set("pokes","pokemon_storage",JSON.stringify(pokes));
+						XKit.storage.set("pokes","fixedAfterSortUpdate", "true");
+						XKit.window.show("All done!","Your Pokémon storage has successfully updated. Reload the page, then go out and catch them all!","info");
+					});
+				} catch (e) {
+					XKit.window.show("Oh dear, this is bad.", "Something went wrong trying to migrate your data. Try reloading the page and having this run again. If this persists, feel free to contact live support with the below button.<br/><br/>Error code: PKMN-U-001", "error","<a class=\"xkit-button default\" href=\"https://new-xkit-support.tumblr.com/support\">Live support</div>");
+					console.error(e.message);
+				}
+			});
+		}
 	}
 };
