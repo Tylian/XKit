@@ -1,5 +1,5 @@
 //* TITLE No Recommended **//
-//* VERSION 2.2.0 **//
+//* VERSION 2.2.1 **//
 //* DESCRIPTION Removes recommended posts **//
 //* DETAILS This extension removes recommended posts from your dashboard. To remove Recommended Blogs on the sidebar, please use Tweaks extension. **//
 //* DEVELOPER STUDIOXENIX **//

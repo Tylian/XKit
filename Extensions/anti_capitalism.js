@@ -1,5 +1,5 @@
 //* TITLE Anti-Capitalism **//
-//* VERSION 1.5.1 **//
+//* VERSION 1.5.2 **//
 //* DESCRIPTION	Removes sponsored posts, vendor buttons, and other nonsense that wants your money. **//
 //* DEVELOPER new-xkit **//
 //* FRAME false **//
@@ -73,7 +73,7 @@ XKit.extensions.anti_capitalism = new Object({
 		if (XKit.extensions.anti_capitalism.preferences.yahoo_view.value) {
 			XKit.tools.add_css(' .recommendation-reason-link[href*="//view.yahoo.com"], .recommendation-reason-link[href*="%2F%2Fview.yahoo.com"]  { display: none; } ', "anti_capitalism_yahoo_view");
 		}
-		
+
 		if (XKit.extensions.anti_capitalism.preferences.sidebar_ad.value) {
 			XKit.tools.add_css(' .sidebar-ad { display: none; } ', "anti_capitalism_sidebar_ad");
 		}
