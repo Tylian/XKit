@@ -76,9 +76,7 @@ XKit.extensions.autoscroll = new Object({
 			}
 		};
 		$(document).on("click",".auto_scroll_control_step", function(event){
-			var attr = $(event.target).attr("selected");
-			var ifBool = !$(event.target).is("[selected]");
-			if(ifBool)
+			if(!$(event.target).is("[selected]"))
 			{
 				// Mark and store the selected speed.
 				controlSteps.removeAttr("selected");
