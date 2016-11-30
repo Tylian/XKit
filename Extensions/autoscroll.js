@@ -42,7 +42,6 @@ XKit.extensions.autoscroll = new Object({
 	run: function() {
 		this.running = true;
 		this.initControl();
-		XKit.console.add("Autoscroll: Control initialized");
 
 		// We cannot make references to the "this" that has the preferences
 		// inside a nested functions. Load the values from it ahead of time.
@@ -79,14 +78,12 @@ XKit.extensions.autoscroll = new Object({
 		$(document).on("click",".auto_scroll_control_step", function(event){
 			var attr = $(event.target).attr("selected");
 			var ifBool = !$(event.target).is("[selected]");
-			XKit.console.add("Autoscroll: Step clicked " + ifBool);
 			if(ifBool)
 			{
 				// Mark and store the selected speed.
 				controlSteps.removeAttr("selected");
 				$(event.target).attr("selected","true");
 				currentStep = $(event.target).attr("number");
-				XKit.console.add("Autoscroll: Scroll index= " + currentStep);
 
 				// Start scrolling
 				var wasScrolling = isScrolling;
@@ -95,13 +92,11 @@ XKit.extensions.autoscroll = new Object({
 				// to prevent possible race condition.
 				if(wasScrolling === false)
 				{
-					XKit.console.add("Autoscroll: Scrolling Started");
 					setTimeout(scrollFunction,50);
 				}
 			} else {
 				isScrolling = false;
 				controlSteps.removeAttr("selected");
-				XKit.console.add("Autoscroll: Scrolling stopped from the control");
 			}
 
 			// Prevent click event from being processed further.
@@ -113,7 +108,6 @@ XKit.extensions.autoscroll = new Object({
 			{
 				isScrolling = false;
 				controlSteps.removeAttr("selected");
-				XKit.console.add("Autoscroll: Scrolling stopped from the aether.");
 			}
 		});
 	},
@@ -140,7 +134,6 @@ XKit.extensions.autoscroll = new Object({
 	destroy: function() {
 		this.running = false;
 		$(".auto_scroll_control_container").remove();
-		XKit.console.add("Autoscroll: Control removed");
 	}
 
 });
