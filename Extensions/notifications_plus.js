@@ -1,5 +1,5 @@
 //* TITLE Notifications+ **//
-//* VERSION 1.5.4 **//
+//* VERSION 1.5.5 **//
 //* DESCRIPTION Enhances the notifications **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//
@@ -209,8 +209,7 @@ XKit.extensions.notifications_plus = new Object({
 		XKit.console.add("Notifications+: Post URL is " + post_url);
 
 		// Break it down.
-		post_url = post_url.replace('http://','');
-		post_url = post_url.replace('.tumblr.com','');
+		post_url = post_url.replace(/https?:\/\//,'');
 
 		var parts = post_url.split('/');
 		var blog_id = parts[0];
@@ -255,7 +254,7 @@ XKit.extensions.notifications_plus = new Object({
 			return;
 		}
 
-		var api_url = "https://api.tumblr.com/v2/blog/" + blog_id + ".tumblr.com/posts" + "?api_key=" + XKit.extensions.notifications_plus.apiKey + "&id=" + post_id;
+		var api_url = "https://api.tumblr.com/v2/blog/" + blog_id + "/posts" + "?api_key=" + XKit.extensions.notifications_plus.apiKey + "&id=" + post_id;
 
 		GM_xmlhttpRequest({
 			method: "GET",
