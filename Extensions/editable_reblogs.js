@@ -102,6 +102,10 @@ XKit.extensions.editable_reblogs = new Object({
 			this.edit_the_reblogs();
 			$(element).addClass('disabled');
 		}.bind(this));
+
+		var save_button = $('.post-form--save-button [data-js-clickablesave]');
+		// Prevent Tumblr's event handler from acting on the save button
+		save_button.removeAttr("data-js-clickablesave");
 	},
 
 	add_edit_button: function() {
@@ -137,10 +141,7 @@ XKit.extensions.editable_reblogs = new Object({
 	},
 
 	edit_the_reblogs: function() {
-		var save_button = $('.post-form--save-button [data-js-clickablesave]');
 		try {
-			// Prevent Tumblr's event handler from acting on the save button
-			save_button.removeAttr("data-js-clickablesave");
 			this.process_reblog_content();
 			this.state = "success";
 		} catch(e) {
@@ -347,6 +348,9 @@ XKit.extensions.editable_reblogs = new Object({
 	make_post: function(e) {
 		if (!this.reblog_tree_exists() || this.state != "success") {
 			XKit.interface.post_window.set_content_html(this.wrap_html_links(XKit.interface.post_window.get_content_html()));
+			var save_button = $('.post-form--save-button');
+			save_button.attr("data-js-clickablesave", '');
+			save_button.click();
 			return;
 		}
 
