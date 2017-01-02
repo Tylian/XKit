@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 6.8.0 **//
+//* VERSION 6.8.1 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER new-xkit **//
 
@@ -1670,7 +1670,8 @@ XKit.tools.getParameterByName = function(name){
 					XKit.tools.add_css("." + class_name + ":after {" +
 							" background-image: url('" + icon + "') !important;" +
 							" background-size: auto auto !important;" +
-							" margin-top: -9px !important; " +
+							" margin-top: -7px !important; " +
+							" opacity: 1 !important; " +
 							"}", "xkit_interface_icon___" + class_name);
 
 					if (typeof ok_icon !== "undefined") {
