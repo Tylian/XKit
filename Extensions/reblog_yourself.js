@@ -73,8 +73,6 @@ XKit.extensions.reblog_yourself = {
 		var rd_end =  document.location.href.indexOf("&", rd_start + 2);
 		var rd = document.location.href.substring(rd_start, rd_end);
 
-		var xu = "http://www.tumblr.com/reblog/" + post_id + "/" + xd;
-
 		var xu_html = '<a class="btn icon reblog no_label" id="xreblogyourselfiframebutton" style="display: none;" title="Reblog" href="/reblog/' + post_id + '/' + xd + '?redirect_to=' + rd + '" target="_top"></a>';
 
 
@@ -158,17 +156,6 @@ XKit.extensions.reblog_yourself = {
 
 		if ($(".posts .post").length === 0) { return; }
 
-		/*
-			blog_id +
-			post_type +
-			post_id +
-			reblog_key +
-			user_form_key
-			reblog_id
-		*/
-
-		var user_form_key = $("body").attr('data-form-key');
-
 		$('.post.is_mine').not(".xreblogyourself_done").each(function(index) {
 
 			if ($(this).hasClass("xreblogyourself_done") === true) { return; }
@@ -190,23 +177,12 @@ XKit.extensions.reblog_yourself = {
 
 			var post_id = $(this).attr('data-post-id');
 			var reblog_key = $(this).attr('data-reblog-key');
-			var post_type = $(this).attr('data-type');
-			var blog_id = $(this).attr('data-tumblelog-name');
-			var reblog_id = $(this).attr('data-post-id');
 
 			if (post_id === "" || reblog_key === "") {
 				// Can't do this for some reason.
 				console.log("NO REBLOG / POST ID");
 				return;
 			}
-
-			// <a class="post_control post_control_icon reblog_button" title="" data-tumblelog-name="xenix" data-post-type="regular" data-reblog-key="5XJmYn8f" data-reblog-id="50250451612" data-user-form-key="0Rk2VkO4FhIFHKYsHMXFFokI0QI" href="/reblog/50250451612/5XJmYn8f?redirect_to=%2Fdashboard">Reblog</a>
-
-			// New button layout:
-			// <a class="post_control reblog" title="" href="/reblog/51800635787/9lQg1pX7?redirect_to=%2Fdashboard"><span class="offscreen">Reblog</span></a>
-			/*
-				var m_html = "<a class=\"added_by_xkit_reblog_yourself post_control post_control_icon reblog_button\" title=\"\" data-tumblelog-name=\"" + blog_id + "\" data-post-type=\"" + post_type + "\" data-reblog-key=\"" + reblog_key + "\" data-reblog-id=\"" + reblog_id + "\" data-user-form-key=\"" + user_form_key + "\" href=\"/reblog/" + post_id + "/" + reblog_key + "?redirect_to=%2Fdashboard\">Reblog</a>";
-			*/
 
 			var m_html = "<a class=\"post_control reblog added_by_xkit_reblog_yourself\" title=\"\" href=\"/reblog/" + post_id + "/" + reblog_key + "?redirect_to=%2Fdashboard\"><span class=\"offscreen\">Reblog</span></a>";
 			$(this).find('.post_control.post_control_menu.creator').before(m_html);

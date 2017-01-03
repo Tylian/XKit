@@ -7,6 +7,9 @@
 //* BETA false **//
 //* SLOW true **//
 
+// depends on moment.js
+/* globals moment */
+
 XKit.extensions.timestamps = new Object({
 
 	running: false,
@@ -93,6 +96,8 @@ XKit.extensions.timestamps = new Object({
 				});
 			}
 		} catch (e) {
+			// defined in xkit.js
+			/* globals show_error_script */
 			show_error_script("Timestamps: " + e.message);
 		}
 
@@ -205,14 +210,13 @@ XKit.extensions.timestamps = new Object({
 			channel_id: $(note).attr("data-tumblelog-name")
 		};
 
-		var self = this;
 		GM_xmlhttpRequest({
 			method: "POST",
 			url: "http://www.tumblr.com/svc/post/fetch",
 			data: JSON.stringify(m_object),
 			json: true,
 			onerror: function(response) {
-				self.show_failed(date_element);
+				XKit.extensions.timestamps.show_failed(date_element);
 			},
 			onload: function(response) {
 				// We are done!

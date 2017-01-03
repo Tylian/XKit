@@ -328,7 +328,6 @@ XKit.extensions.classic_tags = new Object({
 
 		$(".tracked_tag").each(function() {
 			var result = $(this).find(".result_link");
-			var tag = result.attr('data-tag-result');
 			var href = result.attr('href');
 
 			if ($("body").attr('data-page-root') === href) {

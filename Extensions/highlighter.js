@@ -90,17 +90,6 @@ XKit.extensions.highlighter = new Object({
 				m_title = $(this).find(".post_title").html();
 			}
 
-			// Collect the author info, if the option is toggled.
-			var m_author = "";
-			if ($(this).find(".post_info_fence a").length > 0) {
-				m_author = $(this).find(".post_info_fence a").html();
-			}
-
-			var m_bTitle = "";
-			if ($(this).find(".post_avatar_link").attr("title").length > 0) {
-				m_bTitle = $(this).find(".post_avatar_link").attr('title');
-			}
-
 			// Collect the content.
 			var m_content = "";
 
@@ -184,7 +173,7 @@ XKit.extensions.highlighter = new Object({
 	do_post: function(post_content) {
 
 		if ($.trim(post_content) === "") { return ""; }
-		post_content = post_content.replace(new RegExp('\n', 'g'), ' ');
+		post_content = post_content.replace(/\n/g, ' ');
 		var p_words = post_content.split(" ");
 
 		for (var i = 0; i < XKit.extensions.highlighter.highlightered.length; i++) {
@@ -217,9 +206,9 @@ XKit.extensions.highlighter = new Object({
 					if (XKit.extensions.highlighter.preferences.use_improved.value === true) {
 						// This will use some CPU...
 						if (post_content.indexOf(m_word) !== -1) {
-							for (var m = 0; m < p_words.length; m++) {
-								if (p_words[m].indexOf(m_word) !== -1) {
-									mp_word = p_words[m].replace(/\./g, '');
+							for (var j = 0; j < p_words.length; j++) {
+								if (p_words[j].indexOf(m_word) !== -1) {
+									var mp_word = p_words[j].replace(/\./g, '');
 									mp_word = mp_word.replace(/\,/g, '');
 									mp_word = mp_word.replace(/\u2026/g, '');
 									if (m_word === mp_word) {

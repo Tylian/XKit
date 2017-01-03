@@ -132,7 +132,6 @@ XKit.extensions.old_notifications = new Object({
 		var preview_frame_class = "icon regular";
 		var preview_image = notification_preview;
 
-		var is_post_regular = $(obj).find(".ui_post_badge").hasClass("regular");
 		var is_post_photo = $(obj).find(".ui_post_badge").hasClass("photo");
 		var is_post_chat = $(obj).find(".ui_post_badge").hasClass("conversation");
 		var is_post_quote = $(obj).find(".ui_post_badge").hasClass("quote");

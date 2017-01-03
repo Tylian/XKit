@@ -622,6 +622,7 @@ XKit.extensions.editable_reblogs = new Object({
 					XKit.interface.kitty.set(response.getResponseHeader("X-tumblr-kittens"));
 					var redirect_url = XKit.tools.getParameterByName("redirect_to");
 					XKit.tools.add_function(function() {
+						/* eslint no-shadow: off */
 						Tumblr.Events.trigger("postForms:saved");
 						var redirect_url = add_tag;
 						if (redirect_url !== "") {

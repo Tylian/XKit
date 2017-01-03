@@ -472,15 +472,15 @@ XKit.extensions.xcloud = new Object({
 		var data_blob = new Blob([upload_data], {type: "text/plain"});
 
 
-		var a = document.createElement("a");
-		document.body.appendChild(a);
-		a.style = "display: none";
+		var dummyLink = document.createElement("a");
+		document.body.appendChild(dummyLink);
+		dummyLink.style = "display: none";
 
 		var fileName = "xcloud_payload.txt";
 		var url = window.URL.createObjectURL(data_blob);
-		a.href = url;
-		a.download = fileName;
-		a.click();
+		dummyLink.href = url;
+		dummyLink.download = fileName;
+		dummyLink.click();
 
 		setTimeout(function() {
 			window.URL.revokeObjectURL(url);
@@ -757,7 +757,7 @@ XKit.extensions.xcloud = new Object({
 			XKit.console.add("XCloud restore -> " + m_name);
 			XKit.install(m_name, function(mdata) {
 				if (mdata.server_down || mdata.errors) {
-					XKit.extensions.xcloud.errors_list.push("Unable to restore extension " + extension_name);
+					XKit.extensions.xcloud.errors_list.push("Unable to restore extension " + m_name);
 				} else if (XKit.extensions.xcloud.extensions_to_download_enabled[XKit.extensions.xcloud.extensions_to_download_count] === false) {
 					XKit.installed.disable(XKit.extensions.xcloud.extensions_to_download[XKit.extensions.xcloud.extensions_to_download_count]);
 				}
@@ -872,9 +872,10 @@ XKit.extensions.xcloud = new Object({
 		}
 
 		if (skipping.length > 0) {
-			m_html = "<ol>";
+			var m_html = "<ol>";
 			for (var j = 0; j < skipping.length; j++) {
-				m_html += "<li><b>" + XKit.installed.title(skipping[j]) + "</b> &middot; " + Math.ceil(skipping_size[j]) + " MB</li>";
+				m_html += "<li><b>" + XKit.installed.title(skipping[j]) + "</b>";
+				// &middot; " + Math.ceil(this.skipping_size[j]) + " MB</li>";
 			}
 			m_html += "</ol>";
 			XKit.window.show("Skipping some extensions", "The following extensions will not be backed up to XCloud because they are storing more than 1.5 megabytes of data, making the backup bigger than XCloud servers can handle." + m_html + "<small style=\"color: rgb(110,110,110);\">If these extensions have data that you can remove, please try removing them and retry the backup process. If you are not using these extensions, click on \"Reset Settings\" button on top-right corner of their control panel to free up space on your computer.</small>", "warning", "<div class=\"xkit-button default\" id=\"xkit-xcloud-backup-skip-continue\">Continue</div><div class=\"xkit-button\" id=\"xkit-close-message\">Cancel</div>");
@@ -1038,6 +1039,7 @@ XKit.extensions.xcloud = new Object({
 
 
 	md5: function(str) {
+		/* eslint id-length: off */
 
 		// http://kevin.vanzonneveld.net
 		// +   original by: Webtoolkit.info (http://www.webtoolkit.info/)
@@ -1109,9 +1111,9 @@ XKit.extensions.xcloud = new Object({
 			return addUnsigned(rotateLeft(a, s), b);
 		};
 
-		var convertToWordArray = function(str) {
+		var convertToWordArray = function(word) {
 			var lWordCount;
-			var lMessageLength = str.length;
+			var lMessageLength = word.length;
 			var lNumberOfWords_temp1 = lMessageLength + 8;
 			var lNumberOfWords_temp2 = (lNumberOfWords_temp1 - (lNumberOfWords_temp1 % 64)) / 64;
 			var lNumberOfWords = (lNumberOfWords_temp2 + 1) * 16;
@@ -1121,7 +1123,7 @@ XKit.extensions.xcloud = new Object({
 			while (lByteCount < lMessageLength) {
 				lWordCount = (lByteCount - (lByteCount % 4)) / 4;
 				lBytePosition = (lByteCount % 4) * 8;
-				lWordArray[lWordCount] = (lWordArray[lWordCount] | (str.charCodeAt(lByteCount) << lBytePosition));
+				lWordArray[lWordCount] = (lWordArray[lWordCount] | (word.charCodeAt(lByteCount) << lBytePosition));
 				lByteCount++;
 			}
 			lWordCount = (lByteCount - (lByteCount % 4)) / 4;

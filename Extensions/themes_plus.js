@@ -33,6 +33,7 @@ jQuery.fn.selectText = function() {
  *
  */
 (function($) {
+	/* eslint id-length: off, no-unused-vars: off */
 	var ColorPicker = function() {
 		var
 			ids = {},
@@ -1081,7 +1082,7 @@ XKit.extensions.themes_plus = new Object({
 
 			}
 
-			var m_obj = this;
+			var this_picker = this;
 
 			var m_color = value;
 
@@ -1098,7 +1099,7 @@ XKit.extensions.themes_plus = new Object({
 					return false;
 				},
 				onChange: function(hsb, hex, rgb) {
-					$(m_obj).css('backgroundColor', '#' + hex);
+					$(this_picker).css('backgroundColor', '#' + hex);
 					/*XKit.tools.remove_css("xkit-themes-plus-preview-" + m_option_id);
 					var m_css = "";
 					for (var i=0;i<m_of.length;i++) {
@@ -1121,7 +1122,7 @@ XKit.extensions.themes_plus = new Object({
 
 				var m_data = "[XKIT_THEME|" + XKit.extensions.themes_plus.theme_compatibility + "|" + window.btoa(unescape(encodeURIComponent(JSON.stringify(XKit.extensions.themes_plus.create_theme_obj_from_settings())))) + "]";
 
-				var m_html = "<div id=\"xkit-themes-plus-share-code\" class=\"nano\">" +
+				var share_code_html = "<div id=\"xkit-themes-plus-share-code\" class=\"nano\">" +
 							"<div class=\"content\">" +
 								"<div id=\"xkit-themes-plus-share-code-inner\">" +
 									m_data +
@@ -1129,7 +1130,7 @@ XKit.extensions.themes_plus = new Object({
 							"</div>" +
 						"</div>";
 
-				XKit.window.show("Export Theme", "Share the code below to let others use your theme!" + m_html, "info", "<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
+				XKit.window.show("Export Theme", "Share the code below to let others use your theme!" + share_code_html, "info", "<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
 
 				$("#xkit-themes-plus-share-code").nanoScroller();
 				$("#xkit-themes-plus-share-code").nanoScroller({ scroll: 'top' });
@@ -1140,9 +1141,9 @@ XKit.extensions.themes_plus = new Object({
 
 			$("#xkit-themes-plus-import-confirm").click(function() {
 
-				var m_html = "<div style=\"\"><input type=\"text\" placeholder=\"Paste the XKit Themes+ theme code you have here.\"  id=\"xkit-themes-plus-input-code-code-code-code\" class=\"xkit-textbox\"></div>";
+				var import_html = "<div style=\"\"><input type=\"text\" placeholder=\"Paste the XKit Themes+ theme code you have here.\"  id=\"xkit-themes-plus-input-code-code-code-code\" class=\"xkit-textbox\"></div>";
 
-				XKit.window.show("Import Theme", "<b>Theme Code:</b><br/>Only Themes+ Codes are accepted." + m_html, "info", "<div class=\"xkit-button default\" id=\"xkit-themes-plus-confirm-input-code\">OK</div><div class=\"xkit-button\" id=\"xkit-close-message\">Cancel</div>");
+				XKit.window.show("Import Theme", "<b>Theme Code:</b><br/>Only Themes+ Codes are accepted." + import_html, "info", "<div class=\"xkit-button default\" id=\"xkit-themes-plus-confirm-input-code\">OK</div><div class=\"xkit-button\" id=\"xkit-close-message\">Cancel</div>");
 
 				$("#xkit-themes-plus-confirm-input-code").click(function() {
 

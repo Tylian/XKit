@@ -136,7 +136,6 @@ XKit.extensions.soft_refresh = new Object({
 				// Fixes the add_to_image_queue bug that causes this addon to stop working.
 				// Problem is that the response code wants to call a page embedded function
 				resText = resText.replace(/add_to_image_queue\(\'.*\'\)\;/g, "");
-				var new_posts = $("ol#posts", resText).html();
 
 				var m_count = 0;
 				var post_ids = [];

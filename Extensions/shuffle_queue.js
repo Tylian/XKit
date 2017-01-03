@@ -401,9 +401,9 @@ XKit.extensions.shuffle_queue = new Object({
 
 	},
 
-	shuffle_data: function(o) {
-		for (var j, x, i = o.length; i; j = parseInt(Math.random() * i), x = o[--i], o[i] = o[j], o[j] = x);
-		return o;
+	shuffle_data: function(array) {
+		for (var j, x, i = array.length; i; j = parseInt(Math.random() * i), x = array[--i], array[i] = array[j], array[j] = x);
+		return array;
 	},
 
 	destroy: function() {

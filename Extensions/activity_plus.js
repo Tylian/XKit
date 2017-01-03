@@ -6,6 +6,9 @@
 //* FRAME false **//
 //* BETA false **//
 
+// defined in moment.js
+/* globals moment */
+
 XKit.extensions.activity_plus = new Object({
 
 	running: false,
@@ -52,8 +55,6 @@ XKit.extensions.activity_plus = new Object({
 		}
 	},
 
-	new_note_check_interval: 0,
-
 	in_type_filter: false,
 	in_type_filter_button: "",
 
@@ -72,8 +73,8 @@ XKit.extensions.activity_plus = new Object({
 			}
 
 			if (this.preferences.show_timestamps.value === true || this.preferences.condensed_notes.value === true) {
-			// m_css = m_css + " .part_activity { left: 95px !important; } .ui_note .part_avatar { left: 57px !important; } .part_response { padding-left: 95px !important; }";
-				new_note_check_interval = setInterval(XKit.extensions.activity_plus.do_on_new, 3000);
+				// m_css = m_css + " .part_activity { left: 95px !important; } .ui_note .part_avatar { left: 57px !important; } .part_response { padding-left: 95px !important; }";
+				setInterval(XKit.extensions.activity_plus.do_on_new, 3000);
 			}
 
 			if (this.preferences.notes_filter.value === true) {

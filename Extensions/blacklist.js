@@ -338,20 +338,20 @@ XKit.extensions.blacklist = new Object({
 
 			var whitelist_count = 0;
 			if (typeof m_obj[to_check_whitelist] === "object") {
-				m_obj[to_check_whitelist].forEach(function(m_word) {
-					m_word = $.trim(m_word);
-					if (m_word === "") { return; }
-					if (m_word.indexOf(",") !== -1) {
-						m_word = XKit.tools.replace_all(m_word, ",", "");
+				m_obj[to_check_whitelist].forEach(function(word) {
+					word = $.trim(word);
+					if (word === "") { return; }
+					if (word.indexOf(",") !== -1) {
+						word = XKit.tools.replace_all(word, ",", "");
 					}
-					if (m_word.indexOf("\\") !== -1) {
-						m_word = XKit.tools.replace_all(m_word, "\\\\", "");
+					if (word.indexOf("\\") !== -1) {
+						word = XKit.tools.replace_all(word, "\\\\", "");
 					}
-					if (m_word.length <= 3) {
-						m_word = m_word + "*";
+					if (word.length <= 3) {
+						word = word + "*";
 					}
-					if (XKit.extensions.blacklist.check_if_exists(m_word) !== true) {
-						XKit.extensions.blacklist.whitelisted.push(m_word);
+					if (XKit.extensions.blacklist.check_if_exists(word) !== true) {
+						XKit.extensions.blacklist.whitelisted.push(word);
 						whitelist_count++;
 					}
 				});
@@ -530,11 +530,6 @@ XKit.extensions.blacklist = new Object({
 						if ($(this).find(".post_source_link").length > 0) {
 							m_author = m_author + " " + $(this).find(".post_source_link").html();
 						}
-
-						var m_bTitle = "";
-						if ($(this).find(".post_avatar_link").attr("title").length > 0) {
-							m_bTitle = $(this).find(".post_avatar_link").attr('title');
-						}
 					} catch (e) {
 						console.log(" !! can't get author !!");
 					}
@@ -635,7 +630,7 @@ XKit.extensions.blacklist = new Object({
 
 		if (!XKit.extensions.blacklist.running) { return; }
 
-		m_this = e.target;
+		var m_this = e.target;
 		var m_div = $("#" + $(m_this).attr('data-post-id'));
 		$(m_div).removeClass("xblacklist_blacklisted_post");
 		$(m_div).find(".post_info").css("display", "block");
@@ -748,7 +743,7 @@ XKit.extensions.blacklist = new Object({
 	do_post: function(obj, post_content, tags) {
 
 		// if ($.trim(post_content) === "") { return ""; }
-		post_content = post_content.replace(new RegExp('\n', 'g'), ' ');
+		post_content = post_content.replace(/\n/g, ' ');
 		var p_words = post_content.split(" ");
 
 		var new_array = [];
@@ -852,9 +847,9 @@ XKit.extensions.blacklist = new Object({
 						// This will use some CPU...
 						if (m_post_content.indexOf(m_word) !== -1) {
 							// // console.log('%c  found on m_post_content.', 'background: #a5edae; color: black');
-							for (var m = 0; m < m_p_words.length; m++) {
-								if (m_p_words[m].indexOf(m_word) !== -1) {
-									mp_word = m_p_words[m].replace(/\./g, '');
+							for (var j = 0; j < m_p_words.length; j++) {
+								if (m_p_words[j].indexOf(m_word) !== -1) {
+									var mp_word = m_p_words[j].replace(/\./g, '');
 									mp_word = mp_word.replace(/\,/g, '');
 									mp_word = mp_word.replace(/\u2026/g, '');
 									mp_word = mp_word.replace(/[\.,-\/#!$%\^&\*;:{}=\-_`~()]/g, "").replace(/\s{2,}/g, " ");
@@ -1024,7 +1019,7 @@ XKit.extensions.blacklist = new Object({
 		if (XKit.extensions.blacklist.blacklisted.length <= 1) {
 			m_html = m_html + "<div class=\"xkit-blacklist-none\"><b>You have no blacklisted words.</b></div>";
 		} else {
-			for (var i = 0; i < XKit.extensions.blacklist.blacklisted.length; i++) {
+			for (let i = 0; i < XKit.extensions.blacklist.blacklisted.length; i++) {
 				if (XKit.extensions.blacklist.blacklisted[i] !== "") {
 					m_html = m_html + XKit.extensions.blacklist.create_blacklist_div(XKit.extensions.blacklist.blacklisted[i]);
 				}
@@ -1037,7 +1032,7 @@ XKit.extensions.blacklist = new Object({
 		if (XKit.extensions.blacklist.whitelisted.length <= 1) {
 			m_html = m_html + "<div class=\"xkit-blacklist-none\"><b>You have no whitelisted words.</b></div>";
 		} else {
-			for (var i = 0; i < XKit.extensions.blacklist.whitelisted.length; i++) {
+			for (let i = 0; i < XKit.extensions.blacklist.whitelisted.length; i++) {
 				if (XKit.extensions.blacklist.whitelisted[i] !== "") {
 					m_html = m_html + XKit.extensions.blacklist.create_blacklist_div(XKit.extensions.blacklist.whitelisted[i], true);
 				}

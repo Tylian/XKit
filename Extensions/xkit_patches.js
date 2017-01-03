@@ -129,7 +129,7 @@ XKit.extensions.xkit_patches = new Object({
 			if (blog_menu_items.length) {
 
 				blog_menu_items.each(function() {
-					blog_url = this.id.split("--")[1];
+					var blog_url = this.id.split("--")[1];
 					if (blog_url) {
 						m_blogs.push(blog_url);
 					}
@@ -182,7 +182,6 @@ XKit.extensions.xkit_patches = new Object({
  * @return {String} The url to link the user to
  */
 		XKit.tools.github_issue = function(title, data, error) {
-	/*jshint -W069 */
 
 			if (!data) {
 				data = {};
@@ -194,7 +193,7 @@ XKit.extensions.xkit_patches = new Object({
 			data['Extensions'] = XKit.installed.list().join(", ");
 			data['URL'] = window.location.toString();
 
-			body = "\xA0\n*Please describe what actions we can take to reproduce the bug you found, " +
+			var body = "\xA0\n*Please describe what actions we can take to reproduce the bug you found, " +
 			  "including any links or screenshots that might help us figure out what's going on.*\n\n\n" +
 	       "-----------\n\n";
 
@@ -292,7 +291,7 @@ XKit.extensions.xkit_patches = new Object({
 						xkit_blogs: blogs,
 					}, window.location.protocol + "//" + window.location.host);
 				}
-			} catch (_) {}
+			} catch (e) {}
 		}, true);
 
 /**
@@ -438,6 +437,7 @@ XKit.extensions.xkit_patches = new Object({
 			if (!window._ || !window.jQuery) {
 				return;
 			}
+			/* globals _ */
 
 			if (_.get(window, "Tumblr.Prima.CrtPlayer")) {
 				window.Tumblr.Prima.CrtPlayer.prototype.onLoadedMetadata =
@@ -575,7 +575,8 @@ XKit.extensions.xkit_patches = new Object({
 		};
 
 		if (XKit.frame_mode === true) {
-
+			// from xkit.js
+			/* globals xkit_check_storage */
 			xkit_check_storage();
 
 			// console.log("XKit Patches determined that it's in frame mode, resizing stuff!");
@@ -662,6 +663,8 @@ XKit.extensions.xkit_patches = new Object({
 
 			$("#tiptip_holder").css("z-index", "99000000");
 
+			// from xkit.js
+			/* globals centerIt */
 			centerIt($("#xkit-window"));
 			$("#xkit-window").fadeIn('fast');
 
@@ -751,12 +754,14 @@ XKit.extensions.xkit_patches = new Object({
 							}
 							XKit.interface.kitty.stored = kitty_text;
 							m_object.kitten = XKit.interface.kitty.stored;
+							m_object.response = response;
 							callback(m_object);
 						},
 						onerror: function(response) {
 							//// console.log("XKitty: DAMN IT! Kitty request FAILED!");
 							m_object.errors = true;
 							m_object.kitten = "";
+							m_object.response = response;
 							XKit.interface.kitty.stored = "";
 							callback(m_object);
 						}
@@ -876,6 +881,7 @@ XKit.extensions.xkit_patches = new Object({
 
 					var html_or_markdown = $(".tab-label[data-js-srclabel]").text();
 					XKit.tools.add_function(function() {
+						/* eslint no-shadow: "off" */
 						var new_content = add_tag[0];
 						var html_or_markdown = add_tag[1];
 						var editor_div = document.getElementsByClassName("ace_editor");
@@ -1045,7 +1051,6 @@ XKit.extensions.xkit_patches = new Object({
 				 * @return {String} Type of post, see also XKit.interface.post_window.post_type
 				 */
 				type: function() {
-					var to_return = {};
 					var types = ['text', 'photo', 'quote', 'link', 'chat', 'audio', 'video'];
 					var form = $('.post-form');
 					for (var i = 0; i < types.length; i++) {
@@ -1436,14 +1441,13 @@ XKit.extensions.xkit_patches = new Object({
 						if (retry_mode === false) {
 							XKit.interface.edit(tumblr_object, func, true);
 						} else {
-
 							to_return.error = true;
-							to_return.status = response.status;
+							to_return.status = kitty_data.response.status;
 
-							if (response.status === 401) {
+							if (kitty_data.response.status === 401) {
 								to_return.message = "Permission Denied";
 							} else {
-								if (response.status === 404) {
+								if (kitty_data.response.status === 404) {
 									to_return.message = "Post Not Found";
 								} else {
 									to_return.message = "Unknown";
@@ -1997,7 +2001,7 @@ XKit.extensions.xkit_patches = new Object({
 				m_return.activity = '[0,0,0,0,0,0,0,0,0,0,0,0]';
 
 				// Needs to be in a variable, otherwise account button can't be clicked. (Weird as fuck)
-				m_account = $("#account_button");
+				var m_account = $("#account_button");
 
 				m_account.click(); // Because tab must be open to steal data from it
 
@@ -2316,26 +2320,17 @@ XKit.extensions.xkit_patches = new Object({
 			if (XKit.post_listener.callbacks.length === 0) {
 				return;
 			}
-			var successful_count = 0;
-			var fail_count = 0;
 			for (var i = 0; i < XKit.post_listener.callbacks.length; i++) {
-
 				try {
 					XKit.post_listener.callbacks[i]();
-					successful_count++;
 				} catch (e) {
-					// console.log("Can not call callback with id " + XKit.post_listener.callback_ids[i] + ": " + e.message);
-					fail_count++;
+					console.error("Can not call callback with id " + XKit.post_listener.callback_ids[i] + ": " + e.message);
 				}
-
 			}
-			// console.log("[Post Listener] Ran " + XKit.post_listener.callbacks.length + " callbacks, " + successful_count + " successful, " + fail_count + " failed.");
 		};
 
 		if ($(".search_control.post_layout").length > 0) {
-
 			setTimeout(function() { XKit.post_listener.check(true); }, 400);
-
 		}
 
 		/**
@@ -2347,8 +2342,6 @@ XKit.extensions.xkit_patches = new Object({
 		 * @param {Function} callback - On click callback for notification
 		 */
 		XKit.notifications.add = function(message, type, sticky, callback) {
-
-				//alert($("#xkit-notifications").length);
 			if ($("#xkit-notifications").length <= 0) {
 				setTimeout(function() { XKit.notifications.add(message, type, sticky, callback); }, 500);
 				return;

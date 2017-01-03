@@ -303,6 +303,7 @@ XKit.extensions.one_click_reply = new Object({
 	},
 
 	JsAutoP: function(s) {
+		/* eslint id-length: off */
 
 		// From: http://ufku.com/personal/autop
 
@@ -646,15 +647,6 @@ XKit.extensions.one_click_reply = new Object({
 
 		obj = $(obj).parent();
 
-		if ($(obj).hasClass("note") === false || $(obj).hasClass("action") === true) {
-			// Must be in a sub-div.
-			if ($(obj).hasClass("action") === true) {
-				n_box = $(obj).parent();
-			} else {
-				n_box = $(obj).parentsUntil(".note").parent();
-			}
-		}
-
 		if ($(obj).hasClass("ui_note")) {
 			// New style notifications!
 			return XKit.extensions.one_click_reply.make_post_activity(obj, silent_mode);
@@ -717,8 +709,6 @@ XKit.extensions.one_click_reply = new Object({
 
 		// Example sentence:
 		// "<p><a href=\"%l\">%u</a> reblogged <a href=\"%p\">your post</a> and added:</p><blockquote><p>%r<p></blockquote>"
-
-		var sentence_p = post_url;
 
 		var user_name = "";
 		var user_url = "";
@@ -800,7 +790,7 @@ XKit.extensions.one_click_reply = new Object({
 			// Fetch the avatar, slugify it to sentence.
 			var avatar_url = $(obj).find(".avatar_frame").find(".avatar").attr('src');
 			// This is ugly but it works:
-			avatar_url_start = avatar_url.indexOf('.media.tumblr.com');
+			var avatar_url_start = avatar_url.indexOf('.media.tumblr.com');
 			if (avatar_url_start !== -1) {
 				avatar_url = "https://31." + avatar_url.substring(avatar_url_start + 1);
 			}
@@ -1034,7 +1024,7 @@ XKit.extensions.one_click_reply = new Object({
 		var avatar_url = $(m_obj).find(".avatar_frame").find(".avatar").attr('src');
 		// This is ugly but it works:
 		try {
-			avatar_url_start = avatar_url.indexOf('.media.tumblr.com');
+			var avatar_url_start = avatar_url.indexOf('.media.tumblr.com');
 		} catch (e) {
 			console.log("Can't fetch avatar.");
 		}
@@ -1148,7 +1138,7 @@ XKit.extensions.one_click_reply = new Object({
 			avatar_url = avatar_url.replace("_128.jpg", "_40.jpg");
 			// This is ugly but it works:
 			try {
-				avatar_url_start = avatar_url.indexOf('.media.tumblr.com');
+				var avatar_url_start = avatar_url.indexOf('.media.tumblr.com');
 			} catch (e) {
 				console.log("Can't fetch avatar.");
 			}

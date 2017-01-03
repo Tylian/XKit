@@ -54,7 +54,7 @@ XKit.extensions.show_originals = new Object({
 
 		XKit.extensions.show_originals.status = XKit.storage.get("show_originals", "status", "false");
 
-		xf_html = '<ul class="controls_section" id="xshow_originals_ul">' +
+		var xf_html = '<ul class="controls_section" id="xshow_originals_ul">' +
 			'<li class="section_header selected">SHOW ORIGINALS</li>' +
 			'<li class="no_push" style="height:36px;"><a href="#" id="xshoworiginals_button">' +
 			'<div class="hide_overflow" style="color: rgba(255, 255, 255, 0.5) !important; font-weight: bold; padding-left: 10px; padding-top: 8px;">Originals Only</div>' +

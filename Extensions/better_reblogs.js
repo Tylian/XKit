@@ -177,7 +177,6 @@ XKit.extensions.better_reblogs = new Object({
 			old_val = $(this).val();
 		}).change(function() {
 			var $el = $(this);
-			var val = $el.val();
 			$el.blur();
 			XKit.window.show("Warning", "Changing the reblog style requires refreshing the page. " +
                 "<br>Are you sure you wish to continue?",
@@ -338,7 +337,7 @@ XKit.extensions.better_reblogs = new Object({
 			var title = reblog_tree.find('.reblog-title').clone();
 
 			if (!reblog_tree.length) {
-				var content = $this.find(".reblog-list-item.contributed-content .reblog-content").clone();
+				let content = $this.find(".reblog-list-item.contributed-content .reblog-content").clone();
 				title = $this.find(".reblog-list-item.contributed-content .reblog-title").clone();
 				if (content.length) {
 					content.addClass("post_body");
@@ -350,7 +349,6 @@ XKit.extensions.better_reblogs = new Object({
 				return;
 			}
 
-			var cc = $this.find('.contributed-content');
 			reblog_tree.after('<div class="xkit-better-reblogs-old post_body"></div>');
 			reblog_tree.after(title);
 			title.removeClass("reblog-title");
@@ -358,9 +356,9 @@ XKit.extensions.better_reblogs = new Object({
 
 			var all_quotes = [];
 			reblog_tree.find(".reblog-list-item:not(.contributed-content)").each(function() {
-				var $this = $(this);
-				var content = $this.find('.reblog-content');
-				var author = $this.find('.reblog-tumblelog-name');
+				var $item = $(this);
+				var content = $item.find('.reblog-content');
+				var author = $item.find('.reblog-tumblelog-name');
 				var reblog_data = {
 					reblog_content: content.html() || '',
 					reblog_author: author.contents()[0].data || '',
@@ -394,8 +392,6 @@ XKit.extensions.better_reblogs = new Object({
 		$(posts).each(function() {
 
 			$(this).addClass("xkit-color-quoted");
-
-			var m_post = XKit.interface.post($(this));
 
 			var count = 0;
 
@@ -434,8 +430,8 @@ XKit.extensions.better_reblogs = new Object({
 	},
 
 	hex_to_rgb: function(hex) {
-
         // From: http://stackoverflow.com/questions/5623838/rgb-to-hex-and-hex-to-rgb
+        /* eslint id-length: off */
 
 		var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
 		return result ? {

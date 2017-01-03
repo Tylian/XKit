@@ -13,6 +13,7 @@ XKit.extensions.tweaks = new Object({
 	slow: true,
 	run_interval: 0,
 	run_interval_2: 0,
+	hide_bubble_interval: 0,
 
 	preferences: {
 
@@ -299,7 +300,6 @@ XKit.extensions.tweaks = new Object({
 	},
 
 	default_page_title: "",
-	hide_bubble_interval: "",
 
 	run: function() {
 		this.running = true;
@@ -328,7 +328,7 @@ XKit.extensions.tweaks = new Object({
 
 			XKit.extensions.tweaks.default_page_title = document.title;
 			$("#new_post_notice_container").remove();
-			hide_bubble_interval = setInterval(function() {
+			this.hide_bubble_interval = setInterval(function() {
 				document.title = XKit.extensions.tweaks.default_page_title;
 			}, 1000);
 
@@ -834,6 +834,7 @@ XKit.extensions.tweaks = new Object({
 			XKit.console.add("Tweaks, upload_photos: done.");
 
 			XKit.tools.add_function(function() {
+				/* globals tinyMCE */
 				Tumblr.Events.trigger("posts:load");
 				tinyMCE.execCommand("mceRepaint");
 				alert(JSON.stringify(tinyMCE.activeEditor.settings));
@@ -880,6 +881,7 @@ XKit.extensions.tweaks = new Object({
 		XKit.post_listener.remove("tweaks_dont_show_liked");
 		clearInterval(this.run_interval);
 		clearInterval(this.run_interval_2);
+		clearInterval(this.hide_bubble_interval);
 		XKit.post_listener.remove("tweaks_split_gear");
 		$(".xkit-small-blog-setting-link").remove();
 		$(".small_links.by-xkit").remove();

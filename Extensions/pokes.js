@@ -150,14 +150,14 @@ XKit.extensions.pokes = {
 					var storage_array = JSON.parse(XKit.storage.get("pokes", "pokemon_storage", ""));
 					if (storage_array !== "") {
 						var poke_id = $(this).data("pokeid");
-						var poke_gender = $(this).data("pokegender");
-						var poke_name = $(this).data("pokename");
-						var poke_wiki_name = poke_name;
+						var caught_gender = $(this).data("pokegender");
+						var caught_name = $(this).data("pokename");
+						var poke_wiki_name = caught_name;
 
-						if (poke_name.indexOf(" ") > -1) {
-							var firstWord = poke_name.split(" ")[0];
+						if (caught_name.indexOf(" ") > -1) {
+							var firstWord = caught_name.split(" ")[0];
 							if (firstWord == "Mega" || firstWord == "Primal") {
-								poke_wiki_name = poke_name.split(" ")[1];
+								poke_wiki_name = caught_name.split(" ")[1];
 							} else if (firstWord == "Cosplay") {
 								poke_wiki_name = "Cosplay Pikachu";
 							} else {
@@ -165,9 +165,9 @@ XKit.extensions.pokes = {
 							}
 						}
 
-						storage_array.push({ id: poke_id, gender: poke_gender, shiny: $(this).hasClass("pokes_shiny") });
+						storage_array.push({ id: poke_id, gender: caught_gender, shiny: $(this).hasClass("pokes_shiny") });
 						XKit.storage.set("pokes", "pokemon_storage", JSON.stringify(storage_array));
-						XKit.notifications.add("You caught a " + ($(this).hasClass("pokes_shiny") ? "shiny " : "") + poke_gender + " " + poke_name.charAt(0).toUpperCase() + poke_name.substr(1) + "!", "pokes", false, function() {
+						XKit.notifications.add("You caught a " + ($(this).hasClass("pokes_shiny") ? "shiny " : "") + caught_gender + " " + caught_name.charAt(0).toUpperCase() + caught_name.substr(1) + "!", "pokes", false, function() {
 							window.open("http://bulbapedia.bulbagarden.net/wiki/" + poke_wiki_name);
 						});
 						$(this).hide();
@@ -284,8 +284,8 @@ XKit.extensions.pokes = {
 
 		var sortFunction = function(dataAttr, optData) {
 			var up = ($('input.xkit-pokes-sorter#reverse-toggle').is(":checked") ? -1 : 1);
-			return function(a, b) {
-				return ($(b).data(dataAttr) || $(b).data(optData)) < ($(a).data(dataAttr) || $(a).data(optData)) ? up : -up;
+			return function(first, second) {
+				return ($(second).data(dataAttr) || $(second).data(optData)) < ($(first).data(dataAttr) || $(first).data(optData)) ? up : -up;
 			};
 		};
 
@@ -302,7 +302,7 @@ XKit.extensions.pokes = {
 									.prependTo("#xkit-loading_pokemon");
 		});
 		$('.xkit-pokes-sorter#reverse-toggle').change(function(e) {
-				 $("#xkit-loading_pokemon div.caught").sort(function(e) {return 1;}).prependTo("#xkit-loading_pokemon");
+				 $("#xkit-loading_pokemon div.caught").sort(function(i) {return 1;}).prependTo("#xkit-loading_pokemon");
 		});
 
 		$(".xkit-pokes-lightbox").animate({
@@ -361,17 +361,17 @@ XKit.extensions.pokes = {
 			var caught = JSON.parse(XKit.storage.get("pokes", "pokemon_storage", "[]"));
 			var header = "<p>You've caught " + caught.length + " total Pokémon!<br/> That's ";
 			var checklist = [];
-			var m_html = "";
+			var caught_html = "";
 			$.each(caught, function(index, value) {
 				var sprite = mdata[value.id].sprite;
 				if (value.shiny) {
 					sprite = mdata[value.id].sprite_shiny || mdata[value.id].sprite;
 				}
-				m_html = m_html + "<div class='caught" + (value.shiny ? " pokes_shiny" : "") + "' data-pokeid='" + value.id + "' data-pokegender='" + value.gender + "' data-pokespecies='" + mdata[value.id].name + "' data-pokenick='" + (value.nickname || "") + "' data-array_index=" + index + "><img class='caught poke_sprite' src='" + sprite + "' /></div>";
+				caught_html = caught_html + "<div class='caught" + (value.shiny ? " pokes_shiny" : "") + "' data-pokeid='" + value.id + "' data-pokegender='" + value.gender + "' data-pokespecies='" + mdata[value.id].name + "' data-pokenick='" + (value.nickname || "") + "' data-array_index=" + index + "><img class='caught poke_sprite' src='" + sprite + "' /></div>";
 				if (checklist.indexOf(value.id) === -1) checklist.push(value.id);
 			});
 			header += checklist.length + " out of " + mdata.length + " different species of Pokémon!</p>";
-			$("#xkit-loading_pokemon").html(m_html);
+			$("#xkit-loading_pokemon").html(caught_html);
 			$(".caught_stats").html(header);
 			$(".xkit-pokes-pc-pokemon .caught").click(function() {
 				if ($(this).hasClass("active")) {

@@ -70,7 +70,7 @@ XKit.extensions.audio_downloader = new Object({
 					}
 
 					if (obj.posts[0].audio_type == "tumblr") {
-						m_url = obj.posts[0].audio_url;
+						var m_url = obj.posts[0].audio_url;
 						if (m_url.indexOf('https://www.tumblr.com/audio_file/') === 0) {
 							m_url = 'http://a.tumblr.com/' + m_url.substr(m_url.lastIndexOf('/') + 1) + 'o1.mp3';
 						}

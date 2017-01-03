@@ -109,7 +109,6 @@ XKit.extensions.tagviewer = new Object({
 
 			$(reblogs).each(function() {
 
-				var blog_username = this.blog_url;
 				var blog_name = this.blog_name;
 				var post_id = this.post_id;
 				var blog_avatar = this.avatar_url[48];
@@ -132,8 +131,8 @@ XKit.extensions.tagviewer = new Object({
 
 						try {
 
-							var data = JSON.parse(response.responseText);
-							var post = data.response.posts[0];
+							var responseData = JSON.parse(response.responseText);
+							var post = responseData.response.posts[0];
 
 							if (typeof post.tags !== "undefined") {
 								if (post.tags.length > 0) {

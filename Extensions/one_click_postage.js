@@ -258,7 +258,7 @@ XKit.extensions.one_click_postage = new Object({
 
 		if (XKit.extensions.one_click_postage.preferences.default_blog.value !== "") {
 			if (XKit.extensions.one_click_postage.blogs_list.indexOf(XKit.extensions.one_click_postage.preferences.default_blog.value) !== -1) {
-				channel_id = XKit.extensions.one_click_postage.preferences.default_blog.value;
+				var channel_id = XKit.extensions.one_click_postage.preferences.default_blog.value;
 				blog_id = channel_id;
 			} else {
 				$(obj).removeClass("xkit-button-working");
@@ -267,16 +267,13 @@ XKit.extensions.one_click_postage = new Object({
 			}
 		}
 
-		m_object = {
+		var m_object = {
 			channel_id: blog_id,
 			reblog_id: post_id,
 			reblog_key: reblog_key,
 			form_key: form_key,
 			post_type: ""
 		};
-
-		var tags = "";
-		var caption = "";
 
 		GM_xmlhttpRequest({
 			method: "POST",
@@ -1102,6 +1099,10 @@ XKit.extensions.one_click_postage = new Object({
 	close_menu: function(obj, force) {
 		clearTimeout(XKit.extensions.one_click_postage.menu_closer_int);
 
+		// I don't know what this is doing
+		// but I don't want to break its current behavior
+		/* eslint no-undef: off */
+
 		if (force === true) {
 			last_object = null;
 			XKit.extensions.one_click_postage.user_on_box = false;
@@ -1308,11 +1309,6 @@ XKit.extensions.one_click_postage = new Object({
 			data.post.two = "";
 		}
 
-		var photo_post = false;
-		if (data.post.type === "photo" || data.post.type === "photoset") {
-			photo_post = true;
-		}
-
 		caption = XKit.tools.replace_all(caption, "\n", "<br/>");
 
 		var variable_to_use = "post[two]";
@@ -1439,10 +1435,6 @@ XKit.extensions.one_click_postage = new Object({
 							}
 						}
 					} else {
-						var m_error = "Unknown error at svc/post/update";
-						if (typeof mdata.error !== "undefined") {
-							m_error = mdata.error;
-						}
 						XKit.extensions.one_click_postage.show_error("OCP10", state);
 						$(m_button).removeClass("xkit-one-click-reblog-working");
 					}

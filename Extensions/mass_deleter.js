@@ -40,7 +40,7 @@ XKit.extensions.mass_deleter = new Object({
 
 		if ($("#drafts_plus_sidebar").length > 0) {
 
-			xf_html = '<li class="no_push">' +
+			var xf_html = '<li class="no_push">' +
 					'<a href="#" class="customize xkit-mass-deleter" id="xkit-mass-deleter-100">' +
 						'<div class="hide_overflow">Delete 100 Drafts</div>' +
 					'</a>' +
@@ -260,7 +260,7 @@ XKit.extensions.mass_deleter = new Object({
 
 	init_likes: function() {
 
-		xf_html = '<ul class="controls_section" id="xkit-mass-deleter-ul">' +
+		var xf_html = '<ul class="controls_section" id="xkit-mass-deleter-ul">' +
 			'<li class="no_push">' +
 				'<a href="#" class="customize xkit-mass-deleter" onclick="return false;" id="xkit-mass-deleter-100">' +
 					'<div class="hide_overflow">Unlike 100 Likes</div>' +

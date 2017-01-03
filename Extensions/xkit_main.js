@@ -84,7 +84,9 @@
 				XKit.console.add("Disabled extensions: " + XKit.extensions.xkit_main.disabled_extensions);
 				XKit.post_listener.check();
 				setTimeout(function() {
-					var diff = new Date().getTime() - start;
+					// defined in xkit.js
+					/* globals xkit_global_start */
+					var diff = new Date().getTime() - xkit_global_start;
 					XKit.console.add("Booted XKit up in " + diff + " milliseconds.");
 				}, 1);
 			}
@@ -205,6 +207,8 @@
 				} else {
 					XKit.extensions.xkit_main.disabled_extensions = XKit.extensions.xkit_main.disabled_extensions + ", " + extension_id + "(error)";
 				}
+				// defined in xkit.js
+				/* globals show_error_reset */
 				show_error_reset("Can't run " + extension_id + ":" + e.message);
 				if (!dont_run_next) {
 					XKit.extensions.xkit_main.run_next_extension();

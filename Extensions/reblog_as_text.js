@@ -65,19 +65,19 @@ XKit.extensions.reblog_as_text = new Object({
 					}, 100);
 					return;
 				}
-				var l = jQuery(".post_form_wrapper_inner");
-				var k = l.height();
-				l.empty().append(jQuery('<div class="dummy"/>').height(k));
+				var inner = jQuery(".post_form_wrapper_inner");
+				var height = inner.height();
+				inner.empty().append(jQuery('<div class="dummy"/>').height(height));
 				if (this.destroy_preview) {
 					this.destroy_preview();
 				}
-				Tumblr.PostForms.change_reblog_type("text", jQuery('body').attr('data-page-root'), l, k, "");
+				Tumblr.PostForms.change_reblog_type("text", jQuery('body').attr('data-page-root'), inner, height, "");
 			}
 		}
 
 		try {
 			var script = document.createElement("script");
-			script.textContent = script.textContent + (true ? "(" : "") + m_function.toString() + (true ? ")();" : "");
+			script.textContent = script.textContent + "(" + m_function.toString() + ")();";
 			document.body.appendChild(script);
 		} catch (e) { alert(e.message); }
 
@@ -105,11 +105,6 @@ XKit.extensions.reblog_as_text = new Object({
 			return;
 		}
 
-		var add_tag = "";
-		var xas;
-		var xae;
-		var last_point = 0;
-		var do_tags = true;
 		var tag_to_be_added = "";
 		var tags = to_add.split(",");
 		for (var i = 0; i < tags.length; i++) {

@@ -248,8 +248,8 @@ XKit.extensions.xinbox = new Object({
 				Tumblr.Events.trigger("ask:form:open", {
 					recipient: e_target.attr("data-tumblelog-name")
 				});
-			} catch (e) {
-				console.log("Error: " + e.message);
+			} catch (err) {
+				console.error("Error: " + err.message);
 			}
 
 		}, true, m_post_id);
@@ -497,7 +497,7 @@ XKit.extensions.xinbox = new Object({
 			return;
 		}
 
-		xf_html = '<ul class="controls_section" id="xinbox_sidebar">' +
+		var xf_html = '<ul class="controls_section" id="xinbox_sidebar">' +
 			'<li class="" id="xinbox_mass_edit_li" style="height: 36px;">' +
 				'<a href="#" class="customize" id="xinbox_mass_edit_button">' +
 					'<div class="hide_overflow" style="color: rgba(255, 255, 255, 0.5) !important; font-weight: bold; padding-left: 10px; padding-top: 8px;">Mass Edit Mode</div>' +
@@ -641,7 +641,7 @@ XKit.extensions.xinbox = new Object({
 		var button_default = "No messages selected";
 
 		if (current_msg > msg_count) {
-			selected_post_count = 0;
+			this.selected_post_count = 0;
 			XKit.window.show("Done!", "All messages deleted successfully.", "info", "<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
 			$("#xkit_delete_selected").html(button_default);
 			$("#xkit_delete_selected").addClass("disabled");
@@ -1017,14 +1017,13 @@ XKit.extensions.xinbox = new Object({
 				onload: function(response) {
 					// We are done!
 					XKit.interface.kitty.set(response.getResponseHeader("X-tumblr-kittens"));
-					var mdata = null;
 					try {
-						mdata = $.parseJSON(response.responseText);
+						var responseData = $.parseJSON(response.responseText);
 					} catch (e) {
 						XKit.extensions.xinbox.show_error("Server returned a non-JSON object. Maybe server overloaded, try again later. Error: " + e.message);
 						return;
 					}
-					if (mdata.errors === false) {
+					if (responseData.errors === false) {
 						$(post_div).fadeOut('slow', function() {
 							$(post_div).parent().remove();
 							XKit.tools.add_function(function() {
@@ -1051,7 +1050,7 @@ XKit.extensions.xinbox = new Object({
 	},
 
 	poke_tinymce: function(post_id) {
-		source = " if (tinyMCE && tinyMCE.get('ask_answer_field_" + post_id + "')) {  " +
+		var source = " if (tinyMCE && tinyMCE.get('ask_answer_field_" + post_id + "')) {  " +
 						" document.getElementById('ask_answer_field_" + post_id + "').value = (tinyMCE.get('ask_answer_field_" + post_id + "').getContent()); " +
 						" } ";
 

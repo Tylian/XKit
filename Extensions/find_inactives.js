@@ -121,9 +121,7 @@ XKit.extensions.find_inactives = new Object({
 
 				try {
 
-					var total = XKit.extensions.find_inactives.people_count;
 					var perc = self.page_tracker.get_progress();
-
 
 					XKit.progress.value("find-inactives", perc);
 

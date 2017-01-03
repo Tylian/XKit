@@ -229,7 +229,6 @@ XKit.extensions.notificationblock = new Object({
 	on_click: function(e) {
 
 		var obj = e.target || e.srcElement;
-		var parent = $(obj).parentsUntil("#posts");
 
 		if (XKit.extensions.notificationblock.preferences.ask.value === false) {
 

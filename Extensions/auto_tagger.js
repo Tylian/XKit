@@ -147,10 +147,9 @@ XKit.extensions.auto_tagger = new Object({
 		},
 	},
 
-	new_post_check_interval: 0,
 	run: function() {
 		this.running = true;
-		new_post_check_interval = setInterval(function() { XKit.extensions.auto_tagger.new_post_check(); }, 1000);
+		setInterval(function() { XKit.extensions.auto_tagger.new_post_check(); }, 1000);
 	},
 
 	frame_run: function() {
@@ -234,6 +233,8 @@ XKit.extensions.auto_tagger = new Object({
 	},
 
 	return_date_tag: function() {
+		// defined in moment.js
+		/* globals moment */
 
 		var nowdate = new Date();
 		var nowdatem = moment(nowdate);

@@ -28,8 +28,8 @@ XKit.extensions.retags = {
 
 	observer: new MutationObserver(function(ms) {
 		var notesProcessed = false;
-		ms.forEach(function(m) {
-			var $baseMutatedElements = $(m.addedNodes);
+		ms.forEach(function(mutation) {
+			var $baseMutatedElements = $(mutation.addedNodes);
 			var nonPopoverNotes = $baseMutatedElements.find('.note:not(.ui_post_badge)');
 			if ($baseMutatedElements.hasClass('note-list')) {
 				//remove existing retags items (if tabbing between popover views)
@@ -208,9 +208,9 @@ XKit.extensions.retags = {
 		// some of the cached posts, so we need to partition the keys like so.
 		var settingKeys = [], postIds = [];
 		Object.keys(cache).forEach(function(key) {
-			var m;
-			if ((m = key.match(/^post_([0-9]+)$/))) {
-				postIds.push(parseInt(m[1], 10));
+			var id_match;
+			if ((id_match = key.match(/^post_([0-9]+)$/))) {
+				postIds.push(parseInt(id_match[1], 10));
 			} else {
 				settingKeys.push(key);
 			}
@@ -218,7 +218,7 @@ XKit.extensions.retags = {
 
 		// Now sort the post IDs in descending order and take only the first
 		// few, so we only keep the newest posts.
-		postIds.sort(function(a, b) { return b - a; });
+		postIds.sort(function(id_one, id_two) { return id_two - id_one; });
 		if (postIds.length > XKit.extensions.retags.POST_CACHE_CLEAR_PRESERVED) {
 			postIds.length = XKit.extensions.retags.POST_CACHE_CLEAR_PRESERVED;
 		}

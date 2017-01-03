@@ -329,7 +329,7 @@ XKit.extensions.profiler = new Object({
 		var m_blogs = XKit.tools.get_blogs();
 		for (var i = 0; i < m_blogs.length; i++) {
 			if (m_blogs[i] !== "") {
-				blog_id = m_blogs[i];
+				var blog_id = m_blogs[i];
 				break;
 			}
 		}
@@ -358,6 +358,8 @@ XKit.extensions.profiler = new Object({
 
 				var data = JSON.parse(response.responseText).response;
 				var dtx = new Date(data.blog.updated * 1000);
+				// defined in moment.js
+				/* globals moment */
 				var dt = moment(dtx);
 
 				$("#xkit-profiler-last-update").removeClass("loading-up").html(dt.from(new Date()));
@@ -389,13 +391,13 @@ XKit.extensions.profiler = new Object({
 					method: "GET",
 					url: new_url,
 					json: true,
-					onerror: function(response) {
+					onerror: function(next_response) {
 						XKit.extensions.profiler.display_error(m_window_id);
 						return;
 					},
-					onload: function(response) {
-						var data = JSON.parse(response.responseText).response;
-						var date = new Date(data.posts[0].timestamp * 1000);
+					onload: function(next_response) {
+						var next_data = JSON.parse(next_response.responseText).response;
+						var date = new Date(next_data.posts[0].timestamp * 1000);
 						$("#xkit-profiler-since").removeClass("loading-up").html(date.getFullYear());
 					}
 				});

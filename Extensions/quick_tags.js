@@ -154,21 +154,21 @@ XKit.extensions.quick_tags = new Object({
 				var m_post_object = XKit.interface.edit_post_object(data.data, { tags: m_tags });
 
 				// Now submit it back to the server:
-				XKit.interface.edit(m_post_object, function(data) {
+				XKit.interface.edit(m_post_object, function(edit_data) {
 
 					XKit.interface.switch_control_button($(m_button), false);
 
-					if (data.error === false && data.data.errors === false) {
+					if (edit_data.error === false && edit_data.data.errors === false) {
 
 						XKit.interface.switch_control_button($(m_button), false);
 						XKit.interface.update_view.tags(m_post, m_tags);
 
 					} else {
 						// Oops?
-						if (data.error === true) {
-							XKit.window.show("Unable to edit post", "Something went wrong, my apologizes.<br/>Please try again later or file a bug report with the error code:<br/>QT01B" + data.status + "<br/>" + data.message, "error", "<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
+						if (edit_data.error === true) {
+							XKit.window.show("Unable to edit post", "Something went wrong, my apologizes.<br/>Please try again later or file a bug report with the error code:<br/>QT01B" + edit_data.status + "<br/>" + edit_data.message, "error", "<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
 						} else {
-							XKit.window.show("Unable to edit post", "Something went wrong, my apologizes.<br/>Please try again later or file a bug report with the error code:<br/>QT01A" + data.status + "<br/>" + data.data.errors, "error", "<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
+							XKit.window.show("Unable to edit post", "Something went wrong, my apologizes.<br/>Please try again later or file a bug report with the error code:<br/>QT01A" + edit_data.status + "<br/>" + edit_data.data.errors, "error", "<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
 						}
 					}
 
@@ -576,7 +576,6 @@ XKit.extensions.quick_tags = new Object({
 					return;
 				}
 
-				var m_object = {};
 				XKit.extensions.quick_tags.tag_array[m_id].title = title;
 				XKit.extensions.quick_tags.tag_array[m_id].tags = tags;
 
@@ -651,7 +650,6 @@ XKit.extensions.quick_tags = new Object({
 			XKit.storage.set("quick_tags", "user_tags", JSON.stringify(XKit.extensions.quick_tags.tag_array));
 
 			XKit.window.close();
-			XKit.extensions.quick_tags.cpanel(m_div);
 			XKit.extensions.xkit_preferences.restart_extension("quick_tags");
 
 		});

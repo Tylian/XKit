@@ -23,7 +23,7 @@ XKit.extensions.tag_replacer = new Object({
 		XKit.tools.init_css("tag_replacer");
 
 		if ($("#tag_replacer.ul").length === 0) {
-			xf_html = '<ul class="controls_section" id="tag_replacer_ul">' +
+			var xf_html = '<ul class="controls_section" id="tag_replacer_ul">' +
 				'<li class="section_header selected">Tag Replacer</li>' +
 				'<li class="no_push" style="height: 36px;"><a data-url="' + XKit.interface.where().user_url + '" href="#" id="tag_replacer_button">' +
 				'<div class="hide_overflow" style="color: rgba(255, 255, 255, 0.5) !important; font-weight: bold; padding-left: 10px; padding-top: 8px;">Replace a tag<span class="sub_control link_arrow icon_right icon_arrow_carrot_right"></span></div>' +
@@ -205,12 +205,12 @@ XKit.extensions.tag_replacer = new Object({
 
 			var m_post_object = XKit.interface.edit_post_object(data.data, { tags: tags_to_post });
 
-			XKit.interface.edit(m_post_object, function(data) {
+			XKit.interface.edit(m_post_object, function(edit_data) {
 
-				var perc = Math.round((XKit.extensions.tag_replacer.p_array_index * 100) / XKit.extensions.tag_replacer.p_array.length);
-				XKit.progress.value("tag-replacer-pb", perc);
+				var progress_perc = Math.round((XKit.extensions.tag_replacer.p_array_index * 100) / XKit.extensions.tag_replacer.p_array.length);
+				XKit.progress.value("tag-replacer-pb", progress_perc);
 
-				if (data.error === false && data.data.errors === false) {
+				if (edit_data.error === false && edit_data.data.errors === false) {
 
 					console.log("Post " + m_post + " updated successfully.");
 

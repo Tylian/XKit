@@ -1,5 +1,5 @@
 var available_extensions = [];
-var start = Date.now();  // log start timestamp
+var xkit_global_start = Date.now();  // log start timestamp
 
 (function() {
 
@@ -1112,7 +1112,7 @@ function xkit_init() {
 
 function xkit_check_storage() {
 	if (storage_used === -1) {
-		setTimeout(function() { xkit_check_storage(); }, 100);
+		setTimeout(function() { xkit_check_storage(); }, 2000);
 		return;
 	}
 

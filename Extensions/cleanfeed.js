@@ -74,7 +74,7 @@ XKit.extensions.cleanfeed = new Object({
 		}
 
 
-		xf_html = '<ul class="controls_section" id="xcleanfeed_ul">' +
+		var xf_html = '<ul class="controls_section" id="xcleanfeed_ul">' +
 			'<li class="section_header selected">CLEANFEED</li>' +
 			'<li class="no_push" style="height: 36px;"><a href="#" id="xcleanfeed_button">' +
 			'<div class="hide_overflow" style="color: rgba(255, 255, 255, 0.5) !important; font-weight: bold; padding-left: 10px; padding-top: 8px;">Filtering</div>' +

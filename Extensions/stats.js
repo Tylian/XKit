@@ -7,6 +7,7 @@
 //* BETA false **//
 
 XKit.extensions.stats = new Object({
+	/* eslint id-length: off */
 
 	running: false,
 
@@ -186,7 +187,7 @@ XKit.extensions.stats = new Object({
 
 				try {
 
-					data = JSON.parse(response.responseText).response;
+					var data = JSON.parse(response.responseText).response;
 
 					for (var i = 0; i < data.posts.length; i++) {
 
@@ -481,7 +482,7 @@ XKit.extensions.stats = new Object({
 			m_object["post[one]"] = "XStats Results for " + blog_url;
 		}
 
-		m_text = "<p><b>Top 4 blogs</b></p><ul>";
+		var m_text = "<p><b>Top 4 blogs</b></p><ul>";
 
 		for (var user_i = 0; user_i < 4; user_i++) {
 			var perc = Math.round((users[user_i].count * 100) / posts.length);

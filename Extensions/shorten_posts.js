@@ -246,17 +246,13 @@ XKit.extensions.shorten_posts = new Object({
 		if (isNaN(XKit.extensions.shorten_posts.preferences.height.value) === true) {
 			XKit.console.add("Invalid post height check interval, reverting to default: not a number.");
 			XKit.extensions.shorten_posts.preferences.height.value = XKit.extensions.shorten_posts.height_default;
-			return true;
 		} else {
 			var m_height = XKit.extensions.shorten_posts.preferences.height.value;
 			if (m_height > XKit.extensions.shorten_posts.height_max || m_height < XKit.extensions.shorten_posts.height_min) {
 				XKit.extensions.shorten_posts.preferences.height.value = XKit.extensions.shorten_posts.height_default;
 				XKit.console.add("Invalid post height check interval, reverting to default: too small or big.");
 			}
-			return true;
 		}
-
-		return false;
 
 	},
 

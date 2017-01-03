@@ -131,7 +131,7 @@ XKit.extensions.jk_across_pages = new Object({
 			XKit.tools.remove_css("jk_across_pages");
 			this.running = false;
 		} catch (err) {
-			if (console && console.error) console.error(e);
+			if (console && console.error) console.error(err);
 		}
 	}
 

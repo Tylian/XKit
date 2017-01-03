@@ -70,7 +70,7 @@ XKit.extensions.hideavatars = new Object({
 
 	load_blogs: function() {
 
-		m_storage = XKit.storage.get("hideavatars", "blognames", "");
+		var m_storage = XKit.storage.get("hideavatars", "blognames", "");
 
 		if (m_storage !== "") {
 			try {
@@ -114,7 +114,7 @@ XKit.extensions.hideavatars = new Object({
 			cat_list = "<div class=\"xkit-hideavatars-no-blognames\">You have no blogs set.</div>";
 		} else {
 
-			for (var i = 0; i < XKit.extensions.hideavatars.blognames.length; i++) {
+			for (let i = 0; i < XKit.extensions.hideavatars.blognames.length; i++) {
 
 				cat_list = cat_list + "<div class=\"xkit-hideavatars-cp-item\" data-id=\"" + XKit.extensions.hideavatars.blognames[i].id + "\">" + XKit.extensions.hideavatars.blognames[i].title + "</div>";
 
@@ -175,7 +175,7 @@ XKit.extensions.hideavatars = new Object({
 
 				XKit.extensions.hideavatars.load_blogs();
 
-				for (var i = 0; i < XKit.extensions.hideavatars.blognames.length; i++) {
+				for (let i = 0; i < XKit.extensions.hideavatars.blognames.length; i++) {
 
 					if (m_cat_obj.id === XKit.extensions.hideavatars.blognames[i].id) {
 

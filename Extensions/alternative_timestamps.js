@@ -6,6 +6,9 @@
 //* FRAME false **//
 //* BETA true **//
 
+// defined in moment.js
+/* globals moment */
+
 XKit.extensions.alternative_timestamps = new Object({
 
 	running: false,
@@ -125,8 +128,8 @@ XKit.extensions.alternative_timestamps = new Object({
 	},
 
 	escape_raw: function(full_match, raw_block) {
-		return raw_block.replace(/./g, function(c) {
-			return '\\' + c;
+		return raw_block.replace(/./g, function(char) {
+			return '\\' + char;
 		});
 	},
 

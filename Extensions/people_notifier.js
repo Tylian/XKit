@@ -221,7 +221,6 @@ XKit.extensions.people_notifier = new Object({
 					var do_continue_lads = true;
 					var lad_count = -1;
 					var found_count = 0;
-					var post_id = 0;
 
 					while (do_continue_lads) {
 
@@ -311,7 +310,7 @@ XKit.extensions.people_notifier = new Object({
 		} else {
 
 			var current_ms = new Date().getTime();
-			for (var i = 0; i < this.blogs.length; i++) {
+			for (let i = 0; i < this.blogs.length; i++) {
 
 				m_html = m_html + '<li style="padding-top: 2px; height: 24px;" id="xkit-people-notifier-for---' + this.blogs[i].url + '" data-url="' + this.blogs[i].url + '" class="no_push xkit-people-notifier-person" draggable="true">' +
 								'<img src="https://api.tumblr.com/v2/blog/' + this.blogs[i].url + '.tumblr.com/avatar/16" class="people-notifier-avatar">' +
@@ -383,7 +382,7 @@ XKit.extensions.people_notifier = new Object({
 		$(document).on("drop", ".xkit-people-notifier-person", function(e) {
 			var half_div_height = 13;
 			var index_of_object_with_property = function(array, property_name, property_value) {
-				for (var i = 0; i < array.length; i++) {
+				for (let i = 0; i < array.length; i++) {
 					if (array[i][property_name] === property_value) {
 						return i;
 					}
@@ -487,7 +486,7 @@ XKit.extensions.people_notifier = new Object({
 
 			$("#xkit-people-notifier-create").click(function() {
 
-				to_add = $("#xkit-people-notifier-add-url").val().toLowerCase();
+				var to_add = $("#xkit-people-notifier-add-url").val().toLowerCase();
 
 				if ($.trim(to_add) === "") {
 					XKit.window.close();

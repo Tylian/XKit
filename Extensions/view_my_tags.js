@@ -176,14 +176,11 @@ XKit.extensions.view_my_tags = new Object({
 					$(".xkit-view-my-tags-tag").removeClass("xkit-view-tags-hidden");
 				}
 
-				var m_count = 0;
-
 				$(".xkit-view-my-tags-tag").each(function() {
 
 					if ($(this).html().toLowerCase().indexOf(m_value) !== -1) {
 
 						$(this).removeClass("xkit-view-tags-hidden");
-						m_count++;
 
 					} else {
 

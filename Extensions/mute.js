@@ -50,8 +50,7 @@ XKit.extensions.mute = new Object({
 
 			$("#xkit-mute-button").click(function() {
 
-				var m_username = $(this).attr('data-username');
-				var user_url = m_username;
+				var user_url = $(this).attr('data-username');
 
 				if (XKit.extensions.mute.return_user_object(user_url) !== -1) {
 
@@ -144,7 +143,7 @@ XKit.extensions.mute = new Object({
 					$(document).on("click", ".xkit-mute-button-" + user_url, XKit.extensions.mute.menu_clicked_new);
 
 					return "<li>" +
-						"<a data-url=\"" + user_url + "\" class=\"xkit-mute-button-" + user_url + " xkit-mute xkit-new-menu-fix\">" +
+						"<a data-url=\"" + user_url + "\" class=\"" + m_class + " xkit-mute-button-" + user_url + " xkit-mute xkit-new-menu-fix\">" +
 							"<span class=\"hide_overflow\">" + m_sentence + "</span>" +
 						"</a>" +
 					"</li>";
@@ -188,7 +187,7 @@ XKit.extensions.mute = new Object({
 		$(document).on("click", ".xkit-mute-button-" + user_url, XKit.extensions.mute.menu_clicked_new);
 
 		m_html = "<li>" +
-				"<a style=\"background-image: none !important;\" data-url=\"" + user_url + "\" class=\"xkit-mute-button-" + user_url + " xkit-mute xkit-new-menu-fix\">" +
+				"<a style=\"background-image: none !important;\" data-url=\"" + user_url + "\" class=\"xkit-mute-button-" + user_url + " xkit-mute xkit-new-menu-fix " + m_class + "\">" +
 					"<span class=\"hide_overflow\">" + m_sentence + "</span>" +
 				"</a>" +
 			"</li>";
@@ -268,7 +267,7 @@ XKit.extensions.mute = new Object({
 			XKit.extensions.mute.muted = [];
 		} else {
 			try {
-				m_parsed = JSON.parse(m_list);
+				var m_parsed = JSON.parse(m_list);
 				var m_convert = false;
 
 				if (typeof m_parsed.list === "undefined" || typeof m_parsed.version === "undefined") {
@@ -367,8 +366,6 @@ XKit.extensions.mute = new Object({
 		$('.tumblelog_menu_button').bind('click', XKit.extensions.mute.add_mute_link);
 
 		var update_rects = false;
-
-		var m_posts = ".post.is_regular, .post.is_note";
 
 		if (rethink === true) {
 
@@ -597,7 +594,7 @@ XKit.extensions.mute = new Object({
 		}
 
 
-		m_html =	"<div class=\"xkit-mute-options\">" +
+		var m_html =	"<div class=\"xkit-mute-options\">" +
 					"<div data-type=\"regular\" class=\"xkit-mute-option regular " + m_regular_class + "\">&nbsp;</div>" +
 					"<div data-type=\"asks\" class=\"xkit-mute-option asks " + m_asks_class + "\">&nbsp;</div>" +
 					"<div data-type=\"photo\" class=\"xkit-mute-option photo " + m_photo_class + "\">&nbsp;</div>" +
@@ -725,9 +722,9 @@ XKit.extensions.mute = new Object({
 
 			var m_username = $(this).attr('data-user-name');
 
-			for (var i = 0; i < XKit.extensions.mute.muted.length; i++) {
-				if (XKit.extensions.mute.muted[i].username === m_username) {
-					XKit.extensions.mute.muted.splice(i, 1);
+			for (var j = 0; j < XKit.extensions.mute.muted.length; j++) {
+				if (XKit.extensions.mute.muted[j].username === m_username) {
+					XKit.extensions.mute.muted.splice(j, 1);
 					XKit.extensions.mute.save();
 					XKit.extensions.mute.do_posts(true);
 					XKit.extensions.mute.cpanel(mdiv);

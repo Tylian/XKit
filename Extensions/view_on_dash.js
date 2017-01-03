@@ -99,7 +99,7 @@ XKit.extensions.view_on_dash = new Object({
 
 		$("#xkit-view-on-dash-ok").click(function() {
 
-			to_add = $("#xkit-view-on-dash-input-url").val().toLowerCase();
+			var to_add = $("#xkit-view-on-dash-input-url").val().toLowerCase();
 
 			if ($.trim(to_add) === "") {
 				XKit.window.close();
@@ -188,7 +188,6 @@ XKit.extensions.view_on_dash = new Object({
 
 		var m_html = "<li class=\"post_container\">";
 		var post_class = "";
-		var additional_classes_for_post = "";
 
 		var post_tags = "";
 		var post_contents = "";
@@ -329,7 +328,7 @@ XKit.extensions.view_on_dash = new Object({
 
 					if (row_count >= 2) {
 
-						for (var m = 1; m < row_count; m++) {
+						for (var j = 1; j < row_count; j++) {
 
 							var photo_height = (m_width * XKit.extensions.view_on_dash.get_photo_height(data, m_temp_photo, "500")) / 500;
 
@@ -540,12 +539,12 @@ XKit.extensions.view_on_dash = new Object({
 						headers: {
 							"X-tumblr-form-key": XKit.interface.form_key(),
 						},
-						onerror: function(response) {
+						onerror: function(_response) {
 							alert("Can't process like/unlike, please try again later or file for a bug report at http://new-xkit-extension.tumblr.com/ask.");
 							// Revert changes.
 							$(m_icon_obj).toggleClass("liked");
 						},
-						onload: function(response) {
+						onload: function(_response) {
 							// Do nothing except a little dance.
 						}
 					});
@@ -612,7 +611,7 @@ XKit.extensions.view_on_dash = new Object({
 			onload: function(response) {
 				try {
 
-					data = JSON.parse(response.responseText);
+					var data = JSON.parse(response.responseText);
 
 					$("#view-on-dash-content").removeClass("loading");
 
@@ -728,10 +727,10 @@ XKit.extensions.view_on_dash = new Object({
 						if ($("#view-on-dash-loader-box").length > 0) { return; }
 						if ($(this).hasClass("disabled")) { return; }
 
-						var page = parseInt($("#view-on-dash-header").attr('data-page')) + 1;
-						var username = $("#view-on-dash-header").attr('data-username');
+						var this_page = parseInt($("#view-on-dash-header").attr('data-page')) + 1;
+						var this_username = $("#view-on-dash-header").attr('data-username');
 
-						XKit.extensions.view_on_dash.view(username, (page * 20), page, type);
+						XKit.extensions.view_on_dash.view(this_username, (this_page * 20), this_page, type);
 
 					});
 
@@ -741,10 +740,10 @@ XKit.extensions.view_on_dash = new Object({
 						if ($("#view-on-dash-loader-box").length > 0) { return; }
 						if ($(this).hasClass("disabled")) { return; }
 
-						var page = parseInt($("#view-on-dash-header").attr('data-page')) - 1;
-						var username = $("#view-on-dash-header").attr('data-username');
+						var this_page = parseInt($("#view-on-dash-header").attr('data-page')) - 1;
+						var this_username = $("#view-on-dash-header").attr('data-username');
 
-						XKit.extensions.view_on_dash.view(username, (page * 20), page, type);
+						XKit.extensions.view_on_dash.view(this_username, (this_page * 20), this_page, type);
 
 					});
 

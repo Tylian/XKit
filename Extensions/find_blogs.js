@@ -108,7 +108,7 @@ XKit.extensions.find_blogs = new Object({
 
 		if (XKit.interface.where().user_url === "") { return; }
 
-		xf_html = '<ul class="controls_section" id="find_blogs_ul">' +
+		var xf_html = '<ul class="controls_section" id="find_blogs_ul">' +
 			'<li class="section_header selected">FIND BLOGS</li>' +
 			'<li class="no_push" style="height: 36px;"><a href="#" onclick="return false;" id="find_blogs_button">' +
 				'<div class="hide_overflow" style="color: rgba(255, 255, 255, 0.5) !important; font-weight: bold; padding-left: 10px; padding-top: 8px;">Similar to ' + XKit.interface.where().user_url + '<span class="sub_control link_arrow arrow_right"></span></div>' +
@@ -196,12 +196,15 @@ XKit.extensions.find_blogs = new Object({
 			},
 			onload: function(response) {
 				try {
-					data = JSON.parse(response.responseText);
-					if (data.following === true) { return callback(true, m_url); } else { return callback(false, m_url); }
+					var data = JSON.parse(response.responseText);
+					if (data.following === true) {
+						return callback(true, m_url);
+					} else {
+						return callback(false, m_url);
+					}
 				} catch (e) {
 					return callback(false, m_url);
 				}
-				return callback(false, m_url);
 			}
 		});
 
@@ -213,8 +216,6 @@ XKit.extensions.find_blogs = new Object({
 		if (XKit.extensions.find_blogs.window_id !== m_window_id) {return; }
 
 		var container = [];
-
-		var people_backup = people;
 
 		while (people.length > 0) {
 
@@ -247,7 +248,7 @@ XKit.extensions.find_blogs = new Object({
 
 		console.log("new container length = " + container.length);
 
-		container.sort(function(a, b) { return b.count - a.count; } );
+		container.sort(function(first, second) { return second.count - first.count; } );
 
 		try {
 
@@ -374,18 +375,18 @@ XKit.extensions.find_blogs = new Object({
 				if (XKit.extensions.find_blogs.window_id !== m_window_id) {return; }
 
 				try {
-					data = JSON.parse(response.responseText);
+					var data = JSON.parse(response.responseText);
 
 					for (var i = 0; i < data.response.posts.length; i++) {
 
 						var m_post = data.response.posts[i];
 
 						try {
-							if (typeof data.response.posts[i].reblogged_from_name !== "undefined") {
-								people.push(data.response.posts[i].reblogged_from_name);
+							if (typeof m_post.reblogged_from_name !== "undefined") {
+								people.push(m_post.reblogged_from_name);
 							}
-							if (typeof data.response.posts[i].source_title !== "undefined") {
-								people.push(data.response.posts[i].source_title);
+							if (typeof m_post.source_title !== "undefined") {
+								people.push(m_post.source_title);
 							}
 						} catch (e) {
 							console.log("Can't read post, " + e.message);

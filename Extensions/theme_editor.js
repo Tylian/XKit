@@ -32,7 +32,7 @@ XKit.extensions.theme_editor = new Object({
 			}
 		}
 
-		xf_html = '<ul class="controls_section" id="xkit-theme-editor-ul">' +
+		var xf_html = '<ul class="controls_section" id="xkit-theme-editor-ul">' +
 			'<li class="no_push"><a href="#" class="customize" id="xkit-theme-editor-button">' +
 			'<div class="hide_overflow">Edit Theme</div>' +
 			'</a></li></ul>';

@@ -60,8 +60,6 @@ XKit.extensions.postarchive = {
 
 		$("#xkit_postarchive_inblog_button").click(function() {
 
-			var blog_url = $("#tumblelog_name").attr('data-tumblelog-name');
-
 			XKit.iframe.full();
 
 			XKit.extensions.postarchive.archive(post_id, this, true);
@@ -339,9 +337,9 @@ XKit.extensions.postarchive = {
 			var blob = new Blob([JSON.stringify(m_data)], {type: 'text/plain'});
 
 			XKit.window.show("Export Archive", "Click OK to download a file with the contents of your Archive.", "info", "<a id='xkit-postarchive-download-export'><div class=\"xkit-button default\" id=\"xkit-postarchive-export-confirm\">OK</div></a>");
-			var a = $('#xkit-postarchive-download-export')[0];
-			a.href = window.URL.createObjectURL(blob);
-			a.download = 'PostArchive export - ' + Date() + '.txt';
+			var link = $('#xkit-postarchive-download-export')[0];
+			link.href = window.URL.createObjectURL(blob);
+			link.download = 'PostArchive export - ' + Date() + '.txt';
 
 			$("#xkit-postarchive-export-confirm").click(function() {
 
@@ -383,8 +381,8 @@ XKit.extensions.postarchive = {
 						return;
 					}
 
-					m_posts = JSON.parse(m_obj.posts);
-					m_categories = JSON.parse(m_obj.categories);
+					var m_posts = JSON.parse(m_obj.posts);
+					var m_categories = JSON.parse(m_obj.categories);
 
 					XKit.extensions.postarchive.load_posts();
 
@@ -497,7 +495,6 @@ XKit.extensions.postarchive = {
 
 		var m_html = "<li class=\"post_container\">";
 		var post_class = "";
-		var additional_classes_for_post = "";
 
 		var post_tags = "";
 		var post_contents = "";
@@ -643,7 +640,7 @@ XKit.extensions.postarchive = {
 
 					if (row >= 2) {
 
-						for (var m = 1; m < row; m++) {
+						for (var j = 1; j < row; j++) {
 
 							var scaled_height = (m_width * XKit.extensions.postarchive.get_photo_height(data, m_temp_photo, "500")) / 500;
 
@@ -710,7 +707,7 @@ XKit.extensions.postarchive = {
 		}
 
 		var source_div = "";
-		var reblog_div = "";
+		// var reblog_div = "";
 
 		if (data.source_url !== "" && typeof data.source_url !== "undefined") {
 
@@ -720,7 +717,7 @@ XKit.extensions.postarchive = {
 
 		if (data.reblogged_from_id !== "" && typeof data.reblogged_from_id !== "undefined") {
 
-			reblog_div = '<span class="reblog_source"><span class="reblog_icon" title="' + username + ' reblogged ' + data.reblogged_from_name + '">reblogged</span><a target="_BLANK" title="' + data.reblogged_from_name + '" href="' + data.reblogged_from_url + '" style="">' + data.reblogged_from_name + '</a></span>';
+			// reblog_div = '<span class="reblog_source"><span class="reblog_icon" title="' + username + ' reblogged ' + data.reblogged_from_name + '">reblogged</span><a target="_BLANK" title="' + data.reblogged_from_name + '" href="' + data.reblogged_from_url + '" style="">' + data.reblogged_from_name + '</a></span>';
 
 		}
 
@@ -1100,11 +1097,11 @@ XKit.extensions.postarchive = {
 
 		$("#xkit-postarchive-save").click(function() {
 
-			var m_title = $("#xkit-postarchive-title").val();
+			var save_title = $("#xkit-postarchive-title").val();
 
 			if ($(this).hasClass("disabled")) { return; }
 
-			if ($.trim(m_title) === "") {
+			if ($.trim(save_title) === "") {
 				alert("Please enter a title for this post.");
 				return;
 			}
@@ -1117,7 +1114,7 @@ XKit.extensions.postarchive = {
 
 			}
 
-			XKit.extensions.postarchive.save_using_api(post_id, obj, m_title, m_category, in_blog_mode);
+			XKit.extensions.postarchive.save_using_api(post_id, obj, save_title, m_category, in_blog_mode);
 
 		});
 
@@ -1148,7 +1145,7 @@ XKit.extensions.postarchive = {
 
 				try {
 
-					data = JSON.parse(response.responseText).response;
+					var data = JSON.parse(response.responseText).response;
 
 					var m_object = {};
 
@@ -1310,11 +1307,11 @@ XKit.extensions.postarchive = {
 
 				XKit.extensions.postarchive.load_posts();
 
-				for (var i = 0; i < XKit.extensions.postarchive.categories.length; i++) {
+				for (var j = 0; j < XKit.extensions.postarchive.categories.length; j++) {
 
-					if (m_cat_obj.id === XKit.extensions.postarchive.categories[i].id) {
+					if (m_cat_obj.id === XKit.extensions.postarchive.categories[j].id) {
 
-						XKit.extensions.postarchive.categories[i].title = $("#xkit-postarchive-category-add-title").val();
+						XKit.extensions.postarchive.categories[j].title = $("#xkit-postarchive-category-add-title").val();
 						XKit.extensions.postarchive.save_posts();
 
 						XKit.window.close();
@@ -1335,13 +1332,13 @@ XKit.extensions.postarchive = {
 
 					XKit.extensions.postarchive.load_posts();
 
-					for (var i = 0; i < XKit.extensions.postarchive.archived_posts.length; i++) {
+					for (var j = 0; j < XKit.extensions.postarchive.archived_posts.length; j++) {
 
-						if (typeof XKit.extensions.postarchive.archived_posts[i].category !== "undefined") {
+						if (typeof XKit.extensions.postarchive.archived_posts[j].category !== "undefined") {
 
-							if (XKit.extensions.postarchive.archived_posts[i].category === m_cat_obj.id) {
+							if (XKit.extensions.postarchive.archived_posts[j].category === m_cat_obj.id) {
 
-								XKit.extensions.postarchive.archived_posts[i].category = "";
+								XKit.extensions.postarchive.archived_posts[j].category = "";
 
 							}
 
@@ -1349,7 +1346,7 @@ XKit.extensions.postarchive = {
 
 					}
 
-					for (var j = 0; j < XKit.extensions.postarchive.categories.length; j++) {
+					for (j = 0; j < XKit.extensions.postarchive.categories.length; j++) {
 
 						if (m_cat_obj.id === XKit.extensions.postarchive.categories[j].id) {
 

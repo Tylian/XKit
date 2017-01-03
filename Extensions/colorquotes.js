@@ -29,6 +29,8 @@ XKit.extensions.colorquotes = new Object({
             '<div id="xkit-close-message" class="xkit-button">Don\'t install</div>');
 		$("#xkit-install-br").click(function() {
 			XKit.install("better_reblogs", function(mdata) {
+				// defined in xkit.js
+				/* globals show_error_installation */
 				if (mdata.errors) {
 					if (mdata.storage_error === true) {
 						show_error_installation("[Code: 631] Can't store data on browser");
@@ -38,9 +40,9 @@ XKit.extensions.colorquotes = new Object({
 						show_error_installation("[Code: 101] Can't reach XKit servers");
 					} else {
 						if (mdata.file === "not_found") {
-							show_error_installation("Can't download " + to_install + ": Not found");
+							show_error_installation("Can't download better_reblogs: Not found");
 						} else {
-							show_error_installation("Can't download " + to_install);
+							show_error_installation("Can't download better_reblogs");
 						}
 					}
 					return;

@@ -132,12 +132,12 @@ XKit.extensions.show_more = new Object({
 
 	},
 
-	show_classic_menu: function(e) {
+	show_classic_menu: function(event) {
 
-		e.preventDefault();
-		e.stopPropagation();
+		event.preventDefault();
+		event.stopPropagation();
 
-		var m_obj = $(e.target);
+		var m_obj = $(event.target);
 
 		if (typeof XKit.extensions.show_more.popup_data.avatar_url === "undefined") {
 			return;
@@ -287,10 +287,9 @@ XKit.extensions.show_more = new Object({
 			e.preventDefault();
 			XKit.extensions.show_more.hide_classic_menu();
 			XKit.tools.add_function(function() {
-				var f = {
+				Tumblr.FanMail.show({
 					href: "/send/" + jQuery(".xkit-fan-mail").attr('data-tumblelog-name')
-				};
-				Tumblr.FanMail.show(f);
+				});
 			}, true, "");
 
 		});
@@ -481,7 +480,7 @@ XKit.extensions.show_more = new Object({
 					console.log("show_more: Successfully fetched and stored popup_data.");
 					try {
 						XKit.extensions.show_more.popup_data = JSON.parse(response.responseText);
-					} catch (e) {
+					} catch (err) {
 						XKit.extensions.show_more.popup_data = {};
 						XKit.extensions.show_more.popup_data.error = true;
 					}
@@ -737,7 +736,6 @@ XKit.extensions.show_more = new Object({
 
 		var menu_box = $(e.target).parent().find(".tumblelog_menu_popover");
 		var user_url = $(menu_box).parent().find(".tumblelog_menu_link").attr('data-tumblelog-name');
-		var m_class = "";
 
 		var m_html = "";
 
@@ -814,7 +812,7 @@ XKit.extensions.show_more = new Object({
 			$("#xkit-avatar-magnetizer-window").remove();
 		}
 
-		avatar_url = "https://api.tumblr.com/v2/blog/" + user_url + ".tumblr.com/avatar/512";
+		var avatar_url = "https://api.tumblr.com/v2/blog/" + user_url + ".tumblr.com/avatar/512";
 
 		var m_html = "<div id=\"xkit-avatar-magnetizer-shadow\">&nbsp;</div>" +
 				"<div id=\"xkit-avatar-magnetizer-window\">" +

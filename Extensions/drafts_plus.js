@@ -16,7 +16,7 @@ XKit.extensions.drafts_plus = new Object({
 
 		XKit.tools.init_css("drafts_plus");
 
-		xf_html = '<ul class="controls_section" id="drafts_plus_sidebar">' +
+		var xf_html = '<ul class="controls_section" id="drafts_plus_sidebar">' +
 			'<li class="section_header selected">DRAFTS TOOLS</li>' +
 			'<li class="" id="drafts_plus_mass_edit_li"">' +
 				'<a href="#" class="customize" id="drafts_plus_mass_edit_button">' +
