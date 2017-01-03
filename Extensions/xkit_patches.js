@@ -881,6 +881,7 @@ XKit.extensions.xkit_patches = new Object({
 
 					var html_or_markdown = $(".tab-label[data-js-srclabel]").text();
 					XKit.tools.add_function(function() {
+						/* globals require */
 						/* eslint-disable no-shadow */
 						var new_content = add_tag[0];
 						var html_or_markdown = add_tag[1];

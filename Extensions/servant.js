@@ -734,7 +734,6 @@ XKit.extensions.servant = new Object({
 				var m_return = false;
 
 				try {
-					/* jshint evil: true */
 					m_return = eval(parameter + "\n//# sourceURL=xkit/servant/servant" + (new Date()).getTime() + ".js");
 				} catch (e) {
 					m_return = false;

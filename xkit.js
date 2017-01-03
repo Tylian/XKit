@@ -16,7 +16,7 @@ var xkit_global_start = Date.now();  // log start timestamp
 		},
 		init: function() {
 
-		// Check page then return control to init_extension.
+			// Check page then return control to init_extension.
 			if (document.location.href.indexOf('://www.tumblr.com/xkit_reset') !== -1 ||
 			document.location.href.indexOf('://www.tumblr.com/xkit_log') !== -1 ||
 			document.location.href.indexOf('://www.tumblr.com/xkit_editor') !== -1 ||
@@ -27,7 +27,7 @@ var xkit_global_start = Date.now();  // log start timestamp
 			}
 
 			XKit.init_flags();
-		// If not in an iframe
+			// If not in an iframe
 			if ((window.window === window.top) && document.location.href.indexOf("://www.tumblr.com/dashboard/iframe?") === -1) {
 				XKit.page.standard = true;
 				XKit.init_extension();
@@ -71,10 +71,10 @@ var xkit_global_start = Date.now();  // log start timestamp
 
 			try {
 
-			// Check for Bridge errors.
+				// Check for Bridge errors.
 				var bridge_status = getBridgeError();
 				if (bridge_status.errors === true) {
-				// Bridge encountered an error!
+					// Bridge encountered an error!
 					XKit.window.show("XKit couldn't start.", "<b>Generated Error message:</b><br/><p>XKit Bridge Error<br/>" + bridge_status.error.message + "</p>Please reload the page to try again or click on the Troubleshooting Help button below to see how you can fix this error.", "error", "<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div><a href=\"http://www.xkit.info/troubleshooting\" class=\"xkit-button\">Troubleshooting Help</a>");
 					return;
 				}
@@ -89,7 +89,7 @@ var xkit_global_start = Date.now();  // log start timestamp
 					}
 				}
 
-			// Load dashboard extensions.
+				// Load dashboard extensions.
 				XKit.notifications.init();
 				var m_browser = XKit.browser();
 
@@ -99,7 +99,7 @@ var xkit_global_start = Date.now();  // log start timestamp
 				}
 
 				if (m_browser.spoofed === true) {
-				// Nope, I won't be running here.
+					// Nope, I won't be running here.
 					XKit.window.show("Your browser is pretending to be something it is not.", "Spoofing your browser name/version can cause problems not just with XKit but other websites and extensions too. Please turn off any User Agent modifier you have installed. XKit will stop running now.", "error", "<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div><a href=\"http://www.xkit.info/troubleshooting\" class=\"xkit-button\">Troubleshooting Help</a>");
 					return;
 				}
@@ -107,28 +107,27 @@ var xkit_global_start = Date.now();  // log start timestamp
 				xkit_check_storage();
 
 				if (XKit.tools.get_setting("xkit_installation_complete", "") !== "true") {
-				// We need to install XKit!
+					// We need to install XKit!
 					console.log("Installation complete is not true, it is = " + XKit.tools.get_setting("xkit_installation_complete", ""));
 					xkit_install();
 					return;
 				}
 
-			// Okay lets boot our extensions now. This is actually done
-			// by xkit_main.js so let's just call it.
+				// Okay lets boot our extensions now. This is actually done
+				// by xkit_main.js so let's just call it.
 
-			// First lets check if it actually exists.
+				// First lets check if it actually exists.
 				if (XKit.installed.check("xkit_main") === false) {
 					console.log("xkit_main not found! Re-installing....");
 					xkit_install();
 					return;
 				}
 
-			// It exists! Great.
+				// It exists! Great.
 				var xkit_main = XKit.installed.get("xkit_main");
 				if (!xkit_main.errors && xkit_main.script) {
 					XKit.console.add("Trying to run xkit_main.");
 					try {
-					/* jshint evil: true */
 						eval(xkit_main.script + "\n//# sourceURL=xkit/xkit_main.js");
 						XKit.extensions.xkit_main.run();
 					} catch (e) {
@@ -136,13 +135,13 @@ var xkit_global_start = Date.now();  // log start timestamp
 					}
 				} else {
 					if (xkit_main.error == "not_installed") {
-					// Still not installed?
+						// Still not installed?
 						XKit.console.add("xkit_main not found! Re-installing....");
 						xkit_install();
 						return;
 					}
 					if (xkit_main.error == "parse_error") {
-					// Corrupt storage? Recomment reset.
+						// Corrupt storage? Recomment reset.
 						XKit.console.add("xkit_main is corrupt!");
 						show_error_reset("Package xkit_main is corrupted!");
 						return;
@@ -156,19 +155,18 @@ var xkit_global_start = Date.now();  // log start timestamp
 		},
 		init_frame: function() {
 
-		// Load frame extensions.
-		// First lets check if it actually exists.
+			// Load frame extensions.
+			// First lets check if it actually exists.
 			if (XKit.installed.check("xkit_main") === false) {
 				XKit.console.add("xkit_main not found! Quitting.");
 				return;
 			}
 
-		// It exists! Great.
+			// It exists! Great.
 			var xkit_main = XKit.installed.get("xkit_main");
 			if (!xkit_main.errors && xkit_main.script) {
 				XKit.console.add("Trying to run xkit_main.");
 				try {
-				/* jshint evil: true */
 					eval(xkit_main.script + "\n//# sourceURL=xkit/xkit_main.js");
 					XKit.frame_mode = true;
 					XKit.extensions.xkit_main.run();
@@ -229,7 +227,7 @@ var xkit_global_start = Date.now();  // log start timestamp
 		download: {
 			try_count: 0,
 			max_try_count: 5,
-		// TODO: implement as module, lose most of this code
+			// TODO: implement as module, lose most of this code
 			github_fetch: function(path, callback, fallback) {
 				var url = 'https://new-xkit.github.io/XKit/Extensions/dist/' + path;
 				GM_xmlhttpRequest({
@@ -240,12 +238,12 @@ var xkit_global_start = Date.now();  // log start timestamp
 						return fallback();
 					},
 					onload: function(response) {
-					// We are done!
+						// We are done!
 						var mdata = {};
 						try {
 							mdata = jQuery.parseJSON(response.responseText);
 						} catch (e) {
-						// Server returned bad thingy.
+							// Server returned bad thingy.
 							XKit.console.add("Unable to download '" + path +
 										"', server returned non-json object." + e.message);
 							return fallback();
@@ -255,7 +253,7 @@ var xkit_global_start = Date.now();  // log start timestamp
 				});
 			},
 			extension: function(extension_id, callback) {
-			// Downloads the extension file.
+				// Downloads the extension file.
 				function fallback() {
 					return XKit.download.page("get.php?extension=" + extension_id, callback);
 				}
@@ -263,7 +261,7 @@ var xkit_global_start = Date.now();  // log start timestamp
 				XKit.download.github_fetch(extension_id + '.json', callback, fallback);
 			},
 			page: function(page, callback, fallingBack) {
-			// Attempt to use Github distribution
+				// Attempt to use Github distribution
 				function fallback() {
 					return XKit.download.page(page, callback, true);
 				}
@@ -290,7 +288,7 @@ var xkit_global_start = Date.now();  // log start timestamp
 						return;
 					}
 				}
-			// Downloads page from servers.
+				// Downloads page from servers.
 				if (XKit.download.try_count >= XKit.download.max_try_count) {
 					XKit.download.try_count = 0;
 					callback({errors: true, server_down: true});
@@ -312,12 +310,12 @@ var xkit_global_start = Date.now();  // log start timestamp
 						return XKit.download.page(page, callback);
 					},
 					onload: function(response) {
-					// We are done!
+						// We are done!
 						var mdata = {};
 						try {
 							mdata = jQuery.parseJSON(response.responseText);
 						} catch (e) {
-						// Server returned bad thingy.
+							// Server returned bad thingy.
 							XKit.console.add("Unable to download page '" + page + "', server returned non-json object." + e.message);
 							XKit.download.try_count++;
 							return XKit.download.page(page, callback);
@@ -336,7 +334,7 @@ var xkit_global_start = Date.now();  // log start timestamp
 			}
 		},
 		install: function(extension_id, callback) {
-		// Installs the extension.
+			// Installs the extension.
 			XKit.download.extension(extension_id, function(mdata) {
 				XKit.console.add("download.extension of '" + extension_id + "' was successful. Calling callback.");
 				install_extension(mdata, callback);
@@ -344,9 +342,9 @@ var xkit_global_start = Date.now();  // log start timestamp
 		},
 		installed: {
 			add: function(extension_id) {
-			// Add extension to the installed list.
+				// Add extension to the installed list.
 				if (XKit.installed.check(extension_id) === true) {
-				// Already added, stop.
+					// Already added, stop.
 					return;
 				}
 				var m_string = XKit.tools.get_setting("xkit_installed_extensions", "");
@@ -361,7 +359,7 @@ var xkit_global_start = Date.now();  // log start timestamp
 				XKit.tools.set_setting("xkit_installed_extensions", m_string);
 			},
 			remove: function(extension_id) {
-			// Remove extension from installed list.
+				// Remove extension from installed list.
 				var current_extensions = XKit.installed.list();
 				for (var i = 0; i < current_extensions.length; i++) {
 					if (current_extensions[i] == extension_id) {
@@ -373,7 +371,7 @@ var xkit_global_start = Date.now();  // log start timestamp
 				XKit.tools.set_setting("xkit_installed_extensions", m_string);
 			},
 			list: function() {
-			// Get an array containing all installed extensions.
+				// Get an array containing all installed extensions.
 				var m_string = XKit.tools.get_setting("xkit_installed_extensions", "");
 				var installed_extensions;
 				try {
@@ -384,7 +382,7 @@ var xkit_global_start = Date.now();  // log start timestamp
 				return installed_extensions.extensions;
 			},
 			check: function(extension_id) {
-			// Check if an extension is installed.
+				// Check if an extension is installed.
 				var current_extensions = XKit.installed.list();
 				for (var i = 0; i < current_extensions.length; i++) {
 					if (current_extensions[i] == extension_id) {
@@ -394,7 +392,7 @@ var xkit_global_start = Date.now();  // log start timestamp
 				return false;
 			},
 			get: function(extension_id) {
-			// Returns the object.
+				// Returns the object.
 				var app_data = XKit.tools.get_setting("extension_" + extension_id, "");
 				if (app_data === "") {
 					return {
@@ -434,31 +432,31 @@ var xkit_global_start = Date.now();  // log start timestamp
 				}
 			},
 			version: function(extension_id) {
-			// Returns extension version if it's installed.
+				// Returns extension version if it's installed.
 				return XKit.installed.get(extension_id).version || "";
 			},
 			title: function(extension_id) {
-			// Returns extension title if it's installed.
+				// Returns extension title if it's installed.
 				return XKit.installed.get(extension_id).title || "";
 			},
 			developer: function(extension_id) {
-			// Returns extension developer if it's installed.
+				// Returns extension developer if it's installed.
 				return XKit.installed.get(extension_id).developer || "";
 			},
 			description: function(extension_id) {
-			// Returns extension description if it's installed.
+				// Returns extension description if it's installed.
 				return XKit.installed.get(extension_id).description || "";
 			},
 			script: function(extension_id) {
-			// Returns extension script if it's installed.
+				// Returns extension script if it's installed.
 				return XKit.installed.get(extension_id).script || "";
 			},
 			icon: function(extension_id) {
-			// Returns extension icon if it's installed.
+				// Returns extension icon if it's installed.
 				return XKit.installed.get(extension_id).icon || "";
 			},
 			css: function(extension_id) {
-			// Returns extension css if it's installed.
+				// Returns extension css if it's installed.
 				return XKit.installed.get(extension_id).css || "";
 			}
 		},
@@ -471,9 +469,9 @@ var xkit_global_start = Date.now();  // log start timestamp
 			}
 		},
 		storage: {
-		// Extension storage.
-		// Each extension is limited to 50 kb storage.
-		// Each extension's data is stored as a stringified JSON object.
+			// Extension storage.
+			// Each extension is limited to 50 kb storage.
+			// Each extension's data is stored as a stringified JSON object.
 			max_area_size: 51200,
 			unlimited_storage: false,
 			size: function(extension_id) {
@@ -576,11 +574,11 @@ var xkit_global_start = Date.now();  // log start timestamp
 				version: 0
 			};
 
-		// First, let's check if it's chrome.
+			// First, let's check if it's chrome.
 			if (window.chrome) {
 				to_return.chrome = true;
 			} else {
-			// it can still be chrome?
+				// it can still be chrome?
 				var is_chrome = navigator.userAgent.toLowerCase().indexOf('chrome') > -1;
 				to_return.chrome = is_chrome;
 			}
@@ -593,24 +591,24 @@ var xkit_global_start = Date.now();  // log start timestamp
 			}
 
 			if (to_return.chrome === true) {
-				// Get version.
+					// Get version.
 				to_return.name = "Google Chrome";
 				to_return.version = get_real_version("chrome/");
 			} else if (navigator.userAgent.toLowerCase().indexOf('firefox') > -1) {
-				// Then, let's check if it's firefox.
+					// Then, let's check if it's firefox.
 				to_return.name = "Mozilla Firefox";
 				to_return.firefox = true;
 				to_return.version = get_real_version("firefox/");
 			} else if (navigator.userAgent.toLowerCase().indexOf('safari') > -1) {
-				// Is it Safari?
+					// Is it Safari?
 				to_return.name = "Apple Safari";
 				to_return.safari = true;
-				//Safari's actual version is actually after the version tag
+					//Safari's actual version is actually after the version tag
 				to_return.version = get_real_version("version/");
 			}
 
-		// Check if there is spoofing!
-		// A lot of people now switch to IE.
+			// Check if there is spoofing!
+			// A lot of people now switch to IE.
 			if (navigator.userAgent.indexOf('MSIE') > -1) {
 				to_return.spoofed = true;
 			}
@@ -701,7 +699,7 @@ var xkit_global_start = Date.now();  // log start timestamp
 						try {
 							callback();
 						} catch (e) {
-						// Meh.
+							// Meh.
 						}
 					}
 					$("#xkit_notification_" + m_notification_id).slideUp('slow');
@@ -718,7 +716,7 @@ var xkit_global_start = Date.now();  // log start timestamp
 				var m_return = {
 					count: 0,
 					fatal: false,
-				// Checks for modes that might break XKit.
+					// Checks for modes that might break XKit.
 					html: "<ol>"
 				};
 
@@ -824,7 +822,7 @@ var xkit_global_start = Date.now();  // log start timestamp
 
 						var script_src = $(this).html();
 
-					// This is quite hacky but quite frankly I don't give a fuck anymore.
+						// This is quite hacky but quite frankly I don't give a fuck anymore.
 
 						script_src = script_src.replace('require(\'context\').bootloader(', '');
 						script_src = script_src.substring(0, script_src.length - 2);
@@ -1082,7 +1080,6 @@ function xkit_init_special() {
 			xhr.open('GET', chrome.extension.getURL('editor.js'), false);
 			xhr.send(null);
 			try {
-				/* jshint evil: true */
 				eval(xhr.responseText + "\n//# sourceURL=xkit/editor.js");
 				XKit.extensions.xkit_editor.run();
 			} catch (e) {
@@ -1276,7 +1273,6 @@ function xkit_install() {
 		}
 
 		try {
-			/* jshint evil: true */
 			eval(mdata.script + "\n//# sourceURL=xkit/xkit_installer.js");
 			XKit.extensions.xkit_installer.run();
 		} catch (e) {

@@ -1,4 +1,4 @@
-/* jshint moz: true */
+/* globals require */
 let self = require('sdk/self');
 let pageMod = require('sdk/page-mod');
 let prefs = require('sdk/preferences/service');

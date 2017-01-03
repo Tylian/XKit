@@ -30,7 +30,7 @@
 
 			XKit.console.add("Welcome from XKit Main " + XKit.installed.version('xkit_main'));
 
-		// Run XKit Patches first.
+			// Run XKit Patches first.
 			if (XKit.flags.do_not_load_xkit_patches !== true) {
 
 				var m_result = XKit.extensions.xkit_main.run_extension("xkit_patches", true, true);
@@ -46,7 +46,7 @@
 
 			}
 
-		// Get currently running extensions.
+			// Get currently running extensions.
 			XKit.extensions.xkit_main.to_run = XKit.installed.list();
 
 			if (XKit.extensions.xkit_main.should_slow_down() === true) {
@@ -63,9 +63,9 @@
 
 		should_slow_down: function() {
 
-			if (document.location.href.indexOf('://www.tumblr.com/new/') !== -1) { return true; }
+			if (document.location.href.indexOf(':	//www.tumblr.com/new/') !== -1) { return true; }
 
-			if (document.location.href.substring(0, 27) === "://www.tumblr.com/blog/") {
+			if (document.location.href.substring(0, 27) === ":	//www.tumblr.com/blog/") {
 				if (document.location.href.indexOf('/new/') !== -1) {
 					return true;
 				}
@@ -94,22 +94,21 @@
 
 		run_extension: function(extension_id, force, dont_run_next) {
 
-		// We don't want an infinite loop now do we?
+			// We don't want an infinite loop now do we?
 			if (extension_id === "xkit_main") { XKit.extensions.xkit_main.run_next_extension(); return; }
 
-		// Just in case..
+			// Just in case..
 			if (extension_id === "xkit_installer" && force !== true) { XKit.extensions.xkit_main.run_next_extension(); return; }
 
-		// We'll be running patches first.
+			// We'll be running patches first.
 			if (extension_id === "xkit_patches" && force !== true) { XKit.extensions.xkit_main.run_next_extension(); return; }
 
 			var xkit_main = XKit.installed.get(extension_id);
 
-		// Check if in Frame Mode.
+			// Check if in Frame Mode.
 			if (XKit.frame_mode === true && extension_id !== "xkit_patches") {
-			// This is ugly: I don't want to eval script.
-			/* jshint evil: true */
-				eval(xkit_main.script + "\n//# sourceURL=xkit/" + extension_id + ".js");
+				// This is ugly: I don't want to eval script.
+				eval(xkit_main.script + "\n	//# sourceURL=xkit/" + extension_id + ".js");
 				var frame_script = "";
 				try {
 					frame_script = XKit.extensions[extension_id].frame_run;
@@ -117,8 +116,8 @@
 					XKit.console.add("No frame_run on " + extension_id);
 				}
 				if (frame_script !== "" && typeof frame_script !== "undefined") {
-				// This is a hybrid extension!
-				// Run it!
+					// This is a hybrid extension!
+					// Run it!
 					if (XKit.installed.enabled(extension_id) === true) {
 						try {
 							if (typeof XKit.extensions[extension_id].preferences !== "undefined") {
@@ -136,7 +135,7 @@
 					return;
 				}
 				if (xkit_main.frame !== true) {
-				// not a frame extension, quit.
+					// not a frame extension, quit.
 					if (XKit.extensions.xkit_main.disabled_extensions === "") {
 						XKit.extensions.xkit_main.disabled_extensions = extension_id + "(in frame)";
 					} else {
@@ -149,9 +148,9 @@
 				}
 			} else {
 				if (xkit_main.frame === true) {
-				// is a frame extension, quit.
+					// is a frame extension, quit.
 					try {
-						eval(xkit_main.script + "\n//# sourceURL=xkit/" + extension_id + ".js");
+						eval(xkit_main.script + "\n	//# sourceURL=xkit/" + extension_id + ".js");
 					} catch (e) {
 						XKit.console.add("Can't eval " + extension_id);
 					}

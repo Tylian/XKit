@@ -30,9 +30,6 @@
       - before: true
         after: true
   globals:
-    require: true
-    unsafeWindow: true
-
     XKit: true
     XBridge: true
     Tumblr: true

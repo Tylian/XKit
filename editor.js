@@ -83,8 +83,7 @@ function makeEditorShim(id) {
 	};
 }
 
-
-
+/* globals unsafeWindow */
 function extension_editor_finish_run() {
 	if ((typeof(unsafeWindow) !== 'undefined') && (navigator.userAgent.indexOf('Mobile') === -1)) {
 		script_editor = unsafeWindow.ace.edit('xkit-editor-textarea');
