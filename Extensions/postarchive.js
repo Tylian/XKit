@@ -620,7 +620,7 @@ XKit.extensions.postarchive = {
 
 				var rows = [];
 
-				for (var i = 0; i < data.photoset_layout.length; i++) {
+				for (let i = 0; i < data.photoset_layout.length; i++) {
 					rows.push(data.photoset_layout[i]);
 				}
 
@@ -640,7 +640,7 @@ XKit.extensions.postarchive = {
 
 					if (row >= 2) {
 
-						for (var j = 1; j < row; j++) {
+						for (let i = 1; i < row; i++) {
 
 							var scaled_height = (m_width * XKit.extensions.postarchive.get_photo_height(data, m_temp_photo, "500")) / 500;
 
@@ -1245,7 +1245,7 @@ XKit.extensions.postarchive = {
 			cat_list = "<div class=\"xkit-postarchive-no-categories\">You have no categories set.</div>";
 		} else {
 
-			for (var i = 0; i < XKit.extensions.postarchive.categories.length; i++) {
+			for (let i = 0; i < XKit.extensions.postarchive.categories.length; i++) {
 
 				cat_list = cat_list + "<div class=\"xkit-postarchive-cp-item\" data-id=\"" + XKit.extensions.postarchive.categories[i].id + "\">" + XKit.extensions.postarchive.categories[i].title + "</div>";
 
@@ -1307,11 +1307,11 @@ XKit.extensions.postarchive = {
 
 				XKit.extensions.postarchive.load_posts();
 
-				for (var j = 0; j < XKit.extensions.postarchive.categories.length; j++) {
+				for (let i = 0; i < XKit.extensions.postarchive.categories.length; i++) {
 
-					if (m_cat_obj.id === XKit.extensions.postarchive.categories[j].id) {
+					if (m_cat_obj.id === XKit.extensions.postarchive.categories[i].id) {
 
-						XKit.extensions.postarchive.categories[j].title = $("#xkit-postarchive-category-add-title").val();
+						XKit.extensions.postarchive.categories[i].title = $("#xkit-postarchive-category-add-title").val();
 						XKit.extensions.postarchive.save_posts();
 
 						XKit.window.close();
@@ -1332,13 +1332,13 @@ XKit.extensions.postarchive = {
 
 					XKit.extensions.postarchive.load_posts();
 
-					for (var j = 0; j < XKit.extensions.postarchive.archived_posts.length; j++) {
+					for (let i = 0; i < XKit.extensions.postarchive.archived_posts.length; i++) {
 
-						if (typeof XKit.extensions.postarchive.archived_posts[j].category !== "undefined") {
+						if (typeof XKit.extensions.postarchive.archived_posts[i].category !== "undefined") {
 
-							if (XKit.extensions.postarchive.archived_posts[j].category === m_cat_obj.id) {
+							if (XKit.extensions.postarchive.archived_posts[i].category === m_cat_obj.id) {
 
-								XKit.extensions.postarchive.archived_posts[j].category = "";
+								XKit.extensions.postarchive.archived_posts[i].category = "";
 
 							}
 
@@ -1346,11 +1346,11 @@ XKit.extensions.postarchive = {
 
 					}
 
-					for (j = 0; j < XKit.extensions.postarchive.categories.length; j++) {
+					for (let i = 0; i < XKit.extensions.postarchive.categories.length; i++) {
 
-						if (m_cat_obj.id === XKit.extensions.postarchive.categories[j].id) {
+						if (m_cat_obj.id === XKit.extensions.postarchive.categories[i].id) {
 
-							XKit.extensions.postarchive.categories.splice(j, 1);
+							XKit.extensions.postarchive.categories.splice(i, 1);
 
 						}
 

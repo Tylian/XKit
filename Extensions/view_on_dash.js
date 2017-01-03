@@ -311,7 +311,7 @@ XKit.extensions.view_on_dash = new Object({
 
 				var rows = [];
 
-				for (var i = 0; i < data.photoset_layout.length; i++) {
+				for (let i = 0; i < data.photoset_layout.length; i++) {
 					rows.push(data.photoset_layout[i]);
 				}
 
@@ -328,7 +328,7 @@ XKit.extensions.view_on_dash = new Object({
 
 					if (row_count >= 2) {
 
-						for (var j = 1; j < row_count; j++) {
+						for (let i = 1; i < row_count; i++) {
 
 							var photo_height = (m_width * XKit.extensions.view_on_dash.get_photo_height(data, m_temp_photo, "500")) / 500;
 

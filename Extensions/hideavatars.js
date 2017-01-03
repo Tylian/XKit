@@ -200,11 +200,11 @@ XKit.extensions.hideavatars = new Object({
 
 					XKit.extensions.hideavatars.load_blogs();
 
-					for (var j = 0; j < XKit.extensions.hideavatars.blognames.length; j++) {
+					for (let i = 0; i < XKit.extensions.hideavatars.blognames.length; i++) {
 
-						if (m_cat_obj.id === XKit.extensions.hideavatars.blognames[j].id) {
+						if (m_cat_obj.id === XKit.extensions.hideavatars.blognames[i].id) {
 
-							XKit.extensions.hideavatars.blognames.splice(j, 1);
+							XKit.extensions.hideavatars.blognames.splice(i, 1);
 
 						}
 

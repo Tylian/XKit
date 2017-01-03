@@ -1127,15 +1127,15 @@ XKit.extensions.servant = new Object({
 
 				var parameter_fixed = parameter;
 
-				for (var i = 0; i <= 10; i++) {
+				for (let i = 0; i <= 10; i++) {
 					parameter_fixed = parameter_fixed.replace("%" + (i + 1), returns[i]);
 				}
 
 				var m_post = "";
 
-				for (var j = 0; j < to_pass.length; j++) {
-					if (compatibility[j] === "post") {
-						m_post = $(to_pass[j]);
+				for (let i = 0; i < to_pass.length; i++) {
+					if (compatibility[i] === "post") {
+						m_post = $(to_pass[i]);
 					}
 				}
 

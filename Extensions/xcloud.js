@@ -872,9 +872,9 @@ XKit.extensions.xcloud = new Object({
 
 		if (skipping.length > 0) {
 			var m_html = "<ol>";
-			for (var j = 0; j < skipping.length; j++) {
-				m_html += "<li><b>" + XKit.installed.title(skipping[j]) + "</b>";
-				// &middot; " + Math.ceil(this.skipping_size[j]) + " MB</li>";
+			for (var i = 0; i < skipping.length; i++) {
+				m_html += "<li><b>" + XKit.installed.title(skipping[i]) + "</b>";
+				// &middot; " + Math.ceil(this.skipping_size[i]) + " MB</li>";
 			}
 			m_html += "</ol>";
 			XKit.window.show("Skipping some extensions", "The following extensions will not be backed up to XCloud because they are storing more than 1.5 megabytes of data, making the backup bigger than XCloud servers can handle." + m_html + "<small style=\"color: rgb(110,110,110);\">If these extensions have data that you can remove, please try removing them and retry the backup process. If you are not using these extensions, click on \"Reset Settings\" button on top-right corner of their control panel to free up space on your computer.</small>", "warning", "<div class=\"xkit-button default\" id=\"xkit-xcloud-backup-skip-continue\">Continue</div><div class=\"xkit-button\" id=\"xkit-close-message\">Cancel</div>");

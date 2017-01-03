@@ -691,7 +691,7 @@ XKit.extensions.mute = new Object({
 		XKit.extensions.mute.control_panel_div = mdiv;
 
 		var found_count = 0;
-		for (var i = 0; i < XKit.extensions.mute.muted.length; i++) {
+		for (let i = 0; i < XKit.extensions.mute.muted.length; i++) {
 			//console.log(XKit.extensions.mute.muted[i].username);
 			if (typeof XKit.extensions.mute.muted[i].username !== "undefined") {
 				if (XKit.extensions.mute.muted[i].username !== "") {
@@ -722,9 +722,9 @@ XKit.extensions.mute = new Object({
 
 			var m_username = $(this).attr('data-user-name');
 
-			for (var j = 0; j < XKit.extensions.mute.muted.length; j++) {
-				if (XKit.extensions.mute.muted[j].username === m_username) {
-					XKit.extensions.mute.muted.splice(j, 1);
+			for (let i = 0; i < XKit.extensions.mute.muted.length; i++) {
+				if (XKit.extensions.mute.muted[i].username === m_username) {
+					XKit.extensions.mute.muted.splice(i, 1);
 					XKit.extensions.mute.save();
 					XKit.extensions.mute.do_posts(true);
 					XKit.extensions.mute.cpanel(mdiv);
