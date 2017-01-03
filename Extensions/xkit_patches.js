@@ -62,6 +62,7 @@ XKit.extensions.xkit_patches = new Object({
 
 		/**
 		 * Parse an XKit extension version string of form X.Y.Z or X.Y REV Z
+		 * @param {String} versionString
 		 * @return {Object} version descriptor with keys major, minor, and patch
 		 */
 		XKit.tools.parse_version = function(versionString) {
@@ -1113,7 +1114,11 @@ XKit.extensions.xkit_patches = new Object({
 				 */
 				do: function() {
 
-					if (!XKit.interface.post_window_listener_running) { XKit.interface.post_window_listener_window_id = 0; return XKit.interface.post_window_listener.set_listen(); }
+					if (!XKit.interface.post_window_listener_running) {
+						XKit.interface.post_window_listener_window_id = 0;
+						XKit.interface.post_window_listener.set_listen();
+						return;
+					}
 
 					var post_content = $(".post-form");
 					var ask_form = $(".post_ask_answer_form");
@@ -1121,19 +1126,22 @@ XKit.extensions.xkit_patches = new Object({
 					if (post_content.length <= 0 || ask_form.length > 0 || post_content.css('display') === 'none') {
 						// No post window yet. Do nothing.
 						XKit.interface.post_window_listener_window_id = 0;
-						return XKit.interface.post_window_listener.set_listen();
+						XKit.interface.post_window_listener.set_listen();
+						return;
 					}
 
 					if (XKit.interface.post_window_listener_window_id !== 0) {
 						// Already ran the functions here?
-						return XKit.interface.post_window_listener.set_listen();
+						XKit.interface.post_window_listener.set_listen();
+						return;
 					} else {
 						XKit.interface.post_window_listener_window_id = XKit.tools.random_string();
 					}
 
 					if (XKit.interface.post_window_listener_id.length === 0) {
 						// We got not functions to run.
-						return XKit.interface.post_window_listener.set_listen();
+						XKit.interface.post_window_listener.set_listen();
+						return;
 					}
 
 					// XKit.console.add("interface -> Post Window found, running attached functions. [" + XKit.interface.post_window_listener_window_id + "]");
@@ -1513,7 +1521,7 @@ XKit.extensions.xkit_patches = new Object({
 			},
 
 			/**
-			 * @param {Object} post_obj - Interface Post Object provided by XKit.interface.post
+			 * @param {Object} post_object - Interface Post Object provided by XKit.interface.post
 			 * @param {Function} func - Called on error or on completion with an object describing
 			 *                          the results of the fetch. The object has key error: true
 			 *                          if there is an error.
@@ -2232,6 +2240,8 @@ XKit.extensions.xkit_patches = new Object({
 			/**
 			 * Determines whether a user is following the given blog.
 			 * The logged-in user must be a member of the given blog to determine this.
+			 * @param {String} username
+			 * @param {String} blog
 			 * @return {Promise<Boolean>}
 			 */
 			is_following: function(username, blog) {

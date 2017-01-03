@@ -960,6 +960,7 @@ XKit.extensions.one_click_postage = new Object({
 
 	/**
 	 * Allows keep_tags to continue to work even in the post editor.
+	 * @param {Event} e
 	 */
 	process_click: function(e) {
 		var parent_box = $(e.target).parentsUntil('.post').parent();

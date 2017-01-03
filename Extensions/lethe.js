@@ -115,8 +115,6 @@ Lethe.prototype.showPost = function(hiddenPost) {
 	hiddenPost.placeholder.outerHTML = hiddenPost.html;
 };
 
-
-
 /**
  * Destroy Lethe
  */

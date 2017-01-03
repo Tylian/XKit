@@ -16,6 +16,12 @@
     no-mixed-spaces-and-tabs: [error, smart-tabs]
     id-length: [error, exceptions: [i, j, e, x, y]]
 
+    valid-jsdoc:
+      - error
+      - requireReturn: false
+        requireParamDescription: false
+        requireReturnDescription: false
+
     indent: [error, tab]
     semi: error
     brace-style: [error, 1tbs, allowSingleLine: true]
