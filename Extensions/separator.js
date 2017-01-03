@@ -77,7 +77,7 @@ XKit.extensions.separator = new Object({
 
 		}
 
-		var last_loaded_post = XKit.storage.get("separator","last_post","");
+		var last_loaded_post = XKit.storage.get("separator", "last_post", "");
 
 		var current_last_post = $("body").find(".posts .post").not("#tumblr_radar").not(".new_post_buttons").first();
 
@@ -127,7 +127,7 @@ XKit.extensions.separator = new Object({
 
 		}
 
-		XKit.storage.set("separator","last_post",$(current_last_post).attr('data-post-id'));
+		XKit.storage.set("separator", "last_post", $(current_last_post).attr('data-post-id'));
 
 	},
 
@@ -149,7 +149,7 @@ XKit.extensions.separator = new Object({
 				try {
 					// Just in case.
 					XKit.post_listener.remove("separator");
-				} catch(e) {
+				} catch (e) {
 					console.log("Unable to remove separator post listener.");
 				}
 

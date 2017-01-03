@@ -67,17 +67,17 @@ XKit.extensions.activity_plus = new Object({
 
 		try {
 
-		if (this.preferences.hide_graphs.value === true) {
-			m_css = m_css + " #user_graphs, .ui_stats { display: none; }";
-		}
+			if (this.preferences.hide_graphs.value === true) {
+				m_css = m_css + " #user_graphs, .ui_stats { display: none; }";
+			}
 
-		if (this.preferences.show_timestamps.value === true || this.preferences.condensed_notes.value === true) {
+			if (this.preferences.show_timestamps.value === true || this.preferences.condensed_notes.value === true) {
 			// m_css = m_css + " .part_activity { left: 95px !important; } .ui_note .part_avatar { left: 57px !important; } .part_response { padding-left: 95px !important; }";
-			new_note_check_interval = setInterval(XKit.extensions.activity_plus.do_on_new, 3000);
-		}
+				new_note_check_interval = setInterval(XKit.extensions.activity_plus.do_on_new, 3000);
+			}
 
-		if (this.preferences.notes_filter.value === true) {
-			var m_html = "<div id=\"xkit-activity-plus-note-filter\">" +
+			if (this.preferences.notes_filter.value === true) {
+				var m_html = "<div id=\"xkit-activity-plus-note-filter\">" +
 						"<div data-type=\"\" class=\"xkit-note-filter-all selected\" title=\"All Notifications\">all</div>" +
 						"<div data-type=\"is_reblog\" class=\"xkit-note-filter-reblog\" title=\"Reblogs\">reblogs</div>" +
 						"<div data-type=\"is_like\" class=\"xkit-note-filter-like\" title=\"Likes\">likes</div>" +
@@ -86,86 +86,86 @@ XKit.extensions.activity_plus = new Object({
 						"<div data-type=\"is_user_mention\" class=\"xkit-note-filter-mention\" title=\"Mentions\">mentions</div>" +
 						"<div data-type=\"from_mutual\" class=\"xkit-note-filter-from-mutual\" title=\"From Mutual Follows\">from mutual</div>" +
 					"</div>";
-			$(".ui_notes_switcher").append(m_html);
+				$(".ui_notes_switcher").append(m_html);
 
-			$("#xkit-activity-plus-note-filter div").tipTip({maxWidth: "auto", edgeOffset: 10, delay: 10 });
+				$("#xkit-activity-plus-note-filter div").tipTip({maxWidth: "auto", edgeOffset: 10, delay: 10 });
 
-			$("#xkit-activity-plus-note-filter div").bind("click", function() {
+				$("#xkit-activity-plus-note-filter div").bind("click", function() {
 
-				var m_type = $(this).attr('data-type');
+					var m_type = $(this).attr('data-type');
 
-				$("#xkit-activity-plus-note-filter div").removeClass("selected");
-				$(this).addClass("selected");
+					$("#xkit-activity-plus-note-filter div").removeClass("selected");
+					$(this).addClass("selected");
 
-				if (m_type === "from_mutual") {
+					if (m_type === "from_mutual") {
 
-					XKit.tools.add_css(".ui_note { display: none; } .ui_note.is_friend { display: block }", "activity_plus_note_filter_mutual");
-					return;
+						XKit.tools.add_css(".ui_note { display: none; } .ui_note.is_friend { display: block }", "activity_plus_note_filter_mutual");
+						return;
 
-				}
-
-				XKit.tools.remove_css("activity_plus_note_filter_mutual");
-				XKit.tools.remove_css("activity_plus_note_filter");
-
-				if (m_type === "") {
-					if ($(".ui_note").length >= 350) {
-						$('html, body').animate({
-							scrollTop: 30
-						}, 600);
-						$( ".ui_note:gt(200)" ).remove();
 					}
-					XKit.extensions.activity_plus.in_type_filter = false;
-					return;
-				}
+
+					XKit.tools.remove_css("activity_plus_note_filter_mutual");
+					XKit.tools.remove_css("activity_plus_note_filter");
+
+					if (m_type === "") {
+						if ($(".ui_note").length >= 350) {
+							$('html, body').animate({
+								scrollTop: 30
+							}, 600);
+							$( ".ui_note:gt(200)" ).remove();
+						}
+						XKit.extensions.activity_plus.in_type_filter = false;
+						return;
+					}
 
 
 
-				XKit.extensions.activity_plus.in_type_filter = true;
-				XKit.extensions.activity_plus.in_type_filter_button = $(this);
+					XKit.extensions.activity_plus.in_type_filter = true;
+					XKit.extensions.activity_plus.in_type_filter_button = $(this);
 
-				if (m_type === "is_reply") {
-					m_type = "is_reply, .is_answer";
-				}
+					if (m_type === "is_reply") {
+						m_type = "is_reply, .is_answer";
+					}
 
-				var m_filter_css = ".ui_note { display: none; } .ui_note." + m_type + " { display: block; }";
-				XKit.tools.add_css(m_filter_css, "activity_plus_note_filter");
+					var m_filter_css = ".ui_note { display: none; } .ui_note." + m_type + " { display: block; }";
+					XKit.tools.add_css(m_filter_css, "activity_plus_note_filter");
 
-				XKit.extensions.activity_plus.undo_condense();
+					XKit.extensions.activity_plus.undo_condense();
 
 
-			});
+				});
 
-			$(window).scroll(function () {
-				if ($(".ui_sticky").hasClass("is_sticky")) {
-					$("#xkit-activity-plus-note-filter").addClass("center-me-up");
-				} else {
-					$("#xkit-activity-plus-note-filter").removeClass("center-me-up");
-				}
-			});
+				$(window).scroll(function() {
+					if ($(".ui_sticky").hasClass("is_sticky")) {
+						$("#xkit-activity-plus-note-filter").addClass("center-me-up");
+					} else {
+						$("#xkit-activity-plus-note-filter").removeClass("center-me-up");
+					}
+				});
 
-		}
+			}
 
-		if (this.preferences.quick_switch.value === true) {
+			if (this.preferences.quick_switch.value === true) {
 
-			$("#popover_blogs").find(".blog_title").each(function() {
-				$(this).attr('href', $(this).attr('href').replace('/blog/', '/activity/'));
-			});
+				$("#popover_blogs").find(".blog_title").each(function() {
+					$(this).attr('href', $(this).attr('href').replace('/blog/', '/activity/'));
+				});
 
-		}
+			}
 
-		if (this.preferences.condensed_notes.value === true) {
-			XKit.extensions.activity_plus.do_condensed();
-		}
+			if (this.preferences.condensed_notes.value === true) {
+				XKit.extensions.activity_plus.do_condensed();
+			}
 
-		XKit.tools.add_css(m_css, "activity_plus_additional");
+			XKit.tools.add_css(m_css, "activity_plus_additional");
 
-		if (XKit.installed.check("notificationblock")) {
-			setTimeout(function() { XKit.extensions.activity_plus.do_on_new(); }, 1000);
-		} else {
-			XKit.extensions.activity_plus.do_on_new();
-		}
+			if (XKit.installed.check("notificationblock")) {
+				setTimeout(function() { XKit.extensions.activity_plus.do_on_new(); }, 1000);
+			} else {
+				XKit.extensions.activity_plus.do_on_new();
+			}
 
-		} catch(e) {
+		} catch (e) {
 
 			console.log("activity_plus = " + e.message);
 
@@ -198,7 +198,7 @@ XKit.extensions.activity_plus = new Object({
 					if (XKit.extensions.activity_plus.condensed_count === 2) {
 						try {
 							$(XKit.extensions.activity_plus.last_checked_item).addClass("xkit-activity-plus-condensed-item-parent").addClass("xkit-activity-plus-condensed-item---" + XKit.extensions.activity_plus.condensed_id);
-						} catch(e) {
+						} catch (e) {
 							// meh.
 						}
 					}
@@ -230,12 +230,12 @@ XKit.extensions.activity_plus = new Object({
 						if (XKit.extensions.activity_plus.condensed_count === 2) {
 							try {
 								$(XKit.extensions.activity_plus.last_checked_item).addClass("xkit-activity-plus-condensed-item-parent").addClass("xkit-activity-plus-condensed-item---" + XKit.extensions.activity_plus.condensed_id);
-							} catch(e) {
+							} catch (e) {
 								// meh.
 							}
 						}
 
-					} else{
+					} else {
 
 						XKit.extensions.activity_plus.do_condensed_condense();
 						XKit.extensions.activity_plus.last_post_info = post_info;
@@ -326,7 +326,7 @@ XKit.extensions.activity_plus = new Object({
 	cpanel: function() {
 
 		$("#xkit-timestamps-format-help").click(function() {
-			XKit.window.show("Timestamp formatting","This extension allows you to format the date by using a formatting syntax. Make your own and type it in the Timestamp Format box to customize your timestamps.<br/><br/>For information, please visit:<br/><a href=\"http://xkit.info/seven/support/timestamps/index.php\">Timestamp Format Documentation</a><br/><br/>Please be careful while customizing the format. Improper/invalid formatting can render Timestamps unusable. In that case, just delete the text you've entered completely and XKit will revert to its default formatting.","info","<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
+			XKit.window.show("Timestamp formatting", "This extension allows you to format the date by using a formatting syntax. Make your own and type it in the Timestamp Format box to customize your timestamps.<br/><br/>For information, please visit:<br/><a href=\"http://xkit.info/seven/support/timestamps/index.php\">Timestamp Format Documentation</a><br/><br/>Please be careful while customizing the format. Improper/invalid formatting can render Timestamps unusable. In that case, just delete the text you've entered completely and XKit will revert to its default formatting.", "info", "<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
 		});
 
 	},

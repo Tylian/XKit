@@ -39,8 +39,7 @@ XKit.extensions.reblog_yourself = {
 				}
 			});
 		}
-		if(XKit.extensions.reblog_yourself.preferences.dashboard.value === true)
-		{
+		if (XKit.extensions.reblog_yourself.preferences.dashboard.value === true)		{
 			XKit.post_listener.add("reblog_yourself", XKit.extensions.reblog_yourself.fix_dashboard);
 			XKit.extensions.reblog_yourself.fix_dashboard();
 		}
@@ -49,7 +48,7 @@ XKit.extensions.reblog_yourself = {
 
 	frame_run: function() {
 
-		if(XKit.extensions.reblog_yourself.preferences.postpages.value === false)
+		if (XKit.extensions.reblog_yourself.preferences.postpages.value === false)
 			return;
 		// This gets run on frame.
 		// Port of ugly code from XKit 6 but at least it works.
@@ -105,7 +104,7 @@ XKit.extensions.reblog_yourself = {
 		}
 
 		// defaults
-		var m_blog_url = $("#popover_blogs").find(".popover_menu_item").first().attr('id').replace("menuitem-","");
+		var m_blog_url = $("#popover_blogs").find(".popover_menu_item").first().attr('id').replace("menuitem-", "");
 		var m_blog_title = $("#popover_blogs").find(".popover_menu_item").first().find(".blog_title").find("span").html();
 
 		// check which blog is missing from the list
@@ -113,21 +112,21 @@ XKit.extensions.reblog_yourself = {
 		var check = [];
 		var do_add = false;
 		var m_blog_avatar = "";
-		for(i=0;i<m_blogs.length;i++) {
+		for (i = 0; i < m_blogs.length; i++) {
 			if (m_blogs[i] !== "") {
-				check = $('#tumblelog_choices').find('.popover_inner ul li div[data-option-value='+m_blogs[i]+']');
-				if(check.length <= 0) {
+				check = $('#tumblelog_choices').find('.popover_inner ul li div[data-option-value=' + m_blogs[i] + ']');
+				if (check.length <= 0) {
 					do_add = true;
 					m_blog_url = m_blogs[i];
-					m_blog_title = $("#menuitem-"+m_blog_url+" .blog_title span").html();
+					m_blog_title = $("#menuitem-" + m_blog_url + " .blog_title span").html();
 
 					try {
-						m_blog_avatar = $("#menuitem-"+m_blog_url).find(".blog_icon_image").attr('src');
+						m_blog_avatar = $("#menuitem-" + m_blog_url).find(".blog_icon_image").attr('src');
 						// I'm pretty sure they just use PNG but just in case:
-						m_blog_avatar = m_blog_avatar.replace("_40.png","_64.png");
-						m_blog_avatar = m_blog_avatar.replace("_40.gif","_64.gif");
-						m_blog_avatar = m_blog_avatar.replace("_40.jpg","_64.jpg");
-					} catch(e) {
+						m_blog_avatar = m_blog_avatar.replace("_40.png", "_64.png");
+						m_blog_avatar = m_blog_avatar.replace("_40.gif", "_64.gif");
+						m_blog_avatar = m_blog_avatar.replace("_40.jpg", "_64.jpg");
+					} catch (e) {
 						XKit.console.add("reblog_yourself: " + e.message);
 					}
 				} else {
@@ -141,11 +140,11 @@ XKit.extensions.reblog_yourself = {
 		var post_avatar = "";
 		try {
 			post_avatar = m_blog_avatar;
-		} catch(e) {
+		} catch (e) {
 			XKit.console.add("reblog_yourself: " + e.message);
 		}
 
-		var m_html = '<div class="option" data-facebook-on="false" data-twitter-on="false" data-facebook="false" data-twitter="false" data-is-password-protected="false" data-use-sub-avatar="" data-use-channel-avatar="0" data-blog-url="http://' + m_blog_url + '.tumblr.com/" data-avatar-url="' + post_avatar +'" data-user-avatar-url="' + post_avatar +'" data-option-value="'+ m_blog_url +'" title="'+ m_blog_title +'">' + m_blog_url + '</div>';
+		var m_html = '<div class="option" data-facebook-on="false" data-twitter-on="false" data-facebook="false" data-twitter="false" data-is-password-protected="false" data-use-sub-avatar="" data-use-channel-avatar="0" data-blog-url="http://' + m_blog_url + '.tumblr.com/" data-avatar-url="' + post_avatar + '" data-user-avatar-url="' + post_avatar + '" data-option-value="' + m_blog_url + '" title="' + m_blog_title + '">' + m_blog_url + '</div>';
 
 		$("#tumblelog_choices").find(".popover_inner").find("ul").prepend("<li>" + m_html + "</li>");
 
@@ -195,7 +194,7 @@ XKit.extensions.reblog_yourself = {
 			var blog_id = $(this).attr('data-tumblelog-name');
 			var reblog_id = $(this).attr('data-post-id');
 
-			if (post_id === "" ||reblog_key === "") {
+			if (post_id === "" || reblog_key === "") {
 				// Can't do this for some reason.
 				console.log("NO REBLOG / POST ID");
 				return;

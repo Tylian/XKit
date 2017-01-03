@@ -41,8 +41,8 @@ XKit.extensions.norecommended = new Object({
 	do: function() {
 
 	    if (XKit.extensions.norecommended.preferences.no_mini_recs.value) {
-			XKit.tools.add_css(" .recommended-unit-container.blog-card-compact {display: none;}", "norecommended_no_mini_recs");
-		}
+		XKit.tools.add_css(" .recommended-unit-container.blog-card-compact {display: none;}", "norecommended_no_mini_recs");
+	}
 
 		if (XKit.extensions.norecommended.preferences.no_liked.value) {
 			XKit.tools.add_css(" .rapid-recs {display: none;}", "norecommended_no_liked");
@@ -82,7 +82,7 @@ XKit.extensions.norecommended = new Object({
 	hide_recommended_on_blogs: function() {
 		if (!XKit.interface.is_tumblr_page()) {
 			//We're not going to expect other themes have this class as well.
-			XKit.tools.add_css(".related-posts-wrapper, .recommended-posts-wrapper {display:none;}","norecommended_hide_recommended_on_blogs");
+			XKit.tools.add_css(".related-posts-wrapper, .recommended-posts-wrapper {display:none;}", "norecommended_hide_recommended_on_blogs");
 		}
 	},
 

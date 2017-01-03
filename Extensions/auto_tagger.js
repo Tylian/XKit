@@ -200,7 +200,7 @@ XKit.extensions.auto_tagger = new Object({
 
 		XKit.console.add("Auto Tagger -> new_post_check -> user in new post page!");
 
-		if(post_forms.length <= 0) {
+		if (post_forms.length <= 0) {
 			XKit.console.add("Auto Tagger -> new_post_check -> delaying, not on page...");
 			return;
 		}
@@ -388,9 +388,9 @@ XKit.extensions.auto_tagger = new Object({
 	},
 
 	inject_to_window: function(raw_string) {
-        $(".post-form--footer").css("display", "block");
-        $(".post-form--footer").css("opacity", "1");
-        if($(".post-form").length <= 0) {
+		$(".post-form--footer").css("display", "block");
+		$(".post-form--footer").css("opacity", "1");
+		if ($(".post-form").length <= 0) {
 			setTimeout(function() {
 				XKit.extensions.auto_tagger.inject_to_window(raw_string);
 			}, 200);

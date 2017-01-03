@@ -142,7 +142,7 @@ XKit.extensions.audio_plus = {
 					m_object.playing = audiojs.instances["audiojs" + current_player].playing;
 					m_object.id = parseInt(current_player);
 					jQuery("#xkit-audio-plus-current-player").html("CU:" + JSON.stringify(m_object));
-				} catch(e){
+				} catch (e) {
 					jQuery("#xkit-audio-plus-current-player").html("");
 				}
 			}, 1000);
@@ -152,12 +152,12 @@ XKit.extensions.audio_plus = {
 
 	return_current_instance: function() {
 
-		if ($("#xkit-audio-plus-current-player").html().substring(0,3) !== "CU:") {
+		if ($("#xkit-audio-plus-current-player").html().substring(0, 3) !== "CU:") {
 			return -1;
 		} else {
 			try {
 				return JSON.parse($("#xkit-audio-plus-current-player").html().substring(3));
-			} catch(e) {
+			} catch (e) {
 				return -1;
 			}
 		}

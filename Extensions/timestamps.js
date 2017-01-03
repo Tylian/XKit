@@ -88,11 +88,11 @@ XKit.extensions.timestamps = new Object({
 				XKit.post_listener.add("timestamps", this.add_timestamps);
 				this.add_timestamps();
 
-				$(document).on("click",".xkit-timestamp-failed-why", function() {
+				$(document).on("click", ".xkit-timestamp-failed-why", function() {
 					XKit.window.show("Timestamp loading failed.", "This might be caused by several reasons, such as the post being removed, becoming private, or the Tumblr server having a problem that it can't return the page required by XKit to load you the timestamp.", "error", "<div id=\"xkit-close-message\" class=\"xkit-button\">OK</div></div>");
 				});
 			}
-		} catch(e) {
+		} catch (e) {
 			show_error_script("Timestamps: " + e.message);
 		}
 
@@ -221,7 +221,7 @@ XKit.extensions.timestamps = new Object({
 				try {
 					var mdata = JSON.parse(response.responseText);
 					raw_date = mdata.post.date;
-				} catch(e) {
+				} catch (e) {
 					self.show_failed(date_element);
 					return;
 				}
@@ -263,13 +263,13 @@ XKit.extensions.timestamps = new Object({
 						date_element.html(self.format_date(date));
 						date_element.removeClass("xtimestamp_loading");
 						XKit.storage.set("timestamps", "xkit_timestamp_cache_" + post_id, post.timestamp);
-					} catch(e) {
+					} catch (e) {
 						XKit.console.add('Unable to load timestamp for post ' + post_id);
 						self.show_failed(date_element);
 					}
 				}
 			});
-		} catch(e) {
+		} catch (e) {
 			XKit.console.add('Unable to load timestamp for post ' + post_id);
 			XKit.extensions.timestamps.show_failed(date_element);
 		}
@@ -302,7 +302,7 @@ XKit.extensions.timestamps = new Object({
 
 	cpanel: function() {
 		$("#xkit-timestamps-format-help").click(function() {
-			XKit.window.show("Timestamp formatting","Timestamps extension allows you to format the date by using a formatting syntax. Make your own and type it in the Timestamp Format box to customize your timestamps.<br/><br/>For information, please visit:<br/><a href=\"http://xkit.info/seven/support/timestamps/index.php\">Timestamp Format Documentation</a><br/><br/>Please be careful while customizing the format. Improper/invalid formatting can render Timestamps unusable. In that case, just delete the text you've entered completely and XKit will revert to its default formatting.","info","<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
+			XKit.window.show("Timestamp formatting", "Timestamps extension allows you to format the date by using a formatting syntax. Make your own and type it in the Timestamp Format box to customize your timestamps.<br/><br/>For information, please visit:<br/><a href=\"http://xkit.info/seven/support/timestamps/index.php\">Timestamp Format Documentation</a><br/><br/>Please be careful while customizing the format. Improper/invalid formatting can render Timestamps unusable. In that case, just delete the text you've entered completely and XKit will revert to its default formatting.", "info", "<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
 		});
 	},
 

@@ -60,7 +60,7 @@ XKit.extensions.profiler = new Object({
 			$(".follower").each(function() {
 
 				var m_url = $(this).find(".name").text();
-				var m_storage = XKit.storage.get("profiler","nick-for--" + m_url, "");
+				var m_storage = XKit.storage.get("profiler", "nick-for--" + m_url, "");
 				if (m_storage === "") { return; }
 
 				$(this).find(".name").append("<div class=\"xkit-profiler-nickname-inline\">(" + m_storage + ")</div>");
@@ -90,12 +90,12 @@ XKit.extensions.profiler = new Object({
 				try {
 					var m_json_obj = JSON.parse(m_json_info);
 					post_owner = m_json_obj.name;
-				} catch(e) {
+				} catch (e) {
 					return;
 				}
 			}
 
-			var m_storage = XKit.storage.get("profiler","nick-for--" + post_owner, "");
+			var m_storage = XKit.storage.get("profiler", "nick-for--" + post_owner, "");
 
 			if (m_storage === "") { return; }
 
@@ -291,11 +291,11 @@ XKit.extensions.profiler = new Object({
 		$("#xkit-profiler-contents").nanoScroller();
 		$("#xkit-profiler-contents").nanoScroller({ scroll: 'top' });
 
-		$("body").css("overflow","hidden");
+		$("body").css("overflow", "hidden");
 
 		$("#xkit-profiler-close").click(function() {
 
-			$("body").css("overflow","auto");
+			$("body").css("overflow", "auto");
 			XKit.window.close();
 
 			if (XKit.extensions.profiler.is_inframe === true) {
@@ -309,7 +309,7 @@ XKit.extensions.profiler = new Object({
 			var new_name = prompt("Enter a nickname/title/description for this person");
 
 			if (new_name !== null) {
-				XKit.storage.set("profiler","nick-for--" + user_url, new_name);
+				XKit.storage.set("profiler", "nick-for--" + user_url, new_name);
 				$("#xkit-profiler-nickname").removeClass("loading-up").html(new_name);
 			} else {
 				console.log("Nothing entered.");
@@ -319,7 +319,7 @@ XKit.extensions.profiler = new Object({
 
 		});
 
-		var m_nickname = XKit.storage.get("profiler","nick-for--" + user_url, "");
+		var m_nickname = XKit.storage.get("profiler", "nick-for--" + user_url, "");
 		if (m_nickname === "") {
 			$("#xkit-profiler-nickname").removeClass("loading-up").html("Not set");
 		} else {
@@ -327,7 +327,7 @@ XKit.extensions.profiler = new Object({
 		}
 
 		var m_blogs = XKit.tools.get_blogs();
-		for(i=0;i<m_blogs.length;i++) {
+		for (i = 0; i < m_blogs.length; i++) {
 			if (m_blogs[i] !== "") {
 				blog_id = m_blogs[i];
 				break;
@@ -371,7 +371,7 @@ XKit.extensions.profiler = new Object({
 				$("#xkit-profiler-custom-domain").removeClass("loading-up").html(m_custom_val);
 
 				if (data.blog.is_nsfw === true) {
-						$("#xkit-profiler-nsfw").removeClass("loading-up").html("Yes");
+					$("#xkit-profiler-nsfw").removeClass("loading-up").html("Yes");
 				} else {
 					$("#xkit-profiler-nsfw").removeClass("loading-up").html("No");
 				}
@@ -395,7 +395,7 @@ XKit.extensions.profiler = new Object({
 					},
 					onload: function(response) {
 						var data = JSON.parse(response.responseText).response;
-						var date = new Date(data.posts[0].timestamp*1000);
+						var date = new Date(data.posts[0].timestamp * 1000);
 						$("#xkit-profiler-since").removeClass("loading-up").html(date.getFullYear());
 					}
 				});
@@ -469,7 +469,7 @@ XKit.extensions.profiler = new Object({
 				var data = null;
 				try {
 					data = JSON.parse(response.responseText).response;
-				} catch(e) {
+				} catch (e) {
 					console.log("Error parsing data.");
 					XKit.extensions.profiler.display_error(m_window_id);
 					return;
@@ -497,9 +497,9 @@ XKit.extensions.profiler = new Object({
 
 	show_ump_error: function() {
 
-		if (XKit.storage.get("profiler","shown_warning_about_show_more","") !== "yass") {
-			XKit.window.show("Oops: User Menus+ is missing.", "<b>Profiler requires User Menus+ extension to be installed and enabled in order to work.</b> Please download User Menus+ from the extension gallery and refresh the page to start using Profiler.","error","<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
-			XKit.storage.set("profiler","shown_warning_about_show_more","yass");
+		if (XKit.storage.get("profiler", "shown_warning_about_show_more", "") !== "yass") {
+			XKit.window.show("Oops: User Menus+ is missing.", "<b>Profiler requires User Menus+ extension to be installed and enabled in order to work.</b> Please download User Menus+ from the extension gallery and refresh the page to start using Profiler.", "error", "<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
+			XKit.storage.set("profiler", "shown_warning_about_show_more", "yass");
 		}
 
 	},
@@ -508,7 +508,7 @@ XKit.extensions.profiler = new Object({
 		this.running = false;
 		try {
 			XKit.extensions.show_more.remove_custom_menu("profiler");
-		} catch(e){
+		} catch (e) {
 			XKit.console.add("Can't remove custom menu, " + e.message);
 		}
 	}

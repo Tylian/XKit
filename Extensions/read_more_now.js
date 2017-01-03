@@ -43,7 +43,7 @@ XKit.extensions.read_more_now = new Object({
 			$(this).addClass("disabled");
 			$(this).html("Retrieving post...");
 			var m_url = $(this).attr('data-post-url');
-			var json_page_parts = m_url.replace(/https?:\/\//,"").split("/");
+			var json_page_parts = m_url.replace(/https?:\/\//, "").split("/");
 			var blog_name = json_page_parts[0];
 			var post_id = json_page_parts[2];
 			var m_cont = $(this);
@@ -54,50 +54,50 @@ XKit.extensions.read_more_now = new Object({
 				method: "GET",
 				url: api_url,
 				json: true,
-			onerror: function() {
-				$(m_cont).removeClass("disabled");
-				$(m_cont).html(XKit.extensions.read_more_now.button_caption);
-				XKit.extensions.read_more_now.show_failed();
-			},
-			onload: function(response) {
-				var data = JSON.parse(response.responseText);
-				var m_object = data.response;
-				try {
-					var m_contents = m_object.posts[0].body;
-
-					if (m_object.posts[0].type === "photo") {
-						m_contents = m_object.posts[0]["photo-caption"] ||
-						             m_object.posts[0].caption;
-					}
-
-					if (m_object.posts[0].type === "answer") {
-						m_contents = m_object.posts[0].answer;
-					}
-
-					if (m_object.posts[0].type === "link") {
-						m_contents = m_object.posts[0].description;
-					}
-
-					var post_cont = $(m_cont).parent().parent();
-					if (post_cont.find(".post_title").length > 0) {
-						var post_title = post_cont.find(".post_title")[0].outerHTML;
-						post_cont.html(XKit.extensions.read_more_now.strip_scripts(post_title + m_contents));
-					} else {
-						post_cont.html(XKit.extensions.read_more_now.strip_scripts(m_contents));
-					}
-
-					if (XKit.interface.where().search) {
-						post_cont.find("img").load(function() {
-							XKit.interface.trigger_reflow();
-						});
-						XKit.interface.trigger_reflow();
-					}
-				} catch(e) {
+				onerror: function() {
 					$(m_cont).removeClass("disabled");
 					$(m_cont).html(XKit.extensions.read_more_now.button_caption);
 					XKit.extensions.read_more_now.show_failed();
-				}
-			}});
+				},
+				onload: function(response) {
+					var data = JSON.parse(response.responseText);
+					var m_object = data.response;
+					try {
+						var m_contents = m_object.posts[0].body;
+
+						if (m_object.posts[0].type === "photo") {
+							m_contents = m_object.posts[0]["photo-caption"] ||
+						             m_object.posts[0].caption;
+						}
+
+						if (m_object.posts[0].type === "answer") {
+							m_contents = m_object.posts[0].answer;
+						}
+
+						if (m_object.posts[0].type === "link") {
+							m_contents = m_object.posts[0].description;
+						}
+
+						var post_cont = $(m_cont).parent().parent();
+						if (post_cont.find(".post_title").length > 0) {
+							var post_title = post_cont.find(".post_title")[0].outerHTML;
+							post_cont.html(XKit.extensions.read_more_now.strip_scripts(post_title + m_contents));
+						} else {
+							post_cont.html(XKit.extensions.read_more_now.strip_scripts(m_contents));
+						}
+
+						if (XKit.interface.where().search) {
+							post_cont.find("img").load(function() {
+								XKit.interface.trigger_reflow();
+							});
+							XKit.interface.trigger_reflow();
+						}
+					} catch (e) {
+						$(m_cont).removeClass("disabled");
+						$(m_cont).html(XKit.extensions.read_more_now.button_caption);
+						XKit.extensions.read_more_now.show_failed();
+					}
+				}});
 		});
 	},
 
@@ -113,14 +113,14 @@ XKit.extensions.read_more_now = new Object({
 		var scripts = div.getElementsByTagName('script');
 		var i = scripts.length;
 		while (i--) {
-				scripts[i].parentNode.removeChild(scripts[i]);
+			scripts[i].parentNode.removeChild(scripts[i]);
 		}
 		return div.innerHTML;
 	},
 
 	show_failed: function() {
 
-		XKit.window.show("Unable to fetch read more","Perhaps the user deleted the post?","error","<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
+		XKit.window.show("Unable to fetch read more", "Perhaps the user deleted the post?", "error", "<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
 
 	},
 

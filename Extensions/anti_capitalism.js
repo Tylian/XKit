@@ -79,7 +79,7 @@ XKit.extensions.anti_capitalism = new Object({
 		}
 
 		if (this.preferences.video_ad.value) {
-			this.interval_id = setInterval(function (){
+			this.interval_id = setInterval(function() {
 				var players = $(".sidebar-ad-content iframe, .sponsored_post iframe, .sponsored_post video, .standalone-ad-container video");
 				// Pause + remove src of video tags to prevent audio from persisting after DOM removal
 				var videos = players.filter("video");

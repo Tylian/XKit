@@ -25,7 +25,7 @@ XKit.extensions.reblog_as_text = new Object({
 
 	fix_page: function() {
 
-		if ($("#tumblelog_choices").length === 0 ||$(".mceEditor").length === 0) {
+		if ($("#tumblelog_choices").length === 0 || $(".mceEditor").length === 0) {
 			XKit.console.add("Reblog window Not active yet, delaying..");
 			setTimeout(function() { XKit.extensions.reblog_as_text.fix_page(); }, 100);
 			return;
@@ -71,13 +71,15 @@ XKit.extensions.reblog_as_text = new Object({
 				if (this.destroy_preview) {
 					this.destroy_preview();
 				}
-				Tumblr.PostForms.change_reblog_type("text",jQuery('body').attr('data-page-root'),l,k,"");
+				Tumblr.PostForms.change_reblog_type("text", jQuery('body').attr('data-page-root'), l, k, "");
 			}
 		}
 
-		try { var script = document.createElement("script");
-		script.textContent = script.textContent + (true ? "(" : "") + m_function.toString() + (true ? ")();" : "");
-		document.body.appendChild(script); } catch(e) { alert(e.message); }
+		try {
+			var script = document.createElement("script");
+			script.textContent = script.textContent + (true ? "(" : "") + m_function.toString() + (true ? ")();" : "");
+			document.body.appendChild(script); 
+		} catch (e) { alert(e.message); }
 
 		// If reblog yourself is installed, call it.
 		XKit.installed.when_running("reblog_yourself", function() {
@@ -96,7 +98,7 @@ XKit.extensions.reblog_as_text = new Object({
 
 	try_to_inject_tags: function(to_add) {
 
-		if($("#post_content").length <= 0) {
+		if ($("#post_content").length <= 0) {
 			setTimeout(function() {
 				XKit.extensions.reblog_as_text.try_to_inject_tags(to_add);
 			}, 200);
@@ -110,7 +112,7 @@ XKit.extensions.reblog_as_text = new Object({
 		var do_tags = true;
 		var tag_to_be_added = "";
 		var tags = to_add.split(",");
-		for (i=0;i<tags.length;i++) {
+		for (i = 0; i < tags.length; i++) {
 			tag_to_be_added = tags[i];
 			if (tag_to_be_added !== "") {
 				var old_tags = $("#post_content").find(".tags").find(".post_tags").val();
@@ -118,7 +120,7 @@ XKit.extensions.reblog_as_text = new Object({
 				$("#post_content").find(".tags").find(".editor_wrapper").before('<span class="tag">' + tag_to_be_added + '</span>');
 			}
 		}
-		$("#post_tags_label").css('display','none');
+		$("#post_tags_label").css('display', 'none');
 		$("#post_tags").val(to_add);
 
 	},
