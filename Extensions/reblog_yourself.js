@@ -112,7 +112,7 @@ XKit.extensions.reblog_yourself = {
 		var check = [];
 		var do_add = false;
 		var m_blog_avatar = "";
-		for (i = 0; i < m_blogs.length; i++) {
+		for (var i = 0; i < m_blogs.length; i++) {
 			if (m_blogs[i] !== "") {
 				check = $('#tumblelog_choices').find('.popover_inner ul li div[data-option-value=' + m_blogs[i] + ']');
 				if (check.length <= 0) {

@@ -327,7 +327,7 @@ XKit.extensions.highlighter = new Object({
 		if (XKit.extensions.highlighter.highlightered.length <= 1) {
 			m_html = m_html + "<div id=\"xkit-highlighter-none\"><b>You have no highlighted words.</b><br/>Click on the button above to add new words to your Highlighter.</div>";
 		} else {
-			for (i = 0; i < XKit.extensions.highlighter.highlightered.length; i++) {
+			for (var i = 0; i < XKit.extensions.highlighter.highlightered.length; i++) {
 				if (XKit.extensions.highlighter.highlightered[i] !== "") {
 					m_html = m_html + XKit.extensions.highlighter.create_highlighter_div(XKit.extensions.highlighter.highlightered[i]);
 				}

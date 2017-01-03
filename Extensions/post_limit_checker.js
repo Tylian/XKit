@@ -39,8 +39,6 @@ XKit.extensions.post_limit_checker = new Object({
 
 	start: function() {
 
-		var shown_message = XKit.storage.get("post_limit_checker", "shown_warning", "");
-
 		var m_html = "<div id=\"xkit-plc-list\" class=\"nano\"><div id=\"xkit-plc-list-content\" class=\"content\">" +
 					"<div class=\"xkit-warning-plc-text\"><b>Deleted posts</b><br/>Deleted posts are counted by Tumblr, but this tool can't count them. For example, if you've made 250 posts since the last reset but then deleted 50 of them, this tool will tell you that you have 50 more posts to go, but in reality you've already hit your post limit.</div>" +
 					"<div class=\"xkit-warning-plc-text\"><b>Original photo posts</b><br/>There is a separate, 75 uploads per day limit for photo posts. This extension does not check for that.</div>" +
@@ -58,7 +56,7 @@ XKit.extensions.post_limit_checker = new Object({
 
 			XKit.window.show("Please wait", "Gathering the information I need..." + XKit.progress.add("post-limit-checker-progress"), "info");
 			var posts = [];
-			for (i = 0; i < XKit.tools.get_blogs().length; i++) {posts.push([]);}
+			for (var i = 0; i < XKit.tools.get_blogs().length; i++) {posts.push([]);}
 			XKit.extensions.post_limit_checker.next(0, posts, XKit.extensions.post_limit_checker.window_id, XKit.tools.get_blogs(), 0);
 
 		});
@@ -141,17 +139,16 @@ XKit.extensions.post_limit_checker = new Object({
 		// http://www.techrepublic.com/article/convert-the-local-time-to-another-time-zone-with-this-javascript/
 
 		// create Date object for current location
-		d = new Date(time);
-
+		var date = new Date(time);
 
 		// convert to msec
 		// add local time zone offset
 		// get UTC time in msec
-		utc = d.getTime() + (d.getTimezoneOffset() * 60000);
+		var utc = date.getTime() + (date.getTimezoneOffset() * 60000);
 
 		// create new Date object for different city
 		// using supplied offset
-		nd = new Date(utc + (3600000 * offset));
+		var nd = new Date(utc + (3600000 * offset));
 
 		// return time as a string
 		return nd;
@@ -187,7 +184,7 @@ XKit.extensions.post_limit_checker = new Object({
 
 				try {
 
-					data = JSON.parse(response.responseText);
+					var data = JSON.parse(response.responseText);
 
 					for (var i = 0; i < data.response.posts.length; i++) {
 

@@ -14,7 +14,7 @@
     no-empty: off
     no-shadow: error
     no-mixed-spaces-and-tabs: [error, smart-tabs]
-    id-length: [error, exceptions: [i, e]]
+    id-length: [error, exceptions: [i, j, e, x, y]]
 
     indent: [error, tab]
     semi: error
@@ -31,16 +31,17 @@
         after: true
   globals:
     require: true
+    unsafeWindow: true
 
     XKit: true
     XBridge: true
+    Tumblr: true
 
     storage_max: true
     storage_used: true
     framework_version: true
     getBridgeError: true
 
-    unsafeWindow: true
     GM_flushStorage: true
     GM_deleteAllValues: true
     GM_getValue: true

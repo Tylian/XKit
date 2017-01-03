@@ -1024,7 +1024,7 @@ XKit.extensions.blacklist = new Object({
 		if (XKit.extensions.blacklist.blacklisted.length <= 1) {
 			m_html = m_html + "<div class=\"xkit-blacklist-none\"><b>You have no blacklisted words.</b></div>";
 		} else {
-			for (i = 0; i < XKit.extensions.blacklist.blacklisted.length; i++) {
+			for (var i = 0; i < XKit.extensions.blacklist.blacklisted.length; i++) {
 				if (XKit.extensions.blacklist.blacklisted[i] !== "") {
 					m_html = m_html + XKit.extensions.blacklist.create_blacklist_div(XKit.extensions.blacklist.blacklisted[i]);
 				}
@@ -1037,7 +1037,7 @@ XKit.extensions.blacklist = new Object({
 		if (XKit.extensions.blacklist.whitelisted.length <= 1) {
 			m_html = m_html + "<div class=\"xkit-blacklist-none\"><b>You have no whitelisted words.</b></div>";
 		} else {
-			for (i = 0; i < XKit.extensions.blacklist.whitelisted.length; i++) {
+			for (var i = 0; i < XKit.extensions.blacklist.whitelisted.length; i++) {
 				if (XKit.extensions.blacklist.whitelisted[i] !== "") {
 					m_html = m_html + XKit.extensions.blacklist.create_blacklist_div(XKit.extensions.blacklist.whitelisted[i], true);
 				}

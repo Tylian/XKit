@@ -57,6 +57,8 @@ XKit.extensions.xkit_installer = new Object({
 		$("#xkit-install-process").html("Installing package " + to_install + "...");
 
 		XKit.install(to_install, function(mdata) {
+			// defined in xkit.js
+			/* globals show_error_installation */
 
 			if (mdata.errors) {
 				if (mdata.storage_error === true) {

@@ -246,7 +246,7 @@ XKit.extensions.one_click_postage = new Object({
 			alert("Unable to QuickReblog/Queue:\nCan't get list of current blogs, please visit dashboard first.");
 			return;
 		} else {
-			for (i = 0; i < m_blogs.length; i++) {
+			for (var i = 0; i < m_blogs.length; i++) {
 				if (m_blogs[i] !== "") {
 					blog_id = m_blogs[i];
 					break;
@@ -647,7 +647,7 @@ XKit.extensions.one_click_postage = new Object({
 		XKit.extensions.one_click_postage.default_blog_id = m_blogs[0];
 
 		if (this.preferences.show_blog_selector.value) {
-			for (i = 0; i < m_blogs.length; i++) {
+			for (var i = 0; i < m_blogs.length; i++) {
 				if (m_blogs[i] !== "") {
 					var extra_cls = "";
 					if (this.preferences.default_blog.value !== "") {
@@ -1243,7 +1243,7 @@ XKit.extensions.one_click_postage = new Object({
 
 		if (blog_id === "" || typeof blog_id === "undefined") {
 			var m_blogs = XKit.tools.get_blogs();
-			for (i = 0; i < m_blogs.length; i++) {
+			for (var i = 0; i < m_blogs.length; i++) {
 				if (m_blogs[i] !== "") {
 					blog_id = m_blogs[i];
 					break;

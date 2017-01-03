@@ -327,7 +327,7 @@ XKit.extensions.profiler = new Object({
 		}
 
 		var m_blogs = XKit.tools.get_blogs();
-		for (i = 0; i < m_blogs.length; i++) {
+		for (var i = 0; i < m_blogs.length; i++) {
 			if (m_blogs[i] !== "") {
 				blog_id = m_blogs[i];
 				break;

@@ -28,8 +28,7 @@ XKit.extensions.xkit_updates = new Object({
 		try {
 			XKit.tools.init_css("xkit_updates");
 			this.running = true;
-			var d = new Date();
-			var ms = d.getTime();
+			var ms = (new Date()).getTime();
 			var last_time = parseFloat(XKit.storage.get("xkit_updates", "last_update_check", "0"));
 			var difference = ms - last_time;
 			XKit.console.add("Updates: difference = " + difference);
@@ -118,8 +117,7 @@ XKit.extensions.xkit_updates = new Object({
 				}
 				XKit.extensions.xkit_updates.update_next(force_mode);
 			} else {
-				var d = new Date();
-				var ms = d.getTime();
+				var ms = (new Date()).getTime();
 				XKit.storage.set("xkit_updates", "last_update_check", ms);
 				XKit.console.add("Update complete: no new extensions");
 			}
@@ -157,8 +155,7 @@ XKit.extensions.xkit_updates = new Object({
 
 		if (XKit.extensions.xkit_updates.to_update_index >= XKit.extensions.xkit_updates.to_update.length) {
 
-			var d = new Date();
-			var ms = d.getTime();
+			var ms = (new Date()).getTime();
 			XKit.storage.set("xkit_updates", "last_update_check", ms);
 
 			// Completed all?
@@ -176,7 +173,7 @@ XKit.extensions.xkit_updates = new Object({
 
 					XKit.notifications.add("XKit updated " + XKit.extensions.xkit_updates.updated_list.length + " extension" + suffix + ". Click here to view them.", "ok", true, function() {
 						var m_result = "";
-						for (i = 0; i < XKit.extensions.xkit_updates.updated_list.length; i++) {
+						for (var i = 0; i < XKit.extensions.xkit_updates.updated_list.length; i++) {
 							m_result = m_result + "<br/>" + XKit.extensions.xkit_updates.updated_list[i] + " &middot; " + XKit.extensions.xkit_updates.updated_list_versions[i];
 						}
 						XKit.window.show("Auto-Update results", "<b>XKit updated the following extension" + suffix + ":</b>" + m_result, "info", "<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");

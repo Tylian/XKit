@@ -506,7 +506,7 @@ XKit.extensions.quick_tags = new Object({
 		if (XKit.extensions.quick_tags.tag_array.length <= 0) {
 			m_html = m_html + "<div id=\"xkit-quick-tags-none\"><b>You have no tag bundles.</b><br/>Create some by clicking on the button above to quickly tag your posts.</div>";
 		} else {
-			for (i = 0; i < XKit.extensions.quick_tags.tag_array.length; i++) {
+			for (var i = 0; i < XKit.extensions.quick_tags.tag_array.length; i++) {
 				if (XKit.extensions.quick_tags.tag_array[i] !== "") {
 					m_html = m_html + XKit.extensions.quick_tags.create_div(XKit.extensions.quick_tags.tag_array[i], i, XKit.extensions.quick_tags.tag_array.length);
 				}

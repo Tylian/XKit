@@ -78,7 +78,7 @@ XKit.extensions.reblog_as_text = new Object({
 		try {
 			var script = document.createElement("script");
 			script.textContent = script.textContent + (true ? "(" : "") + m_function.toString() + (true ? ")();" : "");
-			document.body.appendChild(script); 
+			document.body.appendChild(script);
 		} catch (e) { alert(e.message); }
 
 		// If reblog yourself is installed, call it.
@@ -112,7 +112,7 @@ XKit.extensions.reblog_as_text = new Object({
 		var do_tags = true;
 		var tag_to_be_added = "";
 		var tags = to_add.split(",");
-		for (i = 0; i < tags.length; i++) {
+		for (var i = 0; i < tags.length; i++) {
 			tag_to_be_added = tags[i];
 			if (tag_to_be_added !== "") {
 				var old_tags = $("#post_content").find(".tags").find(".post_tags").val();

@@ -306,17 +306,17 @@ XKit.extensions.xwidgets = new Object({
 				var isitlocal = false;
 				var ofst = now.getTimezoneOffset() / 60;
 				var secs = now.getSeconds();
-				var sec = -1.57 + Math.PI * secs / 30;
+				//var sec = -1.57 + Math.PI * secs / 30;
 				var mins = now.getMinutes();
-				var min = -1.57 + Math.PI * mins / 30;
+				//var min = -1.57 + Math.PI * mins / 30;
 				var hr = (isitlocal) ? now.getHours() : (now.getHours() + parseInt(ofst)) + parseInt(timezone);
-				var hrs = -1.575 + Math.PI * hr / 6 + Math.PI * parseInt(now.getMinutes()) / 360;
+				//var hrs = -1.575 + Math.PI * hr / 6 + Math.PI * parseInt(now.getMinutes()) / 360;
 				if (hr < 0) hr += 24;
 				if (hr > 23) hr -= 24;
-				ampm = (hr > 11) ? "PM" : "AM";
-				statusampm = ampm;
+				var ampm = (hr > 11) ? "PM" : "AM";
+				var statusampm = ampm;
 
-				hr2 = hr;
+				var hr2 = hr;
 				if (hr2 === 0) {
 					hr2 = 12;
 				}
@@ -505,11 +505,11 @@ XKit.extensions.xwidgets = new Object({
 				var isitlocal = false;
 				var ofst = now.getTimezoneOffset() / 60;
 				var secs = now.getSeconds();
-				var sec = -1.57 + Math.PI * secs / 30;
+				// var sec = -1.57 + Math.PI * secs / 30;
 				var mins = now.getMinutes();
-				var min = -1.57 + Math.PI * mins / 30;
+				// var min = -1.57 + Math.PI * mins / 30;
 				var hr = (isitlocal) ? now.getHours() : (now.getHours() + parseInt(ofst)) + parseInt(timezone);
-				var hrs = -1.575 + Math.PI * hr / 6 + Math.PI * parseInt(now.getMinutes()) / 360;
+				// var hrs = -1.575 + Math.PI * hr / 6 + Math.PI * parseInt(now.getMinutes()) / 360;
 				if (hr < 0) hr += 24;
 				if (hr > 23) hr -= 24;
 				/* ampm = (hr > 11)?"PM":"AM";
@@ -519,7 +519,7 @@ XKit.extensions.xwidgets = new Object({
 				//	hr = hr + 12;
 				}
 
-				hr2 = hr;
+				var hr2 = hr;
 				if (hr2 === 0) {
 					hr2 = 24;
 				}
@@ -636,20 +636,20 @@ XKit.extensions.xwidgets = new Object({
 						},
 						onload: function(response) {
 
-							var data = $(response.responseText);
-							var follower_count = $(".followers .count", data).html();
-							var queue_count = $(".queue .count", data).html();
-							var drafts_count = $(".drafts .count", data).html();
+							var blog_page = $(response.responseText);
+							var follower_count = $(".followers .count", blog_page).html();
+							var queue_count = $(".queue .count", blog_page).html();
+							var drafts_count = $(".drafts .count", blog_page).html();
 
-							if ($(".followers .count", data).length === 0) {
+							if ($(".followers .count", blog_page).length === 0) {
 								follower_count = "0";
 							}
 
-							if ($(".queue .count", data).length === 0) {
+							if ($(".queue .count", blog_page).length === 0) {
 								queue_count = "0";
 							}
 
-							if ($(".drafts .count", data).length === 0) {
+							if ($(".drafts .count", blog_page).length === 0) {
 								drafts_count = "0";
 							}
 
@@ -901,7 +901,6 @@ XKit.extensions.xwidgets = new Object({
 
 			button_pressed: function(e) {
 
-				var m_button = $(e.target);
 				var m_parent = $(e.target).parent();
 
 				if ($(m_parent).hasClass("song-actually-playing")) {
@@ -919,16 +918,6 @@ XKit.extensions.xwidgets = new Object({
 			tick: function(obj, data) {
 
 				var m_player = XKit.extensions.audio_plus.return_current_instance();
-
-				if (typeof XKit.extensions.audio_plus === "undefined") {
-					this_widget.show_error(obj);
-					return;
-				} else {
-					if (XKit.extensions.audio_plus.running !== true) {
-						this_widget.show_error(obj);
-						return;
-					}
-				}
 
 				if (m_player === -1) {
 					$(obj).addClass("xkit-no-song-playing");
@@ -1316,12 +1305,13 @@ XKit.extensions.xwidgets = new Object({
 
 				if (typeof XKit.extensions.xwidgets.widgets[XKit.extensions.xwidgets.user_widgets[slot_no]].destroy === "function") {
 					console.log("Destroying widget at " + slot_no);
-					XKit.extensions.xwidgets.widgets[XKit.extensions.xwidgets.user_widgets[slot_no]].destroy($("#xwidgets-box-" + slot_no), XKit.extensions.xwidgets.widget_data[slot_no]);
+					XKit.extensions.xwidgets.widgets[XKit.extensions.xwidgets.user_widgets[slot_no]]
+						.destroy($("#xwidgets-box-" + slot_no), XKit.extensions.xwidgets.widget_data[slot_no]);
 				}
 
 				XKit.extensions.xwidgets.user_widgets[slot_no] = "blank";
 
-				XKit.extensions.xwidgets.widget_data[i] = {};
+				XKit.extensions.xwidgets.widget_data[slot_no] = {};
 				XKit.extensions.xwidgets.save_settings();
 
 				XKit.window.close();
