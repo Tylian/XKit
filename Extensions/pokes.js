@@ -193,7 +193,7 @@ XKit.extensions.pokes = {
 		var rnd_nr = Math.floor(Math.random() * 101);
 		if (rnd_nr >= 0 && rnd_nr <= 8) {
 			return true;
-		}		else {
+		} else {
 			return false;
 		}
 	},

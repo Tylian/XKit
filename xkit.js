@@ -842,11 +842,11 @@ var xkit_global_start = Date.now();  // log start timestamp
 				var popoverBlogs = $('#popover_blogs');
 				if (popoverBlogs && popoverBlogs.length > 0) {
 					$('#popover_blogs > .popover_inner').children('.item')
-																						.not(':last-child').each(function() {
-																							var mX = $(this).attr('id');
-																							mX = mX.substring(9, mX.length);
-																							m_blogs.push(mX);
-																						});
+						.not(':last-child').each(function() {
+							var mX = $(this).attr('id');
+							mX = mX.substring(9, mX.length);
+							m_blogs.push(mX);
+						});
 					XKit.tools.set_setting('xkit_cached_blogs', m_blogs.join(';'));
 					return m_blogs;
 				} else {

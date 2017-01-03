@@ -719,11 +719,10 @@ XKit.extensions.xcloud = new Object({
 		//We want to exclude unavailable extensions since the install script will make the whole thing partially succeed.
 		// Also to make this backwards compatible we need to use the page function which will go to xkitcs.com for XKit 7.5 and gh_pages for New-XKit
 		XKit.download.page('gallery.php', function(gallery_json) {
-
 			if (gallery_json.errors) {
 				XKit.extensions.xcloud.hide_overlay();
 				XKit.window.show("Could not restore", "Couldn't download extension data from the XKit servers.<br/><br/>Please try again or <a href=\"http://new-xkit-support.tumblr.com/ask\">send a bug report</a>.", "error", "<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
-			}			else {
+			} else {
 				XKit.extensions.xcloud.extensions_upgraded = false;
 
 				var extension_array = [];
