@@ -32,8 +32,8 @@ jQuery.fn.selectText = function() {
  * Dual licensed under the MIT and GPL licenses
  *
  */
+/* eslint-disable id-length, no-unused-vars */
 (function($) {
-	/* eslint id-length: off, no-unused-vars: off */
 	var ColorPicker = function() {
 		var
 			ids = {},
@@ -507,6 +507,7 @@ jQuery.fn.selectText = function() {
 		ColorPickerShow: ColorPicker.showPicker,
 		ColorPickerSetColor: ColorPicker.setColor
 	});
+	/* eslint-enable id-length, no-unused-vars */
 })(jQuery);
 
 XKit.extensions.themes_plus = new Object({
@@ -1036,8 +1037,8 @@ XKit.extensions.themes_plus = new Object({
 		$(".xkit-themes-plus-option-panel-text-url").change(function(event) {
 
 			var m_option_id = $(this).parentsUntil(".xkit-themes-plus-option").parent().attr('data-option');
-			var m_of = XKit.extensions.themes_plus.options[m_option_id].of;
-			var m_attr = XKit.extensions.themes_plus.options[m_option_id].attr;
+			// var m_of = XKit.extensions.themes_plus.options[m_option_id].of;
+			// var m_attr = XKit.extensions.themes_plus.options[m_option_id].attr;
 
 			/*XKit.tools.remove_css("xkit-themes-plus-preview-" + m_option_id);
 
@@ -1074,12 +1075,10 @@ XKit.extensions.themes_plus = new Object({
 			var value = $(this).attr('data-value');
 
 			var m_of = XKit.extensions.themes_plus.options[m_option_id].of;
-			var m_attr = XKit.extensions.themes_plus.options[m_option_id].attr;
+			// var m_attr = XKit.extensions.themes_plus.options[m_option_id].attr;
 
 			if (!value) {
-
 				value = $(m_of[0]).css("background-color");
-
 			}
 
 			var this_picker = this;

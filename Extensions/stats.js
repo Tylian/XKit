@@ -7,7 +7,6 @@
 //* BETA false **//
 
 XKit.extensions.stats = new Object({
-	/* eslint id-length: off */
 
 	running: false,
 
@@ -154,7 +153,7 @@ XKit.extensions.stats = new Object({
 
 		}
 
-		users.sort(function(a, b) { return b.count - a.count; } );
+		users.sort(function(first, second) { return second.count - first.count; } );
 
 		console.log(types);
 		console.log("total note count = " + total_note_count);
@@ -340,7 +339,7 @@ XKit.extensions.stats = new Object({
 
 		}
 
-		users.sort(function(a, b) { return b.count - a.count; } );
+		users.sort(function(first, second) { return second.count - first.count; } );
 
 		console.log(types);
 		console.log("total note count = " + total_note_count);
@@ -452,7 +451,7 @@ XKit.extensions.stats = new Object({
 			});
 		}
 
-		arranged_types.sort(function(a, b) { return b.count - a.count; } );
+		arranged_types.sort(function(first, second) { return second.count - first.count; });
 
 		var m_object = {};
 

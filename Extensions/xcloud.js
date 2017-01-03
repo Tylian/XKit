@@ -1039,7 +1039,7 @@ XKit.extensions.xcloud = new Object({
 
 
 	md5: function(str) {
-		/* eslint id-length: off */
+		/* eslint-disable id-length */
 
 		// http://kevin.vanzonneveld.net
 		// +   original by: Webtoolkit.info (http://www.webtoolkit.info/)
@@ -1250,6 +1250,7 @@ XKit.extensions.xcloud = new Object({
 		var temp = wordToHex(a) + wordToHex(b) + wordToHex(c) + wordToHex(d);
 
 		return temp.toLowerCase();
+		/* eslint-enable id-length */
 	},
 
 	utf8_encode: function(argString) {
@@ -1278,8 +1279,8 @@ XKit.extensions.xcloud = new Object({
 
 		start = end = 0;
 		stringl = string.length;
-		for (var n = 0; n < stringl; n++) {
-			var c1 = string.charCodeAt(n);
+		for (var i = 0; i < stringl; i++) {
+			var c1 = string.charCodeAt(i);
 			var enc = null;
 
 			if (c1 < 128) {
@@ -1296,9 +1297,9 @@ XKit.extensions.xcloud = new Object({
 					( c1        & 63) | 128
 				);
 			} else { // surrogate pairs
-				if (c1 & 0xFC00 != 0xD800) { throw new RangeError("Unmatched trail surrogate at " + n); }
-				var c2 = string.charCodeAt(++n);
-				if (c2 & 0xFC00 != 0xDC00) { throw new RangeError("Unmatched lead surrogate at " + (n - 1)); }
+				if (c1 & 0xFC00 != 0xD800) { throw new RangeError("Unmatched trail surrogate at " + i); }
+				var c2 = string.charCodeAt(++i);
+				if (c2 & 0xFC00 != 0xDC00) { throw new RangeError("Unmatched lead surrogate at " + (i - 1)); }
 				c1 = ((c1 & 0x3FF) << 10) + (c2 & 0x3FF) + 0x10000;
 				enc = String.fromCharCode(
 					(c1 >> 18)       | 240,
@@ -1312,7 +1313,7 @@ XKit.extensions.xcloud = new Object({
 					utftext += string.slice(start, end);
 				}
 				utftext += enc;
-				start = end = n + 1;
+				start = end = i + 1;
 			}
 		}
 
@@ -1367,9 +1368,9 @@ XKit.extensions.xcloud = new Object({
 
 		enc = tmp_arr.join('');
 
-		var r = data.length % 3;
+		var padding = data.length % 3;
 
-		return (r ? enc.slice(0, r - 3) : enc) + '==='.slice(r || 3);
+		return (padding ? enc.slice(0, padding - 3) : enc) + '==='.slice(padding || 3);
 
 	},
 

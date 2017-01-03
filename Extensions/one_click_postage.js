@@ -1101,7 +1101,7 @@ XKit.extensions.one_click_postage = new Object({
 
 		// I don't know what this is doing
 		// but I don't want to break its current behavior
-		/* eslint no-undef: off */
+		/* eslint-disable no-undef */
 
 		if (force === true) {
 			last_object = null;
@@ -1124,6 +1124,8 @@ XKit.extensions.one_click_postage = new Object({
 				}
 			}
 		}, 700);
+
+		/* eslint-enable no-undef */
 	},
 
 	/**

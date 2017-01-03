@@ -881,9 +881,10 @@ XKit.extensions.xkit_patches = new Object({
 
 					var html_or_markdown = $(".tab-label[data-js-srclabel]").text();
 					XKit.tools.add_function(function() {
-						/* eslint no-shadow: "off" */
+						/* eslint-disable no-shadow */
 						var new_content = add_tag[0];
 						var html_or_markdown = add_tag[1];
+						/* eslint-enable no-shadow */
 						var editor_div = document.getElementsByClassName("ace_editor");
 						if (html_or_markdown === "Markdown") {
 							new_content = require('to-markdown').toMarkdown(new_content);

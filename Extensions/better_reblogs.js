@@ -431,7 +431,7 @@ XKit.extensions.better_reblogs = new Object({
 
 	hex_to_rgb: function(hex) {
         // From: http://stackoverflow.com/questions/5623838/rgb-to-hex-and-hex-to-rgb
-        /* eslint id-length: off */
+        /* eslint-disable id-length */
 
 		var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
 		return result ? {
@@ -440,6 +440,7 @@ XKit.extensions.better_reblogs = new Object({
 			b: parseInt(result[3], 16)
 		} : null;
 
+		/* eslint-enable id-length */
 	},
 
 });
