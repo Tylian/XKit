@@ -44,10 +44,10 @@ XKit.extensions.xkit_patches = new Object({
 
 		XKit.tools.init_css("xkit_patches");
 
-/**
- * Get the user's currently selected blog.
- * @return {String} blog id, e.g. new-xkit-extension.
- */
+		/**
+		 * Get the user's currently selected blog.
+		 * @return {String} blog id, e.g. new-xkit-extension.
+		 */
 		XKit.tools.get_current_blog = function() {
 			var avatar = $("#post_controls_avatar");
 			if (avatar.length > 0) {
@@ -60,10 +60,10 @@ XKit.extensions.xkit_patches = new Object({
 			return XKit.tools.get_blogs()[0];
 		};
 
-/**
- * Parse an XKit extension version string of form X.Y.Z or X.Y REV Z
- * @return {Object} version descriptor with keys major, minor, and patch
- */
+		/**
+		 * Parse an XKit extension version string of form X.Y.Z or X.Y REV Z
+		 * @return {Object} version descriptor with keys major, minor, and patch
+		 */
 		XKit.tools.parse_version = function(versionString) {
 			if (typeof(versionString) === "undefined" || versionString === "") {
 				return {major: 0, minor: 0, patch: 0};
@@ -99,14 +99,14 @@ XKit.extensions.xkit_patches = new Object({
 		window.addEventListener("message", XKit.extensions.xkit_patches.blog_list_message_listener);
 
 
-/**
- * @return {Array<String>} user's blogs' IDs
- */
+		/**
+		 * @return {Array<String>} user's blogs' IDs
+		 */
 		XKit.tools.get_blogs = function() {
 			var m_blogs = [];
 
-	// Approach 1: Scrape the tumblelog models for ones we control
-	// code is above
+			// Approach 1: Scrape the tumblelog models for ones we control
+			// code is above
 
 			if (XKit.blogs_from_tumblr) {
 				m_blogs = XKit.blogs_from_tumblr;
@@ -114,10 +114,10 @@ XKit.extensions.xkit_patches = new Object({
 				return m_blogs;
 			}
 
-	// Approach 2: Scrape from the dynamically-created popover element.
+			// Approach 2: Scrape from the dynamically-created popover element.
 
 			if (!$("[data-js-channel-list]").length) {
-		// create the popover element
+				// create the popover element
 				var account_menu = $("#account_button");
 				account_menu.click();
 				setTimeout(function() {
@@ -141,19 +141,19 @@ XKit.extensions.xkit_patches = new Object({
 				}
 			}
 
-	// Approach 3: Use the last good cached data that we saved in settings
+			// Approach 3: Use the last good cached data that we saved in settings
 			m_blogs = XKit.tools.get_setting("xkit_cached_blogs", "");
 			if (m_blogs !== "") {
 				return m_blogs.split(";");
 			}
 		};
 
-/**
- * Create an anonymous Github gist
- * @param {String} text - the gist's intended text
- * @param {String?} name - the user name to be associated with the gist
- * @return {Promise<String>} Promise resolved with the gist's URL
- */
+		/**
+		 * Create an anonymous Github gist
+		 * @param {String} text - the gist's intended text
+		 * @param {String?} name - the user name to be associated with the gist
+		 * @return {Promise<String>} Promise resolved with the gist's URL
+		 */
 		XKit.tools.make_gist = function(text, name) {
 
 			if (!name) {
@@ -174,13 +174,13 @@ XKit.extensions.xkit_patches = new Object({
 			});
 		};
 
-/**
- * Creates a link to a github issue with error text and template
- * @param {String} title - the title of the github issue--should be unique and useful
- * @param {Object?} data - Key-value pairs to list at the top of the issue.
- * @param {Error?} error - An exception to serialize, if availible
- * @return {String} The url to link the user to
- */
+		/**
+		 * Creates a link to a github issue with error text and template
+		 * @param {String} title - the title of the github issue--should be unique and useful
+		 * @param {Object?} data - Key-value pairs to list at the top of the issue.
+		 * @param {Error?} error - An exception to serialize, if availible
+		 * @return {String} The url to link the user to
+		 */
 		XKit.tools.github_issue = function(title, data, error) {
 
 			if (!data) {
@@ -213,15 +213,15 @@ XKit.extensions.xkit_patches = new Object({
 		};
 
 
-/**
- * Quick-and-dirty function debouncing.
- * Debounced functions will only occur 'delay' milliseconds after their last call.
- * Multiple calls before the function is executed resets the timer.
- * @param {Function} func - Function to wrap. Will be executed with
-                            the *last* passed 'this' values and arguments
- * @param {Number} wait - Milliseconds to pass to setTimeout. Delay that occurs after the last function call
- * @return {Function} The wrapped, debounced function.
- */
+		/**
+		 * Quick-and-dirty function debouncing.
+		 * Debounced functions will only occur 'delay' milliseconds after their last call.
+		 * Multiple calls before the function is executed resets the timer.
+		 * @param {Function} func - Function to wrap. Will be executed with
+		                            the *last* passed 'this' values and arguments
+		 * @param {Number} wait - Milliseconds to pass to setTimeout. Delay that occurs after the last function call
+		 * @return {Function} The wrapped, debounced function.
+		 */
 		XKit.tools.debounce = function(func, wait) {
 			var timeout_id;
 			return function() {
@@ -237,20 +237,20 @@ XKit.extensions.xkit_patches = new Object({
 			};
 		};
 
-/**
- * Cached nonce for use in script injection to overcome CSP
- */
+		/**
+		 * Cached nonce for use in script injection to overcome CSP
+		 */
 		XKit.tools.add_function_nonce = "";
 
-/**
- * Copies a function from the addon context into the page context. This
- * function will be serialized to a string, and then injected as a script tag
- * into the page.
- * @param {Function} func
- * @param {boolean} exec - Whether to execute the function immediately
- * @param {Object} addt - The desired contents of the global variable
- *                        `add_tag`. Only useful if `exec` is true
- */
+		/**
+		 * Copies a function from the addon context into the page context. This
+		 * function will be serialized to a string, and then injected as a script tag
+		 * into the page.
+		 * @param {Function} func
+		 * @param {boolean} exec - Whether to execute the function immediately
+		 * @param {Object} addt - The desired contents of the global variable
+		 *                        `add_tag`. Only useful if `exec` is true
+		 */
 		XKit.tools.add_function = function(func, exec, addt) {
 			if (!XKit.tools.add_function_nonce) {
 				var scripts = document.querySelectorAll('script');
@@ -276,7 +276,7 @@ XKit.extensions.xkit_patches = new Object({
 			}
 		};
 
-// Scrape Tumblr's data object now that we can run add_function
+		// Scrape Tumblr's data object now that we can run add_function
 		XKit.tools.add_function(function() {
 			var blogs = [];
 			try {
@@ -294,10 +294,10 @@ XKit.extensions.xkit_patches = new Object({
 			} catch (e) {}
 		}, true);
 
-/**
- * @return {Object} The elements of XKit's storage as a map from setting key to
- *                  setting value
- */
+		/**
+		 * @return {Object} The elements of XKit's storage as a map from setting key to
+		 *                  setting value
+		 */
 		XKit.tools.dump_config = function() {
 			var values = GM_listValues();
 			if (values.length === 0) { // chrome bridge.js#GM_listValues doesn't work.
@@ -309,18 +309,18 @@ XKit.extensions.xkit_patches = new Object({
 			}, {});
 		};
 
-/**
- * @param {String} text - the text to be escaped
- * @return {String} Will return the passed text, with all potentially
- *                  dangerous-for-HTML characters escaped
- *
- * see also https://www.owasp.org/index.php/XSS_%28Cross_Site_Scripting%29_Prevention_Cheat_Sheet#XSS_Prevention_Rules
- * for the source of the list of escaping rules in this function.
- *
- * Under no circumstances should the output of this function be injected into
- * an unquoted element attribute, as there are many ways to escape from an
- * unquoted attribute that aren't covered here. Don't use unquoted attributes
- */
+		/**
+		 * @param {String} text - the text to be escaped
+		 * @return {String} Will return the passed text, with all potentially
+		 *                  dangerous-for-HTML characters escaped
+		 *
+		 * see also https://www.owasp.org/index.php/XSS_%28Cross_Site_Scripting%29_Prevention_Cheat_Sheet#XSS_Prevention_Rules
+		 * for the source of the list of escaping rules in this function.
+		 *
+		 * Under no circumstances should the output of this function be injected into
+		 * an unquoted element attribute, as there are many ways to escape from an
+		 * unquoted attribute that aren't covered here. Don't use unquoted attributes
+		 */
 		XKit.tools.escape_html = function(text) {
 			return String(text)
         .replace(/&/g, "&amp;")
@@ -331,12 +331,12 @@ XKit.extensions.xkit_patches = new Object({
         .replace(/\//g, "&#x2F;");
 		};
 
-/**
- * @param {String} name - Name of URL parameter to retrieve
- * @return {String} Value of parameter or ""
- */
+		/**
+		 * @param {String} name - Name of URL parameter to retrieve
+		 * @return {String} Value of parameter or ""
+		 */
 		XKit.tools.getParameterByName = function(name) {
-	// http://stackoverflow.com/a/901144/2073440
+			// http://stackoverflow.com/a/901144/2073440
 			name = encodeURIComponent(name);
 			var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
 				results = regex.exec(location.search);
@@ -348,17 +348,17 @@ XKit.extensions.xkit_patches = new Object({
 			}
 		};
 
-/**
- * @return {Object} An overview of the browser's information:
- *	name: "Google Chrome" | "Mozilla Firefox" | "Apple Safari" - The browser's human-readable name
- *	spoofed: boolean - Whether XKit suspects the user of spoofing an IE user agent.
- *	chrome: boolean - Whether the browser is Chrome
- *	firefox: boolean - Whether the browser is Firefox
- *	safari: boolean - Whether the browser is Safari
- *	opera: boolean - Whether the browser is Opera (Always false as implemented currently)
- *	version: number - The numerical representation of the browser's version or 0 if unknown
- *	mobile: boolean - Whether Tumblr is serving the mobile version of the site
- */
+		/**
+		 * @return {Object} An overview of the browser's information:
+		 *	name: "Google Chrome" | "Mozilla Firefox" | "Apple Safari" - The browser's human-readable name
+		 *	spoofed: boolean - Whether XKit suspects the user of spoofing an IE user agent.
+		 *	chrome: boolean - Whether the browser is Chrome
+		 *	firefox: boolean - Whether the browser is Firefox
+		 *	safari: boolean - Whether the browser is Safari
+		 *	opera: boolean - Whether the browser is Opera (Always false as implemented currently)
+		 *	version: number - The numerical representation of the browser's version or 0 if unknown
+		 *	mobile: boolean - Whether Tumblr is serving the mobile version of the site
+		 */
 		XKit.browser = function() {
 
 			var to_return = {};
@@ -372,11 +372,11 @@ XKit.extensions.xkit_patches = new Object({
 			to_return.version = 0;
 			to_return.mobile = false;
 
-		// First, let's check if it's chrome.
+			// First, let's check if it's chrome.
 			if (window.chrome) {
 				to_return.chrome = true;
 			} else {
-			// it can still be chrome?
+				// it can still be chrome?
 				var is_chrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
 				to_return.chrome = is_chrome;
 			}
@@ -388,19 +388,19 @@ XKit.extensions.xkit_patches = new Object({
 			}
 
 			if (to_return.chrome === true) {
-			// Get version.
+				// Get version.
 				to_return.name = "Google Chrome";
 				to_return.version = get_ua_version("chrome/");
 			}
 
-		// Then, let's check if it's firefox.
+			// Then, let's check if it's firefox.
 			if (navigator.userAgent.toLowerCase().indexOf('firefox') > -1) {
 				to_return.name = "Mozilla Firefox";
 				to_return.firefox = true;
 				to_return.version = get_ua_version("firefox/");
 			}
 
-		// Blahblah Safari blah.
+			// Blahblah Safari blah.
 			if (/Safari/.test(navigator.userAgent) && /Apple Computer/.test(navigator.vendor)) {
 				to_return.name = "Apple Safari";
 				to_return.safari = true;
@@ -410,13 +410,13 @@ XKit.extensions.xkit_patches = new Object({
 
 			to_return.ug = navigator.userAgent.toLowerCase();
 
-		// Check if there is spoofing!
-		// A lot of people now switch to IE.
+			// Check if there is spoofing!
+			// A lot of people now switch to IE.
 			if (navigator.userAgent.indexOf('MSIE') > -1) {
 				to_return.spoofed = true;
 			}
 
-		// Check if you're viewing the mobile version
+			// Check if you're viewing the mobile version
 			if ($('.is_mobile').length > 0) {
 				to_return.mobile = true;
 			}
