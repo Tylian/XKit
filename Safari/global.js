@@ -33,7 +33,7 @@ XBackground.prototype.onMessage = function(event) {
 			return handler.call(this, event);
 		}
 		console.log("XBackground: Unknown message '" + event.name + "'");
-	} catch(e) {
+	} catch (e) {
 		alert("XBackground Error: " + e + " with event " + JSON.stringify(event));
 	}
 };
@@ -45,7 +45,7 @@ XBackground.prototype.dispatchEventMessage = function(event, name, message) {
 	}
 	try {
 		event.target.page.dispatchMessage(name, message);
-	} catch(e) {
+	} catch (e) {
 		console.error("XBackground Error: During dispatchEventMessage " + e);
 	}
 };
@@ -119,7 +119,7 @@ XBackground.prototype.messageHandlers = {
 			console.log(" ------      FOUND HEADERS YAY XKIT   ----- ");
 			console.log(settings.headers);
 			for (var header in settings.headers) {
-					request.setRequestHeader(header, settings.headers[header]);
+				request.setRequestHeader(header, settings.headers[header]);
 			}
 		} else {
 			console.log(" ------ !! ----- NO HEADERS ------ !! ----- ");

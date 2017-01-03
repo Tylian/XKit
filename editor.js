@@ -8,18 +8,18 @@
 
 */
 
-(function(){
-if (typeof XKit.extensions.xkit_editor !== "undefined") { return; }
-XKit.extensions.xkit_editor = new Object({
+(function() {
+	if (typeof XKit.extensions.xkit_editor !== "undefined") { return; }
+	XKit.extensions.xkit_editor = new Object({
 
-	filename: "",
-	run: function() {
-		XKit.extensions.xkit_editor.filename = "";
-		document.title = "XKit Extension Editor";
-		extension_editor_run();
-	}
+		filename: "",
+		run: function() {
+			XKit.extensions.xkit_editor.filename = "";
+			document.title = "XKit Extension Editor";
+			extension_editor_run();
+		}
 
-});
+	});
 }());
 
 var script_editor, icon_editor, css_editor, object_editor;
@@ -117,37 +117,37 @@ function extension_editor_finish_run() {
 	$("#xkit-editor-switch-to-script").click(function() {
 		$("#xkit-editor-tabs > div").not(this).removeClass("selected");
 		$(this).addClass("selected");
-		$("#xkit-editor-textarea").css("display","block");
-		$("#xkit-editor-textarea-object").css("display","none");
-		$("#xkit-editor-textarea-css").css("display","none");
-		$("#xkit-editor-textarea-icon").css("display","none");
+		$("#xkit-editor-textarea").css("display", "block");
+		$("#xkit-editor-textarea-object").css("display", "none");
+		$("#xkit-editor-textarea-css").css("display", "none");
+		$("#xkit-editor-textarea-icon").css("display", "none");
 	});
 
 	$("#xkit-editor-switch-to-object").click(function() {
 		$("#xkit-editor-tabs > div").not(this).removeClass("selected");
 		$(this).addClass("selected");
-		$("#xkit-editor-textarea").css("display","none");
-		$("#xkit-editor-textarea-object").css("display","block");
-		$("#xkit-editor-textarea-css").css("display","none");
-		$("#xkit-editor-textarea-icon").css("display","none");
+		$("#xkit-editor-textarea").css("display", "none");
+		$("#xkit-editor-textarea-object").css("display", "block");
+		$("#xkit-editor-textarea-css").css("display", "none");
+		$("#xkit-editor-textarea-icon").css("display", "none");
 	});
 
 	$("#xkit-editor-switch-to-icon").click(function() {
 		$("#xkit-editor-tabs > div").not(this).removeClass("selected");
 		$(this).addClass("selected");
-		$("#xkit-editor-textarea").css("display","none");
-		$("#xkit-editor-textarea-object").css("display","none");
-		$("#xkit-editor-textarea-css").css("display","none");
-		$("#xkit-editor-textarea-icon").css("display","block");
+		$("#xkit-editor-textarea").css("display", "none");
+		$("#xkit-editor-textarea-object").css("display", "none");
+		$("#xkit-editor-textarea-css").css("display", "none");
+		$("#xkit-editor-textarea-icon").css("display", "block");
 	});
 
 	$("#xkit-editor-switch-to-css").click(function() {
 		$("#xkit-editor-tabs > div").not(this).removeClass("selected");
 		$(this).addClass("selected");
-		$("#xkit-editor-textarea").css("display","none");
-		$("#xkit-editor-textarea-object").css("display","css");
-		$("#xkit-editor-textarea-css").css("display","block");
-		$("#xkit-editor-textarea-icon").css("display","none");
+		$("#xkit-editor-textarea").css("display", "none");
+		$("#xkit-editor-textarea-object").css("display", "css");
+		$("#xkit-editor-textarea-css").css("display", "block");
+		$("#xkit-editor-textarea-icon").css("display", "none");
 	});
 
 	extension_changed = false;
@@ -165,12 +165,12 @@ function extension_editor_finish_run() {
 
 	$("#xkit-editor-new").click(function() {
 
-		XKit.window.show("Create extension","<input type=\"text\" id=\"xkit-editor-filename\" placeholder=\"Filename (eg: my_extension)\"><br/>No spaces or special characters.","question","<div id=\"xkit-editor-create-extension\" class=\"xkit-button default\">OK</div><div id=\"xkit-close-message\" class=\"xkit-button\">Cancel</div>");
+		XKit.window.show("Create extension", "<input type=\"text\" id=\"xkit-editor-filename\" placeholder=\"Filename (eg: my_extension)\"><br/>No spaces or special characters.", "question", "<div id=\"xkit-editor-create-extension\" class=\"xkit-button default\">OK</div><div id=\"xkit-close-message\" class=\"xkit-button\">Cancel</div>");
 
 		$("#xkit-editor-filename").focus();
 
 		$("#xkit-editor-filename").on('keydown', function(event) {
-			if(event.which == 13 || event.keyCode == 13) {
+			if (event.which == 13 || event.keyCode == 13) {
 				$("#xkit-editor-create-extension").click();
 			}
 		});
@@ -179,12 +179,12 @@ function extension_editor_finish_run() {
 
 			var new_filename = $("#xkit-editor-filename").val();
 			if (new_filename === "" || new_filename.indexOf(" ") !== -1) {
-				XKit.window.show("Create extension failed","Invalid or blank filename","error","<div id=\"xkit-close-message\" class=\"xkit-button\">OK</div>");
+				XKit.window.show("Create extension failed", "Invalid or blank filename", "error", "<div id=\"xkit-close-message\" class=\"xkit-button\">OK</div>");
 				return;
 			}
 
 			if (XKit.installed.check(new_filename) === true) {
-				XKit.window.show("Create extension failed","Filename already exists.","error","<div id=\"xkit-close-message\" class=\"xkit-button\">OK</div>");
+				XKit.window.show("Create extension failed", "Filename already exists.", "error", "<div id=\"xkit-close-message\" class=\"xkit-button\">OK</div>");
 				return;
 			}
 
@@ -229,7 +229,7 @@ function extension_editor_finish_run() {
 				XKit.window.close();
 			} else {
 				// Something awful has happened.
-				XKit.window.show("Create extension failed","Unable to store data.","error","<div id=\"xkit-close-message\" class=\"xkit-button\">OK</div>");
+				XKit.window.show("Create extension failed", "Unable to store data.", "error", "<div id=\"xkit-close-message\" class=\"xkit-button\">OK</div>");
 			}
 
 		});
@@ -241,13 +241,13 @@ function extension_editor_finish_run() {
 		var m_exts_list = "<div class=\"xkit-file-selector\">";
 
 		var extensions = XKit.installed.list();
-		for (var i=0;i<extensions.length;i++) {
+		for (var i = 0; i < extensions.length; i++) {
 			m_exts_list = m_exts_list + "<div class=\"xkit-button block xkit-editor-open-file\" data-filename=\"" + extensions[i] + "\">" + extensions[i] + "</div>";
 		}
 
 		m_exts_list = m_exts_list + "</div>";
 
-		XKit.window.show("Open Extension...",m_exts_list,"question","<div id=\"xkit-close-message\" class=\"xkit-button\">Cancel</div>");
+		XKit.window.show("Open Extension...", m_exts_list, "question", "<div id=\"xkit-close-message\" class=\"xkit-button\">Cancel</div>");
 
 		$(".xkit-editor-open-file").click(function() {
 			extension_editor_load_extension($(this).attr('data-filename'));
@@ -269,7 +269,7 @@ function extension_editor_finish_run() {
 		if ($(this).hasClass("disabled") === true) { return; }
 		if (XKit.extensions.xkit_editor.filename === "") { return; }
 
-		XKit.window.show("Delete extension?", "Really to delete the extension '" + XKit.extensions.xkit_editor.filename + "'?<br/>You can not undo this action.","question","<div id=\"xkit-editor-delete-extension\" class=\"xkit-button default\">Delete</div><div id=\"xkit-close-message\" class=\"xkit-button\">Cancel</div>");
+		XKit.window.show("Delete extension?", "Really to delete the extension '" + XKit.extensions.xkit_editor.filename + "'?<br/>You can not undo this action.", "question", "<div id=\"xkit-editor-delete-extension\" class=\"xkit-button default\">Delete</div><div id=\"xkit-close-message\" class=\"xkit-button\">Cancel</div>");
 
 		$("#xkit-editor-delete-extension").click(function() {
 			XKit.installed.remove(XKit.extensions.xkit_editor.filename);
@@ -282,38 +282,38 @@ function extension_editor_finish_run() {
 	$(document).on('keydown', function(event) {
 		if (event.ctrlKey || event.metaKey) {
 			switch (String.fromCharCode(event.which).toLowerCase()) {
-				case "s":
-					event.preventDefault();
-					$("#xkit-editor-save").click();
-					break;
-				case "o":
-					event.preventDefault();
-					$("#xkit-editor-open").click();
-					break;
-				case "e":
-					event.preventDefault();
-					$("#xkit-editor-new").click();
-					break;
-				case "d":
-					event.preventDefault();
-					$("#xkit-editor-delete").click();
-					break;
-				case "1":
-					event.preventDefault();
-					$("#xkit-editor-switch-to-script").click();
-					break;
-				case "2":
-					event.preventDefault();
-					$("#xkit-editor-switch-to-css").click();
-					break;
-				case "3":
-					event.preventDefault();
-					$("#xkit-editor-switch-to-icon").click();
-					break;
-				case "4":
-					event.preventDefault();
-					$("#xkit-editor-switch-to-object").click();
-					break;
+			case "s":
+				event.preventDefault();
+				$("#xkit-editor-save").click();
+				break;
+			case "o":
+				event.preventDefault();
+				$("#xkit-editor-open").click();
+				break;
+			case "e":
+				event.preventDefault();
+				$("#xkit-editor-new").click();
+				break;
+			case "d":
+				event.preventDefault();
+				$("#xkit-editor-delete").click();
+				break;
+			case "1":
+				event.preventDefault();
+				$("#xkit-editor-switch-to-script").click();
+				break;
+			case "2":
+				event.preventDefault();
+				$("#xkit-editor-switch-to-css").click();
+				break;
+			case "3":
+				event.preventDefault();
+				$("#xkit-editor-switch-to-icon").click();
+				break;
+			case "4":
+				event.preventDefault();
+				$("#xkit-editor-switch-to-object").click();
+				break;
 			}
 		}
 	});
@@ -347,15 +347,15 @@ function extension_editor_update_object(m_object) {
 	var is_json_tab = $("#xkit-editor-switch-to-object").hasClass("selected");
 
 	if (is_json_tab && extension_changed) {
-		if(!confirm("You are currently on the JSON tab but you modified either Script, Stylesheet or Icon. Saving now would override these changes.\n\nDo you want to save regardless?")) {
+		if (!confirm("You are currently on the JSON tab but you modified either Script, Stylesheet or Icon. Saving now would override these changes.\n\nDo you want to save regardless?")) {
 			return;
 		}
 	} else if (!is_json_tab && json_changed) {
-		if(!confirm("You have modified the JSON object but you are not in the JSON editor. Saving now would override these changes.\n\nDo you want to save regardless?")) {
+		if (!confirm("You have modified the JSON object but you are not in the JSON editor. Saving now would override these changes.\n\nDo you want to save regardless?")) {
 			return;
 		}
-	}else if (extension_changed && json_changed) {
-		if(!confirm("You have modified the JSON object and the Script, Stylesheet or Icon. Saving now would override some of these changes.\n\nDo you want to save regardless?")) {
+	} else if (extension_changed && json_changed) {
+		if (!confirm("You have modified the JSON object and the Script, Stylesheet or Icon. Saving now would override some of these changes.\n\nDo you want to save regardless?")) {
 			return;
 		}
 	}
@@ -369,7 +369,7 @@ function extension_editor_update_object(m_object) {
 
 	var version = extension_editor_legacy_get_attribute(m_object.script, "version");
 	if (version === "") {
-		XKit.window.show("Can't save file","Required VERSION attribute not found.<br/>Consult XKit Developer Documentation.","error","<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
+		XKit.window.show("Can't save file", "Required VERSION attribute not found.<br/>Consult XKit Developer Documentation.", "error", "<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
 		return;
 	} else {
 		m_object.version = version;
@@ -433,7 +433,7 @@ function extension_editor_legacy_get_attribute(text, info_needed) {
 		if (str_end === -1) { return ""; }
 		return tempdata.substring(str_start + (inf_string.length), str_end - 1);
 
-	} catch(e) {
+	} catch (e) {
 
 		return "";
 

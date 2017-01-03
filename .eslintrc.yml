@@ -12,7 +12,23 @@
      - vars: local
        args: none
     no-empty: off
+    no-shadow: error
     no-mixed-spaces-and-tabs: [error, smart-tabs]
+    id-length: [error, exceptions: [i, e]]
+
+    indent: [error, tab]
+    semi: error
+    brace-style: [error, 1tbs, allowSingleLine: true]
+    linebreak-style: [error, unix]
+    semi-spacing: error
+    comma-spacing: error
+    space-infix-ops: error
+    space-before-function-paren: [error, never]
+    space-before-blocks: error
+    keyword-spacing:
+      - error
+      - before: true
+        after: true
   globals:
     require: true
 

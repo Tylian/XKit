@@ -146,7 +146,7 @@ gulp.task('compress:firefox', ['copy:firefox'], function(cb) {
 		 // directory containing a `package.json`.
 		 {cwd: 'build/firefox'},
 		 function(err, stdout, stderr) {
-			if(err) { return cb(err); }
+			if (err) { return cb(err); }
 			cb();
 		});
 });
@@ -181,7 +181,7 @@ gulp.task('build:extensions', ['lint:scripts', 'clean:extensions'], function() {
 		.pipe(gulp.dest('Extensions/dist/page'));
 });
 
-gulp.task('build:themes', ['clean:themes'], function(cb) {
+gulp.task('build:themes', ['clean:themes'], function() {
 	var themeBuilder = require('./dev/builders/theme');
 	return gulp.src(paths.css.themes)
 		.pipe(themeBuilder())
@@ -213,13 +213,13 @@ gulp.task('server', ['build:extensions', 'build:themes'], function(callback) {
 	gulp.watch('Themes/**/*.css', ['build:themes']);
 
 	var devServer = https.createServer({
-				key: fs.readFileSync('./dev/certs/key.pem'),
-				cert: fs.readFileSync('./dev/certs/cert.pem')
-			}, devApp)
+		key: fs.readFileSync('./dev/certs/key.pem'),
+		cert: fs.readFileSync('./dev/certs/cert.pem')
+	}, devApp)
 		.listen(31337);
 
 	devServer.on('error', function(error) {
-		log(colors.underline(colors.red('ERROR'))+' Unable to start server!');
+		log(colors.underline(colors.red('ERROR')) + ' Unable to start server!');
 		callback(error); // we couldn't start the server, so report it and quit gulp
 	});
 
