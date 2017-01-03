@@ -58,11 +58,11 @@ XKit.extensions.autoscroll = new Object({
 			var stepNumber = 0;
 			var numberOfSteps = 0;
 			var directionFactor = 1;
-			if (Number(currentStep) < middleNumber)			{
+			if (Number(currentStep) < middleNumber) {
 				numberOfSteps = middleNumber;
 				directionFactor = -1;
 				stepNumber = middleNumber - Number(currentStep);
-			} else			{
+			} else {
 				numberOfSteps = totalStepCount - middleNumber;
 				stepNumber = Number(currentStep) - middleNumber + 1;
 				directionFactor = 1;
@@ -74,7 +74,7 @@ XKit.extensions.autoscroll = new Object({
 			}
 		};
 		$(document).on("click", ".auto_scroll_control_step", function(event) {
-			if (!$(event.target).is("[selected]"))			{
+			if (!$(event.target).is("[selected]")) {
 				// Mark and store the selected speed.
 				controlSteps.removeAttr("selected");
 				$(event.target).attr("selected", "true");
@@ -85,7 +85,7 @@ XKit.extensions.autoscroll = new Object({
 				isScrolling = true;
 				// Function must be started after isScrolling is set
 				// to prevent possible race condition.
-				if (wasScrolling === false)				{
+				if (wasScrolling === false) {
 					setTimeout(scrollFunction, 50);
 				}
 			} else {
@@ -98,7 +98,7 @@ XKit.extensions.autoscroll = new Object({
 		});
 
 		$(document).on("click", null, function(event) {
-			if (clickAnywhereToStop && isScrolling === true)			{
+			if (clickAnywhereToStop && isScrolling === true) {
 				isScrolling = false;
 				controlSteps.removeAttr("selected");
 			}
@@ -109,10 +109,10 @@ XKit.extensions.autoscroll = new Object({
 		XKit.tools.init_css("autoscroll");
 		// HTML for control
 		var m_html = '<div class="auto_scroll_control_container"><table style="table-layout: fixed"><td class="auto_scroll_table_cell">';
-		for (var j = 0; j < this.preferences.StepsOnControl.value; j++)		{
+		for (var j = 0; j < this.preferences.StepsOnControl.value; j++) {
 			m_html += '<div class="auto_scroll_control_step" number = ' + j + '/>';
 
-			if (j + 1 == Math.round(this.preferences.StepsOnControl.value / 2))			{
+			if (j + 1 == Math.round(this.preferences.StepsOnControl.value / 2)) {
 				m_html += '<div class = "auto_scroll_control_center"/>';
 			}
 		}

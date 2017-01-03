@@ -736,7 +736,7 @@ XKit.extensions.tweaks = new Object({
 			photoset_row.find("img").each(function() {
 				var img = $(this);
 				var imgstyle = img.css("width");
-				if (imgstyle == "540px")  {
+				if (imgstyle == "540px") {
 					img.attr("style", "width: 500px;");
 				} else if (imgstyle == "268px") {
 					img.attr("style", "width: 245px; margin-right: 10px;");

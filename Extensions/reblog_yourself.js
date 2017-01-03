@@ -39,7 +39,7 @@ XKit.extensions.reblog_yourself = {
 				}
 			});
 		}
-		if (XKit.extensions.reblog_yourself.preferences.dashboard.value === true)		{
+		if (XKit.extensions.reblog_yourself.preferences.dashboard.value === true) {
 			XKit.post_listener.add("reblog_yourself", XKit.extensions.reblog_yourself.fix_dashboard);
 			XKit.extensions.reblog_yourself.fix_dashboard();
 		}

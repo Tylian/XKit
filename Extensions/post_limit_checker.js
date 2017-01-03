@@ -87,7 +87,7 @@ XKit.extensions.post_limit_checker = new Object({
 
 			var m_timestamp = XKit.extensions.post_limit_checker.convert_timezone(posts[i].timestamp * 1000, - 4);
 
-			if ((m_timestamp.getTime() <= next_reset.getTime() && m_timestamp.getTime() >= last_reset.getTime()))  {
+			if ((m_timestamp.getTime() <= next_reset.getTime() && m_timestamp.getTime() >= last_reset.getTime())) {
 				posts_since_reset++;
 			}
 

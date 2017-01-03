@@ -71,7 +71,7 @@ XKit.extensions.anti_capitalism = new Object({
 		}
 
 		if (XKit.extensions.anti_capitalism.preferences.yahoo_view.value) {
-			XKit.tools.add_css(' .recommendation-reason-link[href*="//view.yahoo.com"], .recommendation-reason-link[href*="%2F%2Fview.yahoo.com"]  { display: none; } ', "anti_capitalism_yahoo_view");
+			XKit.tools.add_css(' .recommendation-reason-link[href*="//view.yahoo.com"], .recommendation-reason-link[href*="%2F%2Fview.yahoo.com"] { display: none; } ', "anti_capitalism_yahoo_view");
 		}
 
 		if (XKit.extensions.anti_capitalism.preferences.sidebar_ad.value) {
