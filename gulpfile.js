@@ -7,16 +7,14 @@ var cache = require('gulp-cached'),
 	connectStatic = require('serve-static'),
 	csslint = require('gulp-csslint'),
 	del = require('del'),
+	eslint = require('gulp-eslint'),
 	exec = require('child_process').exec,
 	fs = require('fs'),
 	gulp = require('gulp'),
 	gutil = require('gulp-util'),
 	https = require('https'),
-	jshint = require('gulp-jshint'),
-	jscs = require('gulp-jscs'),
 	merge = require('merge-stream'),
 	path = require('path'),
-	stylish = require('jshint-stylish'),
 	zip = require('gulp-zip');
 
 var BUILD_DIR = 'build';
@@ -83,10 +81,9 @@ gulp.task('lint:scripts', function() {
 
 	return gulp.src(src)
 		.pipe(cache('lint:scripts'))
-		.pipe(jshint())
-		.pipe(jshint.reporter(stylish))
-		.pipe(jshint.reporter('fail'))
-		.pipe(jscs());
+		.pipe(eslint())
+		.pipe(eslint.format())
+		.pipe(eslint.failAfterError());
 });
 
 gulp.task('lint:css', function() {

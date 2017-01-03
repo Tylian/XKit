@@ -1,3 +1,6 @@
+/* eslint no-unused-vars: 0 */
+/* global AddonStorage, unsafeWindow */
+
 var framework_version = '7.7.4';
 var Tumblr = unsafeWindow.Tumblr;
 

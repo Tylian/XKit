@@ -7,6 +7,8 @@
 
 */
 
+/* globals chrome */
+
 var bridge_error = false;
 var bridge_error_object;
 var xkit_storage = {};
@@ -39,7 +41,6 @@ function getBridgeError() {
 }
 
 function getVersion() {
-	var version = 'NaN';
 	var xhr = new XMLHttpRequest();
 	xhr.open('GET', chrome.extension.getURL('manifest.json'), false);
 	xhr.send(null);
@@ -57,14 +58,14 @@ function call_xkit() {
 
 function init_bridge() {
 
+	var last_error = "";
+
 	console.log("[XKit Bridge] Hello from Bridge " + bridge_ver);
 	console.log("[XKit Bridge] Retrieving storage..");
 
 	try {
 
 	storage.get(function(items) {
-
-		last_error = "";
 
 		if (typeof chrome.runtime.lastError !== "undefined") {
 			last_error = chrome.runtime.lastError.message;

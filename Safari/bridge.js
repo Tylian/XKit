@@ -1,3 +1,4 @@
+/* globals safari */
 var framework_version = 0;
 var storage_max = -1;
 var storage_used = -1;
@@ -93,9 +94,9 @@ if (!String.prototype.startsWith) {
 
 				};
 
-				for (var i=0;i<XBridge.network.callbacks.length;i++) {
+				for (var i=0; i<XBridge.network.callbacks.length; i++) {
 
-					callback = XBridge.network.callbacks[i];
+					var callback = XBridge.network.callbacks[i];
 
 					if (callback.id == ev.message.request_id) {
 
@@ -124,9 +125,9 @@ if (!String.prototype.startsWith) {
 
 				// Called after XBackground deletes all storage data.
 
-				for (var i=0;i<XBridge.storage.callbacks.length;i++) {
+				for (var i=0; i<XBridge.storage.callbacks.length; i++) {
 
-					callback = XBridge.storage.callbacks[i];
+					var callback = XBridge.storage.callbacks[i];
 
 					if (callback.id == ev.message.id) {
 						XBridge.storage.callbacks[i].callback();

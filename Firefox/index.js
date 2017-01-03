@@ -40,7 +40,7 @@ function onAttach(worker) {
     prefs.reset(prefRoot + data.name);
   });
 
-  port.on('reset_all', function(data) {
+  port.on('reset_all', function(_) {
     console.log('reset_all()');
     let existingKeys = prefs.keys(prefRoot);
     for (let name of existingKeys) {

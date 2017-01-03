@@ -26,9 +26,9 @@ var script_editor, icon_editor, css_editor, object_editor;
 var json_changed, extension_changed;
 
 function extension_editor_run() {
-	
+
 	var keyText = navigator.platform.match(/Mac/i) ? "Meta" : "Ctrl";
-	
+
 	var m_html =	"<div id=\"xkit-editor-sidebar\">" +
 						"<div id=\"xkit-editor-open-file\" class=\"no-file\">No file opened</div>" +
 						"<div id=\"xkit-editor-new\" class=\"xkit-button block\">New Extension (" + keyText + " + E)</div>" +
@@ -149,32 +149,32 @@ function extension_editor_finish_run() {
 		$("#xkit-editor-textarea-css").css("display","block");
 		$("#xkit-editor-textarea-icon").css("display","none");
 	});
-	
+
 	extension_changed = false;
 	json_changed = false;
-	
+
 	$("#xkit-editor-textarea-css, #xkit-editor-textarea-icon, #xkit-editor-textarea").on("change", function(event) {
 		if (!extension_changed) { extension_changed = true; }
 	});
-	
+
 	$("#xkit-editor-textarea-object").on("change", function(event) {
 		if (!json_changed) { json_changed = true; }
 	});
-	
+
 	$("#xkit-editor-switch-to-script").trigger('click');
 
 	$("#xkit-editor-new").click(function() {
 
 		XKit.window.show("Create extension","<input type=\"text\" id=\"xkit-editor-filename\" placeholder=\"Filename (eg: my_extension)\"><br/>No spaces or special characters.","question","<div id=\"xkit-editor-create-extension\" class=\"xkit-button default\">OK</div><div id=\"xkit-close-message\" class=\"xkit-button\">Cancel</div>");
-		
+
 		$("#xkit-editor-filename").focus();
-		
+
 		$("#xkit-editor-filename").on('keydown', function(event) {
 			if(event.which == 13 || event.keyCode == 13) {
 				$("#xkit-editor-create-extension").click();
 			}
 		});
-		
+
 		$("#xkit-editor-create-extension").click(function() {
 
 			var new_filename = $("#xkit-editor-filename").val();
@@ -241,7 +241,7 @@ function extension_editor_finish_run() {
 		var m_exts_list = "<div class=\"xkit-file-selector\">";
 
 		var extensions = XKit.installed.list();
-		for (i=0;i<extensions.length;i++) {
+		for (var i=0;i<extensions.length;i++) {
 			m_exts_list = m_exts_list + "<div class=\"xkit-button block xkit-editor-open-file\" data-filename=\"" + extensions[i] + "\">" + extensions[i] + "</div>";
 		}
 
@@ -278,7 +278,7 @@ function extension_editor_finish_run() {
 		});
 
 	});
-	
+
 	$(document).on('keydown', function(event) {
 		if (event.ctrlKey || event.metaKey) {
 			switch (String.fromCharCode(event.which).toLowerCase()) {
@@ -345,7 +345,7 @@ function extension_editor_load_extension(extension_id) {
 
 function extension_editor_update_object(m_object) {
 	var is_json_tab = $("#xkit-editor-switch-to-object").hasClass("selected");
-	
+
 	if (is_json_tab && extension_changed) {
 		if(!confirm("You are currently on the JSON tab but you modified either Script, Stylesheet or Icon. Saving now would override these changes.\n\nDo you want to save regardless?")) {
 			return;
@@ -366,7 +366,7 @@ function extension_editor_update_object(m_object) {
 	} else {
 		m_object.script = script_editor.getValue();
 	}
-		
+
 	var version = extension_editor_legacy_get_attribute(m_object.script, "version");
 	if (version === "") {
 		XKit.window.show("Can't save file","Required VERSION attribute not found.<br/>Consult XKit Developer Documentation.","error","<div id=\"xkit-close-message\" class=\"xkit-button default\">OK</div>");
@@ -389,7 +389,7 @@ function extension_editor_update_object(m_object) {
 		m_object.beta = false;
 	}
 	m_object.details = extension_editor_legacy_get_attribute(m_object.script, "details");
-	
+
 	if (is_json_tab) {
 		m_object.icon = JSON.parse(object_editor.getValue()).icon;
 		m_object.css = JSON.parse(object_editor.getValue()).css;
@@ -399,7 +399,7 @@ function extension_editor_update_object(m_object) {
 	}
 
 	m_object.errors = false;
-	
+
 	// Update this area too.
 	if (is_json_tab) {
 		script_editor.setValue(JSON.parse(object_editor.getValue()).script);
@@ -411,7 +411,7 @@ function extension_editor_update_object(m_object) {
 
 	XKit.installed.update(XKit.extensions.xkit_editor.filename, m_object);
 	XKit.notifications.add("Extension " + XKit.extensions.xkit_editor.filename + " saved successfully.");
-	
+
 	json_changed = false;
 	extension_changed = false;
 

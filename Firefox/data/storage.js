@@ -1,7 +1,5 @@
-/* jshint moz: true */
-
-storage_used = 0;
-storage_max = -1;
+var storage_used = 0;
+var storage_max = -1;
 
 /**
  * Implement the storage component of XKit
@@ -12,9 +10,6 @@ var AddonStorage = (function() {
   self.port.on('set', function(data) {
     database[data.name] = data.value;
   });
-
-  function init() {
-  }
 
   function storageUsed() {
     let size = 0;
@@ -50,10 +45,6 @@ var AddonStorage = (function() {
 
   function listKeys() {
     return Object.keys(database);
-  }
-
-  function storageMax() {
-    return -1;
   }
 
   return {

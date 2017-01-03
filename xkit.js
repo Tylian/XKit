@@ -247,7 +247,7 @@ XKit = {
 					} catch(e) {
 						// Server returned bad thingy.
 						XKit.console.add("Unable to download '" + path +
-										 "', server returned non-json object." + e.message);
+										"', server returned non-json object." + e.message);
 						return fallback();
 					}
 					callback(mdata);
@@ -366,13 +366,13 @@ XKit = {
 		remove: function(extension_id) {
 			// Remove extension from installed list.
 			var current_extensions = XKit.installed.list();
-			for (i=0;i<current_extensions.length;i++) {
+			for (var i=0;i<current_extensions.length;i++) {
 				if (current_extensions[i] == extension_id) {
 					current_extensions.splice(i, 1);
 				}
 			}
 			var installed_extensions = {extensions: current_extensions};
-			m_string = JSON.stringify(installed_extensions);
+			var m_string = JSON.stringify(installed_extensions);
 			XKit.tools.set_setting("xkit_installed_extensions",m_string);
 		},
 		list: function() {
@@ -389,7 +389,7 @@ XKit = {
 		check: function(extension_id) {
 			// Check if an extension is installed.
 			var current_extensions = XKit.installed.list();
-			for (i=0;i<current_extensions.length;i++) {
+			for (var i=0;i<current_extensions.length;i++) {
 				if (current_extensions[i] == extension_id) {
 					return true;
 				}
@@ -634,24 +634,7 @@ XKit = {
 					" text-decoration: underline; display: inline-block; " +
 					" cursor: pointer; margin-left: 15px; display: none; } ", "console");
 			$("body").append("<div id=\"xkit_console\">Welcome to XKit console!</div>");
-			$(document).on("click", ".xkit-terminate-extension", function() {
-				unload_extension($(this).attr('ext-id'));
-			});
-			$(document).on("click", ".xkit-toggle-extension-setting", function() {
-				var default_value = XKit.extensions[$(this).attr('ext-id')].preferences[$(this).attr('setting-id')].default;
-				var current_value = XKit.tools.get_extension_setting($(this).attr('ext-id'), $(this).attr('setting-id'), default_value);
-				XKit.console.add("current value = " + current_value);
-				if (current_value === true || current_value === "true") {
-					current_value = false;
-				} else {
-					if (current_value === false || current_value === "false") {
-						current_value = true;
-					}
-				}
-				XKit.tools.set_extension_setting($(this).attr('ext-id'), $(this).attr('setting-id'), current_value);
-				XKit.console.add("Default value = " + default_value + ", new value = " + current_value);
-				restart_extension($(this).attr('ext-id'));
-			});
+
 			if (XKit.console.cache !== "") {
 				$("#xkit_console").append("<br/>" + XKit.console.cache);
 				XKit.console.cache = "";
@@ -833,7 +816,7 @@ XKit = {
 		random_string: function() {
 			var text = "";
 			var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-			for ( var i=0; i < 30; i++ ) {
+			for (var i=0; i < 30; i++ ) {
 				text += possible.charAt(Math.floor(Math.random() * possible.length));
 			}
 			return text;
@@ -960,7 +943,7 @@ XKit = {
 			if (XKit.post_listener.callbacks.length === 0) {
 				return;
 			}
-			for (i=0;i<XKit.post_listener.callbacks.length;i++) {
+			for (var i=0;i<XKit.post_listener.callbacks.length;i++) {
 				try {
 					XKit.post_listener.callbacks[i]();
 				} catch(e) {
@@ -1069,14 +1052,6 @@ function show_message(title, msg, icon, buttons) {
 			$(this).remove();
 		});
 	});
-
-}
-
-function xkit_error(title, message) {
-
-	message = "<b>" + message + "</b><br/>";
-	show_error(title, message, "error", "<div id=\"xkit-close-message\" class=\"xkit-button\">OK</div></div>");
-
 }
 
 function xkit_init_special() {
@@ -1105,6 +1080,7 @@ function xkit_init_special() {
 
 	if (document.location.href.indexOf("/xkit_editor") !== -1) {
 		if (XKit.browser().chrome === true) {
+			/* global chrome */
 			var xhr = new XMLHttpRequest();
 			xhr.open('GET', chrome.extension.getURL('editor.js'), false);
 			xhr.send(null);

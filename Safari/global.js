@@ -1,3 +1,4 @@
+/* globals safari */
 // XKit Bridge for Safari Background Page.
 
 function XBackground() {

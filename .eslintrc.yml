@@ -1,0 +1,36 @@
+---
+  parserOptions:
+    ecmaVersion: 6
+  env:
+    browser: true
+    jquery: true
+  extends: eslint:recommended
+  rules:
+    no-console: off
+    no-unused-vars:
+     - error
+     - vars: local
+       args: none
+    no-empty: off
+    no-mixed-spaces-and-tabs: [error, smart-tabs]
+  globals:
+    require: true
+
+    XKit: true
+    XBridge: true
+
+    storage_max: true
+    storage_used: true
+    framework_version: true
+    getBridgeError: true
+
+    unsafeWindow: true
+    GM_flushStorage: true
+    GM_deleteAllValues: true
+    GM_getValue: true
+    GM_deleteValue: true
+    GM_setValue: true
+    GM_log: true
+    GM_openInTab: true
+    GM_listValues: true
+    GM_xmlhttpRequest: true
