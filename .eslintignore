@@ -2,3 +2,8 @@
 **/nano.js
 **/moment.js
 **/tiptip.js
+*.icon.js
+
+node_modules
+build
+Extensions/dist/page
