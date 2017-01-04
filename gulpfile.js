@@ -20,7 +20,7 @@ var cache = require('gulp-cached'),
 var BUILD_DIR = 'build';
 var paths = {
 	scripts: {
-		dev: ['gulpfile.js'],
+		dev: ['gulpfile.js', 'dev/**/*.js'],
 		core: ['editor.js', 'xkit.js'],
 		extensions: ['Extensions/**/*.js', '!Extensions/**/*.icon.js']
 	},
