@@ -6,16 +6,20 @@
     jquery: true
   extends: eslint:recommended
   rules:
+    dot-notation: [error, allowPattern: "^[A-Z]"]
+    id-length: [error, exceptions: [i, j, e, x, y]]
+    no-caller: error
     no-console: off
+    no-empty: off
+    no-implied-eval: error
+    no-mixed-spaces-and-tabs: [error, smart-tabs]
     no-unused-vars:
      - error
      - vars: local
        args: none
-    no-empty: off
     no-shadow: error
-    no-mixed-spaces-and-tabs: [error, smart-tabs]
-    id-length: [error, exceptions: [i, j, e, x, y]]
-
+    no-unsafe-negation: error
+    no-with: error
     valid-jsdoc:
       - error
       - requireReturn: false
