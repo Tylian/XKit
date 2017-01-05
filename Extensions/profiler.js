@@ -326,10 +326,11 @@ XKit.extensions.profiler = new Object({
 			$("#xkit-profiler-nickname").removeClass("loading-up").html(m_nickname);
 		}
 
+		var blog_id;
 		var m_blogs = XKit.tools.get_blogs();
 		for (var i = 0; i < m_blogs.length; i++) {
 			if (m_blogs[i] !== "") {
-				var blog_id = m_blogs[i];
+				blog_id = m_blogs[i];
 				break;
 			}
 		}

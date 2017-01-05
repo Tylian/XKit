@@ -108,7 +108,7 @@
 			// Check if in Frame Mode.
 			if (XKit.frame_mode === true && extension_id !== "xkit_patches") {
 				// This is ugly: I don't want to eval script.
-				eval(xkit_main.script + "\n	//# sourceURL=xkit/" + extension_id + ".js");
+				eval(xkit_main.script + "\n//# sourceURL=xkit/" + extension_id + ".js");
 				var frame_script = "";
 				try {
 					frame_script = XKit.extensions[extension_id].frame_run;
@@ -150,7 +150,7 @@
 				if (xkit_main.frame === true) {
 					// is a frame extension, quit.
 					try {
-						eval(xkit_main.script + "\n	//# sourceURL=xkit/" + extension_id + ".js");
+						eval(xkit_main.script + "\n//# sourceURL=xkit/" + extension_id + ".js");
 					} catch (e) {
 						XKit.console.add("Can't eval " + extension_id);
 					}
