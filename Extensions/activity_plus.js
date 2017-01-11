@@ -1,5 +1,5 @@
 //* TITLE Activity+ **//
-//* VERSION 0.3.6 **//
+//* VERSION 0.3.7 **//
 //* DESCRIPTION Tweaks for the Activity page **//
 //* DETAILS This extension brings a couple of tweaks for the Activity page, such as the ability to filter notes by type and showing timestamps. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -173,7 +173,7 @@ XKit.extensions.activity_plus = new Object({
 
 	},
 
-	last_post_url: -1,
+	last_post_info: -1,
 	condensed_count: 0,
 	condensed_id: 0,
 	last_checked_item: "",
@@ -188,7 +188,7 @@ XKit.extensions.activity_plus = new Object({
 
 			if ($(this).hasClass("is_follower")) {
 
-				if (XKit.extensions.activity_plus.last_post_url === "_FOLLOWER") {
+				if (XKit.extensions.activity_plus.last_post_info === "_FOLLOWER") {
 
 					$(this).addClass("xkit-activity-plus-condensed-item");
 					$(this).addClass("xkit-activity-plus-condensed-item---" + XKit.extensions.activity_plus.condensed_id);
@@ -207,7 +207,7 @@ XKit.extensions.activity_plus = new Object({
 
 					XKit.extensions.activity_plus.do_condensed_condense();
 
-					XKit.extensions.activity_plus.last_post_url = "_FOLLOWER";
+					XKit.extensions.activity_plus.last_post_info = "_FOLLOWER";
 					XKit.extensions.activity_plus.condensed_count = 1;
 					XKit.extensions.activity_plus.condensed_id = XKit.tools.random_string();
 					XKit.extensions.activity_plus.last_checked_item = $(this);
@@ -218,9 +218,9 @@ XKit.extensions.activity_plus = new Object({
 
 				if ($(this).hasClass("is_like") || $(this).hasClass("is_reblog")) {
 
-					var post_url = $(this).find(".part_icon").find("a").attr('href');
+					var post_info = $(this).find(".ui_post_badge").attr("data-peepr");
 
-					if (post_url === XKit.extensions.activity_plus.last_post_url) {
+					if (post_info === XKit.extensions.activity_plus.last_post_info) {
 
 						$(this).addClass("xkit-activity-plus-condensed-item");
 						$(this).addClass("xkit-activity-plus-condensed-item---" + XKit.extensions.activity_plus.condensed_id);
@@ -238,7 +238,7 @@ XKit.extensions.activity_plus = new Object({
 					} else{
 
 						XKit.extensions.activity_plus.do_condensed_condense();
-						XKit.extensions.activity_plus.last_post_url = post_url;
+						XKit.extensions.activity_plus.last_post_info = post_info;
 						XKit.extensions.activity_plus.condensed_count = 1;
 						XKit.extensions.activity_plus.condensed_id = XKit.tools.random_string();
 						XKit.extensions.activity_plus.last_checked_item = $(this);
