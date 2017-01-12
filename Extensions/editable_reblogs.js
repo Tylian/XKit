@@ -1,5 +1,5 @@
 //* TITLE Editable Reblogs **//
-//* VERSION 3.3.2 **//
+//* VERSION 3.3.3 **//
 //* DESCRIPTION Restores ability to edit previous reblogs of a post **//
 //* DEVELOPER new-xkit **//
 //* FRAME false **//
