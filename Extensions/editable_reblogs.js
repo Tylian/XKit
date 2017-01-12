@@ -1,5 +1,5 @@
 //* TITLE Editable Reblogs **//
-//* VERSION 3.3.3 **//
+//* VERSION 3.3.2 **//
 //* DESCRIPTION Restores ability to edit previous reblogs of a post **//
 //* DEVELOPER new-xkit **//
 //* FRAME false **//
@@ -530,7 +530,7 @@ XKit.extensions.editable_reblogs = new Object({
 	},
 
 	format_video_media: function(nodes) {
-		//parse items embedded in the current post
+		// parse items embedded in the current post
 		var embeds = nodes.find('.media-holder');
 		$.each(embeds, function(index, value) {
 			var element = $(value);
@@ -538,17 +538,25 @@ XKit.extensions.editable_reblogs = new Object({
 			element.find('.media-mover').remove();
 			element.find('.thumbnail-preview').remove();
 			var figure = element.find('figure');
+			if (!figure.find('iframe').length) {
+				return;
+			}
+
 			figure.removeClass('tmblr-embed-placeholder')
 					.removeClass('embed-thumbnail-preview')
 					.addClass('tmblr-embed')
 					.removeAttr('data-embed-code')
 					.unwrap();
 		});
-		//parse items embedded in earlier reblogs
+		// parse items embedded in earlier reblogs
 		var figures = nodes.find('figure.tmblr-embed');
 		$.each(figures, function(index, value) {
 			var figure = $(value);
 			var iframe = figure.find('iframe');
+			if (!iframe.length) {
+				return;
+			}
+
 			if (!iframe.is('[data-src]')) {
 				var src = iframe.attr('src');
 				iframe.attr('data-src', src);
@@ -564,11 +572,9 @@ XKit.extensions.editable_reblogs = new Object({
 			if (!figure.is('[data-url]')) {
 				var tumblrSource = iframe.attr('data-src');
 				var embedId = iframe.attr('id');
-				if (tumblrSource && embedId) {
-					var segments = tumblrSource.split('/');
-					var url = segments[6].replace('#' + embedId, '');
-					figure.attr('data-url', url);
-				}
+				var segments = tumblrSource.split('/');
+				var url = segments[6].replace('#' + embedId, '');
+				figure.attr('data-url', url);
 			}
 			if (!figure.is('[data-provider]')) {
 				//it doesn't seem to matter what this value is as long as it exists
