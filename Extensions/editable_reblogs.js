@@ -339,31 +339,45 @@ XKit.extensions.editable_reblogs = new Object({
 		this.scheduled_date = e.target.value;
 	},
 
-	make_post: function(e) {
+	make_post: function(event) {
 		if (!this.reblog_tree_exists() || this.state != "success") {
 			return;
 		}
 
-		var post_types = this.post_types;
-		switch (post_types[this.selected_post_type]) {
-			case post_types.PUBLISH:
-				this.send_post_request(e);
-				break;
-			case post_types.QUEUE:
-				this.send_queue_request(e);
-				break;
-			case post_types.DRAFT:
-				this.send_draft_request(e);
-				break;
-			case post_types.PRIVATE:
-				this.send_private_request(e);
-				break;
-			case post_types.SCHEDULE:
-				this.send_schedule_request(e);
-				break;
-		}
+		try {
+			var post_types = this.post_types;
+			switch (post_types[this.selected_post_type]) {
+				case post_types.PUBLISH:
+					this.send_post_request(event);
+					break;
+				case post_types.QUEUE:
+					this.send_queue_request(event);
+					break;
+				case post_types.DRAFT:
+					this.send_draft_request(event);
+					break;
+				case post_types.PRIVATE:
+					this.send_private_request(event);
+					break;
+				case post_types.SCHEDULE:
+					this.send_schedule_request(event);
+					break;
+			}
 
-		this.state = "finished";
+			this.state = "finished";
+		} catch (e) {
+			console.error(e);
+
+			var github_url = XKit.tools.github_issue("Editable Reblogs post error",
+				{ state: this.state, "ER Version": XKit.installed.get("editable_reblogs").version },
+			e);
+
+			XKit.window.show('Editable Reblogs Error',
+				"ERROR: Editable Reblogs failed to process some part of your post, and it wasn't posted. "+
+				"Try removing images or media and trying again."+
+				(!e.hide_url ? '<br><br><a target="_blank" href="'+github_url+'">You can report this issue on Github by clicking here</a>':''),
+				'error', '<div id="xkit-close-message" class="xkit-button">OK</div>');
+		}
 	},
 
 	send_post_request: function(e) {
@@ -516,7 +530,7 @@ XKit.extensions.editable_reblogs = new Object({
 	},
 
 	format_video_media: function(nodes) {
-		//parse items embedded in the current post
+		// parse items embedded in the current post
 		var embeds = nodes.find('.media-holder');
 		$.each(embeds, function(index, value) {
 			var element = $(value);
@@ -524,17 +538,25 @@ XKit.extensions.editable_reblogs = new Object({
 			element.find('.media-mover').remove();
 			element.find('.thumbnail-preview').remove();
 			var figure = element.find('figure');
+			if (!figure.find('iframe').length) {
+				return;
+			}
+
 			figure.removeClass('tmblr-embed-placeholder')
 					.removeClass('embed-thumbnail-preview')
 					.addClass('tmblr-embed')
-					.removeAttr(' data-embed-code')
+					.removeAttr('data-embed-code')
 					.unwrap();
 		});
-		//parse items embedded in earlier reblogs
+		// parse items embedded in earlier reblogs
 		var figures = nodes.find('figure.tmblr-embed');
 		$.each(figures, function(index, value) {
 			var figure = $(value);
 			var iframe = figure.find('iframe');
+			if (!iframe.length) {
+				return;
+			}
+
 			if (!iframe.is('[data-src]')) {
 				var src = iframe.attr('src');
 				iframe.attr('data-src', src);
@@ -579,8 +601,7 @@ XKit.extensions.editable_reblogs = new Object({
 
 					var github_url = XKit.tools.github_issue("Editable Reblogs posting error",
 						{ "ER Version": XKit.installed.get("editable_reblogs").version,
-						 user: request.channel_id, body: request["post[two]"], response: JSON.stringify(response)},
-					e);
+						 user: request.channel_id, body: request["post[two]"]}, {stack: response});
 
 					XKit.window.show("Error",
 						"Error: XER-SR.<br><br>There was an error reblogging your post. Please try again shortly. "+
