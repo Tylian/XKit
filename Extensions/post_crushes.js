@@ -1,5 +1,5 @@
 //* TITLE Post Crushes **//
-//* VERSION 2.0.4 **//
+//* VERSION 2.0.5 **//
 //* DESCRIPTION Lets you share your Tumblr Crushes **//
 //* DEVELOPER STUDIOXENIX **//
 //* DETAILS To use this extension, go to the 'Following' page on your dashboard, and click on the 'Post My Crushes' button below your Tumblr Crushes. **//
@@ -177,7 +177,7 @@ XKit.extensions.post_crushes = new Object({
 			var m_text = $.trim($("#xkit-post-crushes-additional-text").val());
 
 			if (m_text !== "") {
-				m_object["post[two]"] = send_txt + "<p>" + m_text + "</p>";
+				m_object["post[two]"] = send_txt + "<p>" + XKit.tools.escape_html(m_text) + "</p>";
 			} else {
 				m_object["post[two]"] = send_txt;
 			}
