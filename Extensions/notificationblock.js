@@ -1,5 +1,5 @@
 //* TITLE NotificationBlock **//
-//* VERSION 1.3.3 **//
+//* VERSION 1.3.4 **//
 //* DESCRIPTION Blocks notifications from a post **//
 //* DEVELOPER new-xkit **//
 //* DETAILS One post got way too popular and now just annoying you? Click on the notification block icon on that post to hide the notifications from that post. If you have Go-To-Dash installed, you can click on a notification, then click View button on top-right corner to quickly go back to the post on your dashboard.  **//
@@ -308,14 +308,15 @@ XKit.extensions.notificationblock = new Object({
 
 			$(this).addClass("xnotificationblockchecked");
 
-			var target_url = $(this).find(".part_glass").attr('href') + "  " + $(this).find(".ui_post_badge").attr('href');
+			var target_url = $(this).find(".part_glass").attr('href');
+			target_url += " " +  $(this).find(".ui_post_badge").attr("data-peepr");
 
 			for (var i=0;i<XKit.extensions.notificationblock.blacklisted.length;i++) {
 				if (XKit.extensions.notificationblock.blacklisted[i] === "" ||
 						typeof(XKit.extensions.notificationblock.blacklisted[i]) === "undefined") {
 					continue;
 				}
-				if (target_url.indexOf("/post/" + XKit.extensions.notificationblock.blacklisted[i]) !== -1) {
+				if (target_url.indexOf(XKit.extensions.notificationblock.blacklisted[i]) !== -1) {
 					console.log("Blocking notification because of post " + XKit.extensions.notificationblock.blacklisted[i]);
 					if ($(this).next().hasClass("xkit-activity-plus-condensed-opener")) {
 						$(this).next().remove();
@@ -356,8 +357,6 @@ XKit.extensions.notificationblock = new Object({
 
 				}
 
-
-
 			});
 
 		}
@@ -372,5 +371,4 @@ XKit.extensions.notificationblock = new Object({
 		$(".xkit-notification-notification-block-button").remove();
 		XKit.tools.remove_css("notificationblock_notfix");
 	}
-
 });
