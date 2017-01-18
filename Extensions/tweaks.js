@@ -13,6 +13,7 @@ XKit.extensions.tweaks = new Object({
 	slow: true,
 	run_interval: 0,
 	run_interval_2: 0,
+	hide_bubble_interval: 0,
 
 	preferences: {
 
@@ -299,7 +300,6 @@ XKit.extensions.tweaks = new Object({
 	},
 
 	default_page_title: "",
-	hide_bubble_interval: "",
 
 	run: function() {
 		this.running = true;
@@ -328,7 +328,7 @@ XKit.extensions.tweaks = new Object({
 
 			XKit.extensions.tweaks.default_page_title = document.title;
 			$("#new_post_notice_container").remove();
-			hide_bubble_interval = setInterval(function() {
+			this.hide_bubble_interval = setInterval(function() {
 				document.title = XKit.extensions.tweaks.default_page_title;
 			}, 1000);
 
@@ -336,11 +336,11 @@ XKit.extensions.tweaks = new Object({
 
 		if (XKit.extensions.tweaks.preferences.redirect_to_everything.value) {
 			if (document.location.href.indexOf("://www.tumblr.com/tagged/") !== -1 && $(".tag_editors").length > 0) {
-				var m_tag = document.location.href.replace("www.tumblr.com/tagged/","");
-				m_tag = m_tag.replace("tumblr.com/tagged/","");
-				m_tag = m_tag.replace("https://","");
-				m_tag = m_tag.replace("http://","");
-				m_tag = m_tag.replace("#","");
+				var m_tag = document.location.href.replace("www.tumblr.com/tagged/", "");
+				m_tag = m_tag.replace("tumblr.com/tagged/", "");
+				m_tag = m_tag.replace("https://", "");
+				m_tag = m_tag.replace("http://", "");
+				m_tag = m_tag.replace("#", "");
 				var redirect_me = true;
 				if (m_tag.substring(m_tag.length - 1) === "/") {
 					m_tag = m_tag.substring(0, m_tag.length - 1);
@@ -363,31 +363,31 @@ XKit.extensions.tweaks = new Object({
 
 			try {
 
-			if (document.location.href.indexOf('/dashboard') !== -1) {
+				if (document.location.href.indexOf('/dashboard') !== -1) {
 
-				if (!XKit.browser().mobile) { // mobile stuff
-					if ($("#new_post_buttons").length > 0) {
+					if (!XKit.browser().mobile) { // mobile stuff
+						if ($("#new_post_buttons").length > 0) {
 
 						// Save this.
-						var m_to_save = $("#new_post_buttons")[0].outerHTML;
-						m_to_save = "!" + btoa(m_to_save);
-						XKit.storage.set("tweaks","new_post_buttons_html", m_to_save);
+							var m_to_save = $("#new_post_buttons")[0].outerHTML;
+							m_to_save = "!" + btoa(m_to_save);
+							XKit.storage.set("tweaks", "new_post_buttons_html", m_to_save);
 
-					} else {
+						} else {
 
-						var m_btn_html = XKit.storage.get("tweaks","new_post_buttons_html","");
-						if (m_btn_html !== "" ||typeof m_btn_html !== "undefined") {
-							if (m_btn_html.substring(0,1) === "!") {
-								m_btn_html = atob(m_btn_html.substring(1));
-								$("#posts").prepend(m_btn_html);
+							var m_btn_html = XKit.storage.get("tweaks", "new_post_buttons_html", "");
+							if (m_btn_html !== "" || typeof m_btn_html !== "undefined") {
+								if (m_btn_html.substring(0, 1) === "!") {
+									m_btn_html = atob(m_btn_html.substring(1));
+									$("#posts").prepend(m_btn_html);
+								}
 							}
 						}
 					}
+
 				}
 
-			}
-
-			} catch(e) {
+			} catch (e) {
 
 				console.log("Tweaks -> Can't run show_on_secondary, " + e.message);
 
@@ -405,8 +405,8 @@ XKit.extensions.tweaks = new Object({
 		}
 
 		if (XKit.extensions.tweaks.preferences.hide_radar.value) {
-			$("#tumblr_radar").css("display","none");
-			$(".radar_header").parent().css("display","none");
+			$("#tumblr_radar").css("display", "none");
+			$(".radar_header").parent().css("display", "none");
 		}
 
 		if (XKit.extensions.tweaks.preferences.photo_replies.value) {
@@ -451,14 +451,14 @@ XKit.extensions.tweaks = new Object({
 		if (XKit.extensions.tweaks.preferences.show_top_arrow.value) {
 			XKit.extensions.tweaks.add_css(".elevator-wrapper { display: block !important; } .elevator { opacity: 1 !important; visibility: visible !important; transform: translateY(0px) translateZ(0px) !important; }", "xkit_tweaks_show_top_arrow");
 			XKit.tools.add_function(function() {
-				Tumblr.KeyCommands.elevate = function(){jQuery("html, body").stop(true).animate({scrollTop:0},"slow");};
+				Tumblr.KeyCommands.elevate = function() {jQuery("html, body").stop(true).animate({scrollTop:0}, "slow");};
 			}, true, "");
 		}
 
 		if (XKit.extensions.tweaks.preferences.larger_top_arrow.value) {
 			XKit.extensions.tweaks.add_css(".elevator-wrapper { transform: scale(2.5) translateZ(0px); }", "xkit_tweaks_larger_top_arrow");
 			XKit.tools.add_function(function() {
-				Tumblr.KeyCommands.elevate = function(){jQuery("html, body").stop(true).animate({scrollTop:0},"slow");};
+				Tumblr.KeyCommands.elevate = function() {jQuery("html, body").stop(true).animate({scrollTop:0}, "slow");};
 			}, true, "");
 		}
 
@@ -524,7 +524,7 @@ XKit.extensions.tweaks = new Object({
 		}
 
 		if (XKit.extensions.tweaks.preferences.hide_find_blogs.value) {
-			$("a.spotlight").parent().css("display","none");
+			$("a.spotlight").parent().css("display", "none");
 		}
 
 		if (XKit.extensions.tweaks.preferences.always_show_move_to_top.value) {
@@ -574,24 +574,24 @@ XKit.extensions.tweaks = new Object({
 				XKit.interface.is_tumblr_page()) {
 
 			XKit.extensions.tweaks.add_css(
-				".post .tags { "+
-					"width: 100% !important; "+
-					"display: block !important; "+
-					"overflow:visible; "+
-					"height:auto; "+
-					"white-space: normal; "+
-				"} "+
-				".post .footer_links.with_tags { "+
-					"overflow:visible !important; "+
-					"display: block !important; "+
-				"} "+
-				".post .footer_links.with_tags span, .footer_links.with_tags .source_url { "+
-					"display:block !important; "+
-					"overflow:visible !important; "+
-				"} "+
-				".source_url_gradient { display: none !important; } "+
-				"span.tags { white-space:normal !important; } "+
-				"span.with_blingy_tag a.blingy { height:auto !important; display:inline-block !important; }  "+
+				".post .tags { " +
+					"width: 100% !important; " +
+					"display: block !important; " +
+					"overflow:visible; " +
+					"height:auto; " +
+					"white-space: normal; " +
+				"} " +
+				".post .footer_links.with_tags { " +
+					"overflow:visible !important; " +
+					"display: block !important; " +
+				"} " +
+				".post .footer_links.with_tags span, .footer_links.with_tags .source_url { " +
+					"display:block !important; " +
+					"overflow:visible !important; " +
+				"} " +
+				".source_url_gradient { display: none !important; } " +
+				"span.tags { white-space:normal !important; } " +
+				"span.with_blingy_tag a.blingy { height:auto !important; display:inline-block !important; }  " +
 				".source_url, .post_tags_wrapper { display: block !important; } ",
 			"xkit_tweaks_wrap_tags");
 
@@ -617,7 +617,7 @@ XKit.extensions.tweaks = new Object({
 
 		if (XKit.extensions.tweaks.preferences.scroll_new_posts.value) {
 			if (!XKit.browser().mobile) { // mobile stuff
-				$(window).scroll(function () {
+				$(window).scroll(function() {
 					if ($("#new_post").length > 0) {
 						if ($(window).scrollTop() >= 200) {
 							$("body").addClass("xkit-new-post-scrolls-page");
@@ -661,23 +661,23 @@ XKit.extensions.tweaks = new Object({
 			var add_mega_link = true;
 			if ($(".small_links").length > 0) {
 				try {
-				$(".small_links a").each(function() {
-					var m_link = $(this).attr('href');
-					if (m_link.indexOf('/mega-editor') !== -1) {
-						add_mega_link = false;
-						return false;
-					}
-				});
-				} catch(e) {
+					$(".small_links a").each(function() {
+						var m_link = $(this).attr('href');
+						if (m_link.indexOf('/mega-editor') !== -1) {
+							add_mega_link = false;
+							return false;
+						}
+					});
+				} catch (e) {
 					// Meh.
 				}
 			}
 
-			var x_html = '<a class=\"xkit-small-blog-setting-link\" href="/blog/' + user_url.replace("/","") + '/settings/" target="_blog_settings">Blog Settings</a>';
+			var x_html = '<a class=\"xkit-small-blog-setting-link\" href="/blog/' + user_url.replace("/", "") + '/settings/" target="_blog_settings">Blog Settings</a>';
 			if (add_mega_link) {
 				x_html = '<div class="small_links by-xkit">' +
 											'<a href="/mega-editor/' + user_url + '" target="_mass_post_editor">Mass Post Editor</a>' +
-											'<a href="/blog/' + user_url.replace("/","") + '/settings/" target="_mass_post_editor">Blog Settings</a>' +
+											'<a href="/blog/' + user_url.replace("/", "") + '/settings/" target="_mass_post_editor">Blog Settings</a>' +
 						'</div>';
 			}
 			if ($(".small_links").length > 0 && !add_mega_link) {
@@ -699,12 +699,12 @@ XKit.extensions.tweaks = new Object({
 
 	old_photo_margins: function() {
 
-		XKit.tools.add_css(".post_full.is_photoset .photoset .photoset_row .photoset_photo {margin-left: 0;}","tweaks_old_photo_margins");
+		XKit.tools.add_css(".post_full.is_photoset .photoset .photoset_row .photoset_photo {margin-left: 0;}", "tweaks_old_photo_margins");
 
 		$(".post_media_photo.image").each(function() {
 			if ($(this).attr("width") > 500 ) {
-				$(this).attr("style","margin-left: 20px; width: 500px;");
-				$(this).attr("height","auto");
+				$(this).attr("style", "margin-left: 20px; width: 500px;");
+				$(this).attr("height", "auto");
 			}
 		});
 
@@ -715,14 +715,14 @@ XKit.extensions.tweaks = new Object({
 			var is_viscaps = $(this).hasClass('xkit-accesskit-viscaps');
 
 			if (photoset_row.attr("class") == "photoset_row photoset_row_1") {
-				ratio = 500.0/540.0;
+				ratio = 500.0 / 540.0;
 			} else if (photoset_row.attr("class") == "photoset_row photoset_row_2") {
-				ratio = 245.0/268.0;
+				ratio = 245.0 / 268.0;
 			} else if (photoset_row.attr("class") == "photoset_row photoset_row_3") {
-				ratio = 160.0/177.0;
+				ratio = 160.0 / 177.0;
 			}
 
-			var photoHeight = parseInt(photoset_row.css("height").slice(0,-2))*ratio;
+			var photoHeight = parseInt(photoset_row.css("height").slice(0, -2)) * ratio;
 
 			photoset_row.addClass("xkit-protected-photoset-row");
 
@@ -736,7 +736,7 @@ XKit.extensions.tweaks = new Object({
 			photoset_row.find("img").each(function() {
 				var img = $(this);
 				var imgstyle = img.css("width");
-				if (imgstyle == "540px")  {
+				if (imgstyle == "540px") {
 					img.attr("style", "width: 500px;");
 				} else if (imgstyle == "268px") {
 					img.attr("style", "width: 245px; margin-right: 10px;");
@@ -803,7 +803,7 @@ XKit.extensions.tweaks = new Object({
 				$(this).find(".post_control.edit").appendTo($(this).find(".post_controls_inner"));
 				$(this).find(".post_control.delete").appendTo($(this).find(".post_controls_inner"));
 				$(this).find(".post_control.queue").appendTo($(this).find(".post_controls_inner"));
-				$(this).find(".post_control.post_control_menu.creator").css("display","none");
+				$(this).find(".post_control.post_control_menu.creator").css("display", "none");
 			});
 		}
 
@@ -823,17 +823,18 @@ XKit.extensions.tweaks = new Object({
 				return;
 			}
 
-			$("#post_two_image").css("background","red");
+			$("#post_two_image").css("background", "red");
 			$("#post_two_image").removeClass("mce_image");
 			$("#post_two_image").addClass("mce_image_upload");
 			$("#post_two_image").find(".mceIcon").addClass("mce_image_upload");
 			$("#post_two_image").find(".mceIcon").removeClass("mce_image");
-			$("#post_two_image_upload").attr('id','post_two_image_upload');
-			$("#post_two_image_voice").attr('id','post_two_image_upload_voice');
+			$("#post_two_image_upload").attr('id', 'post_two_image_upload');
+			$("#post_two_image_voice").attr('id', 'post_two_image_upload_voice');
 
 			XKit.console.add("Tweaks, upload_photos: done.");
 
 			XKit.tools.add_function(function() {
+				/* globals tinyMCE */
 				Tumblr.Events.trigger("posts:load");
 				tinyMCE.execCommand("mceRepaint");
 				alert(JSON.stringify(tinyMCE.activeEditor.settings));
@@ -880,16 +881,17 @@ XKit.extensions.tweaks = new Object({
 		XKit.post_listener.remove("tweaks_dont_show_liked");
 		clearInterval(this.run_interval);
 		clearInterval(this.run_interval_2);
+		clearInterval(this.hide_bubble_interval);
 		XKit.post_listener.remove("tweaks_split_gear");
 		$(".xkit-small-blog-setting-link").remove();
 		$(".small_links.by-xkit").remove();
 		$("#new_post_in_tracked_tags_bubble").remove();
-		$("#tumblr_radar").css("display","block");
+		$("#tumblr_radar").css("display", "block");
 		$("#xkit_customize_button").remove();
-		$("a.spotlight").parent().css("display","block");
-		$("a.activity").parent().css("display","block");
-		$(".radar_header").parent().css("display","block");
-		$(".customize").parent().css("display","block");
+		$("a.spotlight").parent().css("display", "block");
+		$("a.activity").parent().css("display", "block");
+		$(".radar_header").parent().css("display", "block");
+		$(".customize").parent().css("display", "block");
 		$("xkit_post_tags_inner_add_back").addClass("post_tags_inner");
 		$("xkit_post_tags_inner_add_back").removeClass("xkit_post_tags_inner_add_back");
 		XKit.tools.remove_css("tweaks_grey_urls");

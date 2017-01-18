@@ -7,7 +7,7 @@
 
 XKit.extensions.autoscroll = new Object({
 
-  running: false,
+	running: false,
 	preferences: {
 		"ClickAnywhereToStop": {
 			text: "Click anywhere to stop scrolling",
@@ -54,33 +54,30 @@ XKit.extensions.autoscroll = new Object({
 		var currentStep = null;
 		var isScrolling = false;
 		var middleNumber = Math.round(totalStepCount / 2);
-		var scrollFunction = function(){
+		var scrollFunction = function() {
 			var stepNumber = 0;
 			var numberOfSteps = 0;
 			var directionFactor = 1;
-			if(Number(currentStep) < middleNumber)
-			{
+			if (Number(currentStep) < middleNumber) {
 				numberOfSteps = middleNumber;
 				directionFactor = -1;
 				stepNumber = middleNumber - Number(currentStep);
-			} else
-			{
+			} else {
 				numberOfSteps = totalStepCount - middleNumber;
 				stepNumber = Number(currentStep) - middleNumber + 1;
 				directionFactor = 1;
 			}
-			window.scrollBy(0,maxSpeed * smoothingFactor * directionFactor);
-			if(isScrolling){
-				var timerRatio = stepNumber/numberOfSteps;
-				setTimeout(scrollFunction,1000 * smoothingFactor / timerRatio);
+			window.scrollBy(0, maxSpeed * smoothingFactor * directionFactor);
+			if (isScrolling) {
+				var timerRatio = stepNumber / numberOfSteps;
+				setTimeout(scrollFunction, 1000 * smoothingFactor / timerRatio);
 			}
 		};
-		$(document).on("click",".auto_scroll_control_step", function(event){
-			if(!$(event.target).is("[selected]"))
-			{
+		$(document).on("click", ".auto_scroll_control_step", function(event) {
+			if (!$(event.target).is("[selected]")) {
 				// Mark and store the selected speed.
 				controlSteps.removeAttr("selected");
-				$(event.target).attr("selected","true");
+				$(event.target).attr("selected", "true");
 				currentStep = $(event.target).attr("number");
 
 				// Start scrolling
@@ -88,9 +85,8 @@ XKit.extensions.autoscroll = new Object({
 				isScrolling = true;
 				// Function must be started after isScrolling is set
 				// to prevent possible race condition.
-				if(wasScrolling === false)
-				{
-					setTimeout(scrollFunction,50);
+				if (wasScrolling === false) {
+					setTimeout(scrollFunction, 50);
 				}
 			} else {
 				isScrolling = false;
@@ -101,25 +97,22 @@ XKit.extensions.autoscroll = new Object({
 			event.stopPropagation();
 		});
 
-		$(document).on("click", null, function(event){
-			if(clickAnywhereToStop && isScrolling === true)
-			{
+		$(document).on("click", null, function(event) {
+			if (clickAnywhereToStop && isScrolling === true) {
 				isScrolling = false;
 				controlSteps.removeAttr("selected");
 			}
 		});
 	},
 
-	initControl: function(){
+	initControl: function() {
 		XKit.tools.init_css("autoscroll");
 		// HTML for control
 		var m_html = '<div class="auto_scroll_control_container"><table style="table-layout: fixed"><td class="auto_scroll_table_cell">';
-		for(var j = 0; j < this.preferences.StepsOnControl.value; j++)
-		{
+		for (var j = 0; j < this.preferences.StepsOnControl.value; j++) {
 			m_html += '<div class="auto_scroll_control_step" number = ' + j + '/>';
 
-			if(j + 1 == Math.round(this.preferences.StepsOnControl.value / 2))
-			{
+			if (j + 1 == Math.round(this.preferences.StepsOnControl.value / 2)) {
 				m_html += '<div class = "auto_scroll_control_center"/>';
 			}
 		}

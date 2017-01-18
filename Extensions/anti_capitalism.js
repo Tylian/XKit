@@ -71,7 +71,7 @@ XKit.extensions.anti_capitalism = new Object({
 		}
 
 		if (XKit.extensions.anti_capitalism.preferences.yahoo_view.value) {
-			XKit.tools.add_css(' .recommendation-reason-link[href*="//view.yahoo.com"], .recommendation-reason-link[href*="%2F%2Fview.yahoo.com"]  { display: none; } ', "anti_capitalism_yahoo_view");
+			XKit.tools.add_css(' .recommendation-reason-link[href*="//view.yahoo.com"], .recommendation-reason-link[href*="%2F%2Fview.yahoo.com"] { display: none; } ', "anti_capitalism_yahoo_view");
 		}
 
 		if (XKit.extensions.anti_capitalism.preferences.sidebar_ad.value) {
@@ -79,7 +79,7 @@ XKit.extensions.anti_capitalism = new Object({
 		}
 
 		if (this.preferences.video_ad.value) {
-			this.interval_id = setInterval(function (){
+			this.interval_id = setInterval(function() {
 				var players = $(".sidebar-ad-content iframe, .sponsored_post iframe, .sponsored_post video, .standalone-ad-container video");
 				// Pause + remove src of video tags to prevent audio from persisting after DOM removal
 				var videos = players.filter("video");

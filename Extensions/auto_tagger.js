@@ -147,10 +147,9 @@ XKit.extensions.auto_tagger = new Object({
 		},
 	},
 
-	new_post_check_interval: 0,
 	run: function() {
 		this.running = true;
-		new_post_check_interval = setInterval(function() { XKit.extensions.auto_tagger.new_post_check(); }, 1000);
+		setInterval(function() { XKit.extensions.auto_tagger.new_post_check(); }, 1000);
 	},
 
 	frame_run: function() {
@@ -200,7 +199,7 @@ XKit.extensions.auto_tagger = new Object({
 
 		XKit.console.add("Auto Tagger -> new_post_check -> user in new post page!");
 
-		if(post_forms.length <= 0) {
+		if (post_forms.length <= 0) {
 			XKit.console.add("Auto Tagger -> new_post_check -> delaying, not on page...");
 			return;
 		}
@@ -234,6 +233,8 @@ XKit.extensions.auto_tagger = new Object({
 	},
 
 	return_date_tag: function() {
+		// defined in moment.js
+		/* globals moment */
 
 		var nowdate = new Date();
 		var nowdatem = moment(nowdate);
@@ -242,7 +243,7 @@ XKit.extensions.auto_tagger = new Object({
 
 	},
 
-	/**
+	/*
 	 * Return tags for the post object returned by XKit.interface.post or
 	 * XKit.interface.find_post.
 	 * Uses tag_for_reblogged, tag_for_original, tag_based_on_type, keep_tags,
@@ -388,9 +389,9 @@ XKit.extensions.auto_tagger = new Object({
 	},
 
 	inject_to_window: function(raw_string) {
-        $(".post-form--footer").css("display", "block");
-        $(".post-form--footer").css("opacity", "1");
-        if($(".post-form").length <= 0) {
+		$(".post-form--footer").css("display", "block");
+		$(".post-form--footer").css("opacity", "1");
+		if ($(".post-form").length <= 0) {
 			setTimeout(function() {
 				XKit.extensions.auto_tagger.inject_to_window(raw_string);
 			}, 200);
