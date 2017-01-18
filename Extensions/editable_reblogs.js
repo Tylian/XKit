@@ -1,5 +1,5 @@
 //* TITLE Editable Reblogs **//
-//* VERSION 3.3.5 **//
+//* VERSION 3.3.6 **//
 //* DESCRIPTION Restores ability to edit previous reblogs of a post **//
 //* DEVELOPER new-xkit **//
 //* FRAME false **//
@@ -190,7 +190,7 @@ XKit.extensions.editable_reblogs = new Object({
 	},
 
 	get_post_save_button: function() {
-		return $('.post-form--save-button');
+		return $('.post-form--save-button button');
 	},
 
 	wrap_html_links: function(html_text) {
