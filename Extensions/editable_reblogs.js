@@ -1,5 +1,5 @@
 //* TITLE Editable Reblogs **//
-//* VERSION 3.3.4 **//
+//* VERSION 3.3.5 **//
 //* DESCRIPTION Restores ability to edit previous reblogs of a post **//
 //* DEVELOPER new-xkit **//
 //* FRAME false **//
@@ -103,9 +103,8 @@ XKit.extensions.editable_reblogs = new Object({
 			$(element).addClass('disabled');
 		}.bind(this));
 
-		var save_button = $('.post-form--save-button [data-js-clickablesave]');
 		// Prevent Tumblr's event handler from acting on the save button
-		save_button.removeAttr("data-js-clickablesave");
+		this.get_post_save_button().removeAttr("data-js-clickablesave");
 	},
 
 	add_edit_button: function() {
@@ -147,7 +146,7 @@ XKit.extensions.editable_reblogs = new Object({
 		} catch (e) {
 			console.error(e);
 
-			save_button.attr("data-js-clickablesave", "");
+			this.get_post_save_button().attr("data-js-clickablesave", "");
 
 			if (!e.hide_popup) {
 				var github_url = XKit.tools.github_issue("Editable Reblogs " + this.state + " error",
@@ -188,6 +187,10 @@ XKit.extensions.editable_reblogs = new Object({
 				this.selected_post_type = "PRIVATE";
 			}
 		}.bind(this));
+	},
+
+	get_post_save_button: function() {
+		return $('.post-form--save-button');
 	},
 
 	wrap_html_links: function(html_text) {
@@ -348,9 +351,8 @@ XKit.extensions.editable_reblogs = new Object({
 	make_post: function(event) {
 		if (!this.reblog_tree_exists() || this.state != "success") {
 			XKit.interface.post_window.set_content_html(this.wrap_html_links(XKit.interface.post_window.get_content_html()));
-			var save_button = $('.post-form--save-button');
-			save_button.attr("data-js-clickablesave", '');
-			save_button.click();
+			this.get_post_save_button().attr("data-js-clickablesave", '');
+			this.get_post_save_button().click();
 			return;
 		}
 
