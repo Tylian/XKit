@@ -1,5 +1,5 @@
 //* TITLE Post Archiver **//
-//* VERSION 1.0.2 **//
+//* VERSION 1.0.3 **//
 //* DESCRIPTION Never lose a post again. **//
 //* DETAILS Post Archiver lets you save posts to your XKit.<br><br>Found a good recipe? Think those hotline numbers on that signal boost post might come in handy in the future?<br><br>Click on the save button, then click on the My Archive button on your sidebar anytime to access those posts. You can also name and categorize posts. **//
 //* DEVELOPER new-xkit **//
@@ -620,7 +620,7 @@ XKit.extensions.postarchive = {
 
 				var rows = [];
 
-				for (let i = 0; i < data.photoset_layout.length; i++) {
+				for (var i = 0; i < data.photoset_layout.length; i++) {
 					rows.push(data.photoset_layout[i]);
 				}
 
@@ -640,7 +640,7 @@ XKit.extensions.postarchive = {
 
 					if (row >= 2) {
 
-						for (let i = 1; i < row; i++) {
+						for (var j = 1; j < row; j++) {
 
 							var scaled_height = (m_width * XKit.extensions.postarchive.get_photo_height(data, m_temp_photo, "500")) / 500;
 
@@ -1245,9 +1245,9 @@ XKit.extensions.postarchive = {
 			cat_list = "<div class=\"xkit-postarchive-no-categories\">You have no categories set.</div>";
 		} else {
 
-			for (let i = 0; i < XKit.extensions.postarchive.categories.length; i++) {
+			for (var j = 0; j < XKit.extensions.postarchive.categories.length; j++) {
 
-				cat_list = cat_list + "<div class=\"xkit-postarchive-cp-item\" data-id=\"" + XKit.extensions.postarchive.categories[i].id + "\">" + XKit.extensions.postarchive.categories[i].title + "</div>";
+				cat_list = cat_list + "<div class=\"xkit-postarchive-cp-item\" data-id=\"" + XKit.extensions.postarchive.categories[j].id + "\">" + XKit.extensions.postarchive.categories[j].title + "</div>";
 
 			}
 		}
@@ -1307,7 +1307,7 @@ XKit.extensions.postarchive = {
 
 				XKit.extensions.postarchive.load_posts();
 
-				for (let i = 0; i < XKit.extensions.postarchive.categories.length; i++) {
+				for (var i = 0; i < XKit.extensions.postarchive.categories.length; i++) {
 
 					if (m_cat_obj.id === XKit.extensions.postarchive.categories[i].id) {
 
@@ -1332,7 +1332,7 @@ XKit.extensions.postarchive = {
 
 					XKit.extensions.postarchive.load_posts();
 
-					for (let i = 0; i < XKit.extensions.postarchive.archived_posts.length; i++) {
+					for (var i = 0; i < XKit.extensions.postarchive.archived_posts.length; i++) {
 
 						if (typeof XKit.extensions.postarchive.archived_posts[i].category !== "undefined") {
 
@@ -1346,11 +1346,11 @@ XKit.extensions.postarchive = {
 
 					}
 
-					for (let i = 0; i < XKit.extensions.postarchive.categories.length; i++) {
+					for (var ii = 0; ii < XKit.extensions.postarchive.categories.length; ii++) {
 
-						if (m_cat_obj.id === XKit.extensions.postarchive.categories[i].id) {
+						if (m_cat_obj.id === XKit.extensions.postarchive.categories[ii].id) {
 
-							XKit.extensions.postarchive.categories.splice(i, 1);
+							XKit.extensions.postarchive.categories.splice(ii, 1);
 
 						}
 

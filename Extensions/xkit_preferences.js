@@ -1,5 +1,5 @@
 //* TITLE XKit Preferences **//
-//* VERSION 7.4.3 **//
+//* VERSION 7.4.4 **//
 //* DESCRIPTION Lets you customize XKit **//
 //* DEVELOPER new-xkit **//
 
@@ -186,7 +186,7 @@ XKit.extensions.xkit_preferences = new Object({
 
 		var m_list_html = '<ul id="xkit-spring-cleaning-list">';
 
-		for (let i = 0; i < clean_list.length; i++) {
+		for (var i = 0; i < clean_list.length; i++) {
 
 			if (XKit.installed.check(clean_list[i]) === true) {
 
@@ -352,7 +352,7 @@ XKit.extensions.xkit_preferences = new Object({
 			var show_all = XKit.tools.get_setting("xkit_show_feature_updates", "true") === "true";
 
 			var m_return = 0;
-			for (let i = 0; i < prev_objects.length; i++) {
+			for (var i = 0; i < prev_objects.length; i++) {
 				console.log(prev_objects[i]);
 				if (prev_objects[i].read === false) {
 					if (typeof prev_objects[i].important !== "undefined") {
@@ -378,7 +378,7 @@ XKit.extensions.xkit_preferences = new Object({
 				prev_objects = [];
 			}
 
-			for (let i = 0; i < prev_objects.length; i++) {
+			for (var i = 0; i < prev_objects.length; i++) {
 
 				if (prev_objects[i].id === id) {
 					return true;
@@ -444,7 +444,7 @@ XKit.extensions.xkit_preferences = new Object({
 				return "";
 			}
 
-			let i = prev_objects.length;
+			var i = prev_objects.length;
 			var m_return = "";
 
 			while (i--) {
@@ -470,7 +470,7 @@ XKit.extensions.xkit_preferences = new Object({
 				prev_objects = [];
 			}
 
-			for (let i = 0; i < prev_objects.length; i++) {
+			for (var i = 0; i < prev_objects.length; i++) {
 				prev_objects[i].read = true;
 			}
 
@@ -491,7 +491,7 @@ XKit.extensions.xkit_preferences = new Object({
 
 			var m_object;
 
-			for (let i = 0; i < prev_objects.length; i++) {
+			for (var i = 0; i < prev_objects.length; i++) {
 				if (parseInt(prev_objects[i].id) === parseInt(id)) {
 					m_object = prev_objects[i];
 					prev_objects[i].read = true;
@@ -967,7 +967,7 @@ XKit.extensions.xkit_preferences = new Object({
 			return "";
 		}
 
-		let installed_extension_class = "";
+		var installed_extension_class = "";
 		if (XKit.installed.check(obj.name)) { installed_extension_class = "xkit-installed-extension"; }
 
 		var m_html = '<div class="xkit-gallery-extension ' + installed_extension_class + '" id="xkit-gallery-extension-' + obj.name + '" data-extension-id="' + obj.name + '">' +
@@ -980,7 +980,7 @@ XKit.extensions.xkit_preferences = new Object({
 		}
 
 
-		let install_button_text = "Install";
+		var install_button_text = "Install";
 		if (XKit.installed.check(obj.name)) { install_button_text = "Installed"; }
 
 		m_html = m_html +
@@ -1085,12 +1085,12 @@ XKit.extensions.xkit_preferences = new Object({
 
 	fill_extensions: function(internal, iconic) {
 
-		let installed = XKit.installed.list();
+		var installed = XKit.installed.list();
 
 		var listed_count = 0;
 		var m_first;
 
-		for (let i = 0; i < installed.length; i++) {
+		for (var i = 0; i < installed.length; i++) {
 
 			if (internal === false && installed[i].substring(0, 5) === "xkit_") {
 				continue;
@@ -1101,7 +1101,7 @@ XKit.extensions.xkit_preferences = new Object({
 			}
 
 			var m_extension = XKit.installed.get(installed[i]);
-			let is_internal = installed[i].substring(0, 5) === "xkit_";
+			var is_internal = installed[i].substring(0, 5) === "xkit_";
 
 			var extension_icon;
 			if (!m_extension.icon) {
@@ -1487,18 +1487,18 @@ XKit.extensions.xkit_preferences = new Object({
 
 			var has_css = extension.css !== "";
 			var has_icon = extension.icon !== "";
-			let is_beta = extension.beta === true;
-			let is_frame = extension.frame === true;
+			var is_beta = extension.beta === true;
+			var is_frame = extension.frame === true;
 			var extension_size = JSON.stringify(extension).length;
 			var extension_size_kb = Math.round(extension_size / 1024);
 			var storage_size = XKit.storage.size(XKit.extensions.xkit_preferences.current_open_extension_panel);
 			var storage_quota = XKit.storage.quota(XKit.extensions.xkit_preferences.current_open_extension_panel);
-			let is_internal = extension.id.substring(0, 5) === "xkit_";
+			var is_internal = extension.id.substring(0, 5) === "xkit_";
 			var has_settings = false;
 			if (typeof XKit.extensions[XKit.extensions.xkit_preferences.current_open_extension_panel].preferences !== "undefined") {
 				has_settings = true;
 			}
-			let is_enabled = XKit.installed.enabled(XKit.extensions.xkit_preferences.current_open_extension_panel);
+			var is_enabled = XKit.installed.enabled(XKit.extensions.xkit_preferences.current_open_extension_panel);
 
 			var details_html =
 					"<b>Internal ID</b>: " + extension.id + "<br>" +
@@ -1590,6 +1590,227 @@ XKit.extensions.xkit_preferences = new Object({
 
 	},
 
+	render_blog_preference: function(pref, extension_id, pref_id) {
+		var m_blogs = XKit.tools.get_blogs();
+		var m_return = "";
+
+		var m_extra_classes = "";
+		if (pref.experimental === true || pref.slow === true) {
+			m_extra_classes = "xkit-experimental-option";
+		}
+
+		var m_extra_style = "";
+		if (pref.mobile_only === true && XKit.browser().mobile === false) {
+			m_extra_style = "display: none;";
+		} else if (pref.desktop_only === true && XKit.browser().mobile === true) {
+			m_extra_style = "display: none;";
+		}
+
+		m_return = m_return + '<div class="xkit-extension-setting xkit-combo-preference ' + m_extra_classes +
+		'" style="' + m_extra_style +
+		'" data-extension-id="' + extension_id + '" data-setting-id="' + pref_id + '">';
+
+		if (pref.experimental === true) {
+			m_return = m_return + '<div class="xkit-extension-experimental-bong">&nbsp;</div>';
+		} else if (pref.slow === true) {
+			m_return = m_return + '<div class="xkit-extension-experimental-turtle">&nbsp;</div>';
+		}
+
+		if (typeof pref.value === "undefined") {
+			pref.value = "";
+		}
+
+		if (pref.value === "") {
+			if (typeof pref.default !== "undefined") {
+				pref.value = pref.default;
+			}
+		}
+
+		var pref_title = pref.text;
+
+		m_return = m_return + '<div class="title">' + pref_title + "</div>";
+
+		m_return = m_return + '<select data-extension-id="' + extension_id + '" data-setting-id="' + pref_id + '" class="xkit-preference-combobox-select-blog xkit-preference-combobox-select">';
+
+		if (pref.value === "") {
+			m_return = m_return + '<option selected value="">Default Action</option>';
+		} else {
+			m_return = m_return + '<option value="">Default Action</option>';
+		}
+
+		for (var i = 0; i < m_blogs.length; i++) {
+
+			if (m_blogs[i] === "") { continue; }
+
+			var option = document.createElement("option");
+			option.setAttribute("value", m_blogs[i]);
+			option.textContent = m_blogs[i];
+			if (m_blogs[i] === pref.value) {
+				option.setAttribute("selected", "true");
+			}
+
+			m_return = m_return + option.outerHTML;
+
+		}
+
+		return m_return + "</select></div>";
+	},
+
+	render_combo_preference: function(pref, extension_id, pref_id) {
+		var m_return = "";
+
+		var m_extra_classes = "";
+		if (pref.experimental === true || pref.slow === true) {
+			m_extra_classes = "xkit-experimental-option";
+		}
+
+		var m_extra_style = "";
+		if (pref.mobile_only === true && XKit.browser().mobile === false) {
+			m_extra_style = "display: none;";
+		} else if (pref.desktop_only === true && XKit.browser().mobile === true) {
+			m_extra_style = "display: none;";
+		}
+
+		m_return = m_return + '<div class="xkit-extension-setting xkit-combo-preference ' + m_extra_classes +
+			'" style="' + m_extra_style +
+			'" data-extension-id="' + extension_id + '" data-setting-id="' + pref_id + '">';
+
+		if (pref.experimental === true) {
+			m_return = m_return + '<div class="xkit-extension-experimental-bong">&nbsp;</div>';
+		} else if (pref.slow === true) {
+			m_return = m_return + '<div class="xkit-extension-experimental-turtle">&nbsp;</div>';
+		}
+
+		if (typeof pref.value === "undefined") {
+			pref.value = "";
+		}
+
+		if (pref.value === "") {
+			if (typeof pref.default !== "undefined") {
+				pref.value = pref.default;
+			}
+		}
+
+		var pref_title = pref.text;
+
+		m_return = m_return + '<div class="title">' + pref_title + "</div>";
+
+		m_return = m_return + '<select data-extension-id="' + extension_id + '" data-setting-id="' + pref_id + '" class="xkit-preference-combobox-select">';
+
+		for (var j = 0; j < pref.values.length; j++) {
+
+			var option = document.createElement("option");
+			option.setAttribute("value", pref.values[j + 1]);
+			option.textContent = pref.values[j];
+			if (pref.values[j + 1] === pref.value) {
+				option.setAttribute("selected", "true");
+			}
+
+			m_return = m_return + option.outerHTML;
+
+			j++;
+
+		}
+
+		return m_return + "</select></div>";
+	},
+
+	render_text_preference: function(pref, extension_id, pref_id) {
+		var m_return = "";
+
+		var m_extra_classes = "";
+		if (pref.experimental === true || pref.slow === true) {
+			m_extra_classes = "xkit-experimental-option";
+		}
+
+		var m_extra_style = "";
+		if (pref.mobile_only === true && XKit.browser().mobile === false) {
+			m_extra_style = "display: none;";
+		} else if (pref.desktop_only === true && XKit.browser().mobile === true) {
+			m_extra_style = "display: none;";
+		}
+
+		m_return = m_return + '<div class="xkit-extension-setting ' + m_extra_classes +
+			'" style="' + m_extra_style +
+			'" data-extension-id="' + extension_id + '" data-setting-id="' + pref_id + '">';
+
+		if (pref.experimental === true) {
+			m_return = m_return + '<div class="xkit-extension-experimental-bong">&nbsp;</div>';
+		} else if (pref.slow === true) {
+			m_return = m_return + '<div class="xkit-extension-experimental-turtle">&nbsp;</div>';
+		}
+
+		if (typeof pref.value === "undefined") {
+			pref.value = "";
+		}
+
+		if (pref.value === "") {
+			if (typeof pref.default !== "undefined") {
+				pref.value = pref.default;
+			}
+		}
+
+		var pref_title = pref.text;
+
+		m_return = m_return + '<div class="title">' + pref_title + "</div>";
+
+		var m_placeholder = "Enter value and hit Enter";
+		if (typeof pref.placeholder !== "undefined") {
+			m_placeholder = pref.placeholder;
+		}
+
+		var textInput = document.createElement("input");
+		textInput.setAttribute("class", "xkit-textbox");
+		textInput.setAttribute("data-extension-id", extension_id);
+		textInput.setAttribute("data-setting-id", pref_id);
+		textInput.setAttribute("placeholder", m_placeholder);
+		textInput.setAttribute("value", pref.value);
+
+		return m_return + textInput.outerHTML + "</div>";
+	},
+
+	render_checkbox_preference: function(pref, extension_id, pref_id) {
+		var m_extra_classes = "";
+		var m_return = "";
+		if (pref.experimental === true || pref.slow === true) {
+			m_extra_classes = "xkit-experimental-option";
+		}
+
+		var m_extra_style = "";
+		if (pref.mobile_only === true && XKit.browser().mobile === false) {
+			m_extra_style = "display: none;";
+		} else if (pref.desktop_only === true && XKit.browser().mobile === true) {
+			m_extra_style = "display: none;";
+		}
+
+		m_return = m_return + '<div class="xkit-extension-setting ' + m_extra_classes +
+			' checkbox" style="' + m_extra_style +
+			'" data-extension-id="' + extension_id + '" data-setting-id="' + pref_id + '">';
+
+		if (pref.experimental === true) {
+			m_return = m_return + '<div class="xkit-extension-experimental-bong">&nbsp;</div>';
+		} else if (pref.slow === true) {
+			m_return = m_return + '<div class="xkit-extension-experimental-turtle">&nbsp;</div>';
+		}
+
+		if (typeof pref.value === "undefined") {
+			if (typeof pref.default !== "undefined") {
+				pref.value = pref.default;
+			}
+		}
+
+		var pref_title = pref.text;
+
+		if (pref.value === false) {
+			m_return = m_return + '<div data-extension-id="' + extension_id + '" data-setting-id="' + pref_id + '" class="xkit-checkbox xkit-change-ext-setting-checkbox"><b>&nbsp;</b>' + pref_title + "</div>";
+		} else {
+			m_return = m_return + '<div data-extension-id="' + extension_id + '" data-setting-id="' + pref_id + '" class="xkit-checkbox selected xkit-change-ext-setting-checkbox"><b>&nbsp;</b>' + pref_title + "</div>";
+		}
+
+		return m_return + "</div>";
+
+	},
+
 	return_extension_settings: function(extension_id) {
 
 		var m_return = "";
@@ -1599,202 +1820,22 @@ XKit.extensions.xkit_preferences = new Object({
 			for (var pref in XKit.extensions[extension_id].preferences) {
 
 				if (XKit.extensions[extension_id].preferences[pref].type === "blog") {
-
-					var m_blogs = XKit.tools.get_blogs();
-
-					let m_extra_classes = "";
-					if (XKit.extensions[extension_id].preferences[pref].experimental === true || XKit.extensions[extension_id].preferences[pref].slow === true) {
-						m_extra_classes = "xkit-experimental-option";
-					}
-
-					let m_extra_style = "";
-					if (XKit.extensions[extension_id].preferences[pref].mobile_only === true && XKit.browser().mobile === false) {
-						m_extra_style = "display: none;";
-					} else if (XKit.extensions[extension_id].preferences[pref].desktop_only === true && XKit.browser().mobile === true) {
-						m_extra_style = "display: none;";
-					}
-
-					m_return = m_return + '<div class="xkit-extension-setting xkit-combo-preference ' + m_extra_classes +
-					'" style="' + m_extra_style +
-					'" data-extension-id="' + extension_id + '" data-setting-id="' + pref + '">';
-
-					if (XKit.extensions[extension_id].preferences[pref].experimental === true) {
-						m_return = m_return + '<div class="xkit-extension-experimental-bong">&nbsp;</div>';
-					} else if (XKit.extensions[extension_id].preferences[pref].slow === true) {
-						m_return = m_return + '<div class="xkit-extension-experimental-turtle">&nbsp;</div>';
-					}
-
-					if (typeof XKit.extensions[extension_id].preferences[pref].value === "undefined") {
-						XKit.extensions[extension_id].preferences[pref].value = "";
-					}
-
-					if (XKit.extensions[extension_id].preferences[pref].value === "") {
-						if (typeof XKit.extensions[extension_id].preferences[pref].default !== "undefined") {
-							XKit.extensions[extension_id].preferences[pref].value = XKit.extensions[extension_id].preferences[pref].default;
-						}
-					}
-
-					let pref_title = XKit.extensions[extension_id].preferences[pref].text;
-
-					m_return = m_return + '<div class="title">' + pref_title + "</div>";
-
-					var m_placeholder = "Enter value and hit Enter";
-					if (typeof XKit.extensions[extension_id].preferences[pref].placeholder !== "undefined") {
-						m_placeholder = XKit.extensions[extension_id].preferences[pref].placeholder;
-					}
-
-					m_return = m_return + '<select data-extension-id="' + extension_id + '" data-setting-id="' + pref + '" class="xkit-preference-combobox-select-blog xkit-preference-combobox-select">';
-
-					if (XKit.extensions[extension_id].preferences[pref].value === "") {
-						m_return = m_return + '<option selected value="">Default Action</option>';
-					} else {
-						m_return = m_return + '<option value="">Default Action</option>';
-					}
-
-					for (let i = 0; i < m_blogs.length; i++) {
-
-						if (m_blogs[i] === "") { continue; }
-
-						let option = document.createElement("option");
-						option.setAttribute("value", m_blogs[i]);
-						option.textContent = m_blogs[i];
-						if (m_blogs[i] === XKit.extensions[extension_id].preferences[pref].value) {
-							option.setAttribute("selected", "true");
-						}
-
-						m_return = m_return + option.outerHTML;
-
-					}
-
-					m_return = m_return + "</select></div>";
-
-
+					m_return = this.render_blog_preference(XKit.extensions[extension_id].preferences[pref], extension_id, pref);
 				}
 
 				if (XKit.extensions[extension_id].preferences[pref].type === "combo") {
-
-					let m_extra_classes = "";
-					if (XKit.extensions[extension_id].preferences[pref].experimental === true || XKit.extensions[extension_id].preferences[pref].slow === true) {
-						m_extra_classes = "xkit-experimental-option";
-					}
-
-					let m_extra_style = "";
-					if (XKit.extensions[extension_id].preferences[pref].mobile_only === true && XKit.browser().mobile === false) {
-						m_extra_style = "display: none;";
-					} else if (XKit.extensions[extension_id].preferences[pref].desktop_only === true && XKit.browser().mobile === true) {
-						m_extra_style = "display: none;";
-					}
-
-					m_return = m_return + '<div class="xkit-extension-setting xkit-combo-preference ' + m_extra_classes +
-						'" style="' + m_extra_style +
-						'" data-extension-id="' + extension_id + '" data-setting-id="' + pref + '">';
-
-					if (XKit.extensions[extension_id].preferences[pref].experimental === true) {
-						m_return = m_return + '<div class="xkit-extension-experimental-bong">&nbsp;</div>';
-					} else if (XKit.extensions[extension_id].preferences[pref].slow === true) {
-						m_return = m_return + '<div class="xkit-extension-experimental-turtle">&nbsp;</div>';
-					}
-
-					if (typeof XKit.extensions[extension_id].preferences[pref].value === "undefined") {
-						XKit.extensions[extension_id].preferences[pref].value = "";
-					}
-
-					if (XKit.extensions[extension_id].preferences[pref].value === "") {
-						if (typeof XKit.extensions[extension_id].preferences[pref].default !== "undefined") {
-							XKit.extensions[extension_id].preferences[pref].value = XKit.extensions[extension_id].preferences[pref].default;
-						}
-					}
-
-					let pref_title = XKit.extensions[extension_id].preferences[pref].text;
-
-					m_return = m_return + '<div class="title">' + pref_title + "</div>";
-
-					m_placeholder = "Enter value and hit Enter";
-					if (typeof XKit.extensions[extension_id].preferences[pref].placeholder !== "undefined") {
-						m_placeholder = XKit.extensions[extension_id].preferences[pref].placeholder;
-					}
-
-					m_return = m_return + '<select data-extension-id="' + extension_id + '" data-setting-id="' + pref + '" class="xkit-preference-combobox-select">';
-
-					for (let i = 0; i < XKit.extensions[extension_id].preferences[pref].values.length; i++) {
-
-						let option = document.createElement("option");
-						option.setAttribute("value", XKit.extensions[extension_id].preferences[pref].values[i + 1]);
-						option.textContent = XKit.extensions[extension_id].preferences[pref].values[i];
-						if (XKit.extensions[extension_id].preferences[pref].values[i + 1] === XKit.extensions[extension_id].preferences[pref].value) {
-							option.setAttribute("selected", "true");
-						}
-
-						m_return = m_return + option.outerHTML;
-
-						i++;
-
-					}
-
-					m_return = m_return + "</select></div>";
-
-
+					m_return = this.render_combo_preference(XKit.extensions[extension_id].preferences[pref], extension_id, pref);
 				}
 
 				if (XKit.extensions[extension_id].preferences[pref].type === "text") {
-
-					let m_extra_classes = "";
-					if (XKit.extensions[extension_id].preferences[pref].experimental === true || XKit.extensions[extension_id].preferences[pref].slow === true) {
-						m_extra_classes = "xkit-experimental-option";
-					}
-
-					let m_extra_style = "";
-					if (XKit.extensions[extension_id].preferences[pref].mobile_only === true && XKit.browser().mobile === false) {
-						m_extra_style = "display: none;";
-					} else if (XKit.extensions[extension_id].preferences[pref].desktop_only === true && XKit.browser().mobile === true) {
-						m_extra_style = "display: none;";
-					}
-
-					m_return = m_return + '<div class="xkit-extension-setting ' + m_extra_classes +
-						'" style="' + m_extra_style +
-						'" data-extension-id="' + extension_id + '" data-setting-id="' + pref + '">';
-
-					if (XKit.extensions[extension_id].preferences[pref].experimental === true) {
-						m_return = m_return + '<div class="xkit-extension-experimental-bong">&nbsp;</div>';
-					} else if (XKit.extensions[extension_id].preferences[pref].slow === true) {
-						m_return = m_return + '<div class="xkit-extension-experimental-turtle">&nbsp;</div>';
-					}
-
-					if (typeof XKit.extensions[extension_id].preferences[pref].value === "undefined") {
-						XKit.extensions[extension_id].preferences[pref].value = "";
-					}
-
-					if (XKit.extensions[extension_id].preferences[pref].value === "") {
-						if (typeof XKit.extensions[extension_id].preferences[pref].default !== "undefined") {
-							XKit.extensions[extension_id].preferences[pref].value = XKit.extensions[extension_id].preferences[pref].default;
-						}
-					}
-
-					let pref_title = XKit.extensions[extension_id].preferences[pref].text;
-
-					m_return = m_return + '<div class="title">' + pref_title + "</div>";
-
-					m_placeholder = "Enter value and hit Enter";
-					if (typeof XKit.extensions[extension_id].preferences[pref].placeholder !== "undefined") {
-						m_placeholder = XKit.extensions[extension_id].preferences[pref].placeholder;
-					}
-
-					var textInput = document.createElement("input");
-					textInput.setAttribute("class", "xkit-textbox");
-					textInput.setAttribute("data-extension-id", extension_id);
-					textInput.setAttribute("data-setting-id", pref);
-					textInput.setAttribute("placeholder", m_placeholder);
-					textInput.setAttribute("value", XKit.extensions[extension_id].preferences[pref].value);
-
-					m_return = m_return + textInput.outerHTML + "</div>";
-
+					m_return = this.render_text_preference(XKit.extensions[extension_id].preferences[pref], extension_id, pref);
 				}
 
 				if (XKit.extensions[extension_id].preferences[pref].type === "separator") {
 
-					let pref_title = XKit.extensions[extension_id].preferences[pref].text;
+					var pref_title = XKit.extensions[extension_id].preferences[pref].text;
 
-					let m_extra_style = "";
+					var m_extra_style = "";
 					if (XKit.extensions[extension_id].preferences[pref].mobile_only === true && XKit.browser().mobile === false) {
 						m_extra_style = "display: none;";
 					} else if (XKit.extensions[extension_id].preferences[pref].desktop_only === true && XKit.browser().mobile === true) {
@@ -1808,45 +1849,7 @@ XKit.extensions.xkit_preferences = new Object({
 
 				if (typeof XKit.extensions[extension_id].preferences[pref].type === "undefined" ||  XKit.extensions[extension_id].preferences[pref].type === "" || XKit.extensions[extension_id].preferences[pref].type === "checkbox") {
 
-					let m_extra_classes = "";
-					if (XKit.extensions[extension_id].preferences[pref].experimental === true || XKit.extensions[extension_id].preferences[pref].slow === true) {
-						m_extra_classes = "xkit-experimental-option";
-					}
-
-					let m_extra_style = "";
-					if (XKit.extensions[extension_id].preferences[pref].mobile_only === true && XKit.browser().mobile === false) {
-						m_extra_style = "display: none;";
-					} else if (XKit.extensions[extension_id].preferences[pref].desktop_only === true && XKit.browser().mobile === true) {
-						m_extra_style = "display: none;";
-					}
-
-					m_return = m_return + '<div class="xkit-extension-setting ' + m_extra_classes +
-						' checkbox" style="' + m_extra_style +
-						'" data-extension-id="' + extension_id + '" data-setting-id="' + pref + '">';
-
-					if (XKit.extensions[extension_id].preferences[pref].experimental === true) {
-						m_return = m_return + '<div class="xkit-extension-experimental-bong">&nbsp;</div>';
-					} else if (XKit.extensions[extension_id].preferences[pref].slow === true) {
-						m_return = m_return + '<div class="xkit-extension-experimental-turtle">&nbsp;</div>';
-					}
-
-					if (typeof XKit.extensions[extension_id].preferences[pref].value === "undefined") {
-						if (typeof XKit.extensions[extension_id].preferences[pref].default !== "undefined") {
-							XKit.extensions[extension_id].preferences[pref].value = XKit.extensions[extension_id].preferences[pref].default;
-						}
-					}
-
-					let pref_title = XKit.extensions[extension_id].preferences[pref].text;
-
-					if (XKit.extensions[extension_id].preferences[pref].value === false) {
-						m_return = m_return + '<div data-extension-id="' + extension_id + '" data-setting-id="' + pref + '" class="xkit-checkbox xkit-change-ext-setting-checkbox"><b>&nbsp;</b>' + pref_title + "</div>";
-					} else {
-						m_return = m_return + '<div data-extension-id="' + extension_id + '" data-setting-id="' + pref + '" class="xkit-checkbox selected xkit-change-ext-setting-checkbox"><b>&nbsp;</b>' + pref_title + "</div>";
-					}
-
-					m_return = m_return + "</div>";
-
-
+					m_return = this.render_checkbox_preference(XKit.extensions[extension_id].preferences[pref], extension_id, pref);
 				}
 			}
 
