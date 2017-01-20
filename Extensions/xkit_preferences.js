@@ -1820,15 +1820,15 @@ XKit.extensions.xkit_preferences = new Object({
 			for (var pref in XKit.extensions[extension_id].preferences) {
 
 				if (XKit.extensions[extension_id].preferences[pref].type === "blog") {
-					m_return = this.render_blog_preference(XKit.extensions[extension_id].preferences[pref], extension_id, pref);
+					m_return += this.render_blog_preference(XKit.extensions[extension_id].preferences[pref], extension_id, pref);
 				}
 
 				if (XKit.extensions[extension_id].preferences[pref].type === "combo") {
-					m_return = this.render_combo_preference(XKit.extensions[extension_id].preferences[pref], extension_id, pref);
+					m_return += this.render_combo_preference(XKit.extensions[extension_id].preferences[pref], extension_id, pref);
 				}
 
 				if (XKit.extensions[extension_id].preferences[pref].type === "text") {
-					m_return = this.render_text_preference(XKit.extensions[extension_id].preferences[pref], extension_id, pref);
+					m_return += this.render_text_preference(XKit.extensions[extension_id].preferences[pref], extension_id, pref);
 				}
 
 				if (XKit.extensions[extension_id].preferences[pref].type === "separator") {
@@ -1842,14 +1842,13 @@ XKit.extensions.xkit_preferences = new Object({
 						m_extra_style = "display: none;";
 					}
 
-					m_return = m_return + '<div class="xkit-extension-setting-separator" style="' + m_extra_style + '">' + pref_title + "</div>";
+					m_return += '<div class="xkit-extension-setting-separator" style="' + m_extra_style + '">' + pref_title + "</div>";
 
 				}
 
-
 				if (typeof XKit.extensions[extension_id].preferences[pref].type === "undefined" ||  XKit.extensions[extension_id].preferences[pref].type === "" || XKit.extensions[extension_id].preferences[pref].type === "checkbox") {
 
-					m_return = this.render_checkbox_preference(XKit.extensions[extension_id].preferences[pref], extension_id, pref);
+					m_return += this.render_checkbox_preference(XKit.extensions[extension_id].preferences[pref], extension_id, pref);
 				}
 			}
 
