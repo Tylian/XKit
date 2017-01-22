@@ -158,7 +158,7 @@
 						if (typeof XKit.extensions[extension_id].preferences !== "undefined") {
 							XKit.extensions.xkit_main.load_extension_preferences(extension_id);
 						}
-					} catch(e) {
+					} catch (e) {
 						XKit.console.add("Failed to load preferences for " + extension_id + ": " + e.message);
 					}
 					if (XKit.extensions.xkit_main.disabled_extensions === "") {
