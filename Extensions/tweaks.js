@@ -1,5 +1,5 @@
 //* TITLE Tweaks **//
-//* VERSION 5.4.1 **//
+//* VERSION 5.4.2 **//
 //* DESCRIPTION Various little tweaks for your dashboard. **//
 //* DEVELOPER new-xkit **//
 //* DETAILS These are small little tweaks that allows you customize your dashboard. If you have used XKit 6, you will notice that some of the extensions have been moved here as options you can toggle. Keep in mind that some of the tweaks (the ones marked with a '*') can slow down your computer. **//
@@ -27,8 +27,8 @@ XKit.extensions.tweaks = new Object({
 			value: true,
 			mobile_only: true
 		},
-		"wrap_tags": {
-			text: "Wrap tags for easier reading",
+		"show_all_tags": {
+			text: "Show tags on all posts by default",
 			default: true,
 			value: true
 		},
@@ -301,8 +301,19 @@ XKit.extensions.tweaks = new Object({
 
 	default_page_title: "",
 
+	show_all_tags_observer: new MutationObserver(function(ms) {
+		XKit.extensions.tweaks.open_all_hidden_tags();
+	}),
+
 	run: function() {
 		this.running = true;
+		if (XKit.extensions.tweaks.preferences.show_all_tags.value && XKit.interface.is_tumblr_page()) {
+			this.open_all_hidden_tags();
+			this.show_all_tags_observer.observe($('body')[0], {
+				childList:true,
+				subtree:true
+			});
+		}
 
 		if (XKit.extensions.tweaks.preferences.old_sidebar_width.value) {
 			XKit.tools.add_css(".right_column, .toastr .toast-kit, .small_links {width: 250px !important;} " +
@@ -570,39 +581,6 @@ XKit.extensions.tweaks = new Object({
 			"xkit_tweaks_hide_follower_count");
 		}
 
-		if (XKit.extensions.tweaks.preferences.wrap_tags.value &&
-				XKit.interface.is_tumblr_page()) {
-
-			XKit.extensions.tweaks.add_css(
-				".post .tags { " +
-					"width: 100% !important; " +
-					"display: block !important; " +
-					"overflow:visible; " +
-					"height:auto; " +
-					"white-space: normal; " +
-				"} " +
-				".post .footer_links.with_tags { " +
-					"overflow:visible !important; " +
-					"display: block !important; " +
-				"} " +
-				".post .footer_links.with_tags span, .footer_links.with_tags .source_url { " +
-					"display:block !important; " +
-					"overflow:visible !important; " +
-				"} " +
-				".source_url_gradient { display: none !important; } " +
-				"span.tags { white-space:normal !important; } " +
-				"span.with_blingy_tag a.blingy { height:auto !important; display:inline-block !important; }  " +
-				".source_url, .post_tags_wrapper { display: block !important; } ",
-			"xkit_tweaks_wrap_tags");
-
-			XKit.extensions.tweaks.add_css(".post.post_full .post_tags { white-space: normal !important; } .post .post_tags a { font-size: 12px; } .post_full .post_tags:after { background: none !important; }", "xkit_tweaks_wrap_tags_v2");
-			$(document).on('mouseup mousemove mouseover mousedown mouseout', '.post_tags_inner', function(e) {
-				$(this).parent().removeClass("draggable");
-				$(this).removeClass("post_tags_inner");
-				$(this).addClass("xkit_post_tags_inner_add_back");
-			});
-		}
-
 		if (document.location.href.indexOf('/dashboard') !== -1) {
 
 			if (XKit.extensions.tweaks.preferences.dont_show_mine_on_dashboard.value) {
@@ -776,6 +754,12 @@ XKit.extensions.tweaks = new Object({
 			Tumblr.Events.trigger("DOMEventor:updateRect");
 		}, true, "");
 
+	},
+
+	open_all_hidden_tags: function() {
+		var unclickedShowLinks = $('body').find('.post_tags .see-all-tags:not(.xkit-show-all-tags-tweak)');
+		unclickedShowLinks.click();
+		unclickedShowLinks.addClass('.xkit-show-all-tags-tweak');
 	},
 
 	css_to_add: "",
