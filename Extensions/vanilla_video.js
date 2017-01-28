@@ -21,7 +21,8 @@ XKit.extensions.vanilla_video = {
 				"100%", 1.0,
 				"75%", 0.75,
 				"50%", 0.50,
-				"25%", 0.25
+				"25%", 0.25,
+				"0% (muted)", 0.0
 			],
 		},
 		"pause_on_click": {
