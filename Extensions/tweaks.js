@@ -27,10 +27,16 @@ XKit.extensions.tweaks = new Object({
 			value: true,
 			mobile_only: true
 		},
-		"show_all_tags": {
-			text: "Show tags on all posts by default",
-			default: true,
-			value: true
+		"collapsible_tag_display": {
+			text: "Show:",
+			default: "show_all_tags",
+			value: "show_all_tags",
+			type: "combo",
+			values: [
+				"All tags on posts by default", "show_all_tags",
+				"One line of tags on posts by default", "show_one_line_of_tags",
+				"Tumblr collapsible tag display", "show_default_tags"
+			],
 		},
 		"grey_urls": {
 			text: "Make URLs grey again",
@@ -301,18 +307,13 @@ XKit.extensions.tweaks = new Object({
 
 	default_page_title: "",
 
-	show_all_tags_observer: new MutationObserver(function(ms) {
-		XKit.extensions.tweaks.open_all_hidden_tags();
-	}),
-
 	run: function() {
 		this.running = true;
-		if (XKit.extensions.tweaks.preferences.show_all_tags.value && XKit.interface.is_tumblr_page()) {
-			this.open_all_hidden_tags();
-			this.show_all_tags_observer.observe($('body')[0], {
-				childList:true,
-				subtree:true
-			});
+		var tag_display = XKit.extensions.tweaks.preferences.collapsible_tag_display.value;
+		if (tag_display && tag_display == "show_all_tags" && XKit.interface.is_tumblr_page()) {
+			XKit.tools.add_css(".post_full .post_tags.fadeable { max-height: none; } .see-all-tags { display: none; }", "xkit_tweaks_collapsible_tag_display");
+		} else if (tag_display && tag_display == "show_one_line_of_tags" && XKit.interface.is_tumblr_page()) {
+			XKit.tools.add_css(".post_full .post_tags.fadeable { max-height: 21px; } .see-all-tags { display: block; }", "xkit_tweaks_collapsible_tag_display");
 		}
 
 		if (XKit.extensions.tweaks.preferences.old_sidebar_width.value) {
@@ -756,12 +757,6 @@ XKit.extensions.tweaks = new Object({
 
 	},
 
-	open_all_hidden_tags: function() {
-		var unclickedShowLinks = $('body').find('.post_tags .see-all-tags:not(.xkit-show-all-tags-tweak)');
-		unclickedShowLinks.click();
-		unclickedShowLinks.addClass('.xkit-show-all-tags-tweak');
-	},
-
 	css_to_add: "",
 
 	add_css: function(css, name) {
@@ -856,6 +851,7 @@ XKit.extensions.tweaks = new Object({
 
 		this.running = false;
 		XKit.tools.remove_css("xkit_tweaks");
+		XKit.tools.remove_css("xkit_tweaks_collapsible_tag_display");
 		XKit.tools.remove_css("tweaks_old_sidebar_width");
 		XKit.tools.remove_css("tweaks_old_photo_margins");
 		XKit.tools.remove_css("tweaks_no_mobile_banner");
