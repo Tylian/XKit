@@ -27,16 +27,15 @@ XKit.extensions.tweaks = new Object({
 			value: true,
 			mobile_only: true
 		},
-		"collapsible_tag_display": {
-			text: "Show:",
-			default: "show_all_tags",
-			value: "show_all_tags",
-			type: "combo",
-			values: [
-				"All tags on posts by default", "show_all_tags",
-				"One line of tags on posts by default", "show_one_line_of_tags",
-				"Tumblr collapsible tag display", "show_default_tags"
-			],
+		"wrap_tags": {
+			text: "Show all tags on posts by default",
+			default: true,
+			value: true
+		},
+		"wrap_tags_one_line": {
+			text: "Show one line of tags on posts by default",
+			default: false,
+			value: false
 		},
 		"grey_urls": {
 			text: "Make URLs grey again",
@@ -309,10 +308,11 @@ XKit.extensions.tweaks = new Object({
 
 	run: function() {
 		this.running = true;
-		var tag_display = XKit.extensions.tweaks.preferences.collapsible_tag_display.value;
-		if (tag_display && tag_display == "show_all_tags" && XKit.interface.is_tumblr_page()) {
+		var wrap_tags_all_lines = XKit.extensions.tweaks.preferences.wrap_tags.value;
+		var wrap_tags_one_line = XKit.extensions.tweaks.preferences.wrap_tags_one_line.value;
+		if (wrap_tags_all_lines && XKit.interface.is_tumblr_page()) {
 			XKit.tools.add_css(".post_full .post_tags.fadeable { max-height: none; } .see-all-tags { display: none; }", "xkit_tweaks_collapsible_tag_display");
-		} else if (tag_display && tag_display == "show_one_line_of_tags" && XKit.interface.is_tumblr_page()) {
+		} else if (wrap_tags_one_line && XKit.interface.is_tumblr_page()) {
 			XKit.tools.add_css(".post_full .post_tags.fadeable { max-height: 21px; } .see-all-tags { display: block; }", "xkit_tweaks_collapsible_tag_display");
 		}
 
