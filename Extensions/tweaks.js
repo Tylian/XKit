@@ -19,7 +19,7 @@ XKit.extensions.tweaks = new Object({
 
 		"sep0": {
 			text: "Popular tweaks",
-			type: "separator",
+			type: "separator"
 		},
 		"no_mobile_banner": {
 			text: "Remove the mobile app banner",
@@ -306,14 +306,34 @@ XKit.extensions.tweaks = new Object({
 
 	default_page_title: "",
 
+	addShowTagsObserver: new MutationObserver(function(ms) {
+		XKit.extensions.tweaks.process_wrap_tags_one_line();
+	}),
+
 	run: function() {
 		this.running = true;
+		this.addShowTagsObserver.disconnect();
 		var wrap_tags_all_lines = XKit.extensions.tweaks.preferences.wrap_tags.value;
 		var wrap_tags_one_line = XKit.extensions.tweaks.preferences.wrap_tags_one_line.value;
-		if (wrap_tags_all_lines && XKit.interface.is_tumblr_page()) {
+		if (wrap_tags_all_lines && XKit.interface.is_tumblr_page() && !XKit.interface.where().search) {
 			XKit.tools.add_css(".post_full .post_tags.fadeable { max-height: none; } .see-all-tags { display: none; }", "xkit_tweaks_collapsible_tag_display");
-		} else if (wrap_tags_one_line && XKit.interface.is_tumblr_page()) {
+		} else if (wrap_tags_all_lines && XKit.interface.where().search) {
+			//fallback for search page
+			XKit.extensions.tweaks.add_css(".post .tags { width: 100% !important; display: block !important; overflow:visible; " +
+				"height:auto; white-space: normal; } .post .footer_links.with_tags { overflow:visible !important; display: block !important;} " +
+				".post .footer_links.with_tags span, .footer_links.with_tags .source_url { display:block !important; overflow:visible !important; } " +
+				".source_url_gradient { display: none !important; } span.tags { white-space:normal !important; } " +
+				"span.with_blingy_tag a.blingy { height:auto !important; display:inline-block !important; } .source_url, .post_tags_wrapper { display: block !important; } ",
+			"xkit_tweaks_wrap_tags");
+			XKit.extensions.tweaks.add_css(".post.post_full .post_tags { white-space: normal !important; } .post .post_tags a { font-size: 12px; } .post_full .post_tags:after { background: none !important; }", "xkit_tweaks_wrap_tags_v2");
+		} else if (wrap_tags_one_line && XKit.interface.is_tumblr_page() && !XKit.interface.where().search) {
 			XKit.tools.add_css(".post_full .post_tags.fadeable { max-height: 21px; } .see-all-tags { display: block; }", "xkit_tweaks_collapsible_tag_display");
+			$('body').on('click', '.xkit_tweaks_show_all_tags_button', XKit.extensions.tweaks.show_all_tags_button_event);
+			this.addShowTagsObserver.observe($('body')[0], {
+				childList:true,
+				subtree:true
+			});
+			XKit.extensions.tweaks.process_wrap_tags_one_line();
 		}
 
 		if (XKit.extensions.tweaks.preferences.old_sidebar_width.value) {
@@ -676,6 +696,23 @@ XKit.extensions.tweaks = new Object({
 
 	},
 
+	show_all_tags_button_event: function() {
+		$(this).closest('.fadeable').removeClass('fadeable');
+		$(this).remove();
+	},
+
+	process_wrap_tags_one_line: function() {
+		var unprocessedTags = $('.post_tags').not('.xkit_tweaks_wrap_tags_one_line_processed');
+		$.each(unprocessedTags, function( index, value ) {
+			if ($(value).children('.see-all-tags').length) {
+				$(value).addClass('xkit_tweaks_wrap_tags_one_line_processed');
+				return true;
+			}
+			$(value).append("<div class=\"see-all-tags xkit_tweaks_show_all_tags_button\"><span class=\"ellipses\">...</span> See all </div>");
+			$(value).addClass('fadeable-source fade xkit_tweaks_wrap_tags_one_line_processed');
+		});
+	},
+
 	old_photo_margins: function() {
 
 		XKit.tools.add_css(".post_full.is_photoset .photoset .photoset_row .photoset_photo {margin-left: 0;}", "tweaks_old_photo_margins");
@@ -850,8 +887,14 @@ XKit.extensions.tweaks = new Object({
 	destroy: function() {
 
 		this.running = false;
+		this.addShowTagsObserver.disconnect();
 		XKit.tools.remove_css("xkit_tweaks");
 		XKit.tools.remove_css("xkit_tweaks_collapsible_tag_display");
+		XKit.tools.remove_css("xkit_tweaks_wrap_tags");
+		XKit.tools.remove_css("xkit_tweaks_wrap_tags_v2");
+		$("body").off("click", '.xkit_tweaks_show_all_tags_button', XKit.extensions.tweaks.show_all_tags_button_event);
+		$('.xkit_tweaks_show_all_tags_button').remove();
+		$('.post_tags').removeClass('xkit_tweaks_wrap_tags_one_line_processed');
 		XKit.tools.remove_css("tweaks_old_sidebar_width");
 		XKit.tools.remove_css("tweaks_old_photo_margins");
 		XKit.tools.remove_css("tweaks_no_mobile_banner");
