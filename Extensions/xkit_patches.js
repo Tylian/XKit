@@ -2182,8 +2182,8 @@ XKit.extensions.xkit_patches = new Object({
 					m_return.likes = true;
 				}
 
-				if ($('meta[name="twitter:title"]').length) {
-					m_return.user_url = $('meta[name="twitter:title"]').attr("content");
+				if ($('link[type="application/rss+xml"]').length) {
+					m_return.user_url = $('link[type="application/rss+xml"]').attr("href").replace(/^(.*)\/rss.*$/, function(match, $1) {return $1;});
 				}
 
 				m_return.dashboard = $("body").hasClass("is_dashboard") === true;
