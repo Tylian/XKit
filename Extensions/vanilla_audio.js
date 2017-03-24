@@ -1,7 +1,7 @@
 //* TITLE Vanilla Audio **//
 //* VERSION 0.2.1 **//
-//* DESCRIPTION	Adds a native (working) audio player to audio posts. **//
-//* DETAILS This extension adds a native HTML5 audio player to every audio post, which should always work, as well as enabling looping, downloading, and better seeking. **//
+//* DESCRIPTION	Adds an alternative audio player to audio posts. **//
+//* DETAILS This extension adds a native HTML5 audio player to every audio post, with an option for the default volume and the ability to loop the audio. **//
 //* DEVELOPER akunohomu **//
 //* FRAME false **//
 //* BETA true **//
