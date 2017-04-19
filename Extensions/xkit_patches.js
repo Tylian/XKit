@@ -2183,7 +2183,7 @@ XKit.extensions.xkit_patches = new Object({
 				}
 
 				if ($('link[type="application/rss+xml"]').length) {
-					m_return.user_url = $('link[type="application/rss+xml"]').attr("href").replace(/^(.*)\/rss.*$/, '');
+					m_return.user_url = $('link[type="application/rss+xml"]').attr("href").replace(/\/rss.*$/, '');
 				}
 
 				m_return.dashboard = $("body").hasClass("is_dashboard") === true;
