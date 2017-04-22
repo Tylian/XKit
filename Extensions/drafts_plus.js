@@ -1,5 +1,5 @@
 //* TITLE Drafts+ **//
-//* VERSION 0.2.4 **//
+//* VERSION 0.2.5 **//
 //* DESCRIPTION Enhancements for Drafts page **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//
@@ -259,8 +259,12 @@ XKit.extensions.drafts_plus = new Object({
 			GM_xmlhttpRequest({
 				method: "POST",
 				url: "http://www.tumblr.com/svc/post/delete",
-				data: JSON.stringify(m_object),
-				json: true,
+				headers: {
+					"Content-Type": "application/x-www-form-urlencoded",
+					"X-tumblr-form-key": XKit.interface.form_key(),
+				},
+				data: "post_id=" + m_object.post_id + "&channel_id=" + m_object.channel_id,
+				json: false,
 				onerror: function(response) {
 					XKit.window.show("Can't delete post.", "Drafts+ could not perform the requested. There might be a problem with Tumblr servers, please try again later.", "error", "<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
 				},
