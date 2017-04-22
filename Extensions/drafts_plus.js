@@ -185,7 +185,7 @@ XKit.extensions.drafts_plus = new Object({
 				headers: {
 					"Content-Type": "application/x-www-form-urlencoded"
 				},
-				data: "id=" + m_object.post_id + "&form_key=" + m_object.form_key + "&queue=queue",
+				data: $.param({"id": m_object.post_id, "form_key" : m_object.form_key, "queue":"queue"}),
 				json: false,
 				onerror: function(response) {
 					XKit.window.show("Can't delete post.", "Drafts+ could not perform the requested action. There might be a problem with Tumblr servers, please try again later.", "error", "<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
@@ -227,7 +227,7 @@ XKit.extensions.drafts_plus = new Object({
 				headers: {
 					"Content-Type": "application/x-www-form-urlencoded"
 				},
-				data: "id=" + m_object.post_id + "&form_key=" + m_object.form_key,
+				data: $.param({"id": m_object.post_id, "form_key" : m_object.form_key}),
 				json: false,
 				onerror: function(response) {
 					XKit.window.show("Can't delete post.", "Drafts+ could not perform the requested. There might be a problem with Tumblr servers, please try again later.", "error", "<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
@@ -263,7 +263,7 @@ XKit.extensions.drafts_plus = new Object({
 					"Content-Type": "application/x-www-form-urlencoded",
 					"X-tumblr-form-key": XKit.interface.form_key(),
 				},
-				data: "post_id=" + m_object.post_id + "&channel_id=" + m_object.channel_id,
+				data: $.param({"post_id": m_object.post_id, "channel_id" : m_object.channel_id }),
 				json: false,
 				onerror: function(response) {
 					XKit.window.show("Can't delete post.", "Drafts+ could not perform the requested. There might be a problem with Tumblr servers, please try again later.", "error", "<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
