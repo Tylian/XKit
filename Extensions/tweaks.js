@@ -155,7 +155,7 @@ XKit.extensions.tweaks = new Object({
 		"wide_sources": {
 			text: "Increase max width of post sources to avoid shortening",
 			default: true,
-			value: false
+			value: true
 		},
 		"sep2": {
 			text: "Dashboard tweaks",
