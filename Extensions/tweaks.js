@@ -153,8 +153,8 @@ XKit.extensions.tweaks = new Object({
 			value: false
 		},
 		"wide_sources": {
-			text: "Increase max width of post sources to avoid truncation",
-			default: false,
+			text: "Increase max width of post sources to avoid shortening",
+			default: true,
 			value: false
 		},
 		"sep2": {
@@ -410,7 +410,7 @@ XKit.extensions.tweaks = new Object({
 		}
 
 		if (XKit.extensions.tweaks.preferences.wide_sources.value) {
-			XKit.tools.add_css("a.post-source-link { max-width: 400px !important }", "xkit_tweaks_wide_sources");
+			XKit.tools.add_css(".post-source-link { max-width: 400px !important }", "xkit_tweaks_wide_sources");
 		}
 
 		if (XKit.extensions.tweaks.preferences.hide_radar.value) {
