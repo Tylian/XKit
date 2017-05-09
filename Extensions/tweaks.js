@@ -1,5 +1,5 @@
 //* TITLE Tweaks **//
-//* VERSION 5.4.1 **//
+//* VERSION 5.4.2 **//
 //* DESCRIPTION Various little tweaks for your dashboard. **//
 //* DEVELOPER new-xkit **//
 //* DETAILS These are small little tweaks that allows you customize your dashboard. If you have used XKit 6, you will notice that some of the extensions have been moved here as options you can toggle. Keep in mind that some of the tweaks (the ones marked with a '*') can slow down your computer. **//
@@ -149,6 +149,11 @@ XKit.extensions.tweaks = new Object({
 		},
 		"border_asks": {
 			text: "Show border around ask posts and answers",
+			default: false,
+			value: false
+		},
+		"wide_sources": {
+			text: "Increase max width of post sources to avoid truncation",
 			default: false,
 			value: false
 		},
@@ -402,6 +407,10 @@ XKit.extensions.tweaks = new Object({
 
 		if (XKit.extensions.tweaks.preferences.border_asks.value) {
 			XKit.extensions.tweaks.add_css(".post-composer_note-post .note_item, .post_full.is_note .post-body .note_item, .post_full.is_note .post_body .note_item, .post_brick.is_note .note_item { border-color: #ccc } .post_full.is_note .nipple, .post-composer_note-post .nipple, .post_brick.is_note .nipple { border-left: 8px solid #ccc } .post_full.is_note .nipple::after, .post-composer_note-post .nipple::after, .post_brick.is_note .nipple::after { display: inline; position: absolute; content: ''; width: 0; height: 0; border-top: 8px solid transparent; border-bottom: 8px solid transparent; border-left: 8px solid #f2f2f2; right: 1px; top: -8px }", "xkit_tweaks_border_asks");
+		}
+
+		if (XKit.extensions.tweaks.preferences.wide_sources.value) {
+			XKit.tools.add_css("a.post-source-link { max-width: 400px !important }", "xkit_tweaks_wide_sources");
 		}
 
 		if (XKit.extensions.tweaks.preferences.hide_radar.value) {
@@ -877,6 +886,7 @@ XKit.extensions.tweaks = new Object({
 		XKit.tools.remove_css("tweaks_no_mobile_banner");
 		XKit.tools.remove_css("xkit_tweaks_larger_small_text_on_reblogs");
 		XKit.tools.remove_css("xkit_tweaks_hide_share");
+		XKit.tools.remove_css("xkit_tweaks_wide_sources");
 		XKit.post_listener.remove("tweaks_fix_hidden_post_height");
 		XKit.post_listener.remove("tweaks_dont_show_liked");
 		clearInterval(this.run_interval);
