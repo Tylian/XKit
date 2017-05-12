@@ -592,7 +592,7 @@ XKit.extensions.tweaks = new Object({
 				"} " +
 				".post_tags { " +
 					"position: relative; " +
-					"display: block !important; " +
+					"display: block; " +
 					"margin-left: 16px;" +
 					"overflow:visible; "+
 					"white-space: normal !important; " +
