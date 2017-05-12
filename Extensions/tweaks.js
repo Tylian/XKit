@@ -1,5 +1,5 @@
 //* TITLE Tweaks **//
-//* VERSION 5.4.2 **//
+//* VERSION 5.4.3 **//
 //* DESCRIPTION Various little tweaks for your dashboard. **//
 //* DEVELOPER new-xkit **//
 //* DETAILS These are small little tweaks that allows you customize your dashboard. If you have used XKit 6, you will notice that some of the extensions have been moved here as options you can toggle. Keep in mind that some of the tweaks (the ones marked with a '*') can slow down your computer. **//
@@ -590,6 +590,16 @@ XKit.extensions.tweaks = new Object({
 					"height:auto; " +
 					"white-space: normal; " +
 				"} " +
+				".post_tags { " +
+					"position: relative; " +
+					"display: block !important; " +
+					"margin-left: 16px;" +
+					"overflow:visible; "+
+					"white-space: normal !important; " +
+				"} " +
+				".post_tag:first-of-type { " +
+					"margin-left: 0px !important; " +
+				"} " +
 				".post .footer_links.with_tags { " +
 					"overflow:visible !important; " +
 					"display: block !important; " +
@@ -604,7 +614,7 @@ XKit.extensions.tweaks = new Object({
 				".source_url, .post_tags_wrapper { display: block !important; } ",
 			"xkit_tweaks_wrap_tags");
 
-			XKit.extensions.tweaks.add_css(".post.post_full .post_tags { white-space: normal !important; } .post .post_tags a { font-size: 12px; } .post_full .post_tags:after { background: none !important; }", "xkit_tweaks_wrap_tags_v2");
+			XKit.extensions.tweaks.add_css(".post .post_tags a { font-size: 12px; } .post_full .post_tags:after { background: none !important; }", "xkit_tweaks_wrap_tags_v2");
 			$(document).on('mouseup mousemove mouseover mousedown mouseout', '.post_tags_inner', function(e) {
 				$(this).parent().removeClass("draggable");
 				$(this).removeClass("post_tags_inner");
