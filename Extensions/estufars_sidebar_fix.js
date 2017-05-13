@@ -67,7 +67,7 @@ XKit.extensions.estufars_sidebar_fix = new Object({
 			}, 250);
 		}
 
-		if(!$(".popover--account-popover").length) {
+		if (!$(".popover--account-popover").length) {
 			var observer = new MutationObserver(function(mutations) {
 				mutations.forEach(function(mutation) {
 					var popover = $(".popover--account-popover")[0];
