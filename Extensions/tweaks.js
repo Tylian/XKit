@@ -591,10 +591,7 @@ XKit.extensions.tweaks = new Object({
 					"white-space: normal; " +
 				"} " +
 				".post_brick .post_tags { " +
-					"position: relative; " +
-					"display: block; " +
 					"margin-left: 16px;" +
-					"overflow:visible; "+
 					"white-space: normal !important; " +
 				"} " +
 				".post_tag:first-of-type { " +
