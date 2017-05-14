@@ -590,7 +590,7 @@ XKit.extensions.tweaks = new Object({
 					"height:auto; " +
 					"white-space: normal; " +
 				"} " +
-				".post_tags { " +
+				".post_brick .post_tags { " +
 					"position: relative; " +
 					"display: block; " +
 					"margin-left: 16px;" +
