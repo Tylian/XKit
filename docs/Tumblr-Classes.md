@@ -12,11 +12,11 @@ These are the stylesheet classes used by Tumblr on their pages.
 ### Data attributes
 
 * `data-post-id` for post ID of the post
-* `data-type` for post Type of the post
+* `data-type` for post type of the post
 * `data-following-tumblelog` if following that user
 * `data-tumblelog-name` for owner of the post
 * `data-root-id` for the post ID of the original post
-* `data-json` the contents of the post in json format
+* `data-json` metadata about the post in json format
 * `data-is-animated` whether the original photoset or video has animation
 
 ### Post Types
