@@ -17,6 +17,16 @@ label.retags .binary_switch_label {
     white-space: nowrap;
 }
 
+.activity-notification {
+    flex-wrap: wrap;
+}
+
+.activity-notification div.retags {
+    width: 100%;
+    padding-top: 5px;
+    padding-left: 15px;
+}
+
 div.retags {
     white-space: normal;
     margin-bottom: 10px;
@@ -28,12 +38,12 @@ div.retags.error {
     color: #c00000;
 }
 
-div.retags + div.retags:before {
+div.retags+div.retags:before {
     color: #c00000;
     content: "Warning: You are running multiple copies of Retags.";
 }
 
-div.retags + div.retags a {
+div.retags+div.retags a {
     display: none;
 }
 
@@ -69,19 +79,22 @@ div.retags a:hover {
     color: rgba(255, 255, 255, 0.4) !important;
 }
 
-.retags-wrapper { list-style: none; padding-left: 30px;}
+.retags-wrapper {
+    list-style: none;
+    padding-left: 30px;
+}
 
 .ui_note div.retags {
     margin-top: 0;
     padding-left: 45px;
 }
 
-.ui_note div.retags + div.retags {
+.ui_note div.retags+div.retags {
     margin-top: -5px;
     padding-top: 0;
 }
 
-.ui_note .part_response + div.retags {
+.ui_note .part_response+div.retags {
     margin-top: -7px;
     padding-top: 0;
 }
