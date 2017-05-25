@@ -126,12 +126,14 @@ XKit.extensions.retags = {
 				host = url[2];
 				id = url[4];
 			}
-			XKit.extensions.retags.request(host, id).then(function(tags) {
-				XKit.extensions.retags.append_tag($element, retagClass, $target, tags);
-			}).fail(function(errorResponse) {
-				var tagError = 'ERROR: ' + errorResponse.status;
-				XKit.extensions.retags.append_tag($element, retagClass, $target, tagError);
-			});
+			if (host && id) {
+				XKit.extensions.retags.request(host, id).then(function(tags) {
+					XKit.extensions.retags.append_tag($element, retagClass, $target, tags);
+				}).fail(function(errorResponse) {
+					var tagError = 'ERROR: ' + errorResponse.status;
+					XKit.extensions.retags.append_tag($element, retagClass, $target, tagError);
+				});
+			}
 		});
 	},
 
