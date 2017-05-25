@@ -265,7 +265,7 @@ XKit.extensions.retags = {
 	$('<style class="retags"> ' +
 		'.ui_note, .ui_notes .activity-notification { display: none; } ' +
 		'.ui_note.is_retags, .ui_note.is_reply, .ui_note.is_response, .ui_note.is_user_mention { display: block; } ' +
-		'.activity-notification.is_retags, .activity-notification.is_reply, .activity-notification.is_response, .activity-notification.is_user_mention { display: flex; }' +
+		'.activity-notification.is_retags, .activity-notification.is_reply, .activity-notification.is_reblog:not(.naked), .activity-notification.user_mention, .activity-notification.note_mention { display: flex; }' +
 	'</style>'),
 
 	mobile_toggle:
