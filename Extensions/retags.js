@@ -104,13 +104,12 @@ XKit.extensions.retags = {
 				   retagClass = 'with_commentary';
 				   $target = $element;
 				   url = $target.find('.action').data('post-url');
-			// Activity
+			// Activity (page/dropdown)
 			} else if ($element.hasClass('activity-notification')) {
 				retagClass = 'is_retags';
 				$target = $element;
 				var glass = $($element).find('.activity-notification__glass');
-				host = glass.data('peepr').tumblelog + '.tumblr.com';
-				id = glass.data('peepr').postId;
+				url = glass.attr('href');
 				// dashboard
 			} else if ($element.hasClass('notification') && !XKit.browser().mobile) {
 				$target = $element.find('.notification_sentence');
@@ -121,12 +120,10 @@ XKit.extensions.retags = {
 				$target = $element.find('.notification-wrapper');
 				url = $target.find('a').not('.notification-username').attr('href');
 			}
-			if (url && !host && !id) {
+			if (url) {
 				url = url.split('/');
 				host = url[2];
 				id = url[4];
-			}
-			if (host && id) {
 				XKit.extensions.retags.request(host, id).then(function(tags) {
 					XKit.extensions.retags.append_tag($element, retagClass, $target, tags);
 				}).fail(function(errorResponse) {
