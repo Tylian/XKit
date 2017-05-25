@@ -23,8 +23,13 @@ label.retags .binary_switch_label {
 
 .activity-notification div.retags {
     width: 100%;
-    padding-top: 5px;
-    padding-left: 15px;
+    margin: -4px 0 0 0;
+    padding-left: 53px;
+    padding-right: 60px;
+}
+
+.is_retags .activity-notification__activity_message.conversational {
+    margin-bottom: 10px;
 }
 
 div.retags {
