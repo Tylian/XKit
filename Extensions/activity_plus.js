@@ -1,5 +1,5 @@
 //* TITLE Activity+ **//
-//* VERSION 0.3.7 **//
+//* VERSION 0.3.8 **//
 //* DESCRIPTION Tweaks for the Activity page **//
 //* DETAILS This extension brings a couple of tweaks for the Activity page, such as the ability to filter notes by type and showing timestamps. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -100,7 +100,7 @@ XKit.extensions.activity_plus = new Object({
 
 					if (m_type === "from_mutual") {
 
-						XKit.tools.add_css(".ui_note { display: none; } .ui_note.is_friend { display: block }", "activity_plus_note_filter_mutual");
+						XKit.tools.add_css(".ui_note, .ui_notes .activity-notification { display: none; } .ui_note.is_friend {display:block} .ui_notes .activity-notification.is_friend { display: flex }", "activity_plus_note_filter_mutual");
 						return;
 
 					}
@@ -109,7 +109,7 @@ XKit.extensions.activity_plus = new Object({
 					XKit.tools.remove_css("activity_plus_note_filter");
 
 					if (m_type === "") {
-						if ($(".ui_note").length >= 350) {
+						if ($(".ui_note, .activity-notification").length >= 350) {
 							$('html, body').animate({
 								scrollTop: 30
 							}, 600);
@@ -127,8 +127,12 @@ XKit.extensions.activity_plus = new Object({
 					if (m_type === "is_reply") {
 						m_type = "is_reply, .is_answer";
 					}
+					if (m_type === "is_user_mention") {
+						m_type = "is_user_mention, .ui_notes .activity-notification.user_mention, .ui_notes .activity-notification.note_mention";
+					}
 
-					var m_filter_css = ".ui_note { display: none; } .ui_note." + m_type + " { display: block; }";
+					var m_filter_css = ".ui_note, .ui_notes .activity-notification { display: none; } .ui_note." + m_type + " { display: block; }";
+					m_filter_css += ".ui_notes .activity-notification." + m_type + " { display: flex }";
 					XKit.tools.add_css(m_filter_css, "activity_plus_note_filter");
 
 					XKit.extensions.activity_plus.undo_condense();
