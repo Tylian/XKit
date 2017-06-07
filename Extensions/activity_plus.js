@@ -97,19 +97,21 @@ XKit.extensions.activity_plus = new Object({
 
 					$("#xkit-activity-plus-note-filter div").removeClass("selected");
 					$(this).addClass("selected");
+					XKit.tools.remove_css("activity_plus_note_filter_mutual");
+					XKit.tools.remove_css("activity_plus_note_filter");
+
 
 					if (m_type === "from_mutual") {
 
-						XKit.tools.add_css(".activity-notification, .ui_notes .activity-notification { display: none; } .activity-notification.is_friend {display:block} .ui_notes .activity-notification.is_friend { display: flex }", "activity_plus_note_filter_mutual");
+						XKit.tools.add_css(".ui_notes .activity-notification { display: none; } .ui_notes .activity-notification.is_friend { display: flex }", "activity_plus_note_filter_mutual");
 						return;
 
 					}
 
-					XKit.tools.remove_css("activity_plus_note_filter_mutual");
-					XKit.tools.remove_css("activity_plus_note_filter");
+
 
 					if (m_type === "") {
-						if ($(".activity-notification, .activity-notification").length >= 350) {
+						if ($(".activity-notification").length >= 350) {
 							$('html, body').animate({
 								scrollTop: 30
 							}, 600);
@@ -131,7 +133,7 @@ XKit.extensions.activity_plus = new Object({
 						m_type = "is_user_mention, .ui_notes .activity-notification.user_mention, .ui_notes .activity-notification.note_mention";
 					}
 
-					var m_filter_css = ".activity-notification, .ui_notes .activity-notification { display: none; } .activity-notification." + m_type + " { display: block; }";
+					var m_filter_css = ".ui_notes .activity-notification { display: none; }";
 					m_filter_css += ".ui_notes .activity-notification." + m_type + " { display: flex }";
 					XKit.tools.add_css(m_filter_css, "activity_plus_note_filter");
 
