@@ -87,7 +87,7 @@ XKit.extensions.activity_plus = new Object({
 						"<div data-type=\"is_user_mention\" class=\"xkit-note-filter-mention\" title=\"Mentions\">mentions</div>" +
 						"<div data-type=\"from_mutual\" class=\"xkit-note-filter-from-mutual\" title=\"From Mutual Follows\">from mutual</div>" +
 					"</div>";
-				$(".activity-notifications_switcher").append(m_html);
+				$(".ui_notes_switcher").append(m_html);
 
 				$("#xkit-activity-plus-note-filter div").tipTip({maxWidth: "auto", edgeOffset: 10, delay: 10 });
 
@@ -100,7 +100,7 @@ XKit.extensions.activity_plus = new Object({
 
 					if (m_type === "from_mutual") {
 
-						XKit.tools.add_css(".activity-notification, .activity-notifications .activity-notification { display: none; } .activity-notification.is_friend {display:block} .activity-notifications .activity-notification.is_friend { display: flex }", "activity_plus_note_filter_mutual");
+						XKit.tools.add_css(".activity-notification, .ui_notes .activity-notification { display: none; } .activity-notification.is_friend {display:block} .ui_notes .activity-notification.is_friend { display: flex }", "activity_plus_note_filter_mutual");
 						return;
 
 					}
@@ -128,11 +128,11 @@ XKit.extensions.activity_plus = new Object({
 						m_type = "is_reply, .is_answer";
 					}
 					if (m_type === "is_user_mention") {
-						m_type = "is_user_mention, .activity-notifications .activity-notification.user_mention, .activity-notifications .activity-notification.note_mention";
+						m_type = "is_user_mention, .ui_notes .activity-notification.user_mention, .ui_notes .activity-notification.note_mention";
 					}
 
-					var m_filter_css = ".activity-notification, .activity-notifications .activity-notification { display: none; } .activity-notification." + m_type + " { display: block; }";
-					m_filter_css += ".activity-notifications .activity-notification." + m_type + " { display: flex }";
+					var m_filter_css = ".activity-notification, .ui_notes .activity-notification { display: none; } .activity-notification." + m_type + " { display: block; }";
+					m_filter_css += ".ui_notes .activity-notification." + m_type + " { display: flex }";
 					XKit.tools.add_css(m_filter_css, "activity_plus_note_filter");
 
 					XKit.extensions.activity_plus.undo_condense();
