@@ -1,5 +1,5 @@
 //* TITLE Activity+ **//
-//* VERSION 0.3.8 **//
+//* VERSION 0.3.9 **//
 //* DESCRIPTION Tweaks for the Activity page **//
 //* DETAILS This extension brings a couple of tweaks for the Activity page, such as the ability to filter notes by type and showing timestamps. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -73,7 +73,7 @@ XKit.extensions.activity_plus = new Object({
 			}
 
 			if (this.preferences.show_timestamps.value === true || this.preferences.condensed_notes.value === true) {
-				// m_css = m_css + " .part_activity { left: 95px !important; } .ui_note .part_avatar { left: 57px !important; } .part_response { padding-left: 95px !important; }";
+				// m_css = m_css + " .part_activity { left: 95px !important; } .activity-notification .part_avatar { left: 57px !important; } .part_response { padding-left: 95px !important; }";
 				setInterval(XKit.extensions.activity_plus.do_on_new, 3000);
 			}
 
@@ -97,23 +97,25 @@ XKit.extensions.activity_plus = new Object({
 
 					$("#xkit-activity-plus-note-filter div").removeClass("selected");
 					$(this).addClass("selected");
+					XKit.tools.remove_css("activity_plus_note_filter_mutual");
+					XKit.tools.remove_css("activity_plus_note_filter");
+
 
 					if (m_type === "from_mutual") {
 
-						XKit.tools.add_css(".ui_note, .ui_notes .activity-notification { display: none; } .ui_note.is_friend {display:block} .ui_notes .activity-notification.is_friend { display: flex }", "activity_plus_note_filter_mutual");
+						XKit.tools.add_css(".ui_notes .activity-notification { display: none; } .ui_notes .activity-notification.is_friend { display: flex }", "activity_plus_note_filter_mutual");
 						return;
 
 					}
 
-					XKit.tools.remove_css("activity_plus_note_filter_mutual");
-					XKit.tools.remove_css("activity_plus_note_filter");
+
 
 					if (m_type === "") {
-						if ($(".ui_note, .activity-notification").length >= 350) {
+						if ($(".activity-notification").length >= 350) {
 							$('html, body').animate({
 								scrollTop: 30
 							}, 600);
-							$( ".ui_note:gt(200)" ).remove();
+							$( ".activity-notification:gt(200)" ).remove();
 						}
 						XKit.extensions.activity_plus.in_type_filter = false;
 						return;
@@ -131,7 +133,7 @@ XKit.extensions.activity_plus = new Object({
 						m_type = "is_user_mention, .ui_notes .activity-notification.user_mention, .ui_notes .activity-notification.note_mention";
 					}
 
-					var m_filter_css = ".ui_note, .ui_notes .activity-notification { display: none; } .ui_note." + m_type + " { display: block; }";
+					var m_filter_css = ".ui_notes .activity-notification { display: none; }";
 					m_filter_css += ".ui_notes .activity-notification." + m_type + " { display: flex }";
 					XKit.tools.add_css(m_filter_css, "activity_plus_note_filter");
 
@@ -185,7 +187,7 @@ XKit.extensions.activity_plus = new Object({
 
 	do_condensed: function() {
 
-		$(".ui_note").not(".xkit-activity-plus-condensed-done").each(function() {
+		$(".activity-notification").not(".xkit-activity-plus-condensed-done").each(function() {
 
 			$(this).addClass("xkit-activity-plus-condensed-done");
 
@@ -307,7 +309,7 @@ XKit.extensions.activity_plus = new Object({
 
 	do_timestamps: function() {
 
-		$(".ui_note").not(".xkit-activity-plus-timestamps-done").each(function() {
+		$(".activity-notification").not(".xkit-activity-plus-timestamps-done").each(function() {
 
 			$(this).addClass("xkit-activity-plus-timestamps-done");
 
@@ -341,7 +343,7 @@ XKit.extensions.activity_plus = new Object({
 		XKit.tools.remove_css("activity_plus_note_filter_mutual");
 		XKit.tools.remove_css("activity_plus");
 		XKit.tools.remove_css("activity_plus_additional");
-		$(".ui_note").removeClass("xkit-activity-plus-timestamps-done");
+		$(".activity-notification").removeClass("xkit-activity-plus-timestamps-done");
 		$(".xkit-activity-plus-timestamp").remove();
 		$("#popover_blogs").find(".blog_title").each(function() {
 			$(this).attr('href', $(this).attr('href').replace('/activity/', '/blog/'));
