@@ -1,5 +1,5 @@
 //* TITLE Activity+ **//
-//* VERSION 0.3.9 **//
+//* VERSION 0.3.10 **//
 //* DESCRIPTION Tweaks for the Activity page **//
 //* DETAILS This extension brings a couple of tweaks for the Activity page, such as the ability to filter notes by type and showing timestamps. **//
 //* DEVELOPER STUDIOXENIX **//
