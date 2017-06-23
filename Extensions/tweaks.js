@@ -481,8 +481,15 @@ XKit.extensions.tweaks = new Object({
 			XKit.extensions.tweaks.add_css(".is_reblog small { font-size: 12px !important; }", "xkit_tweaks_larger_small_text_on_reblogs");
 		}
 
-		if (XKit.extensions.tweaks.preferences.responsive_dash.value) {
-			XKit.extensions.tweaks.add_css(".l-container--two-column-dashboard {padding-left: 0px!important;padding-right: 0px!important;}@media screen and (max-width: 899px) {.right_column {visibility: hidden;display: none;width: 0px!important;}#sidebar_footer_nav {visibility: hidden;}.l-content {width: 625px;}.l-container--two-column-dashboard {width: 645px!important;}}@media screen and (min-width: 644px) {html, body {overflow-x: hidden;}}");
+		if (XKit.extensions.tweaks.preferences.responsive_dash.value && XKit.interface.where().dashboard) {
+			XKit.extensions.tweaks.add_css(
+				".l-container--two-column-dashboard {padding-left: 0px!important;padding-right: 0px!important;}" +
+				"@media screen and (max-width: 899px) {" +
+					".right_column {visibility: hidden;display: none;width: 0px!important;}" +
+					"#sidebar_footer_nav {visibility: hidden;}" +
+					".l-content {width: 625px;}" +
+					".l-container--two-column-dashboard {width: 645px!important;}" +
+				"}");
 		}
 
 		if (XKit.extensions.tweaks.preferences.slim_popups.value) {
