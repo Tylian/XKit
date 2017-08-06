@@ -68,6 +68,8 @@ XKit.extensions.quick_tags = new Object({
 		this.running = true;
 
 		XKit.tools.init_css("quick_tags");
+		
+		if (!$(".post.post_full, .post.post_brick").length) { return; }
 
 		if (!$(".post.post_full, .post.post_brick").length) { return; }
 

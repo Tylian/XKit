@@ -1,5 +1,5 @@
 //* TITLE Messaging Tweaks **//
-//* VERSION 1.7.2 **//
+//* VERSION 1.7.3 **//
 //* DESCRIPTION Helpful tweaks for Tumblr IM **//
 //* DETAILS This adds a few helpful tweaks to the Tumblr IM, for example minimising the chat, hiding the IM icon or changing the looks of the chat window. **//
 //* DEVELOPER New-XKit **//
@@ -113,25 +113,25 @@ XKit.extensions.messaging_tweaks = new Object({
 		"my_chat_bubble_background": {
 			text: "Background for my chat bubbles",
 			type: "text",
-			default: "rgba(0,0,0,.05)",
+			default: "",
 			value: "rgba(0,0,0,.05)"
 		},
 		"other_chat_bubble_background": {
 			text: "Background for other people's chat bubbles",
 			type: "text",
-			default: "rgba(0,0,0,.1)",
+			default: "",
 			value: "rgba(0,0,0,.1)"
 		},
 		"my_chat_bubble_text": {
 			text: "Text color for my chat bubbles",
 			type: "text",
-			default: "rgb(68,68,68)",
+			default: "",
 			value: "rgb(68,68,68)"
 		},
 		"other_chat_bubble_text": {
 			text: "Text color for other people's chat bubbles",
 			type: "text",
-			default: "rgb(68,68,68)",
+			default: "",
 			value: "rgb(68,68,68)"
 		},
 		"background_override": {
@@ -169,7 +169,7 @@ XKit.extensions.messaging_tweaks = new Object({
 		XKit.extensions.messaging_tweaks.observer.disconnect();
 		var icons = $(".messaging-conversation-popovers .avatar:not(.xkit-my_messaging_icon, .xkit-others_messaging_icon)");
 		function img_onload(msg_div, emoji_text, emoji) {
-			msg_div.html(msg_div.html().replace(new RegExp(emoji_text, "g") , emoji.outerHTML));
+			msg_div.html(msg_div.html().replace(new RegExp(emoji_text, "g"), emoji.outerHTML));
 		}
 		icons.each(function() {
 			if ($(this).parents(".conversation-compose").length !== 0) { return; }
@@ -309,7 +309,7 @@ XKit.extensions.messaging_tweaks = new Object({
 		}
 		XKit.extensions.messaging_tweaks.observer = new MutationObserver(XKit.extensions.messaging_tweaks.do_messages);
 		XKit.extensions.messaging_tweaks.chat_window_observer = new MutationObserver(function(mutations, observer) {
-			mutations.forEach(function (mutation) {
+			mutations.forEach(function(mutation) {
 				var i, node;
 				// Check if Chat Window has been added
 				if (mutation.addedNodes.length) {
@@ -373,14 +373,20 @@ XKit.extensions.messaging_tweaks = new Object({
 			}
 		}
 
-		XKit.tools.add_css(".messaging-conversation .xkit-others_messaging_message .conversation-message-text .message-bubble { background-color: " + XKit.extensions.messaging_tweaks.preferences.other_chat_bubble_background.value + " !important; }", "messaging_tweaks");
-		XKit.tools.add_css(".messaging-conversation .xkit-my_messaging_message .conversation-message-text .message-bubble { background-color: " + XKit.extensions.messaging_tweaks.preferences.my_chat_bubble_background.value + " !important; }", "messaging_tweaks");
-
-		XKit.tools.add_css(".messaging-conversation .xkit-others_messaging_message .conversation-message-text .message-bubble { color: " + XKit.extensions.messaging_tweaks.preferences.other_chat_bubble_text.value + " !important; }", "messaging_tweaks");
-		XKit.tools.add_css(".messaging-conversation .xkit-my_messaging_message .conversation-message-text .message-bubble { color: " + XKit.extensions.messaging_tweaks.preferences.my_chat_bubble_text.value + " !important; }", "messaging_tweaks");
-
-		XKit.tools.add_css(".messaging-conversation .xkit-others_messaging_message .conversation-message-text .message-bubble-header a { color: " + XKit.extensions.messaging_tweaks.preferences.other_chat_bubble_text.value + " !important; }", "messaging_tweaks");
-		XKit.tools.add_css(".messaging-conversation .xkit-my_messaging_message .conversation-message-text .message-bubble-header a { color: " + XKit.extensions.messaging_tweaks.preferences.my_chat_bubble_text.value + " !important; }", "messaging_tweaks");
+		if (XKit.extensions.messaging_tweaks.preferences.other_chat_bubble_background.value) {
+			XKit.tools.add_css(".messaging-conversation .xkit-others_messaging_message .conversation-message-text .message-bubble { background-color: " + XKit.extensions.messaging_tweaks.preferences.other_chat_bubble_background.value + " !important; }", "messaging_tweaks");
+		}
+		if (XKit.extensions.messaging_tweaks.preferences.my_chat_bubble_background.value) {
+			XKit.tools.add_css(".messaging-conversation .xkit-my_messaging_message .conversation-message-text .message-bubble { background-color: " + XKit.extensions.messaging_tweaks.preferences.my_chat_bubble_background.value + " !important; }", "messaging_tweaks");
+		}
+		if (XKit.extensions.messaging_tweaks.preferences.other_chat_bubble_text.value) {
+			XKit.tools.add_css(".messaging-conversation .xkit-others_messaging_message .conversation-message-text .message-bubble { color: " + XKit.extensions.messaging_tweaks.preferences.other_chat_bubble_text.value + " !important; }", "messaging_tweaks");
+			XKit.tools.add_css(".messaging-conversation .xkit-others_messaging_message .conversation-message-text .message-bubble-header a { color: " + XKit.extensions.messaging_tweaks.preferences.other_chat_bubble_text.value + " !important; }", "messaging_tweaks");
+		}
+		if (XKit.extensions.messaging_tweaks.preferences.my_chat_bubble_text.value) {
+			XKit.tools.add_css(".messaging-conversation .xkit-my_messaging_message .conversation-message-text .message-bubble { color: " + XKit.extensions.messaging_tweaks.preferences.my_chat_bubble_text.value + " !important; }", "messaging_tweaks");
+			XKit.tools.add_css(".messaging-conversation .xkit-my_messaging_message .conversation-message-text .message-bubble-header a { color: " + XKit.extensions.messaging_tweaks.preferences.my_chat_bubble_text.value + " !important; }", "messaging_tweaks");
+		}
 
 		// There's either 1 or no messaging-conversation-popovers on extension start
 		$(".messaging-conversation-popovers").each(function() {
@@ -433,7 +439,7 @@ XKit.extensions.messaging_tweaks = new Object({
 		this.running = false;
 	},
 
-	cpanel: function (cp) {
+	cpanel: function(cp) {
 		function update() {
 			if (round_icons_setting.hasClass("selected")) {
 				rectangle_icons_setting.show();

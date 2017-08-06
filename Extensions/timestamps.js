@@ -1,11 +1,14 @@
 //* TITLE Timestamps **//
-//* VERSION 2.7.6 **//
+//* VERSION 2.7.8 **//
 //* DESCRIPTION See when a post has been made. **//
 //* DETAILS This extension lets you see when a post was made, in full date or relative time (eg: 5 minutes ago). It also works on asks, and you can format your timestamps. **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//
 //* BETA false **//
 //* SLOW true **//
+
+// depends on moment.js
+/* globals moment */
 
 XKit.extensions.timestamps = new Object({
 
@@ -34,7 +37,7 @@ XKit.extensions.timestamps = new Object({
 			type: "separator"
 		},
 		format: {
-			text: "Timestamp format (<a id=\"xkit-timestamps-format-help\" href=\"#\" onclick=\"return false\">what is this?</a>)",
+			text: "Timestamp format (<span id=\"xkit-timestamps-format-help\" style=\"text-decoration: underline; cursor: pointer;\">what is this?</span>)",
 			type: "text",
 			default: "MMMM Do YYYY, h:mm:ss a",
 			value: "MMMM Do YYYY, h:mm:ss a"
@@ -68,7 +71,13 @@ XKit.extensions.timestamps = new Object({
 
 		if (XKit.interface.where().search) {
 			this.in_search = true;
-			XKit.tools.add_css('.xtimestamp-in-search { position: absolute; top: 43px; color: white; font-size: 12px; left: 0; }', "timestamps_search");
+			XKit.tools.add_css(`
+				.xtimestamp-in-search {
+					position: absolute;
+					top: 32px;
+					color: rgb(168,177,184);
+					font-size: 10px;
+				}`, "timestamps_search");
 		}
 
 		if (this.preferences.only_inbox.value) {
@@ -88,11 +97,13 @@ XKit.extensions.timestamps = new Object({
 				XKit.post_listener.add("timestamps", this.add_timestamps);
 				this.add_timestamps();
 
-				$(document).on("click",".xkit-timestamp-failed-why", function() {
+				$(document).on("click", ".xkit-timestamp-failed-why", function() {
 					XKit.window.show("Timestamp loading failed.", "This might be caused by several reasons, such as the post being removed, becoming private, or the Tumblr server having a problem that it can't return the page required by XKit to load you the timestamp.", "error", "<div id=\"xkit-close-message\" class=\"xkit-button\">OK</div></div>");
 				});
 			}
-		} catch(e) {
+		} catch (e) {
+			// defined in xkit.js
+			/* globals show_error_script */
 			show_error_script("Timestamps: " + e.message);
 		}
 
@@ -120,7 +131,7 @@ XKit.extensions.timestamps = new Object({
 	add_timestamps: function() {
 		var posts = $(".posts .post").not(".xkit_timestamps");
 
-		if (posts.length === 0) {
+		if (!posts || posts.length === 0) {
 			return;
 		}
 
@@ -144,14 +155,12 @@ XKit.extensions.timestamps = new Object({
 
 			var blog_name = '';
 			if (XKit.interface.where().inbox !== true) {
-				if (post.find('.permalink').length <= 0 && post.find(".post_permalink").length <= 0) {
+				var $permalink = post.find('.permalink, .post_permalink, .post-info-tumblelog a');
+
+				if ($permalink.length <= 0) {
 					return;
 				}
-
-				var permalink = post.find(".permalink").attr('href');
-				if (post.find(".post_permalink").length > 0) {
-					permalink = post.find(".post_permalink").attr('href');
-				}
+				var permalink = $permalink.attr('href');
 
 				if (permalink) {
 					// Split permalink into sections, discarding the scheme
@@ -167,7 +176,7 @@ XKit.extensions.timestamps = new Object({
 
 			if (XKit.extensions.timestamps.in_search && !$("#search_posts").hasClass("posts_view_list")) {
 				var in_search_html = '<div class="xkit_timestamp_' + post_id + ' xtimestamp-in-search xtimestamp_loading">&nbsp;</div>';
-				post.find(".post_controls_top").prepend(in_search_html);
+				post.find(".post-info-tumblelogs").prepend(in_search_html);
 			} else {
 				var normal_html = '<div class="xkit_timestamp_' + post_id + ' xtimestamp xtimestamp_loading">&nbsp;</div>';
 				post.find(".post_content").prepend(normal_html);
@@ -205,14 +214,13 @@ XKit.extensions.timestamps = new Object({
 			channel_id: $(note).attr("data-tumblelog-name")
 		};
 
-		var self = this;
 		GM_xmlhttpRequest({
 			method: "POST",
 			url: "http://www.tumblr.com/svc/post/fetch",
 			data: JSON.stringify(m_object),
 			json: true,
 			onerror: function(response) {
-				self.show_failed(date_element);
+				XKit.extensions.timestamps.show_failed(date_element);
 			},
 			onload: function(response) {
 				// We are done!
@@ -221,7 +229,7 @@ XKit.extensions.timestamps = new Object({
 				try {
 					var mdata = JSON.parse(response.responseText);
 					raw_date = mdata.post.date;
-				} catch(e) {
+				} catch (e) {
 					self.show_failed(date_element);
 					return;
 				}
@@ -263,13 +271,13 @@ XKit.extensions.timestamps = new Object({
 						date_element.html(self.format_date(date));
 						date_element.removeClass("xtimestamp_loading");
 						XKit.storage.set("timestamps", "xkit_timestamp_cache_" + post_id, post.timestamp);
-					} catch(e) {
+					} catch (e) {
 						XKit.console.add('Unable to load timestamp for post ' + post_id);
 						self.show_failed(date_element);
 					}
 				}
 			});
-		} catch(e) {
+		} catch (e) {
 			XKit.console.add('Unable to load timestamp for post ' + post_id);
 			XKit.extensions.timestamps.show_failed(date_element);
 		}
@@ -302,7 +310,7 @@ XKit.extensions.timestamps = new Object({
 
 	cpanel: function() {
 		$("#xkit-timestamps-format-help").click(function() {
-			XKit.window.show("Timestamp formatting","Timestamps extension allows you to format the date by using a formatting syntax. Make your own and type it in the Timestamp Format box to customize your timestamps.<br/><br/>For information, please visit:<br/><a href=\"http://xkit.info/seven/support/timestamps/index.php\">Timestamp Format Documentation</a><br/><br/>Please be careful while customizing the format. Improper/invalid formatting can render Timestamps unusable. In that case, just delete the text you've entered completely and XKit will revert to its default formatting.","info","<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
+			XKit.window.show("Timestamp formatting", "Timestamps extension allows you to format the date by using a formatting syntax. Make your own and type it in the Timestamp Format box to customize your timestamps.<br/><br/>For information, please visit:<br/><a href=\"http://xkit.info/seven/support/timestamps/index.php\">Timestamp Format Documentation</a><br/><br/>Please be careful while customizing the format. Improper/invalid formatting can render Timestamps unusable. In that case, just delete the text you've entered completely and XKit will revert to its default formatting.", "info", "<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
 		});
 	},
 

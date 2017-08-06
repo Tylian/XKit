@@ -1,5 +1,5 @@
 //* TITLE Classic Notifications **//
-//* VERSION 0.6 REV B **//
+//* VERSION 0.7.0 **//
 //* DESCRIPTION Notifications where they were **//
 //* DETAILS This is a very experimental extension that brings back the notifications to your blog pages (ie: www.tumblr.com/blog/xkit-extension), just the way it was before Tumblr's Activity update. Only the last 10 notifications are displayed. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -32,7 +32,7 @@ XKit.extensions.old_notifications = new Object({
 
 		if (XKit.interface.where().channel) {
 			XKit.extensions.old_notifications.fetch();
-			$(document).on('click','.notification.xkit-old-notifications', XKit.extensions.old_notifications.open_notification);
+			$(document).on('click', '.notification.xkit-old-notifications', XKit.extensions.old_notifications.open_notification);
 		}
 
 		this.max_notifications = parseInt(this.preferences.count.value.substring(1));
@@ -64,40 +64,43 @@ XKit.extensions.old_notifications = new Object({
 
 	render_notification: function(obj) {
 
-		if ($(obj).find(".ui_note").length <= 0) { return ""; }
+		var $obj = $(obj);
 
-		obj = $(obj).find(".ui_note");
+		if (!$obj.hasClass("activity-notification")) {
+			return "";
+		}
 
-		var notification_url = $(obj).find(".part_glass").attr('href');
 
-		var notification_username = $(obj).attr('data-tumblelog-name');
-		var notification_user_url = $(obj).find(".activity").find("a").attr('href');
-		var notification_avatar = $(obj).find(".ui_avatar_link").attr('data-avatar-url');
+		var notification_url = $obj.find(".activity-notification__glass").attr('href');
 
-		notification_avatar = notification_avatar.replace("_64.png","_40.png");
-		notification_avatar = notification_avatar.replace("_64.gif","_40.gif");
-		notification_avatar = notification_avatar.replace("_64.jpg","_40.jpg");
-		notification_avatar = notification_avatar.replace("_128.png","_40.png");
-		notification_avatar = notification_avatar.replace("_128.gif","_40.gif");
-		notification_avatar = notification_avatar.replace("_128.jpg","_40.jpg");
+		var notification_username = $obj.attr('data-tumblelog-name');
+		var notification_user_url = $obj.find(".activity").find("a").attr('href');
+		var notification_avatar = $obj.find(".ui_avatar_link").attr('data-avatar-url');
+
+		notification_avatar = notification_avatar.replace("_64.png", "_40.png");
+		notification_avatar = notification_avatar.replace("_64.gif", "_40.gif");
+		notification_avatar = notification_avatar.replace("_64.jpg", "_40.jpg");
+		notification_avatar = notification_avatar.replace("_128.png", "_40.png");
+		notification_avatar = notification_avatar.replace("_128.gif", "_40.gif");
+		notification_avatar = notification_avatar.replace("_128.jpg", "_40.jpg");
 
 		var summary = "";
-		if ($(obj).find(".part_main").find(".summary").length > 0) {
-			summary = $(obj).find(".part_main").find(".summary").html();
+		if ($obj.find(".activity-notification__activity_main").find(".summary").length > 0) {
+			summary = $obj.find(".activity-notification__activity_main").find(".summary").html();
 		}
 
 		var response = "";
-		if ($(obj).find(".part_response").length > 0) {
-			response = $(obj).find(".part_response").html();
+		if ($obj.find(".activity-notification__activity_response").length > 0) {
+			response = $obj.find(".activity-notification__activity_response").html();
 		}
 
-		var original_url = $(obj).find(".ui_post_badge").attr('href');
+		var original_url = $obj.find(".ui_post_badge").attr('href');
 
 		if (typeof original_url !== "undefined") {
 
 			if (typeof XKit.extensions.old_notifications !== "undefined") {
 
-				for (var i=0;i<XKit.extensions.old_notifications.blacklisted.length;i++) {
+				for (var i = 0; i < XKit.extensions.old_notifications.blacklisted.length; i++) {
 					if (XKit.extensions.old_notifications.blacklisted[i] === "" ||
 					    typeof(XKit.extensions.old_notifications.blacklisted[i]) === "undefined") {
 						continue;
@@ -112,7 +115,7 @@ XKit.extensions.old_notifications = new Object({
 
 		}
 
-		var notification_preview = $(obj).find(".ui_post_badge").css("background-image");
+		var notification_preview = $obj.find(".ui_post_badge").css("background-image");
 
 		if (notification_preview !== "" && typeof notification_preview !== "undefined") {
 			notification_preview = notification_preview.substring(4, notification_preview.length - 1);
@@ -121,24 +124,23 @@ XKit.extensions.old_notifications = new Object({
 			}
 		}
 
-		var is_friend = $(obj).hasClass("is_friend");
-		var is_reblog = $(obj).hasClass("is_reblog");
-		var is_reply = $(obj).hasClass("is_reply");
-		var is_answer = $(obj).hasClass("is_answer");
-		var is_like = $(obj).hasClass("is_like");
-		var is_follow = $(obj).hasClass("is_follower");
-		var is_mention = $(obj).hasClass("is_user_mention");
+		var is_friend = $obj.hasClass("is_friend");
+		var is_reblog = $obj.hasClass("is_reblog");
+		var is_reply = $obj.hasClass("is_reply");
+		var is_answer = $obj.hasClass("is_answer");
+		var is_like = $obj.hasClass("is_like");
+		var is_follow = $obj.hasClass("is_follower");
+		var is_mention = $obj.hasClass("user_mention") || $obj.hasClass("note_mention");
 
 		var preview_frame_class = "icon regular";
 		var preview_image = notification_preview;
 
-		var is_post_regular = $(obj).find(".ui_post_badge").hasClass("regular");
-		var is_post_photo = $(obj).find(".ui_post_badge").hasClass("photo");
-		var is_post_chat = $(obj).find(".ui_post_badge").hasClass("conversation");
-		var is_post_quote = $(obj).find(".ui_post_badge").hasClass("quote");
-		var is_post_link = $(obj).find(".ui_post_badge").hasClass("link");
-		var is_post_audio = $(obj).find(".ui_post_badge").hasClass("audio");
-		var is_post_video = $(obj).find(".ui_post_badge").hasClass("video");
+		var is_post_photo = $obj.find(".ui_post_badge").hasClass("photo");
+		var is_post_chat = $obj.find(".ui_post_badge").hasClass("conversation");
+		var is_post_quote = $obj.find(".ui_post_badge").hasClass("quote");
+		var is_post_link = $obj.find(".ui_post_badge").hasClass("link");
+		var is_post_audio = $obj.find(".ui_post_badge").hasClass("audio");
+		var is_post_video = $obj.find(".ui_post_badge").hasClass("video");
 
 		var m_post_type_text = "post";
 		if (is_post_photo) { m_post_type_text = "photo"; preview_frame_class = ""; }
@@ -185,6 +187,11 @@ XKit.extensions.old_notifications = new Object({
 
 		var m_inner_html = "";
 		var no_preview_frame = false;
+
+		if ($obj.hasClass('fanmail')) {
+			load_url = notification_url;
+			m_inner_html = $obj.find(".activity").html();
+		}
 
 		if (is_follow) {
 
@@ -296,15 +303,15 @@ XKit.extensions.old_notifications = new Object({
 					"</div>" +
 				"</div>" +
 				"<a target=\"_blank\" href=\"" + notification_user_url + "\" class=\"avatar_frame\">" +
-					"<img alt=\"\" class=\"avatar\" src=\"" + notification_avatar +"\" data-src=\"" + notification_avatar +"\">" +
+					"<img alt=\"\" class=\"avatar\" src=\"" + notification_avatar + "\" data-src=\"" + notification_avatar + "\">" +
 				"</a>";
 
-			if (!no_preview_frame) {
-				m_html = m_html + "<div class=\"notification_right\">" +
+		if (!no_preview_frame) {
+			m_html = m_html + "<div class=\"notification_right\">" +
 					"<a target=\"_blank\" class=\"preview_frame " + preview_frame_class + "\" href=\"" + notification_url + "\">" + preview_img_html + "</a>" +
 				"</div>";
-			}
-			m_html = m_html + "</li>";
+		}
+		m_html = m_html + "</li>";
 
 		XKit.extensions.old_notifications.notification_count++;
 
@@ -429,9 +436,9 @@ XKit.extensions.old_notifications = new Object({
 		}
 
 		var m_html = "";
-		$(".stage", data).each(function() {
+		$(".activity-notification", data).each(function() {
 			if (XKit.extensions.old_notifications.notification_count >= XKit.extensions.old_notifications.max_notifications) { return false; }
-			m_html = m_html + XKit.extensions.old_notifications.render_notification("<div>" + $(this).parent()[0].outerHTML + "</div>");
+			m_html = m_html + XKit.extensions.old_notifications.render_notification($(this)[0].outerHTML);
 		});
 		$(".new_post_buttons_container").after(m_html);
 		$("#xkit-old-notifications-" + XKit.extensions.old_notifications.notification_count).addClass("last_notification");
@@ -458,7 +465,7 @@ XKit.extensions.old_notifications = new Object({
 		XKit.extensions.old_notifications.fetch_id = my_id;
 
 		setTimeout(function() {
-			var to_fetch = document.location.href.replace("/blog/","/activity/");
+			var to_fetch = document.location.href.replace("/blog/", "/activity/");
 			console.log("Trying to fetch " + to_fetch);
 			GM_xmlhttpRequest({
 				method: "GET",

@@ -1,5 +1,5 @@
 //* TITLE Editable Reblogs **//
-//* VERSION 3.3.1 **//
+//* VERSION 3.3.8 **//
 //* DESCRIPTION Restores ability to edit previous reblogs of a post **//
 //* DEVELOPER new-xkit **//
 //* FRAME false **//
@@ -26,12 +26,8 @@ XKit.extensions.editable_reblogs = new Object({
 		this.running = true;
 
 		XKit.interface.post_window_listener.add("editable_reblogs", this.post_window.bind(this));
-
-
 		XKit.tools.init_css("editable_reblogs");
-
-		var create_post_button_click_handler = this.make_post.bind(this);
-		$("body").on("click", ".create_post_button", create_post_button_click_handler);
+		this.create_post_button_click_handler = this.make_post.bind(this);
 
 		// DOM nodes containing options disappear before a handler can be run
 		var record_post_settings_handler = this.record_post_settings.bind(this);
@@ -39,7 +35,7 @@ XKit.extensions.editable_reblogs = new Object({
 
 		var post_setting_keyup_handlers = {};
 		$.each({"#customUrl_input": "post_slug_metadata", "#postDate_input": "post_date_metadata"},
-			function(selector, property){
+			function(selector, property) {
 				post_setting_keyup_handlers[selector] = function() {
 					XKit.extensions.editable_reblogs[property] = $(this).val();
 				};
@@ -49,9 +45,9 @@ XKit.extensions.editable_reblogs = new Object({
 		);
 
 		this.teardown_event_handlers = function() {
-			$("body").off("click", ".create_post_button", create_post_button_click_handler);
+			$("body").off("click", ".create_post_button", this.create_post_button_click_handler);
 			$("body").off("click", record_post_settings_handler);
-			$.each(post_setting_keyup_handlers, function(selector, handler){
+			$.each(post_setting_keyup_handlers, function(selector, handler) {
 				$('body').off("keyup", selector, handler);
 			});
 		};
@@ -59,8 +55,10 @@ XKit.extensions.editable_reblogs = new Object({
 
 	post_window: function() {
 		this.state = "initial";
+		$("body").off("click", ".create_post_button", this.create_post_button_click_handler);
 
 		if (!this.reblog_tree_exists()) {
+			XKit.interface.post_window.set_content_html(this.wrap_html_links(XKit.interface.post_window.get_content_html()));
 			return;
 		}
 
@@ -76,12 +74,12 @@ XKit.extensions.editable_reblogs = new Object({
 				"structure due to changes on Tumblr's side. Any posts reblogged " +
 				"with Editable Reblogs will display the entire reblog tree as a " +
 				"single blockquoted post.<br><br>" +
-				"The XKit team deeply apologizes for any inconvenience this causes, "+
-				"and we're working to restore the original functionality, "+
+				"The XKit team deeply apologizes for any inconvenience this causes, " +
+				"and we're working to restore the original functionality, " +
 				"but Tumblr's updates are in this case beyond our control.<br><br>" +
 				"As always, this extension can be disabled at any time from the XKit preferences panel.",
 				'error', '<div id="xkit-close-message" class="xkit-button xkit-er-ack-blockquotes">OK</div>');
-			$(".xkit-er-ack-blockquotes").click(function(){
+			$(".xkit-er-ack-blockquotes").click(function() {
 				XKit.storage.set('editable_reblogs', 'has_displayed_ER_warning', 'true');
 			});
 		}
@@ -97,9 +95,8 @@ XKit.extensions.editable_reblogs = new Object({
 		this.initialize_selected_post_type();
 		this.scheduled_date = "Next Tuesday, 10am";
 		this.load_initial_metadata();
-
 		var element = this.add_edit_button();
-		$(element).one('click', function(){
+		$(element).one('click', function() {
 			this.edit_the_reblogs();
 			$(element).addClass('disabled');
 		}.bind(this));
@@ -120,15 +117,15 @@ XKit.extensions.editable_reblogs = new Object({
 			);
 
 			$('.xkit-er-callout--container').delay(800).slideDown(800);
-			$('.post-form .editor').one('keyup', function(){
+			$('.post-form .editor').one('keyup', function() {
 				$('.xkit-er-callout--container').delay(2000).slideUp(800);
 			});
 
-			$(".xkit-er-edit-button").click(function(){
+			$(".xkit-er-edit-button").click(function() {
 				XKit.storage.set('editable_reblogs', 'has_dismissed_button_callout', 'true');
 				$('.xkit-er-callout--container').slideUp(800);
 			});
-			$('.xkit-er-callout--container').click(function(){
+			$('.xkit-er-callout--container').click(function() {
 				XKit.storage.set('editable_reblogs', 'has_dismissed_button_callout', 'true');
 				$('.xkit-er-callout--container').slideUp(800);
 			});
@@ -138,25 +135,26 @@ XKit.extensions.editable_reblogs = new Object({
 	},
 
 	edit_the_reblogs: function() {
-		var save_button = $('.post-form--save-button [data-js-clickablesave]');
 		try {
+			var save_button = $('.post-form--save-button [data-js-clickablesave]');
 			// Prevent Tumblr's event handler from acting on the save button
 			save_button.removeAttr("data-js-clickablesave");
-			this.process_existing_content();
+			$("body").on("click", ".create_post_button", this.create_post_button_click_handler);
+			this.process_reblog_content();
 			this.state = "success";
-		} catch(e) {
+		} catch (e) {
 			console.error(e);
 
-			save_button.attr("data-js-clickablesave", "");
+			this.get_post_save_button().attr("data-js-clickablesave", "");
 
 			if (!e.hide_popup) {
-				var github_url = XKit.tools.github_issue("Editable Reblogs "+this.state+" error",
+				var github_url = XKit.tools.github_issue("Editable Reblogs " + this.state + " error",
 					{ state: this.state, "ER Version": XKit.installed.get("editable_reblogs").version },
 				e);
 
-				XKit.window.show('Editable Reblogs Error', 'ERROR: Editable Reblogs failed to proccess some part of your post safely. '+
-					'Therefore, it has been disabled to prevent unintentional side-effects that could potentially corrupt the post. '+
-					(!e.hide_url ? '<br><br><a target="_blank" href="'+github_url+'">You can report this issue on Github by clicking here</a>':''),
+				XKit.window.show('Editable Reblogs Error', 'ERROR: Editable Reblogs failed to proccess some part of your post safely. ' +
+					'Therefore, it has been disabled to prevent unintentional side-effects that could potentially corrupt the post. ' +
+					(!e.hide_url ? '<br><br><a target="_blank" href="' + github_url + '">You can report this issue on Github by clicking here</a>' : ''),
 					'error', '<div id="xkit-close-message" class="xkit-button">OK</div>');
 			}
 		}
@@ -190,14 +188,25 @@ XKit.extensions.editable_reblogs = new Object({
 		}.bind(this));
 	},
 
-	process_existing_content: function() {
+	get_post_save_button: function() {
+		return $('.post-form--save-button button');
+	},
+
+	wrap_html_links: function(html_text) {
+		var nodes = $(html_text);
+		nodes.find('a').wrap('<span></span>');
+		var nodes_text = $('<div>').append($(nodes).clone()).html();
+		return nodes_text;
+	},
+
+	process_reblog_content: function() {
 		var reblog_tree = $(".post-form .reblog-list");
 
 		var all_quotes = [];
 		var old_content = '';
 		var all_quotes_text = '';
 
-		this.state = "processing existing content";
+		this.state = "processing reblog content";
 		// Guard against double evaluation by marking the tree as processed
 		var processed_class = 'xkit-editable-reblogs-done';
 		if (reblog_tree.length > 0) {
@@ -228,8 +237,7 @@ XKit.extensions.editable_reblogs = new Object({
 				if (!all_quotes_text && this.is_blockquote_reblog(data.reblog_content)) {
 					all_quotes_text = reblog_content;
 				} else {
-					all_quotes_text = "<p><a href='" + data.reblog_url + "'>" + data.reblog_author + "</a>:</p>"+
-						"<xkit></xkit>"+
+					all_quotes_text = "<p><a href='" + data.reblog_url + "'>" + data.reblog_author + "</a>:</p>" +
 					"<blockquote>" + all_quotes_text + reblog_content + "</blockquote>";
 				}
 			}.bind(this));
@@ -238,8 +246,8 @@ XKit.extensions.editable_reblogs = new Object({
 		try {
 			old_content = XKit.interface.post_window.get_content_html();
 		} catch (e) {
-			XKit.window.show('Invalid editor type', 'ERROR: Editable Reblogs cannot currently get content from your default editor type. '+
-				'To continue using editable reblogs, click <a target="_blank" href="https://www.tumblr.com/settings/dashboard">here</a> '+
+			XKit.window.show('Invalid editor type', 'ERROR: Editable Reblogs cannot currently get content from your default editor type. ' +
+				'To continue using editable reblogs, click <a target="_blank" href="https://www.tumblr.com/settings/dashboard">here</a> ' +
 				'to edit your dashboard settings to use the rich text editor or HTML editor',
 				'error', "<div id=\"xkit-close-message\" class=\"xkit-button\">OK</div>");
 			var error = new Error("Editor Type");
@@ -274,7 +282,7 @@ XKit.extensions.editable_reblogs = new Object({
 	is_blockquote_reblog: function(text) {
 		var elements = $(text);
 
-		elements = elements.filter(function(index, node){
+		elements = elements.filter(function(index, node) {
 			if (!node.innerHTML || node.innerHTML == "<br>") {
 				return false;
 			}
@@ -339,31 +347,48 @@ XKit.extensions.editable_reblogs = new Object({
 		this.scheduled_date = e.target.value;
 	},
 
-	make_post: function(e) {
+	make_post: function(event) {
 		if (!this.reblog_tree_exists() || this.state != "success") {
+			XKit.interface.post_window.set_content_html(this.wrap_html_links(XKit.interface.post_window.get_content_html()));
+			this.get_post_save_button().attr("data-js-clickablesave", '');
+			this.get_post_save_button().click();
 			return;
 		}
 
-		var post_types = this.post_types;
-		switch (post_types[this.selected_post_type]) {
+		try {
+			var post_types = this.post_types;
+			switch (post_types[this.selected_post_type]) {
 			case post_types.PUBLISH:
-				this.send_post_request(e);
+				this.send_post_request(event);
 				break;
 			case post_types.QUEUE:
-				this.send_queue_request(e);
+				this.send_queue_request(event);
 				break;
 			case post_types.DRAFT:
-				this.send_draft_request(e);
+				this.send_draft_request(event);
 				break;
 			case post_types.PRIVATE:
-				this.send_private_request(e);
+				this.send_private_request(event);
 				break;
 			case post_types.SCHEDULE:
-				this.send_schedule_request(e);
+				this.send_schedule_request(event);
 				break;
-		}
+			}
 
-		this.state = "finished";
+			this.state = "finished";
+		} catch (e) {
+			console.error(e);
+
+			var github_url = XKit.tools.github_issue("Editable Reblogs post error",
+				{ state: this.state, "ER Version": XKit.installed.get("editable_reblogs").version },
+			e);
+
+			XKit.window.show('Editable Reblogs Error',
+				"ERROR: Editable Reblogs failed to process some part of your post, and it wasn't posted. " +
+				"Try removing images or media and trying again." +
+				(!e.hide_url ? '<br><br><a target="_blank" href="' + github_url + '">You can report this issue on Github by clicking here</a>' : ''),
+				'error', '<div id="xkit-close-message" class="xkit-button">OK</div>');
+		}
 	},
 
 	send_post_request: function(e) {
@@ -473,7 +498,8 @@ XKit.extensions.editable_reblogs = new Object({
 			return $(element).text();
 		}).join(",");
 
-		request["post[two]"] = this.parse_html(XKit.interface.post_window.get_content_html());
+		var html_data = this.parse_html(XKit.interface.post_window.get_content_html());
+		request["post[two]"] = this.wrap_html_links(html_data);
 
 		if ($('.post-forms--social-buttons .social-button.twitter').hasClass('checked')) {
 			request.send_to_twitter = "on";
@@ -493,7 +519,7 @@ XKit.extensions.editable_reblogs = new Object({
 
 		var nodes = $('<div>').append($(text));
 		nodes.find('.tmblr-truncated').replaceWith('[[MORE]]');
-
+		XKit.extensions.editable_reblogs.format_video_media(nodes);
 
 		// tumblr_blog must be wrapped in single quotes,
 		// not double, or the dash will nom the shit out of your post
@@ -501,17 +527,65 @@ XKit.extensions.editable_reblogs = new Object({
 		text = nodes.html();
 		// text = text.replace(/['"]tumblr_blog['"]/g, "tumblr_blog tumblr_blog");
 
-		// break up blockquote links that may confuse tumblr
-		text = text.replace(
-			/(<\/a>:<\/\w+>)(\s|<p><\/p>)*?(\n?<blockquote>)/g,
-			'$1<xkit></xkit>$3'
-		);
-
 		// also remove empty HTML if the user hasn't added anything
 		if (text.indexOf("<p><br></p>", text.length - 11) !== -1) {
 			text = text.substring(0, text.length - 11);
 		}
 		return text;
+	},
+
+	format_video_media: function(nodes) {
+		// parse items embedded in the current post
+		var embeds = nodes.find('.media-holder');
+		$.each(embeds, function(index, value) {
+			var element = $(value);
+			element.find('.media-killer').remove();
+			element.find('.media-mover').remove();
+			element.find('.thumbnail-preview').remove();
+			var figure = element.find('figure');
+			if (!figure.find('iframe').length) {
+				return;
+			}
+
+			figure.removeClass('tmblr-embed-placeholder')
+					.removeClass('embed-thumbnail-preview')
+					.addClass('tmblr-embed')
+					.removeAttr('data-embed-code')
+					.unwrap();
+		});
+		// parse items embedded in earlier reblogs
+		var figures = nodes.find('figure.tmblr-embed');
+		$.each(figures, function(index, value) {
+			var figure = $(value);
+			var iframe = figure.find('iframe');
+			if (!iframe.length) {
+				return;
+			}
+
+			if (!iframe.is('[data-src]')) {
+				var src = iframe.attr('src');
+				iframe.attr('data-src', src);
+			}
+			if (!figure.is('[data-orig-height]')) {
+				var height = iframe.attr('height');
+				figure.attr('data-orig-height', height);
+			}
+			if (!figure.is('[data-orig-width]')) {
+				var width = iframe.attr('width');
+				figure.attr('data-orig-width', width);
+			}
+			if (!figure.is('[data-url]')) {
+				var tumblrSource = iframe.attr('data-src');
+				var embedId = iframe.attr('id');
+				var segments = tumblrSource.split('/');
+				var url = segments[6].replace('#' + embedId, '');
+				figure.attr('data-url', url);
+			}
+			if (!figure.is('[data-provider]')) {
+				//it doesn't seem to matter what this value is as long as it exists
+				figure.attr('data-provider', 'youtube');
+			}
+		});
 	},
 
 	send_request: function(request) {
@@ -532,13 +606,12 @@ XKit.extensions.editable_reblogs = new Object({
 
 					var github_url = XKit.tools.github_issue("Editable Reblogs posting error",
 						{ "ER Version": XKit.installed.get("editable_reblogs").version,
-						 user: request.channel_id, body: request["post[two]"], response: JSON.stringify(response)},
-					e);
+						 user: request.channel_id, body: request["post[two]"]}, {stack: response});
 
 					XKit.window.show("Error",
-						"Error: XER-SR.<br><br>There was an error reblogging your post. Please try again shortly. "+
-						'<br><br>'+
-						'<a target="_blank" href="'+github_url+'">You can report this issue on Github by clicking here</a>',
+						"Error: XER-SR.<br><br>There was an error reblogging your post. Please try again shortly. " +
+						'<br><br>' +
+						'<a target="_blank" href="' + github_url + '">You can report this issue on Github by clicking here</a>',
 						"error",
 						'<div class="xkit-button default" id="xkit-close-message">OK</div>');
 
@@ -547,13 +620,13 @@ XKit.extensions.editable_reblogs = new Object({
 
 				onload: function(response) {
 					// We are done!
-					XKit.interface.kitty.set(response.getResponseHeader("X-tumblr-kittens"));
+					XKit.interface.kitty.set(response.getResponseHeader("X-Tumblr-Kittens"));
 					var redirect_url = XKit.tools.getParameterByName("redirect_to");
 					XKit.tools.add_function(function() {
 						Tumblr.Events.trigger("postForms:saved");
-						var redirect_url = add_tag;
+						var redirect_url = add_tag; // eslint-disable-line no-shadow
 						if (redirect_url !== "") {
-							setTimeout(function(){
+							setTimeout(function() {
 								window.location.replace(redirect_url);
 							}, 500);
 						}

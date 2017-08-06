@@ -1,6 +1,6 @@
 //* TITLE       Retags **//
 //* DEVELOPER   new-xkit **//
-//* VERSION     1.1.3 **//
+//* VERSION     1.2.1 **//
 //* DESCRIPTION Adds tags to reblog notes **//
 //* FRAME       false **//
 //* SLOW        false **//
@@ -9,15 +9,15 @@
 XKit.extensions.retags = {
 	running: false,
 	api_key: XKit.api_key,
-	selectors: '.type_2,.type_8,.type_6,.reblog,.is_reblog,.notification_reblog,.is_reply,.is_answer,.is_user_mention,.notification_user_mention',
+	selectors: '.type_2,.type_8,.type_6,.reblog:not(.ui_avatar_link),.is_reblog,.notification_reblog,.is_reply,.is_answer,.is_user_mention,.notification_user_mention',
 	blog_name: "",
 
-	run: function(){
+	run: function() {
 		this.running = true;
 		XKit.tools.init_css("retags");
 		try {
 			this.blog_name = $('body').data('new-root').split('/').pop();
-		} catch(e) {}
+		} catch (e) {}
 		this.add_toggle();
 		this.observer.observe($('body')[0], {
 			childList:true,
@@ -26,11 +26,12 @@ XKit.extensions.retags = {
 		this.tag(this.selectors);
 	},
 
-	observer: new MutationObserver(function(ms){
+	observer: new MutationObserver(function(ms) {
 		var notesProcessed = false;
-		ms.forEach(function(m){
-			var $baseMutatedElements = $(m.addedNodes);
-			var nonPopoverNotes = $baseMutatedElements.find('.note:not(.ui_post_badge)');
+		ms.forEach(function(mutation) {
+			var $baseMutatedElements = $(mutation.addedNodes);
+			var activityNotes = $baseMutatedElements.find('.activity-notification');
+			var fallbackNotes = $baseMutatedElements.find('.note:not(.ui_post_badge)');
 			if ($baseMutatedElements.hasClass('note-list')) {
 				//remove existing retags items (if tabbing between popover views)
 				$baseMutatedElements.find('.retags-wrapper').remove();
@@ -39,16 +40,18 @@ XKit.extensions.retags = {
 				XKit.extensions.retags.tag_popover(elements.filter(XKit.extensions.retags.selectors));
 			} else if ($baseMutatedElements.hasClass('post-activity-note') && !notesProcessed) {
 				XKit.extensions.retags.tag_popover($baseMutatedElements.filter(XKit.extensions.retags.selectors));
-			} else if (nonPopoverNotes.length > 0) {
-				XKit.extensions.retags.tag(nonPopoverNotes.filter(XKit.extensions.retags.selectors));
+			} else if (activityNotes.length > 0) {
+				XKit.extensions.retags.tag(activityNotes.filter(XKit.extensions.retags.selectors));
+			} else if (fallbackNotes.length > 0) {
+				XKit.extensions.retags.tag(fallbackNotes.filter(XKit.extensions.retags.selectors));
 			} else {
 				XKit.extensions.retags.tag($baseMutatedElements.filter(XKit.extensions.retags.selectors));
 			}
 		});
 	}),
 
-	tag_popover: function(elements){
-		$(elements).each(function(){
+	tag_popover: function(elements) {
+		$(elements).each(function() {
 			var $element = $(this), retagClass, $target, host, id;
 			if ($element.find('div.retags').length) {
 				return false;
@@ -68,11 +71,11 @@ XKit.extensions.retags = {
 			}
 			if (host && id) {
 				XKit.extensions.retags.request(host, id).then(function(tags) {
-						XKit.extensions.retags.append_tag_popover($element, retagClass, $target, tags);
-					}).fail(function(errorResponse) {
-						var tagError = 'ERROR: ' + errorResponse.status;
-						XKit.extensions.retags.append_tag_popover($element, retagClass, $target, tagError);
-					});
+					XKit.extensions.retags.append_tag_popover($element, retagClass, $target, tags);
+				}).fail(function(errorResponse) {
+					var tagError = 'ERROR: ' + errorResponse.status;
+					XKit.extensions.retags.append_tag_popover($element, retagClass, $target, tagError);
+				});
 			}
 		});
 	},
@@ -86,9 +89,9 @@ XKit.extensions.retags = {
 		$target.after(retags);
 	},
 
-	tag: function(elements){
-		$(elements).each(function(){
-			var $element = $(this), retagClass, $target, url;
+	tag: function(elements) {
+		$(elements).each(function() {
+			var $element = $(this),	retagClass, $target, url, host, id;
 			if ($element.find('div.retags').length) {
 				return false;
 			}
@@ -101,15 +104,13 @@ XKit.extensions.retags = {
 				   retagClass = 'with_commentary';
 				   $target = $element;
 				   url = $target.find('.action').data('post-url');
-			// Activity
-			} else if ($element.hasClass('ui_note')) {
-				if ($element.find('.part_response').length) {
-					$element.addClass('is_response');
-				}
+			// Activity (page/dropdown)
+			} else if ($element.hasClass('activity-notification')) {
 				retagClass = 'is_retags';
 				$target = $element;
-				url = $target.find('.part_glass').attr('href');
-			// dashboard
+				var glass = $($element).find('.activity-notification__glass');
+				url = glass.attr('href');
+				// dashboard
 			} else if ($element.hasClass('notification') && !XKit.browser().mobile) {
 				$target = $element.find('.notification_sentence');
 				url = $target.find('.notification_target').attr('href');
@@ -121,18 +122,19 @@ XKit.extensions.retags = {
 			}
 			if (url) {
 				url = url.split('/');
-				var host = url[2], id = url[4];
+				host = url[2];
+				id = url[4];
 				XKit.extensions.retags.request(host, id).then(function(tags) {
-						XKit.extensions.retags.append_tag($element, retagClass, $target, tags);
-					}).fail(function(errorResponse) {
-						var tagError = 'ERROR: ' + errorResponse.status;
-						XKit.extensions.retags.append_tag($element, retagClass, $target, tagError);
-					});
+					XKit.extensions.retags.append_tag($element, retagClass, $target, tags);
+				}).fail(function(errorResponse) {
+					var tagError = 'ERROR: ' + errorResponse.status;
+					XKit.extensions.retags.append_tag($element, retagClass, $target, tagError);
+				});
 			}
 		});
 	},
 
-	append_tag: function ($element, retagClass, $target, data) {
+	append_tag: function($element, retagClass, $target, data) {
 		var retags = XKit.extensions.retags.build_tag_collection($element, retagClass, data);
 		$target.append(retags);
 	},
@@ -150,7 +152,7 @@ XKit.extensions.retags = {
 		GM_xmlhttpRequest({
 			method: 'GET',
 			url: url,
-			onload: function(data){
+			onload: function(data) {
 				tags = JSON.parse(data.responseText).response.posts[0].tags;
 				if (XKit.extensions.retags.should_clear_posts()) {
 					XKit.extensions.retags.clear_old_posts();
@@ -165,14 +167,14 @@ XKit.extensions.retags = {
 		return deferred;
 	},
 
-	build_tag_collection: function($element, retagClass, tags){
+	build_tag_collection: function($element, retagClass, tags) {
 		if (tags.length) {
 			var $retags = $('<div class="retags">');
 			if (typeof tags === 'string') {
 				$retags.append(tags).addClass('error');
 			} else {
-				tags.forEach(function(tag){
-					$retags.append('<a href="//tumblr.com/tagged/'+tag.replace(/ /g,'-')+'">#'+tag+'</a>');
+				tags.forEach(function(tag) {
+					$retags.append('<a href="//tumblr.com/tagged/' + tag.replace(/ /g, '-') + '">#' + tag + '</a>');
 				});
 			}
 			$element.addClass(retagClass);
@@ -208,9 +210,9 @@ XKit.extensions.retags = {
 		// some of the cached posts, so we need to partition the keys like so.
 		var settingKeys = [], postIds = [];
 		Object.keys(cache).forEach(function(key) {
-			var m;
-			if ((m = key.match(/^post_([0-9]+)$/))) {
-				postIds.push(parseInt(m[1], 10));
+			var id_match;
+			if ((id_match = key.match(/^post_([0-9]+)$/))) {
+				postIds.push(parseInt(id_match[1], 10));
 			} else {
 				settingKeys.push(key);
 			}
@@ -218,7 +220,7 @@ XKit.extensions.retags = {
 
 		// Now sort the post IDs in descending order and take only the first
 		// few, so we only keep the newest posts.
-		postIds.sort(function(a, b) { return b - a; });
+		postIds.sort(function(id_one, id_two) { return id_two - id_one; });
 		if (postIds.length > XKit.extensions.retags.POST_CACHE_CLEAR_PRESERVED) {
 			postIds.length = XKit.extensions.retags.POST_CACHE_CLEAR_PRESERVED;
 		}
@@ -234,15 +236,15 @@ XKit.extensions.retags = {
 
 	//********** Activity Page Toggle ********/
 
-	add_toggle: function(){
+	add_toggle: function() {
 		var toggle = 'toggle_' + this.blog_name;
 		if (XKit.browser().mobile) {
 			this.html_toggle.appendTo('.primary-nav');
-			XKit.tools.add_css('label.retags .binary_switch_label {font-size:15px; color:white; padding-bottom:15px; }','retags_mobile_label');
+			XKit.tools.add_css('label.retags .binary_switch_label {font-size:15px; color:white; padding-bottom:15px; }', 'retags_mobile_label');
 		} else {
 			this.html_toggle.appendTo('.ui_notes_switcher .part-toggle');
 		}
-		$('#retags-toggle').change(function(){
+		$('#retags-toggle').change(function() {
 			if ($(this).prop('checked')) {
 				XKit.storage.set('retags', toggle, 'true');
 				XKit.extensions.retags.css_toggle.appendTo('head');
@@ -261,8 +263,9 @@ XKit.extensions.retags = {
 
 	css_toggle:
 	$('<style class="retags"> ' +
-		'.ui_note { display: none; } ' +
+		'.ui_note, .ui_notes .activity-notification { display: none; } ' +
 		'.ui_note.is_retags, .ui_note.is_reply, .ui_note.is_response, .ui_note.is_user_mention { display: block; } ' +
+		'.activity-notification.is_retags, .activity-notification.is_reply, .activity-notification.is_reblog:not(.naked), .activity-notification.user_mention, .activity-notification.note_mention { display: flex; }' +
 	'</style>'),
 
 	mobile_toggle:
@@ -272,14 +275,14 @@ XKit.extensions.retags = {
 	'</style>'),
 
 	html_toggle:
-	$('<label class="retags binary_switch">'+
-		'<input id="retags-toggle" type="checkbox">'+
-		'<span class="binary_switch_track"></span>'+
-		'<span class="binary_switch_button"></span>'+
-		'<span class="binary_switch_label">Show only retags / responses</span>'+
+	$('<label class="retags binary_switch">' +
+		'<input id="retags-toggle" type="checkbox">' +
+		'<span class="binary_switch_track"></span>' +
+		'<span class="binary_switch_button"></span>' +
+		'<span class="binary_switch_label">Show only retags / responses</span>' +
 	'</label>'),
 
-	destroy: function(){
+	destroy: function() {
 		this.running = false;
 		XKit.tools.remove_css("retags");
 		XKit.tools.remove_css('retags_mobile');

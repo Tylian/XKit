@@ -1,4 +1,4 @@
-/* jshint node: true */
+/* eslint-env node */
 'use strict';
 
 var cache = require('gulp-cached'),
@@ -7,22 +7,20 @@ var cache = require('gulp-cached'),
 	connectStatic = require('serve-static'),
 	csslint = require('gulp-csslint'),
 	del = require('del'),
+	eslint = require('gulp-eslint'),
 	exec = require('child_process').exec,
 	fs = require('fs'),
 	gulp = require('gulp'),
 	gutil = require('gulp-util'),
 	https = require('https'),
-	jshint = require('gulp-jshint'),
-	jscs = require('gulp-jscs'),
 	merge = require('merge-stream'),
 	path = require('path'),
-	stylish = require('jshint-stylish'),
 	zip = require('gulp-zip');
 
 var BUILD_DIR = 'build';
 var paths = {
 	scripts: {
-		dev: ['gulpfile.js'],
+		dev: ['gulpfile.js', 'dev/**/*.js'],
 		core: ['editor.js', 'xkit.js'],
 		extensions: ['Extensions/**/*.js', '!Extensions/**/*.icon.js']
 	},
@@ -49,8 +47,8 @@ gulp.task('clean:modules', function(cb) {
 	del(['node_modules'], cb);
 });
 
-gulp.task('clean:chrome', function(cb) {
-	del([BUILD_DIR + '/chrome'], cb);
+gulp.task('clean:webext', function(cb) {
+	del([BUILD_DIR + '/webext'], cb);
 });
 
 gulp.task('clean:firefox', function(cb) {
@@ -76,17 +74,16 @@ gulp.task('lint:scripts', function() {
 		paths.scripts.dev,
 		paths.scripts.core,
 		paths.scripts.extensions,
-		['Chrome/**/*.js',
+		['WebExtension/**/*.js',
 		 'Firefox/**/*.js',
 		 'Safari/**/*.js']
 	);
 
 	return gulp.src(src)
 		.pipe(cache('lint:scripts'))
-		.pipe(jshint())
-		.pipe(jshint.reporter(stylish))
-		.pipe(jshint.reporter('fail'))
-		.pipe(jscs());
+		.pipe(eslint())
+		.pipe(eslint.format())
+		.pipe(eslint.failAfterError());
 });
 
 gulp.task('lint:css', function() {
@@ -104,24 +101,24 @@ gulp.task('lint:css', function() {
 
 gulp.task('lint', ['lint:scripts']);
 
-gulp.task('copy:chrome', ['clean:chrome', 'lint'], function() {
+gulp.task('copy:webext', ['clean:webext', 'lint'], function() {
 	var src = [].concat(
 		paths.scripts.core,
 		paths.css.core,
 		paths.vendor,
-		['Chrome/**/*']
+		['WebExtension/**/*']
 	);
 
 	return gulp.src(src)
-		.pipe(gulp.dest(BUILD_DIR + '/chrome'));
+		.pipe(gulp.dest(BUILD_DIR + '/webext'));
 });
 
-gulp.task('compress:chrome', ['copy:chrome'], function() {
-	var chromeManifest = JSON.parse(fs.readFileSync('Chrome/manifest.json'));
+gulp.task('compress:webext', ['copy:webext'], function() {
+	var webextManifest = JSON.parse(fs.readFileSync('WebExtension/manifest.json'));
 
-	return gulp.src(BUILD_DIR + '/chrome/**/*')
-		.pipe(zip('new-xkit-' + chromeManifest.version + '.zip'))
-		.pipe(gulp.dest(BUILD_DIR + '/chrome'));
+	return gulp.src(BUILD_DIR + '/webext/**/*')
+		.pipe(zip('new-xkit-' + webextManifest.version + '.zip'))
+		.pipe(gulp.dest(BUILD_DIR + '/webext'));
 });
 
 gulp.task('copy:firefox', ['clean:firefox', 'lint'], function() {
@@ -132,12 +129,14 @@ gulp.task('copy:firefox', ['clean:firefox', 'lint'], function() {
 	);
 
 	var firefox = ['Firefox/**/*'];
+	var webext = ['WebExtension/**/*.@(js|png)'];
+
 
 	var extension = gulp.src(firefox)
 		.pipe(gulp.dest(BUILD_DIR + '/firefox'));
 
-	var content = gulp.src(src)
-		.pipe(gulp.dest(BUILD_DIR + '/firefox/data/xkit'));
+	var content = gulp.src(src.concat(webext))
+		.pipe(gulp.dest(BUILD_DIR + '/firefox/webextension'));
 
 	return merge(extension, content);
 });
@@ -149,7 +148,7 @@ gulp.task('compress:firefox', ['copy:firefox'], function(cb) {
 		 // directory containing a `package.json`.
 		 {cwd: 'build/firefox'},
 		 function(err, stdout, stderr) {
-			if(err) { return cb(err); }
+			if (err) { return cb(err); }
 			cb();
 		});
 });
@@ -167,7 +166,7 @@ gulp.task('copy:safari', ['clean:safari', 'lint'], function() {
 
 });
 
-gulp.task('build:chrome', ['compress:chrome']);
+gulp.task('build:webext', ['compress:webext']);
 
 gulp.task('build:firefox', ['compress:firefox']);
 
@@ -184,7 +183,7 @@ gulp.task('build:extensions', ['lint:scripts', 'clean:extensions'], function() {
 		.pipe(gulp.dest('Extensions/dist/page'));
 });
 
-gulp.task('build:themes', ['clean:themes'], function(cb) {
+gulp.task('build:themes', ['clean:themes'], function() {
 	var themeBuilder = require('./dev/builders/theme');
 	return gulp.src(paths.css.themes)
 		.pipe(themeBuilder())
@@ -192,7 +191,7 @@ gulp.task('build:themes', ['clean:themes'], function(cb) {
 		.pipe(gulp.dest('Extensions/dist/page'));
 });
 
-gulp.task('build', ['build:chrome', 'build:firefox', 'build:safari']);
+gulp.task('build', ['build:webext', 'build:firefox', 'build:safari']);
 
 gulp.task('watch', function() {
 	gulp.watch('**/*.js', ['lint:scripts']);
@@ -216,13 +215,13 @@ gulp.task('server', ['build:extensions', 'build:themes'], function(callback) {
 	gulp.watch('Themes/**/*.css', ['build:themes']);
 
 	var devServer = https.createServer({
-				key: fs.readFileSync('./dev/certs/key.pem'),
-				cert: fs.readFileSync('./dev/certs/cert.pem')
-			}, devApp)
+		key: fs.readFileSync('./dev/certs/key.pem'),
+		cert: fs.readFileSync('./dev/certs/cert.pem')
+	}, devApp)
 		.listen(31337);
 
 	devServer.on('error', function(error) {
-		log(colors.underline(colors.red('ERROR'))+' Unable to start server!');
+		log(colors.underline(colors.red('ERROR')) + ' Unable to start server!');
 		callback(error); // we couldn't start the server, so report it and quit gulp
 	});
 
