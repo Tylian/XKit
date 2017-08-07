@@ -68,7 +68,7 @@ XKit.extensions.quick_tags = new Object({
 		this.running = true;
 
 		XKit.tools.init_css("quick_tags");
-		
+
 		if (!$(".post.post_full, .post.post_brick").length) { return; }
 
 		if (!$(".post.post_full, .post.post_brick").length) { return; }
@@ -322,8 +322,7 @@ XKit.extensions.quick_tags = new Object({
 						"<div class=\"" + add_class_2 + "\">" + m_user_tags + m_add_button + "</div>" +
 					"</div>" +
 					"<div class=\"xkit-tag-other\">" +
-						"<div class=\"xkit-tag-name\">Other: <span style=\"font-weight: normal\">type and press enter</span></div>" +
-						"<input id=\"xkit-tag-input\" placeholder=\"comma separated tags\" type=\"text\">" +
+						"<input id=\"xkit-tag-input\" placeholder=\"new tags (comma separated)\" type=\"text\">" +
 					"</div>" +
 				"</div>";
 

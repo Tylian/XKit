@@ -160,10 +160,10 @@
 
 #xkit-quick-tags-window .xkit-tag-other {
 
-	background-color: #ffffff !important;
-	box-shadow: inset 0px 1px 2px rgba(0,0,0,0.11);
+	background-color: #f2f2f2 !important;
 	background-image: none;
-	padding: 7px 9px;
+	border-top: 1px solid rgb(231,231,231);
+	padding: 7px 7px 10px 7px;
 	cursor: default;
 	font-size: 12px;
 	color: #444444 !important;
@@ -173,13 +173,11 @@
 
 #xkit-tag-input {
 
+	background-color: #f2f2f2 !important;
 	width: 100%;
-	border: 1px solid rgb(180,180,180);
-	padding: 5px 7px;
-	border-radius: 5px;
+	border: 1px solid rgb(242,242,242);
 	font-size: 13px;
 	margin-top: 4px;
-	box-shadow: 0px 1px 0px rgba(255,255,255,0.44);
 
 }
 
