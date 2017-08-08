@@ -1,5 +1,5 @@
 //* TITLE Blog Tracker **//
-//* VERSION 0.6.1 **//
+//* VERSION 0.6.2 **//
 //* DESCRIPTION Track people like tags **//
 //* DEVELOPER new-xkit **//
 //* DETAILS Blog Tracker lets you track blogs like you can track tags. Add them on your dashboard, and it will let you know how many new posts they've made the last time you've checked their blogs, or if they've changed their URLs.<br><br>Please be aware that the more blogs you add, the longer it will take to track them all. **//
@@ -310,7 +310,7 @@ XKit.extensions.people_notifier = new Object({
 		} else {
 
 			var current_ms = new Date().getTime();
-			for (let i = 0; i < this.blogs.length; i++) {
+			for (var i = 0; i < this.blogs.length; i++) {
 
 				m_html = m_html + '<li style="padding-top: 2px; height: 24px;" id="xkit-people-notifier-for---' + this.blogs[i].url + '" data-url="' + this.blogs[i].url + '" class="no_push xkit-people-notifier-person" draggable="true">' +
 								'<img src="https://api.tumblr.com/v2/blog/' + this.blogs[i].url + '.tumblr.com/avatar/16" class="people-notifier-avatar">' +
@@ -382,9 +382,9 @@ XKit.extensions.people_notifier = new Object({
 		$(document).on("drop", ".xkit-people-notifier-person", function(e) {
 			var half_div_height = 13;
 			var index_of_object_with_property = function(array, property_name, property_value) {
-				for (let i = 0; i < array.length; i++) {
-					if (array[i][property_name] === property_value) {
-						return i;
+				for (var j = 0; j < array.length; j++) {
+					if (array[j][property_name] === property_value) {
+						return j;
 					}
 				}
 				return -1;

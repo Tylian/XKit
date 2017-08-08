@@ -1,5 +1,5 @@
 //* TITLE Tweaks **//
-//* VERSION 5.4.2 **//
+//* VERSION 5.6.0 **/
 //* DESCRIPTION Various little tweaks for your dashboard. **//
 //* DEVELOPER new-xkit **//
 //* DETAILS These are small little tweaks that allows you customize your dashboard. If you have used XKit 6, you will notice that some of the extensions have been moved here as options you can toggle. Keep in mind that some of the tweaks (the ones marked with a '*') can slow down your computer. **//
@@ -80,7 +80,7 @@ XKit.extensions.tweaks = new Object({
 			default: false,
 			value: false
 		},
-		"bold_links": {
+		"bold_links_new": {
 			text: "Use 'Classic' (bold) links on text posts",
 			default: false,
 			value: false
@@ -103,6 +103,11 @@ XKit.extensions.tweaks = new Object({
 		"sep1": {
 			text: "User Interface tweaks",
 			type: "separator",
+		},
+		"slim_activity_feed": {
+			text: "Re-slim the Activity feed",
+			default: false,
+			value: false
 		},
 		"old_sidebar_width": {
 			text: "Return the sidebar to its original width",
@@ -156,6 +161,11 @@ XKit.extensions.tweaks = new Object({
 			text: "Show border around ask posts and answers",
 			default: false,
 			value: false
+		},
+		"wide_sources": {
+			text: "Increase max width of post sources to avoid shortening",
+			default: true,
+			value: true
 		},
 		"sep2": {
 			text: "Dashboard tweaks",
@@ -336,6 +346,26 @@ XKit.extensions.tweaks = new Object({
 			XKit.extensions.tweaks.process_wrap_tags_one_line();
 		}
 
+		if (XKit.extensions.tweaks.preferences.slim_activity_feed.value) {
+			XKit.tools.add_css(".ui_notes .activity-notification{ padding: 10px; }" +
+			".ui_notes .activity-notification .activity-notification__activity .activity-notification__activity_message{ display: block; }" +
+			".ui_notes .activity-notification .activity-notification__activity, .ui_notes .activity-notification .activity-notification__activity .activity-notification__activity_message.conversational{ transform: translate(-10px) }" +
+			".ui_notes .activity-notification .activity-notification__icon{	padding: 0; min-width: 25px; }" +
+			".ui_notes .activity-notification .activity-notification__activity .activity-notification__activity_message .activity-notification__activity_response{ padding: 10px; }" +
+			".ui_notes .activity-notification .activity-notification__avatar .ui_avatar{ margin: 0; }" +
+			".ui_notes .activity-notification .activity-notification__icon .ui_post_badge{ width: 25px; height: 25px; }" +
+			".ui_notes .activity-notification .activity-notification__icon .ui_post_badge.regular{ background-position: -784px -2px; }" +
+			".ui_notes .activity-notification .activity-notification__icon .ui_post_badge.quote{ background-position: -784px -30px; }" +
+			".ui_notes .activity-notification .activity-notification__icon .ui_post_badge.ask_answer{ background-position: -785px -171px; }" +
+			".ui_notes .activity-notification .activity-notification__icon .ui_post_badge.link{ background-position: -785px -58px; }" +
+			".ui_notes .activity-notification .activity-notification__icon .ui_post_badge.conversation{ background-position: -786px -85px; }" +
+			".ui_notes .activity-notification .activity-notification__icon .ui_post_badge.audio{ background-position: -785px -114px; }" +
+			".activity-notification div.retags{ margin: 3px 0 0 !important; padding-left: 41px !important; }" +
+			".xkit-activity-plus-timestamp{ transform: translate(-13px) }" +
+			".xkit-reply-button-pn.xkit-notes-activity{ transform: translate(31px,-9px) }",
+			"tweaks_slim_activity_feed");
+		}
+
 		if (XKit.extensions.tweaks.preferences.old_sidebar_width.value) {
 			XKit.tools.add_css(".right_column, .toastr .toast-kit, .small_links {width: 250px !important;} " +
 			".left_column{margin-left:75px;} #sidebar_footer_nav{margin-left: -420px !important;} .pagination{padding-left:160px;}",
@@ -436,6 +466,10 @@ XKit.extensions.tweaks = new Object({
 			XKit.extensions.tweaks.add_css(".post-composer_note-post .note_item, .post_full.is_note .post-body .note_item, .post_full.is_note .post_body .note_item, .post_brick.is_note .note_item { border-color: #ccc } .post_full.is_note .nipple, .post-composer_note-post .nipple, .post_brick.is_note .nipple { border-left: 8px solid #ccc } .post_full.is_note .nipple::after, .post-composer_note-post .nipple::after, .post_brick.is_note .nipple::after { display: inline; position: absolute; content: ''; width: 0; height: 0; border-top: 8px solid transparent; border-bottom: 8px solid transparent; border-left: 8px solid #f2f2f2; right: 1px; top: -8px }", "xkit_tweaks_border_asks");
 		}
 
+		if (XKit.extensions.tweaks.preferences.wide_sources.value) {
+			XKit.tools.add_css(".post-source-link { max-width: 400px !important }", "xkit_tweaks_wide_sources");
+		}
+
 		if (XKit.extensions.tweaks.preferences.hide_radar.value) {
 			$("#tumblr_radar").css("display", "none");
 			$(".radar_header").parent().css("display", "none");
@@ -464,8 +498,8 @@ XKit.extensions.tweaks = new Object({
 			XKit.extensions.tweaks.add_css(".post .post_content h2 { font-size: 15px !important; line-height: normal !important; font-weight: bold !important; font-family: \"Helvetica Neue\", Helvetica, sans-serif !important; }", "xkit_tweaks_classic_post_titles");
 		}
 
-		if (XKit.extensions.tweaks.preferences.bold_links.value) {
-			XKit.extensions.tweaks.add_css(".post-typography-update .post .post-content a, .post-typography-update .post .post_content a { font-weight: bold !important; }", "xkit_tweaks_bold_links");
+		if (XKit.extensions.tweaks.preferences.bold_links_new.value) {
+			XKit.extensions.tweaks.add_css(".post .post-content a, .post .post_content a { font-weight: bold !important; }", "xkit_tweaks_bold_links");
 		}
 
 		if (XKit.extensions.tweaks.preferences.swap_buttons.value) {
@@ -504,8 +538,15 @@ XKit.extensions.tweaks = new Object({
 			XKit.extensions.tweaks.add_css(".is_reblog small { font-size: 12px !important; }", "xkit_tweaks_larger_small_text_on_reblogs");
 		}
 
-		if (XKit.extensions.tweaks.preferences.responsive_dash.value) {
-			XKit.extensions.tweaks.add_css(".l-container--two-column-dashboard {padding-left: 0px!important;padding-right: 0px!important;}@media screen and (max-width: 899px) {.right_column {visibility: hidden;display: none;width: 0px!important;}#sidebar_footer_nav {visibility: hidden;}.l-content {width: 625px;}.l-container--two-column-dashboard {width: 645px!important;}}@media screen and (min-width: 644px) {html, body {overflow-x: hidden;}}");
+		if (XKit.extensions.tweaks.preferences.responsive_dash.value && XKit.interface.where().dashboard) {
+			XKit.extensions.tweaks.add_css(
+				".l-container--two-column-dashboard {padding-left: 0px!important;padding-right: 0px!important;}" +
+				"@media screen and (max-width: 899px) {" +
+					".right_column {visibility: hidden;display: none;width: 0px!important;}" +
+					"#sidebar_footer_nav {visibility: hidden;}" +
+					".l-content {width: 625px;}" +
+					".l-container--two-column-dashboard {width: 645px!important;}" +
+				"}");
 		}
 
 		if (XKit.extensions.tweaks.preferences.slim_popups.value) {
@@ -895,11 +936,13 @@ XKit.extensions.tweaks = new Object({
 		$("body").off("click", '.xkit_tweaks_show_all_tags_button', XKit.extensions.tweaks.show_all_tags_button_event);
 		$('.xkit_tweaks_show_all_tags_button').remove();
 		$('.post_tags').removeClass('xkit_tweaks_wrap_tags_one_line_processed');
+		XKit.tools.remove_css("tweaks_slim_activity_feed");
 		XKit.tools.remove_css("tweaks_old_sidebar_width");
 		XKit.tools.remove_css("tweaks_old_photo_margins");
 		XKit.tools.remove_css("tweaks_no_mobile_banner");
 		XKit.tools.remove_css("xkit_tweaks_larger_small_text_on_reblogs");
 		XKit.tools.remove_css("xkit_tweaks_hide_share");
+		XKit.tools.remove_css("xkit_tweaks_wide_sources");
 		XKit.post_listener.remove("tweaks_fix_hidden_post_height");
 		XKit.post_listener.remove("tweaks_dont_show_liked");
 		clearInterval(this.run_interval);

@@ -1,5 +1,5 @@
 //* TITLE Editable Reblogs **//
-//* VERSION 3.3.6 **//
+//* VERSION 3.3.8 **//
 //* DESCRIPTION Restores ability to edit previous reblogs of a post **//
 //* DEVELOPER new-xkit **//
 //* FRAME false **//
@@ -26,12 +26,8 @@ XKit.extensions.editable_reblogs = new Object({
 		this.running = true;
 
 		XKit.interface.post_window_listener.add("editable_reblogs", this.post_window.bind(this));
-
-
 		XKit.tools.init_css("editable_reblogs");
-
-		var create_post_button_click_handler = this.make_post.bind(this);
-		$("body").on("click", ".create_post_button", create_post_button_click_handler);
+		this.create_post_button_click_handler = this.make_post.bind(this);
 
 		// DOM nodes containing options disappear before a handler can be run
 		var record_post_settings_handler = this.record_post_settings.bind(this);
@@ -49,7 +45,7 @@ XKit.extensions.editable_reblogs = new Object({
 		);
 
 		this.teardown_event_handlers = function() {
-			$("body").off("click", ".create_post_button", create_post_button_click_handler);
+			$("body").off("click", ".create_post_button", this.create_post_button_click_handler);
 			$("body").off("click", record_post_settings_handler);
 			$.each(post_setting_keyup_handlers, function(selector, handler) {
 				$('body').off("keyup", selector, handler);
@@ -59,8 +55,10 @@ XKit.extensions.editable_reblogs = new Object({
 
 	post_window: function() {
 		this.state = "initial";
+		$("body").off("click", ".create_post_button", this.create_post_button_click_handler);
 
 		if (!this.reblog_tree_exists()) {
+			XKit.interface.post_window.set_content_html(this.wrap_html_links(XKit.interface.post_window.get_content_html()));
 			return;
 		}
 
@@ -102,9 +100,6 @@ XKit.extensions.editable_reblogs = new Object({
 			this.edit_the_reblogs();
 			$(element).addClass('disabled');
 		}.bind(this));
-
-		// Prevent Tumblr's event handler from acting on the save button
-		this.get_post_save_button().removeAttr("data-js-clickablesave");
 	},
 
 	add_edit_button: function() {
@@ -141,6 +136,10 @@ XKit.extensions.editable_reblogs = new Object({
 
 	edit_the_reblogs: function() {
 		try {
+			var save_button = $('.post-form--save-button [data-js-clickablesave]');
+			// Prevent Tumblr's event handler from acting on the save button
+			save_button.removeAttr("data-js-clickablesave");
+			$("body").on("click", ".create_post_button", this.create_post_button_click_handler);
 			this.process_reblog_content();
 			this.state = "success";
 		} catch (e) {
@@ -621,7 +620,7 @@ XKit.extensions.editable_reblogs = new Object({
 
 				onload: function(response) {
 					// We are done!
-					XKit.interface.kitty.set(response.getResponseHeader("X-tumblr-kittens"));
+					XKit.interface.kitty.set(response.getResponseHeader("X-Tumblr-Kittens"));
 					var redirect_url = XKit.tools.getParameterByName("redirect_to");
 					XKit.tools.add_function(function() {
 						Tumblr.Events.trigger("postForms:saved");

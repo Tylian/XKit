@@ -7,7 +7,15 @@
 
 */
 
-/* globals chrome */
+/* globals chrome, browser, msBrowser */
+
+if (typeof(browser) === 'undefined') {
+	if (typeof(chrome) !== 'undefined') {
+		browser = chrome; // eslint-disable-line no-global-assign
+	} else if (typeof(msBrowser) !== 'undefined') {
+		browser = msBrowser; // eslint-disable-line no-global-assign
+	}
+}
 
 var bridge_error = false;
 var bridge_error_object;
@@ -15,7 +23,7 @@ var xkit_storage = {};
 var bridge_ver = "2.1";
 
 try {
-	var storage = chrome.storage.local;
+	var storage = browser.storage.local;
 	var storage_loaded = false;
 	var framework_version = getVersion();
 	var storage_used = -1;
@@ -42,7 +50,7 @@ function getBridgeError() {
 
 function getVersion() {
 	var xhr = new XMLHttpRequest();
-	xhr.open('GET', chrome.extension.getURL('manifest.json'), false);
+	xhr.open('GET', browser.extension.getURL('manifest.json'), false);
 	xhr.send(null);
 	var manifest = JSON.parse(xhr.responseText);
 	return manifest.version;
@@ -67,14 +75,14 @@ function init_bridge() {
 
 		storage.get(function(items) {
 
-			if (typeof chrome.runtime.lastError !== "undefined") {
-				last_error = chrome.runtime.lastError.message;
+			if (browser.runtime.lastError) {
+				last_error = browser.runtime.lastError.message;
 				console.log("storage.get error: " + last_error);
 			}
 
 			if (last_error !== "") {
 
-				XKit.window.show("Corrupt storage", "XKit noticed that your browser's storage area allocated for XKit is corrupt and will now reset itself and clear the storage area so it can save it data and function properly.<br/><br/><b>Your browser returned the following error message:</b><br/>\"" + last_error + "\"<br/><br/>If you keep seeing this message, it means your Chrome's profile file is corrupt, please click on the button below for more information and learn how to fix it.", "error", "<div class=\"xkit-button default\" id=\"xkit-bridge-reset-and-continue\">OK</div><a href=\"http://xkit-extension.tumblr.com/post/52742121604/chrome-system-restores-corrupt-profile-settings-and\" class=\"xkit-button\">Didn't fix your problem?</a>");
+				XKit.window.show("Corrupt storage", "XKit noticed that your browser's storage area allocated for XKit is corrupt and will now reset itself and clear the storage area so it can save it data and function properly.<br/><br/><b>Your browser returned the following error message:</b><br/>\"" + last_error + "\"<br/><br/>If you keep seeing this message, it means your browser's profile file is corrupt, please try uninstalling and reinstalling New XKit", "error",  "<div class=\"xkit-button default\" id=\"xkit-bridge-reset-and-continue\">OK</div>");
 				$("#xkit-bridge-reset-and-continue").click(function() {
 					GM_flushStorage(function() {
 						init_bridge();
@@ -88,19 +96,21 @@ function init_bridge() {
 			storage_loaded = true;
 			console.log("[XKit Bridge] Storage loaded, calling XKit.. bye!");
 
-			storage.getBytesInUse(function(bytes) {
-				storage_used = bytes;
-				storage_max = -1;
+			if (storage.getBytesInUse) {
+				storage.getBytesInUse(function(bytes) {
+					storage_used = bytes;
+					storage_max = -1;
+					call_xkit();
+				});
+			} else {
 				call_xkit();
-			});
-
-
+			}
 
 		});
 
 	} catch (e) {
+		XKit.window.show("Corrupt storage", "XKit noticed that your browser's storage area allocated for XKit is corrupt and will now reset itself and clear the storage area so it can save it data and function properly.<br/><br/><b>Your browser returned the following error message:</b><br/>\"" + last_error + "\"<br/><br/>If you keep seeing this message, it means your browser's profile file is corrupt, please try uninstalling and reinstalling New XKit", "error",  "<div class=\"xkit-button default\" id=\"xkit-bridge-reset-and-continue\">OK</div>");
 
-		XKit.window.show("Corrupt storage", "XKit noticed that your browser's storage area allocated for XKit is corrupt and will now reset itself and clear the storage area so it can save it data and function properly.<br/><br/><b>Your browser returned the following error message:</b><br/>\"" + last_error + "\"<br/><br/>If you keep seeing this message, it means your Chrome's profile file is corrupt, please click on the button below for more information and learn how to fix it.", "error", "<div class=\"xkit-button default\" id=\"xkit-bridge-reset-and-continue\">OK</div><a href=\"http://xkit-extension.tumblr.com/post/52742121604/chrome-system-restores-corrupt-profile-settings-and\" class=\"xkit-button\">Didn't fix your problem?</a>");
 		$("#xkit-bridge-reset-and-continue").click(function() {
 			GM_flushStorage(function() {
 				init_bridge();
@@ -115,7 +125,10 @@ function GM_flushStorage(callback) {
 
 	storage.remove("xkit_something", function() {
 		storage.clear(function(items) {
-			var last_error = chrome.runtime.lastError.message;
+			var last_error = 'unknown error';
+			if (browser.runtime.lastError) {
+				last_error = browser.runtime.lastError.message;
+			}
 			console.log("storage.clear error: " + last_error);
 			callback();
 		});

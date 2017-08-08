@@ -1,5 +1,5 @@
 //* TITLE Reblog Display Options **//
-//* VERSION 1.3.1 **//
+//* VERSION 1.3.2 **//
 //* DESCRIPTION Adds different styles to the new reblog layout, including the "classic" nested look. **//
 //* DEVELOPER new-xkit **//
 //* FRAME false **//
@@ -337,7 +337,7 @@ XKit.extensions.better_reblogs = new Object({
 			var title = reblog_tree.find('.reblog-title').clone();
 
 			if (!reblog_tree.length) {
-				let content = $this.find(".reblog-list-item.contributed-content .reblog-content").clone();
+				var content = $this.find(".reblog-list-item.contributed-content .reblog-content").clone();
 				title = $this.find(".reblog-list-item.contributed-content .reblog-title").clone();
 				if (content.length) {
 					content.addClass("post_body");
@@ -357,10 +357,10 @@ XKit.extensions.better_reblogs = new Object({
 			var all_quotes = [];
 			reblog_tree.find(".reblog-list-item:not(.contributed-content)").each(function() {
 				var $item = $(this);
-				var content = $item.find('.reblog-content');
+				var reblog_content = $item.find('.reblog-content');
 				var author = $item.find('.reblog-tumblelog-name');
 				var reblog_data = {
-					reblog_content: content.html() || '',
+					reblog_content: reblog_content.html() || '',
 					reblog_author: author.contents()[0].data || '',
 					reblog_url: author.attr('href') || ''
 				};

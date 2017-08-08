@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 6.8.0 **//
+//* VERSION 6.8.4 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER new-xkit **//
 
@@ -539,40 +539,78 @@ XKit.extensions.xkit_patches = new Object({
 			},
 
 			/**
+			 * @param  {String} name: the css class name of the button
+			 * @return {JQuery} the element for that css class name
+			 */
+			tx_button_selector: function(name) {
+				return $(`.tx-button.${name}-button, .tx-icon-button.${name}-button`);
+			},
+
+			/**
 			 * @return {JQuery} The follow button in the iframe
 			 */
 			follow_button: function() {
-				return $(".btn.follow,.tx-button.follow-button");
+				return this.tx_button_selector("follow");
 			},
 
 			/**
 			 * @return {JQuery} The unfollow button in the iframe
 			 */
 			unfollow_button: function() {
-				return $(".btn.unfollow,.tx-button.unfollow-button");
+				return this.tx_button_selector("unfollow");
 			},
 
 			/**
 			 * @return {JQuery} The delete button in the iframe
 			 */
 			delete_button: function() {
-				return $(".btn.delete,.tx-button.delete-button");
+				return this.tx_button_selector("delete");
 			},
 
 			/**
 			 * @return {JQuery} The reblog button in the iframe
 			 */
 			reblog_button: function() {
-				return $(".btn.reblog,.tx-button.reblog-button");
+				return this.tx_button_selector("reblog");
 			},
 
 			/**
 			 * @return {JQuery} The dashboard button in the iframe
 			 */
 			dashboard_button: function() {
-				return $(".btn.dashboard,.tx-button.dashboard-button");
+				return this.tx_button_selector("dashboard");
 			},
 
+			/**
+			 * Uses tumblr's built-in RPC functionality to resize the in-blog iframe.
+			 * The iframe will be resized to the maximum of the current body size or
+			 * the iframe-controls-container size.
+			 *
+			 * This is the same postMessage call that happens when you click on the
+			 * profile menu, without the body classes arguments. (Tumblr also allows
+			 * for the code to set classes on the iframe element and the body of the page)
+			 */
+			size_frame_to_fit: function() {
+				var button_container = $(".iframe-controls-container")[0] || {};
+
+				var width = Math.max(
+					button_container.scrollWidth || -Infinity,
+					document.body.scrollWidth);
+
+				var height = Math.max(
+					button_container.scrollHeight || -Infinity,
+					document.body.scrollHeight);
+
+				var payload = {
+					method: "tumblr-unified-controls:IframeControls:size",
+					args: [{
+						width: width,
+						height: height
+					}]
+				};
+
+				window.top.postMessage(JSON.stringify(payload), "*");
+			}
 		};
 
 		if (XKit.frame_mode === true) {
@@ -749,7 +787,10 @@ XKit.extensions.xkit_patches = new Object({
 						onload: function(response) {
 							//// console.log("XKitty: YAY! Kitty request complete!");
 							XKit.interface.kitty.store_time = new Date().getTime();
-							var kitty_text = response.getResponseHeader("X-tumblr-secure-form-key");
+							var kitty_text = response.getResponseHeader("X-Tumblr-Secure-Form-Key");
+							if (!kitty_text) {
+								kitty_text = response.getResponseHeader("X-tumblr-secure-form-key");
+							}
 							if (!kitty_text) {
 								kitty_text = response.getResponseHeader("x-tumblr-secure-form-key");
 							}
@@ -1502,7 +1543,7 @@ XKit.extensions.xkit_patches = new Object({
 						},
 						onload: function(response) {
 
-							XKit.interface.kitty.set(response.getResponseHeader("X-tumblr-kittens"));
+							XKit.interface.kitty.set(response.getResponseHeader("X-Tumblr-Kittens"));
 
 							try {
 								to_return.data = jQuery.parseJSON(response.responseText);
@@ -2182,8 +2223,8 @@ XKit.extensions.xkit_patches = new Object({
 					m_return.likes = true;
 				}
 
-				if ($('meta[name="twitter:title"]').length) {
-					m_return.user_url = $('meta[name="twitter:title"]').attr("content");
+				if ($('link[type="application/rss+xml"]').length) {
+					m_return.user_url = $('link[type="application/rss+xml"]').attr("href").replace(/\/rss.*$/, '');
 				}
 
 				m_return.dashboard = $("body").hasClass("is_dashboard") === true;

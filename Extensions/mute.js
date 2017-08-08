@@ -1,5 +1,5 @@
 //* TITLE Mute! **//
-//* VERSION 2.3.1 **//
+//* VERSION 2.3.2 **//
 //* DESCRIPTION Better than 'shut up!' **//
 //* DETAILS This extension allows you to hide text and answer posts by an user while still seeing their other posts. Useful if a blogger has nice posts but a bad personality. Please note that you'll need to re-mute them if a user changes their URL. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -691,10 +691,10 @@ XKit.extensions.mute = new Object({
 		XKit.extensions.mute.control_panel_div = mdiv;
 
 		var found_count = 0;
-		for (let i = 0; i < XKit.extensions.mute.muted.length; i++) {
+		for (var j = 0; j < XKit.extensions.mute.muted.length; j++) {
 			//console.log(XKit.extensions.mute.muted[i].username);
-			if (typeof XKit.extensions.mute.muted[i].username !== "undefined") {
-				if (XKit.extensions.mute.muted[i].username !== "") {
+			if (typeof XKit.extensions.mute.muted[j].username !== "undefined") {
+				if (XKit.extensions.mute.muted[j].username !== "") {
 					found_count++;
 				}
 			}
@@ -722,7 +722,7 @@ XKit.extensions.mute = new Object({
 
 			var m_username = $(this).attr('data-user-name');
 
-			for (let i = 0; i < XKit.extensions.mute.muted.length; i++) {
+			for (var i = 0; i < XKit.extensions.mute.muted.length; i++) {
 				if (XKit.extensions.mute.muted[i].username === m_username) {
 					XKit.extensions.mute.muted.splice(i, 1);
 					XKit.extensions.mute.save();

@@ -1,5 +1,5 @@
 //* TITLE Messaging Tweaks **//
-//* VERSION 1.7.2 **//
+//* VERSION 1.7.3 **//
 //* DESCRIPTION Helpful tweaks for Tumblr IM **//
 //* DETAILS This adds a few helpful tweaks to the Tumblr IM, for example minimising the chat, hiding the IM icon or changing the looks of the chat window. **//
 //* DEVELOPER New-XKit **//
@@ -113,25 +113,25 @@ XKit.extensions.messaging_tweaks = new Object({
 		"my_chat_bubble_background": {
 			text: "Background for my chat bubbles",
 			type: "text",
-			default: "rgba(0,0,0,.05)",
+			default: "",
 			value: "rgba(0,0,0,.05)"
 		},
 		"other_chat_bubble_background": {
 			text: "Background for other people's chat bubbles",
 			type: "text",
-			default: "rgba(0,0,0,.1)",
+			default: "",
 			value: "rgba(0,0,0,.1)"
 		},
 		"my_chat_bubble_text": {
 			text: "Text color for my chat bubbles",
 			type: "text",
-			default: "rgb(68,68,68)",
+			default: "",
 			value: "rgb(68,68,68)"
 		},
 		"other_chat_bubble_text": {
 			text: "Text color for other people's chat bubbles",
 			type: "text",
-			default: "rgb(68,68,68)",
+			default: "",
 			value: "rgb(68,68,68)"
 		},
 		"background_override": {
@@ -373,14 +373,20 @@ XKit.extensions.messaging_tweaks = new Object({
 			}
 		}
 
-		XKit.tools.add_css(".messaging-conversation .xkit-others_messaging_message .conversation-message-text .message-bubble { background-color: " + XKit.extensions.messaging_tweaks.preferences.other_chat_bubble_background.value + " !important; }", "messaging_tweaks");
-		XKit.tools.add_css(".messaging-conversation .xkit-my_messaging_message .conversation-message-text .message-bubble { background-color: " + XKit.extensions.messaging_tweaks.preferences.my_chat_bubble_background.value + " !important; }", "messaging_tweaks");
-
-		XKit.tools.add_css(".messaging-conversation .xkit-others_messaging_message .conversation-message-text .message-bubble { color: " + XKit.extensions.messaging_tweaks.preferences.other_chat_bubble_text.value + " !important; }", "messaging_tweaks");
-		XKit.tools.add_css(".messaging-conversation .xkit-my_messaging_message .conversation-message-text .message-bubble { color: " + XKit.extensions.messaging_tweaks.preferences.my_chat_bubble_text.value + " !important; }", "messaging_tweaks");
-
-		XKit.tools.add_css(".messaging-conversation .xkit-others_messaging_message .conversation-message-text .message-bubble-header a { color: " + XKit.extensions.messaging_tweaks.preferences.other_chat_bubble_text.value + " !important; }", "messaging_tweaks");
-		XKit.tools.add_css(".messaging-conversation .xkit-my_messaging_message .conversation-message-text .message-bubble-header a { color: " + XKit.extensions.messaging_tweaks.preferences.my_chat_bubble_text.value + " !important; }", "messaging_tweaks");
+		if (XKit.extensions.messaging_tweaks.preferences.other_chat_bubble_background.value) {
+			XKit.tools.add_css(".messaging-conversation .xkit-others_messaging_message .conversation-message-text .message-bubble { background-color: " + XKit.extensions.messaging_tweaks.preferences.other_chat_bubble_background.value + " !important; }", "messaging_tweaks");
+		}
+		if (XKit.extensions.messaging_tweaks.preferences.my_chat_bubble_background.value) {
+			XKit.tools.add_css(".messaging-conversation .xkit-my_messaging_message .conversation-message-text .message-bubble { background-color: " + XKit.extensions.messaging_tweaks.preferences.my_chat_bubble_background.value + " !important; }", "messaging_tweaks");
+		}
+		if (XKit.extensions.messaging_tweaks.preferences.other_chat_bubble_text.value) {
+			XKit.tools.add_css(".messaging-conversation .xkit-others_messaging_message .conversation-message-text .message-bubble { color: " + XKit.extensions.messaging_tweaks.preferences.other_chat_bubble_text.value + " !important; }", "messaging_tweaks");
+			XKit.tools.add_css(".messaging-conversation .xkit-others_messaging_message .conversation-message-text .message-bubble-header a { color: " + XKit.extensions.messaging_tweaks.preferences.other_chat_bubble_text.value + " !important; }", "messaging_tweaks");
+		}
+		if (XKit.extensions.messaging_tweaks.preferences.my_chat_bubble_text.value) {
+			XKit.tools.add_css(".messaging-conversation .xkit-my_messaging_message .conversation-message-text .message-bubble { color: " + XKit.extensions.messaging_tweaks.preferences.my_chat_bubble_text.value + " !important; }", "messaging_tweaks");
+			XKit.tools.add_css(".messaging-conversation .xkit-my_messaging_message .conversation-message-text .message-bubble-header a { color: " + XKit.extensions.messaging_tweaks.preferences.my_chat_bubble_text.value + " !important; }", "messaging_tweaks");
+		}
 
 		// There's either 1 or no messaging-conversation-popovers on extension start
 		$(".messaging-conversation-popovers").each(function() {

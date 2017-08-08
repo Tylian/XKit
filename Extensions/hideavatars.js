@@ -1,5 +1,5 @@
 //* TITLE Hide Avatars **//
-//* VERSION 0.1.4 **//
+//* VERSION 0.1.5 **//
 //* DESCRIPTION Hides avatars on a per-url basis **//
 //* DEVELOPER dlmarquis **//
 //* FRAME false **//
@@ -114,9 +114,9 @@ XKit.extensions.hideavatars = new Object({
 			cat_list = "<div class=\"xkit-hideavatars-no-blognames\">You have no blogs set.</div>";
 		} else {
 
-			for (let i = 0; i < XKit.extensions.hideavatars.blognames.length; i++) {
+			for (var j = 0; j < XKit.extensions.hideavatars.blognames.length; j++) {
 
-				cat_list = cat_list + "<div class=\"xkit-hideavatars-cp-item\" data-id=\"" + XKit.extensions.hideavatars.blognames[i].id + "\">" + XKit.extensions.hideavatars.blognames[i].title + "</div>";
+				cat_list = cat_list + "<div class=\"xkit-hideavatars-cp-item\" data-id=\"" + XKit.extensions.hideavatars.blognames[j].id + "\">" + XKit.extensions.hideavatars.blognames[j].title + "</div>";
 
 			}
 		}
@@ -175,7 +175,7 @@ XKit.extensions.hideavatars = new Object({
 
 				XKit.extensions.hideavatars.load_blogs();
 
-				for (let i = 0; i < XKit.extensions.hideavatars.blognames.length; i++) {
+				for (var i = 0; i < XKit.extensions.hideavatars.blognames.length; i++) {
 
 					if (m_cat_obj.id === XKit.extensions.hideavatars.blognames[i].id) {
 
@@ -200,7 +200,7 @@ XKit.extensions.hideavatars = new Object({
 
 					XKit.extensions.hideavatars.load_blogs();
 
-					for (let i = 0; i < XKit.extensions.hideavatars.blognames.length; i++) {
+					for (var i = 0; i < XKit.extensions.hideavatars.blognames.length; i++) {
 
 						if (m_cat_obj.id === XKit.extensions.hideavatars.blognames[i].id) {
 
