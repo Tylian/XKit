@@ -56,7 +56,9 @@
 	background: rgb(230,239,247);
 }
 
-.xkit-quick-tags-cp-tag .xkit-tag-title { font-weight: bold; }
+.xkit-quick-tags-cp-tag .xkit-tag-title {
+	font-weight: bold;
+}
 
 
 .xkit-quick-tags-tag-delete {
@@ -231,4 +233,8 @@
 	font-size: 13px;
 	line-height: 22px;
 	text-align: center;
+}
+
+.xkit-interface-control-button.xkit-quick-tags:after {
+	opacity: 1 !important;
 }
