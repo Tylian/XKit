@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 6.8.4 **//
+//* VERSION 6.8.7 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER new-xkit **//
 
@@ -94,6 +94,7 @@ XKit.extensions.xkit_patches = new Object({
 		e.data.hasOwnProperty("xkit_blogs")) {
 
 				XKit.blogs_from_tumblr = e.data.xkit_blogs.map(XKit.tools.escape_html);
+				XKit.tools.set_setting('xkit_cached_blogs', XKit.blogs_from_tumblr.join(';'));
 			}
 		};
 
@@ -116,15 +117,6 @@ XKit.extensions.xkit_patches = new Object({
 			}
 
 			// Approach 2: Scrape from the dynamically-created popover element.
-
-			if (!$("[data-js-channel-list]").length) {
-				// create the popover element
-				var account_menu = $("#account_button");
-				account_menu.click();
-				setTimeout(function() {
-					account_menu.click();
-				}, 10);
-			}
 
 			var blog_menu_items = $("[data-js-channel-list] .popover_menu_item_blog");
 			if (blog_menu_items.length) {
@@ -1910,7 +1902,7 @@ XKit.extensions.xkit_patches = new Object({
 				}
 
 				m_return.animated = $(obj).hasClass("is_animated");
-				m_return.is_reblogged = $(obj).hasClass("is_reblog");
+				m_return.is_reblogged = $(obj).hasClass("is_reblog") || $(obj).find(".reblog_info").length > 0;
 				m_return.is_mine = $(obj).hasClass("is_mine");
 				m_return.is_following = ($(obj).attr('data-following-tumblelog') === true);
 				m_return.can_edit = $(obj).find(".post_control.edit").length > 0;
@@ -2288,7 +2280,7 @@ XKit.extensions.xkit_patches = new Object({
 			is_following: function(username, blog) {
 				return $.ajax({
 					type: "GET",
-					url: "/svc/blog/followed_by",
+					url: "https://www.tumblr.com/svc/blog/followed_by",
 					data: "tumblelog=" + blog + "&query=" + username,
 					dataType: "json",
 				}).then(function(msg) {
