@@ -1,7 +1,7 @@
 //* TITLE XNeko **//
 //* VERSION 1.2.2 **//
 //* DESCRIPTION A cat for your dashboard! **//
-//* DEVELOPER STUDIOXENIX **//
+//* DEVELOPER new-xkit **//
 //* FRAME false **//
 //* DETAILS A free spirited Japanese cat for your dashboard.<br>It is based on the Neko application by Kenji Gotoh. **//
 //* BETA false **//
