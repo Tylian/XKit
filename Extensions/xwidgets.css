@@ -57,7 +57,7 @@ body .l-header-container {
 }
 
 body.xkit-widgets-opened {
-	padding-top: 150px;
+	padding-top: 140px;
 	-webkit-transition: padding-top 0.35s ease-in-out;
 	-moz-transition: padding-top 0.35s ease-in-out;
 	-o-transition: padding-top 0.35s ease-in-out;
