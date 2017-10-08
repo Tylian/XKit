@@ -1,5 +1,5 @@
 //* TITLE Find Inactives **//
-//* VERSION 0.4.0 **//
+//* VERSION 0.4.1 **//
 //* DESCRIPTION Find the inactive blogs you follow **//
 //* DEVELOPER new-xkit **//
 //* DETAILS This extension lets you find blogs that haven't been updated in a certain amount of time. Just go to list of blogs you follow, then click on &quot;Find Inactive Blogs&quot; button below your Crushes to get started. **//
@@ -284,33 +284,28 @@ XKit.extensions.find_inactives = new Object({
 
 		if (XKit.extensions.find_inactives.retired_people_list.length === 0) {
 
-			XKit.window.show("All up to date!", "I couldn't find anyone who has been gone for more than " + XKit.extensions.find_inactives.preferences.time.value + " days.", "info", "<div class=\"xkit-button default\" id=\"xkit-close-message\">Whee!</div>");
+			XKit.window.show("All up to date!", `I couldn't find anyone who has been gone for more than ${XKit.extensions.find_inactives.preferences.time.value} days.`, "info", "<div class=\"xkit-button default\" id=\"xkit-close-message\">Whee!</div>");
 			return;
 
 		}
 
 		var m_html = '<div class="nano" id="find-inactives-window-outer"><div class="content" id="find-inactives-window">';
 
-		for (var i = 0; i < XKit.extensions.find_inactives.retired_people_list.length; i++) {
-
-			m_html = m_html + "<div data-url=\"http://" + XKit.extensions.find_inactives.retired_people_list[i].username + ".tumblr.com/\" class=\"find-inactives-blog\">" +
-			"<a class=\"name\" href=\"http://" + XKit.extensions.find_inactives.retired_people_list[i].username + ".tumblr.com/\" target=\"_blank\">" + XKit.extensions.find_inactives.retired_people_list[i].username + "</a>" +
-			"<div class=\"days\">" + XKit.extensions.find_inactives.retired_people_list[i].days + "</div>" +
-			"<img src=\"http://api.tumblr.com/v2/blog/" + XKit.extensions.find_inactives.retired_people_list[i].username + ".tumblr.com/avatar/512\" class=\"avatar\">" +
-			"<button class=\"chrome clear big unfollow_button\" id=\"unfollow_button_"
-				+ XKit.extensions.find_inactives.retired_people_list[i].username + "\" data-name=\""
-				+ XKit.extensions.find_inactives.retired_people_list[i].username + "\" data-formkey=\""
-				+ XKit.interface.form_key() + "\">Unfollow"
-				+ "</button>" +
+		for (const blog of XKit.extensions.find_inactives.retired_people_list) {
+			const username = blog.username;
+			m_html += `<div data-url="http://${username}.tumblr.com/" class="find-inactives-blog">` +
+			`<a class="name" href="http://${username}.tumblr.com/" target="_blank">${username}</a>` +
+			`<div class="days">${blog.days}</div>` +
+			`<img src="https://api.tumblr.com/v2/blog/${username}.tumblr.com/avatar/96" class="avatar"/>` +
+			`<button class="chrome clear big unfollow_button" data-name="${username}">Unfollow</button>` +
 			"</div>";
-
 		}
 
-		m_html = m_html + "</div></div>";
+		m_html += "</div></div>";
 
 		$("body").css("overflow", "hidden");
 
-		XKit.window.show("Found " + XKit.extensions.find_inactives.retired_people_list.length + " inactive blog(s)", m_html, "info", "<div class=\"xkit-button default\" id=\"xkit-close-message-find-inactives\">OK</div>");
+		XKit.window.show(`Found ${XKit.extensions.find_inactives.retired_people_list.length} inactive blog(s)`, m_html, "info", "<div class=\"xkit-button default\" id=\"xkit-close-message-find-inactives\">OK</div>");
 
 		$("#find-inactives-window-outer").nanoScroller();
 
@@ -336,8 +331,9 @@ XKit.extensions.find_inactives = new Object({
 	},
 	trigger_unfollow: function() {
 		var username = add_tag;
-		var removalTarget = jQuery('.find-inactives-blog[data-url="http://' + username + '.tumblr.com/');
-		Tumblr.Dialog.confirm("Are you sure you want to unfollow <strong>" + username + "</strong>?", function() {
+		// We're gonna assume Tumblr won't permit usernames that'd lead to XSS.
+		var removalTarget = jQuery(`.find-inactives-blog[data-url="http://${username}.tumblr.com/"]`);
+		Tumblr.Dialog.confirm(`Are you sure you want to unfollow <strong>${username}</strong>?`, function() {
 			Tumblr.unfollow({
 				tumblelog: username,
 				source: "UNFOLLOW_SOURCE_FOLLOWING_PAGE"
