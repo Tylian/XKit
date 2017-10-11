@@ -1280,7 +1280,7 @@ XKit.extensions.xkit_preferences = new Object({
 		$("#xkit-extensions-panel-right-inner").html(m_html);
 		// Pass control to the extension to draw custom control panel:
 		if (typeof XKit.extensions[extension_id].cpanel !== "undefined" && XKit.installed.enabled(extension_id) !== false) {
-		// Call it:
+			// Call it:
 			XKit.extensions[extension_id].cpanel($("#xkit-extension-panel-settings"));
 		}
 
