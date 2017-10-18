@@ -1,5 +1,5 @@
 //* TITLE One-Click Postage **//
-//* VERSION 4.3.5 **//
+//* VERSION 4.3.6 **//
 //* DESCRIPTION Lets you easily reblog, draft and queue posts **//
 //* DEVELOPER new-xkit **//
 //* FRAME false **//
@@ -696,18 +696,17 @@ XKit.extensions.one_click_postage = new Object({
 		};
 
 		var menu_close = function() {
-			// Only close the menu if it doesn't have keyboard or mouse focus
-			if ($("#x1cpostage_box").find('input:focus, textarea:focus').length === 0 &&
-				$('#x1cpostage_box:hover').length === 0) {
-
+			// Only close the menu if none of its inputs have focus.
+			if ($("#x1cpostage_box").find('input:focus, textarea:focus, select:focus').length === 0) {
 				XKit.extensions.one_click_postage.user_on_box = false;
-				//console.log("calling close_menu 3");
 				XKit.extensions.one_click_postage.close_menu($(this));
 			}
 		};
 
 		$(document).on("mouseover", "#x1cpostage_box", cancel_menu_close);
-		$(document).on("mouseout", "#x1cpostage_box", menu_close);
+		$(document).on("mouseleave", "#x1cpostage_box", menu_close);
+		$(document).on("focus", "#x1cpostage_box input, #x1cpostage_box textarea, #x1cpostage_box select", cancel_menu_close);
+		$(document).on("blur", "#x1cpostage_box input, #x1cpostage_box textarea, #x1cpostage_box select", menu_close);
 
 		$("#x1cpostage_tags, #x1cpostage_caption").bind("keydown", function(event) {
 			if (XKit.extensions.one_click_postage.preferences.enable_keyboard_shortcuts.value
