@@ -1,5 +1,5 @@
 //* TITLE Audio+ **//
-//* VERSION 0.5.0 **//
+//* VERSION 0.5.1 **//
 //* DESCRIPTION Enhancements for the Audio Player **//
 //* DEVELOPER new-xkit **//
 //* FRAME false **//
@@ -131,7 +131,7 @@ XKit.extensions.audio_plus = {
 
 	slider_handle_event: function(e) {
 		var slider = e.target;
-		var player = XKit.extensions.audio_plus.audio_player_of_element(slider);
+		var player = $(e.target).closest(".native-audio-container")[0];
 
 		var volume = slider.value;
 		if (e.type === "click" || e.type === "mousemove") {
@@ -148,7 +148,6 @@ XKit.extensions.audio_plus = {
 		var posts = XKit.interface.get_posts("audio_plus_done");
 
 		$(posts).each(function() {
-
 			$(this).addClass("audio_plus_done");
 
 			var m_post = XKit.interface.post($(this));
@@ -162,10 +161,7 @@ XKit.extensions.audio_plus = {
 								"<input type=\"range\" value=\"100\" min=\"0\" max=\"100\" data-post-id=\"" + m_post.id + "\" title=\"somepeoplelikefish\" class=\"xkit-audio-plus-slider\"></input>" +
 						"</div>";
 
-			$(this).find(".audio-player").append(slider_html);
-
-			// console.log("Volume is => " + $(this).find("audio").get(0).volume);
-
+			$(this).find(".audio-player").after(slider_html);
 		});
 
 	},
