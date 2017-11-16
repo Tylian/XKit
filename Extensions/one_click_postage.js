@@ -591,7 +591,7 @@ XKit.extensions.one_click_postage = new Object({
 						"<div id=\"x1cpostage_reblog\"><i>&nbsp;</i></div>" +
 						"<div id=\"x1cpostage_queue\"><i>&nbsp;</i></div>" +
 						"<div id=\"x1cpostage_draft\"><i>&nbsp;</i></div>" +
-						"<textarea id=\"x1cpostage_caption\" + m_remove_box_style + placeholder=\"caption\"></textarea>" +
+						"<textarea id=\"x1cpostage_caption\" " + m_remove_box_style + " placeholder=\"caption\"></textarea>" +
 						"<div id=\"x1cpostage_replace\" " + m_remove_box_style + "><div>&nbsp;</div>replace caption, not append</div>" +
 						m_remove_button +
 						"<input id=\"x1cpostage_tags\" placeholder=\"tags (comma separated)\" />" +
