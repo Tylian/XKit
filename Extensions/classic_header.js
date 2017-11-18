@@ -120,8 +120,12 @@ XKit.extensions.classic_header = new Object({
 					lpad += 75;
 				}
 				XKit.tools.add_css(
-				"@media screen and (min-width: " + cwidth + "px)" +
-				"{.l-header {max-width: " + cwidth + "px!important; padding-left: " + lpad + "px !important;}}",
+				"@media screen and (min-width: " + cwidth + "px) {" +
+					".l-header {" +
+						"max-width: " + cwidth + "px !important;" +
+						"padding-left: " + lpad + "px !important;" +
+					"}" +
+				"}",
 				"classic_header_fixed_width");
 			});
 		}
