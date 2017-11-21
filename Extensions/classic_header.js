@@ -113,11 +113,11 @@ XKit.extensions.classic_header = new Object({
 		}
 		if (XKit.extensions.classic_header.preferences.fixed_width.value === true) {
 			$( function() {
-				var cwidth = $(".l-content").outerWidth() + 31;
-				if (cwidth < 816) { return; }
-				var lpad = 2;
+				var cwidth = $(".l-content").outerWidth() + 30; // +10 to match l-container, +20 to allow for right padding
+				if (cwidth < 816) { return; } // either l-content does not exist or the screen is too small to need to do anything
+				var lpad = 1; // even with the correct width, the tumblr logo is just one pixel off lining up perfectly
 				if (XKit.extensions.tweaks.preferences.old_sidebar_width.value && $("#right_column").length > 0) {
-					lpad += 75;
+					lpad += 75; // # of pixels added to the dashboard's left margin by this tweak
 				}
 				XKit.tools.add_css(
 				"@media screen and (min-width: " + cwidth + "px) {" +
