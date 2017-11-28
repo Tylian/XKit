@@ -1270,12 +1270,13 @@ XKit.extensions.xkit_preferences = new Object({
 
 			m_html = m_html + '<div id="xkit-extension-panel-no-settings">Please enable this extension to customize it.</div>'; 
 			
-		} else {
-			//Get standard settings.
-			if (typeof XKit.extensions[extension_id].preferences !== "undefined") {
-				m_html = m_html + '<div id="xkit-extension-panel-settings">' + XKit.extensions.xkit_preferences.return_extension_settings(extension_id) + "</div>";
+		} else if (typeof XKit.extensions[extension_id].preferences !== "undefined") {
+			
+			m_html = m_html + '<div id="xkit-extension-panel-settings">' + XKit.extensions.xkit_preferences.return_extension_settings(extension_id) + "</div>";
 				
-			}
+		} else {
+			
+			m_html = m_html + '<div id="xkit-extension-panel-settings"></div>';
 		}
 		$("#xkit-extensions-panel-right-inner").html(m_html);
 		// Pass control to the extension to draw custom control panel:
