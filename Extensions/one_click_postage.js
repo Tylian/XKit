@@ -151,6 +151,7 @@ XKit.extensions.one_click_postage = new Object({
 	last_object: {},
 	last_icon_object: {},
 	last_post_id: 0,
+	ignore_box_input_blurring: false,
 	user_on_box: false,
 	menu_closer_int: 0,
 	default_blog_id: "",
@@ -697,18 +698,21 @@ XKit.extensions.one_click_postage = new Object({
 		};
 
 		var menu_close = function() {
-			// Only close the menu if it doesn't have keyboard or mouse focus
-			if ($("#x1cpostage_box").find('input:focus, textarea:focus').length === 0 &&
-				$('#x1cpostage_box:hover').length === 0) {
-
+			// Only close the menu if none of its inputs have focus.
+			if ($("#x1cpostage_box").find('input:focus, textarea:focus, select:focus').length === 0) {
 				XKit.extensions.one_click_postage.user_on_box = false;
-				//console.log("calling close_menu 3");
 				XKit.extensions.one_click_postage.close_menu($(this));
 			}
 		};
 
 		$(document).on("mouseover", "#x1cpostage_box", cancel_menu_close);
-		$(document).on("mouseout", "#x1cpostage_box", menu_close);
+		$(document).on("mouseleave", "#x1cpostage_box", menu_close);
+		$(document).on("focus", "#x1cpostage_box input, #x1cpostage_box textarea, #x1cpostage_box select", cancel_menu_close);
+		$(document).on("blur", "#x1cpostage_box input, #x1cpostage_box textarea, #x1cpostage_box select", function() {
+			if (!XKit.extensions.one_click_postage.ignore_box_input_blurring) {
+				menu_close();
+			}
+		});
 
 		$("#x1cpostage_tags, #x1cpostage_caption").bind("keydown", function(event) {
 			if (XKit.extensions.one_click_postage.preferences.enable_keyboard_shortcuts.value
@@ -1076,8 +1080,10 @@ XKit.extensions.one_click_postage = new Object({
 	reset_box: function() {
 		$("#x1cpostage_caption").val("");
 		$("#x1cpostage_tags").val("");
+		XKit.extensions.one_click_postage.ignore_box_input_blurring = true;
 		$("#x1cpostage_tags").blur();
 		$("#x1cpostage_caption").blur();
+		XKit.extensions.one_click_postage.ignore_box_input_blurring = false;
 		XKit.extensions.one_click_postage.auto_tagger_done = false;
 	},
 
