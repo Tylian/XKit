@@ -1,5 +1,5 @@
 //* TITLE Tweaks **//
-//* VERSION 5.6.0 **/
+//* VERSION 5.6.1 **/
 //* DESCRIPTION Various little tweaks for your dashboard. **//
 //* DEVELOPER new-xkit **//
 //* DETAILS These are small little tweaks that allows you customize your dashboard. If you have used XKit 6, you will notice that some of the extensions have been moved here as options you can toggle. Keep in mind that some of the tweaks (the ones marked with a '*') can slow down your computer. **//
@@ -64,12 +64,6 @@ XKit.extensions.tweaks = new Object({
 			default: false,
 			value: false,
 			desktop_only: true
-		},
-		"photo_replies": {
-			text: "Auto-enable photo replies on all posts I create",
-			default: false,
-			value: false,
-			experimental: true
 		},
 		"sep001": {
 			text: "Post / Post Editor tweaks",
@@ -246,7 +240,7 @@ XKit.extensions.tweaks = new Object({
 			value: true
 		},
 		"responsive_dash": {
-			text: "Make the dashboard resize with the window.",
+			text: "Make the dashboard resize with the window",
 			default: false,
 			value: false
 		},
@@ -284,12 +278,6 @@ XKit.extensions.tweaks = new Object({
 		},
 		"hide_radar": {
 			text: "Hide the Tumblr radar",
-			default: false,
-			value: false,
-			desktop_only: true
-		},
-		"hide_find_blogs": {
-			text: "Hide \"Find Blogs\" button",
 			default: false,
 			value: false,
 			desktop_only: true
@@ -464,6 +452,7 @@ XKit.extensions.tweaks = new Object({
 		}
 
 		if (XKit.extensions.tweaks.preferences.split_gear.value) {
+			XKit.tools.add_css(".post_controls .post_control.queue::after { background: none !important; }", "tweaks_split_gear");
 			XKit.post_listener.add("tweaks_split_gear", XKit.extensions.tweaks.split_gear);
 			XKit.extensions.tweaks.split_gear();
 		}
@@ -479,12 +468,6 @@ XKit.extensions.tweaks = new Object({
 		if (XKit.extensions.tweaks.preferences.hide_radar.value) {
 			$("#tumblr_radar").css("display", "none");
 			$(".radar_header").parent().css("display", "none");
-		}
-
-		if (XKit.extensions.tweaks.preferences.photo_replies.value) {
-			this.run_interval = setInterval(function() {
-				$("#allow_photo_replies").attr('checked', true);
-			}, 3000);
 		}
 
 		if (XKit.extensions.tweaks.preferences.real_red.value) {
@@ -575,7 +558,7 @@ XKit.extensions.tweaks = new Object({
 		}
 
 		if (XKit.extensions.tweaks.preferences.hide_recommended.value) {
-			XKit.extensions.tweaks.add_css("#recommended_tumblelogs, .recommended_tumblelogs, .trending_tumblelogs, .is_recommended, .recommended-unit-container { display: none !important; }", "xkit_tweaks_hide_recommended");
+			XKit.extensions.tweaks.add_css(".controls_section.recommended_tumblelogs { display: none !important; }", "xkit_tweaks_hide_recommended");
 		}
 
 		if (XKit.extensions.tweaks.preferences.hide_share_menu.value) {
@@ -600,10 +583,6 @@ XKit.extensions.tweaks = new Object({
 
 		if (XKit.extensions.tweaks.preferences.hide_section_headers.value) {
 			XKit.extensions.tweaks.add_css(".controls_section li.section_header { display: none; } ", "xkit_tweaks_hide_section_headers");
-		}
-
-		if (XKit.extensions.tweaks.preferences.hide_find_blogs.value) {
-			$("a.spotlight").parent().css("display", "none");
 		}
 
 		if (XKit.extensions.tweaks.preferences.always_show_move_to_top.value) {
@@ -850,23 +829,22 @@ XKit.extensions.tweaks = new Object({
 	},
 
 	split_gear: function() {
-
 		if (!XKit.browser().mobile) { // mobile stuff
-			$(".post.is_mine").not(".xkit-tweaks-split-gear-done").each(function() {
-				$(this).addClass("xkit-tweaks-split-gear-done");
+			$(".post_control.post_control_menu.creator").not(".xkit-tweaks-split-gear-done").each(function() {
+				var $gear = $(this).addClass("xkit-tweaks-split-gear-done");
 
 				// Remove captions
-				$(this).find(".post_control.edit").html("<span class=\"offscreen\">Edit</span>");
-				$(this).find(".post_control.delete").html("<span class=\"offscreen\">Delete</span>");
-				$(this).find(".post_control.queue").html("<span class=\"offscreen\">Queue</span>");
+				$gear.find(".post_control.edit").html("<span class=\"offscreen\">Edit</span>");
+				$gear.find(".post_control.queue").html("<span class=\"offscreen\">Queue</span>");
+				$gear.find(".post_control.delete").html("<span class=\"offscreen\">Delete</span>");
 
 				// Remove their menu-specific classes
-				$(this).find(".post_control.edit, .post_control.queue, .post_control.delete").removeClass("show_label");
+				$gear.find(".post_control.edit, .post_control.queue, .post_control.delete").removeClass("show_label");
 
-				$(this).find(".post_control.edit").appendTo($(this).find(".post_controls_inner"));
-				$(this).find(".post_control.delete").appendTo($(this).find(".post_controls_inner"));
-				$(this).find(".post_control.queue").appendTo($(this).find(".post_controls_inner"));
-				$(this).find(".post_control.post_control_menu.creator").css("display", "none");
+				$gear.find(".post_control.edit").appendTo($gear.parent());
+				$gear.find(".post_control.queue").addClass("icon_queue_small").appendTo($gear.parent());
+				$gear.find(".post_control.delete").appendTo($gear.parent());
+				$gear.css("display", "none");
 			});
 		}
 
