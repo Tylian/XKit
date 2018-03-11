@@ -63,7 +63,6 @@
 				<string>*.txmblr.com</string>
 				<string>*.xkit.info</string>
 				<string>new-xkit.github.io</string>
-				<string>*.xkitcs.com</string>
 			</array>
 			<key>Include Secure Pages</key>
 			<true/>
