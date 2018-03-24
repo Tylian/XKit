@@ -1,5 +1,5 @@
 //* TITLE XKit Preferences **//
-//* VERSION 7.4.6 **//
+//* VERSION 7.4.7 **//
 //* DESCRIPTION Lets you customize XKit **//
 //* DEVELOPER new-xkit **//
 
@@ -1273,33 +1273,21 @@ XKit.extensions.xkit_preferences = new Object({
 
 			m_html = m_html + '<div id="xkit-extension-panel-no-settings">No settings available for this extension.</div>';
 
+		} else if (XKit.installed.enabled(extension_id) === false) {
+
+			m_html = m_html + '<div id="xkit-extension-panel-no-settings">Please enable this extension to customize it.</div>'; 
+			
+		} else if (typeof XKit.extensions[extension_id].preferences !== "undefined") {
+			
+			m_html = m_html + '<div id="xkit-extension-panel-settings">' + XKit.extensions.xkit_preferences.return_extension_settings(extension_id) + "</div>";
+				
 		} else {
-
-			// To-Do: Load Extension settings Here!
-			// Check if custom control panel:
-			if (typeof XKit.extensions[extension_id].cpanel === "undefined") {
-				// Yes it is.
-				m_html = m_html + '<div id="xkit-extension-panel-settings">' + XKit.extensions.xkit_preferences.return_extension_settings(extension_id) + "</div>";
-			} else {
-				// Check if it also has standard options:
-				if (XKit.installed.enabled(extension_id) === false) {
-
-					m_html = m_html + '<div id="xkit-extension-panel-no-settings">Please enable this extension to customize it.</div>';
-
-				} else {
-					if (typeof XKit.extensions[extension_id].preferences !== "undefined") {
-						m_html = m_html + '<div id="xkit-extension-panel-settings">' + XKit.extensions.xkit_preferences.return_extension_settings(extension_id) + "</div>";
-					} else {
-						m_html = m_html + '<div id="xkit-extension-panel-settings"><div style="padding: 10px">There is a problem loading the extension panel.<br/>Update the extension and again later.</div></div>';
-					}
-				}
-			}
+			
+			m_html = m_html + '<div id="xkit-extension-panel-settings"></div>';
 		}
-
 		$("#xkit-extensions-panel-right-inner").html(m_html);
-
 		// Pass control to the extension to draw custom control panel:
-		if (typeof XKit.extensions[extension_id].cpanel !== "undefined") {
+		if (typeof XKit.extensions[extension_id].cpanel !== "undefined" && XKit.installed.enabled(extension_id) !== false) {
 			// Call it:
 			XKit.extensions[extension_id].cpanel($("#xkit-extension-panel-settings"));
 		}
