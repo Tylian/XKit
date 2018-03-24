@@ -77,3 +77,7 @@
 	font-weight: normal !important;
 	font-size: 13px;
 }
+
+.xkit-interface-control-button.xkit-tagviewer:after {
+	opacity: 1 !important;
+}

@@ -1,5 +1,5 @@
 //* TITLE One-Click Postage **//
-//* VERSION 4.3.5 **//
+//* VERSION 4.3.10 **//
 //* DESCRIPTION Lets you easily reblog, draft and queue posts **//
 //* DEVELOPER new-xkit **//
 //* FRAME false **//
@@ -27,7 +27,7 @@ XKit.extensions.one_click_postage = new Object({
 			type: "separator",
 		},
 		"enable_keyboard_shortcuts": {
-			text: "Use keyboard shortcuts (R/Q/D to reblog/queue/draft, T to tag, escape to close)",
+			text: "Use keyboard shortcuts (R/Q/D to reblog/queue/draft, T to tag, escape to close, 1-9 to add a Quick Tags bundle)",
 			default: false,
 			value: false
 		},
@@ -43,7 +43,7 @@ XKit.extensions.one_click_postage = new Object({
 			experimental: true
 		},
 		"sep_5": {
-			text: "AlreadyReblogged <a id=\"xkit-alreadyreblogged-help\" href=\"#\" onclick=\"return false\">what is this?</a>",
+			text: "AlreadyReblogged&emsp;<a id=\"xkit-alreadyreblogged-help\" href=\"#\" onclick=\"return false\">what is this?</a>",
 			type: "separator",
 		},
 		"enable_alreadyreblogged": {
@@ -122,7 +122,8 @@ XKit.extensions.one_click_postage = new Object({
 			value: false
 		},
 		"allow_resize": {
-			text: "Allow resizing of the caption box vertically (experimental)",
+			text: "Allow resizing of the caption box vertically",
+			experimental: true,
 			default: false,
 			value: false
 		},
@@ -150,6 +151,7 @@ XKit.extensions.one_click_postage = new Object({
 	last_object: {},
 	last_icon_object: {},
 	last_post_id: 0,
+	ignore_box_input_blurring: false,
 	user_on_box: false,
 	menu_closer_int: 0,
 	default_blog_id: "",
@@ -591,7 +593,7 @@ XKit.extensions.one_click_postage = new Object({
 						"<div id=\"x1cpostage_reblog\"><i>&nbsp;</i></div>" +
 						"<div id=\"x1cpostage_queue\"><i>&nbsp;</i></div>" +
 						"<div id=\"x1cpostage_draft\"><i>&nbsp;</i></div>" +
-						"<textarea id=\"x1cpostage_caption\" + m_remove_box_style + placeholder=\"caption\"></textarea>" +
+						"<textarea id=\"x1cpostage_caption\" " + m_remove_box_style + " placeholder=\"caption\"></textarea>" +
 						"<div id=\"x1cpostage_replace\" " + m_remove_box_style + "><div>&nbsp;</div>replace caption, not append</div>" +
 						m_remove_button +
 						"<input id=\"x1cpostage_tags\" placeholder=\"tags (comma separated)\" />" +
@@ -696,18 +698,21 @@ XKit.extensions.one_click_postage = new Object({
 		};
 
 		var menu_close = function() {
-			// Only close the menu if it doesn't have keyboard or mouse focus
-			if ($("#x1cpostage_box").find('input:focus, textarea:focus').length === 0 &&
-				$('#x1cpostage_box:hover').length === 0) {
-
+			// Only close the menu if none of its inputs have focus.
+			if ($("#x1cpostage_box").find('input:focus, textarea:focus, select:focus').length === 0) {
 				XKit.extensions.one_click_postage.user_on_box = false;
-				//console.log("calling close_menu 3");
 				XKit.extensions.one_click_postage.close_menu($(this));
 			}
 		};
 
 		$(document).on("mouseover", "#x1cpostage_box", cancel_menu_close);
-		$(document).on("mouseout", "#x1cpostage_box", menu_close);
+		$(document).on("mouseleave", "#x1cpostage_box", menu_close);
+		$(document).on("focus", "#x1cpostage_box input, #x1cpostage_box textarea, #x1cpostage_box select", cancel_menu_close);
+		$(document).on("blur", "#x1cpostage_box input, #x1cpostage_box textarea, #x1cpostage_box select", function() {
+			if (!XKit.extensions.one_click_postage.ignore_box_input_blurring) {
+				menu_close();
+			}
+		});
 
 		$("#x1cpostage_tags, #x1cpostage_caption").bind("keydown", function(event) {
 			if (XKit.extensions.one_click_postage.preferences.enable_keyboard_shortcuts.value
@@ -878,8 +883,8 @@ XKit.extensions.one_click_postage = new Object({
 			return false;
 		}
 
-		// 68 = D, 81 = Q, 82 = R, 84 = T
-		if (e.which !== 68 && e.which !== 81 && e.which !== 82 && e.which !== 84) {
+		// 68 = D, 81 = Q, 82 = R, 84 = T, 49-57 = 1-9
+		if (e.which !== 68 && e.which !== 81 && e.which !== 82 && e.which !== 84 && (e.which < 49 || e.which > 57)) {
 			return false;
 		}
 		if ($(e.target).is('input,textarea') || $(e.target).attr('contenteditable')) {
@@ -911,25 +916,35 @@ XKit.extensions.one_click_postage = new Object({
 			var parent_box = $(this).parentsUntil(".post").parent();
 			var box_pos = parent_box.offset().top;
 			if (box_pos <= screen_pos && box_pos + parent_box.innerHeight() > screen_pos) {
-				switch (e.which) {
-				case 68: // 68 = D
-					XKit.extensions.one_click_postage.open_menu($(this), true);
-					XKit.extensions.one_click_postage.post(1, false);
-					break;
-				case 81: // 81 = Q
-					XKit.extensions.one_click_postage.open_menu($(this), true);
-					XKit.extensions.one_click_postage.post(2, false);
-					break;
-				case 82: // 82 = R
-					XKit.extensions.one_click_postage.open_menu($(this), true);
-					XKit.extensions.one_click_postage.post(0, false);
-					break;
-				case 84: // 84 = T
-					XKit.extensions.one_click_postage.user_on_box = true;
-					XKit.extensions.one_click_postage.open_menu($(this), false, true);
-					$('#x1cpostage_tags').focus();
-					break;
+				if (XKit.extensions.one_click_postage.user_on_box && e.which >= 49 && e.which <= 57) { // 49-57 = 1-9
+					var index = e.which - 49;
+					var quickTags = $("#x1cpostage_quick_tags").find(".xkit-tag");
+					
+					if (quickTags.length > index) {
+						quickTags[index].click();
+					}
+				} else {
+					switch (e.which) {
+					case 68: // 68 = D
+						XKit.extensions.one_click_postage.open_menu($(this), true);
+						XKit.extensions.one_click_postage.post(1, false);
+						break;
+					case 81: // 81 = Q
+						XKit.extensions.one_click_postage.open_menu($(this), true);
+						XKit.extensions.one_click_postage.post(2, false);
+						break;
+					case 82: // 82 = R
+						XKit.extensions.one_click_postage.open_menu($(this), true);
+						XKit.extensions.one_click_postage.post(0, false);
+						break;
+					case 84: // 84 = T
+						XKit.extensions.one_click_postage.user_on_box = true;
+						XKit.extensions.one_click_postage.open_menu($(this), false, true);
+						$('#x1cpostage_tags').focus();
+						break;
+					}
 				}
+
 				e.preventDefault();
 				return false;
 			} else if (box_pos > screen_pos) {
@@ -968,8 +983,8 @@ XKit.extensions.one_click_postage = new Object({
 
 		// Get the box ID.
 		var parent_box = $(obj).parentsUntil(".post").parent();
-		var box_id = $(parent_box).attr('id');
-		var previous_id = $(XKit.extensions.one_click_postage.last_object).attr('id');
+		var box_id = $(parent_box).attr('data-post-id');
+		var previous_id = $(XKit.extensions.one_click_postage.last_object).attr('data-post-id');
 
 		// Let's first hide our previous box.
 		// only if the current id != previous ID.
@@ -1075,8 +1090,10 @@ XKit.extensions.one_click_postage = new Object({
 	reset_box: function() {
 		$("#x1cpostage_caption").val("");
 		$("#x1cpostage_tags").val("");
+		XKit.extensions.one_click_postage.ignore_box_input_blurring = true;
 		$("#x1cpostage_tags").blur();
 		$("#x1cpostage_caption").blur();
+		XKit.extensions.one_click_postage.ignore_box_input_blurring = false;
 		XKit.extensions.one_click_postage.auto_tagger_done = false;
 	},
 
