@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 6.8.10 **//
+//* VERSION 6.8.11 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER new-xkit **//
 
@@ -2434,6 +2434,61 @@ XKit.extensions.xkit_patches = new Object({
 				}, 5000);
 			}
 		};
+
+		// Expedited fix for #1509; revert after updated XKit extension has been widely installed.
+		XKit.download.github_fetch = function(path, callback) {
+			var url = 'https://new-xkit.github.io/XKit/Extensions/dist/' + path;
+			GM_xmlhttpRequest({
+				method: "GET",
+				url: url,
+				onerror: function(response) {
+					XKit.console.add("Unable to download '" + path + "'");
+					callback({errors: true, server_down: true});
+				},
+				onload: function(response) {
+					// We are done!
+					var mdata = {};
+					try {
+						mdata = jQuery.parseJSON(response.responseText);
+					} catch (e) {
+						// Server returned bad thingy.
+						XKit.console.add("Unable to download '" + path +
+									"', server returned non-json object." + e.message);
+						callback({errors: true, server_down: true});
+						return;
+					}
+					callback(mdata);
+				}
+			});
+		};
+		XKit.download.extension = function(extension_id, callback) {
+			XKit.download.github_fetch(extension_id + '.json', callback);
+		};
+		XKit.download.page = function(page, callback) {
+			if (page === 'list.php') {
+				XKit.download.github_fetch('page/list.json', callback);
+				return;
+			}
+			if (page === 'gallery.php') {
+				XKit.download.github_fetch('page/gallery.json', callback);
+				return;
+			}
+			if (page === 'themes/index.php') {
+				XKit.download.github_fetch('page/themes.json', callback);
+				return;
+			}
+			if (page === 'paperboy/index.php') {
+				XKit.download.github_fetch('page/paperboy.json', callback);
+				return;
+			}
+			if (page === 'framework_version.php') {
+				XKit.download.github_fetch('page/framework_version.json', callback);
+				return;
+			}
+		};
+		delete XKit.servers;
+		delete XKit.download.try_count;
+		delete XKit.download.max_try_count;
 
 	},
 
