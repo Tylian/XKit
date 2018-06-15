@@ -1,5 +1,5 @@
 //* TITLE User Menus+ **//
-//* VERSION 2.5.7 **//
+//* VERSION 2.5.8 **//
 //* DESCRIPTION More options on the user menu **//
 //* DEVELOPER new-xkit **//
 //* DETAILS This extension adds additional options to the user menu (the one that appears under user avatars on your dashboard), such as Avatar Magnifier, links to their Liked Posts page if they have them enabled. Note that this extension, especially the Show Likes and Show Submit options use a lot of network and might slow your computer down. **//
@@ -152,7 +152,7 @@ XKit.extensions.show_more = new Object({
 			if (XKit.extensions.show_more.popup_data.ask_allows_anonymous || XKit.extensions.show_more.popup_data.anonymous_asks || XKit.extensions.show_more.popup_data.ask_allows_anonymous === 1 || XKit.extensions.show_more.popup_data.anonymous_asks === 1) {
 				anon_status = "1";
 			}
-			if (user_url === "xkit-extension" || user_url === "new-xkit-extension") {
+			if (user_url === "new-xkit-extension") {
 				m_html = m_html + "<a href=\"http://" + user_url + ".tumblr.com/ask\" target=\"_BLANK\" class=\"xkit-ask\">XKit Support</a>";
 			} else {
 				m_html = m_html + "<a href=\"http://" + user_url + ".tumblr.com/ask\" data-anonymous-ask=\"" + anon_status + "\" data-tumblelog-name=\"" + user_url + "\" class=\"xkit-ask ask\">Ask</a>";
@@ -256,7 +256,7 @@ XKit.extensions.show_more = new Object({
 					setTimeout(function() { $(".tumblelog_popover_glass").trigger('click'); }, 10);
 					$(".popover").hide();
 				} catch (err) {
-					alert(err.message);
+					console.error(err.message);
 				}
 			});
 
@@ -314,9 +314,14 @@ XKit.extensions.show_more = new Object({
 			},
 			json: false,
 			onerror: function(response) {
-				alert("Unable to follow/unfollow person, error " +
-					  response.status + ": " + response.responseText +
-					  "\n\nPlease try again later or file a bug report by going to new-xkit-extension.tumblr.com/ask");
+				XKit.window.show("User Menus+ Error " + response.status,
+					"Unable to follow user:" +
+					"<p>" + response.responseText + "</p>" +
+					"Please try again later or file a bug report.",
+					"error",
+					'<div class="xkit-button default" id="xkit-close-message">OK</div>' +
+					'<a class="xkit-button" href="https://new-xkit-extension.tumblr.com/ask" target="_blank">Send an ask</a>'
+				);
 			},
 			onload: function(response) {
 				XKit.notifications.add("User " + user_url + " followed.");
@@ -347,9 +352,14 @@ XKit.extensions.show_more = new Object({
 			},
 			json: false,
 			onerror: function(response) {
-				alert("Unable to follow/unfollow person, error " +
-					  response.status + ": \"" + response.responseText +
-					  "\"\n\nPlease try again later or file a bug report by going to new-xkit-extension.tumblr.com/ask");
+				XKit.window.show("User Menus+ Error " + response.status,
+					"Unable to unfollow user:" +
+					"<p>" + response.responseText + "</p>" +
+					"Please try again later or file a bug report.",
+					"error",
+					'<div class="xkit-button default" id="xkit-close-message">OK</div>' +
+					'<a class="xkit-button" href="https://new-xkit-extension.tumblr.com/ask" target="_blank">Send an ask</a>'
+				);
 			},
 			onload: function(response) {
 				XKit.notifications.add("User " + user_url + " unfollowed.");
@@ -360,7 +370,7 @@ XKit.extensions.show_more = new Object({
 						json_obj.following = false;
 						$(m_parent).find(".post_avatar_link").attr('data-tumblelog-popover', JSON.stringify(json_obj));
 					} catch (e) {
-						// console.log("Unable to set popover obj data");
+						// console.error("Unable to set popover obj data");
 					}
 				}
 			}
@@ -455,7 +465,7 @@ XKit.extensions.show_more = new Object({
 			} catch (err) {
 				XKit.extensions.show_more.popup_data = {};
 				XKit.extensions.show_more.popup_data.error = true;
-				XKit.console.add("show_more: Can't parse popup_data:" + e.message);
+				console.error("show_more: Can't parse popup_data:" + e.message);
 			}
 
 		} else {
@@ -472,19 +482,19 @@ XKit.extensions.show_more = new Object({
 					"X-tumblr-form-key": XKit.interface.form_key(),
 				},
 				onerror: function(response) {
-					if (m_req_id !== XKit.extensions.show_more.popup_data.popup_data_req_id) { XKit.console.add("show_more: Could not fetch data, also ID mismatch."); return; }
-					XKit.console.add("show_more: Could not fetch data.");
+					if (m_req_id !== XKit.extensions.show_more.popup_data.popup_data_req_id) { console.error("show_more: Could not fetch data, also ID mismatch."); return; }
+					console.error("show_more: Could not fetch data.");
 					XKit.extensions.show_more.popup_data = {};
 					XKit.extensions.show_more.popup_data.error = true;
 				},
 				onload: function(response) {
 
-					if (m_req_id !== XKit.extensions.show_more.popup_data.popup_data_req_id) { XKit.console.add("show_more: Fetched data but ID mismatch."); return; }
-					XKit.console.add("show_more: Successfully fetched popup_data.");
+					if (m_req_id !== XKit.extensions.show_more.popup_data.popup_data_req_id) { console.log("show_more: Fetched data but ID mismatch."); return; }
+					console.log("show_more: Successfully fetched popup_data.");
 					try {
 						XKit.extensions.show_more.popup_data = JSON.parse(response.responseText);
 					} catch (err) {
-						XKit.console.add("show_more: Could not store popup_data.");
+						console.log("show_more: Could not store popup_data.");
 						XKit.extensions.show_more.popup_data = {};
 						XKit.extensions.show_more.popup_data.error = true;
 					}
@@ -509,7 +519,7 @@ XKit.extensions.show_more = new Object({
 		try {
 			XKit.extensions.show_more.popup_data = JSON.parse($(m_obj).attr('data-tumblelog-popover'));
 		} catch (err) {
-			XKit.console.add("show_more -> Can't parse popup_data");
+			console.log("show_more -> Can't parse popup_data");
 			XKit.extensions.show_more.popup_data = {};
 			XKit.extensions.show_more.popup_data.error = true;
 		}

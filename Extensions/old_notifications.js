@@ -1,5 +1,5 @@
 //* TITLE Classic Notifications **//
-//* VERSION 0.7.2 **//
+//* VERSION 0.7.3 **//
 //* DESCRIPTION Notifications where they were **//
 //* DETAILS This is a very experimental extension that brings back the notifications to your blog pages (ie: www.tumblr.com/blog/new-xkit-extension), just the way it was before Tumblr's Activity update. **//
 //* DEVELOPER New-XKit **//
@@ -425,19 +425,19 @@ XKit.extensions.old_notifications = new Object({
 	fetch_successful: function(data) {
 
 		if (XKit.installed.check("notificationblock") === true) {
-			XKit.console.add("notificationblock installed.");
+			console.log("notificationblock installed.");
 			if (typeof XKit.extensions.notificationblock !== "undefined") {
 				if (XKit.extensions.notificationblock.running === true) {
 					if (XKit.extensions.notificationblock.blacklisted !== "undefined") {
 						XKit.extensions.old_notifications.blacklisted = XKit.extensions.notificationblock.blacklisted;
 					} else {
-						XKit.console.add("notificationblock blacklist is undefined.");
+						console.log("notificationblock blacklist is undefined.");
 					}
 				} else {
-					XKit.console.add("notificationblock is not running.");
+					console.log("notificationblock is not running.");
 				}
 			} else {
-				XKit.console.add("notificationblock is undefined.");
+				console.log("notificationblock is undefined.");
 			}
 		}
 
@@ -452,7 +452,7 @@ XKit.extensions.old_notifications = new Object({
 		if (XKit.installed.check("notificationblock") === true) {
 			if (typeof XKit.extensions.notificationblock !== "undefined") {
 				if (XKit.extensions.notificationblock.running === true) {
-					XKit.console.add("Found NotificationBlock, calling.");
+					console.log("Found NotificationBlock, calling.");
 					XKit.extensions.notificationblock.do();
 				}
 			}

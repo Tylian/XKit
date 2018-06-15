@@ -1,5 +1,5 @@
 //* TITLE XStats **//
-//* VERSION 0.3.5 **//
+//* VERSION 0.3.6 **//
 //* DESCRIPTION The XKit Statistics Tool **//
 //* DETAILS This extension allows you to view statistics regarding your dashboard, such as the percentage of post types, top 4 posters, and more. In the future, it will allow you to view statistics regarding your and others blogs. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -521,7 +521,7 @@ XKit.extensions.stats = new Object({
 		m_text = m_text + "</ul>";
 
 		if (XKit.extensions.stats.preferences.promote.value === true) {
-			m_text = m_text + "<p><small>Generated using XStats on <a href=\"http://www.xkit.info/\">XKit</a>.</small></p>";
+			m_text = m_text + "<p><small>Generated using XStats on <a href=\"https://new-xkit-extension.tumblr.com\">New XKit</a>.</small></p>";
 		}
 
 		m_object["post[two]"] = m_text;

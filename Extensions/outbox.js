@@ -1,5 +1,5 @@
 //* TITLE Outbox **//
-//* VERSION 0.11.0 **//
+//* VERSION 0.11.1 **//
 //* DESCRIPTION Saves your sent replies and asks. **//
 //* DETAILS This extension stores and lets you view the last 50 asks you've answered privately. Please keep in mind that this is a highly experimental extension, so if you hit a bug, please send the XKit blog an ask with the problem you've found. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -33,7 +33,7 @@ XKit.extensions.outbox = new Object({
 
 	frame_run: function() {
 
-		XKit.console.add("Outbox working on Frame mode...");
+		console.log("Outbox working on Frame mode...");
 		if (document.location.href.indexOf('/ask_form') !== -1) {
 			this.run_ask_frame();
 		}
@@ -139,7 +139,7 @@ XKit.extensions.outbox = new Object({
 		XKit.extensions.outbox.check_indash_asks();
 
 		if (XKit.interface.where().inbox !== true) {
-			XKit.console.add("Outbox -> Quitting, not in inbox");
+			console.log("Outbox -> Quitting, not in inbox");
 			return;
 		}
 

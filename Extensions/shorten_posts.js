@@ -1,5 +1,5 @@
 //* TITLE Shorten Posts **//
-//* VERSION 0.2.3 **//
+//* VERSION 0.2.4 **//
 //* DESCRIPTION Makes scrolling easier **//
 //* DETAILS This extension shortens long posts, so if you are interested, you can just click on Show Full Post button to see it all, or scroll down if you are not interested. Useful for screens where long posts take a lot of space, and making it hard to scroll down.<br><br>By default, this extension shortens text posts. You can toggle settings to choose which types of posts to shorten. (This will 'cut off' long, vertical posts.) **//
 //* DEVELOPER STUDIOXENIX **//
@@ -244,13 +244,13 @@ XKit.extensions.shorten_posts = new Object({
 	cpanel_check_height: function() {
 
 		if (isNaN(XKit.extensions.shorten_posts.preferences.height.value) === true) {
-			XKit.console.add("Invalid post height check interval, reverting to default: not a number.");
+			console.log("Invalid post height check interval, reverting to default: not a number.");
 			XKit.extensions.shorten_posts.preferences.height.value = XKit.extensions.shorten_posts.height_default;
 		} else {
 			var m_height = XKit.extensions.shorten_posts.preferences.height.value;
 			if (m_height > XKit.extensions.shorten_posts.height_max || m_height < XKit.extensions.shorten_posts.height_min) {
 				XKit.extensions.shorten_posts.preferences.height.value = XKit.extensions.shorten_posts.height_default;
-				XKit.console.add("Invalid post height check interval, reverting to default: too small or big.");
+				console.log("Invalid post height check interval, reverting to default: too small or big.");
 			}
 		}
 

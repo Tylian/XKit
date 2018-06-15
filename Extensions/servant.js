@@ -1,5 +1,5 @@
 //* TITLE Servant **//
-//* VERSION 0.5.12 **//
+//* VERSION 0.6.0 **//
 //* DESCRIPTION XKit Personal Assistant **//
 //* DETAILS Automator for XKit: lets you create little Servants that does tasks for you when the conditions you've set are met. **//
 //* DEVELOPER new-xkit **//
@@ -122,7 +122,7 @@ XKit.extensions.servant = new Object({
 			compatibility: "post",
 			runs_on: "post",
 			returns: "the owner's URL",
-			placeholder: "ie: 'xkit-extension'",
+			placeholder: "ie: 'new-xkit-extension'",
 			description: "Runs if a post is created/reblogged from the URL you've entered is found, affects that post.",
 
 			run: function(parameter, obj) {
@@ -150,7 +150,7 @@ XKit.extensions.servant = new Object({
 			compatibility: "post",
 			runs_on: "post",
 			returns: "the source URL",
-			placeholder: "ie: 'xkit-extension'",
+			placeholder: "ie: 'new-xkit-extension'",
 			description: "Runs if a post is sourced to the URL you've entered is found, affects that post.",
 
 			run: function(parameter, obj) {
@@ -737,7 +737,7 @@ XKit.extensions.servant = new Object({
 					m_return = eval(parameter + "\n//# sourceURL=xkit/servant/servant" + (new Date()).getTime() + ".js");
 				} catch (e) {
 					m_return = false;
-					console.log("Unable to run Servant! ---> " + e.message);
+					console.error("Unable to run Servant! ---> " + e.message);
 				}
 
 				m_object.run = m_return;
@@ -1054,7 +1054,7 @@ XKit.extensions.servant = new Object({
 									XKit.installed.enable(parameter);
 									XKit.notifications.add("Enabled '" + parameter + "'", "ok");
 								} catch (e) {
-									XKit.console.add("Can not run " + parameter + ": " + e.message);
+									console.error("Can not run " + parameter + ": " + e.message);
 								}
 
 							}
@@ -1063,7 +1063,7 @@ XKit.extensions.servant = new Object({
 
 					} catch (e) {
 
-						console.log("Can't disable " + parameter + ", " + e.message);
+						console.error("Can't disable " + parameter + ", " + e.message);
 
 					}
 
@@ -1097,7 +1097,7 @@ XKit.extensions.servant = new Object({
 
 					} catch (e) {
 
-						console.log("Can't disable " + parameter + ", " + e.message);
+						console.error("Can't disable " + parameter + ", " + e.message);
 
 					}
 
@@ -1358,8 +1358,6 @@ XKit.extensions.servant = new Object({
 			// push a post object to a function that doesn't take post objects.
 			compatibility.push(XKit.extensions.servant.causes[cause.id].compatibility);
 
-			// alert("on " + obj.id + ":\n" + "returned " + m_result.run + " on causer " + i + " --- parameter = " + cause.value + "\ntype = " + cause.id);
-
 			if (m_result.run === false || do_run === 0) {
 				do_run = 0;
 			} else {
@@ -1429,16 +1427,27 @@ XKit.extensions.servant = new Object({
 
 		m_html = m_html + "<div class=\"xkit-servant-javascript-warning\"><b>Be very careful!</b> The \"Run Javascript Code\" option is for experts. Do not copy/paste and run code from people you don't know and trust, very bad things can happen.</div>";
 
-		XKit.window.show("Add Servant", m_html, "question", "<div class=\"xkit-button default\" id=\"xkit-servant-add\">Add Servant..</div><div id=\"xkit-close-message\" class=\"xkit-button\">Cancel</div><a href=\"http://xkit.info/notes/servant_help.php\" target=\"_BLANK\" class=\"xkit-button float-right\">Help</a>", true);
+		XKit.window.show("Add Servant",
+			m_html,
+			"question",
+			'<div class="xkit-button default" id="xkit-servant-add">Add Servant</div>' +
+			'<div id="xkit-close-message" class="xkit-button">Cancel</div>' +
+			'<div id="xkit-servant-help" class="xkit-button float-right">Help &rarr;</div>',
+		true);
 
 		XKit.extensions.servant.bind_actions_on_add_window();
 		XKit.extensions.servant.react_to_selection_change();
+		$("#tiptip_holder").css("z-index", "99000000");
 
 		$(".xkit-servant-add-more-actions").click(function() {
 
 			$(".xkit-servant-do")
 				.find(".xkit-servant-add-more")
 				.before(XKit.extensions.servant.add_field_action());
+
+			if ($(".xkit-servant-option-line-action").length === 5) {
+				$(".xkit-servant-add-more-actions").css("display", "none");
+			}
 
 			centerIt($("#xkit-window"));
 
@@ -1454,12 +1463,18 @@ XKit.extensions.servant = new Object({
 			$(".xkit-servant-when")
 				.find(".xkit-servant-add-more")
 				.before(XKit.extensions.servant.add_field_cause());
+
+			if ($(".xkit-servant-option-line-cause").length === 3) {
+				$(".xkit-servant-add-more-causes").css("display", "none");
+			}
+
 			centerIt($("#xkit-window"));
 
 			XKit.extensions.servant.readjust_lines($(".xkit-servant-option-cause-line-0"));
 
 			XKit.extensions.servant.bind_actions_on_add_window();
 			XKit.extensions.servant.react_to_selection_change();
+
 
 		});
 
@@ -1477,18 +1492,44 @@ XKit.extensions.servant = new Object({
 
 		$(".xkit-servant-option-textbox").each(function() {
 
-			if ($.trim($(this).val()) === "") {
+			var $this = $(this);
+			if ($.trim($this.val()) === "") {
 				found = true;
-				return false;
+				if ($this.attr("data-old-placeholder")) { return; }
+				$this
+					.css("border-color", "red")
+					.attr("data-old-placeholder", $this.attr("placeholder"))
+					.attr("placeholder", "You can't leave this empty!")
+					.val("")
+					.click(function() {
+						$this
+							.removeAttr("style")
+							.attr("placeholder", $this.attr("data-old-placeholder"))
+							.removeAttr("data-old-placeholder")
+							.off("click");
+					});
 			}
 
 		});
 
 		$(".xkit-servant-option-listbox").each(function() {
 
-			if ($.trim($(this).val()) === "") {
+			var $this = $(this);
+			if ($.trim($this.val()) === "") {
 				found = true;
-				return false;
+				if ($this.attr("data-old-placeholder")) { return; }
+				$this
+					.css("border-color", "red")
+					.attr("data-old-placeholder", $this.attr("placeholder"))
+					.attr("placeholder", "You can't leave this empty!")
+					.val("")
+					.click(function() {
+						$this
+							.removeAttr("style")
+							.attr("placeholder", $this.attr("data-old-placeholder"))
+							.removeAttr("data-old-placeholder")
+							.off("click");
+					});
 			}
 
 		});
@@ -1532,12 +1573,7 @@ XKit.extensions.servant = new Object({
 		var when = [];
 		var action = [];
 
-		if (XKit.extensions.servant.check_if_empty_value() === true) {
-
-			alert("Please fill all the values.");
-			return;
-
-		}
+		if (XKit.extensions.servant.check_if_empty_value()) { return; }
 
 		$(".xkit-servant-option-line-cause").each(function() {
 
@@ -1906,7 +1942,18 @@ XKit.extensions.servant = new Object({
 
 			if (id === "0") { return; }
 
-			$(this).parent().fadeOut('fast', function() { var m_obj = this; $(this).remove(); XKit.extensions.servant.readjust_lines($(m_obj)); centerIt($("#xkit-window")); XKit.extensions.servant.react_to_selection_change(); });
+			$(this).parent().fadeOut('fast', function() {
+				var $obj = $(this);
+				$obj.remove();
+				if ($obj.hasClass("xkit-servant-option-line-cause")) {
+					$(".xkit-servant-add-more-causes").removeAttr("style");
+				} else {
+					$(".xkit-servant-add-more-actions").removeAttr("style");
+				}
+				XKit.extensions.servant.readjust_lines($obj);
+				centerIt($("#xkit-window"));
+				XKit.extensions.servant.react_to_selection_change();
+			});
 
 		});
 
@@ -1916,6 +1963,10 @@ XKit.extensions.servant = new Object({
 			XKit.extensions.servant.react_to_selection_change();
 
 		});
+
+		$("#xkit-servant-help")
+			.unbind("click")
+			.bind("click", XKit.extensions.servant.show_help);
 
 	},
 
@@ -1977,8 +2028,6 @@ XKit.extensions.servant = new Object({
 
 		var causes_html = "";
 
-		if ($(".xkit-servant-option-line-cause").length >= 3) { alert("You can only add up to 3 causes."); return ""; }
-
 		for (var obj in XKit.extensions.servant.causes) {
 
 			var dis_class = "";
@@ -2010,8 +2059,6 @@ XKit.extensions.servant = new Object({
 		var causes_html = "";
 
 		m_html = m_html + "<div data-section=\"action\" data-id=\"" + XKit.extensions.servant.add_action_count + "\" class=\"xkit-servant-help-for-line\">&nbsp;</div>";
-
-		if ($(".xkit-servant-option-line-action").length >= 5) { alert("You can only add up to 5 actions."); return ""; }
 
 		for (var obj in XKit.extensions.servant.actions) {
 
@@ -2182,6 +2229,78 @@ XKit.extensions.servant = new Object({
 
 		XKit.extensions.servant.save_servants();
 
+	},
+
+	show_help: function() {
+
+		XKit.window.show("Servant: Introduction",
+			"This extension allows you to create servants, little code snippets which run when you want them to.<br>" +
+			"You can also write your own Javascript code!<br><br>" +
+			"Each cause and action has a small &quot;i&quot; icon next to them. Select a cause or action, then hover over the icon to see what they do.",
+			"info",
+			'<div class="xkit-button default" id="xkit-servant-returns">Next &rarr;</div>' +
+			'<div class="xkit-button" id="xkit-servant-cancel-tour">Back</div>' +
+			'<div class="xkit-button" id="xkit-close-message">Close</div>');
+
+		$("#xkit-servant-cancel-tour").click(function() {
+			XKit.extensions.servant.show_add(XKit.extensions.servant.control_panel_div);
+		});
+
+		$("#xkit-servant-returns").click(function() {
+			XKit.window.show("Servant: What are returns?",
+				"Some causes &quot;return&quot; data. Here's how to use them.<br><br>" +
+				"Some servant causes have a symbol, a box with an arrow pointing out. " +
+				"Hovering over them shows what they return. Here's an example:<br>" +
+				'<img src="https://new-xkit.github.io/XKit/Extensions/dist/page/images/return_1.png" style="border: 1px solid #aaaa; border-radius: 3px;"><br>' +
+				"This basically means that if you type &quot;%1&quot; on the actions panel, that %1 will get replaced with the time.",
+				"info",
+				'<div class="xkit-button default" id="xkit-servant-js-intro">Next &rarr;</div>' +
+				'<div class="xkit-button" id="xkit-close-message">Close</div>',
+			true);
+			$("#xkit-servant-intro").click(XKit.extensions.servant.show_help);
+			$("#xkit-servant-js-intro").click(function() {
+				XKit.window.show("Servant: How to use JavaScript code?",
+					"If you are a poweruser, you can also use JavaScript code. This allows you to do things that Servant does not support. " +
+					'You have access to the <a href="https://github.com/new-xkit/XKit/wiki#api-functions" target="_blank">XKit API</a> and to jQuery.<br><br>' +
+					"<b>Be careful though, and never copy/paste code from untrustworthy sources!</b><br>" +
+					"You should never use code you didn't review. Do not use obfuscated code.",
+					"info",
+					'<div class="xkit-button default" id="xkit-servant-js-causes">Next &rarr;</div>' +
+					'<div class="xkit-button" id="xkit-close-message">Close</div>',
+				true);
+				$("#xkit-servant-js-causes").click(function() {
+					XKit.window.show("Servant: JavaScript on causes",
+						"When writing a cause Javascript code, simply return true or false and Servant will do the rest.<br><p>" +
+						"// Check if we should run.<br>" +
+						"if (XKit.interface.where().inbox === true) {<br>" +
+						"&zwnj;&emsp;&emsp;return true;<br>" +
+						"} else {<br>" +
+						"&zwnj;&emsp;&emsp;return false;<br>" +
+						"}</p>" +
+						'You can also use this to initialise your code, for example to <a href="https://github.com/new-xkit/XKit/wiki/XKit.interface#adding-buttons" target="_blank">add a control button</a>.',
+						"info",
+						'<div class="xkit-button default" id="xkit-servant-js-actions">Next &rarr;</div>' +
+						'<div class="xkit-button" id="xkit-close-message">Close</div>',
+					true);
+					$("#xkit-servant-js-actions").click(function() {
+						XKit.window.show("Servant: JavaScript on actions",
+							"If your servant runs on a post, you can access the post using the variable <b>post</b>.<p>" +
+							"// Make the said post's background red!<br>" +
+							'$(post).css("background","red");</p>' +
+							"You can also use any cause returns:<p>" +
+							'$(post).append("I made this red because it contained \"%1\"!");</p>',
+							"info",
+							'<div class="xkit-button default" id="xkit-servant-done">Got it - add a new servant!</div>' +
+							'<div class="xkit-button" id="xkit-close-message">Close</div>',
+						true);
+
+						$("#xkit-servant-done").click(function() {
+							XKit.extensions.servant.show_add(XKit.extensions.servant.control_panel_div);
+						});
+					});
+				});
+			});
+		});
 	},
 
 	destroy: function() {

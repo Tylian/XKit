@@ -1,5 +1,5 @@
 //* TITLE Themes+ (preview) **//
-//* VERSION 0.2.6 **//
+//* VERSION 0.2.7 **//
 //* DESCRIPTION Customize More **//
 //* DETAILS Themes+ lets you customize your dashboard to your liking by letting you choose the colors, the images and options yourself. You can also export and import the themes you and others made. Please note that this is the preview edition, so it's lacking some functionality. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -1160,19 +1160,35 @@ XKit.extensions.themes_plus = new Object({
 
 				$("#xkit-themes-plus-confirm-input-code").click(function() {
 
-					var data = $.trim($("#xkit-themes-plus-input-code-code-code-code").val());
+					var $data = $("#xkit-themes-plus-input-code-code-code-code");
+					var data = $.trim($data.val());
+					function complain(problem) {
+						$data
+							.css("border-color", "red")
+							.attr("placeholder", problem)
+							.val("")
+							.click(function() {
+								$data
+									.removeAttr("style")
+									.attr("placeholder", "Paste the XKit Themes+ theme code you have here.")
+									.off("click");
+							});
+					}
 
-					if (data === "") { XKit.window.close(); return; }
+					if (data === "") {
+						complain("You forgot to paste anything.");
+						return;
+					}
 
 					if (data.substring(0, 12) !== "[XKIT_THEME|" || data.length <= 15) {
-						alert("Invalid or incompatible theme code.");
+						complain("Invalid or incompatible theme code.");
 						return;
 					}
 
 					var compatibility_index = data.substring(12, 13);
 
 					if (parseInt(compatibility_index) > XKit.extensions.themes_plus.theme_compatibility) {
-						alert("This theme is not supported by this version of Themes+.");
+						complain("This theme is not supported by this version of Themes+.");
 						return;
 					}
 
@@ -1182,7 +1198,7 @@ XKit.extensions.themes_plus = new Object({
 					try {
 						data_obj = JSON.parse(decodeURIComponent(escape(window.atob(data))));
 					} catch (e) {
-						alert("Theme file corrupt or not compatible.");
+						complain("Theme file corrupt or not compatible.");
 						return;
 					}
 

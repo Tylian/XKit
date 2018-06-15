@@ -1,5 +1,5 @@
 //* TITLE Bookmarker **//
-//* VERSION 2.3.6 **//
+//* VERSION 2.3.7 **//
 //* DESCRIPTION Dashboard Time Machine **//
 //* DEVELOPER new-xkit **//
 //* DETAILS The Bookmarker extension allows you to bookmark posts and get back to them whenever you want to. Just click on the Bookmark icon on posts and the post will be added to your Bookmark List on your sidebar. **//
@@ -329,7 +329,6 @@ XKit.extensions.bookmarker = new Object({
 		var m_index = -1;
 
 		for (var i = 0; i < XKit.extensions.bookmarker.bookmarks.length; i++) {
-			//alert(i + "\ncurrently: " + XKit.extensions.bookmarker.bookmarks[i].id + "\nwanted: " + post_id);
 			if (XKit.extensions.bookmarker.bookmarks[i].id == post_id) {
 				m_index = i;
 				break;
@@ -338,7 +337,6 @@ XKit.extensions.bookmarker = new Object({
 
 		if (m_index === -1) {
 			// Not found, don't bother trying to remove it.
-			//alert("NOT FOUND");
 			return;
 		}
 
@@ -430,11 +428,7 @@ XKit.extensions.bookmarker = new Object({
 
 	cpanel: function() {
 
-		$("#xkit-bookmarks-format-help").click(function() {
-
-			XKit.window.show("Bookmark time formatting", "Bookmarks extension allows you to format the date by using a formatting syntax. Make your own and type it in the Timestamp Format box to customize your timestamps.<br/><br/>For information, please visit:<br/><a href=\"http://xkit.info/seven/support/timestamps/index.php\">Timestamp Format Documentation</a><br/><br/>Please be careful while customizing the format. Improper/invalid formatting can render Timestamps unusable. In that case, just delete the text you've entered completely and XKit will revert to its default formatting.", "info", "<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
-
-		});
+		$("#xkit-bookmarks-format-help").click(XKit.tools.show_timestamps_help);
 
 	},
 

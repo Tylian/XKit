@@ -1,5 +1,5 @@
 //* TITLE One-Click Postage **//
-//* VERSION 4.4.1 **//
+//* VERSION 4.4.2 **//
 //* DESCRIPTION Lets you easily reblog, draft and queue posts **//
 //* DEVELOPER new-xkit **//
 //* FRAME false **//
@@ -172,10 +172,6 @@ XKit.extensions.one_click_postage = new Object({
 		if (XKit.page.blog_frame && XKit.extensions.one_click_postage.preferences.enable_quick_blog_reblog.value) {
 			XKit.extensions.one_click_postage.in_blog();
 		}
-
-		if (XKit.page.peepr) {
-			XKit.extensions.one_click_postage.run();
-		}
 	},
 
 	in_blog: function() {
@@ -233,7 +229,11 @@ XKit.extensions.one_click_postage = new Object({
 		var blog_id = "";
 
 		if (!m_blogs) {
-			alert("Unable to QuickReblog/Queue:\nCan't get list of current blogs, please visit dashboard first.");
+			XKit.window.show("Error",
+				"Can't get list of current blogs - please visit dashboard first.",
+				"error",
+				'<div class="xkit-button default" id="xkit-close-message">OK</div>'
+			);
 			return;
 		} else {
 			for (var i = 0; i < m_blogs.length; i++) {
@@ -272,15 +272,15 @@ XKit.extensions.one_click_postage = new Object({
 			json: true,
 			onerror: function(response) {
 				if (response.status === 401) {
-					alert("Unable to QuickReblog/Queue:\nError Code: INOCP01");
+					XKit.extensions.one_click_postage.show_error("OCP01-B", state);
 				} else {
 					if (response.status === 404) {
-						alert("Unable to QuickReblog/Queue:\nError Code: INOCP04 [Not Found]");
+						XKit.extensions.one_click_postage.show_error("OCP02-B [Post Not Found]", state);
 					} else {
 						if (retry_mode !== true) {
 							setTimeout(function() { XKit.extensions.one_click_postage.in_blog_post(obj, state, true); }, 500);
 						} else {
-							alert("Unable to QuickReblog/Queue:\nError Code: INOCP03 [Not allowed]");
+							XKit.extensions.one_click_postage.show_error("OCP03-" + response.status + "-B", state);
 						}
 					}
 				}
@@ -296,12 +296,12 @@ XKit.extensions.one_click_postage = new Object({
 					if (mdata.errors === false) {
 						XKit.extensions.one_click_postage.in_blog_process(mdata, state, obj, m_object, false);
 					} else {
-						alert("Unable to QuickReblog/Queue:\nError Code: INOCP31");
+						XKit.extensions.one_click_postage.show_error("OCP05-B", state);
 						$(obj).removeClass("xkit-button-working");
 						$(obj).addClass("xkit-button-error");
 					}
 				} catch (e) {
-					alert("Unable to QuickReblog/Queue:\nError Code: INOCP11");
+					XKit.extensions.one_click_postage.show_error("OCP04-B", state);
 					$(obj).removeClass("xkit-button-working");
 					$(obj).addClass("xkit-button-error");
 					return;
@@ -382,7 +382,7 @@ XKit.extensions.one_click_postage = new Object({
 				if (retry_mode !== true) {
 					XKit.extensions.one_click_postage.in_blog_process(data, state, obj, m_object, true);
 				} else {
-					alert("Unable to QuickReblog/Queue:\nError Code: INOCP109-SFORMKEYFAIL");
+					XKit.extensions.one_click_postage.show_error("INOCP109-SFORMKEYFAIL", state);
 					$(obj).removeClass("xkit-button-working");
 					$(obj).addClass("xkit-button-error");
 				}
@@ -401,19 +401,19 @@ XKit.extensions.one_click_postage = new Object({
 				onerror: function(response) {
 					XKit.interface.kitty.set("");
 					if (response.status === 401) {
-						alert("Unable to QuickReblog/Queue:\nError Code: INOCP101");
+						XKit.extensions.one_click_postage.show_error("INOCP101");
 						$(obj).removeClass("xkit-button-working");
 						$(obj).addClass("xkit-button-error");
 					} else {
 						if (response.status === 404) {
-							alert("Unable to QuickReblog/Queue:\nError Code: INOCP104 Not Found");
+							XKit.extensions.one_click_postage.show_error("INOCP104 Not Found", state);
 							$(obj).removeClass("xkit-button-working");
 							$(obj).addClass("xkit-button-error");
 						} else {
 							if (retry_mode !== true) {
 								XKit.extensions.one_click_postage.in_blog_process(data, state, obj, m_object, true);
 							} else {
-								alert("Unable to QuickReblog/Queue:\nError Code: INOCP109-" + response.status);
+								XKit.extensions.one_click_postage.show_error("INOCP109-" + response.status, state);
 								$(obj).removeClass("xkit-button-working");
 								$(obj).addClass("xkit-button-error");
 							}
@@ -427,12 +427,12 @@ XKit.extensions.one_click_postage = new Object({
 							$(obj).removeClass("xkit-button-working");
 							$(obj).addClass("xkit-button-done");
 						} else {
-							alert("Unable to QuickReblog/Queue:\nError Code: INOCP901");
+							XKit.extensions.one_click_postage.show_error("INOCP901", state);
 							$(obj).removeClass("xkit-button-working");
 							$(obj).addClass("xkit-button-error");
 						}
 					} catch (e) {
-						alert("Unable to QuickReblog/Queue:\nError Code: INOCP181");
+						XKit.extensions.one_click_postage.show_error("INOCP181", state);
 						$(obj).removeClass("xkit-button-working");
 						$(obj).addClass("xkit-button-error");
 					}
@@ -533,7 +533,7 @@ XKit.extensions.one_click_postage = new Object({
 					// Not booted up yet?
 					setTimeout(function() { XKit.extensions.one_click_postage.get_autotagger(); }, 100);
 				} else {
-					XKit.console.add("Auto tagger installed and found");
+					console.log("Auto tagger installed and found");
 					XKit.extensions.one_click_postage.auto_tagger = true;
 					XKit.extensions.one_click_postage.auto_tagger_preferences = XKit.extensions.auto_tagger.preferences;
 				}
@@ -552,7 +552,7 @@ XKit.extensions.one_click_postage = new Object({
 					// Not booted up yet?
 					setTimeout(function() { XKit.extensions.one_click_postage.get_quicktags(); }, 100);
 				} else {
-					XKit.console.add("Quick Tags installed and found");
+					console.log("Quick Tags installed and found");
 					XKit.extensions.one_click_postage.quick_tags = true;
 				}
 			} else {
@@ -817,7 +817,7 @@ XKit.extensions.one_click_postage = new Object({
 				XKit.extensions.one_click_postage.already_reblogged = [];
 			}
 
-			XKit.post_listener.add("already_reblogged", XKit.extensions.one_click_postage.check_if_alreadyreblogged);
+			XKit.post_listener.add("one_click_postage", XKit.extensions.one_click_postage.check_if_alreadyreblogged);
 			XKit.extensions.one_click_postage.check_if_alreadyreblogged();
 		}
 
@@ -826,7 +826,7 @@ XKit.extensions.one_click_postage = new Object({
 			if ($("body").hasClass("is_private_channel")) {return; }
 
 			XKit.interface.create_control_button("xkit-one-click-postage-quickqueue", this.qq_icon, "QuickQueue", "", this.qq_ok_icon);
-			XKit.post_listener.add("quick_queue_do_posts", XKit.extensions.one_click_postage.quick_queue_do_posts);
+			XKit.post_listener.add("one_click_postage", XKit.extensions.one_click_postage.quick_queue_do_posts);
 			XKit.extensions.one_click_postage.quick_queue_do_posts();
 
 			$(document).on('click', '.xkit-one-click-postage-quickqueue', XKit.extensions.one_click_postage.quick_queue_button_clicked);
@@ -890,7 +890,7 @@ XKit.extensions.one_click_postage = new Object({
 			.off('keydown', XKit.extensions.one_click_postage.process_keydown);
 		window.removeEventListener('keydown', XKit.extensions.one_click_postage.suspend_tumblr_key_commands);
 		XKit.tools.remove_css("one_click_postage");
-		XKit.post_listener.remove("already_reblogged");
+		XKit.post_listener.remove("one_click_postage");
 		XKit.tools.remove_css("x1cpostage_reverse_ui");
 		$("#x1cpostage_box").remove();
 		XKit.tools.remove_css("one_click_postage_slim");
@@ -1498,7 +1498,7 @@ XKit.extensions.one_click_postage = new Object({
 		try {
 			limit = parseInt(limit_count.substring(1));
 		} catch (e) {
-			//alert("NO");
+
 		}
 
 		if (XKit.extensions.one_click_postage.already_reblogged.length >= limit) {

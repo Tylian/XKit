@@ -1,5 +1,5 @@
 //* TITLE XInbox **//
-//* VERSION 1.9.10 **//
+//* VERSION 1.9.11 **//
 //* DESCRIPTION Enhances your Inbox experience **//
 //* DEVELOPER new-xkit **//
 //* DETAILS XInbox allows you to tag posts before posting them, and see all your messages at once, and lets you delete multiple messages at once using the Mass Editor mode. To use this mode, go to your Inbox and click on the Mass Editor Mode button on your sidebar, click on the messages you want to delete then click the Delete Messages button.  **//
@@ -132,11 +132,11 @@ XKit.extensions.xinbox = new Object({
 
 		if (XKit.extensions.xinbox.preferences.slim_outgoing_fan_mail.value === true) {
 
-			XKit.tools.add_css("#fan_mail { background-image: url('http://xkit.info/seven/extension_assets/paper.png'); }#fan_mail #message{ overflow-y: scroll; font-size: 15px !important; line-height: 22px !important; }", "xinbox_slim_outgoing_fan_mail");
+			XKit.tools.add_css("#fan_mail { background-image: url('https://new-xkit.github.io/XKit/Extensions/dist/page/images/paper.png'); }#fan_mail #message{ overflow-y: scroll; font-size: 15px !important; line-height: 22px !important; }", "xinbox_slim_outgoing_fan_mail");
 
 			$(document).on('click', '#paper_white-lined-1', function() {
 
-				$("#fan_mail").css("background-image", "url('http://xkit.info/seven/extension_assets/paper.png')");
+				$("#fan_mail").css("background-image", "url('https://new-xkit.github.io/XKit/Extensions/dist/page/images/paper.png')");
 
 			});
 
@@ -191,12 +191,12 @@ XKit.extensions.xinbox = new Object({
 			$(document).on('click', '.xkit-xinbox-pa-reply', XKit.extensions.xinbox.on_click_to_pa_reply);
 			XKit.interface.create_control_button("xkit-xinbox-pa-reply", "", "Reply to Answer", "");
 			XKit.tools.add_css(".xkit-xinbox-pa-reply::before { content: \"\\EA96\"; font-family: \"tumblr-icons\", Blank; font-weight: normal; }", "xinbox_private_reply_button");
-			XKit.post_listener.add("xinbox_show_reply_buttons", XKit.extensions.xinbox.show_reply_button);
+			XKit.post_listener.add("xinbox", XKit.extensions.xinbox.show_reply_button);
 			XKit.extensions.xinbox.show_reply_button();
 		}
 
 		if (XKit.extensions.xinbox.preferences.show_tag_box.value === true || XKit.extensions.xinbox.preferences.tag_usernames.value === true || XKit.extensions.xinbox.preferences.tag_custom.value === true) {
-			XKit.post_listener.add("xinbox_init_tags", XKit.extensions.xinbox.init_tags);
+			XKit.post_listener.add("xinbox", XKit.extensions.xinbox.init_tags);
 			XKit.extensions.xinbox.init_tags();
 		}
 
@@ -442,7 +442,7 @@ XKit.extensions.xinbox = new Object({
 
 			$(".post").parent().addClass("xkit-inbox-found");
 			XKit.tools.add_css(".post_container { display: none; } .post_container.xkit-inbox-found { display: block; } ", "xkit-inbox-search");
-			XKit.post_listener.add("xinbox_search", XKit.extensions.xinbox.search_do_posts);
+			XKit.post_listener.add("xinbox", XKit.extensions.xinbox.search_do_posts);
 
 			$("#xinbox_sidebar").addClass("xkit_others_hidden");
 			right_column_children.slideUp('slow', function() {
@@ -470,7 +470,7 @@ XKit.extensions.xinbox = new Object({
 
 		$(".post").parent().removeClass("xkit-inbox-found");
 		XKit.tools.remove_css("xkit-inbox-search");
-		XKit.post_listener.remove("xinbox_search");
+		XKit.post_listener.remove("xinbox", XKit.extensions.xinbox.search_do_posts);
 
 		if ($("#xinbox-search-bar").length > 0) {
 			$("#xinbox-search-bar").slideUp('slow', function() { $(this).remove(); });
@@ -493,7 +493,7 @@ XKit.extensions.xinbox = new Object({
 		try {
 			$(".fan_mail_read_more").trigger('click');
 		} catch (e) {
-			XKit.console.add("auto_expand_fan_mail: " + e.message);
+			console.error("auto_expand_fan_mail: " + e.message);
 		}
 
 	},
@@ -675,11 +675,15 @@ XKit.extensions.xinbox = new Object({
 					"x-tumblr-form-key": m_key
 				},
 				onerror: function(response) {
-					alert("XInbox can not fetch the required page:\n\n" +
-				"There might be a connection problem, or the extension might need updating.\n\n" +
-				"Please try again later, and if the problem continues, disable XInbox from \n" +
-				"the XKit Control Panel (X icon > XInbox > Disable this Extension) to answer\n" +
-				"your asks while this problem is being fixed.");
+					XKit.window.show("Couldn't fetch page.",
+						"There might be a connection problem, or the extension might need updating.<br><br>" +
+						"Please try again later, and if the problem continues, disable XInbox from" +
+						"the XKit Control Panel to answer your asks while this problem is being fixed.",
+
+						"error",
+
+						'<div class="xkit-button default" id="xkit-close-message">OK</div>'
+					);
 				},
 				onload: function(response) {
 					XKit.extensions.xinbox.delete_msg_index = current_msg;
@@ -755,48 +759,6 @@ XKit.extensions.xinbox = new Object({
 						asker = XKit.extensions.xinbox.preferences.anon_tag.value;
 					}
 				}
-
-
-				/*
-
-				OBSOLETE -- Tumblr changes.
-
-				*/
-
-				/*var asker = XKit.extensions.xinbox.preferences.anon_tag.value;
-				var respondant = $(m_parent).attr('data-tumblelog-name');
-
-				if (respondant !== "" && typeof respondant !== "undefined" && !m_parent.hasClass("post_tumblelog_")) {
-					asker = respondant;
-				} else {
-					if (typeof asker === "undefined") {
-						asker = "";
-					}
-				}*/
-
-				/* var asker = "";
-
-				if ($(m_parent).find(".post_avatar_link").length > 0) {
-
-					var avatar_json_data = $(m_parent).find(".post_avatar_link").attr('data-tumblelog-popover');
-					if (avatar_json_data !== "" && typeof avatar_json_data !== "undefined") {
-						try {
-							var avatar_json = JSON.parse(avatar_json_data);
-							if (avatar_json.name !== "" && typeof avatar_json.name !== "undefined") {
-								asker = avatar_json.name;
-							}
-						}catch(e) {
-							XKit.console.add("Can't tag ask ---->" + e.message);
-						}
-					} else {
-						XKit.console.add("xinbox tagger -> data-tumblelog-popover data missing");
-					}
-
-				} else {
-					XKit.console.add("xinbox tagger -> post_avatar_link missing");
-				}*/
-
-				// return alert("asker = " + asker);
 
 				var all_buttons = $(m_parent).find('[id^="ask_publish_button_"], [id^="ask_draft_button_"], [id^="ask_queue_button_"]');
 				var private_button = $(m_parent).find('[id^="private_answer_button_"]');
@@ -1073,9 +1035,7 @@ XKit.extensions.xinbox = new Object({
 	destroy: function() {
 		$("#inbox_button > a").attr("href", "https://www.tumblr.com/inbox");
 		$("#xinbox_sidebar").remove();
-		XKit.post_listener.remove("xinbox_auto_expand_fan_mail");
-		XKit.post_listener.remove("xinbox_search");
-		XKit.post_listener.remove("xinbox_show_reply_buttons");
+		XKit.post_listener.remove("xinbox");
 		$(document).off("click", "[id^='ask_answer_link_']");
 		clearInterval(XKit.extensions.xinbox.notification_check_interval);
 		XKit.tools.remove_css("xkit_inbox_slim_fan_mail");

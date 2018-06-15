@@ -1,5 +1,5 @@
 //* TITLE Timestamps **//
-//* VERSION 2.7.8 **//
+//* VERSION 2.7.9 **//
 //* DESCRIPTION See when a post has been made. **//
 //* DETAILS This extension lets you see when a post was made, in full date or relative time (eg: 5 minutes ago). It also works on asks, and you can format your timestamps. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -260,7 +260,7 @@ XKit.extensions.timestamps = new Object({
 				method: "GET",
 				url: api_url,
 				onerror: function() {
-					XKit.console.add('Unable to load timestamp for post ' + post_id);
+					console.warn('Unable to load timestamp for post ' + post_id);
 					self.show_failed(date_element);
 				},
 				onload: function(response) {
@@ -272,13 +272,13 @@ XKit.extensions.timestamps = new Object({
 						date_element.removeClass("xtimestamp_loading");
 						XKit.storage.set("timestamps", "xkit_timestamp_cache_" + post_id, post.timestamp);
 					} catch (e) {
-						XKit.console.add('Unable to load timestamp for post ' + post_id);
+						console.error('Unable to load timestamp for post ' + post_id);
 						self.show_failed(date_element);
 					}
 				}
 			});
 		} catch (e) {
-			XKit.console.add('Unable to load timestamp for post ' + post_id);
+			console.error('Unable to load timestamp for post ' + post_id);
 			XKit.extensions.timestamps.show_failed(date_element);
 		}
 	},
@@ -309,9 +309,7 @@ XKit.extensions.timestamps = new Object({
 	},
 
 	cpanel: function() {
-		$("#xkit-timestamps-format-help").click(function() {
-			XKit.window.show("Timestamp formatting", "Timestamps extension allows you to format the date by using a formatting syntax. Make your own and type it in the Timestamp Format box to customize your timestamps.<br/><br/>For information, please visit:<br/><a href=\"http://xkit.info/seven/support/timestamps/index.php\">Timestamp Format Documentation</a><br/><br/>Please be careful while customizing the format. Improper/invalid formatting can render Timestamps unusable. In that case, just delete the text you've entered completely and XKit will revert to its default formatting.", "info", "<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
-		});
+		$("#xkit-timestamps-format-help").click(XKit.tools.show_timestamps_help);
 	},
 
 	parse_raw_date: function(raw_date) {

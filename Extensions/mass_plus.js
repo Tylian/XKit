@@ -1,5 +1,5 @@
 //* TITLE Mass+ **//
-//* VERSION 0.4.3 **//
+//* VERSION 0.4.4 **//
 //* DESCRIPTION Enhancements for the Mass Editor **//
 //* DETAILS This extension allows you to select multiple posts by once, by type or month. It also comes with visual enhancements for the mass post editor, such as selected post count and more! **//
 //* DEVELOPER STUDIOXENIX **//
@@ -160,7 +160,11 @@ XKit.extensions.mass_plus = new Object({
 		var last_brick_classes = $(last_brick).attr('class');
 		var last_ts_start = last_brick_classes.indexOf('timestamp_');
 		if (last_ts_start === -1) {
-			alert("Error fetching tags: 100");
+			XKit.window.show("Could not fetch tags",
+				"Error: 100 - timestamp not found.",
+				"error",
+				'<div class="xkit-button default" id="xkit-close-message">OK</div>'
+			);
 			return;
 		}
 		var last_timestamp = last_brick_classes.substring(last_ts_start + 10);
@@ -180,7 +184,7 @@ XKit.extensions.mass_plus = new Object({
 	},
 	search_next_page: function(tag) {
 		var search_url = this.search_url + "&offset=" + (this.search_page * this.api_page_length);
-		XKit.console.add("Fetching " + search_url);
+		console.log("Fetching " + search_url);
 		GM_xmlhttpRequest({
 			method: "GET",
 			url: search_url,

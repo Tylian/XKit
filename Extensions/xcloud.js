@@ -1,7 +1,7 @@
 //* TITLE XCloud **//
-//* VERSION 1.1.1 **//
+//* VERSION 1.1.2 **//
 //* DESCRIPTION Sync XKit data on clouds **//
-//* DETAILS XCloud stores your XKit configuration on New-XKit servers so you can back up your data and synchronize it with other computers and browsers easily. Also compatable with STUDIOXENIX servers.**//
+//* DETAILS XCloud stores your XKit configuration on New XKit servers so you can back up your data and synchronize it with other computers and browsers easily. **//
 //* DEVELOPER new-xkit **//
 //* FRAME false **//
 //* BETA false **//
@@ -11,18 +11,9 @@ XKit.extensions.xcloud = new Object({
 	running: false,
 	username: "",
 	password: "",
-	useoldserver: true,
+	server: "https://cloud.new-xkit.com",
 	gallery_available: {},
 	extensions_upgraded: false,
-
-
-	get_xcloud_url: function() {
-		if (XKit.extensions.xcloud.useoldserver) {
-			return "https://uyjv93kxna.execute-api.us-west-2.amazonaws.com/production";
-		} else {
-			return "https://cloud.new-xkit.com";
-		}
-	},
 
 	run: function() {
 		this.running = true;
@@ -56,7 +47,6 @@ XKit.extensions.xcloud = new Object({
 							"<div class=\"xcloud-information\">" +
 								"XCloud lets you synchronize your XKit data such as your blacklisted words " +
 								"and posts, and your preferences across computers and browsers using XKit servers." +
-								'<hr> <input type="checkbox" class="xkit-checkbox" id="xcloud-use-old" /> Check to use the old XCloud servers' +
 							"</div>" +
 							"<div class=\"xcloud-welcome-buttons\">" +
 								"<div class=\"xcloud-welcome-button\" id=\"xcloud-login\">Sign In</div>" +
@@ -179,7 +169,7 @@ XKit.extensions.xcloud = new Object({
 	},
 
 	panel_appended: function() {
-		var xcloud_url = this.get_xcloud_url();
+		var xcloud_url = this.server;
 		var self = this;
 
 		var exportPanel = $("#xcloud-local-export");
@@ -192,11 +182,6 @@ XKit.extensions.xcloud = new Object({
 		importPanel.unbind("click");
 		importPanel.bind("click", function() {
 			self.local_import();
-		});
-
-		$("#xcloud-use-old").unbind('change');
-		$("#xcloud-use-old").bind('change', function() {
-			XKit.extensions.xcloud.useoldserver = $(this).is(':checked');
 		});
 
 		$("#xcloud-login").unbind("click");
@@ -468,25 +453,8 @@ XKit.extensions.xcloud = new Object({
 	},
 
 	local_export: function() {
-		var upload_data = this.create_export_data(false)[0];
-		var data_blob = new Blob([upload_data], {type: "text/plain"});
-
-
-		var dummyLink = document.createElement("a");
-		document.body.appendChild(dummyLink);
-		dummyLink.style = "display: none";
-
-		var fileName = "xcloud_payload.txt";
-		var url = window.URL.createObjectURL(data_blob);
-		dummyLink.href = url;
-		dummyLink.download = fileName;
-		dummyLink.click();
-
-		setTimeout(function() {
-			window.URL.revokeObjectURL(url);
-			XKit.extensions.xcloud.hide_overlay();
-		}, 100);
-
+		XKit.tools.make_file("xcloud_payload.txt", this.create_export_data(false)[0]);
+		setTimeout(function() { XKit.extensions.xcloud.hide_overlay(); }, 100);
 	},
 
 	local_import: function() {
@@ -552,7 +520,7 @@ XKit.extensions.xcloud = new Object({
 	},
 
 	start_fetch: function() {
-		var xcloud_url = this.get_xcloud_url();
+		var xcloud_url = this.server;
 		XKit.extensions.xcloud.show_overlay(true);
 
 		var m_username = XKit.extensions.xcloud.username;
@@ -658,7 +626,7 @@ XKit.extensions.xcloud = new Object({
 
 			var extension_name = mext.extension;
 
-			XKit.console.add("Restoring settings of " + extension_name);
+			console.log("Restoring settings of " + extension_name);
 
 			var extension_settings = {};
 			try {
@@ -680,11 +648,11 @@ XKit.extensions.xcloud = new Object({
 			}
 
 			if (install_this) {
-				XKit.console.add(" |-- Need to install " + extension_name);
+				console.log(" |-- Need to install " + extension_name);
 				XKit.extensions.xcloud.extensions_to_download.push(extension_name);
 				XKit.extensions.xcloud.extensions_to_download_enabled.push(extension_enabled);
 			} else {
-				XKit.console.add(" |-- Skipping " + extension_name + ", already installed.");
+				console.log(" |-- Skipping " + extension_name + ", already installed.");
 			}
 
 			full_list.push(extension_name);
@@ -703,7 +671,7 @@ XKit.extensions.xcloud = new Object({
 
 				XKit.installed.remove(m_installed[i]);
 				XKit.storage.clear(m_installed[i]);
-				XKit.console.add("Removed " + m_installed[i]);
+				console.log("Removed " + m_installed[i]);
 
 			}
 
@@ -752,7 +720,7 @@ XKit.extensions.xcloud = new Object({
 		XKit.progress.value("xcloud-restore-process", perc);
 
 		if ($.inArray(m_name, XKit.extensions.xcloud.gallery_available) >= 0) {
-			XKit.console.add("XCloud restore -> " + m_name);
+			console.log("XCloud restore -> " + m_name);
 			XKit.install(m_name, function(mdata) {
 				if (mdata.server_down || mdata.errors) {
 					XKit.extensions.xcloud.errors_list.push("Unable to restore extension " + m_name);
@@ -764,7 +732,7 @@ XKit.extensions.xcloud = new Object({
 				XKit.extensions.xcloud.process_download_extension_next();
 			});
 		} else {
-			XKit.console.add("XCloud skip -> " + m_name);
+			console.log("XCloud skip -> " + m_name);
 			XKit.extensions.xcloud.extensions_upgraded = true;
 			XKit.extensions.xcloud.extensions_to_download_count++;
 			XKit.extensions.xcloud.process_download_extension_next();
@@ -889,7 +857,7 @@ XKit.extensions.xcloud = new Object({
 	},
 
 	send_upload_data: function(to_send) {
-		var xcloud_url = this.get_xcloud_url();
+		var xcloud_url = this.server;
 		var m_username = encodeURIComponent(XKit.extensions.xcloud.username);
 		var m_password = encodeURIComponent(XKit.extensions.xcloud.password);
 

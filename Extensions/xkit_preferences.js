@@ -1,5 +1,5 @@
 //* TITLE XKit Preferences **//
-//* VERSION 7.5.0 **//
+//* VERSION 7.5.1 **//
 //* DESCRIPTION Lets you customize XKit **//
 //* DEVELOPER new-xkit **//
 
@@ -120,8 +120,13 @@ XKit.extensions.xkit_preferences = new Object({
 						},
 						json: false,
 						onerror: function(response) {
-							alert("Well this is embarrassing.\n\nTumblr servers would not allow me to let you follow the XKit blog. " +
-								"You can try again later or go to new-xkit-extension.tumblr.com and follow it manually.");
+							XKit.window.show("Well, this is embarrassing.",
+								"Tumblr would not allow me to follow the New XKit blog for you.<br><br>" +
+								"You can follow it manually via the link below instead.",
+								"error",
+								'<a class="xkit-button default" href="https://new-xkit-extension.tumblr.com" target="_blank">New XKit Blog</a>' +
+								'<div class="xkit-button" id="xkit-close-message">OK</div>'
+							);
 						},
 						onload: function(response) {
 							// Do nothing?
@@ -213,12 +218,12 @@ XKit.extensions.xkit_preferences = new Object({
 			// SO!? What shall we do, flips?
 			if (check_for_update === true) {
 				// yep, we need to check for updates.
-				XKit.console.add("Checking for XKit News");
+				console.log("Checking for XKit News");
 				// set it so we don't have to ram the server.
 				var to_save = n_ms.toString();
 				XKit.storage.set("xkit_preferences", "last_news_check", to_save);
 			} else {
-				XKit.console.add("Skipping News update check");
+				console.log("Skipping News update check");
 				return;
 			}
 
@@ -308,7 +313,7 @@ XKit.extensions.xkit_preferences = new Object({
 			try {
 				prev_objects = JSON.parse(prev_objects_str);
 			} catch (e) {
-				XKit.console.add("Unread_Count failed, unknown/corrupt JSON");
+				console.error("Unread_Count failed, unknown/corrupt JSON");
 				prev_objects = [];
 				XKit.storage.set("xkit_preferences", "news", JSON.stringify(prev_objects));
 				return 0;
@@ -357,7 +362,7 @@ XKit.extensions.xkit_preferences = new Object({
 		create: function(id, title, message, date, important) {
 
 			if (XKit.extensions.xkit_preferences.news.check(id) === true) {
-				XKit.console.add("News " + id + " could not be pushed: already exists.");
+				console.log("News " + id + " could not be pushed: already exists.");
 				return;
 			}
 
@@ -387,7 +392,7 @@ XKit.extensions.xkit_preferences = new Object({
 
 			var m_result = XKit.storage.set("xkit_preferences", "news", JSON.stringify(prev_objects));
 			if (m_result === true) {
-				XKit.console.add("News " + id + " pushed successfully.");
+				console.log("News " + id + " pushed successfully.");
 			} else {
 				console.error("Can not push news_object. Storage might be full.");
 			}
@@ -480,7 +485,7 @@ XKit.extensions.xkit_preferences = new Object({
 
 			var m_result = XKit.storage.set("xkit_preferences", "news", JSON.stringify(prev_objects));
 			if (m_result === true) {
-				XKit.console.add("News " + id + " pushed successfully.");
+				console.log("News " + id + " pushed successfully.");
 			} else {
 				console.error("Can not save news_object with read flag. Storage might be full.");
 			}
@@ -1175,7 +1180,7 @@ XKit.extensions.xkit_preferences = new Object({
 				"Please refresh the page and try again.<br><br>If this extension is causing trouble:<br>" +
 				'<div id="xkit-extension-delete-trouble" class="xkit-button">Delete this extension</div></div>');
 
-			XKit.console.add("Can't load extension panel: Extension undefined.");
+			console.error("Can't load extension panel: Extension undefined.");
 			$("#xkit-extension-delete-trouble").click(function() {
 
 				if (this_is_internal === true) { return; }
@@ -1183,7 +1188,7 @@ XKit.extensions.xkit_preferences = new Object({
 				try {
 					XKit.extensions[XKit.extensions.xkit_preferences.current_open_extension_panel].destroy();
 				} catch (e) {
-					XKit.console.add("Unable to shutdown extension " + XKit.extensions.xkit_preferences.current_open_extension_panel);
+					console.error("Unable to shutdown extension " + XKit.extensions.xkit_preferences.current_open_extension_panel);
 				}
 				XKit.tools.remove_css(XKit.extensions.xkit_preferences.current_open_extension_panel);
 				setTimeout(function() {
@@ -1205,7 +1210,7 @@ XKit.extensions.xkit_preferences = new Object({
 					'<div class="more-info" style="display: none;" id="xkit-extension-more-info">attributes</div>' +
 					'<div class="description">' + m_extension.description;
 
-		var xkit_developers = ["studioxenix", "new-xkit", "dlmarquis", "hobinjk", "thepsionic", "nightpool", "blackjackkent", "wolvan", "bvtsang", "0xazure"];
+		var xkit_developers = ["studioxenix", "new-xkit", "dlmarquis", "hobinjk", "thepsionic", "nightpool", "blackjackkent", "wolvan", "bvtsang", "0xazure", "aprilsylph"];
 		if (xkit_developers.indexOf(m_extension.developer.toLowerCase()) === -1) {
 			m_html = m_html + '<div class="xkit-third-party-warning">third party extension</div>';
 		}
@@ -1550,12 +1555,12 @@ XKit.extensions.xkit_preferences = new Object({
 				try {
 					XKit.extensions[extension_id].run();
 				} catch (e) {
-					XKit.console.add("Can not run " + extension_id + ": " + e.message);
+					console.error("Can not run " + extension_id + ": " + e.message);
 				}
 			}, 10);
 		} catch (e) {
 			// Unknown what to do here.
-			XKit.console.add("Can not run " + extension_id + ": " + e.message);
+			console.error("Can not run " + extension_id + ": " + e.message);
 		}
 
 	},
@@ -1849,7 +1854,6 @@ XKit.extensions.xkit_preferences = new Object({
 						'<div data-pname="news" class="xkit-extension text-only">News Notifications</div>' +
 						'<div data-pname="updates" class="xkit-extension text-only">Update Notifications</div>' +
 						'<div class="xkit-extension text-only separator">Advanced Settings</div>' +
-						'<div data-pname="console" class="xkit-extension text-only">Console</div>' +
 						'<div data-pname="editor" class="xkit-extension text-only">XKit Editor</div>' +
 						'<div data-pname="internal" class="xkit-extension text-only">Internals</div>' +
 						'<div data-pname="flags" class="xkit-extension text-only" style="display: none;">Flags</div>' +
@@ -1885,9 +1889,6 @@ XKit.extensions.xkit_preferences = new Object({
 			}
 			if ($this.attr('data-pname') === "news") {
 				XKit.extensions.xkit_preferences.show_others_panel_news();
-			}
-			if ($this.attr('data-pname') === "console") {
-				XKit.extensions.xkit_preferences.show_others_panel_console();
 			}
 			if ($this.attr('data-pname') === "flags") {
 				XKit.extensions.xkit_preferences.show_others_panel_flags();
@@ -2125,72 +2126,24 @@ XKit.extensions.xkit_preferences = new Object({
 		$("#xkit-extensions-panel-right-inner").html(m_html);
 		$("#xkit-extensions-panel-right").nanoScroller();
 
-		function update_button(el, text) {
-			if (el.hasClass("disabled")) {
-				return;
-			}
-			XKit.tools.make_gist(text).then(function(url) {
-				el.replaceWith('<input class="xkit-url-field" type="text" value="' + url + '">');
-				$('input.xkit-url-field[value="' + url + '"]')[0].setSelectionRange(0, url.length);
-			});
-			el.text("loading...");
-			el.addClass("disabled");
-		}
-
 		$("#xkit-panel-extension-info").click(function() {
 
 			var text = "XKit version " + XKit.version + "\n" +
 					"extensions:\n" + XKit.installed.list().map(function(i) {
 						return "   " + i + ": " + XKit.installed.version(i) + (XKit.installed.enabled(i) ? "" : " (disabled)");
 					}).join("\n");
+			var timestamp = new Date();
 
-			update_button($(this), text);
+			XKit.tools.make_file("XKit Basic Export " + timestamp.getTime() + ".txt", text);
 		});
 
 		$("#xkit-panel-full-config").click(function() {
 
 			var text = JSON.stringify(XKit.tools.dump_config());
+			var timestamp = new Date();
 
-			update_button($(this), text);
+			XKit.tools.make_file("XKit Full Export " + timestamp.getTime() + ".txt", text);
 		});
-	},
-
-	show_others_panel_console: function() {
-
-		var m_html =
-				'<div class="xkit-others-panel">' +
-				'<div class="title">Console</div>' +
-				'<div class="description">' +
-					"XKit comes with a console used to debug errors or see what's happening " +
-					"in the background, if you are the curious type. When filing a bug report, " +
-					"you should copy the error text on the console so I can fix the error sooner." +
-				"</div>" +
-				'<div class="bottom-part">' +
-					'<div id="xkit-panel-enable-console" class="xkit-checkbox"><b>&nbsp;</b>Enable XKit Console</div>' +
-				"</div>" +
-				"</div>";
-
-		$("#xkit-extensions-panel-right-inner").html(m_html);
-		$("#xkit-extensions-panel-right").nanoScroller();
-
-		if (XKit.tools.get_setting("xkit_log_enabled", "false") === "true") {
-			$("#xkit-panel-enable-console").addClass("selected");
-		}
-
-		$("#xkit-panel-enable-console").click(function() {
-
-			if (XKit.tools.get_setting("xkit_log_enabled", "false") === "false") {
-				$("#xkit-panel-enable-console").addClass("selected");
-				XKit.tools.set_setting("xkit_log_enabled", "true");
-				XKit.console.show();
-			} else {
-				$("#xkit-panel-enable-console").removeClass("selected");
-				XKit.tools.set_setting("xkit_log_enabled", "false");
-				XKit.console.hide();
-			}
-
-		});
-
 	},
 
 	show_others_panel_flags: function() {
@@ -2354,33 +2307,33 @@ XKit.extensions.xkit_preferences = new Object({
 		var m_html =
 				'<div id="xkit-logo-big">&nbsp;</div>' +
 				'<div id="xkit-about-window-text">' +
-					'<div class="title">XKit Version ' + XKit.version + '</div>' +
+					'<span class="title">XKit Version ' + XKit.version + '</span>' +
+					'<span>XKit Patches v. ' + XKit.installed.version('xkit_patches') + '</span>' +
 					'<div class="subtitle">The Extension Framework for Tumblr.</div>' +
-					'<div class="copyright">&copy; 2011 - 2014 STUDIOXENIX</div>' +
-					'<div class="copyright">&copy; 2015 - 2016 the New XKit Team</div>' +
-					'<div>XKit Patches v. ' + XKit.installed.version('xkit_patches') + '</div>' +
-					'<div class="thanks">The New XKit Team would like to thank all of the myriad users and, ' +
-					'contributors who have worked to make this plugin what it is today. ' +
+					'<div class="copyright">&copy; 2011 - 2014&ensp;STUDIOXENIX</div>' +
+					'<div class="copyright">&copy; 2015 - 2018&ensp;the New XKit Team</div>' +
+					'<div class="thanks">The New XKit Team would like to thank all of the myriad users and ' +
+					'<a href="https://github.com/new-xkit/XKit/contributors" target="_blank">contributors</a> who have worked to make this plugin what it is today. ' +
 					"Above all we would like to thank Atesh, the original XKit Guy, " +
 					'without whom we all would have been lost to the outer darkness some time ago.</div>' +
 				'</div>' +
 				'<div id="xkit-about-window-links">' +
-					'<a href="https://new-xkit-extension.tumblr.com">New XKit Tumblr</a>' +
+					'<a href="https://new-xkit-extension.tumblr.com" target="_blank">New XKit Tumblr</a>' +
 					'<a href="#" id="xkit-open-credits">Credits</a>' +
-					'<a href="http://new-xkit-support.tumblr.com/support">Support</a>' +
-					'<a href="https://github.com/new-xkit/XKit/wiki">Documentation</a>' +
+					'<a href="https://new-xkit-support.tumblr.com/support" target="_blank">Support</a>' +
+					'<a href="https://github.com/new-xkit/XKit/wiki" target="_blank">Documentation</a>' +
 				'</div>';
 		$("#xkit-control-panel-inner").html(m_html);
 
 		$("#xkit-open-credits").click(function() {
 
 			XKit.window.show("Credits",
-					'XKit uses <a href="www.jquery.com">jQuery and jQuery UI</a> by jQuery Foundation, ' +
-					'<a href="https://github.com/timrwood/moment/">moment.js</a> by Tim Wood, ' +
-					'<a href="http://code.drewwilson.com/entry/tiptip-jquery-plugin">TipTip</a> by Drew Wilson and ' +
-					'<a href="http://jamesflorentino.github.io/nanoScrollerJS/">nanoScroll</a> by James Florentino. ' +
+					'XKit uses <a href="https://jquery.com/" target="_blank">jQuery and jQuery UI</a> by jQuery Foundation, ' +
+					'<a href="https://momentjs.com/" target="_blank">moment.js</a> by Tim Wood, ' +
+					'<a href="https://github.com/drewwilson/TipTip" target="_blank">TipTip</a> by Drew Wilson and ' +
+					'<a href="https://jamesflorentino.github.io/nanoScrollerJS/" target="_blank">nanoScroll</a> by James Florentino. ' +
 					'<br/><br/>' +
-					'The original XKit extension was written by <a href="http://www.studioxenix.com/">STUDIOXENIX</a>, a one-man entity.<br/><br/>' +
+					'The original XKit extension was written by STUDIOXENIX, a one-man entity.<br/><br/>' +
 					'All trademarks are the property of their respective owners.',
 				"info", '<div class="xkit-button default" id="xkit-close-message">OK</div>');
 

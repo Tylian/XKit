@@ -13,9 +13,9 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleShortVersionString</key>
-	<string>7.8.2</string>
+	<string>7.9.0</string>
 	<key>CFBundleVersion</key>
-	<string>7.8.2</string>
+	<string>7.9.0</string>
 	<key>Chrome</key>
 	<dict>
 		<key>Database Quota</key>
@@ -27,12 +27,6 @@
 	<dict>
 		<key>Scripts</key>
 		<dict>
-			<key>End</key>
-			<array>
-				<string>bridge.js</string>
-				<string>xkit.js</string>
-				<string>editor.js</string>
-			</array>
 			<key>Start</key>
 			<array>
 				<string>jquery.js</string>
@@ -40,6 +34,9 @@
 				<string>tiptip.js</string>
 				<string>nano.js</string>
 				<string>lodash.min.js</string>
+				<string>bridge.js</string>
+				<string>xkit.js</string>
+				<string>editor.js</string>
 			</array>
 		</dict>
 		<key>Stylesheets</key>
@@ -61,7 +58,6 @@
 			<array>
 				<string>*.tumblr.com</string>
 				<string>*.txmblr.com</string>
-				<string>*.xkit.info</string>
 				<string>new-xkit.github.io</string>
 			</array>
 			<key>Include Secure Pages</key>
@@ -73,6 +69,6 @@
 	<key>Update Manifest URL</key>
 	<string>https://new-xkit.github.io/XKit/Extensions/dist/page/SafariUpdate.plist</string>
 	<key>Website</key>
-	<string>http://new-xkit-extension.tumblr.com/</string>
+	<string>https://new-xkit-extension.tumblr.com/</string>
 </dict>
 </plist>

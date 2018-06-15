@@ -1,5 +1,5 @@
 //* TITLE Tweaks **//
-//* VERSION 5.6.1 **/
+//* VERSION 5.6.2 **/
 //* DESCRIPTION Various little tweaks for your dashboard. **//
 //* DEVELOPER new-xkit **//
 //* DETAILS These are small little tweaks that allows you customize your dashboard. If you have used XKit 6, you will notice that some of the extensions have been moved here as options you can toggle. Keep in mind that some of the tweaks (the ones marked with a '*') can slow down your computer. **//
@@ -367,7 +367,7 @@ XKit.extensions.tweaks = new Object({
 		}
 
 		if (XKit.extensions.tweaks.preferences.old_photo_margins.value) {
-			XKit.post_listener.add("tweaks_old_photo_margins", XKit.extensions.tweaks.old_photo_margins);
+			XKit.post_listener.add("tweaks", XKit.extensions.tweaks.old_photo_margins);
 		}
 
 		if (XKit.extensions.tweaks.preferences.no_mobile_banner.value) { //mobile stuff
@@ -453,7 +453,7 @@ XKit.extensions.tweaks = new Object({
 
 		if (XKit.extensions.tweaks.preferences.split_gear.value) {
 			XKit.tools.add_css(".post_controls .post_control.queue::after { background: none !important; }", "tweaks_split_gear");
-			XKit.post_listener.add("tweaks_split_gear", XKit.extensions.tweaks.split_gear);
+			XKit.post_listener.add("tweaks", XKit.extensions.tweaks.split_gear);
 			XKit.extensions.tweaks.split_gear();
 		}
 
@@ -612,7 +612,7 @@ XKit.extensions.tweaks = new Object({
 
 		if (XKit.extensions.tweaks.preferences.dont_show_liked_on_dashboard.value) {
 			XKit.extensions.tweaks.add_css("#posts .post.is_liked { display: none !important; }", "xkit_tweaks_dont_show_liked");
-			XKit.post_listener.add("tweaks_dont_show_liked", XKit.extensions.tweaks.check_for_liked_posts);
+			XKit.post_listener.add("tweaks", XKit.extensions.tweaks.check_for_liked_posts);
 			XKit.extensions.tweaks.check_for_liked_posts();
 		}
 
@@ -850,41 +850,6 @@ XKit.extensions.tweaks = new Object({
 
 	},
 
-	upload_photos: function() {
-
-
-		if (document.location.href.indexOf('/new/photo') !== -1) {
-
-			XKit.console.add("Tweaks, upload_photos: user in photo page.");
-			if ($("#post_content").length === 0) {
-				XKit.console.add("Tweaks, upload_photos: waiting for panel.");
-				setTimeout(function() {
-					XKit.extensions.tweaks.upload_photos();
-				}, 1);
-				return;
-			}
-
-			$("#post_two_image").css("background", "red");
-			$("#post_two_image").removeClass("mce_image");
-			$("#post_two_image").addClass("mce_image_upload");
-			$("#post_two_image").find(".mceIcon").addClass("mce_image_upload");
-			$("#post_two_image").find(".mceIcon").removeClass("mce_image");
-			$("#post_two_image_upload").attr('id', 'post_two_image_upload');
-			$("#post_two_image_voice").attr('id', 'post_two_image_upload_voice');
-
-			XKit.console.add("Tweaks, upload_photos: done.");
-
-			XKit.tools.add_function(function() {
-				/* globals tinyMCE */
-				Tumblr.Events.trigger("posts:load");
-				tinyMCE.execCommand("mceRepaint");
-				alert(JSON.stringify(tinyMCE.activeEditor.settings));
-			}, true, "");
-
-		}
-
-	},
-
 	full_width_gifs_do_first: function() {
 		$(document.body).on("click", ".post-settings", function() {
 			if (!$("#xkit-full-width-gifs").length) {
@@ -928,9 +893,7 @@ XKit.extensions.tweaks = new Object({
 		XKit.tools.remove_css("xkit_tweaks_hide_share");
 		XKit.tools.remove_css("xkit_tweaks_wide_sources");
 
-		XKit.post_listener.remove("tweaks_fix_hidden_post_height");
-		XKit.post_listener.remove("tweaks_dont_show_liked");
-		XKit.post_listener.remove("tweaks_split_gear");
+		XKit.post_listener.remove("tweaks");
 
 		clearInterval(this.run_interval);
 		clearInterval(this.run_interval_2);

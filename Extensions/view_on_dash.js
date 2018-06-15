@@ -1,5 +1,5 @@
 //* TITLE View On Dash **//
-//* VERSION 0.7.10 **//
+//* VERSION 0.7.11 **//
 //* DESCRIPTION View blogs on your dash **//
 //* DEVELOPER new-xkit **//
 //* DETAILS This is a preview version of an extension, missing most features due to legal/technical reasons for now. It lets you view the last 20 posts a person has made on their blogs right on your dashboard. If you have User Menus+ installed, you can also access it from their user menu under their avatar. **//
@@ -99,15 +99,26 @@ XKit.extensions.view_on_dash = new Object({
 
 		$("#xkit-view-on-dash-ok").click(function() {
 
-			var to_add = $("#xkit-view-on-dash-input-url").val().toLowerCase();
+			var $to_add = $("#xkit-view-on-dash-input-url");
+			var to_add = $to_add.val().toLowerCase();
 
 			if ($.trim(to_add) === "") {
+				$to_add.attr("placeholder", "Okay, see ya.");
 				XKit.window.close();
 				return;
 			}
 
 			if (/^[a-zA-Z0-9\-]+$/.test(to_add) === false) {
-				alert("Invalid username");
+				$to_add
+					.css("border-color", "red")
+					.attr("placeholder", "Invalid username.")
+					.val("")
+					.click(function() {
+						$to_add
+							.removeAttr("style")
+							.attr("placeholder", "Enter a URL (example: new-xkit-extension)")
+							.off("click");
+					});
 				return;
 			}
 
@@ -442,7 +453,6 @@ XKit.extensions.view_on_dash = new Object({
 					"</div>" +
 					"<a class=\"post_permalink\" id=\"permalink_" + data.id + "\" href=\"" + data.post_url + "\" target=\"_blank\" title=\"View post\"></a>";
 
-		//alert("<a style=\"display: none;\" class=\"post_permalink\" id=\"permalink_" + data.id + "\" href=\"" + data.url + "\" target=\"_blank\" title=\"View post - whatever\"></a>");
 		m_html = m_html + "</div>";
 		m_html = m_html + "</li>";
 
@@ -540,7 +550,12 @@ XKit.extensions.view_on_dash = new Object({
 							"X-tumblr-form-key": XKit.interface.form_key(),
 						},
 						onerror: function(_response) {
-							alert("Can't process like/unlike, please try again later or file for a bug report at http://new-xkit-extension.tumblr.com/ask.");
+							XKit.window.show("Can't process like/unlike",
+								"Please try again later or file a bug report.",
+								"error",
+								'<div class="xkit-button default" id="xkit-close-message">OK</div>' +
+								'<a class="xkit-button" href="https://new-xkit-extension.tumblr.com/ask" target="_blank">Send an ask</a>'
+							);
 							// Revert changes.
 							$(m_icon_obj).toggleClass("liked");
 						},
@@ -809,7 +824,7 @@ XKit.extensions.view_on_dash = new Object({
 		try {
 			XKit.extensions.show_more.remove_custom_menu("view_on_dash");
 		} catch (e) {
-			XKit.console.add("Can't remove custom menu, " + e.message);
+			console.error("Can't remove custom menu, " + e.message);
 		}
 	}
 
