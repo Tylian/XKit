@@ -1,5 +1,5 @@
 //* TITLE One-Click Postage **//
-//* VERSION 4.4.3 **//
+//* VERSION 4.4.4 **//
 //* DESCRIPTION Lets you easily reblog, draft and queue posts **//
 //* DEVELOPER new-xkit **//
 //* FRAME false **//
@@ -584,6 +584,11 @@ XKit.extensions.one_click_postage = new Object({
 			XKit.tools.add_css(slim_css, "one_click_postage_slim");
 		}
 
+		XKit.blog_listener.add("one_click_postage", this.init);
+	},
+
+	init: function(m_blogs) {
+
 		var m_remove_button = "<div id=\"x1cpostage_remove_caption\">remove caption</div>";
 
 		if (!this.preferences.show_caption_remover.value) {
@@ -650,7 +655,6 @@ XKit.extensions.one_click_postage = new Object({
 			$("#x1cpostage_box").removeClass("xkit_x1cpostage_queue_press");
 		});
 
-		var m_blogs = XKit.tools.get_blogs();
 		var m_blogselector_html = "";
 
 		XKit.extensions.one_click_postage.blogs_list = m_blogs;
