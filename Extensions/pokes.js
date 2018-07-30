@@ -1,5 +1,5 @@
 //* TITLE Pokés **//
-//* VERSION 0.11.4 **//
+//* VERSION 0.12.0 **//
 //* DESCRIPTION Gotta catch them all! **//
 //* DETAILS Randomly spawns Pokémon on your dash for you to collect. **//
 //* DEVELOPER new-xkit **//
@@ -93,6 +93,7 @@ XKit.extensions.pokes = {
 	},
 
 	parse_pokemon: function(mdata, db_nr, pokedThing) {
+		var poke_sortid = mdata[db_nr].sortid;
 		var poke_name = mdata[db_nr].name;
 		var poke_sprite = mdata[db_nr].sprite;
 		var m_f_ratio = parseInt(mdata[db_nr].gender_rate);
@@ -134,10 +135,10 @@ XKit.extensions.pokes = {
 			}
 
 			if (XKit.extensions.pokes.preferences.allow_fullwidth.value) {
-				poke_html = '<div class="poke ' + poke_class + shiny_class + '" data-pokeid="' + db_nr + '" data-pokename="' + poke_name + '" data-pokegender="' + poke_gender + '" style="left:' + xpos + 'px; margin-top:' + ypos + 'px;">' +
+				poke_html = '<div class="poke ' + poke_class + shiny_class + '" data-pokeid="' + db_nr + '" data-pokesortid="' + poke_sortid + '" data-pokename="' + poke_name + '" data-pokegender="' + poke_gender + '" style="left:' + xpos + 'px; margin-top:' + ypos + 'px;">' +
 				'<img src="' + poke_sprite + '" alt="' + poke_name + '"/>' + '</div>';
 			} else {
-				poke_html = '<div class="poke fixed ' + poke_class + shiny_class + '" data-pokeid="' + db_nr + '" data-pokename="' + poke_name + '" data-pokegender="' + poke_gender + '" style="margin-top:' + ypos + 'px;">' +
+				poke_html = '<div class="poke fixed ' + poke_class + shiny_class + '" data-pokeid="' + db_nr + '" data-pokesortid="' + poke_sortid + '" data-pokename="' + poke_name + '" data-pokegender="' + poke_gender + '" style="margin-top:' + ypos + 'px;">' +
 				'<img src="' + poke_sprite + '" alt="' + poke_name + '"/>' + '</div>';
 			}
 
@@ -151,6 +152,7 @@ XKit.extensions.pokes = {
 					var storage_array = JSON.parse(XKit.storage.get("pokes", "pokemon_storage", ""));
 					if (storage_array !== "") {
 						var poke_id = $(this).data("pokeid");
+						var caught_sortid = $(this).data("pokesortid");
 						var caught_gender = $(this).data("pokegender");
 						var caught_name = $(this).data("pokename");
 						var poke_wiki_name = caught_name;
@@ -166,7 +168,7 @@ XKit.extensions.pokes = {
 							}
 						}
 
-						storage_array.push({ id: poke_id, gender: caught_gender, shiny: $(this).hasClass("pokes_shiny") });
+						storage_array.push({ id: poke_id, sortid: caught_sortid, gender: caught_gender, shiny: $(this).hasClass("pokes_shiny") });
 						XKit.storage.set("pokes", "pokemon_storage", JSON.stringify(storage_array));
 						XKit.notifications.add("You caught a " + ($(this).hasClass("pokes_shiny") ? "shiny " : "") + caught_gender + " " + caught_name.charAt(0).toUpperCase() + caught_name.substr(1) + "!", "pokes", false, function() {
 							window.open("http://bulbapedia.bulbagarden.net/wiki/" + poke_wiki_name);
@@ -178,6 +180,8 @@ XKit.extensions.pokes = {
 				} catch (e) {
 					XKit.window.show("Catching failed!", "Something went wrong trying to catch the Pokémon. Please try again.<br/><br/>Error code: PKMN-002", "error", "<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
 				}
+
+				XKit.extensions.pokes.addSortID();
 			});
 		} else {
 			XKit.extensions.pokes.parse_pokemon(mdata, XKit.extensions.pokes.pokeGen(), pokedThing);
@@ -291,7 +295,7 @@ XKit.extensions.pokes = {
 		};
 
 		$('input:radio[name="xkit-pokes-sort"]#pokeid').change(function(e) {
-			$("#xkit-loading_pokemon div.caught").sort(sortFunction("pokeid", "pokeid"))
+			$("#xkit-loading_pokemon div.caught").sort(sortFunction("pokesortid", "pokesortid"))
 									.prependTo("#xkit-loading_pokemon");
 		});
 		$('input:radio[name="xkit-pokes-sort"]#alphabetical').change(function(e) {
@@ -368,7 +372,7 @@ XKit.extensions.pokes = {
 				if (value.shiny) {
 					sprite = mdata[value.id].sprite_shiny || mdata[value.id].sprite;
 				}
-				caught_html = caught_html + "<div class='caught" + (value.shiny ? " pokes_shiny" : "") + "' data-pokeid='" + value.id + "' data-pokegender='" + value.gender + "' data-pokespecies='" + mdata[value.id].name + "' data-pokenick='" + (value.nickname || "") + "' data-array_index=" + index + "><img class='caught poke_sprite' src='" + sprite + "' /></div>";
+				caught_html = caught_html + "<div class='caught" + (value.shiny ? " pokes_shiny" : "") + "' data-pokeid='" + value.id + "' data-pokesortid='" + value.sortid + "' data-pokegender='" + value.gender + "' data-pokespecies='" + mdata[value.id].name + "' data-pokenick='" + (value.nickname || "") + "' data-array_index=" + index + "><img class='caught poke_sprite' src='" + sprite + "' /></div>";
 				if (checklist.indexOf(value.id) === -1) checklist.push(value.id);
 			});
 			header += checklist.length + " out of " + mdata.length + " different species of Pokémon!</p>";
@@ -439,5 +443,37 @@ XKit.extensions.pokes = {
 
 		$("#xkit-extensions-panel-right").nanoScroller();
 		$("#xkit-extensions-panel-right").nanoScroller({ scroll: 'top' });
+	},
+
+	addSortID: function() {
+		var offset = parseInt(XKit.storage.get("pokes", "update_offset", 0));
+		if (isNaN(offset)) offset = 0;
+		var step_size = 1000;
+
+		if (offset !== -1) {
+			var pokes = JSON.parse(XKit.storage.get("pokes", "pokemon_storage", "[]"));
+			try {
+				XKit.extensions.pokes.fetch_pokedex(function(mdata) {
+					for (var i = offset; i < offset + step_size; i++) {
+						try {
+							pokes[i].sortid = mdata[pokes[i].id].sortid;
+						} catch (e) {
+							if (e instanceof ReferenceError) {
+								offset = -1; //This is good! We've finished the array and never have to do this ever again.
+							} else if (e instanceof TypeError) {
+								//Do nothing. We can ignore these safely; it just makes the Pokémon sorted to the end of the list.
+							} else {
+								console.error(e);
+							}
+						}
+					}
+				});
+			} catch (e) {
+				console.error(e);
+			}
+
+			XKit.storage.set("pokes", "pokemon_storage", JSON.stringify(pokes));
+			XKit.storage.set("pokes", "update_offset", offset + step_size);
+		}
 	}
 };
