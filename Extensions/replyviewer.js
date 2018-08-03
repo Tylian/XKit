@@ -225,7 +225,7 @@ XKit.extensions.replyviewer = new Object({
 			}
 
 		});
-		
+
 	},
 
 	show_loader: function() {
