@@ -1,5 +1,5 @@
 //* TITLE ReplyViewer **//
-//* VERSION 0.3.1 **//
+//* VERSION 0.3.2 **//
 //* DESCRIPTION View post replies easily **//
 //* DETAILS The close relative of TagViewer, this extension allows you to see what replies, answers and additional content added to it while reblogging on any post. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -11,7 +11,7 @@ XKit.extensions.replyviewer = new Object({
 
 	running: false,
 	slow: false,
-	apiKey: XKit.api_key,
+	apiKey: "5CIOyjHfcrNFlyEJl2D7vnoDTYqV30lNAUaSd4LJKoBFOZOmxp",
 
 	button_icon:" data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAAXNSR0IArs4c6QAAAnhJREFUOBGlVP9rUlEUv++hmWsrp0iJ+0GyIBFEiUmQNAghif0wnPir+ZOQqEh/iJP93A8F0kiELAqhsRIMIRWFkIFgY4mYIKHNRvh1n/PgyTakzA6cd+6955zPveecD4+xOWU8HnPTUvlph7OcRaPRxtbW1pPzwFNvmQUwEomMKY7juA9SqdTj9/trwp4+uOktbnpI63kEoG2e5x8Eg8HPQsn/A0YPQP4C9BKtJfQRJRwOz9wCsWTkNqCboVAoSzhnAOngXwSlZuVy+abP5yNQQeYGRM8eaTSaF263uyeCkZ0bECU+E4G2t7fv0zoQCOzNDSiCkR0Oh0kMhWh0WST2ETakNDEH9CW0Dv0NPYA+hVrJP03gW8T5EvmEF0okko2VlZVlOFKj0ehmLper7+/vc91ulykUCs5sNl83Go2v4d9FzmMM4yclTxOBJgi8Bef7Wq1WTSaTd5Ag1Wq1vFKpZM1mc9xoNMYymezI6XR+UavV1xBrR8yhCChSiGjHA+wGHLuZTOYwkUis6XS6C16vlzcYDIxeaDKZOI/Hw6tUqqVYLGYrFot1xH9Enk4EPG2ph68KhcLXfD5/12azsfX1da7X67FUKsUqlYpgkcxcLhe/urrK0un0WqlU+oa8NzhfOA1Ga6GH/X7/ynnHn/btdvteq9ViOzs7v1DumVAC3LBarZ86nc4AZUvQL2a325nD4WDVapXp9Xr6o7B4PM7q9Tq1gFksFob2sMFgMAFDzDvaTIaC6e6Vy+WLKGmZHJg6m3UoFC+KAEgb9OMqzPPj4+Pb2Wx2ERP/gaEoQZvvoM0BaGPAK/5KGxF4YgFMxI5DZyb2JBmLE4DNNuBNd2zuAAAAAElFTkSuQmCC",
 
@@ -40,24 +40,22 @@ XKit.extensions.replyviewer = new Object({
 	},
 
 	notes_url: "",
-	notes_url_from: "",
 	found_count: 0,
 	last_page: false,
 	loading_more: false,
 	post_id: "",
 	init_id: "",
 
-	view_tags: function(post_id, tumblelog_key, tumblelog_name, from) {
+	view_tags: function(post_id, tumblelog_key, tumblelog_name) {
 
-		// Set tag viewer up and show our window.
+		// Set reply viewer up and show our window.
 
 		XKit.extensions.replyviewer.init_id = XKit.tools.random_string();
 		XKit.extensions.replyviewer.found_count = 0;
 		XKit.extensions.replyviewer.post_id = post_id;
 		XKit.extensions.replyviewer.last_page = false;
 		XKit.extensions.replyviewer.loading_more = false;
-		XKit.extensions.replyviewer.notes_url_from = "";
-		XKit.extensions.replyviewer.notes_url = "http://www.tumblr.com/dashboard/notes/" + post_id + "/" + tumblelog_key + "/" + tumblelog_name;
+		XKit.extensions.replyviewer.notes_url = "https://www.tumblr.com/svc/tumblelog/" + tumblelog_name + "/" + post_id + "/notes";
 
 		console.log("replyviewer -> init_id is " + XKit.extensions.replyviewer.init_id);
 
@@ -68,40 +66,23 @@ XKit.extensions.replyviewer = new Object({
 				"</div></div><div id=\"replyviewer-loader-icon\">&nbsp;</div>";
 
 		$("#replyviewer-window").unbind('scroll');
-		XKit.window.show("", m_html, "", "<div id=\"xreplyviewer-close\" class=\"xkit-button\">Close</div>");
-
-		$("#xreplyviewer-close").click(function() {
-
-			XKit.extensions.replyviewer.init_id = -1;
-			XKit.window.close();
-
-		});
-
+		XKit.window.show("", m_html, "", "<div id=\"xkit-close-message\" class=\"xkit-button\">Close</div>");
 		XKit.extensions.replyviewer.load_tags();
 
 	},
 
-	load_tags_no_api: function() {
+	load_tags: function() {
 
 		// Load the next set of notes and tags.
 
 		var m_url = XKit.extensions.replyviewer.notes_url;
 		var m_init_id = XKit.extensions.replyviewer.init_id;
 
-		if (XKit.extensions.replyviewer.notes_url_from !== "") {
-			m_url += "?from_c=" + XKit.extensions.replyviewer.notes_url_from;
-		}
-
 		var m_post_id = XKit.extensions.replyviewer.post_id;
-
-		// Quick Hack:
-		if (document.location.href.toLowerCase().indexOf("https://") !== -1) {
-			m_url = m_url.replace("http://", "https://");
-		}
 
 		$.ajax({
 			url: m_url,
-			dataType: 'html'
+			dataType: 'json'
 		}).error(function() {
 
 			XKit.window.close();
@@ -114,37 +95,85 @@ XKit.extensions.replyviewer = new Object({
 				return;
 			}
 
-			var next_note = jqXHR.getResponseHeader('X-Next-Note');
-
-			var notes = $($.parseHTML(data));
-			var commentaries = notes.find("li.reblog.with_commentary, li.reply, li.answer");
+			var commentaries = data.response.notes.filter(function(item) {
+				return (item.type === "reblog" || item.type === "reply");
+			});
 
 			$(commentaries).each(function() {
 
-				console.log($(this));
-				var blog_username = $(this).attr('data-tumblelog');
-				var post_url = $(this).find(".action").attr('data-post-url');
-				var blog_avatar = $(this).find("img.avatar").attr('src');
-
-				var reply_container = $(this).find("blockquote");
+				var post_type = this.type;
+				var blog_name = this.blog_name;
+				var post_id = this.post_id;
+				var blog_avatar = this.avatar_url[48];
+				var post_url = "";
 				var content = "";
 				var only_text = false;
+				var api_url = "https://api.tumblr.com/v2/blog/" + blog_name + "/posts" + "?api_key=" + XKit.extensions.replyviewer.apiKey + "&id=" + post_id;
 
-				if ($(this).find(".answer_content").length > 0) {
-					content = $(this).find(".answer_content").html();
-					only_text = true;
-					post_url = "http://" + blog_username + ".tumblr.com";
-				} else {
-					content = $(reply_container).find("a").html();
+				if (post_type === "reply") {
+					if (this.reply_text.length > 0) {
+						content = this.reply_text;
+						only_text = true;
+						post_url = this.blog_url;
+						XKit.extensions.replyviewer.add_tags(blog_name, content, post_url, blog_avatar, only_text);
+						XKit.extensions.replyviewer.found_count++;
+					}
+				} else if (post_type === "reblog") {
+					if (typeof this.added_text !== "undefined") {
+						if (this.added_text.length > 0) {
+							content = this.added_text;
+							post_url = this.blog_url + "post/" + post_id;
+							XKit.extensions.replyviewer.add_tags(blog_name, content, post_url, blog_avatar, only_text);
+							XKit.extensions.replyviewer.found_count++;
+						}
+					} else {
+
+						GM_xmlhttpRequest({
+							method: "GET",
+							url: api_url,
+							json: true,
+							onerror: function(response) {
+								console.error("replyviewer -> Can't fetch page " + api_url);
+							},
+							onload: function(response) {
+
+								if (m_post_id !== XKit.extensions.replyviewer.post_id || m_init_id !== XKit.extensions.replyviewer.init_id) {
+									console.log("replyviewer -> quitting, wrong post_id or init_id");
+									return;
+								}
+
+								try {
+
+									var responseData = JSON.parse(response.responseText);
+									var post = responseData.response.posts[0];
+
+									if (typeof post.reblog.comment !== "undefined") {
+										if (post.reblog.comment.length > 0) {
+											content = post.reblog.comment;
+											content = content.replace(/<p>/gi, "");
+											content = content.replace(/<\/p>/gi, "");
+											content = content.replace(/<img[^>]*>/gi, " [img] ");
+											content = content.replace(/<figure[^>]*>/gi, "");
+											content = content.replace(/<\/figure>/gi, "");
+											content = content.replace(/<a.*href=".*?".*>(.*?)<\/a>/gi, "$1");
+											if (content.length > 0) {
+												XKit.extensions.replyviewer.add_tags(blog_name, content, post.post_url, blog_avatar, only_text);
+												XKit.extensions.replyviewer.found_count++;
+											}
+										}
+									}
+
+								} catch (e) {
+									console.error("replyviewer -> Can't parse JSON at " + api_url + " -> " + e.message);
+								}
+							}
+						})
+					}
 				}
-
-				XKit.extensions.replyviewer.add_tags(blog_username, content, post_url, blog_avatar, only_text);
-				XKit.extensions.replyviewer.found_count++;
-
 			});
 
-			if (next_note > 0) {
-				XKit.extensions.replyviewer.notes_url_from = next_note;
+			if (data.response._links) {
+				XKit.extensions.replyviewer.notes_url = "https://www.tumblr.com" + data.response._links.next.href;
 				console.log("Another page found.");
 				if (XKit.extensions.replyviewer.found_count <= 7) {
 					console.log(" -- Not enough posts loaded, auto-loading..");
@@ -168,20 +197,6 @@ XKit.extensions.replyviewer = new Object({
 			}
 
 		});
-
-	},
-
-
-	load_tags: function() {
-
-		// Load the next set of notes and tags.
-		// This uses APIv2, which I do not have a key and can't gather
-		// thanks to Tumblr's license agreement, which sounds like it was
-		// written especially to prevent XKit from using it.
-
-		XKit.extensions.replyviewer.load_tags_no_api();
-		return;
-
 
 	},
 
@@ -210,7 +225,7 @@ XKit.extensions.replyviewer = new Object({
 			}
 
 		});
-
+		
 	},
 
 	show_loader: function() {
@@ -246,7 +261,7 @@ XKit.extensions.replyviewer = new Object({
 
 		m_html = m_html + "</div></div>";
 
-		if ($("#tagviever-mini-loader").length > 0) {
+		if ($("#replyviever-mini-loader").length > 0) {
 			$("#replyviewer-window").before(m_html);
 		} else {
 			$("#replyviewer-window").append(m_html);
