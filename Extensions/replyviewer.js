@@ -11,7 +11,7 @@ XKit.extensions.replyviewer = new Object({
 
 	running: false,
 	slow: false,
-	apiKey: "5CIOyjHfcrNFlyEJl2D7vnoDTYqV30lNAUaSd4LJKoBFOZOmxp",
+	apiKey: XKit.api_key,
 
 	button_icon:" data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAAXNSR0IArs4c6QAAAnhJREFUOBGlVP9rUlEUv++hmWsrp0iJ+0GyIBFEiUmQNAghif0wnPir+ZOQqEh/iJP93A8F0kiELAqhsRIMIRWFkIFgY4mYIKHNRvh1n/PgyTakzA6cd+6955zPveecD4+xOWU8HnPTUvlph7OcRaPRxtbW1pPzwFNvmQUwEomMKY7juA9SqdTj9/trwp4+uOktbnpI63kEoG2e5x8Eg8HPQsn/A0YPQP4C9BKtJfQRJRwOz9wCsWTkNqCboVAoSzhnAOngXwSlZuVy+abP5yNQQeYGRM8eaTSaF263uyeCkZ0bECU+E4G2t7fv0zoQCOzNDSiCkR0Oh0kMhWh0WST2ETakNDEH9CW0Dv0NPYA+hVrJP03gW8T5EvmEF0okko2VlZVlOFKj0ehmLper7+/vc91ulykUCs5sNl83Go2v4d9FzmMM4yclTxOBJgi8Bef7Wq1WTSaTd5Ag1Wq1vFKpZM1mc9xoNMYymezI6XR+UavV1xBrR8yhCChSiGjHA+wGHLuZTOYwkUis6XS6C16vlzcYDIxeaDKZOI/Hw6tUqqVYLGYrFot1xH9Enk4EPG2ph68KhcLXfD5/12azsfX1da7X67FUKsUqlYpgkcxcLhe/urrK0un0WqlU+oa8NzhfOA1Ga6GH/X7/ynnHn/btdvteq9ViOzs7v1DumVAC3LBarZ86nc4AZUvQL2a325nD4WDVapXp9Xr6o7B4PM7q9Tq1gFksFob2sMFgMAFDzDvaTIaC6e6Vy+WLKGmZHJg6m3UoFC+KAEgb9OMqzPPj4+Pb2Wx2ERP/gaEoQZvvoM0BaGPAK/5KGxF4YgFMxI5DZyb2JBmLE4DNNuBNd2zuAAAAAElFTkSuQmCC",
 
@@ -167,7 +167,7 @@ XKit.extensions.replyviewer = new Object({
 									console.error("replyviewer -> Can't parse JSON at " + api_url + " -> " + e.message);
 								}
 							}
-						})
+						});
 					}
 				}
 			});
