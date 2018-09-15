@@ -128,3 +128,38 @@ body {
 .post_avatar .post_avatar_link {
     background-color: rgba(44, 47, 51, 0.18);
 }
+
+/* Change Reblog Post background overlay to black. */
+.post-forms-glass {
+	background-color: rgba(26, 29, 33, 0.86);
+}
+
+/* Add light drop-shadow to avatars */
+.post_avatar.post-avatar--sticky .post_avatar_wrapper {
+	box-shadow: 0px 2px 3px rgba(0,0,0,0.15);
+}
+
+/* Dog-ear transparency code by https://motackt.tumblr.com, thanks for the help! */
+/*when hovering over post, use gradient to cut away upper-right corner.*/
+.post.post_full:hover {
+	background: linear-gradient(225deg, transparent 0%, transparent 12px, #FFF 12px, #FFF 100%);
+}
+
+/*otherwise, use gradient to show the whole post container (this will be more useful when transitions are available for linear gradients*/
+/*and ofc make sure new post buttons never dog ear*/
+.post.post_full, .new_post_buttons_container {
+	background: linear-gradient(225deg, #FFF 0%, #FFF 12px, #FFF 12px, #FFF 100%);
+}
+
+/*remove transition when going to hover over post too*/
+.post_full:hover .post_permalink {
+	transition: unset;
+}
+
+/*remove the dark blue border + bg-color of the dog-ear, and remove transition when post stops being hovered over, because linear gradients don't have transitions yet*/
+.post_full .post_permalink {
+	border-color: transparent transparent #d0d0d0 #d0d0d0;
+	background: transparent;
+	transition: unset;
+}
+/* End dog-ear transparency code */
