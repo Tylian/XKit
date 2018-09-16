@@ -9,7 +9,10 @@ body {
 }
 
 .l-header-container--refresh {
-    background-color: rgba(50,53,60,0.67);
+    /* old pre-blur color -- background-color: rgba(50,53,60,0.67); */
+    background-color: rgba(100, 117, 154, 0.19);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
 }
 
 .selected .tab_notice {
