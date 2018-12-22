@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 7.1.2 **//
+//* VERSION 7.1.3 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER new-xkit **//
 
@@ -7,27 +7,14 @@ XKit.extensions.xkit_patches = new Object({
 
 	running: false,
 
-	preferences: {
-		debug_mode: {
-			text: "XKit Developer Mode",
-			default: true,
-			value: true
-		}
-	},
-
 	run: function() {
 		this.running = true;
 
-		var to_run = [];
-		for (var i in this.patches) {
-			to_run.unshift(i);
-			if (i === XKit.version) {
-				break;
-			}
-		}
-		for (var x in to_run) {
-			this.patches[to_run[x]]();
-		}
+		this.run_order.filter(x => {
+			return this.run_order.indexOf(x) >= this.run_order.indexOf(XKit.version);
+		}).forEach(x => {
+			this.patches[x]();
+		});
 
 		// Identify retina screen displays. Unused anywhere else
 		try {
@@ -59,6 +46,7 @@ XKit.extensions.xkit_patches = new Object({
 
 		window.addEventListener("message", XKit.blog_listener.eventHandler);
 
+		// Scrape Tumblr's data object now that we can run add_function
 		XKit.tools.add_function(function() {
 			var blogs = [];
 			try {
@@ -135,6 +123,8 @@ XKit.extensions.xkit_patches = new Object({
 
 		}, 1000);
 	},
+
+	run_order: ["7.8.1", "7.8.2", "7.9.0"],
 
 	patches: {
 		"7.9.0": function() {
@@ -493,24 +483,6 @@ XKit.extensions.xkit_patches = new Object({
 					);
 				}
 			};
-
-			// Scrape Tumblr's data object now that we can run add_function
-			XKit.tools.add_function(function() {
-				var blogs = [];
-				try {
-					var models = Tumblr.dashboardControls.allTumblelogs;
-					models.filter(function(model) {
-						return model.attributes.hasOwnProperty("is_current");
-					}).forEach(function(model) {
-						blogs.push(model.attributes.name);
-					});
-					if (blogs.length) {
-						window.postMessage({
-							xkit_blogs: blogs,
-						}, window.location.protocol + "//" + window.location.host);
-					}
-				} catch (e) {}
-			}, true);
 
 			/**
 			 * @return {Object} The elements of XKit's storage as a map from setting key to
