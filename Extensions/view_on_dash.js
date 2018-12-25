@@ -1,5 +1,5 @@
 //* TITLE View On Dash **//
-//* VERSION 0.7.5 **//
+//* VERSION 0.7.13 **//
 //* DESCRIPTION View blogs on your dash **//
 //* DEVELOPER new-xkit **//
 //* DETAILS This is a preview version of an extension, missing most features due to legal/technical reasons for now. It lets you view the last 20 posts a person has made on their blogs right on your dashboard. If you have User Menus+ installed, you can also access it from their user menu under their avatar. **//
@@ -9,7 +9,7 @@
 XKit.extensions.view_on_dash = new Object({
 
 	running: false,
-	apiKey: "fuiKNFp9vQFvjLNvx4sUwti4Yb5yGutBN4Xh10LXZhhRKjWlV4",
+	apiKey: XKit.api_key,
 
 	preferences: {
 		"show_sidebar_button": {
@@ -50,15 +50,16 @@ XKit.extensions.view_on_dash = new Object({
 
 			var xf_html = '<ul class="controls_section" id="view_on_dash_ul">' +
 				'<li class="section_header selected">VIEW BLOGS</li>' +
-				'<li class="no_push"><a href="#" onclick="return false;" id="view_on_dash_button">' +
+				'<li class="no_push"><a href="#" id="view_on_dash_button">' +
 					'<div class="hide_overflow">View on Dash<span class="sub_control link_arrow arrow_right"></span></div>' +
 				'</a></li></ul>';
-			$("ul.controls_section:eq(1)").before(xf_html);
+			$(".controls_section:eq(1)").before(xf_html);
 
-			$("#view_on_dash_ul").click(function() {
+			$("#view_on_dash_button").click(function() {
 
 				XKit.extensions.view_on_dash.show_open();
 
+				return false;
 			});
 
 		}
@@ -94,19 +95,30 @@ XKit.extensions.view_on_dash = new Object({
 
 	show_open: function() {
 
-		XKit.window.show("View on Dash","Enter the username of the blog you would like to view <input type=\"text\" maxlength=\"50\" placeholder=\"Enter a URL (example: new-xkit-extension)\" class=\"xkit-textbox\" id=\"xkit-view-on-dash-input-url\" onkeydown=\"if (event.keyCode == 13) document.getElementById('xkit-view-on-dash-ok').click()\">", "question", "<div class=\"xkit-button default\" id=\"xkit-view-on-dash-ok\">Go!</div><div class=\"xkit-button\" id=\"xkit-close-message\">Cancel</div>");
+		XKit.window.show("View on Dash", "Enter the username of the blog you would like to view <input type=\"text\" maxlength=\"50\" placeholder=\"Enter a URL (example: new-xkit-extension)\" class=\"xkit-textbox\" id=\"xkit-view-on-dash-input-url\" onkeydown=\"if (event.keyCode == 13) document.getElementById('xkit-view-on-dash-ok').click()\">", "question", "<div class=\"xkit-button default\" id=\"xkit-view-on-dash-ok\">Go!</div><div class=\"xkit-button\" id=\"xkit-close-message\">Cancel</div>");
 
 		$("#xkit-view-on-dash-ok").click(function() {
 
-			to_add = $("#xkit-view-on-dash-input-url").val().toLowerCase();
+			var $to_add = $("#xkit-view-on-dash-input-url");
+			var to_add = $to_add.val().toLowerCase();
 
 			if ($.trim(to_add) === "") {
+				$to_add.attr("placeholder", "Okay, see ya.");
 				XKit.window.close();
 				return;
 			}
 
 			if (/^[a-zA-Z0-9\-]+$/.test(to_add) === false) {
-				alert("Invalid username");
+				$to_add
+					.css("border-color", "red")
+					.attr("placeholder", "Invalid username.")
+					.val("")
+					.click(function() {
+						$to_add
+							.removeAttr("style")
+							.attr("placeholder", "Enter a URL (example: new-xkit-extension)")
+							.off("click");
+					});
 				return;
 			}
 
@@ -157,7 +169,7 @@ XKit.extensions.view_on_dash = new Object({
 
 	get_photo: function(data, index, width) {
 
-		for (var i=0;i<data.photos[index].alt_sizes.length;i++) {
+		for (var i = 0; i < data.photos[index].alt_sizes.length; i++) {
 			if (parseInt(data.photos[index].alt_sizes[i].width) === parseInt(width)) {
 				return data.photos[index].alt_sizes[i].url;
 			}
@@ -169,7 +181,7 @@ XKit.extensions.view_on_dash = new Object({
 
 	get_photo_height: function(data, index, width) {
 
-		for (var i=0;i<data.photos[index].alt_sizes.length;i++) {
+		for (var i = 0; i < data.photos[index].alt_sizes.length; i++) {
 			if (parseInt(data.photos[index].alt_sizes[i].width) === parseInt(width)) {
 				return data.photos[index].alt_sizes[i].height;
 			}
@@ -181,13 +193,12 @@ XKit.extensions.view_on_dash = new Object({
 
 	parse_item: function(data, username, tumblelog_key) {
 
-		if(tumblelog_key === null){
+		if (tumblelog_key === null) {
 			tumblelog_key = "";
 		}
 
 		var m_html = "<li class=\"post_container\">";
 		var post_class = "";
-		var additional_classes_for_post = "";
 
 		var post_tags = "";
 		var post_contents = "";
@@ -277,13 +288,29 @@ XKit.extensions.view_on_dash = new Object({
 
 		}
 
+		if (data.type === "chat") {
+			post_class = "is_conversation";
+			post_contents += "<div class=\"post_body\"><ul class=\"conversation_lines\">";
+			if (data.dialogue && data.dialogue.length > 0) {
+				for (var index = 0; index < data.dialogue.length; index++) {
+					var line = data.dialogue[index];
+					post_contents += "<li class=\"chat_line\">";
+					if (line.label !== "") {
+						post_contents += "<strong>" + line.label + " </strong>";
+					}
+					post_contents += line.phrase + "</li>";
+				}
+			}
+			post_contents += "</ul></div>";
+		}
+
 		if (data.type === "photo") {
 
 			post_class = "is_photo";
 
 			//var m_post_inner_html = '<img class="image" width="500" alt="" src="' + data["photo-url-500"] + '" data-thumbnail="' + data["photo-url-100"] + '">';
 
-			if (data.photos.length === 1) { post_class = "is_photo"; }else {post_class = "is_photoset"; }
+			if (data.photos.length === 1) { post_class = "is_photo"; } else {post_class = "is_photoset"; }
 
 			var photo_post_inner_html = "";
 
@@ -295,7 +322,7 @@ XKit.extensions.view_on_dash = new Object({
 
 				var rows = [];
 
-				for (var i=0;i<data.photoset_layout.length;i++) {
+				for (let i = 0; i < data.photoset_layout.length; i++) {
 					rows.push(data.photoset_layout[i]);
 				}
 
@@ -312,11 +339,11 @@ XKit.extensions.view_on_dash = new Object({
 
 					if (row_count >= 2) {
 
-						for (var m = 1; m < row_count; m++) {
+						for (let j = 1; j < row_count; j++) {
 
 							var photo_height = (m_width * XKit.extensions.view_on_dash.get_photo_height(data, m_temp_photo, "500")) / 500;
 
-							if (photo_height <= shortest ||shortest === 0) {
+							if (photo_height <= shortest || shortest === 0) {
 								shortest = photo_height;
 							}
 
@@ -332,7 +359,7 @@ XKit.extensions.view_on_dash = new Object({
 
 					var in_row_html = "";
 
-					for (var x=0;x < row_count;x++) {
+					for (var x = 0; x < row_count; x++) {
 
 						var m_height = (m_width * XKit.extensions.view_on_dash.get_photo_height(data, current_photo, "500")) / 500;
 						var margin_top = 0;
@@ -426,7 +453,6 @@ XKit.extensions.view_on_dash = new Object({
 					"</div>" +
 					"<a class=\"post_permalink\" id=\"permalink_" + data.id + "\" href=\"" + data.post_url + "\" target=\"_blank\" title=\"View post\"></a>";
 
-		//alert("<a style=\"display: none;\" class=\"post_permalink\" id=\"permalink_" + data.id + "\" href=\"" + data.url + "\" target=\"_blank\" title=\"View post - whatever\"></a>");
 		m_html = m_html + "</div>";
 		m_html = m_html + "</li>";
 
@@ -523,12 +549,17 @@ XKit.extensions.view_on_dash = new Object({
 						headers: {
 							"X-tumblr-form-key": XKit.interface.form_key(),
 						},
-						onerror: function(response) {
-							alert("Can't process like/unlike, please try again later or file for a bug report at http://new-xkit-extension.tumblr.com/ask.");
+						onerror: function(_response) {
+							XKit.window.show("Can't process like/unlike",
+								"Please try again later or file a bug report.",
+								"error",
+								'<div class="xkit-button default" id="xkit-close-message">OK</div>' +
+								'<a class="xkit-button" href="https://new-xkit-extension.tumblr.com/ask" target="_blank">Send an ask</a>'
+							);
 							// Revert changes.
 							$(m_icon_obj).toggleClass("liked");
 						},
-						onload: function(response) {
+						onload: function(_response) {
 							// Do nothing except a little dance.
 						}
 					});
@@ -595,7 +626,7 @@ XKit.extensions.view_on_dash = new Object({
 			onload: function(response) {
 				try {
 
-					data = JSON.parse(response.responseText);
+					var data = JSON.parse(response.responseText);
 
 					$("#view-on-dash-content").removeClass("loading");
 
@@ -674,7 +705,7 @@ XKit.extensions.view_on_dash = new Object({
 
 					$("#view-on-dash-header").attr('data-total', data.response.blog.posts);
 
-					for (var i=0;i<data.response.posts.length;i++) {
+					for (var i = 0; i < data.response.posts.length; i++) {
 
 						$(".xkit-view-on-dash-ol").append(XKit.extensions.view_on_dash.parse_item(data.response.posts[i], username, tumblelog_key));
 
@@ -691,8 +722,6 @@ XKit.extensions.view_on_dash = new Object({
 						$("#view-on-dash-back").removeClass("disabled");
 
 					}
-
-					XKit.post_listener.run_callbacks();
 
 					$(".view-on-dash-post-type").unbind("click");
 					$(".view-on-dash-post-type").bind("click", function() {
@@ -711,10 +740,10 @@ XKit.extensions.view_on_dash = new Object({
 						if ($("#view-on-dash-loader-box").length > 0) { return; }
 						if ($(this).hasClass("disabled")) { return; }
 
-						var page = parseInt($("#view-on-dash-header").attr('data-page')) + 1;
-						var username = $("#view-on-dash-header").attr('data-username');
+						var this_page = parseInt($("#view-on-dash-header").attr('data-page')) + 1;
+						var this_username = $("#view-on-dash-header").attr('data-username');
 
-						XKit.extensions.view_on_dash.view(username, (page * 20), page, type);
+						XKit.extensions.view_on_dash.view(this_username, (this_page * 20), this_page, type);
 
 					});
 
@@ -724,10 +753,10 @@ XKit.extensions.view_on_dash = new Object({
 						if ($("#view-on-dash-loader-box").length > 0) { return; }
 						if ($(this).hasClass("disabled")) { return; }
 
-						var page = parseInt($("#view-on-dash-header").attr('data-page')) - 1;
-						var username = $("#view-on-dash-header").attr('data-username');
+						var this_page = parseInt($("#view-on-dash-header").attr('data-page')) - 1;
+						var this_username = $("#view-on-dash-header").attr('data-username');
 
-						XKit.extensions.view_on_dash.view(username, (page * 20), page, type);
+						XKit.extensions.view_on_dash.view(this_username, (this_page * 20), this_page, type);
 
 					});
 
@@ -738,14 +767,14 @@ XKit.extensions.view_on_dash = new Object({
 						$("#view-on-dash-background").fadeOut('slow', function() {
 
 							try {
-							if (XKit.extensions.view_on_dash.last_scroll_point !== -1) {
+								if (XKit.extensions.view_on_dash.last_scroll_point !== -1) {
 
-								$('html, body').animate({
-									scrollTop: XKit.extensions.view_on_dash.last_scroll_point
-								}, 500);
+									$('html, body').animate({
+										scrollTop: XKit.extensions.view_on_dash.last_scroll_point
+									}, 500);
 
-							}
-							} catch(e) {
+								}
+							} catch (e) {
 								// meh.
 							}
 
@@ -775,7 +804,7 @@ XKit.extensions.view_on_dash = new Object({
 					XKit.extensions.view_on_dash.get_rand_id = XKit.tools.random_string();
 					XKit.extensions.view_on_dash.get_if_liked(XKit.extensions.view_on_dash.get_rand_id);
 
-				} catch(e) {
+				} catch (e) {
 					console.log("view-on-dash -> Error parsing data. " + e.message);
 					XKit.extensions.view_on_dash.show_error("<b>Unable to read JSON received from API calls.</b><br/>Please try again later.<br/><br/>Error Code: VOD-235");
 					return;
@@ -792,8 +821,8 @@ XKit.extensions.view_on_dash = new Object({
 		$("#view_on_dash_ul").remove();
 		try {
 			XKit.extensions.show_more.remove_custom_menu("view_on_dash");
-		} catch(e){
-			XKit.console.add("Can't remove custom menu, " + e.message);
+		} catch (e) {
+			console.error("Can't remove custom menu, " + e.message);
 		}
 	}
 

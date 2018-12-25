@@ -1,5 +1,6 @@
 .xkit-activity-plus-condensed-item.xkit-activity-plus-yellow-mode-on {
-	display: none; height: 0;
+	display: none !important;
+	height: 0 !important;
 	overflow: hidden;
 }
 
@@ -8,7 +9,8 @@
 }
 
 .xkit-activity-plus-condensed-item-opened.xkit-activity-plus-yellow-mode-on {
-	display: block; height: auto;
+	display: flex !important;
+	height: auto !important;
 	overflow: hidden;
    	-webkit-transition: 0.3s ease-in;
    	-moz-transition: 0.3s ease-in;
@@ -31,10 +33,15 @@
 	background: rgb(250,250,250);
 }
 
+.activity-notification {
+    flex-wrap: wrap;
+}
+
 .xkit-activity-plus-timestamp {
 	font-size: 11px;
 	text-align: left;
-	padding: 0px 8px 7px 8px;
+	padding: 2px 8px 2px 53px;
+	width: 100%;
 }
 
 #xkit-activity-plus-note-filter {

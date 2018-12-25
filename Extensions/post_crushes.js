@@ -1,7 +1,7 @@
 //* TITLE Post Crushes **//
-//* VERSION 2.0 REV A **//
+//* VERSION 2.0.9 **//
 //* DESCRIPTION Lets you share your Tumblr Crushes **//
-//* DEVELOPER STUDIOXENIX **//
+//* DEVELOPER New-XKit **//
 //* DETAILS To use this extension, go to the 'Following' page on your dashboard, and click on the 'Post My Crushes' button below your Tumblr Crushes. **//
 //* FRAME false **//
 //* BETA false **//
@@ -61,7 +61,7 @@ XKit.extensions.post_crushes = new Object({
 		$("#crushes").after('<div class="xkit-button xkit-wide-button" id="xkit_post_crushes" style="display: block; font-size: 12px; font-weight: bold; text-align: center; margin-bottom: 10px; border-radius: 4px; margin-top: 15px;">Post My Crushes</div>');
 
 		$("#xkit_post_crushes").click(function() {
-			if($(this).hasClass("xkit_button_gray") === true) { return; }
+			if ($(this).hasClass("xkit_button_gray") === true) { return; }
 			XKit.extensions.post_crushes.post();
 		});
 
@@ -70,41 +70,39 @@ XKit.extensions.post_crushes = new Object({
 	post: function() {
 
 		var blog_url = $("#search_form").find("[name='t']").val();
-		var send_url = "http://www.studioxenix.com/xkit/crushes/index.php";
-		var send_string = "?xkit=xkitnext";
-		var crush_img = [];
 		var crush_name = [];
 		var crush_url = [];
 		var crush_val = [];
+		var crush_avi = [];
 		var i = 0;
 
 		$("#xkit_post_crushes").removeClass("xkit_button_green");
 		$("#xkit_post_crushes").addClass("disabled");
 		$("#xkit_post_crushes").html("Please wait...");
 
-		for (i=1; i<=9; i++) {
-			var crush_img_src = $("#crush_" + i).attr('style').substring($("#crush_" + i).attr('style').indexOf("url('") + 5);
-				crush_img_src = crush_img_src.substring(0, crush_img_src.indexOf("'"));
-			crush_img.push(crush_img_src);
-			crush_url.push($("#crush_" + i).attr('href'));
-			crush_name.push($("#crush_" + i).attr('data-tumblelog-name'));
-			crush_val.push($("#crush_" + i).find("span").html().replace("%",""));
-		}
+		for (i = 1; i <= 9; i++) {
+			var $crush = $("#crush_" + i), crush_avi_css;
 
-		for (i=0; i<=8; i++) {
-			send_string = send_string + "&img" + (i+1) + "=" + crush_img[i] + "&val" + (i+1) + "=" + crush_val[i];
-		}
+			crush_url.push($crush.attr('href'));
+			crush_name.push($crush.attr('data-tumblelog-name'));
+			crush_val.push($crush.find("span").html().replace("%", ""));
 
-		send_url = send_url + encodeURI(send_string);
+			crush_avi_css = $crush.css("background-image");
+			crush_avi.push(crush_avi_css.substring(5, crush_avi_css.length - 2).replace("_96.", "_512."));
+		}
 
 		var m_tags = "";
+		if (XKit.extensions.post_crushes.preferences.auto_tag.value) {
+			m_tags = XKit.extensions.post_crushes.preferences.auto_tag_text.value;
+		}
+
 		var send_txt = "<strong>" + XKit.extensions.post_crushes.preferences.default_title.value + ":</strong><ol>";
 
-		for (i=0; i<=8; i++) {
+		for (i = 0; i <= 8; i++) {
 			var perc = '<small> (' + crush_val[i] + '%)</small>';
 			if (XKit.extensions.post_crushes.preferences.show_percentage.value === false) { perc = ""; }
 			send_txt = send_txt + '<li><a href="' + crush_url[i] + '">' + crush_name[i] + '</a>' + perc + '</li>';
-			m_tags = m_tags + "," + crush_name[i];
+			m_tags += "," + crush_name[i];
 		}
 
 		send_txt = send_txt + '</ol><p> </p>';
@@ -113,35 +111,47 @@ XKit.extensions.post_crushes = new Object({
 
 		m_object.channel_id = blog_url;
 
-		m_object.form_key = $("#form_key").val();
+		m_object.form_key = XKit.interface.form_key();
 
 		m_object.context_page = "dashboard";
 
-		m_object.context_id = "dashboard";
+		m_object.context_id = "";
 
 		// Not sure about this part:
 		m_object["is_rich_text[one]"] = "0";
 		m_object["is_rich_text[two]"] = "1";
 		m_object["is_rich_text[three]"] = "0";
 
-		m_object.MAX_FILE_SIZE = "10485760";
-
 		m_object["post[slug]"] = "";
 		m_object["post[draft_status]"] = "";
-		m_object["post[date]"] ="";
+		m_object["post[date]"] = "";
 
+		m_object.errors = false;
+		m_object.silent = false;
+		m_object.detached = true;
+		m_object.reblog = false;
 
 		m_object["post[type]"] = "photo";
+		m_object["post[photoset_layout]"] = "333";
+		m_object["post[photoset_order]"] = "o1,o2,o3,o4,o5,o6,o7,o8,o9";
+
+		for (i = 1; i <= 9; i++) {
+			m_object["images[o" + i + "]"] = crush_avi[i - 1];
+		}
 
 		var blog_selector_html = "<select id=\"xkit-post-crushes-blog\" style=\"margin-top: 7px; width: 100%; -webkit-box-sizing: border-box; -moz-box-sizing: border-box;  box-sizing: border-box; height: 25px;\">";
 
 		var m_blogs = XKit.tools.get_blogs();
 
 		if (m_blogs === "") {
-			alert("Unable to Post Crushes\nCan't get list of current blogs, please visit dashboard first.");
+			XKit.window.show("Error",
+				"Unable to Post Crushes - can't get list of current blogs. Please visit the dashboard first.",
+				"error",
+				'<div class="xkit-button default" id="xkit-close-message">OK</div>'
+			);
 			return;
 		} else {
-			for(i=0;i<m_blogs.length;i++) {
+			for (i = 0; i < m_blogs.length; i++) {
 				if (m_blogs[i] !== "") {
 					blog_selector_html = blog_selector_html + "<option value=\"" + m_blogs[i] + "\">" + m_blogs[i] + "</option>";
 				}
@@ -152,18 +162,13 @@ XKit.extensions.post_crushes = new Object({
 
 		if (XKit.extensions.post_crushes.preferences.tag_people.value === false) {
 			m_object["post[tags]"] = "";
-		}else {
+		} else {
 			m_object["post[tags]"] = m_tags;
 		}
-		m_object["post[publish_on]"] ="";
-		m_object.custom_tweet = "";
+		m_object["post[publish_on]"] = "";
+		m_object.custom_tweet = false;
 
-		m_object["post[photoset_order]"] = "o1";
-		m_object["post[photoset_layout]"] = "1";
-		m_object["photo_src[]"] = send_url;
-		m_object["images[o1]"] = send_url;
-
-		XKit.window.show("Post Crushes","<b>Post Caption:</b><input id=\"xkit-post-crushes-additional-text\" type=\"text\" class=\"xkit-textbox\" maxlength=\"256\" placeholder=\"optional additional text for this post\"><b>Blog to Post to:</b><br/>" + blog_selector_html + "<div style=\"margin-top: 10px; font-size: 13px; color: rgb(130,130,130);\">For additional options please check the Post Crushes control panel.</div>","question","<div data-status=\"0\" class=\"xkit-button default xkit-post-crushes-proceed\">Publish</div><div data-status=\"1\" class=\"xkit-button xkit-post-crushes-proceed\">Draft</div><div data-status=\"2\" class=\"xkit-button xkit-post-crushes-proceed\">Queue</div><div id=\"xkit-post-crushes-ignore\" class=\"xkit-button\">Cancel</div>");
+		XKit.window.show("Post Crushes", "<b>Post Caption:</b><input id=\"xkit-post-crushes-additional-text\" type=\"text\" class=\"xkit-textbox\" maxlength=\"256\" placeholder=\"optional additional text for this post\"><b>Blog to Post to:</b><br/>" + blog_selector_html + "<div style=\"margin-top: 10px; font-size: 13px; color: rgb(130,130,130);\">For additional options please check the Post Crushes control panel.</div>", "question", "<div data-status=\"0\" class=\"xkit-button default xkit-post-crushes-proceed\">Publish</div><div data-status=\"1\" class=\"xkit-button xkit-post-crushes-proceed\">Draft</div><div data-status=\"2\" class=\"xkit-button xkit-post-crushes-proceed\">Queue</div><div id=\"xkit-post-crushes-ignore\" class=\"xkit-button\">Cancel</div>");
 
 		$(".xkit-post-crushes-proceed").click(function() {
 
@@ -174,7 +179,7 @@ XKit.extensions.post_crushes = new Object({
 			var m_text = $.trim($("#xkit-post-crushes-additional-text").val());
 
 			if (m_text !== "") {
-				m_object["post[two]"] = send_txt + "<p>" + m_text + "</p>";
+				m_object["post[two]"] = send_txt + "<p>" + XKit.tools.escape_html(m_text) + "</p>";
 			} else {
 				m_object["post[two]"] = send_txt;
 			}
@@ -216,21 +221,20 @@ XKit.extensions.post_crushes = new Object({
 
 			GM_xmlhttpRequest({
 				method: "POST",
-				url: "http://www.tumblr.com/svc/post/update",
+				url: "https://www.tumblr.com/svc/post/update",
 				data: JSON.stringify(m_object),
+				json: true,
 				headers: {
 					"X-tumblr-puppies": kitty_data.kitten,
-					"X-tumblr-form-key": XKit.interface.form_key(),
-					"Content-Type": "application/json"
+					"X-tumblr-form-key": XKit.interface.form_key()
 				},
 				onerror: function(response) {
 					XKit.interface.kitty.set("");
 					XKit.extensions.post_crushes.post_crushes_error("Can't post crushes", "Server returned invalid/blank page or could not be reached. Maybe you hit your post limit for today, or your account has been suspended. Please check your internet connection and try again later.");
 				},
 				onload: function(response) {
-					XKit.interface.kitty.set(response.getResponseHeader("X-tumblr-kittens"));
+					XKit.interface.kitty.set(response.getResponseHeader("X-Tumblr-Kittens"));
 					var m_obj = jQuery.parseJSON(response.responseText);
-					console.log(m_obj);
 					if (m_obj.errors === false) {
 						$("#xkit_post_crushes").html("Posted!");
 						XKit.window.close();

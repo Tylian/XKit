@@ -1,5 +1,5 @@
 //* TITLE Notifications+ **//
-//* VERSION 1.5 REV C **//
+//* VERSION 1.5.7 **//
 //* DESCRIPTION Enhances the notifications **//
 //* DEVELOPER STUDIOXENIX **//
 //* FRAME false **//
@@ -11,7 +11,7 @@ XKit.extensions.notifications_plus = new Object({
 
 	running: false,
 	slow: true,
-	apiKey: "fuiKNFp9vQFvjLNvx4sUwti4Yb5yGutBN4Xh10LXZhhRKjWlV4",
+	apiKey: XKit.api_key,
 
 	last_post_id: "",
 	last_post_notes: 0,
@@ -70,10 +70,10 @@ XKit.extensions.notifications_plus = new Object({
 			XKit.extensions.notifications_plus.dedim();
 		}
 
-		if (XKit.interface.where().dashboard === true ||XKit.interface.where().channel === true) {
+		if (XKit.interface.where().dashboard === true || XKit.interface.where().channel === true) {
 
 			if (XKit.extensions.notifications_plus.preferences.follow_glow.value === true) {
-				XKit.post_listener.add("notifications_plus_followglow", XKit.extensions.notifications_plus.follow_glow);
+				XKit.post_listener.add("notifications_plus", XKit.extensions.notifications_plus.follow_glow);
 				XKit.extensions.notifications_plus.follow_glow();
 			}
 
@@ -87,7 +87,7 @@ XKit.extensions.notifications_plus = new Object({
 
 	follow_glow: function() {
 
-		$(".notification").not("notifications-follow-glow-plus-done").each(function() {
+		$(".notification").not(".notifications-follow-glow-plus-done").each(function() {
 
 			$(this).addClass("notifications-follow-glow-plus-done");
 
@@ -123,11 +123,11 @@ XKit.extensions.notifications_plus = new Object({
 
 	dedim: function() {
 
-		$(".notification_reblog").not("notifications-plus-done").each(function() {
+		$(".notification_reblog").not(".notifications-plus-done").each(function() {
 
 			$(this).addClass(".notifications-plus-done");
 			if ($(this).find("blockquote").length > 0) {
-				$(this).css("opacity","1");
+				$(this).css("opacity", "1");
 			}
 
 		});
@@ -146,8 +146,8 @@ XKit.extensions.notifications_plus = new Object({
 			XKit.extensions.notifications_plus.xpreview_show($(this));
 		});
 
-		$(document).on("mouseleave", ".notification, .ui_note", function(e){
-			$("#xpreview-container").css("display","none");
+		$(document).on("mouseleave", ".notification, .ui_note", function(e) {
+			$("#xpreview-container").css("display", "none");
 		});
 
 	},
@@ -178,26 +178,26 @@ XKit.extensions.notifications_plus = new Object({
 					m_preview = m_preview.substring(4, m_preview.length - 1);
 					m_preview = XKit.tools.replace_all(m_preview, "\\\"", "");
 					$("#xpreview-image").attr('src', m_preview);
-					$("#xpreview-image").css("display","block");
+					$("#xpreview-image").css("display", "block");
 					$("#xpreview-container").addClass("with-preview");
 				} else {
 					$("#xpreview-container").removeClass("with-preview");
-					$("#xpreview-image").css("display","none");
+					$("#xpreview-image").css("display", "none");
 				}
 			} else {
 				if (!$(obj).find(".preview_frame").hasClass("icon")) {
 					$("#xpreview-image").attr('src', $(obj).find(".preview_frame").find("img").attr('src'));
-					$("#xpreview-image").css("display","block");
+					$("#xpreview-image").css("display", "block");
 					$("#xpreview-container").addClass("with-preview");
 					using_preview = true;
 				} else {
 					$("#xpreview-container").removeClass("with-preview");
-					$("#xpreview-image").css("display","none");
+					$("#xpreview-image").css("display", "none");
 				}
 			}
 		}
 
-		if (post_url === "" ||typeof post_url === "undefined") {
+		if (post_url === "" || typeof post_url === "undefined") {
 			// XReply is here! (Compatibility with XKit 6)
 			post_url = $(obj).attr('data-old-href');
 			if (post_url === "") {
@@ -206,11 +206,10 @@ XKit.extensions.notifications_plus = new Object({
 			}
 		}
 
-		XKit.console.add("Notifications+: Post URL is " + post_url);
+		console.log("Notifications+: Post URL is " + post_url);
 
 		// Break it down.
-		post_url = post_url.replace('http://','');
-		post_url = post_url.replace('.tumblr.com','');
+		post_url = post_url.replace(/https?:\/\//, '');
 
 		var parts = post_url.split('/');
 		var blog_id = parts[0];
@@ -226,13 +225,13 @@ XKit.extensions.notifications_plus = new Object({
 		if (using_preview === true) {
 			box_top = offset.top - 34;
 		}
-		$("#xpreview-container").css("top",box_top + "px");
-		$("#xpreview-container").css("left",box_left + "px");
-		$("#xpreview-container").css("display","block");
+		$("#xpreview-container").css("top", box_top + "px");
+		$("#xpreview-container").css("left", box_left + "px");
+		$("#xpreview-container").css("display", "block");
 		$("#xpreview-container").addClass("loading");
 		$("#xpreview-notes").html("loading");
 
-		XKit.console.add("Notifications+: Post ID is " + post_id + " | blog_id = " + blog_id);
+		console.log("Notifications+: Post ID is " + post_id + " | blog_id = " + blog_id);
 
 		XKit.extensions.notifications_plus.xpreview_load(post_id, blog_id);
 
@@ -249,20 +248,20 @@ XKit.extensions.notifications_plus = new Object({
 		}
 
 		if (blog_id === "") {
-			XKit.console.add("Can't do XPreview, no blog_id");
-			$("#xpreview-container").css("display","none");
+			console.log("Can't do XPreview, no blog_id");
+			$("#xpreview-container").css("display", "none");
 			$("#xpreview-container").removeClass("loading");
 			return;
 		}
 
-		var api_url = "https://api.tumblr.com/v2/blog/" + blog_id + ".tumblr.com/posts" + "?api_key=" + XKit.extensions.notifications_plus.apiKey + "&id=" + post_id;
+		var api_url = "https://api.tumblr.com/v2/blog/" + blog_id + "/posts" + "?api_key=" + XKit.extensions.notifications_plus.apiKey + "&id=" + post_id;
 
 		GM_xmlhttpRequest({
 			method: "GET",
 			url: api_url,
 			json: true,
 			onerror: function() {
-				XKit.console.add("Can not load page to load notes.");
+				console.log("Can not load page to load notes.");
 			},
 			onload: function(response) {
 				try {
@@ -271,8 +270,8 @@ XKit.extensions.notifications_plus = new Object({
 					$("#xpreview-notes").html("&hearts; " + data.posts[0].note_count);
 					XKit.extensions.notifications_plus.last_post = post_id;
 					XKit.extensions.notifications_plus.last_post_notes = data.posts[0].note_count;
-				} catch(e) {
-					XKit.console.add(e.message);
+				} catch (e) {
+					console.error(e.message);
 				}
 
 			}
@@ -283,7 +282,6 @@ XKit.extensions.notifications_plus = new Object({
 	destroy: function() {
 		this.running = false;
 		XKit.post_listener.remove("notifications_plus");
-		XKit.post_listener.remove("notifications_plus_followglow");
 		XKit.tools.remove_css("notifications_plus_only_replies");
 	}
 

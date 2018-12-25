@@ -1,108 +1,200 @@
 //* TITLE Old Stats **//
-//* VERSION 0.2.2 **//
-//* DESCRIPTION  **//
-//* DEVELOPER STUDIOXENIX **//
+//* VERSION 0.5.0 **//
+//* DESCRIPTION Blog stats where they were **//
+//* DEVELOPER New-XKit **//
 //* FRAME false **//
 //* BETA false **//
 
 XKit.extensions.old_stats = new Object({
 
 	running: false,
+	done: false,
+	blogs: {},
+
+	preferences: {
+		"iconify": {
+			text: "Put the icons back on posts/followers/etc links",
+			default: true,
+			value: true
+		},
+		"switcher": {
+			text: "Show the blog switcher",
+			experimental: true,
+			default: true,
+			value: true
+		}
+	},
 
 	run: function() {
 		this.running = true;
-		var m_user = XKit.interface.user();
-		var posts_show = " ";
-		var followers_show = " ";
-		var drafts_show	= " ";
-		var queue_show = " ";
+		if (this.preferences.iconify.value) {
+			XKit.tools.init_css("old_stats");
+		}
+		if (this.preferences.switcher.value) {
+			window.addEventListener("message", this.messageListener);
+			XKit.tools.add_css(`
+				#old_stats_switcher::before {
+					content: "\\EA07";
+					font-family: tumblr-icons, Blank;
+					color: hsla(0,0%,100%,.6);
+					cursor: pointer;
+					position: absolute;
+					top: calc(50% - 0.5em);
+					right: calc(10px + 0.5em);
+					transition: transform 0.1s;
+				}
+				#old_stats_switcher.active::before {
+					color: unset;
+					transform: rotate(180deg);
+				}
+				.old_stats_blog { cursor: pointer; }`,
+			"old_stats_switcher");
+		}
+		if ($("#dashboard_controls_open_blog").length) {
+			if (this.preferences.switcher.value) {
+				this.blogScraper();
+			}
+		} else if ($(".recommended_tumblelogs").length) {
+			this.fetchStats();
+		}
+	},
 
-		if (XKit.interface.where().inbox) { 
-			return;
-		}
-		if (XKit.interface.where().likes) { 
-			return; 
+	fetchStats: function(blog) {
+
+		var page;
+
+		if (blog) {
+			page = "blog/" + blog;
+		} else {
+			page = "likes";
 		}
 
-		if (m_user.posts === 0) {
-			posts_show = " count_0 ";
-		}
-		if (m_user.followers === 0) {
-			followers_show = " count_0 ";
-		}
-		if (m_user.drafts === 0) {
-			drafts_show = " count_0 ";
-		}
-		if (m_user.processing === 0) {
-			processing_show = " count_0 ";
-		}
-		if (m_user.queue === 0) {
-			queue_show = " count_0 ";
-		}
-
-		var xf_html = '<ul data-blog-name="' + m_user.name + '" id="dashboard_controls_open_blog" class="controls_section">' +
-					'<li class="no_push selected_blog">' +
-						'<div class="open_blog with_subtitle">' +
-							'<a class="currently_selected_blog hide_overflow blog_title">' + m_user.name + '</a>' +
-							'<small>' +
-								'<div class="hide_overflow">' +
-									'<a target="_blank" href="http://' + m_user.name + '.tumblr.com/" class="open_blog_link" id="open_blog_link">' + m_user.title + '</a>' +
-								'</div>' +
-							'</small>' +
-						'</div>' +
-					'</li>' +
-					'<li class="controls_section_item' + posts_show + '" data-blog-controls-count="post_count" id="posts_control">' +
-						'<a class="control-item control-anchor posts" href="/blog/' + m_user.name + '">' +
-							'<div class="hide_overflow">Posts</div>' +
-							'<span class="count">' + m_user.posts.toLocaleString() + '</span>' +
-						'</a>' +
-					'</li>' +
-					'<li class="controls_section_item' + followers_show + '" data-blog-controls-count="follower_count">' +
-						'<a class="control-item control-anchor followers" href="/blog/' + m_user.name + '/followers">' +
-							'<div class="hide_overflow">Followers</div>' +
-							'<span class="count">' + m_user.followers.toLocaleString() + '</span>' +
-						'</a>' +
-					'</li>' +
-					'<li class="controls_section_item popover_menu_item_blog_details">' +
-						'<a class="control-item control-anchor activity" href="/blog/' + m_user.name + '/activity">' +
-							'<div class="hide_overflow" id="old_stats_activity">Activity</div>' +
-							'<span data-sparkline="' + m_user.activity + '" class="count sparkline">' +
-								'<canvas style="display: inline-block; vertical-align: top; height: 15px; width: 36px;" width="72" height="30"></canvas>' +
-							'</span>' +
-						'</a>' +
-					'</li>' +
-					'<li class="controls_section_item' + drafts_show + '" data-blog-controls-count="draft_count">' +
-						'<a class="control-item control-anchor drafts" href="/blog/' + m_user.name + '/drafts">' +
-							'<div class="hide_overflow">Drafts</div>' +
-							'<span class="count">' + m_user.drafts.toLocaleString() + '</span>' +
-							'</a>' +
-					'</li>' +
-					'<li class="controls_section_item' + processing_show + '" data-blog-controls-count="transcoding_count">' +
-						'<a class="control-item control-anchor queue" href="/blog/' + m_user.name + '/processing">' +
-							'<div class="hide_overflow">Processing</div>' +
-							'<span class="count">' + m_user.processing.toLocaleString() + '</span>' +
-						'</a>' +
-					'</li>' +
-					'<li class="controls_section_item' + queue_show + '" data-blog-controls-count="queued_post_count">' +
-						'<a class="control-item control-anchor queue" href="/blog/' + m_user.name + '/queue">' +
-							'<div class="hide_overflow">Queue</div>' +
-							'<span class="count">' + m_user.queue.toLocaleString() + '</span>' +
-						'</a>' +
-					'</li>' +
-					'<li class="controls_section_item no_push">' +
-						'<a class="control-item control-anchor customize" href="/settings/blog/' + m_user.name + '">' +
-							'<div class="hide_overflow">' +
-								'Edit appearance<i class="sub_control link_arrow icon_right icon_arrow_carrot_right"></i>' +
-							'</div>' +
-						'</a>' +
-					'</li>' +
-				'</ul>' +
-				'<ul id="xkit-dashboard-account" class="controls_section"></ul>';
-
-		$(".recommended_tumblelogs").before(xf_html);
+		GM_xmlhttpRequest({
+			method: "GET",
+			url: "https://www.tumblr.com/" + page,
+			onerror: function(response) {
+				console.error("[Old Stats] Couldn't fetch blog info.");
+			},
+			onload: function(response) {
+				$("#dashboard_controls_open_blog, .small_links").remove();
+				$("#right_column").prepend($(".small_links", response.responseText).css("margin", "0 0 18px")).prepend($("#dashboard_controls_open_blog", response.responseText));
+				$("#dashboard_controls_open_blog .selected").removeClass("selected");
+				$("#dashboard_controls_open_blog [data-sparkline]").prepend('<canvas id="old_stats_canvas" width="72" height="30" style="display: inline-block; width: 36px; height: 15px; vertical-align: top;">');
+				try {
+					var sparkline = JSON.parse($("#dashboard_controls_open_blog [data-sparkline]").attr("data-sparkline"));
+					var sparkmin = Math.min.apply(Math, sparkline);
+					var sparkpx = (Math.max.apply(Math, sparkline) - sparkmin) / 30;
+					var canvas = document.getElementById("old_stats_canvas").getContext("2d");
+					canvas.strokeStyle = "#FFFFFF";
+					canvas.lineWidth = 3.5;
+					canvas.moveTo(0, 30 - ((sparkline[0] - sparkmin) / sparkpx));
+					for (var i = 1; i < sparkline.length; i++) {
+						canvas.lineTo(i * (72 / sparkline.length), 30 - ((sparkline[i] - sparkmin) / sparkpx));
+						canvas.stroke();
+					}
+				} catch (e) {} // No activity, no problem.
+				if (XKit.extensions.old_stats.preferences.switcher.value) { XKit.extensions.old_stats.blogScraper(); }
+				XKit.extensions.old_stats.done = true;
+			}
+		});
 
 	},
+
+	blogScraper: function() {
+		if (Object.keys(this.blogs).length) { this.initSwitcher(); return; }
+		XKit.tools.add_function(function() {
+			try {
+				var models = Tumblr.dashboardControls.allTumblelogs, blogs = {};
+				models.filter(function(model) {
+					return model.attributes.hasOwnProperty("is_current");
+				}).forEach(function(model) {
+					blogs[model.attributes.name] = model.attributes.directory_safe_title;
+				});
+				window.postMessage({
+					xkit_blogs_with_names: blogs
+				}, window.location.protocol + "//" + window.location.host);
+			} catch (e) { console.error(e.message); }
+		}, true);
+	},
+
+	messageListener: function(e) {
+		if (e.origin == window.location.protocol + "//" + window.location.host && e.data.hasOwnProperty("xkit_blogs_with_names")) {
+			window.removeEventListener("message", this.messageListener);
+			XKit.extensions.old_stats.blogs = e.data.xkit_blogs_with_names;
+			XKit.extensions.old_stats.initSwitcher();
+		}
+	},
+
+	initSwitcher: function() {
+		var blogs = this.blogs;
+		if (!Object.keys(blogs).length) { return; }
+
+		$(".no_push.selected_blog").append('<span id="old_stats_switcher"></span>');
+
+		var loading = false;
+		$("#old_stats_switcher").click(function() {
+			if (document.selection) {
+				document.selection.empty();
+			} else if (window.getSelection) {
+				window.getSelection().removeAllRanges();
+			}
+			if ($(this).hasClass("active")) {
+				$(".old_stats_blog").off("click").remove();
+				if (!loading) {
+					$("#dashboard_controls_open_blog").children().removeAttr("style");
+					$(".small_links").removeAttr("style").css("margin", "0 0 18px");
+				} else {
+					$("#dashboard_controls_open_blog").append(
+						'<li class="controls_section_item selected_blog">' +
+							'<a class="control-item control-anchor">' +
+								'<div class="hide_overflow">Loading...</div>' +
+							'</a>' +
+						'</li>');
+				}
+				loading = false;
+			} else {
+				$("#dashboard_controls_open_blog").children(":not(.selected_blog)").css("display", "none");
+				$(".small_links").css("display", "none");
+				var current_blog = $(".no_push.selected_blog .currently_selected_blog").html(), do_append = false;
+
+				for (var x in blogs) {
+					if (x == current_blog) { do_append = true; continue; }
+					var blog_html =
+						'<li class="no_push old_stats_blog">' +
+							'<div class="open_blog with_subtitle">' +
+								'<a class="currently_selected_blog hide_overflow blog_title">' + x + '</a>' +
+								'<small>' +
+									'<div class="hide_overflow">' +
+										'<span class="open_blog_link" href="https://' + x + '.tumblr.com/" data-peepr="{&quot;tumblelog&quot;:&quot;' + x + '&quot;}">' + blogs[x] + '</span>' +
+									'</div>' +
+								'</small>' +
+							'</div>' +
+						'</li>';
+					if (do_append) {
+						$(".no_push.selected_blog, .no_push.old_stats_blog").last().after(blog_html);
+					} else {
+						$(".no_push.selected_blog, .no_push.old_stats_blog").last().before(blog_html);
+					}
+				}
+
+				$(".no_push.selected_blog, .no_push.old_stats_blog").last().css("margin", "0 0 18px");
+
+				$(".old_stats_blog").click(function() {
+					$(".no_push.selected_blog .open_blog.with_subtitle")[0].outerHTML = this.firstChild.outerHTML.replace("span", "a");
+					loading = true;
+					$("#old_stats_switcher").click();
+					XKit.extensions.old_stats.fetchStats($(this).find(".currently_selected_blog").html());
+				});
+			}
+			$(this).toggleClass("active");
+		});
+	},
+
 	destroy: function() {
 		this.running = false;
+		XKit.tools.remove_css("old_stats");
+		if (this.done) {
+			$("#dashboard_controls_open_blog, .small_links").remove();
+		}
 	}
 });

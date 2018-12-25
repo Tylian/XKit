@@ -1,7 +1,7 @@
 //* TITLE XNeko **//
-//* VERSION 1.2 REV A **//
+//* VERSION 1.2.2 **//
 //* DESCRIPTION A cat for your dashboard! **//
-//* DEVELOPER STUDIOXENIX **//
+//* DEVELOPER new-xkit **//
 //* FRAME false **//
 //* DETAILS A free spirited Japanese cat for your dashboard.<br>It is based on the Neko application by Kenji Gotoh. **//
 //* BETA false **//
@@ -34,6 +34,11 @@ XKit.extensions.xneko = new Object({
 			default: "Maneki-neko",
 			value: "Maneki-neko"
 		},
+		"viewport": {
+			text: "Stay in the window regardless of scrolling",
+			default: true,
+			value: true
+		},
 		"stay_away": {
 			text: "Stay at least 10 pixels away from the cursor",
 			default: true,
@@ -64,7 +69,7 @@ XKit.extensions.xneko = new Object({
 				XKit.extensions.xneko.think(XKit.extensions.xneko.neko);
 			}, 200);
 			$("#xneko").click(function() {
-				XKit.notifications.add("Meow!","ok");
+				XKit.notifications.add("Meow!", "ok");
 				XKit.extensions.xneko.mouse_x = XKit.extensions.xneko.mouse_x + 60;
 				XKit.extensions.xneko.think(XKit.extensions.xneko.neko, true);
 			});
@@ -88,18 +93,25 @@ XKit.extensions.xneko = new Object({
 		// Center the cat.
 		XKit.extensions.xneko.neko.place($(window).width() / 2 - 16, $(window).height() / 2 - 16);
 
-		$(document).mousemove(function(e){
-			if (XKit.extensions.xneko.preferences.stay_away.value === true) {
-				XKit.extensions.xneko.mouse_x = e.pageX - 15;
-				XKit.extensions.xneko.mouse_y = e.pageY - 15;
+		$(document).mousemove(function(e) {
+			if (XKit.extensions.xneko.preferences.viewport.value) {
+				XKit.extensions.xneko.mouse_x = e.clientX;
+				XKit.extensions.xneko.mouse_y = e.clientY;
 			} else {
 				XKit.extensions.xneko.mouse_x = e.pageX;
 				XKit.extensions.xneko.mouse_y = e.pageY;
 			}
+
+			if (XKit.extensions.xneko.preferences.stay_away.value) {
+				XKit.extensions.xneko.mouse_x -= 15;
+				XKit.extensions.xneko.mouse_y -= 15;
+			}
 		});
 
 		$("#xneko").addClass(XKit.extensions.xneko.preferences.appearance.value);
-
+		if (XKit.extensions.xneko.preferences.viewport.value) {
+			XKit.tools.add_css("#xneko { position: fixed; }", "xneko_sticky");
+		}
 	},
 
 	think: function(cat, force_mode) {
@@ -131,7 +143,7 @@ XKit.extensions.xneko = new Object({
 			if (mc_diff < 40) {
 				cat.direction_x = 0;
 			}
-		}else {
+		} else {
 			if (mc_diff < 15) {
 				cat.direction_x = 0;
 			}
@@ -159,23 +171,23 @@ XKit.extensions.xneko = new Object({
 		if (cat.direction_x === 1) {
 			if (cat.direction_y === 1) {
 				if (cat.alt_sprite === false) {
-					$("#xneko").css("background-position", "0px -" + (12*32) + "px");
+					$("#xneko").css("background-position", "0px -" + (12 * 32) + "px");
 				} else {
-					$("#xneko").css("background-position", "32px -" + (12*32) + "px");
+					$("#xneko").css("background-position", "32px -" + (12 * 32) + "px");
 				}
 			}
 			if (cat.direction_y === 0) {
 				if (cat.alt_sprite === false) {
-					$("#xneko").css("background-position", "0px -" + (13*32) + "px");
+					$("#xneko").css("background-position", "0px -" + (13 * 32) + "px");
 				} else {
-					$("#xneko").css("background-position", "32px -" + (13*32) + "px");
+					$("#xneko").css("background-position", "32px -" + (13 * 32) + "px");
 				}
 			}
 			if (cat.direction_y === -1) {
 				if (cat.alt_sprite === false) {
-					$("#xneko").css("background-position", "0px -" + (14*32) + "px");
+					$("#xneko").css("background-position", "0px -" + (14 * 32) + "px");
 				} else {
-					$("#xneko").css("background-position", "32px -" + (14*32) + "px");
+					$("#xneko").css("background-position", "32px -" + (14 * 32) + "px");
 				}
 			}
 		}
@@ -183,24 +195,24 @@ XKit.extensions.xneko = new Object({
 		if (cat.direction_x === 0) {
 			if (cat.direction_y === 1) {
 				if (cat.alt_sprite === false) {
-					$("#xneko").css("background-position", "0px -" + (11*32) + "px");
+					$("#xneko").css("background-position", "0px -" + (11 * 32) + "px");
 				} else {
-					$("#xneko").css("background-position", "32px -" + (11*32) + "px");
+					$("#xneko").css("background-position", "32px -" + (11 * 32) + "px");
 				}
 			}
 			if (cat.direction_y === 0) {
 				if (cat.alt_sprite === false) {
-					$("#xneko").css("background-position", "0px -" + (3*32) + "px");
+					$("#xneko").css("background-position", "0px -" + (3 * 32) + "px");
 				} else {
-					$("#xneko").css("background-position", "0px -" + (3*32) + "px");
+					$("#xneko").css("background-position", "0px -" + (3 * 32) + "px");
 				}
 				m_cat_stopped = true;
 			}
 			if (cat.direction_y === -1) {
 				if (cat.alt_sprite === false) {
-					$("#xneko").css("background-position", "0px -" + (15*32) + "px");
+					$("#xneko").css("background-position", "0px -" + (15 * 32) + "px");
 				} else {
-					$("#xneko").css("background-position", "32px -" + (15*32) + "px");
+					$("#xneko").css("background-position", "32px -" + (15 * 32) + "px");
 				}
 			}
 		}
@@ -208,23 +220,23 @@ XKit.extensions.xneko = new Object({
 		if (cat.direction_x === -1) {
 			if (cat.direction_y === 1) {
 				if (cat.alt_sprite === false) {
-					$("#xneko").css("background-position", "0px -" + (10*32) + "px");
+					$("#xneko").css("background-position", "0px -" + (10 * 32) + "px");
 				} else {
-					$("#xneko").css("background-position", "32px -" + (10*32) + "px");
+					$("#xneko").css("background-position", "32px -" + (10 * 32) + "px");
 				}
 			}
 			if (cat.direction_y === 0) {
 				if (cat.alt_sprite === false) {
-					$("#xneko").css("background-position", "0px -" + (9*32) + "px");
+					$("#xneko").css("background-position", "0px -" + (9 * 32) + "px");
 				} else {
-					$("#xneko").css("background-position", "32px -" + (9*32) + "px");
+					$("#xneko").css("background-position", "32px -" + (9 * 32) + "px");
 				}
 			}
 			if (cat.direction_y === -1) {
 				if (cat.alt_sprite === false) {
-					$("#xneko").css("background-position", "0px -" + (8*32) + "px");
+					$("#xneko").css("background-position", "0px -" + (8 * 32) + "px");
 				} else {
-					$("#xneko").css("background-position", "32px -" + (8*32) + "px");
+					$("#xneko").css("background-position", "32px -" + (8 * 32) + "px");
 				}
 			}
 		}
@@ -254,9 +266,9 @@ XKit.extensions.xneko = new Object({
 			cat.stand_count = 0;
 
 			if (cat.alt_sprite === true) {
-				$("#xneko").css("background-position", "0px -" + (1*32) + "px");
+				$("#xneko").css("background-position", "0px -" + (1 * 32) + "px");
 			} else {
-				$("#xneko").css("background-position", "32px -" + (1*32) + "px");
+				$("#xneko").css("background-position", "32px -" + (1 * 32) + "px");
 			}
 
 			cat.int = setTimeout(function() { XKit.extensions.xneko.think(XKit.extensions.xneko.neko); }, 520);
@@ -282,7 +294,7 @@ XKit.extensions.xneko = new Object({
 			} else {
 
 				if (cat.stopped === true) {
-					$("#xneko").css("background-position", "32px -" + (3*32) + "px");
+					$("#xneko").css("background-position", "32px -" + (3 * 32) + "px");
 					cat.sleeping = true;
 				}
 
@@ -291,23 +303,23 @@ XKit.extensions.xneko = new Object({
 				cat.stand_count = cat.stand_count + 1;
 
 				if (cat.stand_count === 5 || cat.stand_count === 7) {
-					$("#xneko").css("background-position", "32px -" + (2*32) + "px");
+					$("#xneko").css("background-position", "32px -" + (2 * 32) + "px");
 				}
 
 				if (cat.stand_count === 4 || cat.stand_count === 6) {
-					$("#xneko").css("background-position", "0px -" + (2*32) + "px");
+					$("#xneko").css("background-position", "0px -" + (2 * 32) + "px");
 				}
 
 				if (cat.stand_count === 12 || cat.stand_count === 14) {
-					$("#xneko").css("background-position", "32px -" + (6*32) + "px");
+					$("#xneko").css("background-position", "32px -" + (6 * 32) + "px");
 				}
 
 				if (cat.stand_count === 13 || cat.stand_count === 15) {
-					$("#xneko").css("background-position", "0px -" + (6*32) + "px");
+					$("#xneko").css("background-position", "0px -" + (6 * 32) + "px");
 				}
 
 				if (cat.stand_count === 15 || cat.stand_count === 30) {
-					$("#xneko").css("background-position", "32px -" + (3*32) + "px");
+					$("#xneko").css("background-position", "32px -" + (3 * 32) + "px");
 				}
 
 				cat.int = setTimeout(function() { XKit.extensions.xneko.think(XKit.extensions.xneko.neko); }, 520);
@@ -321,6 +333,7 @@ XKit.extensions.xneko = new Object({
 	destroy: function() {
 		this.running = false;
 		XKit.tools.remove_css("xneko");
+		XKit.tools.remove_css("xneko_sticky");
 		if (typeof XKit.extensions.xneko.neko !== "undefined") {
 			if (typeof XKit.extensions.xneko.neko.die === "function") {
 				XKit.extensions.xneko.neko.die();

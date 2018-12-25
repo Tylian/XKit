@@ -1,5 +1,5 @@
 //* TITLE AccessKit **//
-//* VERSION 1.1.7 **//
+//* VERSION 1.3.0 **//
 //* DESCRIPTION Accessibility tools for Tumblr **//
 //* DETAILS Provides accessibility tools for XKit and your dashboard, such as increased font sizes, more contrast on icons and more. **//
 //* DEVELOPER new-xkit **//
@@ -30,8 +30,18 @@ XKit.extensions.accesskit = new Object({
 			text: "Dashboard Adjustments",
 			type: "separator"
 		},
+		visible_captions: {
+			text: "Make image captions viewable below image",
+			default: false,
+			value: false
+		},
 		make_links_blue: {
 			text: "Make links on the posts on my dashboard blue",
+			default: true,
+			value: true
+		},
+		no_npf_colors: {
+			text: "Don't display NPF (user-set) colours in posts",
 			default: true,
 			value: true
 		},
@@ -79,19 +89,19 @@ XKit.extensions.accesskit = new Object({
 			type: "separator"
 		},
 		invert: {
-			text: "Invert colors (Chrome/Safari only, may cause slowness/problems)",
+			text: "Invert colors (May cause slowness/problems)",
 			default: false,
 			value: false,
 			experimental: true
 		},
 		grayscale: {
-			text: "Use grayscale colors (Chrome/Safari only, may cause slowness/problems)",
+			text: "Use grayscale colors (May cause slowness/problems)",
 			default: false,
 			value: false,
 			experimental: true
 		},
 		contrast: {
-			text: "Increase overall contrast (Chrome/Safari only, may cause slowness/problems)",
+			text: "Increase overall contrast (May cause slowness/problems)",
 			default: false,
 			value: false,
 			experimental: true
@@ -113,7 +123,7 @@ XKit.extensions.accesskit = new Object({
 
 		if (this.preferences.font.value === "opendyslexic") {
 
-			m_css = m_css + " @font-face { font-family: open-dyslexic; src: url('http://puaga.com/seven/accesskit/OpenDyslexic-Regular.ttf'); }" +
+			m_css = m_css + " @font-face { font-family: open-dyslexic; src: url('https://cdn.jsdelivr.net/open-dyslexic/2.1.0/ttf/OpenDyslexic-Regular.ttf'); }" +
 					" .post_wrapper *{ font-family: open-dyslexic; } ";
 
 		}
@@ -148,12 +158,20 @@ XKit.extensions.accesskit = new Object({
 
 		if (m_filters !== "") {
 
-			m_css = m_css + " html { -webkit-filter: " + m_filters + "; } ";
+			m_css = m_css + "html {height: 100%; } body { height: 100%; filter: " + m_filters + "; } ";
 
+		}
+
+		if (this.preferences.visible_captions.value === true) {
+			XKit.post_listener.add("accesskit_vis_caps", XKit.extensions.accesskit.vis_caps);
 		}
 
 		if (this.preferences.make_links_blue.value === true) {
 			m_css = m_css + " .post .post_body a, .reblog-content a { color: #2449c1 !important; font-weight: bold !important; } ";
+		}
+
+		if (this.preferences.no_npf_colors.value) {
+			m_css += ".post span { color: inherit !important; }";
 		}
 
 		if (this.preferences.contrast_sidebar.value === true) {
@@ -287,7 +305,51 @@ XKit.extensions.accesskit = new Object({
 					" .xkit-window-buttons { border-top: 1px solid black; } ";
 		}
 
+		if (XKit.interface.where().inbox) {
+			m_css += ".post_full.is_note.no_body .post_footer { margin: 0; }";
+		}
+
 		XKit.tools.add_css(m_css, "accesskit");
+
+	},
+
+	vis_caps: function() {
+
+		if (!XKit.interface.where().dashboard && !XKit.interface.where().channel && !XKit.interface.where().inbox) {
+			// probs on a blog. abort mission.
+			return;
+		}
+
+		var imgCap = '';
+		var imgWidth = '';
+		var rowHeight = '';
+
+		$('.photoset_row').each(function() {
+
+			if (!$(this).hasClass('xkit-accesskit-viscaps')) { //prevents double-dipping
+
+				$(this).attr('style', $(this).attr('style').replace('height', 'min-height'));
+				rowHeight = $(this).css('min-height');
+
+				$(this).find('a').each(function() {
+
+					if (!$(this).hasClass('xkit-accesskit-viscaps')) { //protection!
+
+						imgCap = $(this).find('img').attr('alt');
+						imgWidth = $(this).find('img').css('width');
+						$(this).html('<div style="height: ' + rowHeight + '; overflow: hidden;">' + $(this).html() + '</div><p style="width: ' + imgWidth + '; white-space: pre-wrap">' + imgCap + '</p>');
+
+						$(this).addClass('xkit-accesskit-viscaps');
+
+					}
+
+				});
+
+				$(this).addClass('xkit-accesskit-viscaps');
+
+			}
+
+		});
 
 	},
 

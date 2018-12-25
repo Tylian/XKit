@@ -1,5 +1,5 @@
 //* TITLE Unreverse **//
-//* VERSION 1.0 REV B **//
+//* VERSION 1.0.3 **//
 //* DESCRIPTION Places the post buttons on top **//
 //* DETAILS This extension places the reblog/like/reply/etc buttons on the top of the post. It is unsupported, and might cause problems with your dashboard. Please use with caution. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -19,12 +19,12 @@ XKit.extensions.unreverse2 = new Object({
 		XKit.post_listener.add("unreverse2", XKit.extensions.unreverse2.do);
 		XKit.extensions.unreverse2.do();
 
-		if (XKit.storage.get("unreverse2","shown_warning","") !== "yas") {
+		if (XKit.storage.get("unreverse2", "shown_warning", "") !== "yas") {
 
-			XKit.window.show("Unsupported extension","<b>Unreverse is an unsupported extension, which might cause problems with your dashboard.</b><br><br>You can still use it, but no support will be provided if you use it. If you experience any problems such as popup menus not opening, please disable this extension before contacting XKit support.","warning","<div class=\"xkit-button default\" id=\"unreverse-warning-close-button\">OK</div>");
+			XKit.window.show("Unsupported extension", "<b>Unreverse is an unsupported extension, which might cause problems with your dashboard.</b><br><br>You can still use it, but no support will be provided if you use it. If you experience any problems such as popup menus not opening, please disable this extension before contacting XKit support.", "warning", "<div class=\"xkit-button default\" id=\"unreverse-warning-close-button\">OK</div>");
 
 			$("#unreverse-warning-close-button").click(function() {
-				XKit.storage.set("unreverse2","shown_warning","yas");
+				XKit.storage.set("unreverse2", "shown_warning", "yas");
 				XKit.window.close();
 			});
 

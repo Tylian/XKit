@@ -1,5 +1,5 @@
 //* TITLE User Menus+ **//
-//* VERSION 2.5.5 **//
+//* VERSION 2.5.8 **//
 //* DESCRIPTION More options on the user menu **//
 //* DEVELOPER new-xkit **//
 //* DETAILS This extension adds additional options to the user menu (the one that appears under user avatars on your dashboard), such as Avatar Magnifier, links to their Liked Posts page if they have them enabled. Note that this extension, especially the Show Likes and Show Submit options use a lot of network and might slow your computer down. **//
@@ -50,21 +50,12 @@ XKit.extensions.show_more = new Object({
 			text: "Show Submit button if user has their submit box enabled",
 			default: false,
 			value: false
-		},
-		"sep2": {
-			text: "In-Dashboard Asks",
-			type: "separator",
-		},
-		"enable_anon": {
-			text: "Enable sending anonymous messages from the dashboard",
-			default: true,
-			value: true
 		}
 	},
 
 	init_inbox_asks: function() {
 
-		var askbox_template = XKit.storage.get("show_more","inbox_ask_template","");
+		var askbox_template = XKit.storage.get("show_more", "inbox_ask_template", "");
 		if (askbox_template === "") {
 			return;
 		}
@@ -86,7 +77,7 @@ XKit.extensions.show_more = new Object({
 			XKit.extensions.show_more.init_inbox_asks();
 		} else {
 			if ($("#dashboard_ask_template").length > 0) {
-				XKit.storage.set("show_more","inbox_ask_template", $("#dashboard_ask_template")[0].outerHTML);
+				XKit.storage.set("show_more", "inbox_ask_template", $("#dashboard_ask_template")[0].outerHTML);
 			}
 		}
 
@@ -115,7 +106,7 @@ XKit.extensions.show_more = new Object({
 		$(document).on('mouseover', 'a', XKit.extensions.show_more.store_data_username_if_userlink);
 		$(document).on('mouseover', '.post_info_fence a, .post_info a, a.username', XKit.extensions.show_more.store_data_username);
 		$(document).on('mouseover', '.post_avatar_link', XKit.extensions.show_more.store_data_avatar);
-		$(document).on('click mouseover','.tumblelog_popover .info_popover_button', XKit.extensions.show_more.add_links_new);
+		$(document).on('click mouseover', '.tumblelog_popover .info_popover_button', XKit.extensions.show_more.add_links_new);
 		$(document).on('click', '#xkit-classic-user-menu .xkit-ask', XKit.extensions.show_more.intercept_classic_menu_ask);
 
 	},
@@ -128,16 +119,16 @@ XKit.extensions.show_more = new Object({
 
 		$("#xkit-classic-user-menu-glass").remove();
 		$(".xkit-classic-menu-opener").removeClass("opened");
-		$("#xkit-classic-user-menu").fadeOut('fast', function() { $(this).remove() });
+		$("#xkit-classic-user-menu").fadeOut('fast', function() { $(this).remove(); });
 
 	},
 
-	show_classic_menu: function(e) {
+	show_classic_menu: function(event) {
 
-		e.preventDefault();
-		e.stopPropagation();
+		event.preventDefault();
+		event.stopPropagation();
 
-		var m_obj = $(e.target);
+		var m_obj = $(event.target);
 
 		if (typeof XKit.extensions.show_more.popup_data.avatar_url === "undefined") {
 			return;
@@ -156,12 +147,12 @@ XKit.extensions.show_more = new Object({
 
 		m_html = m_html + "<a class=\"xkit-open\" target=\"_blank\" href=\"" + XKit.extensions.show_more.popup_data.url + "\">Open in New Tab</a>";
 
-		if (XKit.extensions.show_more.popup_data.show_ask == 1 ||XKit.extensions.show_more.popup_data.asks == 1) {
+		if (XKit.extensions.show_more.popup_data.show_ask == 1 || XKit.extensions.show_more.popup_data.asks == 1) {
 			var anon_status = "0";
 			if (XKit.extensions.show_more.popup_data.ask_allows_anonymous || XKit.extensions.show_more.popup_data.anonymous_asks || XKit.extensions.show_more.popup_data.ask_allows_anonymous === 1 || XKit.extensions.show_more.popup_data.anonymous_asks === 1) {
 				anon_status = "1";
 			}
-			if (user_url === "xkit-extension" || user_url === "new-xkit-extension") {
+			if (user_url === "new-xkit-extension") {
 				m_html = m_html + "<a href=\"http://" + user_url + ".tumblr.com/ask\" target=\"_BLANK\" class=\"xkit-ask\">XKit Support</a>";
 			} else {
 				m_html = m_html + "<a href=\"http://" + user_url + ".tumblr.com/ask\" data-anonymous-ask=\"" + anon_status + "\" data-tumblelog-name=\"" + user_url + "\" class=\"xkit-ask ask\">Ask</a>";
@@ -214,13 +205,13 @@ XKit.extensions.show_more = new Object({
 
 			var m_data = XKit.extensions.show_more.popup_data;
 
-			for (var i=0;i<XKit.extensions.show_more.custom_menu_extension.length;i++) {
+			for (var i = 0; i < XKit.extensions.show_more.custom_menu_extension.length; i++) {
 
 				var returned_menu = "";
 
 				try {
 					returned_menu = XKit.extensions.show_more.custom_menu_function[i](m_data);
-				} catch(err) {
+				} catch (err) {
 					returned_menu = "";
 				}
 
@@ -264,8 +255,8 @@ XKit.extensions.show_more = new Object({
 					$(".tumblelog_popover_glass").trigger('click');
 					setTimeout(function() { $(".tumblelog_popover_glass").trigger('click'); }, 10);
 					$(".popover").hide();
-				} catch(err) {
-					alert(err.message);
+				} catch (err) {
+					console.error(err.message);
 				}
 			});
 
@@ -287,10 +278,9 @@ XKit.extensions.show_more = new Object({
 			e.preventDefault();
 			XKit.extensions.show_more.hide_classic_menu();
 			XKit.tools.add_function(function() {
-				var f = {
-						href: "/send/" + jQuery(".xkit-fan-mail").attr('data-tumblelog-name')
-				};
-				Tumblr.FanMail.show(f);
+				Tumblr.FanMail.show({
+					href: "/send/" + jQuery(".xkit-fan-mail").attr('data-tumblelog-name')
+				});
 			}, true, "");
 
 		});
@@ -324,9 +314,14 @@ XKit.extensions.show_more = new Object({
 			},
 			json: false,
 			onerror: function(response) {
-				alert("Unable to follow/unfollow person, error " +
-					  response.status + ": " + response.responseText +
-					  "\n\nPlease try again later or file a bug report by going to new-xkit-extension.tumblr.com/ask");
+				XKit.window.show("User Menus+ Error " + response.status,
+					"Unable to follow user:" +
+					"<p>" + response.responseText + "</p>" +
+					"Please try again later or file a bug report.",
+					"error",
+					'<div class="xkit-button default" id="xkit-close-message">OK</div>' +
+					'<a class="xkit-button" href="https://new-xkit-extension.tumblr.com/ask" target="_blank">Send an ask</a>'
+				);
 			},
 			onload: function(response) {
 				XKit.notifications.add("User " + user_url + " followed.");
@@ -336,7 +331,7 @@ XKit.extensions.show_more = new Object({
 						var json_obj = JSON.parse(json_data);
 						json_obj.following = true;
 						$(m_parent).find(".post_avatar_link").attr('data-tumblelog-popover', JSON.stringify(json_obj));
-					} catch(e) {
+					} catch (e) {
 						// console.log("Unable to set popover obj data");
 					}
 				}
@@ -357,9 +352,14 @@ XKit.extensions.show_more = new Object({
 			},
 			json: false,
 			onerror: function(response) {
-				alert("Unable to follow/unfollow person, error " +
-					  response.status + ": \"" + response.responseText +
-					  "\"\n\nPlease try again later or file a bug report by going to new-xkit-extension.tumblr.com/ask");
+				XKit.window.show("User Menus+ Error " + response.status,
+					"Unable to unfollow user:" +
+					"<p>" + response.responseText + "</p>" +
+					"Please try again later or file a bug report.",
+					"error",
+					'<div class="xkit-button default" id="xkit-close-message">OK</div>' +
+					'<a class="xkit-button" href="https://new-xkit-extension.tumblr.com/ask" target="_blank">Send an ask</a>'
+				);
 			},
 			onload: function(response) {
 				XKit.notifications.add("User " + user_url + " unfollowed.");
@@ -369,8 +369,8 @@ XKit.extensions.show_more = new Object({
 						var json_obj = JSON.parse(json_data);
 						json_obj.following = false;
 						$(m_parent).find(".post_avatar_link").attr('data-tumblelog-popover', JSON.stringify(json_obj));
-					} catch(e) {
-						// console.log("Unable to set popover obj data");
+					} catch (e) {
+						// console.error("Unable to set popover obj data");
 					}
 				}
 			}
@@ -394,9 +394,9 @@ XKit.extensions.show_more = new Object({
 		var m_index = XKit.extensions.show_more.custom_menu_extension.indexOf(extension_name);
 		if (m_index === -1) { return; }
 
-		XKit.extensions.show_more.custom_menu_extension.splice(m_index,1);
-		XKit.extensions.show_more.custom_menu_function.splice(m_index,1);
-		XKit.extensions.show_more.custom_menu_callback.splice(m_index,1);
+		XKit.extensions.show_more.custom_menu_extension.splice(m_index, 1);
+		XKit.extensions.show_more.custom_menu_function.splice(m_index, 1);
+		XKit.extensions.show_more.custom_menu_callback.splice(m_index, 1);
 
 	},
 
@@ -425,19 +425,32 @@ XKit.extensions.show_more = new Object({
 
 		if (typeof $(m_obj).attr('href') === "undefined") { return; }
 
-		var m_url = $(m_obj).attr('href').toLowerCase();
+		var m_url = $(m_obj).attr('href');
 
-		if (m_url.substring(m_url.length - 1) === "/") {m_url = m_url.substring(0, m_url.length - 1); }
+		/*Test for a link to a tumblr blog in a form that will have a popover
+		The regex has two capture groups, respectively the username and the path of the linked blog page.
+		https://xyz.tumblr.com links alway have a popover, while https://xyz.tumblr.com/foo/bar links do not have
+		a popover unless they're in a reblog header, in which case they have the post_info_link class.*/
+		var m_test, m_identifier, m_path;
 
-		if (m_url.substring(0, 7) === "http://" && m_url.substring(m_url.length - 11) === ".tumblr.com") {
-			var m_username = m_url.substring(7, m_url.length - 11);
-			XKit.extensions.show_more.store_data_username(e, true, m_username);
+		m_test = /https?:\/\/(?!www\.)([a-z0-9-]+)\.tumblr\.com([a-z0-9/-]*)/.exec(m_url);
+		if (m_test) {
+			m_path = m_test[2];
+			if (m_path == "" || m_path == "/" || $(m_obj).hasClass("post_info_link")) {
+				m_identifier = m_test[1];
+				XKit.extensions.show_more.store_data_username(e, true, m_identifier);
+			}
+		} else {
+			/* handle tmblr.co links, which appear in mentions*/
+			m_test = /https?:\/\/tmblr\.co\/([A-Za-z0-9_-]+)/.exec(m_url);
+			if (m_test) {
+				m_identifier = m_test[1];
+				XKit.extensions.show_more.store_data_username(e, true, m_identifier, true);
+			}
 		}
-
-
 	},
 
-	store_data_username: function(e, userlink_mode, real_username) {
+	store_data_username: function(e, userlink_mode, blog_identifier, is_mention) {
 
 		var m_obj = $(e.target);
 
@@ -449,10 +462,10 @@ XKit.extensions.show_more = new Object({
 
 			try {
 				XKit.extensions.show_more.popup_data = JSON.parse($(m_obj).attr('data-tumblelog-popover'));
-			} catch(err) {
+			} catch (err) {
 				XKit.extensions.show_more.popup_data = {};
 				XKit.extensions.show_more.popup_data.error = true;
-				XKit.console.add("show_more -> Can't parse popup_data:" + e.message);
+				console.error("show_more: Can't parse popup_data:" + e.message);
 			}
 
 		} else {
@@ -463,25 +476,25 @@ XKit.extensions.show_more = new Object({
 
 			GM_xmlhttpRequest({
 				method: "GET",
-				url: "http://www.tumblr.com/svc/tumblelog_popover/" + real_username + "?is_user_mention=false",
+				url: "http://www.tumblr.com/svc/tumblelog_popover/" + blog_identifier + "?is_user_mention=" + (is_mention || false),
 				json: false,
 				headers: {
 					"X-tumblr-form-key": XKit.interface.form_key(),
 				},
 				onerror: function(response) {
-					if (m_req_id !== XKit.extensions.show_more.popup_data.popup_data_req_id) { console.log("show_more: Could not fetch data, also ID mismatch."); return; }
-					console.log("show_more: Could not fetch data.");
+					if (m_req_id !== XKit.extensions.show_more.popup_data.popup_data_req_id) { console.error("show_more: Could not fetch data, also ID mismatch."); return; }
+					console.error("show_more: Could not fetch data.");
 					XKit.extensions.show_more.popup_data = {};
 					XKit.extensions.show_more.popup_data.error = true;
-					XKit.console.add("show_more -> Can't parse popup_data - not defined.");
 				},
 				onload: function(response) {
 
 					if (m_req_id !== XKit.extensions.show_more.popup_data.popup_data_req_id) { console.log("show_more: Fetched data but ID mismatch."); return; }
-					console.log("show_more: Successfully fetched and stored popup_data.");
+					console.log("show_more: Successfully fetched popup_data.");
 					try {
 						XKit.extensions.show_more.popup_data = JSON.parse(response.responseText);
-					} catch(e){
+					} catch (err) {
+						console.log("show_more: Could not store popup_data.");
 						XKit.extensions.show_more.popup_data = {};
 						XKit.extensions.show_more.popup_data.error = true;
 					}
@@ -505,8 +518,8 @@ XKit.extensions.show_more = new Object({
 
 		try {
 			XKit.extensions.show_more.popup_data = JSON.parse($(m_obj).attr('data-tumblelog-popover'));
-		} catch(err) {
-			XKit.console.add("show_more -> Can't parse popup_data");
+		} catch (err) {
+			console.log("show_more -> Can't parse popup_data");
 			XKit.extensions.show_more.popup_data = {};
 			XKit.extensions.show_more.popup_data.error = true;
 		}
@@ -574,13 +587,13 @@ XKit.extensions.show_more = new Object({
 
 			var m_data = XKit.extensions.show_more.popup_data;
 
-			for (var i=0;i<XKit.extensions.show_more.custom_menu_extension.length;i++) {
+			for (var i = 0; i < XKit.extensions.show_more.custom_menu_extension.length; i++) {
 
 				var returned_menu = "";
 
 				try {
 					returned_menu = XKit.extensions.show_more.custom_menu_function[i](m_data);
-				} catch(e) {
+				} catch (e) {
 					returned_menu = "";
 				}
 
@@ -648,48 +661,6 @@ XKit.extensions.show_more = new Object({
 
 		}
 
-		if (XKit.extensions.show_more.preferences.enable_anon.value) {
-
-			var anon_delay_count = 0;
-
-			$(".post_avatar").not(".xkit-show-more-anons-done").each(function() {
-
-				$(this).addClass("xkit-show-more-anons-done");
-
-				var username = $(this).parent().attr('data-tumblelog-name');
-
-				if (typeof XKit.extensions.show_more.anon_available[username] === "boolean") {
-					return;
-				}
-
-				var m_url = "https://www.tumblr.com/ask_form/" + username + ".tumblr.com";
-
-				if (typeof username === "undefined" || username === "") {
-					return;
-				}
-
-				// Temporarily set it to false while we fetch pages.
-				XKit.extensions.show_more.anon_available[username] = false;
-
-				setTimeout(function() {
-					GM_xmlhttpRequest({
-						url: m_url,
-						onload: function(data) {
-							if ($("#ask_anonymously", data).length > 0) {
-								XKit.extensions.show_more.anon_available[username] = true;
-							} else {
-								XKit.console.add("No anon messages for " + username);
-							}
-						}
-					});
-				}, 100 + (anon_delay_count * 100));
-
-				anon_delay_count++;
-
-			});
-
-		}
-
 		if (XKit.extensions.show_more.preferences.show_likes.value) {
 
 			var m_delay_count = 0;
@@ -737,7 +708,6 @@ XKit.extensions.show_more = new Object({
 
 		var menu_box = $(e.target).parent().find(".tumblelog_menu_popover");
 		var user_url = $(menu_box).parent().find(".tumblelog_menu_link").attr('data-tumblelog-name');
-		var m_class = "";
 
 		var m_html = "";
 
@@ -746,7 +716,7 @@ XKit.extensions.show_more = new Object({
 
 		if (XKit.extensions.show_more.anon_available[user_url]) {
 
-			$(menu_box).find(".tumblelog_menu_link.ask").attr('data-anonymous-ask','1');
+			$(menu_box).find(".tumblelog_menu_link.ask").attr('data-anonymous-ask', '1');
 
 		}
 
@@ -814,7 +784,7 @@ XKit.extensions.show_more = new Object({
 			$("#xkit-avatar-magnetizer-window").remove();
 		}
 
-		avatar_url = "https://api.tumblr.com/v2/blog/" + user_url + ".tumblr.com/avatar/512";
+		var avatar_url = "https://api.tumblr.com/v2/blog/" + user_url + ".tumblr.com/avatar/512";
 
 		var m_html = "<div id=\"xkit-avatar-magnetizer-shadow\">&nbsp;</div>" +
 				"<div id=\"xkit-avatar-magnetizer-window\">" +
@@ -839,14 +809,14 @@ XKit.extensions.show_more = new Object({
 	intercept_classic_menu_ask: function(event) {
 		event.preventDefault();
 
-		XKit.tools.add_function(function(){
+		XKit.tools.add_function(function() {
 			var args = JSON.parse(add_tag);
 			var config = jQuery("<div data-tumblelog-name='" + args.recipient + "' />");
 			config.data("anonymous_ask", args.anonymous_asks);
 			Tumblr.Events.trigger("ask:form:open", {
-                recipient: args.recipient,
-                allow_anonymous: args.anonymous_asks === "1" ? true : false
-            });
+				recipient: args.recipient,
+				allow_anonymous: args.anonymous_asks === "1" ? true : false
+			});
 		}, true, JSON.stringify({
 			recipient: this.getAttribute("data-tumblelog-name"),
 			anonymous_asks: this.getAttribute("data-anonymous-ask")
@@ -862,7 +832,7 @@ XKit.extensions.show_more = new Object({
 		$(document).off('mouseover', '.post_info_fence a, .post_info a, a.username', XKit.extensions.show_more.store_data_username);
 		$(document).off('mouseover', '.post_avatar_link', XKit.extensions.show_more.store_data_avatar);
 		$(document).off('mouseover', '.post_avatar .post_avatar_link', XKit.extensions.show_more.enable_classic_menu);
-		$(document).off('click','.tumblelog_menu_btn', XKit.extensions.show_more.add_links_new);
+		$(document).off('click', '.tumblelog_menu_btn', XKit.extensions.show_more.add_links_new);
 		$(document).off('click', '#xkit-classic-user-menu .xkit-ask', XKit.extensions.show_more.intercept_classic_menu_ask);
 		this.running = false;
 	}

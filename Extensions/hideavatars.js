@@ -1,7 +1,7 @@
 //* TITLE Hide Avatars **//
-//* VERSION 0.1.4 **//
+//* VERSION 0.1.6 **//
 //* DESCRIPTION Hides avatars on a per-url basis **//
-//* DEVELOPER dlmarquis **//
+//* DEVELOPER New-XKit **//
 //* FRAME false **//
 //* BETA true **//
 
@@ -29,10 +29,10 @@ XKit.extensions.hideavatars = new Object({
 
 		if (XKit.interface.where().dashboard) {
 			//Regular avatars
-			XKit.extensions.hideavatars.blognames.forEach(function (blogname) {
+			XKit.extensions.hideavatars.blognames.forEach(function(blogname) {
 				$(".post_avatar_link").filter(function() {
 					return $(this).attr("href").slice(7).split(".")[0] === blogname.title;
-				}).attr("style", "opacity: 0.5; background-image: url('"+hidden_avatar+"');");
+				}).attr("style", "opacity: 0.5; background-image: url('" + hidden_avatar + "');");
 
 			//Avatars in notifications
 				$(".notification a").filter(function() {
@@ -42,42 +42,42 @@ XKit.extensions.hideavatars = new Object({
 		}
 
 		if (XKit.interface.where().inbox) {
-			XKit.extensions.hideavatars.blognames.forEach(function (blogname) {
+			XKit.extensions.hideavatars.blognames.forEach(function(blogname) {
 				$(".post_avatar_link").filter(function() {
 					return $(this).attr("href").slice(7).split(".")[0] === blogname.title;
 				}).find(".post_avatar_image").attr("src", hidden_avatar);
 
 				$(".post_avatar_link").filter(function() {
 					return $(this).attr("href").slice(7).split(".")[0] === blogname.title;
-				}).attr("style", "opacity: 0.5; background-image: url('"+hidden_avatar+"');");
+				}).attr("style", "opacity: 0.5; background-image: url('" + hidden_avatar + "');");
 			});
 		}
 
 		if (XKit.interface.where().activity) {
 			//Top-four avatars
-			XKit.extensions.hideavatars.blognames.forEach(function (blogname) {
+			XKit.extensions.hideavatars.blognames.forEach(function(blogname) {
 				$(".ui_jumbo_avatar").filter(function() {
 					return $(this).attr("title") === blogname.title;
-				}).attr("style", "opacity: 0.5; background-image: url('"+hidden_avatar+"');");
+				}).attr("style", "opacity: 0.5; background-image: url('" + hidden_avatar + "');");
 
 			//Avatars in activity lines
 				$(".ui_avatar_link").filter(function() {
 					return $(this).attr("title") === blogname.title;
-				}).find(".avatar").attr("style", "opacity: 0.5; background-image: url('"+hidden_avatar+"');");
+				}).find(".avatar").attr("style", "opacity: 0.5; background-image: url('" + hidden_avatar + "');");
 			});
 		}
 	},
 
 	load_blogs: function() {
 
-		m_storage = XKit.storage.get("hideavatars", "blognames","");
+		var m_storage = XKit.storage.get("hideavatars", "blognames", "");
 
 		if (m_storage !== "") {
 			try {
 				XKit.extensions.hideavatars.blognames = JSON.parse(m_storage);
-			} catch(e) {
+			} catch (e) {
 				XKit.extensions.hideavatars.blognames = [];
-				XKit.console.add("Failed to parse m_storage in XKit.extensions.hideavatars.load_blogs");
+				console.error("Failed to parse m_storage in XKit.extensions.hideavatars.load_blogs");
 			}
 		} else {
 			XKit.extensions.hideavatars.blognames = [];
@@ -91,9 +91,8 @@ XKit.extensions.hideavatars = new Object({
 			console.log("Trying to save " + XKit.extensions.hideavatars.blognames.length + " blogs..");
 			console.log(JSON.stringify(XKit.extensions.hideavatars.blognames));
 			XKit.storage.set("hideavatars", "blognames", JSON.stringify(XKit.extensions.hideavatars.blognames));
-		} catch(e) {
-			XKit.window.show("Unable to save data","Hide Avatars could not save data<br/><br/>Error:<br/>" + e.message, "error", "<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
-			alert("Can't save data:\n" + e.message);
+		} catch (e) {
+			XKit.window.show("Unable to save data", "Hide Avatars could not save data<br/><br/>Error:<br/><p>" + e.message + "</p>", "error", "<div class=\"xkit-button default\" id=\"xkit-close-message\">OK</div>");
 		}
 
 	},
@@ -114,9 +113,9 @@ XKit.extensions.hideavatars = new Object({
 			cat_list = "<div class=\"xkit-hideavatars-no-blognames\">You have no blogs set.</div>";
 		} else {
 
-			for (var i=0;i<XKit.extensions.hideavatars.blognames.length;i++) {
+			for (var j = 0; j < XKit.extensions.hideavatars.blognames.length; j++) {
 
-				cat_list = cat_list + "<div class=\"xkit-hideavatars-cp-item\" data-id=\"" + XKit.extensions.hideavatars.blognames[i].id + "\">" + XKit.extensions.hideavatars.blognames[i].title + "</div>";
+				cat_list = cat_list + "<div class=\"xkit-hideavatars-cp-item\" data-id=\"" + XKit.extensions.hideavatars.blognames[j].id + "\">" + XKit.extensions.hideavatars.blognames[j].title + "</div>";
 
 			}
 		}
@@ -135,16 +134,32 @@ XKit.extensions.hideavatars = new Object({
 
 		$("#xkit-hideavatars-add-blogname").click(function() {
 
-			XKit.window.show("New blog","<b>Blog Name:</b><input type=\"text\" maxlength=\"40\" placeholder=\"\" class=\"xkit-textbox\" id=\"xkit-hideavatars-blogname-add-title\">","question","<div class=\"xkit-button default\" id=\"xkit-hideavatars-create-blogname\">Add Blog</div><div class=\"xkit-button\" id=\"xkit-close-message\">Cancel</div>");
+			XKit.window.show("Add blog", "<b>Blog URL:</b><input type=\"text\" maxlength=\"40\" placeholder=\"e.g. new-xkit-extension\" class=\"xkit-textbox\" id=\"xkit-hideavatars-blogname-add-title\">", "question", "<div class=\"xkit-button default\" id=\"xkit-hideavatars-create-blogname\">Add Blog</div><div class=\"xkit-button\" id=\"xkit-close-message\">Cancel</div>");
 
 			$("#xkit-hideavatars-create-blogname").click(function() {
 
-				var m_title = $("#xkit-hideavatars-blogname-add-title").val();
+				var $m_title = $("#xkit-hideavatars-blogname-add-title");
+				var m_title = $m_title.val();
+				function complain(problem) {
+					$m_title
+						.css("border-color", "red")
+						.attr("placeholder", problem)
+						.val("")
+						.click(function() {
+							$m_title
+								.removeAttr("style")
+								.attr("placeholder", "e.g. new-xkit-extension")
+								.off("click");
+						});
+				}
 
-				if ($.trim(m_title) === "") { XKit.window.close(); return; }
+				if ($.trim(m_title) === "") {
+					complain("Please enter a blog name.");
+					return;
+				}
 
 				if (XKit.extensions.hideavatars.blogname_exists(m_title)) {
-					alert("You've already added this blog!");
+					complain(`You've already added ${m_title}.`);
 					return;
 				}
 
@@ -167,15 +182,23 @@ XKit.extensions.hideavatars = new Object({
 
 			var m_cat_obj = XKit.extensions.hideavatars.get_blogname($(this).attr('data-id'));
 
-			if (m_cat_obj === false) { alert("Error HAV-136: Could not find blog name with data-id " + $(this).attr('data-id') ); return; }
+			if (m_cat_obj === false) {
+				XKit.window.show("Error",
+					"Error HAV-136: " +
+					"<p>Could not find blog name with data-id " + $(this).attr('data-id') + "</p>",
+					"error",
+					'<div class="xkit-button default" id="xkit-close-message">OK</div>'
+				);
+				return;
+			}
 
-			XKit.window.show("Edit blog name","<b>Blog Name:</b><input type=\"text\" maxlength=\"40\" placeholder=\"\" class=\"xkit-textbox\" id=\"xkit-hideavatars-blogname-add-title\" value=\"" + m_cat_obj.title + "\"><br/>If you delete this blog, its avatar will show again","question","<div class=\"xkit-button default\" id=\"xkit-hideavatars-save-blogname\">Save blogname</div><div class=\"xkit-button\" id=\"xkit-hideavatars-delete-blogname\">Delete</div><div class=\"xkit-button\" id=\"xkit-close-message\">Cancel</div>");
+			XKit.window.show("Edit blog name", "<b>Blog Name:</b><input type=\"text\" maxlength=\"40\" placeholder=\"\" class=\"xkit-textbox\" id=\"xkit-hideavatars-blogname-add-title\" value=\"" + m_cat_obj.title + "\"><br/>If you delete this blog, its avatar will show again", "question", "<div class=\"xkit-button default\" id=\"xkit-hideavatars-save-blogname\">Save blogname</div><div class=\"xkit-button\" id=\"xkit-hideavatars-delete-blogname\">Delete</div><div class=\"xkit-button\" id=\"xkit-close-message\">Cancel</div>");
 
 			$("#xkit-hideavatars-save-blogname").click(function() {
 
 				XKit.extensions.hideavatars.load_blogs();
 
-				for (var i=0;i<XKit.extensions.hideavatars.blognames.length;i++) {
+				for (var i = 0; i < XKit.extensions.hideavatars.blognames.length; i++) {
 
 					if (m_cat_obj.id === XKit.extensions.hideavatars.blognames[i].id) {
 
@@ -194,17 +217,17 @@ XKit.extensions.hideavatars = new Object({
 
 			$("#xkit-hideavatars-delete-blogname").click(function() {
 
-				XKit.window.show("You sure?","Delete blog <b>\"" + m_cat_obj.title + "\"</b>?","warning","<div class=\"xkit-button default\" id=\"xkit-hideavatars-delete-blogname-confirm\">Confirm</div><div class=\"xkit-button\" id=\"xkit-close-message\">Cancel</div>");
+				XKit.window.show("You sure?", "Delete blog <b>\"" + m_cat_obj.title + "\"</b>?", "warning", "<div class=\"xkit-button default\" id=\"xkit-hideavatars-delete-blogname-confirm\">Confirm</div><div class=\"xkit-button\" id=\"xkit-close-message\">Cancel</div>");
 
 				$("#xkit-hideavatars-delete-blogname-confirm").click(function() {
 
 					XKit.extensions.hideavatars.load_blogs();
 
-					for (var j=0;j<XKit.extensions.hideavatars.blognames.length;j++) {
+					for (var i = 0; i < XKit.extensions.hideavatars.blognames.length; i++) {
 
-						if (m_cat_obj.id === XKit.extensions.hideavatars.blognames[j].id) {
+						if (m_cat_obj.id === XKit.extensions.hideavatars.blognames[i].id) {
 
-							XKit.extensions.hideavatars.blognames.splice(j, 1);
+							XKit.extensions.hideavatars.blognames.splice(i, 1);
 
 						}
 
@@ -224,7 +247,7 @@ XKit.extensions.hideavatars = new Object({
 
 	get_blogname: function(id) {
 
-		for (var i=0;i<XKit.extensions.hideavatars.blognames.length;i++) {
+		for (var i = 0; i < XKit.extensions.hideavatars.blognames.length; i++) {
 
 			if (id === XKit.extensions.hideavatars.blognames[i].id) {
 
@@ -242,7 +265,7 @@ XKit.extensions.hideavatars = new Object({
 
 		title = title.toLowerCase();
 
-		for (var i=0;i<XKit.extensions.hideavatars.blognames.length;i++) {
+		for (var i = 0; i < XKit.extensions.hideavatars.blognames.length; i++) {
 
 			if (title === XKit.extensions.hideavatars.blognames[i].title.toLowerCase()) {
 

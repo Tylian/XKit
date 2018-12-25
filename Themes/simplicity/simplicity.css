@@ -1,5 +1,5 @@
 /* NAME Simplicity **/
-/* VERSION 1.0.2 **/
+/* VERSION 1.0.3 **/
 /* DESCRIPTION A simple black and grey theme **/
 /* DEVELOPER longislandicedb **/
 
@@ -63,4 +63,9 @@
 .plus-follow-button:hover,
 .identity .controls_section .item:hover .follow:hover {
     background-color: #aaa;
+}
+
+.post_avatar,
+.post_avatar .post_avatar_link {
+	background-color: transparent;
 }

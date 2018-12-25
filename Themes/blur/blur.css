@@ -91,7 +91,12 @@ body {
 }
 */
 
-.post_content{
+.post_avatar,
+.post_avatar .post_avatar_link {
+	background-color: transparent;
+}
+
+.post_content {
 	background: transparent !important;
 }
 

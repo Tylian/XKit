@@ -1,15 +1,31 @@
 //* TITLE Audio+ **//
-//* VERSION 0.3.1 **//
+//* VERSION 0.5.2 **//
 //* DESCRIPTION Enhancements for the Audio Player **//
-//* DEVELOPER STUDIOXENIX **//
+//* DEVELOPER new-xkit **//
 //* FRAME false **//
 //* BETA false **//
 
 XKit.extensions.audio_plus = {
 
 	running: false,
+	current_player: null,
 
-	check_current_interval: 0,
+	preferences: {
+		sep0: {
+			text: "Options",
+			type: "separator"
+		},
+		add_volume_control: {
+			text: "Add a volume slider to audio posts",
+			value: true,
+			default: true
+		},
+		pop_out_player: {
+			text: "Pop out controls when you scroll away from playing audio",
+			value: true,
+			default: true
+		}
+	},
 
 	run: function() {
 		this.running = true;
@@ -18,108 +34,109 @@ XKit.extensions.audio_plus = {
 			return;
 		}
 
-		if ($("#posts").length > 0) {
-			XKit.tools.init_css("audio_plus");
+		if ($("#posts").length === 0) {
+			return;
+		}
+
+		XKit.tools.init_css("audio_plus");
+
+		if (XKit.extensions.audio_plus.preferences.add_volume_control.value) {
 			$(document).on("mousemove mousedown mouseup mouseout click", ".xkit-audio-plus-slider", XKit.extensions.audio_plus.slider_handle_event);
-			XKit.post_listener.add("audio_plus", XKit.extensions.audio_plus.do);
+			XKit.post_listener.add("audio_plus", function() { setTimeout(XKit.extensions.audio_plus.do, 10); });
 			setTimeout(function() { XKit.extensions.audio_plus.do(); }, 500);
-			$("body").append("<div id=\"xkit-audio-plus-current-player\"></div>");
-			XKit.extensions.audio_plus.check_current_interval = setInterval(function() { XKit.extensions.audio_plus.check_current(); }, 1000);
 		}
 
+		if (XKit.extensions.audio_plus.preferences.pop_out_player.value) {
+			window.addEventListener("scroll", XKit.extensions.audio_plus.handle_scroll, false);
+			XKit.extensions.audio_plus.create_pop_out_controls();
+		}
 	},
 
-	check_current: function() {
+	create_pop_out_controls: function() {
+		// Create play and pause buttons modeled after the built-in ones
+		var playPause = document.createElement("div");
+		playPause.classList.add("play-pause");
 
-		XKit.tools.add_function(function() {
+		var icon = document.createElement("i");
+		icon.classList.add("icon");
+		icon.classList.add("icon_pause");
+		playPause.appendChild(icon);
 
-			try {
-				var current_player = Tumblr.AudioPlayer.current_player_id;
+		var controls_undock = document.createElement("div");
+		controls_undock.id = "xkit-audio-plus-controls-undock";
 
-				var m_object = {
-					defined: false
-				};
+		var controls_undock_container = document.createElement("div");
+		controls_undock_container.id = "xkit-audio-plus-controls-undock-container";
+		controls_undock_container.appendChild(controls_undock);
 
-				if (typeof current_player !== "undefined") {
-					m_object.defined = true;
-					m_object.title = audiojs.instances["audiojs" + current_player].audioplayer.$track_name.text();
-					m_object.artist = audiojs.instances["audiojs" + current_player].audioplayer.$artist_name.text();
-					m_object.playing = audiojs.instances["audiojs" + current_player].playing;
-					m_object.id = parseInt(current_player);
-					jQuery("#xkit-audio-plus-current-player").html("CU:" + JSON.stringify(m_object));
-				} else {
-					jQuery("#xkit-audio-plus-current-player").html("");
-				}
-			} catch(e){
-				jQuery("#xkit-audio-plus-current-player").html("");
+		var controls = document.createElement("div");
+		controls.classList.add("xkit-audio-plus-controls");
+		// Spoof audio_player class to get the Play/Pause button styles
+		controls.classList.add("audio-player");
+
+		controls.appendChild(playPause);
+		controls.appendChild(controls_undock_container);
+
+		controls.addEventListener("click", function(event) {
+			if (event.target === controls || event.target === playPause) {
+				XKit.extensions.audio_plus.controls_click_callback();
+			} else {
+				XKit.extensions.audio_plus.controls_undock_click_callback();
 			}
+		}, false);
 
-		}, true, "");
+		XKit.extensions.audio_plus.pop_out_controls = controls;
+
+		document.body.appendChild(controls);
 	},
 
-	return_current_instance: function() {
+	controls_undock_click_callback: function() {
+		var audio_plus = XKit.extensions.audio_plus;
+		var controls = audio_plus.pop_out_controls;
+		if (controls.classList.contains("playing")) {
+			audio_plus.current_player.querySelector('audio').pause();
+		}
+		controls.classList.remove("showing");
+		audio_plus.current_player = null;
+	},
 
-		if ($("#xkit-audio-plus-current-player").html().substring(0,3) !== "CU:") {
-			return -1;
+	controls_click_callback: function() {
+		var audio_plus = XKit.extensions.audio_plus;
+		var controls = audio_plus.pop_out_controls;
+		var ppIcon = controls.querySelector('.play-pause').querySelector('.icon');
+		var audio = audio_plus.current_player.querySelector('audio');
+
+		if (!controls.classList.contains("showing")) {
+			return;
+		}
+		if (controls.classList.contains("playing")) {
+			audio.pause();
+			ppIcon.classList.remove("icon_pause");
+			ppIcon.classList.add("icon_play");
+			controls.classList.remove("playing");
 		} else {
-			try {
-				return JSON.parse($("#xkit-audio-plus-current-player").html().substring(3));
-			} catch(e) {
-				return -1;
-			}
+			audio.play();
+			ppIcon.classList.remove("icon_play");
+			ppIcon.classList.add("icon_pause");
+			controls.classList.add("playing");
 		}
-
 	},
 
-	stop_current_instance: function() {
-		var instance = XKit.extensions.audio_plus.return_current_instance();
-
-		if (instance === -1) { return; }
-
-		var m_object = {
-			id: instance.id
-		};
-
-		XKit.tools.add_function(function() {
-			var add_tags = JSON.parse(add_tag);
-			var m_object = audiojs.instances["audiojs" + add_tags.id];
-			m_object.pause();
-		}, true, JSON.stringify(m_object));
-
-	},
-
-	play_current_instance: function() {
-		var instance = XKit.extensions.audio_plus.return_current_instance();
-
-		if (instance === -1) { return; }
-
-		var m_object = {id: instance.id};
-
-		XKit.tools.add_function(function() {
-
-			var add_tags = JSON.parse(add_tag);
-			var m_object = audiojs.instances["audiojs" + add_tags.id];
-			m_object.play();
-
-		}, true, JSON.stringify(m_object));
-
+	audio_player_of_element: function(elt) {
+		while (elt && !elt.classList.contains('audio-player')) {
+			elt = elt.parentNode;
+		}
+		return elt;
 	},
 
 	slider_handle_event: function(e) {
-		function firstParentWithClass(elt, cls) {
-			if (elt.classList.contains(cls)) {
-				return elt;
-			} else {
-				return firstParentWithClass(elt.parentNode, cls);
-			}
-		}
-		var slider =	e.target;
+		var slider = e.target;
+		var player = $(e.target).closest(".native-audio-container")[0];
 
-		var parent_post = firstParentWithClass(slider, 'post');
 		var volume = slider.value;
 		if (e.type === "click" || e.type === "mousemove") {
 			slider.title = volume;
-			var audio = parent_post.querySelector("audio");
+			var audio = player.querySelector("audio");
 			if (audio && audio.volume !== volume / 100) {
 				audio.volume = volume / 100;
 			}
@@ -131,7 +148,6 @@ XKit.extensions.audio_plus = {
 		var posts = XKit.interface.get_posts("audio_plus_done");
 
 		$(posts).each(function() {
-
 			$(this).addClass("audio_plus_done");
 
 			var m_post = XKit.interface.post($(this));
@@ -139,25 +155,63 @@ XKit.extensions.audio_plus = {
 			if (!m_post || m_post.type !== "audio") { return; }
 
 			// Check if hosted by Tumblr:
-			if ($(this).find(".audio_player").length === 0 || $(this).find(".audio_visualizer").length === 0) { return; }
+			if ($(this).find(".audio-player").length === 0) { return; }
 
-			var slider_html =	 "<div data-post-id=\"" + m_post.id + "\" class=\"xkit-audio-plus-slider-container\">" +
+			var slider_html = "<div data-post-id=\"" + m_post.id + "\" class=\"xkit-audio-plus-slider-container\">" +
 								"<input type=\"range\" value=\"100\" min=\"0\" max=\"100\" data-post-id=\"" + m_post.id + "\" title=\"somepeoplelikefish\" class=\"xkit-audio-plus-slider\"></input>" +
 						"</div>";
 
-			$(this).find(".post_media").append(slider_html);
-
-			// console.log("Volume is => " + $(this).find("audio").get(0).volume);
-
+			$(this).find(".audio-player").after(slider_html);
 		});
 
 	},
 
+	handle_scroll: function() {
+		var audio_plus = XKit.extensions.audio_plus;
+		if (audio_plus.scroll_waiting) {
+			return;
+		}
+		if (audio_plus.pop_out_controls.classList.contains("showing")) {
+			return;
+		}
+		audio_plus.scroll_waiting = true;
+		setTimeout(audio_plus.check_pop_out, 100);
+	},
+
+	check_pop_out: function() {
+		var audio_plus = XKit.extensions.audio_plus;
+		audio_plus.scroll_waiting = false;
+
+		var pause_icons = document.querySelectorAll(".post_media .audio-player .icon_pause");
+		if (pause_icons.length === 0) {
+			return;
+		}
+
+		// Arbitrarily select the first if there are multiple
+		var player = audio_plus.audio_player_of_element(pause_icons[0]);
+		var player_bounds = player.getBoundingClientRect();
+
+		// If not completely off the screen
+		if (player_bounds.top > -player_bounds.height) {
+			return;
+		}
+
+		audio_plus.current_player = player;
+		audio_plus.pop_out_controls.classList.add("showing");
+		audio_plus.pop_out_controls.classList.add("playing");
+	},
+
 	destroy: function() {
 		this.running = false;
-		clearInterval(XKit.extensions.audio_plus.check_current_interval);
+
+		XKit.tools.add_function(function() {
+			clearInterval(window.xkit_audio_plus_check_current_interval);
+		}, true, "");
 		$("#xkit-audio-plus-current-player").remove();
+
+		document.body.removeChild(this.pop_out_controls);
 		XKit.post_listener.remove("audio_plus");
+		window.removeEventListener("scroll", this.handle_scroll, false);
 	}
 
 };

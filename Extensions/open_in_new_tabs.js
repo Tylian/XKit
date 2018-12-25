@@ -1,5 +1,5 @@
 //* TITLE Open In Tabs **//
-//* VERSION 1.1.6 **//
+//* VERSION 1.1.7 **//
 //* DESCRIPTION Changes links to open in new tabs **//
 //* DETAILS Open In Tabs allows you to open links on new tabs, useful if you don't like being confined to one tab. Since some links, if opened in new tabs, can break functionality, they are not effected by this extension. **//
 //* DEVELOPER STUDIOXENIX **//
@@ -33,7 +33,7 @@ XKit.extensions.open_in_new_tabs = new Object({
 		this.running = true;
 
 		if (XKit.extensions.open_in_new_tabs.preferences.button_tabs.value) {
-			$("#content area").attr('target','_blank');
+			$("#content area").attr('target', '_blank');
 			$(document).on("click", XKit.extensions.open_in_new_tabs.do_open);
 		}
 		
@@ -66,14 +66,14 @@ XKit.extensions.open_in_new_tabs = new Object({
 		if (m_url === "#") { return; }
 		if (typeof $(m_box).attr('onclick') !== "undefined" || typeof $(m_box).parent().attr('onclick') !== "undefined") { return; }
 		if (typeof m_url === "undefined") { return; }
-		if ($(m_box).hasClass("photoset_photo") === true) { alert("no3"); return; }
+		if ($(m_box).hasClass("photoset_photo") === true) { return; }
 
 		try {
 			var open_new_tab = false;
 			if (typeof $(m_box).attr('target') === "undefined") {
 				open_new_tab = true;
 			} else {
-				if($(m_box).attr('target').toLowerCase() !== "_blank") {
+				if ($(m_box).attr('target').toLowerCase() !== "_blank") {
 					open_new_tab = true;
 					
 				}
@@ -90,20 +90,20 @@ XKit.extensions.open_in_new_tabs = new Object({
 				open_new_tab = false;
 			}
 
-			if(open_new_tab === true) {
+			if (open_new_tab === true) {
 				e.preventDefault();
 				window.open(m_url, "_blank");
 			}
 
-		} catch(err) {
+		} catch (err) {
 
-			//alert(e.message);
+			console.error(err.message);
 
 		}
 
 	},
 	
-		do: function() {
+	do: function() {
 
 		$("a").off("click", XKit.extensions.open_in_new_tabs.click);
 		$("a").on("click", XKit.extensions.open_in_new_tabs.click);
@@ -130,7 +130,7 @@ XKit.extensions.open_in_new_tabs = new Object({
 			return;
 
 		var open_in_tab = false;
-		var tmp_link = link.replace("http://","").replace("https://","");
+		var tmp_link = link.replace("http://", "").replace("https://", "");
 		var link_components = tmp_link.split(".");
 
 		if (link_components.length == 3)
