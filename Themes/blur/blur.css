@@ -1,13 +1,16 @@
 /* NAME Blur **/
 /* VERSION 2.0.0 **/
-/* DESCRIPTION A simple, clean Tumblr dash theme with a soft, blurred background. **/
+/* DESCRIPTION A simple, clean Tumblr dash theme with a soft, blurred background. For the best experience (with frosted glass blurs), visit and enable chrome://flags/#enable-experimental-web-platform-features and restart Chrome. **/
 /* DEVELOPER HeyItsJono - http://kaywhatever.tumblr.com/ **/
 
+/* Background body image changed; restore the old one by using 'https://new-xkit.github.io/XKit/Themes/blur/body-background.png' */
 body {
-	background: url('https://new-xkit.github.io/XKit/Themes/blur/body-background.png') center #000000 repeat fixed !important;
+	background: url('https://new-xkit.github.io/XKit/Themes/blur/new-body-background.png') center #000000 repeat fixed !important;
 	background-size: cover;
+	-webkit-transform:translatez(360deg);
 }
 
+/* Add a blue glass effect to the nav bar */ 
 .l-header-container--refresh {
     /* old pre-blur color -- background-color: rgba(50,53,60,0.67); */
     background-color: rgba(100, 117, 154, 0.19);
@@ -85,15 +88,10 @@ body {
 	background: blue;
 	border-radius: 20px;
 }
+*/
 
 .post-container {
     background: transparent;
-}
-*/
-
-.post_avatar,
-.post_avatar .post_avatar_link {
-	background-color: transparent;
 }
 
 .post_content {
@@ -108,9 +106,16 @@ body {
 	background: rgba(1,1,1,0);
 }
 
+.post_avatar,
+.post_avatar .post_avatar_link {
+	background-color: transparent;
+}
+
 .chrome {
     border-width: 0px;
     background: rgba(200, 203, 208, 0.20);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
 }
 
 .chrome:active {
@@ -119,10 +124,14 @@ body {
 
 .chrome.blue {
     background: rgba(255,255,255,0.35);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
 }
 
 .chrome.blue:active {
     background: #C12C5B;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
 }
 
 .rapid-recs-container .rapid-recs {
@@ -137,9 +146,34 @@ body {
     background-color: rgba(44, 47, 51, 0.18);
 }
 
-/* Change Reblog Post background overlay to black. */
+.sorry {
+    color: rgb(245,245,245);
+}
+
+.sorry a {
+    color: #B2FF00
+}
+
+.post_avatar {
+    background-color: rgba(54, 70, 93, 0);
+}
+
+.l-container.l-container--flex .l-content {
+	background-color: rgba(0,0,0,0);
+}
+
+/* Change Reblog Post background overlay to blue glass. */
 .post-forms-glass {
-	background-color: rgba(26, 29, 33, 0.86);
+	background-color: rgba(100, 117, 154, 0.19);
+	backdrop-filter: blur(10px);
+	-webkit-backdrop-filter: blur(10px);
+}
+
+/* Change related likes background overlay to blue glass. */
+body.flag--always-opaque-peepr .ui_peepr_glass {
+	background-color: rgba(100, 117, 154, 0.19);
+	backdrop-filter: blur(10px);
+	-webkit-backdrop-filter: blur(10px);
 }
 
 /* Add light drop-shadow to avatars */
@@ -171,3 +205,34 @@ body {
 	transition: unset;
 }
 /* End dog-ear transparency code */
+
+/* XKit Theme Editor Button custom CSS start */
+a#xkit-theme-editor-button.customize {
+    color: hsla(0,0%,100%,.6);
+    font-family: "Helvetica Neue";
+    font-size: 12px;
+}
+
+a#xkit-theme-editor-button.customize > div.hide_overflow {
+	padding-left: 10px;
+	background-color: rgba(100, 117, 154, 0.19);
+	backdrop-filter: blur(10px);
+	-webkit-backdrop-filter: blur(10px);
+	border-radius: 5px;
+	margin: 0 239px 0 0;
+}
+/* XKit Theme Editor Button custom CSS end */
+
+/* Add some glass to XKit menus and overlays */
+#xkit-postarchive-background {
+	background-color: rgba(52, 60, 78, 0.26);
+	backdrop-filter: blur(10px);
+	-webkit-backdrop-filter: blur(10px);
+}
+
+#xkit-control-panel-shadow {
+	background-color: rgba(100, 117, 154, 0.19);
+	backdrop-filter: blur(10px);
+	-webkit-backdrop-filter: blur(10px);
+}
+/* End XKit Glass */
