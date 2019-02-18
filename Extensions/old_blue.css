@@ -13,11 +13,11 @@
 /* global.css */
 
 body {
-    color: --old-text;
+    color: var(--old-text);
 }
 
 a {
-    color: --old-text;
+    color: var(--old-text);
 }
 
 .tab_notice {
@@ -73,7 +73,7 @@ a {
     color: hsla(0,0%,100%,.4);
 }
 .identity .right_column:after {
-    background: linear-gradient(180deg,--old-blue,rgba(54,70,93,0));
+    background: linear-gradient(180deg,var(--old-blue),rgba(54,70,93,0));
 }
 
 .identity .controls_section .delete_all_messages,
@@ -208,7 +208,7 @@ a {
 }
 
 .popover_header {
-    color: --old-text;
+    color: var(--old-text);
 }
 
 .popover_menu_item small {
@@ -665,7 +665,7 @@ a {
 }
 
 .search_filter_items .popover_menu_item .icon_post_text_small {
-    color: --old-text;
+    color: var(--old-text);
 }
 
 .search_filter_items .popover_menu_item .icon_post_photo_small {
@@ -709,7 +709,7 @@ a {
 }
 
 .search_filter_items .popover_menu_item .icon_post_text_small {
-    color: --old-text;
+    color: var(--old-text);
 }
 
 .search_filter_items .popover_menu_item .icon_post_photo_small {
@@ -823,11 +823,11 @@ a {
 }
 
 .post-container {
-    color: --old-text;
+    color: var(--old-text);
 }
 
 .post-container a {
-    color: --old-text;
+    color: var(--old-text);
 }
 
 .post-form--tag-editor .tag-label {
@@ -841,7 +841,7 @@ a {
 
 .pop-menu input[type=text].field,
 .post-form input[type=text].field {
-    color: --old-text;
+    color: var(--old-text);
 }
 
 .media-container .video-error {
@@ -853,7 +853,7 @@ a {
 }
 
 .media-dropzone .media-url {
-    color: --old-text;
+    color: var(--old-text);
 }
 
 .overlay-button.active .icon {
@@ -861,7 +861,7 @@ a {
 }
 
 .pop-menu {
-    color: --old-text;
+    color: var(--old-text);
 }
 
 .pop-menu .form-group .field.checkbox .help_text {
@@ -873,7 +873,7 @@ a {
 }
 
 .post-form--header .tumblelog-select .caption {
-    color: --old-text;
+    color: var(--old-text);
 }
 
 .post-form--header .tumblelog-select .reblog_source {
@@ -885,7 +885,7 @@ a {
 }
 
 .post-form--header .tumblelog-select .icon_arrow_carrot_down {
-    color: --old-text;
+    color: var(--old-text);
 }
 
 .post-form--header .tumblelog-select .reblog-icon {
@@ -908,7 +908,7 @@ a {
 .editor-placeholder,
 .editor-plaintext,
 .editor-richtext {
-    color: --old-text;
+    color: var(--old-text);
 }
 
 .editor-placeholder {
@@ -929,7 +929,7 @@ a {
 }
 
 .html-mode .src-view {
-    color: --old-text;
+    color: var(--old-text);
 }
 
 .control-reblog-tree .btn-show-tree {
@@ -970,12 +970,12 @@ a {
 }
 .ui_search.active .search_form_field:before,
 .ui_search.selected .search_form_field:before {
-    color: --old-text;
+    color: var(--old-text);
 }
 
 .ui_search.active .search_query,
 .ui_search.selected .search_query {
-    color: --old-text;
+    color: var(--old-text);
 }
 
 .ui_search.active .search_query::-webkit-input-placeholder,
@@ -1043,31 +1043,31 @@ a {
 /* dashboard.css */
 
 .notification .notification_right .preview_frame.audio,.ui_post_badge.audio {
- background-color: --old-purple;
+ background-color: var(--old-purple);
 }
 
 .notification .notification_right .preview_frame.conversation,.ui_post_badge.conversation {
- background-color: --old-accent;
+ background-color: var(--old-accent);
 }
 
 .notification .notification_right .preview_frame.link,.ui_post_badge.link {
- background-color: --old-green;
+ background-color: var(--old-green);
 }
 
 .notification_like .avatar_frame::before,.notes .note.like .avatar_frame::before,.ui_avatar .frame.like::before {
-  background: --old-red;
+  background: var(--old-red);
 }
 
 .notification_follower .avatar_frame::before,.notification_group_member .avatar_frame::before,.notes .note.follower .avatar_frame::before,.ui_avatar .frame.follower::before {
-  background: --old-accent;
+  background: var(--old-accent);
 }
 
 .notification_reblog .avatar_frame::before,.notes .note.reblog .avatar_frame::before,.ui_avatar .frame.reblog::before {
-  background: --old-green;
+  background: var(--old-green);
 }
 
 .notification_user_mention .avatar_frame::before,.notes .note.user_mention .avatar_frame::before,.ui_avatar .frame.user_mention::before,.ui_avatar .frame.note_mention::before {
-  background: --old-purple;
+  background: var(--old-purple);
 }
 
 .post.new_post .new_post_label {
@@ -1075,35 +1075,35 @@ a {
 }
 
 .new_post_label i.icon_post_text {
-  color: --old-text;
+  color: var(--old-text);
 }
 
 .new_post_label i.icon_post_photo {
-  color: --old-red;
+  color: var(--old-red);
 }
 
 .new_post_label i.icon_post_quote {
-  color: --old-orange;
+  color: var(--old-orange);
 }
 
 .new_post_label i.icon_post_link {
-  color: --old-green;
+  color: var(--old-green);
 }
 
 .new_post_label i.icon_post_chat {
-  color: --old-accent;
+  color: var(--old-accent);
 }
 
 .new_post_label i.icon_post_audio {
-  color: --old-purple;
+  color: var(--old-purple);
 }
 
 .new_post_label i.icon_post_video {
-  color: --old-vidgey;
+  color: var(--old-vidgey);
 }
 
 .new_post_label i.icon_money_bubble {
-  color: --old-green;
+  color: var(--old-green);
 }
 
 .video_preview.no_thumbnail {
@@ -1111,57 +1111,57 @@ a {
 }
 
 .post_full .post_header,.post_full .post_header .post_info .post_info_link {
-  color: --old-grey;
+  color: var(--old-grey);
 }
 
 .post_full .post_header .post_info .post_info_link:first-child {
-  color: --old-text;
+  color: var(--old-text);
 }
 
 .post_full .post_info .post_info_fence .reblog_source .post_info_link {
-  color: --old-grey;
+  color: var(--old-grey);
 }
 
 .post_full .post_header_discover_button {
   color: #b0b0b0;
 }
 .post_full .post_tags,.post_full .post_tags a {
-  color: --old-grey;
+  color: var(--old-grey);
 }
 
 .post_full .post_tags .post_tag {
-  color: --old-grey;
+  color: var(--old-grey);
 }
 
 .post_full .post_tags .post_tag.post_tag_color_4,.post_full .post_tags .post_tag.post_tag_color_4:active,.post_full .post_tags .post_tag.post_tag_color_4:hover {
-  color: --old-accent;
+  color: var(--old-accent);
 }
 
 .post_full .post_footer {
-  color: --old-grey;
+  color: var(--old-grey);
 }
 
 .post_full .post_header_text_link {
-  color: --old-grey;
+  color: var(--old-grey);
   font-weight: bold;
   text-decoration: none;
 }
 
 .post_micro.is_audio .post_content {
-  background: --old-purple;
+  background: var(--old-purple);
 }
 
 .post_brick .post_tags .post_tag {
-  color: --old-grey;
+  color: var(--old-grey);
   display: inline-block;
 }
 
 .post_brick .post_tags .post_tag.post_tag_color_4,.post_brick .post_tags .post_tag.post_tag_color_4:active,.post_brick .post_tags .post_tag.post_tag_color_4:hover {
-  color: --old-accent;
+  color: var(--old-accent);
 }
 
 .post_brick .post_footer {
-  color: --old-grey;
+  color: var(--old-grey);
 }
 
 .post_brick.is_video .post_media .no_poster::before,.post_brick.is_regular .post_media .no_poster::before {
@@ -1169,11 +1169,11 @@ a {
 }
 
 .post_brick.is_link .link-button.link-button--title-over-image .publisher>span::before {
-  background: --old-green;
+  background: var(--old-green);
 }
 
 .radar .radar_controls .note_count>a {
-  color: --old-grey;
+  color: var(--old-grey);
 }
 
 .radar .radar_tumblelog_label .name {
@@ -1185,38 +1185,38 @@ a {
 }
 
 .radar.radar_type_quote .header_flag {
-  background: --old-orange;
+  background: var(--old-orange);
 }
 
 .radar .radar_footer .radar_avatar::before {
-  background-image: linear-gradient(to right, rgba(54,70,93,0), --old-blue);
+  background-image: linear-gradient(to right, rgba(54,70,93,0), var(--old-blue));
 }
 
 .radar .radar_button {
-  color: --old-grey;
+  color: var(--old-grey);
 }
 
 .radar .radar_button.reblog.reblogged {
-  color: --old-green;
+  color: var(--old-green);
 }
 
 .radar .radar_button.like.liked::before {
-  color: --old-red;
+  color: var(--old-red);
 }
 
 .takeover-container .sponsored-day-video-container .sponsored-day-video-cta {
-  color: --old-accent;
+  color: var(--old-accent);
 }
 
 @keyframes flash {
   0% {
-    color: --old-accent;
+    color: var(--old-accent);
     background-color: #fff;
   }
 
   100% {
     color: #fff;
-    background-color: --old-accent;
+    background-color: var(--old-accent);
   }
 }
 
@@ -1225,25 +1225,25 @@ a {
 }
 
 .gdpr-guce-announcement .gdpr-guce-manage-options {
-  color: --old-orange;
+  color: var(--old-orange);
 }
 
 .gdpr-guce-announcement .gdpr-guce-accept-defaults {
-  background-color: --old-orange;
+  background-color: var(--old-orange);
 }
 
 
 .project-x-filtered-view-banner,.project-x-announcement {
-  background: --old-accent;
+  background: var(--old-accent);
 }
 
 
 .project-x-filtered-view-banner .actions .project-x-more-details,.project-x-announcement .actions .project-x-more-details {
-  color: --old-accent;
+  color: var(--old-accent);
 }
 
 .project-x-filtered-view-announcement {
-  background: --old-accent;
+  background: var(--old-accent);
 }
 
 /* global.build.css */
@@ -1251,7 +1251,7 @@ a {
 .white.tx-button {
   border-color: rgba(0,0,0,.2);
   background-color: #fff;
-  color: --old-grey;
+  color: var(--old-grey);
 }
 
 .white.tx-button:focus {
@@ -1274,8 +1274,8 @@ a {
 }
 
  .tumblr-blue.tx-button {
-  border-color: --old-blue;
-  background-color: --old-blue;
+  border-color: var(--old-blue);
+  background-color: var(--old-blue);
   color: #fff;
 }
 
@@ -1292,15 +1292,15 @@ a {
 }
 
 .tumblr-blue.disabled.active.tx-button,.tumblr-blue.disabled.tx-button,.tumblr-blue[disabled].tx-button,.tumblr-blue[disabled].tx-button:active {
-  border-color: --old-blue;
-  background-color: --old-blue;
+  border-color: var(--old-blue);
+  background-color: var(--old-blue);
   color: hsla(0,0%,100%,.5);
   cursor: default;
 }
 
  .red.tx-button {
-  border-color: --old-red;
-  background-color: --old-red;
+  border-color: var(--old-red);
+  background-color: var(--old-red);
   color: #fff;
 }
 
@@ -1317,15 +1317,15 @@ a {
 }
 
 .red.disabled.active.tx-button,.red.disabled.tx-button,.red[disabled].tx-button,.red[disabled].tx-button:active {
-  border-color: --old-red;
-  background-color: --old-red;
+  border-color: var(--old-red);
+  background-color: var(--old-red);
   color: hsla(0,0%,100%,.5);
   cursor: default;
 }
 
  .orange.tx-button {
-  border-color: --old-orange;
-  background-color: --old-orange;
+  border-color: var(--old-orange);
+  background-color: var(--old-orange);
   color: #fff;
 }
 
@@ -1342,15 +1342,15 @@ a {
 }
 
 .orange.disabled.active.tx-button,.orange.disabled.tx-button,.orange[disabled].tx-button,.orange[disabled].tx-button:active {
-  border-color: --old-orange;
-  background-color: --old-orange;
+  border-color: var(--old-orange);
+  background-color: var(--old-orange);
   color: hsla(0,0%,100%,.5);
   cursor: default;
 }
 
  .green.tx-button {
-  border-color: --old-green;
-  background-color: --old-green;
+  border-color: var(--old-green);
+  background-color: var(--old-green);
   color: #fff;
 }
 
@@ -1367,15 +1367,15 @@ a {
 }
 
 .green.disabled.active.tx-button,.green.disabled.tx-button,.green[disabled].tx-button,.green[disabled].tx-button:active {
-  border-color: --old-green;
-  background-color: --old-green;
+  border-color: var(--old-green);
+  background-color: var(--old-green);
   color: hsla(0,0%,100%,.5);
   cursor: default;
 }
 
 .blue.tx-button {
-  border-color: --old-accent;
-  background-color: --old-accent;
+  border-color: var(--old-accent);
+  background-color: var(--old-accent);
   color: #fff;
 }
 
@@ -1392,15 +1392,15 @@ a {
 }
 
 .blue.disabled.active.tx-button,.blue.disabled.tx-button,.blue[disabled].tx-button,.blue[disabled].tx-button:active {
-  border-color: --old-accent;
-  background-color: --old-accent;
+  border-color: var(--old-accent);
+  background-color: var(--old-accent);
   color: hsla(0,0%,100%,.5);
   cursor: default;
 }
 
 .purple.tx-button {
-  border-color: --old-purple;
-  background-color: --old-purple;
+  border-color: var(--old-purple);
+  background-color: var(--old-purple);
   color: #fff;
 }
 
@@ -1417,65 +1417,65 @@ a {
 }
 
 .purple.disabled.active.tx-button,.purple.disabled.tx-button,.purple[disabled].tx-button,.purple[disabled].tx-button:active {
-  border-color: --old-purple;
-  background-color: --old-purple;
+  border-color: var(--old-purple);
+  background-color: var(--old-purple);
   color: hsla(0,0%,100%,.5);
   cursor: default;
 }
 
 
 body {
-  color: --old-text;
+  color: var(--old-text);
 }
 
 a {
-  color: --old-text;
+  color: var(--old-text);
 }
 
 .tab_notice {
-  background-color: --old-accent;
+  background-color: var(--old-accent);
 }
 
 .selected .tab_notice {
-  background: --old-accent;
+  background: var(--old-accent);
 }
 
 .tab-notice--outlined {
-  border-color: --old-blue;
+  border-color: var(--old-blue);
 }
 
 .blog_menu .tab_notice {
-  background-color: --old-accent;
+  background-color: var(--old-accent);
 }
 
 .blog_menu .tab_notice .tab_notice_value {
-  color: --old-blue;
+  color: var(--old-blue);
 }
 
 .identity {
-  background-color: --old-blue;
+  background-color: var(--old-blue);
 }
 
 .l-container.l-container--two-column-dashboard .l-content,
 .l-container.l-container--two-column .l-content {
-  background-color: --old-blue;
+  background-color: var(--old-blue);
 }
 
 .l-container.l-container--two-column-dashboard .right_column,
 .l-container.l-container--two-column .right_column {
-  background-color: --old-blue;
+  background-color: var(--old-blue);
 }
 
 .l-container.l-container--two-column-dashboard .left_column {
-  background-color: --old-blue;
+  background-color: var(--old-blue);
 }
 
 .l-container.l-container--flex .l-content {
-  background-color: --old-blue;
+  background-color: var(--old-blue);
 }
 
 .identity .right_column:after {
-  background: linear-gradient(180deg,--old-blue,rgba(54,70,93,0));
+  background: linear-gradient(180deg,var(--old-blue),rgba(54,70,93,0));
 }
 
 .identity .right_column .small_text {
@@ -1493,7 +1493,7 @@ a {
 }
 
 .identity .controls_section .item:hover .follow:hover {
-  background: --old-accent;
+  background: var(--old-accent);
 }
 
 .identity .controls_section a .count {
@@ -1509,8 +1509,8 @@ a {
 }
 
 .identity .controls_section.user_list li .follow_list_item_blog:before {
-  background-image: linear-gradient(90deg,rgba(54,70,93,0),--old-blue);
-  border-right: 5px solid --old-blue;
+  background-image: linear-gradient(90deg,rgba(54,70,93,0),var(--old-blue));
+  border-right: 5px solid var(--old-blue);
 }
 
 .identity .controls_section.user_list li .follow_list_item_blog .tumblelog_title {
@@ -1533,149 +1533,149 @@ a {
 .form-container .survey-result .highlight {
   margin-bottom: 14px;
   font-weight: 700;
-  color: --old-red;
+  color: var(--old-red);
 }
 
 .form-container .form-row.checkmark-row .option-radio:checked+.option-label:after {
-  color: --old-accent;
+  color: var(--old-accent);
 }
 
 .dynamic-fields .remove-url-button {
-  background-color: --old-red;
+  background-color: var(--old-red);
 }
 
 .flag--one-true-post .post-micro .post-content--link {
-  background-color: --old-green;
+  background-color: var(--old-green);
 }
 
 .flag--one-true-post .post-audio-block.post-audio--error {
-  background-color: --old-red;
+  background-color: var(--old-red);
 }
 
 .flag--one-true-post .post-reblog-button.post-reblog-button--reblogged .icon {
-  color: --old-green;
+  color: var(--old-green);
 }
 
 .flag--one-true-post .post-like-button.post-like-button--liked .icon {
-  color: --old-red;
+  color: var(--old-red);
 }
 
 .flag--one-true-post .post-like-heart-animation.like {
-  color: --old-red;
+  color: var(--old-red);
 }
 
 .flag--one-true-post .post-permalink {
-  border-top-color: --old-blue;
-  border-right-color: --old-blue;
+  border-top-color: var(--old-blue);
+  border-right-color: var(--old-blue);
 }
 
 .flag--one-true-post .post:hover .post-permalink {
-  background-color: --old-green;
+  background-color: var(--old-green);
 }
 
 .flag--one-true-post .follow-button--worded .follow-text {
-  color: --old-accent;
+  color: var(--old-accent);
 }
 
 
 .cta-blue-button {
-  background-color: --old-accent;
-  border-color: --old-accent;
+  background-color: var(--old-accent);
+  border-color: var(--old-accent);
 }
 
 .cta-blue-button .tsp-opacity-overlay {
-  border-color: --old-accent;
+  border-color: var(--old-accent);
 }
 
 .cta-blue-button .cta-color-applied {
-  color: --old-accent;
+  color: var(--old-accent);
   transition: color .4s;
 }
 
 .cta-green-button {
-  background-color: --old-green;
-  border-color: --old-green;
+  background-color: var(--old-green);
+  border-color: var(--old-green);
 }
 
 .cta-green-button .tsp-opacity-overlay {
-  border-color: --old-green;
+  border-color: var(--old-green);
 }
 
 .cta-green-button .cta-color-applied {
-  color: --old-green;
+  color: var(--old-green);
 }
 
 .cta-purple-button {
-  background-color: --old-purple;
-  border-color: --old-purple;
+  background-color: var(--old-purple);
+  border-color: var(--old-purple);
 }
 
 .cta-purple-button .tsp-opacity-overlay {
-  border-color: --old-purple;
+  border-color: var(--old-purple);
 }
 
 .cta-purple-button .cta-color-applied {
-  color: --old-purple;
+  color: var(--old-purple);
 }
 
 .form-container.success .success-message .message-text .message-link {
-  color: --old-accent;
+  color: var(--old-accent);
 }
 
 .form-container-static label.image-upload,.form-container label.image-upload {
-  color: --old-grey;
+  color: var(--old-grey);
 }
 
 .form-container-static .sub-label,.form-container .sub-label {
-  color: --old-grey;
+  color: var(--old-grey);
 }
 
 .form-container-static .error-message,.form-container .error-message {
-  color: --old-red;
+  color: var(--old-red);
 }
 
 .form-container-static .language-notice,.form-container .language-notice {
-  color: --old-red;
+  color: var(--old-red);
 }
 
 .drawer-error-tag {
-  background-color: --old-red;
+  background-color: var(--old-red);
 }
 
 .loader-bar .bar.red {
-  background: --old-red;
+  background: var(--old-red);
 }
 
 .loader-bar .bar.orange {
-  background: --old-orange;
+  background: var(--old-orange);
 }
 
 .loader-bar .bar.green {
-  background: --old-green;
+  background: var(--old-green);
 }
 
 .loader-bar .bar.purple {
-  background: --old-purple;
+  background: var(--old-purple);
 }
 
 .audio-player {
-  background: --old-purple;
+  background: var(--old-purple);
 }
 
 .popover--base-overlay {
-  background: --old-blue;
+  background: var(--old-blue);
 }
 
 .popover_header {
-  color: --old-grey;
+  color: var(--old-grey);
 }
 
 .popover_menu_item small {
-  color: --old-grey;
+  color: var(--old-grey);
 }
 
 .search_popover .search_results_section .search_subheading {
-  color: --old-grey;
+  color: var(--old-grey);
 }
 
 .search_popover .result .result_link .go-to-blog {
@@ -1683,177 +1683,177 @@ a {
 }
 
 .popover_share_social .share_form.embed .share_label,.popover_share_social .share_form.facebook .share_label,.popover_share_social .share_form.twitter .share_label {
-  color: --old-grey;
+  color: var(--old-grey);
 }
 
 .popover_share_social .share_form.twitter .character_count.character-limit {
-  color: --old-red;
+  color: var(--old-red);
 }
 
 .popover_share_social .share_form .reply_to {
-  color: --old-grey;
+  color: var(--old-grey);
 }
 
 .popover_share_social .status .status_message {
-  color: --old-grey;
+  color: var(--old-grey);
 }
 
 .tumblelog_popover .recommended_blogs .tumblelog_info_heading {
-  color: --old-grey;
+  color: var(--old-grey);
 }
 
 .tumblelog_popover .recommended_blogs .name h4 {
-  color: --old-grey;
+  color: var(--old-grey);
 }
 
 .info_popover .popover_inner ul li.label {
-  color: --old-grey;
+  color: var(--old-grey);
 }
 
 .info_popover .popover_inner ul li.web-subscribe-how-to {
-  color: --old-grey;
+  color: var(--old-grey);
 }
 
 .popover_vendor .popover_menu_item:hover {
-  color: --old-blue;
+  color: var(--old-blue);
 }
 
 .popover_vendor .popover_menu_item:hover .subtext,.popover_vendor .popover_menu_item:hover .subtext-email {
-  color: --old-blue;
+  color: var(--old-blue);
 }
 
 .post_avatar {
-  background-color: --old-blue;
+  background-color: var(--old-blue);
 }
 
 .post_avatar.flat {
-  border-color: --old-blue;
+  border-color: var(--old-blue);
 }
 
 .post_avatar.lighter_blue {
-  background-color: --old-blue;
+  background-color: var(--old-blue);
 }
 
 .post_avatar .post_avatar_link {
-  background-color: --old-blue;
+  background-color: var(--old-blue);
 }
 
 .post .post_header .post_info_link {
-  color: --old-grey;
+  color: var(--old-grey);
 }
 
 .post .post_info .reblog_icon {
-  color: --old-grey;
+  color: var(--old-grey);
 }
 
 .post .post_content_inner.safemode,.post .post_content_inner.tagfiltering {
-  color: --old-grey;
+  color: var(--old-grey);
 }
 
 .post .post_content_inner.safemode .link,.post .post_content_inner.tagfiltering .link {
-  color: --old-accent;
+  color: var(--old-accent);
 }
 
 .post_controls .post_control:before {
-  color: --old-grey;
+  color: var(--old-grey);
 }
 
 .post_controls .post_control.like.liked:before {
-  color: --old-red;
+  color: var(--old-red);
 }
 
 .post_controls .post_control.reblog.reblogged:before {
-  color: --old-green;
+  color: var(--old-green);
 }
 
 .post .post_tags_inner.dragging .post_tag:hover {
-  color: --old-grey;
+  color: var(--old-grey);
 }
 
 .post .post_tags .post_tag,
 .post .post_tags a {
-  color: --old-grey;
+  color: var(--old-grey);
 }
 
 .post-content-text .tmblr-truncated .tmblr-truncated-link,.post-content-text .tmblr-truncated:after,.post .post_body .tmblr-truncated .tmblr-truncated-link,.post .post_body .tmblr-truncated:after,.reblog-content .tmblr-truncated .tmblr-truncated-link,.reblog-content .tmblr-truncated:after {
-  color: --old-accent;
+  color: var(--old-accent);
 }
 
 .post .post-source-footer {
-  color: --old-grey;
+  color: var(--old-grey);
 }
 
 .post .post-source-footer a.post-source-link {
-  color: --old-grey;
+  color: var(--old-grey);
 }
 
 .post .recommendation-reason-link {
-  color: --old-red;
+  color: var(--old-red);
 }
 
 .post_full.has_pce.pce_ads_cpi .cpi_install_button,.post_full.has_pce.pce_ads_cpi .cpi_install_button:active {
-  background: --old-green;
+  background: var(--old-green);
 }
 
 .post .dockable_video_embed .post_header .post_info_tumblelog {
-  color: --old-grey;
+  color: var(--old-grey);
 }
 
 .post .dockable_video_embed .post_info .post_info_link {
-  color: --old-grey;
+  color: var(--old-grey);
 }
 
 .post .post_reblog_poof {
   font-size: 100px;
-  color: --old-green;
+  color: var(--old-green);
 }
 
 .post .post_animated_heart,.standalone-ad-container .post_animated_heart {
-  color: --old-red;
+  color: var(--old-red);
 }
 
 .post .post_animated_heart.unliked,.standalone-ad-container .post_animated_heart.unliked {
-  color: --old-grey;
+  color: var(--old-grey);
 }
 
 .post_full.is_link .link-button.link-button--title-over-image .publisher>span:before {
-  background: --old-green;
+  background: var(--old-green);
 }
 
 .post_full .post_permalink {
-  border-top-color: --old-blue;
-  border-right-color: --old-blue;
+  border-top-color: var(--old-blue);
+  border-right-color: var(--old-blue);
 }
 
 .timeline-yam-plus-ad-container .section_header {
-  color: --old-grey;
+  color: var(--old-grey);
 }
 
 .blog-activity .blog-activity--empty {
-  color: --old-grey;
+  color: var(--old-grey);
 }
 
 .blog-activity .blog-activity-more {
-  color: --old-grey;
+  color: var(--old-grey);
 }
 
 .ask-form .ask-character-count.count-warning {
-  color: --old-orange;
+  color: var(--old-orange);
 }
 .ask-form .ask-character-count.count-danger {
-  color: --old-red;
+  color: var(--old-red);
 }
 
 .binary-switch input[type=checkbox]:checked~.binary-switch-track {
-  background: --old-accent;
+  background: var(--old-accent);
 }
 
 .blog-selector-container .selected-blog .caret.is-open {
-  color: --old-accent;
+  color: var(--old-accent);
 }
 
 .blog-selector-container .selected-blog .caret.has-badge {
-  background: --old-accent;
+  background: var(--old-accent);
 }
 
 .ui_dialog_lock {
@@ -1861,7 +1861,7 @@ a {
 }
 
 .ui_dialog .text a {
-  color: --old-accent;
+  color: var(--old-accent);
 }
 
 .ui_dialog .buttons .ui_button {
@@ -1872,7 +1872,7 @@ a {
 
 .ui_dialog .chrome.blue {
   background-image: none;
-  background-color: --old-accent;
+  background-color: var(--old-accent);
 }
 
 .discover_actions_discover .elevator,.search_actions_search .elevator {
@@ -1881,56 +1881,56 @@ a {
 
 .plus-follow-button {
   background: hsla(0,0%,100%,.2);
-  color: --old-blue;
+  color: var(--old-blue);
 }
 
 .plus-follow-button.blue,.plus-follow-button:hover {
-  background: --old-accent;
+  background: var(--old-accent);
 }
 
 .reblog_follow_button .follow-text,.worded-follow-button .follow-text {
-  color: --old-accent;
+  color: var(--old-accent);
 }
 
 
 .popover--gif-search .gif-search-results .gif-search-result:nth-child(odd) {
-  background-color: --old-green;
+  background-color: var(--old-green);
 }
 
 .popover--gif-search .gif-search-results .gif-search-result:nth-child(8n) {
-  background-color: --old-accent;
+  background-color: var(--old-accent);
 }
 
 .popover--gif-search .gif-search-results .gif-search-result:nth-child(2n) {
-  background-color: --old-red;
+  background-color: var(--old-red);
 }
 
 .popover--gif-search .gif-search-results .gif-search-result:nth-child(3n) {
-  background-color: --old-orange;
+  background-color: var(--old-orange);
 }
 
 .popover--gif-search .gif-search-results .gif-search-result:nth-child(5n) {
-  background-color: --old-green;
+  background-color: var(--old-green);
 }
 
 .popover--gif-search .gif-search-results .gif-search-result:nth-child(7n) {
-  background-color: --old-accent;
+  background-color: var(--old-accent);
 }
 
 .popover--gif-search .gif-search-results .gif-search-result:nth-child(5n) {
-  background-color: --old-purple;
+  background-color: var(--old-purple);
 }
 
 .popover--gif-search .gif-search-results .gif-search-result:nth-child(8n) {
-  background-color: --old-red;
+  background-color: var(--old-red);
 }
 
 .popover--gif-search .gif-search-results .gif-search-result:nth-child(12n) {
-  background-color: --old-orange;
+  background-color: var(--old-orange);
 }
 
 .popover--gif-search .gif-search-results .gif-search-result:nth-child(18n) {
-  background-color: --old-green;
+  background-color: var(--old-green);
 }
 
 .blue#glass_overlay,.blue#hello_glass,.blue.glass {
@@ -1942,8 +1942,8 @@ a {
 }
 
 .logged-out-header .signup-button {
-  border: 1px solid --old-accent;
-  background-color: --old-accent;
+  border: 1px solid var(--old-accent);
+  background-color: var(--old-accent);
 }
 
 .logged-out-header .signup-button:focus {
@@ -1959,8 +1959,8 @@ a {
 }
 
 .logged-out-header .disabled.active.signup-button,.logged-out-header .disabled.signup-button,.logged-out-header [disabled].signup-button,.logged-out-header [disabled].signup-button:active {
-  border-color: --old-accent;
-  background-color: --old-accent;
+  border-color: var(--old-accent);
+  background-color: var(--old-accent);
   color: hsla(0,0%,100%,.5);
   cursor: default;
 }
@@ -1968,14 +1968,14 @@ a {
 .flag--is-dev .logged-out-header .signup-button:not([role=button]):not(button),.logged-out-header .flag--is-dev .signup-button:not([role=button]):not(button) {
   padding: 50px 70px!important;
   border: 10px dotted!important;
-  background-color: --old-red!important;
+  background-color: var(--old-red)!important;
   font-size: 40px!important;
 }
 
 .logged-out-header .login-button {
   border-color: rgba(0,0,0,.2);
   background-color: hsla(0,0%,100%,.6);
-  color: --old-blue;
+  color: var(--old-blue);
 }
 
 .logged-out-header .login-button:focus {
@@ -1996,7 +1996,7 @@ a {
 }
 
 .tab-bar-container .tab_notice {
-  color: --old-blue;
+  color: var(--old-blue);
 }
 
 .tab_bar .tab_anchor {
@@ -2007,91 +2007,91 @@ a {
 }
 
 .l-header-container--refresh {
-  background-color: --old-blue;
+  background-color: var(--old-blue);
 }
 
 .messaging-share-post .messaging-share-post-message .compose-text-input-container .submit-button .submit {
-  color: --old-accent;
+  color: var(--old-accent);
 }
 
 .messaging-share-post .messaging-share-post-result .container {
-  color: --old-accent;
+  color: var(--old-accent);
 }
 
 .messaging-share-post .messaging-share-post-search .selected-blog {
-  background: --old-accent;
+  background: var(--old-accent);
 }
 
 .messaging-share-post .messaging-share-post-external-networks .is-focused.messaging-share-post-external-network {
-  color: --old-accent;
+  color: var(--old-accent);
 }
 
 .messaging-share-post .messaging-share-post-external-network-subview-wrapper>.external-network-subview .external-network-form-subview .form-result.form-result--fail {
-  color: --old-red;
+  color: var(--old-red);
 }
 
 .messaging-inbox .inbox-conversations .is-unread.inbox-conversation .name-container {
-  color: --old-accent;
+  color: var(--old-accent);
 }
 
 .messaging-inbox .inbox-compose-toggle .compose-start {
-  color: --old-accent;
+  color: var(--old-accent);
 }
 
 .flag--messaging-new-empty-inbox .messaging-inbox .inbox-row .info-container .send-link,.messaging-inbox .flag--messaging-new-empty-inbox .inbox-row .info-container .send-link {
-  color: --old-accent;
+  color: var(--old-accent);
 }
 
 .messaging-conversation--open .conversation-compose .compose-text-input-container .submit-button .submit {
-  color: --old-accent;
+  color: var(--old-accent);
 }
 
 .messaging-conversation--open .conversation-header:not(.has-image) {
-  background-color: --old-accent;
+  background-color: var(--old-accent);
 }
 
 .messaging-conversation--open .conversation-message .retry-button {
-  color: --old-red;
+  color: var(--old-red);
 }
 
 .messaging-conversation--open .conversation-message .retry-button.is-pending {
-  color: --old-orange;
+  color: var(--old-orange);
 }
 
 .messaging-conversation--open .conversation-message-post .conversation-message-post--gif.message-container .icon,.messaging-conversation--open .conversation-message-post .conversation-message-post--photo.message-container .icon,.messaging-conversation--open .conversation-message-post .conversation-message-post--photoset.message-container .icon {
-  background: --old-red;
+  background: var(--old-red);
 }
 
 .messaging-conversation--open .conversation-message-post .conversation-message-post--quote.message-container .icon {
-  background: --old-orange;
+  background: var(--old-orange);
 }
 
 .messaging-conversation--open .conversation-message-post .conversation-message-post--link.message-container .icon {
-  background: --old-green;
+  background: var(--old-green);
 }
 
 .messaging-conversation--open .conversation-message-post .conversation-message-post--chat.message-container .icon {
-  background: --old-accent;
+  background: var(--old-accent);
 }
 
 .messaging-conversation--open .conversation-message-post .conversation-message-post--video.message-container .icon {
-  background: --old-vidgey;
+  background: var(--old-vidgey);
 }
 
 .messaging-conversation--open .conversation-message-safemode-post .message-bubble {
   width: 100%;
   font-size: 13px;
-  color: --old-grey;
+  color: var(--old-grey);
 }
 
 .mobile-banner {
-  background: --old-green;
+  background: var(--old-green);
 }
 
 .mobile-banner .mobile-banner-button.secondary-cta {
-  border-color: --old-blue;
-  background-color: --old-blue;
-  color: --old-green;
+  border-color: var(--old-blue);
+  background-color: var(--old-blue);
+  color: var(--old-green);
 }
 
 .mobile-banner .mobile-banner-button.secondary-cta:focus {
@@ -2107,59 +2107,59 @@ a {
 }
 
 .mobile-banner .mobile-banner-button.secondary-cta.disabled,.mobile-banner .mobile-banner-button.secondary-cta.disabled.active,.mobile-banner .mobile-banner-button.secondary-cta[disabled],.mobile-banner .mobile-banner-button.secondary-cta[disabled]:active {
-  border-color: --old-blue;
-  background-color: --old-blue;
+  border-color: var(--old-blue);
+  background-color: var(--old-blue);
   color: rgba(86,188,138,.5);
 }
 
 
 .app-gate .mobile-banner {
-  background-color: --old-blue;
+  background-color: var(--old-blue);
 }
 
 .mobile-banner.pop {
-  background: --old-purple;
+  background: var(--old-purple);
 }
 
 .ui_notes .date_header,.ui_notes .date_header.date_activity {
-  color: --old-grey;
+  color: var(--old-grey);
 }
 
 .ui_notes .activity-notification .activity-notification__activity .activity-notification__activity_message .activity-notification__activity_reply .activity-notification__activity_reply_link {
-  color: --old-accent;
+  color: var(--old-accent);
 }
 
 .ui_notes .activity-notification .activity-notification__activity .activity-notification__activity_message .activity-notification__activity_response blockquote {
-  color: --old-grey;
+  color: var(--old-grey);
 }
 
 .ui_notes .activity-notification .activity-notification__icon .note_follow {
-  color: --old-accent;
+  color: var(--old-accent);
 }
 
 .ui_notes .activity-notification .activity-notification__icon .ui_post_badge.audio {
-  background-color: --old-purple;
+  background-color: var(--old-purple);
 }
 
 .ui_notes .activity-notification .activity-notification__icon .ui_post_badge.conversation {
-  background-color: --old-accent;
+  background-color: var(--old-accent);
 }
 
 
 .ui_notes .activity-notification .activity-notification__icon .ui_post_badge.link {
-  background-color: --old-green;
+  background-color: var(--old-green);
 }
 
 .ui_notes .activity-notification .activity-notification__icon .ui_post_badge.quote {
-  background-color: --old-orange;
+  background-color: var(--old-orange);
 }
 
 .ui_notes .activity-notification.is_friend {
-  color: --old-blue;
+  color: var(--old-blue);
 }
 
 .ui_notes .activity-notification.is_friend .activity-notification__activity_main .activity,.ui_notes .activity-notification.is_friend .activity-notification__activity_main .activity a {
-  color: --old-blue;
+  color: var(--old-blue);
 }
 
 .ui_notes .activity-notification.is_friend .activity-notification__activity_main .summary {
@@ -2175,92 +2175,92 @@ a {
 }
 
 .search_filter_items .popover_menu_item .icon_post_text_small {
-  color: --old-text;
+  color: var(--old-text);
 }
 
 .search_filter_items .popover_menu_item .icon_post_photo_small {
-  color: --old-red;
+  color: var(--old-red);
 }
 
 .search_filter_items .popover_menu_item .icon_post_quote_small {
-  color: --old-orange;
+  color: var(--old-orange);
 }
 
 .search_filter_items .popover_menu_item .icon_post_link_small {
-  color: --old-green;
+  color: var(--old-green);
 }
 
 .search_filter_items .popover_menu_item .icon_post_chat_small {
-  color: --old-accent;
+  color: var(--old-accent);
 }
 
 .search_filter_items .popover_menu_item .icon_post_audio_small {
-  color: --old-purple;
+  color: var(--old-purple);
 }
 
 .search_filter_items .popover_menu_item .icon_post_video_small {
-  color: --old-vidgey;
+  color: var(--old-vidgey);
 }
 
 .search_filter_items .popover_menu_item .icon_checkmark {
-  color: --old-accent;
+  color: var(--old-accent);
 }
 
 .peepr-body .indash_blog a.reblog_info {
-  color: --old-grey;
+  color: var(--old-grey);
 }
 
 .peepr-body .indash_blog a.source_info {
-  color: --old-grey;
+  color: var(--old-grey);
 }
 
 .peepr-body .indash_blog .post_notes_label {
-  color: --old-grey;
+  color: var(--old-grey);
 }
 
 .search_filter_items .popover_menu_item .icon_post_text_small {
-  color: --old-text;
+  color: var(--old-text);
 }
 
 .search_filter_items .popover_menu_item .icon_post_photo_small {
-  color: --old-red;
+  color: var(--old-red);
 }
 
 .search_filter_items .popover_menu_item .icon_post_quote_small {
-  color: --old-orange;
+  color: var(--old-orange);
 }
 
 .search_filter_items .popover_menu_item .icon_post_link_small {
-  color: --old-green;
+  color: var(--old-green);
 }
 
 .search_filter_items .popover_menu_item .icon_post_chat_small {
-  color: --old-accent;
+  color: var(--old-accent);
 }
 
 .search_filter_items .popover_menu_item .icon_post_audio_small {
-  color: --old-purple;
+  color: var(--old-purple);
 }
 
 .search_filter_items .popover_menu_item .icon_post_video_small {
-  color: --old-vidgey;
+  color: var(--old-vidgey);
 }
 
 .search_filter_items .popover_menu_item .icon_checkmark {
-  color: --old-accent;
+  color: var(--old-accent);
 }
 
 .overlay-container .indash_blog .overlay-wrapper .post_content_inner.safemode .link,.overlay-container .indash_blog .overlay-wrapper .post_content_inner.tagfiltering .link,.peepr-drawer.overlay-container .overlay-wrapper .post_content_inner.safemode .link,.peepr-drawer.overlay-container .overlay-wrapper .post_content_inner.tagfiltering .link {
-  color: --old-accent;
+  color: var(--old-accent);
 }
 
 .survey-body .tx-button {
   background-color: #fff;
-  color: --old-accent;
+  color: var(--old-accent);
 }
 
 .post-activity-header .return:before,.post-activity-header .tags-mode-button:before {
-  color: --old-grey;
+  color: var(--old-grey);
 }
 
 .is-followed.without-commentary.post-activity-note {
@@ -2268,15 +2268,15 @@ a {
 }
 
 .like .post-activity-note-avatar .post-activity-avatar-link:after {
-  background-color: --old-red;
+  background-color: var(--old-red);
 }
 
 .reblog .post-activity-note-avatar .post-activity-avatar-link:after {
-  background-color: --old-green;
+  background-color: var(--old-green);
 }
 
 .answer .post-activity-note-avatar .post-activity-avatar-link:after,.reply .post-activity-note-avatar .post-activity-avatar-link:after {
-  background-color: --old-accent;
+  background-color: var(--old-accent);
 }
 
 .is-followed.with-commentary .post-activity-note-content {
@@ -2288,31 +2288,31 @@ a {
 }
 
 .is-followed .post-activity-note-content .note-text .note-text-link {
-  color: --old-blue;
+  color: var(--old-blue);
 }
 
 .is-followed .post-activity-note-content .note-added-tags,.is-followed .post-activity-note-content .note-added-text {
-  color: --old-blue;
+  color: var(--old-blue);
 }
 
 .post-activity-note-content .note-added-tags .tag,.post-activity-note-content .note-added-text .tag {
-  color: --old-grey;
+  color: var(--old-grey);
 }
 
 .post-activity-reply .submit {
-  color: --old-accent;
+  color: var(--old-accent);
 }
 
 .post-activity-header .subscription-status .outer {
-  fill: --old-blue;
+  fill: var(--old-blue);
 }
 
 .post-activity-header .subscription-status .bolt {
-  fill: --old-blue;
+  fill: var(--old-blue);
 }
 
 .post-activity-header .subscription-status.is-subscribed .inner {
-  fill: --old-blue;
+  fill: var(--old-blue);
 }
 
 .post-forms-glass {
@@ -2320,15 +2320,15 @@ a {
 }
 
 .post-form--form.blocked {
-  background-color: --old-accent;
+  background-color: var(--old-accent);
 }
 
 .post-container {
-  color: --old-text;
+  color: var(--old-text);
 }
 
 .post-container a {
-  color: --old-text;
+  color: var(--old-text);
 }
 
 .post-form--tag-editor .tag-label {
@@ -2336,54 +2336,54 @@ a {
 }
 
 .post-form--tag-editor .tag-label.hover-style,.post-form--tag-editor .tag-label.selected {
-  color: --old-accent;
+  color: var(--old-accent);
 }
 
 .pop-menu input[type=text].field,.post-form input[type=text].field {
-  color: --old-text;
+  color: var(--old-text);
 }
 
 .media-container .video-error {
-  background-color: --old-vidgey;
+  background-color: var(--old-vidgey);
 }
 
 .media-container.audio-media-container .album-art-uploader .media-dropzone {
-  color: --old-purple;
+  color: var(--old-purple);
 }
 
 .media-container .remove-button {
   position: absolute;
   top: -7px;
   right: -7px;
-  background-color: --old-red;
-  border-color: --old-red;
+  background-color: var(--old-red);
+  border-color: var(--old-red);
   color: #fff;
 }
 
 .media-dropzone .media-url {
-  color: --old-text;
+  color: var(--old-text);
 }
 
 .overlay-button.active .icon {
-  color: --old-accent;
+  color: var(--old-accent);
 }
 
 .pop-menu {
-  color: --old-text;
+  color: var(--old-text);
 }
 
 .pop-menu .form-group .field.checkbox .help_text {
-  color: --old-grey;
+  color: var(--old-grey);
 }
 
 .post-form--header {
-  color: --old-grey;
+  color: var(--old-grey);
 }
 
 .post-form--header .tumblelog-select .caption {
   font-size: 13px;
   font-weight: 700;
-  color: --old-text;
+  color: var(--old-text);
 }
 
 .post-form--header .tumblelog-select .reblog_source {
@@ -2391,15 +2391,15 @@ a {
 }
 
 .post-form--header .tumblelog-select .reblog_name {
-  color: --old-grey;
+  color: var(--old-grey);
 }
 
 .post-form--header .tumblelog-select .icon_arrow_carrot_down {
-  color: --old-text;
+  color: var(--old-text);
 }
 
 .post-form--header .tumblelog-select .reblog-icon {
-  color: --old-text;
+  color: var(--old-text);
   opacity: .5;
 }
 
@@ -2420,7 +2420,7 @@ a {
   font-weight: 700;
   line-height: 1.4;
   text-decoration: none;
-  background-color: --old-accent;
+  background-color: var(--old-accent);
   color: #fff;
   display: -ms-inline-flexbox;
   display: inline-flex;
@@ -2439,13 +2439,13 @@ a {
 }
 
 .post-form--controls .controls-container .post-form--save-button .split-button:active {
-  background-color: --old-accent;
+  background-color: var(--old-accent);
   color: #fff;
 }
 
 .post-form--controls .controls-container .post-form--save-button .split-button .button-area,.post-form--controls .controls-container .post-form--save-button .split-button .dropdown-area {
-  border-color: --old-accent;
-  background-color: --old-accent;
+  border-color: var(--old-accent);
+  background-color: var(--old-accent);
   color: #fff;
   padding-top: 5px;
   padding-bottom: 5px;
@@ -2464,8 +2464,8 @@ a {
 }
 
 .post-form--controls .controls-container .post-form--save-button .split-button .button-area.disabled,.post-form--controls .controls-container .post-form--save-button .split-button .button-area.disabled.active,.post-form--controls .controls-container .post-form--save-button .split-button .button-area[disabled],.post-form--controls .controls-container .post-form--save-button .split-button .button-area[disabled]:active,.post-form--controls .controls-container .post-form--save-button .split-button .dropdown-area.disabled,.post-form--controls .controls-container .post-form--save-button .split-button .dropdown-area.disabled.active,.post-form--controls .controls-container .post-form--save-button .split-button .dropdown-area[disabled],.post-form--controls .controls-container .post-form--save-button .split-button .dropdown-area[disabled]:active {
-  border-color: --old-accent;
-  background-color: --old-accent;
+  border-color: var(--old-accent);
+  background-color: var(--old-accent);
   color: hsla(0,0%,100%,.5);
   cursor: default;
 }
@@ -2511,7 +2511,7 @@ a {
 .flag--is-dev .post-form--controls .controls-container .post-form--save-button .split-button:not([role=button]):not(button) {
   padding: 50px 70px!important;
   border: 10px dotted!important;
-  background-color: --old-red!important;
+  background-color: var(--old-red)!important;
   font-size: 40px!important;
 }
 
@@ -2520,15 +2520,15 @@ a {
 }
 
 .post-composer_link-post .link-editor .editor {
-  color: --old-green;
+  color: var(--old-green);
 }
 
 .post-composer_link-post.loaded .link-editor {
-  background: --old-green;
+  background: var(--old-green);
 }
 
 .editor-placeholder,.editor-plaintext,.editor-richtext {
-  color: --old-text;
+  color: var(--old-text);
 }
 
 .editor-placeholder {
@@ -2536,32 +2536,32 @@ a {
 }
 
 .editor .over-bottom:after,.editor .over-top:before {
-  background-color: --old-accent;
+  background-color: var(--old-accent);
 }
 
 .editor .media-holder .media-killer {
-  background-color: --old-red;
-  border-color: --old-red;
+  background-color: var(--old-red);
+  border-color: var(--old-red);
 }
 
 .editor-slot .inline-controls .tray .post-form--inline-embed-field .editor-plaintext.invalid,.editor-slot .inline-controls .tray .post-form--inline-embed-field .invalid.editor-placeholder {
-  color: --old-red;
+  color: var(--old-red);
 }
 
 .bubbles>div.active {
-  background-color: --old-accent;
+  background-color: var(--old-accent);
 }
 
 .html-mode .src-view {
-  color: --old-text;
+  color: var(--old-text);
 }
 
 .control-reblog-tree .btn-show-tree {
-  color: --old-grey;
+  color: var(--old-grey);
 }
 
 .btn-remove {
-  color: --old-grey;
+  color: var(--old-grey);
 }
 
 [data-help-popover=inline-controls] .post-container-inner:after,[data-help-popover=inline-controls] .post-form--avatar:after {
@@ -2569,16 +2569,16 @@ a {
 }
 
 .popover--reblog-graph .reblog-graph-info-button {
-  color: --old-accent;
+  color: var(--old-accent);
 }
 
 .reblog-list-item .reblog-avatar.sub-icon-reblog:before {
-  background: --old-green;
+  background: var(--old-green);
 }
 
 .control-reblog-trail .remove-button {
-  background: --old-red;
-  border-color: --old-red;
+  background: var(--old-red);
+  border-color: var(--old-red);
 }
 
 .ui_search {
@@ -2603,36 +2603,36 @@ a {
 }
 
 .ui_search.active .search_form_field:before,.ui_search.selected .search_form_field:before {
-  color: --old-text;
+  color: var(--old-text);
 }
 
 .ui_search.active .search_query,.ui_search.selected .search_query {
-  color: --old-text;
+  color: var(--old-text);
 }
 
 .ui_search.active .search_query::-webkit-input-placeholder,.ui_search.selected .search_query::-webkit-input-placeholder {
-  color: --old-grey;
+  color: var(--old-grey);
 }
 
 .ui_search.active .search_query:-moz-placeholder,.ui_search.active .search_query::-moz-placeholder,.ui_search.selected .search_query:-moz-placeholder,.ui_search.selected .search_query::-moz-placeholder {
-  color: --old-grey;
+  color: var(--old-grey);
 }
 
 .ui_search.active .search_query:-moz-placeholder,.ui_search.selected .search_query:-moz-placeholder {
-  color: --old-grey;
+  color: var(--old-grey);
 }
 
 .ui_search.active .search_query:-ms-input-placeholder,.ui_search.selected .search_query:-ms-input-placeholder {
   transition: color 75ms;
-  color: --old-grey;
+  color: var(--old-grey);
 }
 
 .site-notification {
-  background: --old-green;
+  background: var(--old-green);
 }
 
 .site-notification.site-notification-danger {
-  background: --old-red;
+  background: var(--old-red);
 }
 
 .tab-post-type .post-type-icon {
@@ -2647,7 +2647,7 @@ a {
 }
 
 .search-text-ad .sponsored-header .sponsored-text {
-  color: --old-grey;
+  color: var(--old-grey);
 }
 
 .yam-plus-ad-container {
@@ -2655,15 +2655,15 @@ a {
 }
 
 .yam-plus-ad-container .ad-bg.bg-orange {
-  background-color: --old-orange;
+  background-color: var(--old-orange);
 }
 
 .yam-plus-ad-container .ad-bg.bg-green {
-  background-color: --old-green;
+  background-color: var(--old-green);
 }
 
 .yam-plus-ad-container .ad-bg.bg-blue {
-  background-color: --old-accent;
+  background-color: var(--old-accent);
 }
 
 .yam-plus-ad-container .ad-bg.bg-grey {
@@ -2671,9 +2671,9 @@ a {
 }
 
 .yam-plus-ad-container .ad-bg.bg-purple {
-  background-color: --old-purple;
+  background-color: var(--old-purple);
 }
 
 .yam-plus-ad-container .ad-bg.bg-red {
-  background-color: --old-red;
+  background-color: var(--old-red);
 }
