@@ -1099,7 +1099,7 @@ a {
 }
 
 .new_post_label i.icon_post_video {
-  color: var(--old-vidgey);
+  color: var(--old-vidgrey);
 }
 
 .new_post_label i.icon_money_bubble {
@@ -1486,6 +1486,7 @@ a {
   padding: 0 10px;
   color: hsla(0,0%,100%,.25);
   font-size: 12px;
+  text-transform: uppercase;
 }
 
 .identity .controls_section .delete_all_messages {
@@ -2075,7 +2076,7 @@ a {
 }
 
 .messaging-conversation--open .conversation-message-post .conversation-message-post--video.message-container .icon {
-  background: var(--old-vidgey);
+  background: var(--old-vidgrey);
 }
 
 .messaging-conversation--open .conversation-message-safemode-post .message-bubble {
@@ -2199,7 +2200,7 @@ a {
 }
 
 .search_filter_items .popover_menu_item .icon_post_video_small {
-  color: var(--old-vidgey);
+  color: var(--old-vidgrey);
 }
 
 .search_filter_items .popover_menu_item .icon_checkmark {
@@ -2243,7 +2244,7 @@ a {
 }
 
 .search_filter_items .popover_menu_item .icon_post_video_small {
-  color: var(--old-vidgey);
+  color: var(--old-vidgrey);
 }
 
 .search_filter_items .popover_menu_item .icon_checkmark {
@@ -2344,7 +2345,7 @@ a {
 }
 
 .media-container .video-error {
-  background-color: var(--old-vidgey);
+  background-color: var(--old-vidgrey);
 }
 
 .media-container.audio-media-container .album-art-uploader .media-dropzone {
@@ -2675,4 +2676,60 @@ a {
 
 .yam-plus-ad-container .ad-bg.bg-red {
   background-color: var(--old-red);
+}
+
+
+/* index.build.js (approximate) */
+
+
+.toastr .toast .crumb.like {
+  background-color: var(--old-red);
+}
+
+.toastr .toast .crumb.blog-subscription {
+  background-color: var(--old-orange);
+}
+
+.toastr .toast .crumb.reblog {
+  background-color: var(--old-green);
+}
+
+.toastr .toast .crumb.answer {
+  background-color: var(--old-accent);
+}
+
+.toastr .toast .crumb.follower {
+  background-color: var(--old-accent);
+}
+
+.toastr .toast {
+  background: var(--old-blue);
+}
+
+.toastr .toast .item.post {
+  background-color: var(--old-text);
+}
+
+.toastr .toast .item.question {
+  background-color: var(--old-text);
+}
+
+.toastr .toast .item.quote {
+  background-color: var(--old-orange);
+}
+
+.toastr .toast .item.link {
+  background-color: var(--old-green);
+}
+
+.toastr .toast .item.chat {
+  background-color: var(--old-accent);
+}
+
+.toastr .toast .item.audio {
+  background-color: var(--old-purple);
+}
+
+.toastr .toast .item.video {
+  background-color: var(--old-vidgrey);
 }
