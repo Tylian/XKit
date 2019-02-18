@@ -1005,7 +1005,7 @@ a {
 }
 
 .tab-post-type .post-type-icon {
-    background-image: url("https://new-xkit.github.io/XKit/Extensions/dist/quick_compose_sprite_1_.png");
+    background-image: url("https://new-xkit.github.io/XKit/Extensions/dist/quick_compose_sprite.png");
 }
 
 .search-text-ad .sponsored-header .sponsored-text {
@@ -2623,7 +2623,6 @@ a {
 }
 
 .ui_search.active .search_query:-ms-input-placeholder,.ui_search.selected .search_query:-ms-input-placeholder {
-  transition: color 75ms;
   color: var(--old-grey);
 }
 
