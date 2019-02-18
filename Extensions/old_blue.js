@@ -1,5 +1,5 @@
 //* TITLE Old Blue **//
-//* VERSION 0.0.2 **//
+//* VERSION 0.1.0 **//
 //* DESCRIPTION No more dark blue background! **//
 //* DEVELOPER New-XKit **//
 //* FRAME false **//
@@ -11,12 +11,12 @@ XKit.extensions.old_blue = new Object({
 
 	run: function() {
 		this.running = true;
-		$("body").removeClass("flag--accessibility-design-update");
+		XKit.tools.init_css("old_blue");
 	},
 
 	destroy: function() {
 		this.running = false;
-		$("body").addClass("flag--accessibility-design-update");
+		XKit.tools.remove_css("old_blue");
 	}
 
 });
