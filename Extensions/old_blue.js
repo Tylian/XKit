@@ -11,7 +11,6 @@ XKit.extensions.old_blue = new Object({
 
 	run: function() {
 		this.running = true;
-		$("body").addClass("flag--old-blue");
 		XKit.tools.init_css("old_blue");
 	},
 
