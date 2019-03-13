@@ -276,6 +276,12 @@ XKit.extensions.xkit_patches = new Object({
 				});
 				return posts;
 			};
+
+			XKit.interface.post_window.blog =
+				() => $("#channel_id").val() || $(".post-form--header [data-js-tumbleloglabel]").text();
+
+			XKit.interface.post_window.reblogging_from =
+				() => $(".post-form--header .reblog_source .reblog_name").text();
 		},
 		"7.8.2": function() {
 			XKit.api_key = "kZSI0VnPBJom8cpIeTFw4huEh9gGbq4KfWKY7z5QECutAAki6D";
