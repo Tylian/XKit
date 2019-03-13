@@ -1,5 +1,5 @@
 //* TITLE XKit Patches **//
-//* VERSION 7.1.4 **//
+//* VERSION 7.2.0 **//
 //* DESCRIPTION Patches framework **//
 //* DEVELOPER new-xkit **//
 
@@ -129,6 +129,51 @@ XKit.extensions.xkit_patches = new Object({
 	patches: {
 		"7.9.0": function() {
 
+			XKit.svc = {
+				blog: {
+					followed_by: data => new Promise((resolve, reject) => {
+						XKit.tools.Nx_XHR({
+							method: "GET",
+							url: "https://www.tumblr.com/svc/blog/followed_by?" + $.param(data),
+							onload: resolve,
+							onerror: reject
+						});
+					})
+				},
+
+				conversations: {
+					participant_info: data => new Promise((resolve, reject) => {
+						XKit.tools.Nx_XHR({
+							method: "GET",
+							url: "https://www.tumblr.com/svc/conversations/participant_info?" + $.param(data),
+							onload: resolve,
+							onerror: reject
+						});
+					})
+				}
+			};
+
+			/**
+			 * Determines whether a user is following the given blog.
+			 * The logged-in user must be a member of the given blog to determine this.
+			 * @param {String} username
+			 * @param {String} blog
+			 * @return {Promise<Boolean>}
+			 */
+			XKit.interface.is_following = function(username, blog) {
+				return XKit.svc.conversations.participant_info({
+					"q": username,
+					"participant": blog
+				})
+				.then(response => response.json().response.is_blog_following_you)
+				.catch(() =>
+					XKit.svc.blog.followed_by({
+						"query": username,
+						"tumblelog": blog
+					})
+					.then(response => response.json().response.is_friend));
+			};
+
 			XKit.blog_listener = {
 				callbacks: {},
 				done: false,
@@ -220,11 +265,13 @@ XKit.extensions.xkit_patches = new Object({
 				function handler(e) {
 					if (e.origin === window.location.protocol + "//" + window.location.host && e.data.timestamp === "xkit_" + details.timestamp) {
 						window.removeEventListener("message", handler);
-						let {success, response} = e.data;
+						let {success, response} = JSON.parse(JSON.stringify(e.data));
 
 						if (typeof response.headers["x-tumblr-kittens"] !== "undefined") {
 							XKit.interface.kitty.set(response.headers["x-tumblr-kittens"]);
 						}
+
+						response.json = () => JSON.parse(response.responseText);
 
 						if (success && response.status >= 200 && response.status < 300) {
 							details.onload(response);
@@ -2328,24 +2375,6 @@ XKit.extensions.xkit_patches = new Object({
 					XKit.tools.add_function(function() {
 						Tumblr.Events.trigger("peepr-open-request", add_tag);
 					}, true, payload);
-				},
-
-				/**
-				 * Determines whether a user is following the given blog.
-				 * The logged-in user must be a member of the given blog to determine this.
-				 * @param {String} username
-				 * @param {String} blog
-				 * @return {Promise<Boolean>}
-				 */
-				is_following: function(username, blog) {
-					return $.ajax({
-						type: "GET",
-						url: "https://www.tumblr.com/svc/blog/followed_by",
-						data: "tumblelog=" + blog + "&query=" + username,
-						dataType: "json",
-					}).then(function(msg) {
-						return msg.response.is_friend == 1;
-					});
 				}
 			});
 
