@@ -1,5 +1,5 @@
 //* TITLE Timestamps **//
-//* VERSION 2.8.2 **//
+//* VERSION 2.9.0 **//
 //* DESCRIPTION See when a post has been made. **//
 //* DETAILS This extension lets you see when a post was made, in full date or relative time (eg: 5 minutes ago). It also works on asks, and you can format your timestamps. **//
 //* DEVELOPER New-XKit **//
@@ -31,7 +31,23 @@ XKit.extensions.timestamps = new Object({
 			default: false,
 			value: false
 		},
-		sep0: {
+
+		title_reblogs: {
+			text: "Reblog timestamps",
+			type: "separator"
+		},
+		do_reblogs: {
+			text: "Show timestamps on reblog comments",
+			default: true,
+			value: true
+		},
+		only_original: {
+			text: "Only put timestamps on original comments",
+			default: true,
+			value: true
+		},
+
+		title_format: {
 			text: "Timestamp display format",
 			type: "separator"
 		},
@@ -45,19 +61,12 @@ XKit.extensions.timestamps = new Object({
 
 	check_quota: function() {
 
-		if (XKit.storage.size("timestamps") >= 800) {
+		if (XKit.storage.quota("timestamps") <= 1024 || XKit.storage.size("timestamps") >= 153600) {
 			XKit.storage.clear("timestamps");
-			if (this.preferences.only_relative.value) {
-				XKit.storage.set("timestamps", "extension__setting__only_relative", "true");
-			}
-			if (this.preferences.only_inbox.value) {
-				XKit.storage.set("timestamps", "extension__setting__only_inbox", "true");
-			}
-			if (this.preferences.only_on_hover.value) {
-				XKit.storage.set("timestamps", "extension__setting__only_on_hover", "true");
-			}
-			if (this.preferences.format.value !== "") {
-				XKit.storage.set("timestamps", "extension__setting__format", this.preferences.format.value);
+			for (let x of Object.keys(this.preferences)) {
+				if (this.preferences[x].value !== this.preferences[x].default) {
+					XKit.storage.set("timestamps", `extension__setting__${x}`, this.preferences[x].value.toString());
+				}
 			}
 		}
 
@@ -97,6 +106,11 @@ XKit.extensions.timestamps = new Object({
 				XKit.tools.add_css('#posts .post .post_content { padding-top: 0px; }', "timestamps");
 				XKit.post_listener.add("timestamps", this.add_timestamps);
 				this.add_timestamps();
+
+				if (this.preferences.do_reblogs.value) {
+					XKit.post_listener.add("timestamps", this.add_reblog_timestamps);
+					this.add_reblog_timestamps();
+				}
 
 				$(document).on("click", ".xkit-timestamp-failed-why", function() {
 					XKit.window.show("Timestamp loading failed.", "This might be caused by several reasons, such as the post being removed, becoming private, or the Tumblr server having a problem that it can't return the page required by XKit to load you the timestamp.", "error", "<div id=\"xkit-close-message\" class=\"xkit-button\">OK</div></div>");
@@ -155,6 +169,29 @@ XKit.extensions.timestamps = new Object({
 		});
 	},
 
+	add_reblog_timestamps: function() {
+		var selector = ".reblog-list-item";
+		if (XKit.extensions.timestamps.preferences.only_original.value) {
+			selector += ".original-reblog-content";
+		}
+
+		$(selector).not(".xkit_timestamps")
+		.addClass("xkit_timestamps")
+		.each(function() {
+			let $this = $(this);
+
+			let $link = $this.find(".reblog-header [data-peepr]");
+			if (!$link.length || !$link.attr("data-peepr")) {
+				return;
+			}
+			let {tumblelog, postId} = JSON.parse($link.attr("data-peepr"));
+
+			$this.find(".reblog-header").append(`<div class="xkit_timestamp_${postId} xtimestamp xtimestamp_loading">&nbsp;</div>`);
+			let $timestamp = $(`.xkit_timestamp_${postId}`);
+			XKit.extensions.timestamps.fetch_timestamp(postId, tumblelog, $timestamp);
+		});
+	},
+
 	fetch_timestamp: function(post_id, blog_name, date_element) {
 		if (this.fetch_from_cache(post_id, date_element)) {
 			return;
@@ -169,7 +206,12 @@ XKit.extensions.timestamps = new Object({
 			should_bypass_tagfiltering: true
 		})
 		.then(response => {
-			var timestamp = response.json().response.posts[0].timestamp;
+			var responseData = response.json().response;
+			if (responseData.post_not_found_message !== undefined) {
+				throw 404;
+			}
+
+			var timestamp = responseData.posts[0].timestamp;
 			date_element.html(this.format_date(moment(new Date(timestamp * 1000))));
 			date_element.removeClass("xtimestamp_loading");
 			XKit.storage.set("timestamps", "xkit_timestamp_cache_" + post_id, timestamp);
