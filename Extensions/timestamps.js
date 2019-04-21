@@ -1,5 +1,5 @@
 //* TITLE Timestamps **//
-//* VERSION 2.9.0 **//
+//* VERSION 2.10.0 **//
 //* DESCRIPTION See when a post has been made. **//
 //* DETAILS This extension lets you see when a post was made, in full date or relative time (eg: 5 minutes ago). It also works on asks, and you can format your timestamps. **//
 //* DEVELOPER New-XKit **//
@@ -16,46 +16,47 @@ XKit.extensions.timestamps = new Object({
 	slow: true,
 
 	preferences: {
+		inbox: {
+			text: "Show timestamps in the inbox",
+			default: true,
+			value: true
+		},
+		posts: {
+			text: "Show timestamps on posts",
+			default: true,
+			value: true
+		},
+		reblogs: {
+			text: "Reblog timestamps",
+			type: "combo",
+			values: [
+				"Don't display any", "off",
+				"Display only on the original post", "op",
+				"Display on all comments", "all"
+			],
+			default: "op",
+			value: "op"
+		},
+
+		display_title: {
+			text: "Display options",
+			type: "separator"
+		},
+		format: {
+			text: 'Timestamp format (<span id="xkit-timestamps-format-help" style="text-decoration: underline; cursor: pointer;">what is this?</span>)',
+			type: "text",
+			default: "MMMM Do YYYY, h:mm:ss a",
+			value: "MMMM Do YYYY, h:mm:ss a"
+		},
 		only_on_hover: {
-			text: "Only show timestamps when I hover over a post",
+			text: "Hide timestamps until I hover over a post",
 			default: false,
 			value: false
 		},
 		only_relative: {
-			text: "Only show relative time (eg: 5 minutes ago)",
+			text: "Display timestamps in relative form",
 			default: false,
 			value: false
-		},
-		only_inbox: {
-			text: "Only show timestamps on asks in my inbox",
-			default: false,
-			value: false
-		},
-
-		title_reblogs: {
-			text: "Reblog timestamps",
-			type: "separator"
-		},
-		do_reblogs: {
-			text: "Show timestamps on reblog comments",
-			default: true,
-			value: true
-		},
-		only_original: {
-			text: "Only put timestamps on original comments",
-			default: true,
-			value: true
-		},
-
-		title_format: {
-			text: "Timestamp display format",
-			type: "separator"
-		},
-		format: {
-			text: "Timestamp format (<span id=\"xkit-timestamps-format-help\" style=\"text-decoration: underline; cursor: pointer;\">what is this?</span>)",
-			type: "text",
-			default: "MMMM Do YYYY, h:mm:ss a",
-			value: "MMMM Do YYYY, h:mm:ss a"
 		}
 	},
 
@@ -68,14 +69,40 @@ XKit.extensions.timestamps = new Object({
 					XKit.storage.set("timestamps", `extension__setting__${x}`, this.preferences[x].value.toString());
 				}
 			}
+			XKit.storage.set("timestamps", "preference_conversion", "done");
 		}
 
+	},
+
+	convert_preferences: function() {
+		[
+			["only_inbox", "false", {inbox: true, posts: false}],
+			["do_reblogs", "true", {reblogs: "all"}],
+			["only_original", "true", {reblogs: "op"}]
+		]
+		.filter(([preference, defaultValue]) => XKit.storage.get("timestamps", `extension__setting__${preference}`, defaultValue) === "true")
+		.forEach(([preference, _, conversion]) => {
+			Object.entries(conversion).forEach(([key, value]) => {
+				XKit.storage.set("timestamps", `extension__setting__${key}`, value.toString());
+				this.preferences[key].value = value;
+			});
+		});
+
+		XKit.storage.set("timestamps", "preference_conversion", "done");
 	},
 
 	in_search: false,
 
 	run: function() {
+		if (XKit.storage.get("timestamps", "preference_conversion") !== "done") {
+			this.convert_preferences();
+		}
+
 		if (!XKit.interface.is_tumblr_page()) { return; }
+
+		if (!this.preferences.inbox.value && XKit.interface.where().inbox) {
+			return;
+		}
 
 		XKit.tools.init_css("timestamps");
 
@@ -87,13 +114,7 @@ XKit.extensions.timestamps = new Object({
 					top: 32px;
 					color: rgb(168,177,184);
 					font-size: 10px;
-				}`, "timestamps_search");
-		}
-
-		if (this.preferences.only_inbox.value) {
-			if (!XKit.interface.where().inbox) {
-				return;
-			}
+				}`, "timestamps");
 		}
 
 		if (this.preferences.format.value === "") {
@@ -104,10 +125,12 @@ XKit.extensions.timestamps = new Object({
 		try {
 			if (this.is_compatible()) {
 				XKit.tools.add_css('#posts .post .post_content { padding-top: 0px; }', "timestamps");
-				XKit.post_listener.add("timestamps", this.add_timestamps);
-				this.add_timestamps();
+				if (this.preferences.posts.value || (this.preferences.inbox.value && XKit.interface.where().inbox)) {
+					XKit.post_listener.add("timestamps", this.add_timestamps);
+					this.add_timestamps();
+				}
 
-				if (this.preferences.do_reblogs.value) {
+				if (this.preferences.reblogs.value !== "off") {
 					XKit.post_listener.add("timestamps", this.add_reblog_timestamps);
 					this.add_reblog_timestamps();
 				}
@@ -171,7 +194,7 @@ XKit.extensions.timestamps = new Object({
 
 	add_reblog_timestamps: function() {
 		var selector = ".reblog-list-item";
-		if (XKit.extensions.timestamps.preferences.only_original.value) {
+		if (XKit.extensions.timestamps.preferences.reblogs.value === "op") {
 			selector += ".original-reblog-content";
 		}
 
